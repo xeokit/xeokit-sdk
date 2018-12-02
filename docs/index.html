@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">Home | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for building high-performance visualizations on xeogl"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for building high-performance visualizations on xeogl"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="xeokit-sdk">xeokit-sdk</h1><p><strong>xeokit-sdk</strong> is a software development kit from <a href="http://xeolabs.com">xeolabs</a> for developing high-performance Web-based 3D viewers on the
+<a href="http://xeogl.org">xeogl</a> WebGL library.</p>
+<p>At its heart of the kit is the <a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html">Viewer</a> class which wraps a <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a> and
+acts as a container for <a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/Plugin.js~Plugin.html">Plugin</a> subclasses that implement application-specific functionality. The viewer
+is also able to save and restore its state, and the state of its plugins, as JSON bookmark objects.</p>
+<p>The boilerplate comes with a bunch of bundled plugins to get you started, including
+some that load models from various formats formats, widgets and gizmos etc.</p>
+<h2 id="features">Features</h2><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extensible plugin-based architecture</td>
+<td>A modular, extensible architecture that can be extended with plugins.</td>
+</tr>
+<tr>
+<td>Loads glTF, OBJ, STL &amp; 3DXML</td>
+<td>Can be extended to load more formats as required.</td>
+</tr>
+<tr>
+<td>Loads models with 1M+ elements</td>
+<td>Able to load very high-detail models from glTF.</td>
+</tr>
+<tr>
+<td>BCF viewpoints</td>
+<td>Includes a plugin to save and load viewpoints as BCF records, allowing you to share viewpoints with other BIM platforms.</td>
+</tr>
+<tr>
+<td>Written in ECMA6</td>
+<td>Implemented in modern JavaScript.</td>
+</tr>
+<tr>
+<td>Built on xeogl</td>
+<td>Has a commercially-proven open source (MIT) 3D WebGL library at it&apos;s core.</td>
+</tr>
+<tr>
+<td>Uses WebGL 1</td>
+<td>Built on WebGL 1, this ensures that xeokit-sdk will work in most Web browsers, on high-end and low-end hardware.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Compatible with xeogl V1.0</li>
+<li>Written as EC6 modules</li>
+<li>Built using gulp</li>
+<li>Documentation generated using ESDoc (xeogl still uses YUIDoc at this point)</li>
+</ul>
+<h2 id="examples">Examples</h2><table>
+<thead>
+<tr>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://xeolabs.com/xeokit-sdk/apps/gltfviewer/index.html">gltfviewer</a></td>
+<td>Minimal application that loads a model from glTF.</td>
+</tr>
+<tr>
+<td><a href="http://xeolabs.com/xeokit-sdk/apps/objviewer/index.html">objviewer</a></td>
+<td>Minimal application that loads a model from OBJ.</td>
+</tr>
+<tr>
+<td><a href="http://xeolabs.com/xeokit-sdk/apps/gltfbigviewer/index.html">gltfbigviewer</a></td>
+<td>Minimal application that loads a large glTF model, using xeogl&apos;s support for large models.</td>
+</tr>
+<tr>
+<td><a href="http://xeolabs.com/xeokit-sdk/apps/xml3dviewer/index.html">xml3dviewer</a></td>
+<td>Minimal application that loads a model from 3DXML.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resources">Resources</h2><ul>
+<li><a href="http://xeolabs.com/xeokit-sdk/docs">Docs</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki">Wiki</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/issues">Issues</a></li>
+</ul>
+<h2 id="license">License</h2><p>TODO: Some sort of license that allows:</p>
+<ul>
+<li>access to source code</li>
+<li>unlimited deployments</li>
+<li>don&apos;t redistribute</li>
+</ul>
+<h2 id="building-docs">Building Docs</h2><p>This project requires <a href="https://nodejs.org/en/download/">Node.js</a> to be installed.</p>
+<pre><code><code class="source-code prettyprint">git clone https://github.com/xeolabs/xeokit-sdk.git
+cd xeokit-sdk
+npm install</code>
+</code></pre><pre><code><code class="source-code prettyprint">./node_modules/.bin/esdoc</code>
+</code></pre><p>Documentation will then be generated in <code>./docs</code>.</p>
+<h2 id="change-notes">Change notes</h2><p>TODO</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

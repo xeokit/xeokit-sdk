@@ -1,0 +1,29 @@
+{
+  "name": "xeokit-sdk",
+  "version": "1.0.0",
+  "description": "SDK for building high-performance visualizations on xeogl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xeolabs/xeokit-sdk.git"
+  },
+  "keywords": [
+    "webgl",
+    "xeogl",
+    "bim",
+    "cad"
+  ],
+  "author": "Lindsay Kay",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/xeolabs/xeokit-sdk/issues"
+  },
+  "homepage": "https://github.com/xeolabs/xeokit-sdk#readme",
+  "dependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0"
+  }
+}

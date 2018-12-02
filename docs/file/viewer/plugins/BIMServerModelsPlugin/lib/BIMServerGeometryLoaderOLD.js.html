@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../">
+  <title data-ice="title">viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoaderOLD.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for building high-performance visualizations on xeogl"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for building high-performance visualizations on xeogl"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoaderOLD.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {DataInputStreamReader} from &quot;./DataInputStreamReader.js&quot;;
+import {math} from &quot;../../../../../libs/xeogl/xeogl.module.js&quot;;
+
+/**
+ * @private
+ */
+function BIMServerGeometryLoader(bimServerAPI, viewer, model, roid) {
+
+    // TODO:
+
+    var o = this;
+
+    o.bimServerAPI = bimServerAPI;
+    o.viewer = viewer;
+    o.state = {};
+    o.progressListeners = [];
+    o.objectAddedListeners = [];
+    o.prepareReceived = false;
+    o.todo = [];
+    o.geometryIds = {};
+    o.dataToInfo = {};
+
+    o.model = model;
+    o.roid = roid;
+
+    const globalTransformationMatrix = null; // TODO
+    console.log(globalTransformationMatrix);
+
+    this.addProgressListener = function (progressListener) {
+        o.progressListeners.push(progressListener);
+    };
+
+    this.process = function () {
+        var data = o.todo.shift();
+        var stream;
+        while (data != null) {
+            stream = new DataInputStreamReader(data);
+            var channel = stream.readLong();
+            var messageType = stream.readByte();
+            if (messageType == 0) {
+                o._readStart(stream);
+            } else if (messageType == 6) {
+                o._readEnd(stream);
+            } else {
+                o._readObject(stream, messageType);
+            }
+            data = o.todo.shift();
+        }
+    };
+
+    this.setLoadOids = function (oids) {
+        o.options = {type: &quot;oids&quot;, oids: oids};
+    };
+
+    /**
+     * Starts this loader.
+     */
+    this.start = function () {
+        if (!o.options || o.options.type !== &quot;oids&quot;) {
+            throw new Error(&quot;Invalid loader configuration&quot;);
+        }
+
+        if (this.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+
+            o.groupId = o.roid;
+            o.oids = o.options.oids;
+            o.bimServerAPI.getMessagingSerializerByPluginClassName(&quot;org.bimserver.serializers.binarygeometry.BinaryGeometryMessagingSerializerPlugin&quot;, function (serializer) {
+                o.bimServerAPI.call(&quot;Bimsie1ServiceInterface&quot;, &quot;downloadByOids&quot;, {
+                    roids: [o.roid],
+                    oids: o.options.oids,
+                    serializerOid: serializer.oid,
+                    sync: false,
+                    deep: false
+                }, function (topicId) {
+                    o.topicId = topicId;
+                    o.bimServerAPI.registerProgressHandler(o.topicId, o._progressHandler, o._afterRegistration);
+                });
+            });
+
+        } else {
+
+            var obj = [];
+
+            o.groupId = o.roid;
+            o.infoToOid = o.options.oids;
+            debugger;
+            //for (var k in o.infoToOid) {
+            for (var k = 0, len = o.infoToOid.length; k &lt; len; k++) {
+                var oid = parseInt(o.infoToOid[k]);
+                o.model.apiModel.get(oid, function (object) {
+                    if (object) {
+                        if (object.object._rgeometry != null) {
+                            if (object.model.objects[object.object._rgeometry._i] != null) {
+                                // Only if this data is preloaded, otherwise just don&apos;t include any gi
+                                object.getGeometry(function (geometryInfo) {
+                                    obj.push({
+                                        gid: object.object._rgeometry._i,
+                                        oid: object.oid,
+                                        object: object,
+                                        info: geometryInfo.object
+                                    });
+                                });
+                            } else {
+                                obj.push({gid: object.object._rgeometry._i, oid: object.oid, object: object});
+                            }
+                        }
+                    }
+                });
+            }
+            obj.sort(function (a, b) {
+                if (a.info != null &amp;&amp; b.info != null) {
+                    var topa = (a.info._emaxBounds.z + a.info._eminBounds.z) / 2;
+                    var topb = (b.info._emaxBounds.z + b.info._eminBounds.z) / 2;
+                    return topa - topb;
+                } else {
+                    // Resort back to type
+                    // TODO this is dodgy when some objects do have info, and others don&apos;t
+                    return a.object.getType().localeCompare(b.object.getType());
+                }
+            });
+
+            var oids = [];
+            obj.forEach(function (wrapper) {
+                oids.push(wrapper.object.object._rgeometry._i);
+            });
+
+            var query = {
+                type: &quot;GeometryInfo&quot;,
+                oids: oids,
+                include: {
+                    type: &quot;GeometryInfo&quot;,
+                    field: &quot;data&quot;
+                }
+            };
+            o.bimServerAPI.getSerializerByPluginClassName(&quot;org.bimserver.serializers.binarygeometry.BinaryGeometryMessagingStreamingSerializerPlugin3&quot;, function (serializer) {
+                o.bimServerAPI.call(&quot;ServiceInterface&quot;, &quot;download&quot;, {
+                    roids: [o.roid],
+                    query: JSON.stringify(query),
+                    serializerOid: serializer.oid,
+                    sync: false
+                }, function (topicId) {
+                    o.topicId = topicId;
+                    o.bimServerAPI.registerProgressHandler(o.topicId, o._progressHandler);
+                });
+            });
+        }
+    };
+
+    this._progressHandler = function (topicId, state) {
+        if (topicId == o.topicId) {
+            if (state.title == &quot;Done preparing&quot;) {
+                if (!o.prepareReceived) {
+                    o.prepareReceived = true;
+                    o._downloadInitiated();
+                }
+            }
+            if (state.state == &quot;FINISHED&quot;) {
+                o.bimServerAPI.unregisterProgressHandler(o.topicId, o._progressHandler);
+            }
+        }
+    };
+
+    this._downloadInitiated = function () {
+        o.state = {
+            mode: 0,
+            nrObjectsRead: 0,
+            nrObjects: 0
+        };
+        // o.viewer.SYSTEM.events.trigger(&apos;progressStarted&apos;, [&apos;Loading Geometry&apos;]);
+        // o.viewer.SYSTEM.events.trigger(&apos;progressBarStyleChanged&apos;, BIMSURFER.Constants.ProgressBarStyle.Continuous);
+        var msg = {
+            longActionId: o.topicId,
+            topicId: o.topicId
+        };
+        o.bimServerAPI.setBinaryDataListener(o.topicId, o._binaryDataListener);
+        o.bimServerAPI.downloadViaWebsocket(msg);
+    };
+
+    this._binaryDataListener = function (data) {
+        o.todo.push(data);
+    };
+
+    this._afterRegistration = function (topicId) {
+        o.bimServerAPI.call(&quot;Bimsie1NotificationRegistryInterface&quot;, &quot;getProgress&quot;, {
+            topicId: o.topicId
+        }, function (state) {
+            o._progressHandler(o.topicId, state);
+        });
+    };
+
+    this._readEnd = function (data) {
+        o.progressListeners.forEach(function (progressListener) {
+            progressListener(&quot;done&quot;, o.state.nrObjectsRead, o.state.nrObjectsRead);
+        });
+        o.bimServerAPI.call(&quot;ServiceInterface&quot;, &quot;cleanupLongAction&quot;, {topicId: o.topicId}, function () {
+        });
+    };
+
+    this._readStart = function (data) {
+        var start = data.readUTF8();
+        if (start != &quot;BGS&quot;) {
+            console.error(&quot;data does not start with BGS (&quot; + start + &quot;)&quot;);
+            return false;
+        }
+        o.protocolVersion = data.readByte();
+        if (o.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+            if (version != 4 &amp;&amp; version != 5 &amp;&amp; version != 6) {
+                console.error(&quot;Unimplemented version&quot;);
+                return false;
+            }
+        } else {
+            if (o.protocolVersion != 10 &amp;&amp; o.protocolVersion != 11) {
+                console.error(&quot;Unimplemented version&quot;);
+                return false;
+            }
+        }
+        data.align8();
+        if (o.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+            var boundary = data.readFloatArray(6);
+        } else {
+            var boundary = data.readDoubleArray(6);
+        }
+        this._initCamera(boundary);
+        o.state.mode = 1;
+        if (o.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+            o.state.nrObjects = data.readInt();
+        }
+        o.progressListeners.forEach(function (progressListener) {
+            progressListener(&quot;start&quot;, o.state.nrObjectsRead, o.state.nrObjectsRead);
+        });
+        //o._updateProgress();
+    };
+
+    this._initCamera = function (boundary) {
+
+        if (!this._gotCamera) {
+
+            this._gotCamera = true;
+
+            // Bump scene origin to center the model
+
+            var xmin = boundary[0];
+            var ymin = boundary[1];
+            var zmin = boundary[2];
+            var xmax = boundary[3];
+            var ymax = boundary[4];
+            var zmax = boundary[5];
+
+            var diagonal = Math.sqrt(
+                Math.pow(xmax - xmin, 2) +
+                Math.pow(ymax - ymin, 2) +
+                Math.pow(zmax - zmin, 2));
+
+            var scale = 100 / diagonal;
+
+            // TODO
+            //this.viewer.setScale(scale); // Temporary until we find a better scaling system.
+
+            var far = diagonal * 5; // 5 being a guessed constant that should somehow coincide with the max zoom-out-factor
+
+            var center = [
+                scale * ((xmax + xmin) / 2),
+                scale * ((ymax + ymin) / 2),
+                scale * ((zmax + zmin) / 2)
+            ];
+
+            const camera = this.viewer.camera;
+
+            camera.eye = [center[0] - scale * diagonal, center[1] - scale * diagonal, center[2] + scale * diagonal];
+            camera.look = center;
+            camera.up = [0, 0, 1];
+
+            camera.projection = &quot;perspective&quot;;
+            camera.perspective.near = 0.1;
+            camera.perspective.far = 5000;
+            camera.perspective.fov = 35.8493;
+        }
+    };
+
+    this._updateProgress = function () {
+//            if (o.state.nrObjectsRead &lt; o.state.nrObjects) {
+//                var progress = Math.ceil(100 * o.state.nrObjectsRead / o.state.nrObjects);
+//                if (progress != o.state.lastProgress) {
+//                    o.progressListeners.forEach(function (progressListener) {
+//                        progressListener(progress, o.state.nrObjectsRead, o.state.nrObjects);
+//                    });
+//                    // TODO: Add events
+//                    // o.viewer.SYSTEM.events.trigger(&apos;progressChanged&apos;, [progress]);
+//                    o.state.lastProgress = progress;
+//                }
+//            } else {
+//                // o.viewer.SYSTEM.events.trigger(&apos;progressDone&apos;);
+//                o.progressListeners.forEach(function (progressListener) {
+//                    progressListener(&quot;done&quot;, o.state.nrObjectsRead, o.state.nrObjects);
+//                });
+//                // o.viewer.events.trigger(&apos;sceneLoaded&apos;, [o.viewer.scene.scene]);
+//
+//                var d = {};
+//                d[o.viewer.BIMSERVER_VERSION == &quot;1.4&quot; ? &quot;actionId&quot; : &quot;topicId&quot;] = o.topicId;
+//                o.bimServerAPI.call(&quot;ServiceInterface&quot;, &quot;cleanupLongAction&quot;, d, function () {});
+//            }
+    };
+
+    this._readObject = function (stream, geometryType) {
+        if (o.viewer.BIMSERVER_VERSION != &quot;1.4&quot;) {
+            stream.align8();
+        }
+
+//            var type = stream.readUTF8();
+//            var roid = stream.readLong(); // TODO: Needed?
+//            var objectId = stream.readLong();
+//            var oid = objectId;
+        var modelId;
+        var geometryId;
+        var numGeometries;
+        var numParts;
+        var objectBounds;
+        var numIndices;
+        var indices;
+        var numPositions;
+        var positions;
+        var numNormals;
+        var normals;
+        var numColors;
+        var colors = null;
+        var color;
+        var i;
+
+        if (geometryType == 1) {
+            geometryId = stream.readLong();
+            numIndices = stream.readInt();
+            if (o.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+                indices = stream.readIntArray(numIndices);
+            } else {
+                indices = stream.readShortArray(numIndices);
+            }
+            if (o.protocolVersion == 11) {
+                var b = stream.readInt();
+                if (b == 1) {
+                    color = {
+                        r: stream.readFloat(),
+                        g: stream.readFloat(),
+                        b: stream.readFloat(),
+                        a: stream.readFloat()
+                    };
+                }
+            }
+            stream.align4();
+            numPositions = stream.readInt();
+            positions = stream.readFloatArray(numPositions);
+            numNormals = stream.readInt();
+            normals = stream.readFloatArray(numNormals);
+            numColors = stream.readInt();
+            if (numColors &gt; 0) {
+                colors = stream.readFloatArray(numColors);
+            } else if (color != null) {
+                // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+                colors = new Array(numPositions * 4);
+                for (i = 0; i &lt; numPositions; i++) {
+                    colors[i * 4 + 0] = color.r;
+                    colors[i * 4 + 1] = color.g;
+                    colors[i * 4 + 2] = color.b;
+                    colors[i * 4 + 3] = color.a;
+                }
+            }
+
+            o.geometryIds[geometryId] = [geometryId];
+            modelId = o.roid; // TODO: set to the model ID
+            o.viewer.createGeometry(modelId, geometryId, positions, normals, colors, indices);
+
+            if (o.dataToInfo[geometryId] != null) {
+                o.dataToInfo[geometryId].forEach(function (oid) {
+                    var ob = o.viewer.getObject(o.roid + &quot;:&quot; + oid);
+                    ob.add(geometryId);
+                });
+                delete o.dataToInfo[geometryId];
+            }
+        } else if (geometryType == 2) {
+            console.log(&quot;Unimplemented&quot;, 2);
+        } else if (geometryType == 3) {
+            var geometryDataOid = stream.readLong();
+            numParts = stream.readInt();
+            o.geometryIds[geometryDataOid] = [];
+
+            var geometryIds = [];
+            for (i = 0; i &lt; numParts; i++) {
+                var partId = stream.readLong();
+                geometryId = geometryDataOid + &quot;_&quot; + i;
+                numIndices = stream.readInt();
+
+                if (o.viewer.BIMSERVER_VERSION == &quot;1.4&quot;) {
+                    indices = stream.readIntArray(numIndices);
+                } else {
+                    indices = stream.readShortArray(numIndices);
+                }
+
+                if (o.protocolVersion == 11) {
+                    var b = stream.readInt();
+                    if (b == 1) {
+                        var color = {
+                            r: stream.readFloat(),
+                            g: stream.readFloat(),
+                            b: stream.readFloat(),
+                            a: stream.readFloat()
+                        };
+                    }
+                }
+                stream.align4();
+
+                numPositions = stream.readInt();
+                positions = stream.readFloatArray(numPositions);
+                numNormals = stream.readInt();
+                normals = stream.readFloatArray(numNormals);
+                numColors = stream.readInt();
+                if (numColors &gt; 0) {
+                    colors = stream.readFloatArray(numColors);
+                } else if (color != null) {
+                    // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
+                    colors = new Array(numPositions * 4);
+                    for (i = 0; i &lt; numPositions; i++) {
+                        colors[i * 4 + 0] = color.r;
+                        colors[i * 4 + 1] = color.g;
+                        colors[i * 4 + 2] = color.b;
+                        colors[i * 4 + 3] = color.a;
+                    }
+                }
+
+                geometryIds.push(geometryId);
+                o.geometryIds[geometryDataOid].push(geometryId);
+                var modelId = o.roid; // TODO: set to the model ID
+                o.viewer.createGeometry(modelId, geometryId, positions, normals, colors, indices);
+            }
+            if (o.dataToInfo[geometryDataOid] != null) {
+                o.dataToInfo[geometryDataOid].forEach(function (oid) {
+                    var ob = o.viewer.getObject(o.roid + &quot;:&quot; + oid);
+                    geometryIds.forEach(function (geometryId) {
+                        ob.add(geometryId);
+                    });
+                });
+                delete o.dataToInfo[geometryDataOid];
+            }
+        } else if (geometryType == 4) {
+            console.log(&quot;Unimplemented&quot;, 4);
+        } else if (geometryType == 5) {
+            var roid = stream.readLong();
+            var geometryInfoOid = stream.readLong();
+            var objectBounds = stream.readDoubleArray(6);
+            var matrix = stream.readDoubleArray(16);
+            if (globalTransformationMatrix != null) {
+                math.mulMat4(matrix, matrix, globalTransformationMatrix);
+            }
+            var geometryDataOid = stream.readLong();
+            var geometryDataOids = o.geometryIds[geometryDataOid];
+            var oid = o.infoToOid[geometryInfoOid];
+            if (geometryDataOids == null) {
+                geometryDataOids = [];
+                var list = o.dataToInfo[geometryDataOid];
+                if (list == null) {
+                    list = [];
+                    o.dataToInfo[geometryDataOid] = list;
+                }
+                list.push(oid);
+            }
+            if (oid == null) {
+                console.error(&quot;Not found&quot;, o.infoToOid, geometryInfoOid);
+            } else {
+                o.model.apiModel.get(oid, function (object) {
+                    object.gid = geometryInfoOid;
+                    var modelId = o.roid; // TODO: set to the model ID
+                    o._createObject(modelId, roid, oid, oid, geometryDataOids, object.getType(), matrix);
+                });
+            }
+        } else {
+            this.warn(&quot;Unsupported geometry type: &quot; + geometryType);
+            return;
+        }
+
+        o.state.nrObjectsRead++;
+
+        o._updateProgress();
+    };
+
+    this._createObject = function (modelId, roid, oid, objectId, geometryIds, type, matrix) {
+
+        if (o.state.mode == 0) {
+            console.log(&quot;Mode is still 0, should be 1&quot;);
+            return;
+        }
+
+        // o.models[roid].get(oid,
+        // function () {
+        if (o.viewer.createObject(modelId, roid, oid, objectId, geometryIds, type, matrix)) {
+
+            // o.objectAddedListeners.forEach(function (listener) {
+            // listener(objectId);
+            // });
+        }
+
+        // });
+    };
+}
+
+export {BIMServerGeometryLoader};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

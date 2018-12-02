@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../">
+  <title data-ice="title">viewer/plugins/XML3DModelsPlugin/zipjs/z-worker.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for building high-performance visualizations on xeogl"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for building high-performance visualizations on xeogl"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/XML3DModelsPlugin/zipjs/z-worker.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* jshint worker:true */
+(function main(global) {
+	&quot;use strict&quot;;
+
+	if (global.zWorkerInitialized)
+		throw new Error(&apos;z-worker.js should be run only once&apos;);
+	global.zWorkerInitialized = true;
+
+	addEventListener(&quot;message&quot;, function(event) {
+		var message = event.data, type = message.type, sn = message.sn;
+		var handler = handlers[type];
+		if (handler) {
+			try {
+				handler(message);
+			} catch (e) {
+				onError(type, sn, e);
+			}
+		}
+		//for debug
+		//postMessage({type: &apos;echo&apos;, originalType: type, sn: sn});
+	});
+
+	var handlers = {
+		importScripts: doImportScripts,
+		newTask: newTask,
+		append: processData,
+		flush: processData,
+	};
+
+	// deflater/inflater tasks indexed by serial numbers
+	var tasks = {};
+
+	function doImportScripts(msg) {
+		if (msg.scripts &amp;&amp; msg.scripts.length &gt; 0)
+			importScripts.apply(undefined, msg.scripts);
+		postMessage({type: &apos;importScripts&apos;});
+	}
+
+	function newTask(msg) {
+		var CodecClass = global[msg.codecClass];
+		var sn = msg.sn;
+		if (tasks[sn])
+			throw Error(&apos;duplicated sn&apos;);
+		tasks[sn] =  {
+			codec: new CodecClass(msg.options),
+			crcInput: msg.crcType === &apos;input&apos;,
+			crcOutput: msg.crcType === &apos;output&apos;,
+			crc: new Crc32(),
+		};
+		postMessage({type: &apos;newTask&apos;, sn: sn});
+	}
+
+	// performance may not be supported
+	var now = global.performance ? global.performance.now.bind(global.performance) : Date.now;
+
+	function processData(msg) {
+		var sn = msg.sn, type = msg.type, input = msg.data;
+		var task = tasks[sn];
+		// allow creating codec on first append
+		if (!task &amp;&amp; msg.codecClass) {
+			newTask(msg);
+			task = tasks[sn];
+		}
+		var isAppend = type === &apos;append&apos;;
+		var start = now();
+		var output;
+		if (isAppend) {
+			try {
+				output = task.codec.append(input, function onprogress(loaded) {
+					postMessage({type: &apos;progress&apos;, sn: sn, loaded: loaded});
+				});
+			} catch (e) {
+				delete tasks[sn];
+				throw e;
+			}
+		} else {
+			delete tasks[sn];
+			output = task.codec.flush();
+		}
+		var codecTime = now() - start;
+
+		start = now();
+		if (input &amp;&amp; task.crcInput)
+			task.crc.append(input);
+		if (output &amp;&amp; task.crcOutput)
+			task.crc.append(output);
+		var crcTime = now() - start;
+
+		var rmsg = {type: type, sn: sn, codecTime: codecTime, crcTime: crcTime};
+		var transferables = [];
+		if (output) {
+			rmsg.data = output;
+			transferables.push(output.buffer);
+		}
+		if (!isAppend &amp;&amp; (task.crcInput || task.crcOutput))
+			rmsg.crc = task.crc.get();
+		
+		// posting a message with transferables will fail on IE10
+		try {
+			postMessage(rmsg, transferables);
+		} catch(ex) {
+			postMessage(rmsg); // retry without transferables
+		}
+	}
+
+	function onError(type, sn, e) {
+		var msg = {
+			type: type,
+			sn: sn,
+			error: formatError(e)
+		};
+		postMessage(msg);
+	}
+
+	function formatError(e) {
+		return { message: e.message, stack: e.stack };
+	}
+
+	// Crc32 code copied from file zip.js
+	function Crc32() {
+		this.crc = -1;
+	}
+	Crc32.prototype.append = function append(data) {
+		var crc = this.crc | 0, table = this.table;
+		for (var offset = 0, len = data.length | 0; offset &lt; len; offset++)
+			crc = (crc &gt;&gt;&gt; 8) ^ table[(crc ^ data[offset]) &amp; 0xFF];
+		this.crc = crc;
+	};
+	Crc32.prototype.get = function get() {
+		return ~this.crc;
+	};
+	Crc32.prototype.table = (function() {
+		var i, j, t, table = []; // Uint32Array is actually slower than []
+		for (i = 0; i &lt; 256; i++) {
+			t = i;
+			for (j = 0; j &lt; 8; j++)
+				if (t &amp; 1)
+					t = (t &gt;&gt;&gt; 1) ^ 0xEDB88320;
+				else
+					t = t &gt;&gt;&gt; 1;
+			table[i] = t;
+		}
+		return table;
+	})();
+
+	// &quot;no-op&quot; codec
+	function NOOP() {}
+	global.NOOP = NOOP;
+	NOOP.prototype.append = function append(bytes, onprogress) {
+		return bytes;
+	};
+	NOOP.prototype.flush = function flush() {};
+})(this);
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

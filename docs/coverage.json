@@ -1,0 +1,497 @@
+{
+  "coverage": "30.57%",
+  "expectCount": 314,
+  "actualCount": 96,
+  "files": {
+    "viewer/ModelsPlugin.js": {
+      "expectCount": 13,
+      "actualCount": 11,
+      "undocumentLines": [
+        13,
+        115
+      ]
+    },
+    "viewer/Plugin.js": {
+      "expectCount": 13,
+      "actualCount": 13,
+      "undocumentLines": []
+    },
+    "viewer/Viewer.js": {
+      "expectCount": 24,
+      "actualCount": 18,
+      "undocumentLines": [
+        358,
+        365,
+        372,
+        15,
+        345,
+        353
+      ]
+    },
+    "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
+      "expectCount": 2,
+      "actualCount": 1,
+      "undocumentLines": [
+        26
+      ]
+    },
+    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js": {
+      "expectCount": 11,
+      "actualCount": 6,
+      "undocumentLines": [
+        4,
+        267,
+        271,
+        21,
+        184
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js": {
+      "expectCount": 15,
+      "actualCount": 13,
+      "undocumentLines": [
+        19,
+        43
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoader.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoaderOLD.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerModel.js": {
+      "expectCount": 7,
+      "actualCount": 1,
+      "undocumentLines": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        13
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/DataInputStreamReader.js": {
+      "expectCount": 19,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        9,
+        10,
+        11,
+        14,
+        23,
+        27,
+        36,
+        45,
+        51,
+        57,
+        63,
+        69,
+        75,
+        85,
+        91,
+        101,
+        107
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js": {
+      "expectCount": 4,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        12,
+        27
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js": {
+      "expectCount": 4,
+      "actualCount": 2,
+      "undocumentLines": [
+        28,
+        64
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/StringView.js": {
+      "expectCount": 16,
+      "actualCount": 1,
+      "undocumentLines": [
+        330,
+        350,
+        393,
+        397,
+        408,
+        425,
+        431,
+        448,
+        467,
+        488,
+        510,
+        523,
+        574,
+        592,
+        629
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/defaultMaterials.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/request.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/utils.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        1,
+        11
+      ]
+    },
+    "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        13
+      ]
+    },
+    "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js": {
+      "expectCount": 4,
+      "actualCount": 2,
+      "undocumentLines": [
+        17,
+        36
+      ]
+    },
+    "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        15,
+        20
+      ]
+    },
+    "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        15,
+        20
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/XML3DModel.js": {
+      "expectCount": 35,
+      "actualCount": 9,
+      "undocumentLines": [
+        17,
+        279,
+        288,
+        1038,
+        1069,
+        1075,
+        1087,
+        1099,
+        1171,
+        1184,
+        1294,
+        1415,
+        1424,
+        1430,
+        25,
+        36,
+        44,
+        49,
+        50,
+        51,
+        102,
+        107,
+        189,
+        212,
+        227,
+        231
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        49
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test1.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        17,
+        28
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test10.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        3,
+        5,
+        9,
+        16,
+        24
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test11.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        34,
+        45,
+        55
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test12.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        34,
+        40,
+        50
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test13.js": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        34,
+        41,
+        46,
+        62
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test14.js": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        34,
+        41,
+        46,
+        68
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test15.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        7,
+        25,
+        47,
+        68,
+        76,
+        77
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test16.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        17,
+        28
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test17.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        6,
+        10,
+        18,
+        29
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test18.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        5,
+        9,
+        17,
+        28
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test2.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        6,
+        10,
+        20,
+        31
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test20.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        3,
+        5,
+        9,
+        29
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test3.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        6,
+        10,
+        15,
+        22
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test4.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        6,
+        10,
+        18,
+        29
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test5.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        6,
+        10,
+        15,
+        22
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test6.js": {
+      "expectCount": 7,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        6,
+        10,
+        15,
+        22
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test7.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        3,
+        7
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test8.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        3,
+        5,
+        9,
+        14,
+        21
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test9.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        3,
+        5,
+        9,
+        16,
+        24
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/util.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/zip-ext.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/XML3DModelsPlugin/zipjs/zip.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}

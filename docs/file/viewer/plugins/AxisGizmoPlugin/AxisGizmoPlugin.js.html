@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for building high-performance visualizations on xeogl"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for building high-performance visualizations on xeogl"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {VectorTextGeometry} from &quot;../../../xeogl/VectorTextGeometry/VectorTextGeometry.js&quot;
+import {Plugin} from &quot;./../../../viewer/Plugin.js&quot;;
+import {
+    Scene,
+    AmbientLight,
+    DirLight,
+    Mesh,
+    CylinderGeometry,
+    SphereGeometry,
+    PhongMaterial,
+    math
+} from &quot;../../../xeogl/xeogl.module.js&quot;
+
+
+/**
+ * Viewer plugin that shows the axii of the World-space coordinate system.
+ *
+ * Depends on: xeogl.VectorTextGeometry
+ *
+ * @class AxisGizmoPlugin
+ * @constructor
+ * @param viewer {Viewer} The xeoviewer viewer.
+ */
+class AxisGizmoPlugin extends Plugin {
+
+    constructor(viewer, cfg) {
+
+        cfg = cfg || {};
+
+        super(&quot;axisGizmo&quot;, viewer, cfg);
+
+        var camera = viewer.scene.camera;
+
+        var size = cfg.size || [250, 250];
+
+        var canvas = camera.scene.canvas;
+
+        // Create canvas for this gizmo
+
+        var canvasId = &quot;xeogl-axisHelper-canvas-&quot; + math.createUUID();
+        var body = document.getElementsByTagName(&quot;body&quot;)[0];
+        var div = document.createElement(&apos;div&apos;);
+        var style = div.style;
+        style.height = size[0] + &quot;px&quot;;
+        style.width = size[1] + &quot;px&quot;;
+        style.padding = &quot;0&quot;;
+        style.margin = &quot;0&quot;;
+        style.float = &quot;left&quot;;
+        style.left = &quot;410px&quot;;
+        style.bottom = &quot;350px&quot;;
+        style.position = &quot;absolute&quot;;
+        style[&quot;z-index&quot;] = &quot;1000000&quot;;
+        // style[&quot;background-color&quot;] = &quot;rgba(0,0,0,0.3)&quot;;
+        div.innerHTML += &apos;&lt;canvas id=&quot;&apos; + canvasId + &apos;&quot; style=&quot;width: &apos; + size[0] + &apos;px; height: &apos; + size[1] + &apos;px; float: left; margin: 0; padding: 0;&quot;&gt;&lt;/canvas&gt;&apos;;
+        body.appendChild(div);
+        var helperCanvas = document.getElementById(canvasId);
+
+        canvas.on(&quot;boundary&quot;,
+            function (boundary) {
+                style.left = boundary[0] + 10 + &quot;px&quot;;
+                style.bottom = (boundary[0] + 20) + &quot;px&quot;;
+            });
+
+        // The scene containing this helper
+        var scene = new Scene({
+            canvas: helperCanvas,
+            transparent: true
+        });
+
+        // Custom lights
+        scene.clearLights();
+
+        new AmbientLight(scene, {
+            color: [0.45, 0.45, 0.5],
+            intensity: 0.9
+        });
+
+        new DirLight(scene, {
+            dir: [-0.5, 0.5, -0.6],
+            color: [0.8, 0.8, 0.7],
+            intensity: 1.0,
+            space: &quot;view&quot;
+        });
+
+        new DirLight(scene, {
+            dir: [0.5, -0.5, -0.6],
+            color: [0.8, 0.8, 0.8],
+            intensity: 1.0,
+            space: &quot;view&quot;
+        });
+
+        // Rotate helper in synch with target camera
+
+        var helperCamera = scene.camera;
+
+        camera.on(&quot;matrix&quot;, function () {
+
+            var eye = camera.eye;
+            var look = camera.look;
+            var up = camera.up;
+
+            var eyeLook = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, [])), 22);
+
+            helperCamera.look = [0, 0, 0];
+            helperCamera.eye = eyeLook;
+            helperCamera.up = up;
+        });
+
+        // ----------------- Components that are shared among more than one mesh ---------------
+
+        var arrowHead = new CylinderGeometry(scene, {
+            radiusTop: 0.01,
+            radiusBottom: 0.6,
+            height: 1.7,
+            radialSegments: 20,
+            heightSegments: 1,
+            openEnded: false
+        });
+
+        var arrowShaft = new CylinderGeometry(scene, {
+            radiusTop: 0.2,
+            radiusBottom: 0.2,
+            height: 4.5,
+            radialSegments: 20,
+            heightSegments: 1,
+            openEnded: false
+        });
+
+        var axisMaterial = new PhongMaterial(scene, { // Red by convention
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var xAxisMaterial = new PhongMaterial(scene, { // Red by convention
+            diffuse: [1, 0.3, 0.3],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var xAxisLabelMaterial = new PhongMaterial(scene, { // Red by convention
+            emissive: [1, 0.3, 0.3],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var yAxisMaterial = new PhongMaterial(scene, { // Green by convention
+            diffuse: [0.3, 1, 0.3],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var yAxisLabelMaterial = new PhongMaterial(scene, { // Green by convention
+            emissive: [0.3, 1, 0.3],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+
+        var zAxisMaterial = new PhongMaterial(scene, { // Blue by convention
+            diffuse: [0.3, 0.3, 1],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var zAxisLabelMaterial = new PhongMaterial(scene, {
+            emissive: [0.3, 0.3, 1],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+        var ballMaterial = new PhongMaterial(scene, {
+            diffuse: [0.5, 0.5, 0.5],
+            ambient: [0.0, 0.0, 0.0],
+            specular: [.6, .6, .3],
+            shininess: 80,
+            lineWidth: 2
+        });
+
+
+        // ----------------- Meshes ------------------------------
+
+        var meshes = [
+
+            // Sphere behind gnomon
+
+            new Mesh(scene, {
+                geometry: new SphereGeometry(scene, {
+                    radius: 9.0,
+                    heightSegments: 60,
+                    widthSegments: 60
+                }),
+                material: new PhongMaterial(scene, {
+                    diffuse: [0.0, 0.0, 0.0],
+                    emissive: [0.1, 0.1, 0.1],
+                    ambient: [0.1, 0.1, 0.2],
+                    specular: [0, 0, 0],
+                    alpha: 0.4,
+                    alphaMode: &quot;blend&quot;,
+                    frontface: &quot;cw&quot;
+                }),
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false
+            }),
+
+            // Ball at center of axis
+
+            new Mesh(scene, {  // Arrow
+                geometry: new SphereGeometry(scene, {
+                    radius: 1.0
+                }),
+                material: ballMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false
+            }),
+
+            // X-axis arrow, shaft and label
+
+            new Mesh(scene, {  // Arrow
+                geometry: arrowHead,
+                material: xAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [-5, 0, 0],
+                rotation: [0, 0, 90]
+            }),
+
+            new Mesh(scene, {  // Shaft
+                geometry: arrowShaft,
+                material: xAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [-2, 0, 0],
+                rotation: [0, 0, 90]
+            }),
+
+            new Mesh(scene, {  // Label
+                geometry: new VectorTextGeometry(scene, {text: &quot;X&quot;, size: 1.5}),
+                material: xAxisLabelMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [-7, 0, 0],
+                billboard: &quot;spherical&quot;
+            }),
+
+            // Y-axis arrow, shaft and label
+
+            new Mesh(scene, {  // Arrow
+                geometry: arrowHead,
+                material: yAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 5, 0]
+            }),
+
+            new Mesh(scene, {  // Shaft
+                geometry: arrowShaft,
+                material: yAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 2, 0]
+            }),
+
+            new Mesh(scene, {  // Label
+                geometry: new VectorTextGeometry(scene, {text: &quot;Y&quot;, size: 1.5}),
+                material: yAxisLabelMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 7, 0],
+                billboard: &quot;spherical&quot;
+            }),
+
+            // Z-axis arrow, shaft and label
+
+            new Mesh(scene, {  // Arrow
+                geometry: arrowHead,
+                material: zAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 0, 5],
+                rotation: [90, 0, 0]
+            }),
+
+            new Mesh(scene, {  // Shaft
+                geometry: arrowShaft,
+                material: zAxisMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 0, 2],
+                rotation: [90, 0, 0]
+            }),
+
+            new Mesh(scene, {  // Label
+                geometry: new VectorTextGeometry(scene, {text: &quot;Z&quot;, size: 1.5}),
+                material: zAxisLabelMaterial,
+                pickable: false,
+                collidable: false,
+                visible: cfg.visible !== false,
+                position: [0, 0, 7],
+                billboard: &quot;spherical&quot;
+            })
+        ];
+
+        /** Shows or hides this helper
+         *
+         * @param visible
+         */
+        this.setVisible = function (visible) {
+            for (var i = 0; i &lt; meshes.length; i++) {
+                meshes[i].visible = visible;
+            }
+        }
+    }
+}
+
+export {AxisGizmoPlugin}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
