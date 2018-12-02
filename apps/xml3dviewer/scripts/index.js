@@ -31,7 +31,7 @@ export default class XML3DViewerApp {
 
         new XML3DModelsPlugin(viewer, {
             id: "xml3d",
-            workerScriptsPath : "../../../src/viewer/plugins/XML3DModelsPlugin/zipjs/"
+            workerScriptsPath : "./../../../src/viewer/plugins/XML3DModelsPlugin/zipjs/"
         });
         new AxisGizmoPlugin(viewer, {id: "axis", size: [250, 250]});
 
