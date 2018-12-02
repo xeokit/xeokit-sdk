@@ -1,4 +1,4 @@
-import {_isString, utils, scheduleTask, math} from "../../../libs/xeogl/xeogl.module.js";
+import {_isString, utils, scheduleTask, math} from "../../xeogl/xeogl.module.js";
 import {BigModel} from "../BigModel/BigModel.js";
 
 /**

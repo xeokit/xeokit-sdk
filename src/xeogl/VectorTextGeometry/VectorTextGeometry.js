@@ -1,4 +1,4 @@
-import {Geometry, math, _apply, _isNumeric} from "../../../libs/xeogl/xeogl.module.js"
+import {Geometry, math, _apply, _isNumeric} from "../xeogl.module.js"
 
 var letters;
 
