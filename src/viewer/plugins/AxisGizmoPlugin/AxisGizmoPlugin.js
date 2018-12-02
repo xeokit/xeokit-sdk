@@ -9,7 +9,7 @@ import {
     SphereGeometry,
     PhongMaterial,
     math
-} from "../../../../libs/xeogl/xeogl.module.js"
+} from "../../../xeogl/xeogl.module.js"
 
 
 /**
