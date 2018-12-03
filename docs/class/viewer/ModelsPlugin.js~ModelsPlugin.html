@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ModelsPlugin} from &apos;<span><a href="file/viewer/ModelsPlugin.js.html#lineNumber11">xeokit-sdk/viewer/ModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ModelsPlugin} from &apos;<span><a href="file/viewer/ModelsPlugin.js.html#lineNumber9">xeokit-sdk/viewer/ModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/ModelsPlugin.js.html#lineNumber11">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/ModelsPlugin.js.html#lineNumber9">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -71,7 +71,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>Base class for viewer plugins that load models.</p>
+  <div class="description" data-ice="description"><p>Base class for Viewer plugins that load models.</p>
 </div>
   
 
@@ -104,7 +104,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, modelClass: <span>Class</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -145,7 +145,7 @@
       <div>
         
         
-        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">Models</a> currently loaded by this plugin.</p>
+        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -233,13 +233,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Model</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Loads a model into the viewer.</p>
+        <div data-ice="description"><p>Loads a model into this Plugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -268,7 +268,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Unloads a model that was loaded by this plugin.</p>
+        <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -305,7 +305,7 @@
       <div>
         
         
-        <div data-ice="description"><p>ID for this Plugin, unique within the <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+        <div data-ice="description"><p>ID for this Plugin, unique within its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -334,7 +334,7 @@
       <div>
         
         
-        <div data-ice="description"><p>The viewer that contains this plugin.</p>
+        <div data-ice="description"><p>The Viewer that contains this Plugin.</p>
 </div>
       </div>
     </td>
@@ -363,7 +363,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Destroys this plugin and removes it from its viewer.</p>
+        <div data-ice="description"><p>Destroys this Plugin and removes it from its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -392,7 +392,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -421,7 +421,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Fires an event on this plugin.</p>
+        <div data-ice="description"><p>Fires an event at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -450,7 +450,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -479,7 +479,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Subscribes to an event on this plugin.</p>
+        <div data-ice="description"><p>Subscribes to an event fired at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -504,11 +504,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, modelClass: <span>Class</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber13">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -520,7 +520,45 @@
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/Plugin.js~Plugin.html#instance-constructor-constructor">Plugin#constructor</a></span></div>
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID for this plugin, with which we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">viewer</td>
+      <td data-ice="type" class="code"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">modelClass</td>
+      <td data-ice="type" class="code"><span>Class</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The JavaScript class for the type of model this plugin will manage.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Plugin configuration.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -555,14 +593,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber26">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">Models</a> currently loaded by this plugin.</p>
+  <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.</p>
 </div>
 
   
@@ -602,7 +640,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber128">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -646,7 +684,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber137">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber144">source</a></span></span>
     </span>
   </h3>
 
@@ -686,18 +724,18 @@
     
     
     
-    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Model</span></span>
+    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber48">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Loads a model into the viewer.</p>
+  <div data-ice="description"><p>Loads a model into this Plugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
 
   
@@ -734,8 +772,8 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>Model</span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>A xeogl component representing the newly-loaded model - see: <a href="http://xeogl.org/docs/classes/Model.html">http://xeogl.org/docs/classes/Model.html</a></p>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model</p>
 </td>
         </tr>
       </tbody>
@@ -771,14 +809,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/ModelsPlugin.js.html#lineNumber76">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Unloads a model that was loaded by this plugin.</p>
+  <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
 </div>
 
   

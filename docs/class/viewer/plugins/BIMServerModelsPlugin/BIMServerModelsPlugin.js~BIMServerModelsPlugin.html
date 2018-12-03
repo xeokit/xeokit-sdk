@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerModelsPlugin} from &apos;<span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber17">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerModelsPlugin} from &apos;<span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber14">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber17">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber14">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -104,7 +104,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -305,7 +305,7 @@
       <div>
         
         
-        <div data-ice="description"><p>ID for this Plugin, unique within the <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+        <div data-ice="description"><p>ID for this Plugin, unique within its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -334,7 +334,7 @@
       <div>
         
         
-        <div data-ice="description"><p>The viewer that contains this plugin.</p>
+        <div data-ice="description"><p>The Viewer that contains this Plugin.</p>
 </div>
       </div>
     </td>
@@ -363,7 +363,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Destroys this plugin and removes it from its viewer.</p>
+        <div data-ice="description"><p>Destroys this Plugin and removes it from its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -392,7 +392,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -421,7 +421,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Fires an event on this plugin.</p>
+        <div data-ice="description"><p>Fires an event at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -450,7 +450,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -479,7 +479,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Subscribes to an event on this plugin.</p>
+        <div data-ice="description"><p>Subscribes to an event fired at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -504,11 +504,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -520,7 +520,46 @@
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/Plugin.js~Plugin.html#instance-constructor-constructor">Plugin#constructor</a></span></div>
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">viewer</td>
+      <td data-ice="type" class="code"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Plugin configuration.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;BIMServerModels&quot;</li></ul></td>
+      <td data-ice="description"><p>Optional ID for this plugin, with which we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.bimServerAPI]</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A BIMServer client API instance.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -555,7 +594,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -599,7 +638,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -643,7 +682,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -690,7 +729,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -734,7 +773,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 

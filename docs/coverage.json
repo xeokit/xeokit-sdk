@@ -1,14 +1,13 @@
 {
-  "coverage": "30.57%",
+  "coverage": "33.12%",
   "expectCount": 314,
-  "actualCount": 96,
+  "actualCount": 104,
   "files": {
     "viewer/ModelsPlugin.js": {
       "expectCount": 13,
-      "actualCount": 11,
+      "actualCount": 12,
       "undocumentLines": [
-        13,
-        115
+        122
       ]
     },
     "viewer/Plugin.js": {
@@ -20,38 +19,34 @@
       "expectCount": 24,
       "actualCount": 18,
       "undocumentLines": [
-        358,
-        365,
-        372,
-        15,
-        345,
-        353
+        360,
+        367,
+        374,
+        17,
+        347,
+        355
       ]
     },
     "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
       "expectCount": 2,
-      "actualCount": 1,
-      "undocumentLines": [
-        26
-      ]
+      "actualCount": 2,
+      "undocumentLines": []
     },
     "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js": {
       "expectCount": 11,
-      "actualCount": 6,
+      "actualCount": 7,
       "undocumentLines": [
         4,
-        267,
-        271,
-        21,
-        184
+        270,
+        274,
+        187
       ]
     },
     "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js": {
       "expectCount": 15,
-      "actualCount": 13,
+      "actualCount": 14,
       "undocumentLines": [
-        19,
-        43
+        51
       ]
     },
     "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoader.js": {
@@ -173,33 +168,28 @@
     },
     "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js": {
       "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        13
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js": {
       "expectCount": 4,
-      "actualCount": 2,
+      "actualCount": 3,
       "undocumentLines": [
-        17,
-        36
+        65
       ]
     },
     "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js": {
       "expectCount": 3,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
-        15,
-        20
+        51
       ]
     },
     "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js": {
       "expectCount": 3,
-      "actualCount": 1,
+      "actualCount": 2,
       "undocumentLines": [
-        15,
-        20
+        50
       ]
     },
     "viewer/plugins/XML3DModelsPlugin/XML3DModel.js": {
@@ -238,7 +228,7 @@
       "expectCount": 4,
       "actualCount": 3,
       "undocumentLines": [
-        49
+        50
       ]
     },
     "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test1.js": {

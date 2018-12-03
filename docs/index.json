@@ -567,7 +567,7 @@
     "__docId__": 48,
     "kind": "file",
     "name": "viewer/ModelsPlugin.js",
-    "content": "import {_apply} from \"../xeogl/xeogl.module.js\"\nimport {Plugin} from \"./Plugin.js\";\n\n/**\n Base class for viewer plugins that load models.\n\n @class ModelsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n */\nclass ModelsPlugin extends Plugin {\n\n    constructor(id, viewer, modelClass, cfg) {\n\n        super(id, viewer, cfg);\n\n        /**\n         * @private\n         */\n        this._modelClass = modelClass;\n\n        /**\n         * <a href=\"http://xeogl.org/docs/classes/Model.html\">Models</a> currently loaded by this plugin.\n         * @type {{String:Model}}\n         */\n        this.models = {};\n\n        /**\n         * Saves load params for bookmarks.\n         * @private\n         */\n        this._modelLoadParams = {};\n    }\n\n    /**\n     Loads a model into the viewer.\n\n     @param params {*} Configs\n     @param params.id {String} Optional ID, unique among all components in the viewer's scene.\n     @return {Model} A xeogl component representing the newly-loaded model - see: http://xeogl.org/docs/classes/Model.html\n     */\n    load(params, ok) {\n        const id = params.id;\n        if (!id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[id]) {\n            this.error(`Component with this ID already exists in viewer: ${id}`);\n            return;\n        }\n        const model = new this._modelClass(this.viewer.scene, params);\n        this._modelLoadParams[id] = _apply(params, {});\n        this.models[id] = model;\n        model.once(\"destroyed\", () => {\n            delete this.models[id];\n            delete this._modelLoadParams[id];\n        });\n        if (ok) {\n            model.once(\"loaded\", ok);\n        }\n        return model;\n    }\n\n    /**\n     * Unloads a model that was loaded by this plugin.\n     * @param {String} id  ID of model to unload.\n     */\n    unload(id) {\n        const model = this.models;\n        if (!model) {\n            this.error(`unload() model with this ID not found: ${id}`);\n            return;\n        }\n        model.destroy();\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        switch (name) {\n            case \"clear\":\n                this.clear();\n                break;\n        }\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        bookmark[this.id] = this._modelLoadParams;\n    }\n\n    /**\n     * @private\n     */\n    readBookmarkAsynch(bookmark, ok) {\n        this.clear();\n        var modelLoadParams = bookmark[this.id];\n        if (modelLoadParams) {\n            var modelParamsList = [];\n            for (const id in modelLoadParams) {\n                modelParamsList.push(modelLoadParams[id]);\n            }\n            if (modelParamsList.length === 0) {\n                ok();\n                return;\n            }\n            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);\n        }\n    }\n\n    _loadModel(modelLoadParams, i, ok) {\n        this.load(modelLoadParams[i], function () {\n            if (i === 0) {\n                ok();\n            } else {\n                this._loadModel(modelLoadParams, i - 1, ok);\n            }\n        });\n    }\n\n    /**\n     * Destroys models loaded by this plugin.\n     */\n    clear() {\n        for (const id in this.models) {\n            this.models[id].destroy();\n        }\n    }\n\n    /**\n     * Destroys this plugin, after first destroying any models it has loaded.\n     */\n    destroy() {\n        this.clear();\n        super.destroy();\n    }\n}\n\nexport {ModelsPlugin}",
+    "content": "import {_apply} from \"../xeogl/xeogl.module.js\"\nimport {Plugin} from \"./Plugin.js\";\n\n/**\n Base class for Viewer plugins that load models.\n\n @class ModelsPlugin\n */\nclass ModelsPlugin extends Plugin {\n\n    /**\n     * @constructor\n     *\n     * @param {String} [id] ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     * @param {Viewer} viewer The Viewer.\n     * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.\n     * @param {Object} cfg  Plugin configuration.\n     */\n    constructor(id, viewer, modelClass, cfg) {\n\n        super(id, viewer, cfg);\n\n        /**\n         * @private\n         */\n        this._modelClass = modelClass;\n\n        /**\n         * <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Models</a> currently loaded by this Plugin.\n         * @type {{String:Model}}\n         */\n        this.models = {};\n\n        /**\n         * Saves load params for bookmarks.\n         * @private\n         */\n        this._modelLoadParams = {};\n    }\n\n    /**\n     * Loads a model into this Plugin's {@link Viewer}.\n     *\n     * @param params {*} Configs\n     * @param params.id {String} Optional ID, unique among all components in the viewer's scene.\n     * @returns {{xeogl.Model}} A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model\n     */\n    load(params, ok) {\n        const id = params.id;\n        if (!id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[id]) {\n            this.error(`Component with this ID already exists in viewer: ${id}`);\n            return;\n        }\n        const model = new this._modelClass(this.viewer.scene, params);\n        this._modelLoadParams[id] = _apply(params, {});\n        this.models[id] = model;\n        model.once(\"destroyed\", () => {\n            delete this.models[id];\n            delete this._modelLoadParams[id];\n        });\n        if (ok) {\n            model.once(\"loaded\", ok);\n        }\n        return model;\n    }\n\n    /**\n     * Unloads and destroys a model that was previously loaded by this Plugin.\n     *\n     * @param {String} id  ID of model to unload.\n     */\n    unload(id) {\n        const model = this.models;\n        if (!model) {\n            this.error(`unload() model with this ID not found: ${id}`);\n            return;\n        }\n        model.destroy();\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        switch (name) {\n            case \"clear\":\n                this.clear();\n                break;\n        }\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        bookmark[this.id] = this._modelLoadParams;\n    }\n\n    /**\n     * @private\n     */\n    readBookmarkAsynch(bookmark, ok) {\n        this.clear();\n        var modelLoadParams = bookmark[this.id];\n        if (modelLoadParams) {\n            var modelParamsList = [];\n            for (const id in modelLoadParams) {\n                modelParamsList.push(modelLoadParams[id]);\n            }\n            if (modelParamsList.length === 0) {\n                ok();\n                return;\n            }\n            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);\n        }\n    }\n\n    _loadModel(modelLoadParams, i, ok) {\n        this.load(modelLoadParams[i], function () {\n            if (i === 0) {\n                ok();\n            } else {\n                this._loadModel(modelLoadParams, i - 1, ok);\n            }\n        });\n    }\n\n    /**\n     * Destroys models loaded by this plugin.\n     */\n    clear() {\n        for (const id in this.models) {\n            this.models[id].destroy();\n        }\n    }\n\n    /**\n     * Destroys this plugin, after first destroying any models it has loaded.\n     */\n    destroy() {\n        this.clear();\n        super.destroy();\n    }\n}\n\nexport {ModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/ModelsPlugin.js",
     "access": "public",
@@ -585,28 +585,12 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/ModelsPlugin.js",
     "importStyle": "{ModelsPlugin}",
-    "description": "Base class for viewer plugins that load models.",
-    "lineNumber": 11,
+    "description": "Base class for Viewer plugins that load models.",
+    "lineNumber": 9,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "ModelsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
       }
     ],
     "interface": false,
@@ -624,9 +608,56 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true
+    "description": "",
+    "lineNumber": 19,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "id",
+        "description": "ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Class"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "modelClass",
+        "description": "The JavaScript class for the type of model this plugin will manage."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      }
+    ]
   },
   {
     "__docId__": 51,
@@ -637,7 +668,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#_modelClass",
     "access": "private",
     "description": "",
-    "lineNumber": 20,
+    "lineNumber": 26,
     "ignore": true,
     "type": {
       "types": [
@@ -653,8 +684,8 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#models",
     "access": "public",
-    "description": "<a href=\"http://xeogl.org/docs/classes/Model.html\">Models</a> currently loaded by this plugin.",
-    "lineNumber": 26,
+    "description": "<a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Models</a> currently loaded by this Plugin.",
+    "lineNumber": 32,
     "type": {
       "nullable": null,
       "types": [
@@ -673,7 +704,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#_modelLoadParams",
     "access": "private",
     "description": "Saves load params for bookmarks.",
-    "lineNumber": 32,
+    "lineNumber": 38,
     "ignore": true,
     "type": {
       "types": [
@@ -691,8 +722,14 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#load",
     "access": "public",
-    "description": "Loads a model into the viewer.",
-    "lineNumber": 42,
+    "description": "Loads a model into this Plugin's {@link Viewer}.",
+    "lineNumber": 48,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{xeogl.Model}} A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model"
+      }
+    ],
     "params": [
       {
         "nullable": null,
@@ -718,10 +755,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Model"
+        "{xeogl.Model}"
       ],
       "spread": false,
-      "description": "A xeogl component representing the newly-loaded model - see: http://xeogl.org/docs/classes/Model.html"
+      "description": "A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model"
     }
   },
   {
@@ -734,8 +771,8 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#unload",
     "access": "public",
-    "description": "Unloads a model that was loaded by this plugin.",
-    "lineNumber": 69,
+    "description": "Unloads and destroys a model that was previously loaded by this Plugin.",
+    "lineNumber": 76,
     "params": [
       {
         "nullable": null,
@@ -761,7 +798,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#send",
     "access": "private",
     "description": "",
-    "lineNumber": 81,
+    "lineNumber": 88,
     "ignore": true,
     "params": [
       {
@@ -790,7 +827,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#writeBookmark",
     "access": "private",
     "description": "",
-    "lineNumber": 92,
+    "lineNumber": 99,
     "ignore": true,
     "params": [
       {
@@ -813,7 +850,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#readBookmarkAsynch",
     "access": "private",
     "description": "",
-    "lineNumber": 99,
+    "lineNumber": 106,
     "ignore": true,
     "params": [
       {
@@ -842,7 +879,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#_loadModel",
     "access": "private",
     "description": null,
-    "lineNumber": 115,
+    "lineNumber": 122,
     "undocument": true,
     "ignore": true,
     "params": [
@@ -878,7 +915,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#clear",
     "access": "public",
     "description": "Destroys models loaded by this plugin.",
-    "lineNumber": 128,
+    "lineNumber": 135,
     "params": [],
     "return": null
   },
@@ -893,7 +930,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#destroy",
     "access": "public",
     "description": "Destroys this plugin, after first destroying any models it has loaded.",
-    "lineNumber": 137,
+    "lineNumber": 144,
     "params": [],
     "return": null
   },
@@ -901,7 +938,7 @@
     "__docId__": 62,
     "kind": "file",
     "name": "viewer/Plugin.js",
-    "content": "/**\n @desc Base class for {@link Viewer} plugin classes.\n */\nclass Plugin {\n\n    /**\n     * Creates this Plugin and installs it into the given {@link Viewer}.\n     *\n     * @param {string} id ID for this plugin, unique among all plugins in the viewer.\n     * @param {Viewer} viewer The viewer.\n     * @param {Object} [cfg] Options\n     */\n    constructor(id, viewer, cfg) {\n\n        /**\n         * ID for this Plugin, unique within the {@link Viewer}.\n         *\n         * @type {string}\n         */\n        this.id = (cfg && cfg.id) ? cfg.id : id;\n\n        /**\n         * The viewer that contains this plugin.\n         * @type {Viewer}\n         */\n        this.viewer = viewer;\n\n        /**\n         * Subscriptions to events fired on this plugin.\n         * @private\n         */\n        this._eventSubs = {};\n\n        viewer.addPlugin(this);\n    }\n\n    /**\n     Subscribes to an event on this plugin.\n     @param {String} event The event\n     @param {Function} callback Callback fired on the event\n     */\n    on(event, callback) {\n        let subs = this._eventSubs[event];\n        if (!subs) {\n            subs = [];\n            this._eventSubs[event] = subs;\n        }\n        subs.push(callback);\n    }\n\n    /**\n     Fires an event on this plugin.\n     @param {String} event The event type name\n     @param {Object} value The event parameters\n     */\n    fire(event, value) {\n        const subs = this._eventSubs[event];\n        if (subs) {\n            for (let i = 0, len = subs.length; i < len; i++) {\n                subs[i](value);\n            }\n        }\n    }\n\n    /**\n     * Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.\n     * @param {String} msg The error message\n     */\n    log(msg) {\n        console.log(`[xeoviewer plugin ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.\n     * @param {String} msg The error message\n     */\n    error(msg) {\n        console.error(`[xeoviewer plugin ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Sends a message to this plugin.\n     * @private\n     */\n    send(name, value) {\n        //...\n    }\n\n    /**\n     * Saves the state of this plugin to a bookmark.\n     * @private\n     */\n    writeBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * Restores the state of this plugin from a bookmark.\n     * @private\n     */\n    readBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * Destroys this plugin and removes it from its viewer.\n     */\n    destroy() {\n        this.viewer.removePlugin(this);\n    }\n}\n\nexport {Plugin}",
+    "content": "/**\n @desc Base class for {@link Viewer} plugin classes.\n */\nclass Plugin {\n\n    /**\n     * Creates this Plugin and installs it into the given {@link Viewer}.\n     *\n     * @param {string} id ID for this plugin, unique among all plugins in the viewer.\n     * @param {Viewer} viewer The viewer.\n     * @param {Object} [cfg] Options\n     */\n    constructor(id, viewer, cfg) {\n\n        /**\n         * ID for this Plugin, unique within its {@link Viewer}.\n         *\n         * @type {string}\n         */\n        this.id = (cfg && cfg.id) ? cfg.id : id;\n\n        /**\n         * The Viewer that contains this Plugin.\n         *\n         * @type {Viewer}\n         */\n        this.viewer = viewer;\n\n        /**\n         * Subscriptions to events fired on this Plugin.\n         * @private\n         */\n        this._eventSubs = {};\n\n        viewer.addPlugin(this);\n    }\n\n    /**\n     Subscribes to an event fired at this Plugin.\n\n     @param {String} event The event\n     @param {Function} callback Callback fired on the event\n     */\n    on(event, callback) {\n        let subs = this._eventSubs[event];\n        if (!subs) {\n            subs = [];\n            this._eventSubs[event] = subs;\n        }\n        subs.push(callback);\n    }\n\n    /**\n     Fires an event at this Plugin.\n\n     @param {String} event The event type name\n     @param {Object} value The event parameters\n     */\n    fire(event, value) {\n        const subs = this._eventSubs[event];\n        if (subs) {\n            for (let i = 0, len = subs.length; i < len; i++) {\n                subs[i](value);\n            }\n        }\n    }\n\n    /**\n     * Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.\n     *\n     * @param {String} msg The error message\n     */\n    log(msg) {\n        console.log(`[xeoviewer plugin ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.\n     *\n     * @param {String} msg The error message\n     */\n    error(msg) {\n        console.error(`[xeoviewer plugin ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Sends a message to this Plugin.\n     *\n     * @private\n     */\n    send(name, value) {\n        //...\n    }\n\n    /**\n     * Saves the state of this Plugin to a bookmark.\n     *\n     * @private\n     */\n    writeBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * Restores the state of this Plugin from a bookmark.\n     *\n     * @private\n     */\n    readBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * Destroys this Plugin and removes it from its {@link Viewer}.\n     */\n    destroy() {\n        this.viewer.removePlugin(this);\n    }\n}\n\nexport {Plugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/Plugin.js",
     "access": "public",
@@ -976,7 +1013,7 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#id",
     "access": "public",
-    "description": "ID for this Plugin, unique within the {@link Viewer}.",
+    "description": "ID for this Plugin, unique within its {@link Viewer}.",
     "lineNumber": 20,
     "type": {
       "nullable": null,
@@ -995,8 +1032,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#viewer",
     "access": "public",
-    "description": "The viewer that contains this plugin.",
-    "lineNumber": 26,
+    "description": "The Viewer that contains this Plugin.",
+    "lineNumber": 27,
     "type": {
       "nullable": null,
       "types": [
@@ -1014,8 +1051,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#_eventSubs",
     "access": "private",
-    "description": "Subscriptions to events fired on this plugin.",
-    "lineNumber": 32,
+    "description": "Subscriptions to events fired on this Plugin.",
+    "lineNumber": 33,
     "ignore": true,
     "type": {
       "types": [
@@ -1033,8 +1070,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#on",
     "access": "public",
-    "description": "Subscribes to an event on this plugin.",
-    "lineNumber": 42,
+    "description": "Subscribes to an event fired at this Plugin.",
+    "lineNumber": 44,
     "params": [
       {
         "nullable": null,
@@ -1069,8 +1106,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#fire",
     "access": "public",
-    "description": "Fires an event on this plugin.",
-    "lineNumber": 56,
+    "description": "Fires an event at this Plugin.",
+    "lineNumber": 59,
     "params": [
       {
         "nullable": null,
@@ -1105,8 +1142,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#log",
     "access": "public",
-    "description": "Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.",
-    "lineNumber": 69,
+    "description": "Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.",
+    "lineNumber": 73,
     "params": [
       {
         "nullable": null,
@@ -1131,8 +1168,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#error",
     "access": "public",
-    "description": "Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.",
-    "lineNumber": 77,
+    "description": "Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.",
+    "lineNumber": 82,
     "params": [
       {
         "nullable": null,
@@ -1157,8 +1194,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#send",
     "access": "private",
-    "description": "Sends a message to this plugin.",
-    "lineNumber": 85,
+    "description": "Sends a message to this Plugin.",
+    "lineNumber": 91,
     "ignore": true,
     "params": [
       {
@@ -1186,8 +1223,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#writeBookmark",
     "access": "private",
-    "description": "Saves the state of this plugin to a bookmark.",
-    "lineNumber": 93,
+    "description": "Saves the state of this Plugin to a bookmark.",
+    "lineNumber": 100,
     "ignore": true,
     "params": [
       {
@@ -1209,8 +1246,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#readBookmark",
     "access": "private",
-    "description": "Restores the state of this plugin from a bookmark.",
-    "lineNumber": 101,
+    "description": "Restores the state of this Plugin from a bookmark.",
+    "lineNumber": 109,
     "ignore": true,
     "params": [
       {
@@ -1232,8 +1269,8 @@
     "static": false,
     "longname": "viewer/Plugin.js~Plugin#destroy",
     "access": "public",
-    "description": "Destroys this plugin and removes it from its viewer.",
-    "lineNumber": 108,
+    "description": "Destroys this Plugin and removes it from its {@link Viewer}.",
+    "lineNumber": 116,
     "params": [],
     "return": null
   },
@@ -1241,7 +1278,7 @@
     "__docId__": 76,
     "kind": "file",
     "name": "viewer/Viewer.js",
-    "content": "import {math, Scene, CameraFlightAnimation, CameraControl} from \"../xeogl/xeogl.module.js\";\n\n/**\n * Implements the WebGL-based 3D Viewer at the heart of the xeokit SDK.\n *\n * A Viewer wraps a <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a> in a container of\n * {@link Plugin}s that handle the various aspects of the Viewer's functionality.\n *\n * Each Plugin is able to serialize and deserialize its state as JSON.\n *\n * @public\n */\nclass Viewer {\n\n    constructor(cfg) {\n\n        /**\n         * Metadata about this Viewer.\n         *\n         * @property meta\n         * @type {{system: string}}\n         */\n        this.meta = {\n            systemId: \"xeoviewer.org\",\n            authoring_tool: \"xeoviewer.org\"\n        };\n\n        /**\n         * Subscriptions to events sent with {@link fire}.\n         * @private\n         */\n        this._eventSubs = {};\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>.\n         *\n         * @property scene\n         * @type {xeogl.Scene}\n         */\n        this.scene = new Scene({\n            canvas: cfg.canvasId,\n            webgl2: false,\n            contextAttr: {preserveDrawingBuffer: true},\n            transparent: !!cfg.transparent,\n            gammaInput: true,\n            gammaOutput: true\n        });\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraFlightAnimation.html\">xeogl.CameraFlightAnimation</a>, which\n         * is used to fly the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> to given targets.\n         *\n         * @property cameraFlight\n         * @type {xeogl.CameraFlightAnimation}\n         */\n        this.cameraFlight = new CameraFlightAnimation(this.scene, {\n            fitFOV: 45,\n            duration: 0.1\n        });\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraControl.html\">xeogl.CameraControl</a>, which\n         * controls the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> with mouse,  touch and keyboard input.\n         *\n         * @property cameraControl\n         * @type {xeogl.CameraControl}\n         */\n        this.cameraControl = new CameraControl(this.scene, {});\n\n        /**\n         * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.\n         *\n         * @property plugins\n         * @type {{string:Plugin}}\n         */\n        this.plugins = {};\n    }\n\n    /**\n     * Subscribes to an event fired at this Viewer.\n     *\n     * @param {String} event The event\n     * @param {Function} callback Callback fired on the event\n     */\n    on(event, callback) {\n        let subs = this._eventSubs[event];\n        if (!subs) {\n            subs = [];\n            this._eventSubs[event] = subs;\n        }\n        subs.push(callback);\n    }\n\n    /**\n     * Fires an event at this Viewer.\n     *\n     * @param {String} event Event name\n     * @param {Object} value Event parameters\n     */\n    fire(event, value) {\n        const subs = this._eventSubs[event];\n        if (subs) {\n            for (let i = 0, len = subs.length; i < len; i++) {\n                subs[i](value);\n            }\n        }\n    }\n\n    /**\n     * Logs a message to the JavaScript developer console, prefixed with the ID of this Viewer.\n     *\n     * @param {String} msg The message\n     */\n    log(msg) {\n        console.log(`[xeoviewer viewer ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Logs an error message to the JavaScript developer console, prefixed with the ID of this Viewer.\n     *\n     * @param {String} msg The error message\n     */\n    error(msg) {\n        console.error(`[xeoviewer viewer ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Installs a Plugin.\n     *\n     * @private\n     */\n    addPlugin(plugin) {\n        if (this.plugins[plugin.id]) {\n            this.error(`Plugin with this ID already installed: ${plugin.id}`);\n        }\n        this.plugins[plugin.id] = plugin;\n        this.log(`Installed plugin: ${plugin.id}`);\n    }\n\n    /**\n     * Uninstalls a Plugin, clearing content from it first.\n     *\n     * @private\n     */\n    removePlugin(plugin) {\n        const installedPlugin = this.plugins[plugin.id];\n        if (!installedPlugin) {\n            this.error(`Can't remove plugin - no plugin with this ID is installed: ${plugin.id}`);\n            return;\n        }\n        if (!installedPlugin !== plugin) {\n            this.error(`Can't remove plugin - a different plugin is installed with this ID: ${plugin.id}`);\n            return;\n        }\n        if (installedPlugin.clear) {\n            installedPlugin.clear();\n        }\n        delete this.plugins[id];\n        this.log(`Removed plugin: ${plugin.id}`);\n    }\n\n    /**\n     * Sends a message to installed Plugins.\n     *\n     * The message can optionally be accompanied by a value.\n     * @private\n     */\n    sendToPlugins(name, value) {\n        const plugins = this.plugins;\n        for (const id in plugins) {\n            if (plugins.hasOwnProperty(id)) {\n                plugins[id].send(name, value);\n            }\n        }\n    }\n\n    /**\n     * Clears content from this Viewer and all installed {@link Plugin}s.\n     */\n    clear() {\n        this.sendToPlugins(\"clear\");\n    }\n\n    /**\n     * Resets viewing state.\n     *\n     * Sends a \"resetView\" message to each installed {@link Plugin}.\n     */\n    resetView() {\n        this.sendToPlugins(\"resetView\");\n\n        // TODO\n        // this.show();\n        // this.hide(\"space\");\n        // this.hide(\"DEFAULT\");\n    }\n\n    /**\n     * Gets a JSON bookmark that captures the state of the Viewer and all installed {@link Plugin}s.\n     *\n     * @returns {*} The bookmark\n     */\n    getBookmark() {\n\n        const vecToArray = math.vecToArray;\n        const bookmark = {};\n        let id;\n        let model;\n        let modelState;\n        let position;\n        let scale;\n        let rotation;\n        let object;\n        let objectState;\n\n        /*\n         // Save object states that have non-default properties\n\n         const objectStates = [];\n         for (id in this.scene.entities) {\n         if (this.scene.entities.hasOwnProperty(id)) {\n         object = this.scene.entities[id];\n         objectState = null;\n         position = getPosition(object);\n         if (position) {\n         objectState = objectState || {id};\n         objectState.position = position;\n         }\n         scale = getScale(object);\n         if (scale) {\n         objectState = objectState || {id};\n         objectState.scale = scale;\n         }\n         rotation = getRotation(object);\n         if (rotation) {\n         objectState = objectState || {id};\n         objectState.rotation = rotation;\n         }\n         if (!object.visible) {\n         objectState = objectState || {id};\n         objectState.visible = false;\n         }\n         if (object.outlined) {\n         objectState = objectState || {id};\n         objectState.outlined = true;\n         }\n         if (!object.clippable) {\n         objectState = objectState || {id};\n         objectState.clippable = false;\n         }\n         if (!object.pickable) {\n         objectState = objectState || {id};\n         objectState.pickable = false;\n         }\n         if (!object.pickable) {\n         objectState = objectState || {id};\n         objectState.pickable = false;\n         }\n         if (objectState) {\n         objectStates.push(objectState);\n         }\n         }\n         }\n         if (objectStates.length > 0) {\n         bookmark.objects = objectStates;\n         }\n\n         const camera = this.camera;\n\n         bookmark.lookat = {\n         eye: vecToArray(camera.eye),\n         look: vecToArray(camera.look),\n         up: vecToArray(camera.up),\n         worldZUp: worldZUp === true\n         };\n\n         // Save other viewer properties that have non-default values\n\n         if (camera.gimbalLock !== true) {\n         bookmark.gimbalLock = camera.gimbalLock;\n         }\n\n         if (camera.projection !== \"perspective\") {\n         bookmark.projection = camera.projection;\n         }\n\n         if (camera.perspective.near !== 0.1) {\n         bookmark.perspectiveNear = camera.perspective.near;\n         }\n\n         if (camera.perspective.far !== 10000.0) {\n         bookmark.perspectiveFar = camera.perspective.far;\n         }\n\n         if (camera.perspective.fov !== 60.0) {\n         bookmark.perspectiveFOV = camera.perspective.fov;\n         }\n\n         if (camera.ortho.near !== 0.1) {\n         bookmark.orthoNear = camera.ortho.near;\n         }\n\n         if (camera.ortho.far !== 10000.0) {\n         bookmark.orthoFar = camera.ortho.far;\n         }\n\n         if (camera.ortho.scale !== 1.0) {\n         bookmark.orthoScale = camera.ortho.scale;\n         }\n\n         bookmark.viewFitFOV = this.cameraFlight.fitFOV;\n         bookmark.viewFitDuration = this.cameraFlight.duration;\n         */\n        // Save plugin states\n\n        for (const pluginId in this.plugins) {\n            if (this.plugins.hasOwnProperty(pluginId)) {\n                const plugin = this.plugins[pluginId];\n                if (plugin.writeBookmark) {\n                    plugin.writeBookmark(bookmark);\n                }\n            }\n        }\n\n        return bookmark;\n    }\n\n    /**\n     * Restores the Viewer and all installed {@link Plugin}s to the state captured in the given JSON bookmark.\n     *\n     * @param {*} bookmark\n     */\n    setBookmark(bookmark) {\n\n        for (const pluginId in this.plugins) {\n            if (this.plugins.hasOwnProperty(pluginId)) {\n                const plugin = this.plugins[pluginId];\n                if (plugin.readBookmark) {\n                    plugin.readBookmark(bookmark);\n                }\n            }\n        }\n    }\n\n    getSnapshot(params = {}, ok) {\n        return this.scene.canvas.getSnapshot({\n            width: params.width, // Defaults to size of canvas\n            height: params.height,\n            format: params.format || \"png\" // Options are \"jpeg\" (default), \"png\" and \"bmp\"\n        }, ok);\n    }\n\n    destroy() {\n\n    }\n}\n\nfunction getPosition(object) {\n    const position = object.position;\n    if (position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {\n        return vecToArray(position);\n    }\n}\n\nfunction getScale(object) {\n    const scale = object.scale;\n    if (scale[0] !== 1 || scale[1] !== 1 || scale[2] !== 1) {\n        return vecToArray(scale);\n    }\n}\n\nfunction getRotation(object) {\n    const rotation = object.rotation;\n    if (rotation[0] !== 0 || rotation[1] !== 0 || rotation[2] !== 0) {\n        return vecToArray(rotation);\n    }\n}\n\nexport {Viewer}",
+    "content": "import {math, Scene, CameraFlightAnimation, CameraControl} from \"../xeogl/xeogl.module.js\";\n\n/**\n * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.\n *\n * A Viewer wraps a single  <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>.\n *\n * Add {@link Plugin}s to a Viewer to extend its functionality.\n *\n * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed\n * {@link Plugin} instances will also save and load their state to and from the JSON.\n *\n * @public\n */\nclass Viewer {\n\n    constructor(cfg) {\n\n        /**\n         * Metadata about this Viewer.\n         *\n         * @property meta\n         * @type {{system: string}}\n         */\n        this.meta = {\n            systemId: \"xeoviewer.org\",\n            authoring_tool: \"xeoviewer.org\"\n        };\n\n        /**\n         * Subscriptions to events sent with {@link fire}.\n         * @private\n         */\n        this._eventSubs = {};\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>.\n         *\n         * @property scene\n         * @type {xeogl.Scene}\n         */\n        this.scene = new Scene({\n            canvas: cfg.canvasId,\n            webgl2: false,\n            contextAttr: {preserveDrawingBuffer: true},\n            transparent: !!cfg.transparent,\n            gammaInput: true,\n            gammaOutput: true\n        });\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraFlightAnimation.html\">xeogl.CameraFlightAnimation</a>, which\n         * is used to fly the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> to given targets.\n         *\n         * @property cameraFlight\n         * @type {xeogl.CameraFlightAnimation}\n         */\n        this.cameraFlight = new CameraFlightAnimation(this.scene, {\n            fitFOV: 45,\n            duration: 0.1\n        });\n\n        /**\n         * The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraControl.html\">xeogl.CameraControl</a>, which\n         * controls the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> with mouse,  touch and keyboard input.\n         *\n         * @property cameraControl\n         * @type {xeogl.CameraControl}\n         */\n        this.cameraControl = new CameraControl(this.scene, {});\n\n        /**\n         * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.\n         *\n         * @property plugins\n         * @type {{string:Plugin}}\n         */\n        this.plugins = {};\n    }\n\n    /**\n     * Subscribes to an event fired at this Viewer.\n     *\n     * @param {String} event The event\n     * @param {Function} callback Callback fired on the event\n     */\n    on(event, callback) {\n        let subs = this._eventSubs[event];\n        if (!subs) {\n            subs = [];\n            this._eventSubs[event] = subs;\n        }\n        subs.push(callback);\n    }\n\n    /**\n     * Fires an event at this Viewer.\n     *\n     * @param {String} event Event name\n     * @param {Object} value Event parameters\n     */\n    fire(event, value) {\n        const subs = this._eventSubs[event];\n        if (subs) {\n            for (let i = 0, len = subs.length; i < len; i++) {\n                subs[i](value);\n            }\n        }\n    }\n\n    /**\n     * Logs a message to the JavaScript developer console, prefixed with the ID of this Viewer.\n     *\n     * @param {String} msg The message\n     */\n    log(msg) {\n        console.log(`[xeoviewer viewer ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Logs an error message to the JavaScript developer console, prefixed with the ID of this Viewer.\n     *\n     * @param {String} msg The error message\n     */\n    error(msg) {\n        console.error(`[xeoviewer viewer ${this.id}]: ${msg}`);\n    }\n\n    /**\n     * Installs a Plugin.\n     *\n     * @private\n     */\n    addPlugin(plugin) {\n        if (this.plugins[plugin.id]) {\n            this.error(`Plugin with this ID already installed: ${plugin.id}`);\n        }\n        this.plugins[plugin.id] = plugin;\n        this.log(`Installed plugin: ${plugin.id}`);\n    }\n\n    /**\n     * Uninstalls a Plugin, clearing content from it first.\n     *\n     * @private\n     */\n    removePlugin(plugin) {\n        const installedPlugin = this.plugins[plugin.id];\n        if (!installedPlugin) {\n            this.error(`Can't remove plugin - no plugin with this ID is installed: ${plugin.id}`);\n            return;\n        }\n        if (!installedPlugin !== plugin) {\n            this.error(`Can't remove plugin - a different plugin is installed with this ID: ${plugin.id}`);\n            return;\n        }\n        if (installedPlugin.clear) {\n            installedPlugin.clear();\n        }\n        delete this.plugins[id];\n        this.log(`Removed plugin: ${plugin.id}`);\n    }\n\n    /**\n     * Sends a message to installed Plugins.\n     *\n     * The message can optionally be accompanied by a value.\n     * @private\n     */\n    sendToPlugins(name, value) {\n        const plugins = this.plugins;\n        for (const id in plugins) {\n            if (plugins.hasOwnProperty(id)) {\n                plugins[id].send(name, value);\n            }\n        }\n    }\n\n    /**\n     * Clears content from this Viewer and all installed {@link Plugin}s.\n     */\n    clear() {\n        this.sendToPlugins(\"clear\");\n    }\n\n    /**\n     * Resets viewing state.\n     *\n     * Sends a \"resetView\" message to each installed {@link Plugin}.\n     */\n    resetView() {\n        this.sendToPlugins(\"resetView\");\n\n        // TODO\n        // this.show();\n        // this.hide(\"space\");\n        // this.hide(\"DEFAULT\");\n    }\n\n    /**\n     * Gets a JSON bookmark that captures the state of the Viewer and all installed {@link Plugin}s.\n     *\n     * @returns {*} The bookmark\n     */\n    getBookmark() {\n\n        const vecToArray = math.vecToArray;\n        const bookmark = {};\n        let id;\n        let model;\n        let modelState;\n        let position;\n        let scale;\n        let rotation;\n        let object;\n        let objectState;\n\n        /*\n         // Save object states that have non-default properties\n\n         const objectStates = [];\n         for (id in this.scene.entities) {\n         if (this.scene.entities.hasOwnProperty(id)) {\n         object = this.scene.entities[id];\n         objectState = null;\n         position = getPosition(object);\n         if (position) {\n         objectState = objectState || {id};\n         objectState.position = position;\n         }\n         scale = getScale(object);\n         if (scale) {\n         objectState = objectState || {id};\n         objectState.scale = scale;\n         }\n         rotation = getRotation(object);\n         if (rotation) {\n         objectState = objectState || {id};\n         objectState.rotation = rotation;\n         }\n         if (!object.visible) {\n         objectState = objectState || {id};\n         objectState.visible = false;\n         }\n         if (object.outlined) {\n         objectState = objectState || {id};\n         objectState.outlined = true;\n         }\n         if (!object.clippable) {\n         objectState = objectState || {id};\n         objectState.clippable = false;\n         }\n         if (!object.pickable) {\n         objectState = objectState || {id};\n         objectState.pickable = false;\n         }\n         if (!object.pickable) {\n         objectState = objectState || {id};\n         objectState.pickable = false;\n         }\n         if (objectState) {\n         objectStates.push(objectState);\n         }\n         }\n         }\n         if (objectStates.length > 0) {\n         bookmark.objects = objectStates;\n         }\n\n         const camera = this.camera;\n\n         bookmark.lookat = {\n         eye: vecToArray(camera.eye),\n         look: vecToArray(camera.look),\n         up: vecToArray(camera.up),\n         worldZUp: worldZUp === true\n         };\n\n         // Save other viewer properties that have non-default values\n\n         if (camera.gimbalLock !== true) {\n         bookmark.gimbalLock = camera.gimbalLock;\n         }\n\n         if (camera.projection !== \"perspective\") {\n         bookmark.projection = camera.projection;\n         }\n\n         if (camera.perspective.near !== 0.1) {\n         bookmark.perspectiveNear = camera.perspective.near;\n         }\n\n         if (camera.perspective.far !== 10000.0) {\n         bookmark.perspectiveFar = camera.perspective.far;\n         }\n\n         if (camera.perspective.fov !== 60.0) {\n         bookmark.perspectiveFOV = camera.perspective.fov;\n         }\n\n         if (camera.ortho.near !== 0.1) {\n         bookmark.orthoNear = camera.ortho.near;\n         }\n\n         if (camera.ortho.far !== 10000.0) {\n         bookmark.orthoFar = camera.ortho.far;\n         }\n\n         if (camera.ortho.scale !== 1.0) {\n         bookmark.orthoScale = camera.ortho.scale;\n         }\n\n         bookmark.viewFitFOV = this.cameraFlight.fitFOV;\n         bookmark.viewFitDuration = this.cameraFlight.duration;\n         */\n        // Save plugin states\n\n        for (const pluginId in this.plugins) {\n            if (this.plugins.hasOwnProperty(pluginId)) {\n                const plugin = this.plugins[pluginId];\n                if (plugin.writeBookmark) {\n                    plugin.writeBookmark(bookmark);\n                }\n            }\n        }\n\n        return bookmark;\n    }\n\n    /**\n     * Restores the Viewer and all installed {@link Plugin}s to the state captured in the given JSON bookmark.\n     *\n     * @param {*} bookmark\n     */\n    setBookmark(bookmark) {\n\n        for (const pluginId in this.plugins) {\n            if (this.plugins.hasOwnProperty(pluginId)) {\n                const plugin = this.plugins[pluginId];\n                if (plugin.readBookmark) {\n                    plugin.readBookmark(bookmark);\n                }\n            }\n        }\n    }\n\n    getSnapshot(params = {}, ok) {\n        return this.scene.canvas.getSnapshot({\n            width: params.width, // Defaults to size of canvas\n            height: params.height,\n            format: params.format || \"png\" // Options are \"jpeg\" (default), \"png\" and \"bmp\"\n        }, ok);\n    }\n\n    destroy() {\n\n    }\n}\n\nfunction getPosition(object) {\n    const position = object.position;\n    if (position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {\n        return vecToArray(position);\n    }\n}\n\nfunction getScale(object) {\n    const scale = object.scale;\n    if (scale[0] !== 1 || scale[1] !== 1 || scale[2] !== 1) {\n        return vecToArray(scale);\n    }\n}\n\nfunction getRotation(object) {\n    const rotation = object.rotation;\n    if (rotation[0] !== 0 || rotation[1] !== 0 || rotation[2] !== 0) {\n        return vecToArray(rotation);\n    }\n}\n\nexport {Viewer}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/Viewer.js",
     "access": "public",
@@ -1262,7 +1299,7 @@
     "importPath": "xeokit-sdk/viewer/Viewer.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 358,
+    "lineNumber": 360,
     "undocument": true,
     "params": [
       {
@@ -1293,7 +1330,7 @@
     "importPath": "xeokit-sdk/viewer/Viewer.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 365,
+    "lineNumber": 367,
     "undocument": true,
     "params": [
       {
@@ -1324,7 +1361,7 @@
     "importPath": "xeokit-sdk/viewer/Viewer.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 372,
+    "lineNumber": 374,
     "undocument": true,
     "params": [
       {
@@ -1352,8 +1389,8 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/Viewer.js",
     "importStyle": "{Viewer}",
-    "description": "Implements the WebGL-based 3D Viewer at the heart of the xeokit SDK.\n\nA Viewer wraps a <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a> in a container of\n{@link Plugin}s that handle the various aspects of the Viewer's functionality.\n\nEach Plugin is able to serialize and deserialize its state as JSON.",
-    "lineNumber": 13,
+    "description": "The WebGL-based 3D Viewer class at the heart of the xeokit SDK.\n\nA Viewer wraps a single  <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>.\n\nAdd {@link Plugin}s to a Viewer to extend its functionality.\n\nSave and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed\n{@link Plugin} instances will also save and load their state to and from the JSON.",
+    "lineNumber": 15,
     "interface": false
   },
   {
@@ -1367,7 +1404,7 @@
     "longname": "viewer/Viewer.js~Viewer#constructor",
     "access": "public",
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 17,
     "undocument": true
   },
   {
@@ -1379,7 +1416,7 @@
     "longname": "viewer/Viewer.js~Viewer#meta",
     "access": "public",
     "description": "Metadata about this Viewer.",
-    "lineNumber": 23,
+    "lineNumber": 25,
     "properties": [
       {
         "nullable": null,
@@ -1410,7 +1447,7 @@
     "longname": "viewer/Viewer.js~Viewer#_eventSubs",
     "access": "private",
     "description": "Subscriptions to events sent with {@link fire}.",
-    "lineNumber": 32,
+    "lineNumber": 34,
     "ignore": true,
     "type": {
       "types": [
@@ -1427,7 +1464,7 @@
     "longname": "viewer/Viewer.js~Viewer#scene",
     "access": "public",
     "description": "The Viewer's <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>.",
-    "lineNumber": 40,
+    "lineNumber": 42,
     "properties": [
       {
         "nullable": null,
@@ -1458,7 +1495,7 @@
     "longname": "viewer/Viewer.js~Viewer#cameraFlight",
     "access": "public",
     "description": "The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraFlightAnimation.html\">xeogl.CameraFlightAnimation</a>, which\nis used to fly the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> to given targets.",
-    "lineNumber": 56,
+    "lineNumber": 58,
     "properties": [
       {
         "nullable": null,
@@ -1489,7 +1526,7 @@
     "longname": "viewer/Viewer.js~Viewer#cameraControl",
     "access": "public",
     "description": "The Viewer's <a href=\"http://xeogl.org/docs/classes/CameraControl.html\">xeogl.CameraControl</a>, which\ncontrols the <a href=\"http://xeogl.org/docs/classes/Scene.html\">xeogl.Scene</a>'s <a href=\"http://xeogl.org/docs/classes/Camera.html\">xeogl.Camera</a> with mouse,  touch and keyboard input.",
-    "lineNumber": 68,
+    "lineNumber": 70,
     "properties": [
       {
         "nullable": null,
@@ -1520,7 +1557,7 @@
     "longname": "viewer/Viewer.js~Viewer#plugins",
     "access": "public",
     "description": "{@link Plugin}s that have been installed into this Viewer, mapped to their IDs.",
-    "lineNumber": 76,
+    "lineNumber": 78,
     "properties": [
       {
         "nullable": null,
@@ -1553,7 +1590,7 @@
     "longname": "viewer/Viewer.js~Viewer#on",
     "access": "public",
     "description": "Subscribes to an event fired at this Viewer.",
-    "lineNumber": 85,
+    "lineNumber": 87,
     "params": [
       {
         "nullable": null,
@@ -1589,7 +1626,7 @@
     "longname": "viewer/Viewer.js~Viewer#fire",
     "access": "public",
     "description": "Fires an event at this Viewer.",
-    "lineNumber": 100,
+    "lineNumber": 102,
     "params": [
       {
         "nullable": null,
@@ -1625,7 +1662,7 @@
     "longname": "viewer/Viewer.js~Viewer#log",
     "access": "public",
     "description": "Logs a message to the JavaScript developer console, prefixed with the ID of this Viewer.",
-    "lineNumber": 114,
+    "lineNumber": 116,
     "params": [
       {
         "nullable": null,
@@ -1651,7 +1688,7 @@
     "longname": "viewer/Viewer.js~Viewer#error",
     "access": "public",
     "description": "Logs an error message to the JavaScript developer console, prefixed with the ID of this Viewer.",
-    "lineNumber": 123,
+    "lineNumber": 125,
     "params": [
       {
         "nullable": null,
@@ -1677,7 +1714,7 @@
     "longname": "viewer/Viewer.js~Viewer#addPlugin",
     "access": "private",
     "description": "Installs a Plugin.",
-    "lineNumber": 132,
+    "lineNumber": 134,
     "ignore": true,
     "params": [
       {
@@ -1700,7 +1737,7 @@
     "longname": "viewer/Viewer.js~Viewer#removePlugin",
     "access": "private",
     "description": "Uninstalls a Plugin, clearing content from it first.",
-    "lineNumber": 145,
+    "lineNumber": 147,
     "ignore": true,
     "params": [
       {
@@ -1723,7 +1760,7 @@
     "longname": "viewer/Viewer.js~Viewer#sendToPlugins",
     "access": "private",
     "description": "Sends a message to installed Plugins.\n\nThe message can optionally be accompanied by a value.",
-    "lineNumber": 168,
+    "lineNumber": 170,
     "ignore": true,
     "params": [
       {
@@ -1752,7 +1789,7 @@
     "longname": "viewer/Viewer.js~Viewer#clear",
     "access": "public",
     "description": "Clears content from this Viewer and all installed {@link Plugin}s.",
-    "lineNumber": 180,
+    "lineNumber": 182,
     "params": [],
     "return": null
   },
@@ -1767,7 +1804,7 @@
     "longname": "viewer/Viewer.js~Viewer#resetView",
     "access": "public",
     "description": "Resets viewing state.\n\nSends a \"resetView\" message to each installed {@link Plugin}.",
-    "lineNumber": 189,
+    "lineNumber": 191,
     "params": [],
     "return": null
   },
@@ -1782,7 +1819,7 @@
     "longname": "viewer/Viewer.js~Viewer#getBookmark",
     "access": "public",
     "description": "Gets a JSON bookmark that captures the state of the Viewer and all installed {@link Plugin}s.",
-    "lineNumber": 203,
+    "lineNumber": 205,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1810,7 +1847,7 @@
     "longname": "viewer/Viewer.js~Viewer#setBookmark",
     "access": "public",
     "description": "Restores the Viewer and all installed {@link Plugin}s to the state captured in the given JSON bookmark.",
-    "lineNumber": 333,
+    "lineNumber": 335,
     "params": [
       {
         "nullable": null,
@@ -1836,7 +1873,7 @@
     "longname": "viewer/Viewer.js~Viewer#getSnapshot",
     "access": "public",
     "description": null,
-    "lineNumber": 345,
+    "lineNumber": 347,
     "undocument": true,
     "params": [
       {
@@ -1872,7 +1909,7 @@
     "longname": "viewer/Viewer.js~Viewer#destroy",
     "access": "public",
     "description": null,
-    "lineNumber": 353,
+    "lineNumber": 355,
     "undocument": true,
     "params": [],
     "return": null
@@ -1881,7 +1918,7 @@
     "__docId__": 101,
     "kind": "file",
     "name": "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
-    "content": "import {VectorTextGeometry} from \"../../../xeogl/VectorTextGeometry/VectorTextGeometry.js\"\nimport {Plugin} from \"./../../../viewer/Plugin.js\";\nimport {\n    Scene,\n    AmbientLight,\n    DirLight,\n    Mesh,\n    CylinderGeometry,\n    SphereGeometry,\n    PhongMaterial,\n    math\n} from \"../../../xeogl/xeogl.module.js\"\n\n\n/**\n * Viewer plugin that shows the axii of the World-space coordinate system.\n *\n * Depends on: xeogl.VectorTextGeometry\n *\n * @class AxisGizmoPlugin\n * @constructor\n * @param viewer {Viewer} The xeoviewer viewer.\n */\nclass AxisGizmoPlugin extends Plugin {\n\n    constructor(viewer, cfg) {\n\n        cfg = cfg || {};\n\n        super(\"axisGizmo\", viewer, cfg);\n\n        var camera = viewer.scene.camera;\n\n        var size = cfg.size || [250, 250];\n\n        var canvas = camera.scene.canvas;\n\n        // Create canvas for this gizmo\n\n        var canvasId = \"xeogl-axisHelper-canvas-\" + math.createUUID();\n        var body = document.getElementsByTagName(\"body\")[0];\n        var div = document.createElement('div');\n        var style = div.style;\n        style.height = size[0] + \"px\";\n        style.width = size[1] + \"px\";\n        style.padding = \"0\";\n        style.margin = \"0\";\n        style.float = \"left\";\n        style.left = \"410px\";\n        style.bottom = \"350px\";\n        style.position = \"absolute\";\n        style[\"z-index\"] = \"1000000\";\n        // style[\"background-color\"] = \"rgba(0,0,0,0.3)\";\n        div.innerHTML += '<canvas id=\"' + canvasId + '\" style=\"width: ' + size[0] + 'px; height: ' + size[1] + 'px; float: left; margin: 0; padding: 0;\"></canvas>';\n        body.appendChild(div);\n        var helperCanvas = document.getElementById(canvasId);\n\n        canvas.on(\"boundary\",\n            function (boundary) {\n                style.left = boundary[0] + 10 + \"px\";\n                style.bottom = (boundary[0] + 20) + \"px\";\n            });\n\n        // The scene containing this helper\n        var scene = new Scene({\n            canvas: helperCanvas,\n            transparent: true\n        });\n\n        // Custom lights\n        scene.clearLights();\n\n        new AmbientLight(scene, {\n            color: [0.45, 0.45, 0.5],\n            intensity: 0.9\n        });\n\n        new DirLight(scene, {\n            dir: [-0.5, 0.5, -0.6],\n            color: [0.8, 0.8, 0.7],\n            intensity: 1.0,\n            space: \"view\"\n        });\n\n        new DirLight(scene, {\n            dir: [0.5, -0.5, -0.6],\n            color: [0.8, 0.8, 0.8],\n            intensity: 1.0,\n            space: \"view\"\n        });\n\n        // Rotate helper in synch with target camera\n\n        var helperCamera = scene.camera;\n\n        camera.on(\"matrix\", function () {\n\n            var eye = camera.eye;\n            var look = camera.look;\n            var up = camera.up;\n\n            var eyeLook = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, [])), 22);\n\n            helperCamera.look = [0, 0, 0];\n            helperCamera.eye = eyeLook;\n            helperCamera.up = up;\n        });\n\n        // ----------------- Components that are shared among more than one mesh ---------------\n\n        var arrowHead = new CylinderGeometry(scene, {\n            radiusTop: 0.01,\n            radiusBottom: 0.6,\n            height: 1.7,\n            radialSegments: 20,\n            heightSegments: 1,\n            openEnded: false\n        });\n\n        var arrowShaft = new CylinderGeometry(scene, {\n            radiusTop: 0.2,\n            radiusBottom: 0.2,\n            height: 4.5,\n            radialSegments: 20,\n            heightSegments: 1,\n            openEnded: false\n        });\n\n        var axisMaterial = new PhongMaterial(scene, { // Red by convention\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var xAxisMaterial = new PhongMaterial(scene, { // Red by convention\n            diffuse: [1, 0.3, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var xAxisLabelMaterial = new PhongMaterial(scene, { // Red by convention\n            emissive: [1, 0.3, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var yAxisMaterial = new PhongMaterial(scene, { // Green by convention\n            diffuse: [0.3, 1, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var yAxisLabelMaterial = new PhongMaterial(scene, { // Green by convention\n            emissive: [0.3, 1, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n\n        var zAxisMaterial = new PhongMaterial(scene, { // Blue by convention\n            diffuse: [0.3, 0.3, 1],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var zAxisLabelMaterial = new PhongMaterial(scene, {\n            emissive: [0.3, 0.3, 1],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var ballMaterial = new PhongMaterial(scene, {\n            diffuse: [0.5, 0.5, 0.5],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n\n        // ----------------- Meshes ------------------------------\n\n        var meshes = [\n\n            // Sphere behind gnomon\n\n            new Mesh(scene, {\n                geometry: new SphereGeometry(scene, {\n                    radius: 9.0,\n                    heightSegments: 60,\n                    widthSegments: 60\n                }),\n                material: new PhongMaterial(scene, {\n                    diffuse: [0.0, 0.0, 0.0],\n                    emissive: [0.1, 0.1, 0.1],\n                    ambient: [0.1, 0.1, 0.2],\n                    specular: [0, 0, 0],\n                    alpha: 0.4,\n                    alphaMode: \"blend\",\n                    frontface: \"cw\"\n                }),\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false\n            }),\n\n            // Ball at center of axis\n\n            new Mesh(scene, {  // Arrow\n                geometry: new SphereGeometry(scene, {\n                    radius: 1.0\n                }),\n                material: ballMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false\n            }),\n\n            // X-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: xAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-5, 0, 0],\n                rotation: [0, 0, 90]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: xAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-2, 0, 0],\n                rotation: [0, 0, 90]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"X\", size: 1.5}),\n                material: xAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-7, 0, 0],\n                billboard: \"spherical\"\n            }),\n\n            // Y-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: yAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 5, 0]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: yAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 2, 0]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"Y\", size: 1.5}),\n                material: yAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 7, 0],\n                billboard: \"spherical\"\n            }),\n\n            // Z-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: zAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 5],\n                rotation: [90, 0, 0]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: zAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 2],\n                rotation: [90, 0, 0]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"Z\", size: 1.5}),\n                material: zAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 7],\n                billboard: \"spherical\"\n            })\n        ];\n\n        /** Shows or hides this helper\n         *\n         * @param visible\n         */\n        this.setVisible = function (visible) {\n            for (var i = 0; i < meshes.length; i++) {\n                meshes[i].visible = visible;\n            }\n        }\n    }\n}\n\nexport {AxisGizmoPlugin}",
+    "content": "import {VectorTextGeometry} from \"../../../xeogl/VectorTextGeometry/VectorTextGeometry.js\"\nimport {Plugin} from \"./../../../viewer/Plugin.js\";\nimport {\n    Scene,\n    AmbientLight,\n    DirLight,\n    Mesh,\n    CylinderGeometry,\n    SphereGeometry,\n    PhongMaterial,\n    math\n} from \"../../../xeogl/xeogl.module.js\"\n\n\n/**\n * Viewer plugin that shows the axii of the World-space coordinate system.\n *\n * @class AxisGizmoPlugin\n */\nclass AxisGizmoPlugin extends Plugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"AxisGizmo\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     * @param {Array} [cfg.size=[250,250]] Initial size in pixels.\n     */\n    constructor(viewer, cfg) {\n\n        cfg = cfg || {};\n\n        super(\"AxisGizmo\", viewer, cfg);\n\n        var camera = viewer.scene.camera;\n\n        var size = cfg.size || [250, 250];\n\n        var canvas = camera.scene.canvas;\n\n        // Create canvas for this gizmo\n\n        var canvasId = \"xeogl-axisHelper-canvas-\" + math.createUUID();\n        var body = document.getElementsByTagName(\"body\")[0];\n        var div = document.createElement('div');\n        var style = div.style;\n        style.height = size[0] + \"px\";\n        style.width = size[1] + \"px\";\n        style.padding = \"0\";\n        style.margin = \"0\";\n        style.float = \"left\";\n        style.left = \"410px\";\n        style.bottom = \"350px\";\n        style.position = \"absolute\";\n        style[\"z-index\"] = \"1000000\";\n        // style[\"background-color\"] = \"rgba(0,0,0,0.3)\";\n        div.innerHTML += '<canvas id=\"' + canvasId + '\" style=\"width: ' + size[0] + 'px; height: ' + size[1] + 'px; float: left; margin: 0; padding: 0;\"></canvas>';\n        body.appendChild(div);\n        var helperCanvas = document.getElementById(canvasId);\n\n        canvas.on(\"boundary\",\n            function (boundary) {\n                style.left = boundary[0] + 10 + \"px\";\n                style.bottom = (boundary[0] + 20) + \"px\";\n            });\n\n        // The scene containing this helper\n        var scene = new Scene({\n            canvas: helperCanvas,\n            transparent: true\n        });\n\n        // Custom lights\n        scene.clearLights();\n\n        new AmbientLight(scene, {\n            color: [0.45, 0.45, 0.5],\n            intensity: 0.9\n        });\n\n        new DirLight(scene, {\n            dir: [-0.5, 0.5, -0.6],\n            color: [0.8, 0.8, 0.7],\n            intensity: 1.0,\n            space: \"view\"\n        });\n\n        new DirLight(scene, {\n            dir: [0.5, -0.5, -0.6],\n            color: [0.8, 0.8, 0.8],\n            intensity: 1.0,\n            space: \"view\"\n        });\n\n        // Rotate helper in synch with target camera\n\n        var helperCamera = scene.camera;\n\n        camera.on(\"matrix\", function () {\n\n            var eye = camera.eye;\n            var look = camera.look;\n            var up = camera.up;\n\n            var eyeLook = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, [])), 22);\n\n            helperCamera.look = [0, 0, 0];\n            helperCamera.eye = eyeLook;\n            helperCamera.up = up;\n        });\n\n        // ----------------- Components that are shared among more than one mesh ---------------\n\n        var arrowHead = new CylinderGeometry(scene, {\n            radiusTop: 0.01,\n            radiusBottom: 0.6,\n            height: 1.7,\n            radialSegments: 20,\n            heightSegments: 1,\n            openEnded: false\n        });\n\n        var arrowShaft = new CylinderGeometry(scene, {\n            radiusTop: 0.2,\n            radiusBottom: 0.2,\n            height: 4.5,\n            radialSegments: 20,\n            heightSegments: 1,\n            openEnded: false\n        });\n\n        var axisMaterial = new PhongMaterial(scene, { // Red by convention\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var xAxisMaterial = new PhongMaterial(scene, { // Red by convention\n            diffuse: [1, 0.3, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var xAxisLabelMaterial = new PhongMaterial(scene, { // Red by convention\n            emissive: [1, 0.3, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var yAxisMaterial = new PhongMaterial(scene, { // Green by convention\n            diffuse: [0.3, 1, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var yAxisLabelMaterial = new PhongMaterial(scene, { // Green by convention\n            emissive: [0.3, 1, 0.3],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n\n        var zAxisMaterial = new PhongMaterial(scene, { // Blue by convention\n            diffuse: [0.3, 0.3, 1],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var zAxisLabelMaterial = new PhongMaterial(scene, {\n            emissive: [0.3, 0.3, 1],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n        var ballMaterial = new PhongMaterial(scene, {\n            diffuse: [0.5, 0.5, 0.5],\n            ambient: [0.0, 0.0, 0.0],\n            specular: [.6, .6, .3],\n            shininess: 80,\n            lineWidth: 2\n        });\n\n\n        // ----------------- Meshes ------------------------------\n\n        var meshes = [\n\n            // Sphere behind gnomon\n\n            new Mesh(scene, {\n                geometry: new SphereGeometry(scene, {\n                    radius: 9.0,\n                    heightSegments: 60,\n                    widthSegments: 60\n                }),\n                material: new PhongMaterial(scene, {\n                    diffuse: [0.0, 0.0, 0.0],\n                    emissive: [0.1, 0.1, 0.1],\n                    ambient: [0.1, 0.1, 0.2],\n                    specular: [0, 0, 0],\n                    alpha: 0.4,\n                    alphaMode: \"blend\",\n                    frontface: \"cw\"\n                }),\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false\n            }),\n\n            // Ball at center of axis\n\n            new Mesh(scene, {  // Arrow\n                geometry: new SphereGeometry(scene, {\n                    radius: 1.0\n                }),\n                material: ballMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false\n            }),\n\n            // X-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: xAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-5, 0, 0],\n                rotation: [0, 0, 90]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: xAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-2, 0, 0],\n                rotation: [0, 0, 90]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"X\", size: 1.5}),\n                material: xAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [-7, 0, 0],\n                billboard: \"spherical\"\n            }),\n\n            // Y-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: yAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 5, 0]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: yAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 2, 0]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"Y\", size: 1.5}),\n                material: yAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 7, 0],\n                billboard: \"spherical\"\n            }),\n\n            // Z-axis arrow, shaft and label\n\n            new Mesh(scene, {  // Arrow\n                geometry: arrowHead,\n                material: zAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 5],\n                rotation: [90, 0, 0]\n            }),\n\n            new Mesh(scene, {  // Shaft\n                geometry: arrowShaft,\n                material: zAxisMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 2],\n                rotation: [90, 0, 0]\n            }),\n\n            new Mesh(scene, {  // Label\n                geometry: new VectorTextGeometry(scene, {text: \"Z\", size: 1.5}),\n                material: zAxisLabelMaterial,\n                pickable: false,\n                collidable: false,\n                visible: cfg.visible !== false,\n                position: [0, 0, 7],\n                billboard: \"spherical\"\n            })\n        ];\n\n        /** Shows or hides this helper\n         *\n         * @param visible\n         */\n        this.setVisible = function (visible) {\n            for (var i = 0; i < meshes.length; i++) {\n                meshes[i].visible = visible;\n            }\n        }\n    }\n}\n\nexport {AxisGizmoPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
     "access": "public",
@@ -1899,28 +1936,12 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
     "importStyle": "{AxisGizmoPlugin}",
-    "description": "Viewer plugin that shows the axii of the World-space coordinate system.\n\nDepends on: xeogl.VectorTextGeometry",
-    "lineNumber": 24,
+    "description": "Viewer plugin that shows the axii of the World-space coordinate system.",
+    "lineNumber": 20,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "AxisGizmoPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
       }
     ],
     "interface": false,
@@ -1938,15 +1959,69 @@
     "static": false,
     "longname": "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true
+    "description": "",
+    "lineNumber": 29,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"AxisGizmo\"",
+        "defaultRaw": "AxisGizmo",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[250,250]",
+        "defaultRaw": [
+          250,
+          250
+        ],
+        "name": "cfg.size",
+        "description": "Initial size in pixels."
+      }
+    ]
   },
   {
     "__docId__": 104,
     "kind": "file",
     "name": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
-    "content": "import {Plugin} from \"./../../../viewer/Plugin.js\";\nimport {Clip, math} from \"../../../xeogl/xeogl.module.js\"\n\nconst tempVec3 = math.vec3();\n\n/**\n Viewer plugin that saves and loads BCF viewpoints as JSON objects.\n\n BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to\n the <a href=\"https://github.com/buildingSMART/BCF-API\">BCF Version 2.1</a> specification.\n\n @class BCFViewpointsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n @param [cfg] {*} Plugin configuration\n @param [cfg.originatingSystem] {string} Identifies the originating system for BCF records.\n @param [cfg.authoringTool] {string} Identifies the authoring tool for BCF records.\n */\nclass BCFViewpointsPlugin extends Plugin {\n\n    constructor(viewer, cfg = {}) {\n\n        super(\"BCFViewpoints\", viewer, cfg);\n\n        /**\n         * Identifies the originating system to include in BCF viewpoints saved by this plugin.\n         * @property originatingSystem\n         * @type {string}\n         */\n        this.originatingSystem = cfg.originatingSystem || \"xeogl\";\n\n        /**\n         * Identifies the authoring tool to include in BCF viewpoints saved by this plugin.\n         * @property authoringTool\n         * @type {string}\n         */\n        this.authoringTool = cfg.authoringTool || \"xeogl\";\n    }\n\n    /**\n     * Saves viewer state to a BCF viewpoint.\n     *\n     * @returns {*} BCF JSON viewpoint object\n     * @example\n     *\n     * const viewer = new Viewer();\n     *\n     * const bcfPlugin = new BCFPlugin(viewer, {\n     *     //...\n     * });\n     *\n     * const viewpoint = bcfPlugin.getViewpoint();\n     *\n     * // viewpoint will resemble the following:\n     *\n     * {\n     *     perspective_camera: {\n     *         camera_view_point: {\n     *             x: 0.0,\n     *             y: 0.0,\n     *             z: 0.0\n     *         },\n     *         camera_direction: {\n     *             x: 1.0,\n     *             y: 1.0,\n     *             z: 2.0\n     *         },\n     *         camera_up_vector: {\n     *             x: 0.0,\n     *             y: 0.0,\n     *             z: 1.0\n     *         },\n     *         field_of_view: 90.0\n     *     },\n     *     lines: [],\n     *     clipping_planes: [{\n     *         location: {\n     *             x: 0.5,\n     *             y: 0.5,\n     *             z: 0.5\n     *         },\n     *         direction: {\n     *             x: 1.0,\n     *             y: 0.0,\n     *             z: 0.0\n     *         }\n     *     }],\n     *     bitmaps: [],\n     *     snapshot: {\n     *         snapshot_type: png,\n     *         snapshot_data: \"data:image/png;base64,......\"\n     *     },\n     *     components: {\n     *         visibility: {\n     *             default_visibility: false,\n     *             exceptions: [{\n     *                 ifc_guid: 4$cshxZO9AJBebsni$z9Yk,\n     *                 originating_system: BIMData.io,\n     *                 authoring_tool_id: BIMViewer/v1.0\n     *             }]\n     *        },\n     *         selection: [{\n     *            ifc_guid: \"4$cshxZO9AJBebsni$z9Yk\",\n     *         }]\n     *     }\n     * }\n     */\n    getViewpoint() {\n\n        // https://github.com/buildingSMART/BCF-API\n\n        const scene = this.viewer.scene;\n        const camera = scene.camera;\n\n        let bcfViewpoint = {};\n\n        // Camera\n\n        bcfViewpoint.perspective_camera = {\n            camera_view_point: xyzArrayToObject(camera.eye),\n            camera_direction: xyzArrayToObject(camera.look),\n            camera_up_vector: xyzArrayToObject(camera.up),\n            field_of_view: camera.perspective.fov,\n        };\n\n        bcfViewpoint.orthogonal_camera = {\n            camera_view_point: xyzArrayToObject(camera.eye),\n            camera_direction: xyzArrayToObject(camera.look),\n            camera_up_vector: xyzArrayToObject(camera.up),\n            view_to_world_scale: camera.ortho.scale,\n        };\n\n        bcfViewpoint.lines = [];\n        bcfViewpoint.bitmaps = [];\n\n        // Clipping planes\n\n        bcfViewpoint.clipping_planes = [];\n        const clips = scene.clips;\n        for (const id in clips) {\n            let clip = clips[id];\n            bcfViewpoint.clipping_planes.push({\n                location: xyzArrayToObject(clip.pos),\n                direction: xyzArrayToObject(clip.dir)\n            });\n        }\n\n        // Entity states\n\n        bcfViewpoint.components = {\n            visibility: {\n                view_setup_hints: {\n                    spaces_visible: false,\n                    space_boundaries_visible: false,\n                    openings_visible: false\n                }\n            }\n        };\n\n        const entityIds = scene.entityIds;\n        const visibleEntities = scene.visibleEntities;\n        const visibleEntityIds = scene.visibleEntityIds;\n        const invisibleEntityIds = entityIds.filter(id => !visibleEntities[id]);\n        const selectedEntityIds = scene.selectedEntityIds;\n\n        if (visibleEntityIds.length < invisibleEntityIds.length) {\n            bcfViewpoint.components.visibility.exceptions = visibleEntityIds.map(el => this._objectIdToComponent(el));\n            bcfViewpoint.components.visibility.default_visibility = false;\n        } else {\n            bcfViewpoint.components.visibility.exceptions = invisibleEntityIds.map(el => this._objectIdToComponent(el));\n            bcfViewpoint.components.visibility.default_visibility = true;\n        }\n\n        bcfViewpoint.components.selection = selectedEntityIds.map(el => this._objectIdToComponent(el));\n\n        bcfViewpoint.snapshot = {\n            snapshot_type: \"png\",\n            snapshot_data: scene.canvas.canvas.toDataURL()\n        };\n\n        return bcfViewpoint;\n    }\n\n    _objectIdToComponent(o) {\n        return {\n            ifc_guid: o.split('#')[1],\n            originating_system: this.originatingSystem || \"xeoviewer.org\",\n            authoring_tool_id: this.authoringTool || \"xeoviewer.org\"\n        };\n    }\n\n    /**\n     * Sets viewer state to the given BCF viewpoint.\n     *\n     * @param bcfViewpoint {*} BCF JSON viewpoint object or \"reset\" / \"RESET\" to reset the viewer, which clears clipping planes,\n     * shows default visible entities and restores camera to initial default position.\n     */\n    setViewpoint(bcfViewpoint) {\n\n        var self = this;\n\n        if (!bcfViewpoint) {\n            return;\n        }\n\n        const viewer = this.viewer;\n\n        if (bcfViewpoint.length && bcfViewpoint.toUpperCase() === 'RESET') {\n            viewer.resetView();\n            return;\n        }\n\n        const scene = this.viewer.scene;\n        const camera = scene.camera;\n\n\n        if (bcfViewpoint.perspective_camera) {\n            camera.eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);\n            camera.look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);\n            camera.up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);\n            camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;\n        }\n\n        if (bcfViewpoint.orthogonal_camera) {\n            camera.eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);\n            camera.look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);\n            camera.up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);\n            camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;\n        }\n\n        if (bcfViewpoint.clipping_planes) {\n            bcfViewpoint.clipping_planes.forEach(function (e) {\n                new Clip(viewer.scene, {\n                    pos: xyzObjectToArray(e.location, tempVec3),\n                    dir: xyzObjectToArray(e.direction, tempVec3)\n                });\n            });\n        }\n\n        // TODO\n\n        // if (bcfViewpoint.components) {\n        //     if (!bcfViewpoint.components.visibility.default_visibility) {\n        //         this.hide();\n        //         this.getModels().forEach(model => {\n        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.show(model + '#' + x.ifc_guid));\n        //         });\n        //     } else {\n        //         this.show();\n        //         this.hide('space');\n        //         this.getModels().forEach(model => {\n        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.hide(model + '#' + x.ifc_guid));\n        //         });\n        //     }\n        // }\n    }\n\n\n    /**\n     * Destroys this plugin.\n     */\n    destroy() {\n        super.destroy();\n    }\n}\n\nfunction xyzArrayToObject(arr) {\n    return {\"x\": arr[0], \"y\": arr[1], \"z\": arr[2]};\n}\n\nfunction xyzObjectToArray(xyz, arry) {\n    arry = new Float32Array(3);\n    arry[0] = xyz.x;\n    arry[1] = xyz.y;\n    arry[2] = xyz.z;\n    return arry;\n}\n\nexport {BCFViewpointsPlugin}",
+    "content": "import {Plugin} from \"./../../../viewer/Plugin.js\";\nimport {Clip, math} from \"../../../xeogl/xeogl.module.js\"\n\nconst tempVec3 = math.vec3();\n\n/**\n Viewer plugin that saves and loads BCF viewpoints as JSON objects.\n\n BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to\n the <a href=\"https://github.com/buildingSMART/BCF-API\">BCF Version 2.1</a> specification.\n\n @class BCFViewpointsPlugin\n */\nclass BCFViewpointsPlugin extends Plugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"BCFViewpoints\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     * @param [cfg.originatingSystem] {string} Identifies the originating system for BCF records.\n     * @param [cfg.authoringTool] {string} Identifies the authoring tool for BCF records.\n     */\n    constructor(viewer, cfg = {}) {\n\n        super(\"BCFViewpoints\", viewer, cfg);\n\n        /**\n         * Identifies the originating system to include in BCF viewpoints saved by this plugin.\n         * @property originatingSystem\n         * @type {string}\n         */\n        this.originatingSystem = cfg.originatingSystem || \"xeogl\";\n\n        /**\n         * Identifies the authoring tool to include in BCF viewpoints saved by this plugin.\n         * @property authoringTool\n         * @type {string}\n         */\n        this.authoringTool = cfg.authoringTool || \"xeogl\";\n    }\n\n    /**\n     * Saves viewer state to a BCF viewpoint.\n     *\n     * @returns {*} BCF JSON viewpoint object\n     * @example\n     *\n     * const viewer = new Viewer();\n     *\n     * const bcfPlugin = new BCFPlugin(viewer, {\n     *     //...\n     * });\n     *\n     * const viewpoint = bcfPlugin.getViewpoint();\n     *\n     * // viewpoint will resemble the following:\n     *\n     * {\n     *     perspective_camera: {\n     *         camera_view_point: {\n     *             x: 0.0,\n     *             y: 0.0,\n     *             z: 0.0\n     *         },\n     *         camera_direction: {\n     *             x: 1.0,\n     *             y: 1.0,\n     *             z: 2.0\n     *         },\n     *         camera_up_vector: {\n     *             x: 0.0,\n     *             y: 0.0,\n     *             z: 1.0\n     *         },\n     *         field_of_view: 90.0\n     *     },\n     *     lines: [],\n     *     clipping_planes: [{\n     *         location: {\n     *             x: 0.5,\n     *             y: 0.5,\n     *             z: 0.5\n     *         },\n     *         direction: {\n     *             x: 1.0,\n     *             y: 0.0,\n     *             z: 0.0\n     *         }\n     *     }],\n     *     bitmaps: [],\n     *     snapshot: {\n     *         snapshot_type: png,\n     *         snapshot_data: \"data:image/png;base64,......\"\n     *     },\n     *     components: {\n     *         visibility: {\n     *             default_visibility: false,\n     *             exceptions: [{\n     *                 ifc_guid: 4$cshxZO9AJBebsni$z9Yk,\n     *                 originating_system: BIMData.io,\n     *                 authoring_tool_id: BIMViewer/v1.0\n     *             }]\n     *        },\n     *         selection: [{\n     *            ifc_guid: \"4$cshxZO9AJBebsni$z9Yk\",\n     *         }]\n     *     }\n     * }\n     */\n    getViewpoint() {\n\n        // https://github.com/buildingSMART/BCF-API\n\n        const scene = this.viewer.scene;\n        const camera = scene.camera;\n\n        let bcfViewpoint = {};\n\n        // Camera\n\n        bcfViewpoint.perspective_camera = {\n            camera_view_point: xyzArrayToObject(camera.eye),\n            camera_direction: xyzArrayToObject(camera.look),\n            camera_up_vector: xyzArrayToObject(camera.up),\n            field_of_view: camera.perspective.fov,\n        };\n\n        bcfViewpoint.orthogonal_camera = {\n            camera_view_point: xyzArrayToObject(camera.eye),\n            camera_direction: xyzArrayToObject(camera.look),\n            camera_up_vector: xyzArrayToObject(camera.up),\n            view_to_world_scale: camera.ortho.scale,\n        };\n\n        bcfViewpoint.lines = [];\n        bcfViewpoint.bitmaps = [];\n\n        // Clipping planes\n\n        bcfViewpoint.clipping_planes = [];\n        const clips = scene.clips;\n        for (const id in clips) {\n            let clip = clips[id];\n            bcfViewpoint.clipping_planes.push({\n                location: xyzArrayToObject(clip.pos),\n                direction: xyzArrayToObject(clip.dir)\n            });\n        }\n\n        // Entity states\n\n        bcfViewpoint.components = {\n            visibility: {\n                view_setup_hints: {\n                    spaces_visible: false,\n                    space_boundaries_visible: false,\n                    openings_visible: false\n                }\n            }\n        };\n\n        const entityIds = scene.entityIds;\n        const visibleEntities = scene.visibleEntities;\n        const visibleEntityIds = scene.visibleEntityIds;\n        const invisibleEntityIds = entityIds.filter(id => !visibleEntities[id]);\n        const selectedEntityIds = scene.selectedEntityIds;\n\n        if (visibleEntityIds.length < invisibleEntityIds.length) {\n            bcfViewpoint.components.visibility.exceptions = visibleEntityIds.map(el => this._objectIdToComponent(el));\n            bcfViewpoint.components.visibility.default_visibility = false;\n        } else {\n            bcfViewpoint.components.visibility.exceptions = invisibleEntityIds.map(el => this._objectIdToComponent(el));\n            bcfViewpoint.components.visibility.default_visibility = true;\n        }\n\n        bcfViewpoint.components.selection = selectedEntityIds.map(el => this._objectIdToComponent(el));\n\n        bcfViewpoint.snapshot = {\n            snapshot_type: \"png\",\n            snapshot_data: scene.canvas.canvas.toDataURL()\n        };\n\n        return bcfViewpoint;\n    }\n\n    _objectIdToComponent(o) {\n        return {\n            ifc_guid: o.split('#')[1],\n            originating_system: this.originatingSystem || \"xeoviewer.org\",\n            authoring_tool_id: this.authoringTool || \"xeoviewer.org\"\n        };\n    }\n\n    /**\n     * Sets viewer state to the given BCF viewpoint.\n     *\n     * @param bcfViewpoint {*} BCF JSON viewpoint object or \"reset\" / \"RESET\" to reset the viewer, which clears clipping planes,\n     * shows default visible entities and restores camera to initial default position.\n     */\n    setViewpoint(bcfViewpoint) {\n\n        var self = this;\n\n        if (!bcfViewpoint) {\n            return;\n        }\n\n        const viewer = this.viewer;\n\n        if (bcfViewpoint.length && bcfViewpoint.toUpperCase() === 'RESET') {\n            viewer.resetView();\n            return;\n        }\n\n        const scene = this.viewer.scene;\n        const camera = scene.camera;\n\n\n        if (bcfViewpoint.perspective_camera) {\n            camera.eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);\n            camera.look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);\n            camera.up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);\n            camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;\n        }\n\n        if (bcfViewpoint.orthogonal_camera) {\n            camera.eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);\n            camera.look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);\n            camera.up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);\n            camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;\n        }\n\n        if (bcfViewpoint.clipping_planes) {\n            bcfViewpoint.clipping_planes.forEach(function (e) {\n                new Clip(viewer.scene, {\n                    pos: xyzObjectToArray(e.location, tempVec3),\n                    dir: xyzObjectToArray(e.direction, tempVec3)\n                });\n            });\n        }\n\n        // TODO\n\n        // if (bcfViewpoint.components) {\n        //     if (!bcfViewpoint.components.visibility.default_visibility) {\n        //         this.hide();\n        //         this.getModels().forEach(model => {\n        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.show(model + '#' + x.ifc_guid));\n        //         });\n        //     } else {\n        //         this.show();\n        //         this.hide('space');\n        //         this.getModels().forEach(model => {\n        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.hide(model + '#' + x.ifc_guid));\n        //         });\n        //     }\n        // }\n    }\n\n\n    /**\n     * Destroys this plugin.\n     */\n    destroy() {\n        super.destroy();\n    }\n}\n\nfunction xyzArrayToObject(arr) {\n    return {\"x\": arr[0], \"y\": arr[1], \"z\": arr[2]};\n}\n\nfunction xyzObjectToArray(xyz, arry) {\n    arry = new Float32Array(3);\n    arry[0] = xyz.x;\n    arry[1] = xyz.y;\n    arry[2] = xyz.z;\n    return arry;\n}\n\nexport {BCFViewpointsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
     "access": "public",
@@ -1988,7 +2063,7 @@
     "importPath": "xeokit-sdk/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 267,
+    "lineNumber": 270,
     "undocument": true,
     "params": [
       {
@@ -2019,7 +2094,7 @@
     "importPath": "xeokit-sdk/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 271,
+    "lineNumber": 274,
     "undocument": true,
     "params": [
       {
@@ -2054,12 +2129,31 @@
     "importPath": "xeokit-sdk/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
     "importStyle": "{BCFViewpointsPlugin}",
     "description": "Viewer plugin that saves and loads BCF viewpoints as JSON objects.\n\nBCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to\nthe <a href=\"https://github.com/buildingSMART/BCF-API\">BCF Version 2.1</a> specification.",
-    "lineNumber": 19,
+    "lineNumber": 14,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "BCFViewpointsPlugin"
-      },
+      }
+    ],
+    "interface": false,
+    "extends": [
+      "viewer/Plugin.js~Plugin"
+    ]
+  },
+  {
+    "__docId__": 109,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#constructor",
+    "access": "public",
+    "description": "",
+    "lineNumber": 24,
+    "unknown": [
       {
         "tagName": "@constructor",
         "tagValue": ""
@@ -2069,22 +2163,34 @@
       {
         "nullable": null,
         "types": [
-          "*"
+          "Viewer"
         ],
         "spread": false,
         "optional": false,
         "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
+        "description": "The Viewer."
       },
       {
         "nullable": null,
         "types": [
-          "*"
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
         ],
         "spread": false,
         "optional": true,
-        "name": "cfg",
-        "description": "{*} Plugin configuration"
+        "defaultValue": "\"BCFViewpoints\"",
+        "defaultRaw": "BCFViewpoints",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
       },
       {
         "nullable": null,
@@ -2106,25 +2212,7 @@
         "name": "cfg.authoringTool",
         "description": "{string} Identifies the authoring tool for BCF records."
       }
-    ],
-    "interface": false,
-    "extends": [
-      "viewer/Plugin.js~Plugin"
     ]
-  },
-  {
-    "__docId__": 109,
-    "kind": "constructor",
-    "name": "constructor",
-    "memberof": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#constructor",
-    "access": "public",
-    "description": null,
-    "lineNumber": 21,
-    "undocument": true
   },
   {
     "__docId__": 110,
@@ -2135,7 +2223,7 @@
     "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#originatingSystem",
     "access": "public",
     "description": "Identifies the originating system to include in BCF viewpoints saved by this plugin.",
-    "lineNumber": 30,
+    "lineNumber": 33,
     "properties": [
       {
         "nullable": null,
@@ -2166,7 +2254,7 @@
     "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#authoringTool",
     "access": "public",
     "description": "Identifies the authoring tool to include in BCF viewpoints saved by this plugin.",
-    "lineNumber": 37,
+    "lineNumber": 40,
     "properties": [
       {
         "nullable": null,
@@ -2202,7 +2290,7 @@
     "examples": [
       "\nconst viewer = new Viewer();\n\nconst bcfPlugin = new BCFPlugin(viewer, {\n    //...\n});\n\nconst viewpoint = bcfPlugin.getViewpoint();\n\n// viewpoint will resemble the following:\n\n{\n    perspective_camera: {\n        camera_view_point: {\n            x: 0.0,\n            y: 0.0,\n            z: 0.0\n        },\n        camera_direction: {\n            x: 1.0,\n            y: 1.0,\n            z: 2.0\n        },\n        camera_up_vector: {\n            x: 0.0,\n            y: 0.0,\n            z: 1.0\n        },\n        field_of_view: 90.0\n    },\n    lines: [],\n    clipping_planes: [{\n        location: {\n            x: 0.5,\n            y: 0.5,\n            z: 0.5\n        },\n        direction: {\n            x: 1.0,\n            y: 0.0,\n            z: 0.0\n        }\n    }],\n    bitmaps: [],\n    snapshot: {\n        snapshot_type: png,\n        snapshot_data: \"data:image/png;base64,......\"\n    },\n    components: {\n        visibility: {\n            default_visibility: false,\n            exceptions: [{\n                ifc_guid: 4$cshxZO9AJBebsni$z9Yk,\n                originating_system: BIMData.io,\n                authoring_tool_id: BIMViewer/v1.0\n            }]\n       },\n        selection: [{\n           ifc_guid: \"4$cshxZO9AJBebsni$z9Yk\",\n        }]\n    }\n}"
     ],
-    "lineNumber": 108,
+    "lineNumber": 111,
     "unknown": [
       {
         "tagName": "@returns",
@@ -2230,7 +2318,7 @@
     "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#_objectIdToComponent",
     "access": "private",
     "description": null,
-    "lineNumber": 184,
+    "lineNumber": 187,
     "undocument": true,
     "ignore": true,
     "params": [
@@ -2258,7 +2346,7 @@
     "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
     "access": "public",
     "description": "Sets viewer state to the given BCF viewpoint.",
-    "lineNumber": 198,
+    "lineNumber": 201,
     "params": [
       {
         "nullable": null,
@@ -2284,7 +2372,7 @@
     "longname": "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#destroy",
     "access": "public",
     "description": "Destroys this plugin.",
-    "lineNumber": 262,
+    "lineNumber": 265,
     "params": [],
     "return": null
   },
@@ -2292,7 +2380,7 @@
     "__docId__": 116,
     "kind": "file",
     "name": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js",
-    "content": "import {Plugin} from \"./../../Plugin.js\";\nimport {Geometry, Object as xeoglObjectClass, Model as xeoglModelClass, Mesh} from \"./../../../../libs/xeogl/xeogl.module.js\";\nimport {preloadQuery} from \"./lib/preloadQuery.js\";\nimport {BIMServerGeometryLoader} from \"./lib/BIMServerGeometryLoader.js\";\nimport {defaultMaterials} from \"./lib/defaultMaterials.js\";\nimport {BIMServerModel} from \"./lib/BIMServerModel.js\";\nimport {utils} from \"./lib/utils.js\";\n\n/**\n A viewer plugin that loads models from a [BIMServer](http://bimserver.org) instance.\n\n @class BIMServerModelsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer\n @param bimServerAPI {Object} The BIMServer client API\n */\nclass BIMServerModelsPlugin extends Plugin {\n\n    constructor(viewer, bimServerAPI) {\n\n        super(\"bimServerModels\", viewer);\n\n        /**\n         * Version of BIMServer supported by this plugin.\n         * @type {string}\n         */\n        this.BIMSERVER_VERSION = \"1.5\";\n\n        /**\n         * The BIMServer API.\n         */\n        this.bimServerAPI = bimServerAPI;\n\n        /**\n         * IFC types that are hidden by default.\n         * @type {{IfcOpeningElement: boolean, IfcSpace: boolean}}\n         */\n        this.hiddenTypes = {\n            \"IfcOpeningElement\": true,\n            \"IfcSpace\": true\n        };\n\n        this._idMapping = { // This are arrays as multiple models might be loaded or unloaded.\n            'toGuid': [],\n            'toId': []\n        };\n\n    }\n\n    /**\n     * Loads a model from BIMServer into the viewer via the plugin's BIMServer API client.\n     * @param params\n     * @returns {Promise}\n     */\n    load(params) {\n        if (!params.id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[params.id]) {\n            this.error(\"Component with this ID already exists in viewer: \" + id);\n            return;\n        }\n        const bimServerAPI = this.bimServerAPI;\n        const self = this;\n        return new Promise((resolve, reject) => {\n            bimServerAPI.getModel(params.poid, params.roid, params.schema, false,\n                apiModel => {  // TODO: Preload not necessary combined with the bruteforce tree\n                    let fired = false;\n                    apiModel.query(preloadQuery, () => {\n                        if (!fired) {\n                            fired = true;\n                            const bimServerModel = new BIMServerModel(bimServerAPI, apiModel);\n                            self._loadModel(params, bimServerModel);\n                            resolve(bimServerModel);\n                        }\n                    });\n                });\n        });\n    };\n\n    /**\n     * @private\n     */\n    _loadModel(params, bimServerModel) {\n\n        const bimServerAPI = this.bimServerAPI;\n        const viewer = this.viewer;\n        const self = this;\n        let onTick;\n\n        bimServerModel.getTree().then(function (tree) {\n\n            const oids = [];\n            const oidToGuid = {};\n            const guidToOid = {};\n\n            const visit = n => {\n                if (self.BIMSERVER_VERSION == \"1.4\") {\n                    oids.push(n.id);\n                } else {\n                    oids[n.gid] = n.id;\n                }\n                oidToGuid[n.id] = n.guid;\n                guidToOid[n.guid] = n.id;\n                for (let i = 0; i < (n.children || []).length; ++i) {\n                    visit(n.children[i]);\n                }\n            };\n\n            visit(tree);\n\n            self._idMapping.toGuid.push(oidToGuid);\n            self._idMapping.toId.push(guidToOid);\n\n            const models = {};\n\n            models[bimServerModel.apiModel.roid] = bimServerModel.apiModel; // TODO: Ugh. Undecorate some of the newly created classes\n\n            const modelId = params.id;\n\n            var xeoglModel = self._createModel(modelId);\n\n            const roid = params.roid;\n\n            const loader = new BIMServerGeometryLoader(bimServerAPI, self.viewer, bimServerModel, roid);\n\n            loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) => {\n                if (progress == \"start\") {\n                    self.log(\"Started loading geometries\");\n                } else if (progress == \"done\") {\n                    self.log(`Finished loading geometries (${totalNrObjects} objects received)`);\n                    viewer.scene.off(onTick);\n                }\n            });\n\n            loader.setLoadOids(oids);\n            //loader.setLoadOids([bimServerModel.apiModel.roid], oids);\n\n            onTick = viewer.scene.on(\"tick\", () => {\n                loader.process();\n            });\n\n            loader.start();\n        });\n    };\n\n    /**\n     * @private\n     */\n    _createModel(modelId) {\n        const viewer = this.viewer;\n        const scene = viewer.scene;\n        if (scene.models[modelId]) {\n            this.log(`Can't create model within viewer - scene model with id ${modelId} already exists`);\n            return;\n        }\n        if (scene.components[modelId]) {\n            this.log(`Can't create model within viewer - scene component with this ID already exists: ${modelId}`);\n            return;\n        }\n        const xeoglModel = new xeoglModelClass(scene, {\n            id: modelId\n        });\n        return xeoglModel;\n    }\n\n    /**\n     * @private\n     */\n    _createGeometry(modelId, geometryId, positions, normals, colors, indices) {\n        const scene = this.scene;\n        const model = scene.models[modelId];\n        if (!model) {\n            this.error(`Can't create geometry - model not found: ${modelId}`);\n            return;\n        }\n        new Geometry(model, { // Geometry will be destroyed with the Model\n            id: `${modelId}.${geometryId}`,\n            primitive: \"triangles\",\n            positions,\n            normals,\n            colors,\n            indices\n        });\n    }\n\n    /**\n     * Called by BimServerGeometryLoader\n     * @private\n     */\n    _createObject(modelId, roid, oid, objectId, geometryIds, ifcType, matrix) {\n        const viewer = this.viewer;\n        const scene = viewer.scene;\n        const model = scene.models[modelId];\n        if (!model) {\n            this.error(`Can't create object - model not found: ${modelId}`);\n            return;\n        }\n        objectId = `${modelId}.${objectId}`;\n        if (scene.entities[objectId]) {\n            this.error(`Can't create object - object with id ${objectId} already exists`);\n            return;\n        }\n        if (scene.components[objectId]) {\n            this.error(`Can't create object - scene component with this ID already exists: ${objectId}`);\n            return;\n        }\n        ifcType = ifcType || \"DEFAULT\";\n        const guid = (objectId.includes(\"#\")) ? utils.CompressGuid(objectId.split(\"#\")[1].substr(8, 36).replace(/-/g, \"\")) : null; // TODO: Computing GUID looks like a performance bottleneck\n        const color = defaultMaterials[ifcType] || defaultMaterials[\"DEFAULT\"];\n        const object = new xeoglObjectClass(model, { // Object will be destroyed with the Model\n            id: objectId,\n            guid,\n            entityType: ifcType, // xeogl semantic models are generic, not limited to IFC\n            matrix,\n            colorize: color, // RGB\n            opacity: color[3], // A\n            visibility: !this.hiddenTypes[ifcType]\n        });\n        // TODO: Call model._addComponent to register child Object?\n        model.addChild(object, false); // Object is child of Model, does not inherit visible states from Model\n        for (let i = 0, len = geometryIds.length; i < len; i++) { // Create child Meshes of Object\n            const mesh = new Mesh(model, { // Each Mesh will be destroyed with the Model\n                geometry: `${modelId}.${geometryIds[i]}`\n            });\n            mesh.colorize = color; // HACK: Overrides state inheritance\n            object.addChild(mesh, true); // Mesh is child of Object, inherits visibility states from Object\n        }\n        return object;\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        //...\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * @private\n     */\n    readBookmark(bookmark, done) {\n        //...\n        done();\n    }\n\n    /**\n     * Destroys this plugin.\n     */\n    destroy() {\n        super.destroy();\n    }\n}\n\nexport {BIMServerModelsPlugin}",
+    "content": "import {Plugin} from \"./../../Plugin.js\";\nimport {Geometry, Object as xeoglObjectClass, Model as xeoglModelClass, Mesh} from \"./../../../../libs/xeogl/xeogl.module.js\";\nimport {preloadQuery} from \"./lib/preloadQuery.js\";\nimport {BIMServerGeometryLoader} from \"./lib/BIMServerGeometryLoader.js\";\nimport {defaultMaterials} from \"./lib/defaultMaterials.js\";\nimport {BIMServerModel} from \"./lib/BIMServerModel.js\";\nimport {utils} from \"./lib/utils.js\";\n\n/**\n A viewer plugin that loads models from a [BIMServer](http://bimserver.org) instance.\n\n @class BIMServerModelsPlugin\n */\nclass BIMServerModelsPlugin extends Plugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"BIMServerModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     * @param {Object} cfg.bimServerAPI] A BIMServer client API instance.\n     */\n    constructor(viewer, cfg) {\n\n        super(\"BIMServerModels\", viewer, cfg);\n\n        /**\n         * Version of BIMServer supported by this plugin.\n         * @type {string}\n         */\n        this.BIMSERVER_VERSION = \"1.5\";\n\n        if (!cfg.bimServerAPI) {\n            this.error(\"Config expected: bimServerAPI\");\n        }\n\n        /**\n         * The BIMServer API.\n         */\n        this.bimServerAPI = cfg.bimServerAPI;\n\n        /**\n         * IFC types that are hidden by default.\n         * @type {{IfcOpeningElement: boolean, IfcSpace: boolean}}\n         */\n        this.hiddenTypes = {\n            \"IfcOpeningElement\": true,\n            \"IfcSpace\": true\n        };\n\n        this._idMapping = { // This are arrays as multiple models might be loaded or unloaded.\n            'toGuid': [],\n            'toId': []\n        };\n\n    }\n\n    /**\n     * Loads a model from BIMServer into the viewer via the plugin's BIMServer API client.\n     * @param params\n     * @returns {Promise}\n     */\n    load(params) {\n        if (!params.id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[params.id]) {\n            this.error(\"Component with this ID already exists in viewer: \" + id);\n            return;\n        }\n        const bimServerAPI = this.bimServerAPI;\n        const self = this;\n        return new Promise((resolve, reject) => {\n            bimServerAPI.getModel(params.poid, params.roid, params.schema, false,\n                apiModel => {  // TODO: Preload not necessary combined with the bruteforce tree\n                    let fired = false;\n                    apiModel.query(preloadQuery, () => {\n                        if (!fired) {\n                            fired = true;\n                            const bimServerModel = new BIMServerModel(bimServerAPI, apiModel);\n                            self._loadModel(params, bimServerModel);\n                            resolve(bimServerModel);\n                        }\n                    });\n                });\n        });\n    };\n\n    /**\n     * @private\n     */\n    _loadModel(params, bimServerModel) {\n\n        const bimServerAPI = this.bimServerAPI;\n        const viewer = this.viewer;\n        const self = this;\n        let onTick;\n\n        bimServerModel.getTree().then(function (tree) {\n\n            const oids = [];\n            const oidToGuid = {};\n            const guidToOid = {};\n\n            const visit = n => {\n                if (self.BIMSERVER_VERSION == \"1.4\") {\n                    oids.push(n.id);\n                } else {\n                    oids[n.gid] = n.id;\n                }\n                oidToGuid[n.id] = n.guid;\n                guidToOid[n.guid] = n.id;\n                for (let i = 0; i < (n.children || []).length; ++i) {\n                    visit(n.children[i]);\n                }\n            };\n\n            visit(tree);\n\n            self._idMapping.toGuid.push(oidToGuid);\n            self._idMapping.toId.push(guidToOid);\n\n            const models = {};\n\n            models[bimServerModel.apiModel.roid] = bimServerModel.apiModel; // TODO: Ugh. Undecorate some of the newly created classes\n\n            const modelId = params.id;\n\n            var xeoglModel = self._createModel(modelId);\n\n            const roid = params.roid;\n\n            const loader = new BIMServerGeometryLoader(bimServerAPI, self.viewer, bimServerModel, roid);\n\n            loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) => {\n                if (progress == \"start\") {\n                    self.log(\"Started loading geometries\");\n                } else if (progress == \"done\") {\n                    self.log(`Finished loading geometries (${totalNrObjects} objects received)`);\n                    viewer.scene.off(onTick);\n                }\n            });\n\n            loader.setLoadOids(oids);\n            //loader.setLoadOids([bimServerModel.apiModel.roid], oids);\n\n            onTick = viewer.scene.on(\"tick\", () => {\n                loader.process();\n            });\n\n            loader.start();\n        });\n    };\n\n    /**\n     * @private\n     */\n    _createModel(modelId) {\n        const viewer = this.viewer;\n        const scene = viewer.scene;\n        if (scene.models[modelId]) {\n            this.log(`Can't create model within viewer - scene model with id ${modelId} already exists`);\n            return;\n        }\n        if (scene.components[modelId]) {\n            this.log(`Can't create model within viewer - scene component with this ID already exists: ${modelId}`);\n            return;\n        }\n        const xeoglModel = new xeoglModelClass(scene, {\n            id: modelId\n        });\n        return xeoglModel;\n    }\n\n    /**\n     * @private\n     */\n    _createGeometry(modelId, geometryId, positions, normals, colors, indices) {\n        const scene = this.scene;\n        const model = scene.models[modelId];\n        if (!model) {\n            this.error(`Can't create geometry - model not found: ${modelId}`);\n            return;\n        }\n        new Geometry(model, { // Geometry will be destroyed with the Model\n            id: `${modelId}.${geometryId}`,\n            primitive: \"triangles\",\n            positions,\n            normals,\n            colors,\n            indices\n        });\n    }\n\n    /**\n     * Called by BimServerGeometryLoader\n     * @private\n     */\n    _createObject(modelId, roid, oid, objectId, geometryIds, ifcType, matrix) {\n        const viewer = this.viewer;\n        const scene = viewer.scene;\n        const model = scene.models[modelId];\n        if (!model) {\n            this.error(`Can't create object - model not found: ${modelId}`);\n            return;\n        }\n        objectId = `${modelId}.${objectId}`;\n        if (scene.entities[objectId]) {\n            this.error(`Can't create object - object with id ${objectId} already exists`);\n            return;\n        }\n        if (scene.components[objectId]) {\n            this.error(`Can't create object - scene component with this ID already exists: ${objectId}`);\n            return;\n        }\n        ifcType = ifcType || \"DEFAULT\";\n        const guid = (objectId.includes(\"#\")) ? utils.CompressGuid(objectId.split(\"#\")[1].substr(8, 36).replace(/-/g, \"\")) : null; // TODO: Computing GUID looks like a performance bottleneck\n        const color = defaultMaterials[ifcType] || defaultMaterials[\"DEFAULT\"];\n        const object = new xeoglObjectClass(model, { // Object will be destroyed with the Model\n            id: objectId,\n            guid,\n            entityType: ifcType, // xeogl semantic models are generic, not limited to IFC\n            matrix,\n            colorize: color, // RGB\n            opacity: color[3], // A\n            visibility: !this.hiddenTypes[ifcType]\n        });\n        // TODO: Call model._addComponent to register child Object?\n        model.addChild(object, false); // Object is child of Model, does not inherit visible states from Model\n        for (let i = 0, len = geometryIds.length; i < len; i++) { // Create child Meshes of Object\n            const mesh = new Mesh(model, { // Each Mesh will be destroyed with the Model\n                geometry: `${modelId}.${geometryIds[i]}`\n            });\n            mesh.colorize = color; // HACK: Overrides state inheritance\n            object.addChild(mesh, true); // Mesh is child of Object, inherits visibility states from Object\n        }\n        return object;\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        //...\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        //...\n    }\n\n    /**\n     * @private\n     */\n    readBookmark(bookmark, done) {\n        //...\n        done();\n    }\n\n    /**\n     * Destroys this plugin.\n     */\n    destroy() {\n        super.destroy();\n    }\n}\n\nexport {BIMServerModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js",
     "access": "public",
@@ -2311,37 +2399,11 @@
     "importPath": "xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js",
     "importStyle": "{BIMServerModelsPlugin}",
     "description": "A viewer plugin that loads models from a [BIMServer](http://bimserver.org) instance.",
-    "lineNumber": 17,
+    "lineNumber": 14,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "BIMServerModelsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "bimServerAPI",
-        "description": "{Object} The BIMServer client API"
       }
     ],
     "interface": false,
@@ -2359,9 +2421,58 @@
     "static": false,
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 19,
-    "undocument": true
+    "description": "",
+    "lineNumber": 23,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"BIMServerModels\"",
+        "defaultRaw": "BIMServerModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg.bimServerAPI]",
+        "description": "A BIMServer client API instance."
+      }
+    ]
   },
   {
     "__docId__": 119,
@@ -2372,7 +2483,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#BIMSERVER_VERSION",
     "access": "public",
     "description": "Version of BIMServer supported by this plugin.",
-    "lineNumber": 27,
+    "lineNumber": 31,
     "type": {
       "nullable": null,
       "types": [
@@ -2391,7 +2502,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#bimServerAPI",
     "access": "public",
     "description": "The BIMServer API.",
-    "lineNumber": 32,
+    "lineNumber": 40,
     "type": {
       "types": [
         "*"
@@ -2407,7 +2518,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#hiddenTypes",
     "access": "public",
     "description": "IFC types that are hidden by default.",
-    "lineNumber": 38,
+    "lineNumber": 46,
     "type": {
       "nullable": null,
       "types": [
@@ -2426,7 +2537,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#_idMapping",
     "access": "private",
     "description": null,
-    "lineNumber": 43,
+    "lineNumber": 51,
     "undocument": true,
     "ignore": true,
     "type": {
@@ -2446,7 +2557,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#load",
     "access": "public",
     "description": "Loads a model from BIMServer into the viewer via the plugin's BIMServer API client.",
-    "lineNumber": 55,
+    "lineNumber": 63,
     "unknown": [
       {
         "tagName": "@returns",
@@ -2485,7 +2596,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#_loadModel",
     "access": "private",
     "description": "",
-    "lineNumber": 85,
+    "lineNumber": 93,
     "ignore": true,
     "params": [
       {
@@ -2514,7 +2625,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#_createModel",
     "access": "private",
     "description": "",
-    "lineNumber": 151,
+    "lineNumber": 159,
     "ignore": true,
     "params": [
       {
@@ -2541,7 +2652,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#_createGeometry",
     "access": "private",
     "description": "",
-    "lineNumber": 171,
+    "lineNumber": 179,
     "ignore": true,
     "params": [
       {
@@ -2594,7 +2705,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#_createObject",
     "access": "private",
     "description": "Called by BimServerGeometryLoader",
-    "lineNumber": 192,
+    "lineNumber": 200,
     "ignore": true,
     "params": [
       {
@@ -2657,7 +2768,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#send",
     "access": "private",
     "description": "",
-    "lineNumber": 236,
+    "lineNumber": 244,
     "ignore": true,
     "params": [
       {
@@ -2686,7 +2797,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#writeBookmark",
     "access": "private",
     "description": "",
-    "lineNumber": 243,
+    "lineNumber": 251,
     "ignore": true,
     "params": [
       {
@@ -2709,7 +2820,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#readBookmark",
     "access": "private",
     "description": "",
-    "lineNumber": 250,
+    "lineNumber": 258,
     "ignore": true,
     "params": [
       {
@@ -2738,7 +2849,7 @@
     "longname": "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#destroy",
     "access": "public",
     "description": "Destroys this plugin.",
-    "lineNumber": 258,
+    "lineNumber": 266,
     "params": [],
     "return": null
   },
@@ -4509,7 +4620,7 @@
     "__docId__": 219,
     "kind": "file",
     "name": "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {GLTFBigModel} from \"../../../xeogl/GLTFBigModel/GLTFBigModel.js\";\n\n/**\n Viewer plugin that loads glTF models into the viewer.\n\n @class ClipsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n */\nclass GLTFBigModelsPlugin extends ModelsPlugin {\n\n    constructor(viewer, cfg) {\n        super(\"GLTFBigModels\", viewer, GLTFBigModel, cfg);\n    }\n\n    /**\n     Loads a glTF model from the file system into the viewer.\n\n     @param params {*} Configs\n     @param [params.id] {String} Optional ID, unique among all components in the parent {{#crossLink \"Scene\"}}Scene{{/crossLink}},\n     generated automatically when omitted.\n     @param [params.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink \"Object\"}}{{/crossLink}} documentation for usage.\n     @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.\n     @param [params.parent] The parent Object.\n     @param [params.visible=true] {Boolean}  Indicates if this GLTFModel is visible.\n     @param [params.culled=false] {Boolean}  Indicates if this GLTFModel is culled from view.\n     @param [params.pickable=true] {Boolean}  Indicates if this GLTFModel is pickable.\n     @param [params.clippable=true] {Boolean} Indicates if this GLTFModel is clippable.\n     @param [params.outlined=false] {Boolean} Whether an outline is rendered around this GLTFModel.\n     @param [params.ghosted=false] {Boolean} Whether this GLTFModel is rendered ghosted.\n     @param [params.highlighted=false] {Boolean} Whether this GLTFModel is rendered highlighted.\n     @param [params.selected=false] {Boolean} Whether this GLTFModel is rendered selected.\n     @param [params.edges=false] {Boolean} Whether this GLTFModel is rendered with edges emphasized.\n     @param [params.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.\n     @param [params.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.\n     @param [params.position=[0,0,0]] {Float32Array} The GLTFModel's local 3D position.\n     @param [params.scale=[1,1,1]] {Float32Array} The GLTFModel's local scale.\n     @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.\n     @param [params.src] {String} Path to a glTF file. You can set this to a new file path at any time, which will cause the\n     @param [params.lambertMaterials=false] {Boolean} When true, gives each {{#crossLink \"Mesh\"}}{{/crossLink}} the same {{#crossLink \"LambertMaterial\"}}{{/crossLink}} and a {{#crossLink \"Mesh/colorize:property\"}}{{/crossLink}} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.\n     @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.\n     @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.\n     @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.\n     @param [params.edgeThreshold=20] {Number} When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     @param [params.handleNode] {Function} Optional callback to mask which {{#crossLink \"Object\"}}Objects{{/crossLink}} are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.\n     */\n    load(params) {\n        if (!params.id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[params.id]) {\n            this.error(\"Component with this ID already exists in viewer: \" + id);\n            return;\n        }\n        var model = new GLTFBigModel(this.viewer.scene, params);\n        return model; // TODO: register loading params within this plugin for inclusion in bookmarks\n    }\n}\n\nexport {GLTFBigModelsPlugin}\n",
+    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {GLTFBigModel} from \"../../../xeogl/GLTFBigModel/GLTFBigModel.js\";\n\n/**\n * A viewer plugin that loads large models from [glTF](https://www.khronos.org/gltf/).\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create a GLTFBigModels plugin within the viewer\n * var plugin = new GLTFBigModelsPlugin(viewer, {\n *      id: \"GLTFBigModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.GLTFBigModels;\n *\n * // Load the big glTF model\n * // These params can include all the xeogl.GLTFModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/gltf/mygltfmodel.gltf\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class GLTFBigModelsPlugin\n *\n */\nclass GLTFBigModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"GLTFBigModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"GLTFBigModels\", viewer, GLTFBigModel, cfg);\n    }\n\n    /**\n     Loads a glTF model from the file system into the viewer.\n\n     @param params {*} Configs\n     @param [params.id] {String} Optional ID, unique among all components in the parent {{#crossLink \"Scene\"}}Scene{{/crossLink}},\n     generated automatically when omitted.\n     @param [params.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink \"Object\"}}{{/crossLink}} documentation for usage.\n     @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.\n     @param [params.parent] The parent Object.\n     @param [params.visible=true] {Boolean}  Indicates if this GLTFModel is visible.\n     @param [params.culled=false] {Boolean}  Indicates if this GLTFModel is culled from view.\n     @param [params.pickable=true] {Boolean}  Indicates if this GLTFModel is pickable.\n     @param [params.clippable=true] {Boolean} Indicates if this GLTFModel is clippable.\n     @param [params.outlined=false] {Boolean} Whether an outline is rendered around this GLTFModel.\n     @param [params.ghosted=false] {Boolean} Whether this GLTFModel is rendered ghosted.\n     @param [params.highlighted=false] {Boolean} Whether this GLTFModel is rendered highlighted.\n     @param [params.selected=false] {Boolean} Whether this GLTFModel is rendered selected.\n     @param [params.edges=false] {Boolean} Whether this GLTFModel is rendered with edges emphasized.\n     @param [params.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.\n     @param [params.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.\n     @param [params.position=[0,0,0]] {Float32Array} The GLTFModel's local 3D position.\n     @param [params.scale=[1,1,1]] {Float32Array} The GLTFModel's local scale.\n     @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.\n     @param [params.src] {String} Path to a glTF file. You can set this to a new file path at any time, which will cause the\n     @param [params.lambertMaterials=false] {Boolean} When true, gives each {{#crossLink \"Mesh\"}}{{/crossLink}} the same {{#crossLink \"LambertMaterial\"}}{{/crossLink}} and a {{#crossLink \"Mesh/colorize:property\"}}{{/crossLink}} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.\n     @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.\n     @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.\n     @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.\n     @param [params.edgeThreshold=20] {Number} When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     @param [params.handleNode] {Function} Optional callback to mask which {{#crossLink \"Object\"}}Objects{{/crossLink}} are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.\n     */\n    load(params) {\n        if (!params.id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[params.id]) {\n            this.error(\"Component with this ID already exists in viewer: \" + id);\n            return;\n        }\n        var model = new GLTFBigModel(this.viewer.scene, params);\n        return model; // TODO: register loading params within this plugin for inclusion in bookmarks\n    }\n}\n\nexport {GLTFBigModelsPlugin}\n",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js",
     "access": "public",
@@ -4527,28 +4638,15 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js",
     "importStyle": "{GLTFBigModelsPlugin}",
-    "description": "Viewer plugin that loads glTF models into the viewer.",
-    "lineNumber": 11,
+    "description": "A viewer plugin that loads large models from [glTF](https://www.khronos.org/gltf/).",
+    "examples": [
+      "\n// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\n// Create a GLTFBigModels plugin within the viewer\nvar plugin = new GLTFBigModelsPlugin(viewer, {\n     id: \"GLTFBigModels\"  // Optional plugin ID\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.GLTFBigModels;\n\n// Load the big glTF model\n// These params can include all the xeogl.GLTFModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/gltf/mygltfmodel.gltf\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});"
+    ],
+    "lineNumber": 39,
     "unknown": [
       {
         "tagName": "@class",
-        "tagValue": "ClipsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
+        "tagValue": "GLTFBigModelsPlugin"
       }
     ],
     "interface": false,
@@ -4566,9 +4664,48 @@
     "static": false,
     "longname": "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true
+    "description": "",
+    "lineNumber": 47,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"GLTFBigModels\"",
+        "defaultRaw": "GLTFBigModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      }
+    ]
   },
   {
     "__docId__": 222,
@@ -4581,7 +4718,7 @@
     "longname": "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin#load",
     "access": "public",
     "description": "Loads a glTF model from the file system into the viewer.",
-    "lineNumber": 49,
+    "lineNumber": 83,
     "params": [
       {
         "nullable": null,
@@ -4920,7 +5057,7 @@
     "__docId__": 223,
     "kind": "file",
     "name": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
-    "content": "import {_apply} from \"../../../xeogl/xeogl.module.js\"\nimport {GLTFModel} from \"././../../../xeogl/GLTFModel/GLTFModel.js\";\n\nimport {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\n\n/**\n A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n\n Depends on: xeogl.GLTFModel\n\n @class GLTFModelsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n */\nclass GLTFModelsPlugin extends ModelsPlugin {\n\n    constructor(viewer, cfg) {\n        super(\"GLTFModels\", viewer, GLTFModel, cfg);\n    }\n\n    /**\n     Loads a glTF model from the file system into the viewer.\n     */\n    load(params) {\n\n        var modelId = params.id;\n        var self = this;\n\n        return super.load(_apply(params, {\n            handleNode: function (nodeInfo, actions) {\n                return self._defaultHhandleNode(modelId, nodeInfo, actions);\n            }\n        }));\n    }\n\n    _defaultHhandleNode(modelId, nodeInfo, actions) {\n        var name = nodeInfo.name;\n        if (!name) {\n            return true; // Continue descending this node subtree\n        }\n        actions.createObject = {\n            id: modelId + \"#\" + name,\n            entityType: \"default\",\n            visible: true\n        };\n        return true; // Continue descending this glTF node subtree\n    }\n}\n\nexport {GLTFModelsPlugin}",
+    "content": "import {_apply} from \"../../../xeogl/xeogl.module.js\"\nimport {GLTFModel} from \"././../../../xeogl/GLTFModel/GLTFModel.js\";\n\nimport {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\n\n/**\n * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create a GLTFModels plugin within the viewer\n * var plugin = new GLTFModelsPlugin(viewer, {\n *      id: \"GLTFModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.GLTFModels;\n *\n * // Load the glTF model\n * // These params can include all the xeogl.GLTFModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/gltf/mygltfmodel.gltf\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class GLTFModelsPlugin\n */\nclass GLTFModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"GLTFModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"GLTFModels\", viewer, GLTFModel, cfg);\n    }\n\n    /**\n     Loads a glTF model from the file system into the viewer.\n     */\n    load(params) {\n\n        var modelId = params.id;\n        var self = this;\n\n        return super.load(_apply(params, {\n            handleNode: function (nodeInfo, actions) {\n                return self._defaultHhandleNode(modelId, nodeInfo, actions);\n            }\n        }));\n    }\n\n    _defaultHhandleNode(modelId, nodeInfo, actions) {\n        var name = nodeInfo.name;\n        if (!name) {\n            return true; // Continue descending this node subtree\n        }\n        actions.createObject = {\n            id: modelId + \"#\" + name,\n            entityType: \"default\",\n            visible: true\n        };\n        return true; // Continue descending this glTF node subtree\n    }\n}\n\nexport {GLTFModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
     "access": "public",
@@ -4938,28 +5075,12 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
     "importStyle": "{GLTFModelsPlugin}",
-    "description": "A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n\nDepends on: xeogl.GLTFModel",
-    "lineNumber": 15,
+    "description": "A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n\n// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\n// Create a GLTFModels plugin within the viewer\nvar plugin = new GLTFModelsPlugin(viewer, {\n     id: \"GLTFModels\"  // Optional plugin ID\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.GLTFModels;\n\n// Load the glTF model\n// These params can include all the xeogl.GLTFModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/gltf/mygltfmodel.gltf\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});",
+    "lineNumber": 38,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "GLTFModelsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
       }
     ],
     "interface": false,
@@ -4977,9 +5098,48 @@
     "static": false,
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true
+    "description": "",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"GLTFModels\"",
+        "defaultRaw": "GLTFModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      }
+    ]
   },
   {
     "__docId__": 226,
@@ -4992,7 +5152,7 @@
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#load",
     "access": "public",
     "description": "Loads a glTF model from the file system into the viewer.",
-    "lineNumber": 24,
+    "lineNumber": 53,
     "params": [
       {
         "name": "params",
@@ -5018,7 +5178,7 @@
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#_defaultHhandleNode",
     "access": "private",
     "description": null,
-    "lineNumber": 36,
+    "lineNumber": 65,
     "undocument": true,
     "ignore": true,
     "params": [
@@ -5051,7 +5211,7 @@
     "__docId__": 228,
     "kind": "file",
     "name": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {OBJModel} from \"./../../../xeogl/OBJModel/OBJModel.js\";\n\n/**\n A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n\n Depends on: xeogl.OBJModel\n\n @class OBJModelsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n */\nclass OBJModelsPlugin extends ModelsPlugin {\n\n    constructor(viewer, cfg) {\n        super(\"OBJModels\", viewer, OBJModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {OBJModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {OBJModel} from \"./../../../xeogl/OBJModel/OBJModel.js\";\n\n/**\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n */\nclass OBJModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"OBJModels\", viewer, OBJModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {OBJModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
     "access": "public",
@@ -5069,28 +5229,15 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
     "importStyle": "{OBJModelsPlugin}",
-    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n\nDepends on: xeogl.OBJModel",
-    "lineNumber": 13,
+    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.",
+    "examples": [
+      "\n// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\n// Create an OBJModels plugin within the viewer\nvar plugin = new OBJModelsPlugin(viewer, {\n     id: \"OBJModels\"  // Optional plugin ID\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.OBJModels;\n\n// Load the OBJ model\n// These params can include all the xeogl.OBJModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/obj/myobjmodel.obj\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});"
+    ],
+    "lineNumber": 38,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "OBJModelsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
       }
     ],
     "interface": false,
@@ -5108,9 +5255,48 @@
     "static": false,
     "longname": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true
+    "description": "",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"OBJModels\"",
+        "defaultRaw": "OBJModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      }
+    ]
   },
   {
     "__docId__": 231,
@@ -5123,7 +5309,7 @@
     "longname": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#load",
     "access": "public",
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 51,
     "undocument": true,
     "params": [
       {
@@ -5143,7 +5329,7 @@
     "__docId__": 232,
     "kind": "file",
     "name": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {STLModel} from \"./../../../xeogl/STLModel/STLModel.js\";\n\n/**\n A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n\n Depends on: xeogl.STLFModel\n\n @class STLModelsPlugin\n @constructor\n @param viewer {Viewer} The xeoviewer viewer.\n */\nclass STLModelsPlugin extends ModelsPlugin {\n\n    constructor(viewer, cfg) {\n        super(\"STLModels\", viewer, STLModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {STLModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {STLModel} from \"./../../../xeogl/STLModel/STLModel.js\";\n\n/**\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n */\nclass STLModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"STLModels\", viewer, STLModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {STLModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
     "access": "public",
@@ -5161,28 +5347,15 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
     "importStyle": "{STLModelsPlugin}",
-    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n\nDepends on: xeogl.STLFModel",
-    "lineNumber": 13,
+    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.",
+    "examples": [
+      "// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\n// Create an STLModels plugin within the viewer\nvar plugin = new SSTLModelsPlugin(viewer, {\n     id: \"STLModels\"  // Optional plugin ID\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.STLModels;\n\n// Load the STL model\n// These params can include all the xeogl.STLModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/stl/mystlmodel.obj\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});"
+    ],
+    "lineNumber": 37,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": "STLModelsPlugin"
-      },
-      {
-        "tagName": "@constructor",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "*"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "viewer",
-        "description": "{Viewer} The xeoviewer viewer."
       }
     ],
     "interface": false,
@@ -5200,9 +5373,48 @@
     "static": false,
     "longname": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#constructor",
     "access": "public",
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true
+    "description": "",
+    "lineNumber": 45,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Viewer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "viewer",
+        "description": "The Viewer."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "cfg",
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"STLModels\"",
+        "defaultRaw": "STLModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
+      }
+    ]
   },
   {
     "__docId__": 235,
@@ -5215,7 +5427,7 @@
     "longname": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#load",
     "access": "public",
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 50,
     "undocument": true,
     "params": [
       {
@@ -6271,7 +6483,7 @@
     "__docId__": 278,
     "kind": "file",
     "name": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../ModelsPlugin.js\";\nimport {XML3DModel} from \"./XML3DModel.js\";\n\n\n/**\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                           // Default is false\n *   scale: [1.0, 1.0, 1.0]                 // Default\n * });\n *\n * @class XML3DModelsPlugin\n */\nclass XML3DModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The viewer.\n     * @param {Object} cfg  Plugin configs.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     */\n    constructor(viewer, cfg) {\n        super(\"XML3DModels\", viewer, XML3DModel, cfg);\n        cfg = cfg || {};\n        if (!cfg.workerScriptsPath) {\n            this.error(\"Config expected: workerScriptsPath\");\n            return\n        }\n        this._workerScriptsPath = cfg.workerScriptsPath;\n    }\n\n    /**\n     Loads a 3DXML model into the viewer.\n\n     */\n    load(params) {\n        params.workerScriptsPath = this._workerScriptsPath;\n        return super.load(params);\n    }\n}\n\nexport {XML3DModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../ModelsPlugin.js\";\nimport {XML3DModel} from \"./XML3DModel.js\";\n\n\n/**\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Optional plugin ID\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n */\nclass XML3DModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     */\n    constructor(viewer, cfg) {\n        super(\"XML3DModels\", viewer, XML3DModel, cfg);\n        cfg = cfg || {};\n        if (!cfg.workerScriptsPath) {\n            this.error(\"Config expected: workerScriptsPath\");\n            return\n        }\n        this._workerScriptsPath = cfg.workerScriptsPath;\n    }\n\n    /**\n     Loads a 3DXML model into the viewer.\n\n     */\n    load(params) {\n        params.workerScriptsPath = this._workerScriptsPath;\n        return super.load(params);\n    }\n}\n\nexport {XML3DModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
     "access": "public",
@@ -6291,7 +6503,7 @@
     "importStyle": "{XML3DModelsPlugin}",
     "description": "A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n\n# Overview\n\n- Supports the 3DXML V4.2 Schema\n- We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.",
     "examples": [
-      "const viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\nconst plugin = new XML3DModelsPlugin(viewer, {\n   id: \"xml3d\",\n   workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n});\n\nconst model = viewer.plugins.xml3d.load({\n  id: \"myModel\",\n  src: \"./models/XML3D/3dpreview.3dxml\",\n  edges: true,                           // Default is false\n  scale: [1.0, 1.0, 1.0]                 // Default\n});"
+      "const viewer = new Viewer({\n     canvasId: \"glcanvas\"\n});\n\nconst plugin = new XML3DModelsPlugin(viewer, {\n   id: \"xml3d\",                                               // Optional plugin ID\n   workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n});\n\nconst model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n  id: \"myModel\",\n  src: \"./models/XML3D/3dpreview.3dxml\",\n  edges: true,                                                // Default is false\n  scale: [1.0, 1.0, 1.0]                                      // Default\n});"
     ],
     "lineNumber": 32,
     "unknown": [
@@ -6316,7 +6528,7 @@
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 42,
+    "lineNumber": 43,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -6332,7 +6544,7 @@
         "spread": false,
         "optional": false,
         "name": "viewer",
-        "description": "The viewer."
+        "description": "The Viewer."
       },
       {
         "nullable": null,
@@ -6342,7 +6554,19 @@
         "spread": false,
         "optional": false,
         "name": "cfg",
-        "description": "Plugin configs."
+        "description": "Plugin configuration."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"XML3DModels\"",
+        "defaultRaw": "XML3DModels",
+        "name": "cfg.id",
+        "description": "Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}."
       },
       {
         "nullable": null,
@@ -6365,7 +6589,7 @@
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#_workerScriptsPath",
     "access": "private",
     "description": null,
-    "lineNumber": 49,
+    "lineNumber": 50,
     "undocument": true,
     "ignore": true,
     "type": {
@@ -6385,7 +6609,7 @@
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#load",
     "access": "public",
     "description": "Loads a 3DXML model into the viewer.",
-    "lineNumber": 56,
+    "lineNumber": 57,
     "params": [
       {
         "name": "params",

@@ -49,16 +49,47 @@
 import {OBJModel} from &quot;./../../../xeogl/OBJModel/OBJModel.js&quot;;
 
 /**
- A viewer plugin that loads models from &lt;a href=&quot;https://en.wikipedia.org/wiki/Wavefront_.obj_file&quot;&gt;OBJ&lt;/a&gt; format.
-
- Depends on: xeogl.OBJModel
-
- @class OBJModelsPlugin
- @constructor
- @param viewer {Viewer} The xeoviewer viewer.
+ * A viewer plugin that loads models from &lt;a href=&quot;https://en.wikipedia.org/wiki/Wavefront_.obj_file&quot;&gt;OBJ&lt;/a&gt; format.
+ *
+ * @example
+ *
+ * // Create a viewer
+ * const viewer = new Viewer({
+ *      canvasId: &quot;glcanvas&quot;
+ * });
+ *
+ * // Create an OBJModels plugin within the viewer
+ * var plugin = new OBJModelsPlugin(viewer, {
+ *      id: &quot;OBJModels&quot;  // Optional plugin ID
+ * });
+ *
+ * // We can also get the plugin by its ID on the viewer
+ * plugin = viewer.plugins.OBJModels;
+ *
+ * // Load the OBJ model
+ * // These params can include all the xeogl.OBJModel configs
+ * const model = plugin.load({
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;./models/obj/myobjmodel.obj&quot;
+ * });
+ *
+ * // The model is a xeogl.Model
+ *
+ * // When the model has loaded, fit it to view
+ * model.on(&quot;loaded&quot;, function() {
+ *      viewer.cameraFlight.flyTo(model);
+ * });
+ *
+ * @class OBJModelsPlugin
  */
 class OBJModelsPlugin extends ModelsPlugin {
 
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;OBJModels&quot;] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     */
     constructor(viewer, cfg) {
         super(&quot;OBJModels&quot;, viewer, OBJModel, cfg);
     }

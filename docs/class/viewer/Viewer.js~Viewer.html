@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewer} from &apos;<span><a href="file/viewer/Viewer.js.html#lineNumber13">xeokit-sdk/viewer/Viewer.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewer} from &apos;<span><a href="file/viewer/Viewer.js.html#lineNumber15">xeokit-sdk/viewer/Viewer.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/Viewer.js.html#lineNumber13">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/Viewer.js.html#lineNumber15">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -71,10 +71,11 @@
 
   
   
-  <div class="description" data-ice="description"><p>Implements the WebGL-based 3D Viewer at the heart of the xeokit SDK.</p>
-<p>A Viewer wraps a <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a> in a container of
-<span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span>s that handle the various aspects of the Viewer&apos;s functionality.</p>
-<p>Each Plugin is able to serialize and deserialize its state as JSON.</p>
+  <div class="description" data-ice="description"><p>The WebGL-based 3D Viewer class at the heart of the xeokit SDK.</p>
+<p>A Viewer wraps a single  <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+<p>Add <span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span>s to a Viewer to extend its functionality.</p>
+<p>Save and load the state of a Viewer as JSON with <span><a href="class/viewer/Viewer.js~Viewer.html#instance-method-getBookmark">Viewer#getBookmark</a></span> and <span><a href="class/viewer/Viewer.js~Viewer.html#instance-method-setBookmark">Viewer#setBookmark</a></span>. Installed
+<span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span> instances will also save and load their state to and from the JSON.</p>
 </div>
   
 
@@ -592,7 +593,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber15">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber17">source</a></span></span>
     </span>
   </h3>
 
@@ -638,7 +639,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
@@ -699,7 +700,7 @@ controls the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>&
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
@@ -760,7 +761,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber23">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -820,7 +821,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber78">source</a></span></span>
     </span>
   </h3>
 
@@ -880,7 +881,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -943,7 +944,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber182">source</a></span></span>
     </span>
   </h3>
 
@@ -987,7 +988,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber355">source</a></span></span>
     </span>
   </h3>
 
@@ -1030,7 +1031,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1091,7 +1092,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber100">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1159,7 +1160,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
@@ -1216,7 +1217,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -1294,7 +1295,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -1355,7 +1356,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
@@ -1423,7 +1424,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber191">source</a></span></span>
     </span>
   </h3>
 
@@ -1468,7 +1469,7 @@ is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scen
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber333">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/Viewer.js.html#lineNumber335">source</a></span></span>
     </span>
   </h3>
 

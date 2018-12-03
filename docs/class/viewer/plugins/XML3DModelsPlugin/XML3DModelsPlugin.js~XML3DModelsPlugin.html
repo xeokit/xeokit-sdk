@@ -91,15 +91,15 @@
 });
 
 const plugin = new XML3DModelsPlugin(viewer, {
-   id: &quot;xml3d&quot;,
+   id: &quot;xml3d&quot;,                                               // Optional plugin ID
    workerScriptsPath : &quot;../../src/plugins/XML3DModels/zipjs/&quot; // Path to zip.js workers dir
 });
 
-const model = viewer.plugins.xml3d.load({
+const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID
   id: &quot;myModel&quot;,
   src: &quot;./models/XML3D/3dpreview.3dxml&quot;,
-  edges: true,                           // Default is false
-  scale: [1.0, 1.0, 1.0]                 // Default
+  edges: true,                                                // Default is false
+  scale: [1.0, 1.0, 1.0]                                      // Default
 });</code></pre>
     </div>
 </div>
@@ -208,7 +208,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>ID for this Plugin, unique within the <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+        <div data-ice="description"><p>ID for this Plugin, unique within its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -237,7 +237,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>The viewer that contains this plugin.</p>
+        <div data-ice="description"><p>The Viewer that contains this Plugin.</p>
 </div>
       </div>
     </td>
@@ -266,7 +266,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Destroys this plugin and removes it from its viewer.</p>
+        <div data-ice="description"><p>Destroys this Plugin and removes it from its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -295,7 +295,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -324,7 +324,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Fires an event on this plugin.</p>
+        <div data-ice="description"><p>Fires an event at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -353,7 +353,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -382,7 +382,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Subscribes to an event on this plugin.</p>
+        <div data-ice="description"><p>Subscribes to an event fired at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -418,7 +418,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">Models</a> currently loaded by this plugin.</p>
+        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -499,13 +499,13 @@ const model = viewer.plugins.xml3d.load({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Model</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Loads a model into the viewer.</p>
+        <div data-ice="description"><p>Loads a model into this Plugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -534,7 +534,7 @@ const model = viewer.plugins.xml3d.load({
       <div>
         
         
-        <div data-ice="description"><p>Unloads a model that was loaded by this plugin.</p>
+        <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -563,7 +563,7 @@ const model = viewer.plugins.xml3d.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -587,14 +587,22 @@ const model = viewer.plugins.xml3d.load({
       <td data-ice="name" class="code" data-depth="0">viewer</td>
       <td data-ice="type" class="code"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The viewer.</p>
+      <td data-ice="description"><p>The Viewer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">cfg</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Plugin configs.</p>
+      <td data-ice="description"><p>Plugin configuration.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;XML3DModels&quot;</li></ul></td>
+      <td data-ice="description"><p>Optional ID for this plugin, with which we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -644,7 +652,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 

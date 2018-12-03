@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber15">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber38">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber15">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber38">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -72,7 +72,27 @@
   
   
   <div class="description" data-ice="description"><p>A viewer plugin that loads models from <a href="https://www.khronos.org/gltf/">glTF</a>.</p>
-<p>Depends on: xeogl.GLTFModel</p>
+<p>// Create a viewer
+const viewer = new Viewer({
+     canvasId: &quot;glcanvas&quot;
+});</p>
+<p>// Create a GLTFModels plugin within the viewer
+var plugin = new GLTFModelsPlugin(viewer, {
+     id: &quot;GLTFModels&quot;  // Optional plugin ID
+});</p>
+<p>// We can also get the plugin by its ID on the viewer
+plugin = viewer.plugins.GLTFModels;</p>
+<p>// Load the glTF model
+// These params can include all the xeogl.GLTFModel configs
+const model = plugin.load({
+     id: &quot;myModel&quot;,
+     src: &quot;./models/gltf/mygltfmodel.gltf&quot;
+});</p>
+<p>// The model is a xeogl.Model</p>
+<p>// When the model has loaded, fit it to view
+model.on(&quot;loaded&quot;, function() {
+     viewer.cameraFlight.flyTo(model);
+});</p>
 </div>
   
 
@@ -105,7 +125,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -184,7 +204,7 @@
       <div>
         
         
-        <div data-ice="description"><p>ID for this Plugin, unique within the <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+        <div data-ice="description"><p>ID for this Plugin, unique within its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -213,7 +233,7 @@
       <div>
         
         
-        <div data-ice="description"><p>The viewer that contains this plugin.</p>
+        <div data-ice="description"><p>The Viewer that contains this Plugin.</p>
 </div>
       </div>
     </td>
@@ -242,7 +262,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Destroys this plugin and removes it from its viewer.</p>
+        <div data-ice="description"><p>Destroys this Plugin and removes it from its <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -271,7 +291,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -300,7 +320,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Fires an event on this plugin.</p>
+        <div data-ice="description"><p>Fires an event at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -329,7 +349,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.</p>
+        <div data-ice="description"><p>Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
 </div>
       </div>
     </td>
@@ -358,7 +378,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Subscribes to an event on this plugin.</p>
+        <div data-ice="description"><p>Subscribes to an event fired at this Plugin.</p>
 </div>
       </div>
     </td>
@@ -394,7 +414,7 @@
       <div>
         
         
-        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">Models</a> currently loaded by this plugin.</p>
+        <div data-ice="description"><p><a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -475,13 +495,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>Model</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Loads a model into the viewer.</p>
+        <div data-ice="description"><p>Loads a model into this Plugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </div>
       </div>
     </td>
@@ -510,7 +530,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Unloads a model that was loaded by this plugin.</p>
+        <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -535,11 +555,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(viewer: <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -551,7 +571,39 @@
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-constructor-constructor">ModelsPlugin#constructor</a></span></div>
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">viewer</td>
+      <td data-ice="type" class="code"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The Viewer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Plugin configuration.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;GLTFModels&quot;</li></ul></td>
+      <td data-ice="description"><p>Optional ID for this plugin, with which we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -587,7 +639,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 

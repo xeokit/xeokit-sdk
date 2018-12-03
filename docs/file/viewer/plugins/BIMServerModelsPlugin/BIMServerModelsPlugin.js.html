@@ -57,15 +57,19 @@ import {utils} from &quot;./lib/utils.js&quot;;
  A viewer plugin that loads models from a [BIMServer](http://bimserver.org) instance.
 
  @class BIMServerModelsPlugin
- @constructor
- @param viewer {Viewer} The xeoviewer viewer
- @param bimServerAPI {Object} The BIMServer client API
  */
 class BIMServerModelsPlugin extends Plugin {
 
-    constructor(viewer, bimServerAPI) {
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;BIMServerModels&quot;] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {Object} cfg.bimServerAPI] A BIMServer client API instance.
+     */
+    constructor(viewer, cfg) {
 
-        super(&quot;bimServerModels&quot;, viewer);
+        super(&quot;BIMServerModels&quot;, viewer, cfg);
 
         /**
          * Version of BIMServer supported by this plugin.
@@ -73,10 +77,14 @@ class BIMServerModelsPlugin extends Plugin {
          */
         this.BIMSERVER_VERSION = &quot;1.5&quot;;
 
+        if (!cfg.bimServerAPI) {
+            this.error(&quot;Config expected: bimServerAPI&quot;);
+        }
+
         /**
          * The BIMServer API.
          */
-        this.bimServerAPI = bimServerAPI;
+        this.bimServerAPI = cfg.bimServerAPI;
 
         /**
          * IFC types that are hidden by default.
