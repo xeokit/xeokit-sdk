@@ -1,12 +1,14 @@
 import {math, Scene, CameraFlightAnimation, CameraControl} from "../xeogl/xeogl.module.js";
 
 /**
- * Implements the WebGL-based 3D Viewer at the heart of the xeokit SDK.
+ * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
  *
- * A Viewer wraps a <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a> in a container of
- * {@link Plugin}s that handle the various aspects of the Viewer's functionality.
+ * A Viewer wraps a single  <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
  *
- * Each Plugin is able to serialize and deserialize its state as JSON.
+ * Add {@link Plugin}s to a Viewer to extend its functionality.
+ *
+ * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
+ * {@link Plugin} instances will also save and load their state to and from the JSON.
  *
  * @public
  */

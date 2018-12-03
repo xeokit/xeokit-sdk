@@ -13,20 +13,21 @@ class Plugin {
     constructor(id, viewer, cfg) {
 
         /**
-         * ID for this Plugin, unique within the {@link Viewer}.
+         * ID for this Plugin, unique within its {@link Viewer}.
          *
          * @type {string}
          */
         this.id = (cfg && cfg.id) ? cfg.id : id;
 
         /**
-         * The viewer that contains this plugin.
+         * The Viewer that contains this Plugin.
+         *
          * @type {Viewer}
          */
         this.viewer = viewer;
 
         /**
-         * Subscriptions to events fired on this plugin.
+         * Subscriptions to events fired on this Plugin.
          * @private
          */
         this._eventSubs = {};
@@ -35,7 +36,8 @@ class Plugin {
     }
 
     /**
-     Subscribes to an event on this plugin.
+     Subscribes to an event fired at this Plugin.
+
      @param {String} event The event
      @param {Function} callback Callback fired on the event
      */
@@ -49,7 +51,8 @@ class Plugin {
     }
 
     /**
-     Fires an event on this plugin.
+     Fires an event at this Plugin.
+
      @param {String} event The event type name
      @param {Object} value The event parameters
      */
@@ -63,7 +66,8 @@ class Plugin {
     }
 
     /**
-     * Logs a message to the JavaScript developer console, prefixed with the ID of this plugin.
+     * Logs a message to the JavaScript developer console, prefixed with the ID of this Plugin.
+     *
      * @param {String} msg The error message
      */
     log(msg) {
@@ -71,7 +75,8 @@ class Plugin {
     }
 
     /**
-     * Logs an error message to the JavaScript developer console, prefixed with the ID of this plugin.
+     * Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.
+     *
      * @param {String} msg The error message
      */
     error(msg) {
@@ -79,7 +84,8 @@ class Plugin {
     }
 
     /**
-     * Sends a message to this plugin.
+     * Sends a message to this Plugin.
+     *
      * @private
      */
     send(name, value) {
@@ -87,7 +93,8 @@ class Plugin {
     }
 
     /**
-     * Saves the state of this plugin to a bookmark.
+     * Saves the state of this Plugin to a bookmark.
+     *
      * @private
      */
     writeBookmark(bookmark) {
@@ -95,7 +102,8 @@ class Plugin {
     }
 
     /**
-     * Restores the state of this plugin from a bookmark.
+     * Restores the state of this Plugin from a bookmark.
+     *
      * @private
      */
     readBookmark(bookmark) {
@@ -103,7 +111,7 @@ class Plugin {
     }
 
     /**
-     * Destroys this plugin and removes it from its viewer.
+     * Destroys this Plugin and removes it from its {@link Viewer}.
      */
     destroy() {
         this.viewer.removePlugin(this);

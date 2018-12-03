@@ -2,14 +2,20 @@ import {_apply} from "../xeogl/xeogl.module.js"
 import {Plugin} from "./Plugin.js";
 
 /**
- Base class for viewer plugins that load models.
+ Base class for Viewer plugins that load models.
 
  @class ModelsPlugin
- @constructor
- @param viewer {Viewer} The xeoviewer viewer.
  */
 class ModelsPlugin extends Plugin {
 
+    /**
+     * @constructor
+     *
+     * @param {String} [id] ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {Viewer} viewer The Viewer.
+     * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.
+     * @param {Object} cfg  Plugin configuration.
+     */
     constructor(id, viewer, modelClass, cfg) {
 
         super(id, viewer, cfg);
@@ -20,7 +26,7 @@ class ModelsPlugin extends Plugin {
         this._modelClass = modelClass;
 
         /**
-         * <a href="http://xeogl.org/docs/classes/Model.html">Models</a> currently loaded by this plugin.
+         * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.
          * @type {{String:Model}}
          */
         this.models = {};
@@ -33,11 +39,11 @@ class ModelsPlugin extends Plugin {
     }
 
     /**
-     Loads a model into the viewer.
-
-     @param params {*} Configs
-     @param params.id {String} Optional ID, unique among all components in the viewer's scene.
-     @return {Model} A xeogl component representing the newly-loaded model - see: http://xeogl.org/docs/classes/Model.html
+     * Loads a model into this Plugin's {@link Viewer}.
+     *
+     * @param params {*} Configs
+     * @param params.id {String} Optional ID, unique among all components in the viewer's scene.
+     * @returns {{xeogl.Model}} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
      */
     load(params, ok) {
         const id = params.id;
@@ -63,7 +69,8 @@ class ModelsPlugin extends Plugin {
     }
 
     /**
-     * Unloads a model that was loaded by this plugin.
+     * Unloads and destroys a model that was previously loaded by this Plugin.
+     *
      * @param {String} id  ID of model to unload.
      */
     unload(id) {

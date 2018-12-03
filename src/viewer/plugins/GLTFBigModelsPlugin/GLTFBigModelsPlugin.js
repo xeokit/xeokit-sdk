@@ -2,14 +2,48 @@ import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
 import {GLTFBigModel} from "../../../xeogl/GLTFBigModel/GLTFBigModel.js";
 
 /**
- Viewer plugin that loads glTF models into the viewer.
-
- @class ClipsPlugin
- @constructor
- @param viewer {Viewer} The xeoviewer viewer.
+ * A viewer plugin that loads large models from [glTF](https://www.khronos.org/gltf/).
+ *
+ * @example
+ *
+ * // Create a viewer
+ * const viewer = new Viewer({
+ *      canvasId: "glcanvas"
+ * });
+ *
+ * // Create a GLTFBigModels plugin within the viewer
+ * var plugin = new GLTFBigModelsPlugin(viewer, {
+ *      id: "GLTFBigModels"  // Optional plugin ID
+ * });
+ *
+ * // We can also get the plugin by its ID on the viewer
+ * plugin = viewer.plugins.GLTFBigModels;
+ *
+ * // Load the big glTF model
+ * // These params can include all the xeogl.GLTFModel configs
+ * const model = plugin.load({
+ *      id: "myModel",
+ *      src: "./models/gltf/mygltfmodel.gltf"
+ * });
+ *
+ * // The model is a xeogl.Model
+ *
+ * // When the model has loaded, fit it to view
+ * model.on("loaded", function() {
+ *      viewer.cameraFlight.flyTo(model);
+ * });
+ *
+ * @class GLTFBigModelsPlugin
+ *
  */
 class GLTFBigModelsPlugin extends ModelsPlugin {
 
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id="GLTFBigModels"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     */
     constructor(viewer, cfg) {
         super("GLTFBigModels", viewer, GLTFBigModel, cfg);
     }

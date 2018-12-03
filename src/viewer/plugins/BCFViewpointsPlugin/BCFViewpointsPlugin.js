@@ -10,14 +10,17 @@ const tempVec3 = math.vec3();
  the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
 
  @class BCFViewpointsPlugin
- @constructor
- @param viewer {Viewer} The xeoviewer viewer.
- @param [cfg] {*} Plugin configuration
- @param [cfg.originatingSystem] {string} Identifies the originating system for BCF records.
- @param [cfg.authoringTool] {string} Identifies the authoring tool for BCF records.
  */
 class BCFViewpointsPlugin extends Plugin {
 
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id="BCFViewpoints"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param [cfg.originatingSystem] {string} Identifies the originating system for BCF records.
+     * @param [cfg.authoringTool] {string} Identifies the authoring tool for BCF records.
+     */
     constructor(viewer, cfg = {}) {
 
         super("BCFViewpoints", viewer, cfg);
