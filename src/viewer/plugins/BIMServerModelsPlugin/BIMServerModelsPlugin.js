@@ -18,14 +18,7 @@ import {utils} from "./lib/utils.js";
  *
  * In the example below, we'll load the latest revision of a project's model.
  *
- * Note how we instantiate a BIMServerClient, which we use to interface with the BIMServer. We get the
- * JavaScript client API library from the BIMServer itself. After creating a Viewer, we instantiate and initialize
- * the BIMServerClient, then add a BIMServerModel then use it to find the project within the BIMServer, from which we get the ID of its latest
- * revision, along with the IFC schema.
- *
- * We then add a BIMServerModelsPlugin to our Viewer, configured with the
- *
- * Read more about this in the [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial.
+ * Read more about this example in the [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial.
  *
  * @example
  * import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
@@ -43,25 +36,20 @@ import {utils} from "./lib/utils.js";
  * });
  *
  * // Create a BIMServer client
- *
  * const bimServerAPI = new BimServerClient(bimServerAddress);
  *
  * // Add a BIMServerModelsPlugin that uses the client
- *
  * const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
  *     bimServerAPI: bimServerAPI
  * });
  *
  * // Initialize the BIMServer client
- *
  * bimServerAPI.init(() => {
  *
  *     // Login to BIMServer
- *
  *     bimServerAPI.login(username, password, () => {
  *
  *         // Query a project by ID
- *
  *         bimServerAPI.call("ServiceInterface", "getProjectByPoid", {
  *             poid: poid
  *         }, (project) => {
@@ -76,6 +64,8 @@ import {utils} from "./lib/utils.js";
  *                 poid: poid,
  *                 roid: roid,
  *                 schema: schema,
+ *                 edges: true,                    // Render with emphasized edges
+ *                 lambertMaterials: true,         // Lambertian flat-shading instead of Blinn/Phong
  *                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
  *                 rotation: [-90, 0, 0]           // Rotate model for World +Y "up"
  *             });
@@ -83,7 +73,7 @@ import {utils} from "./lib/utils.js";
  *             const scene = viewer.scene;  // xeogl.Scene
  *             const camera = scene.camera; // xeogl.Camera
  *
- *             model.on("loaded", () => {
+ *             model.on("loaded", () => { // When loaded, fit camera and start orbiting
  *                 camera.orbitPitch(20);
  *                 viewer.cameraFlight.flyTo(model);
  *                 scene.on("tick", () => {
@@ -135,19 +125,22 @@ class BIMServerModelsPlugin extends Plugin {
     }
 
     /**
-     * Loads a model from BIMServer into the plugin's {@link Viewer}.
+     * Loads a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> from BIMServer into the {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
      *
      * @param {Object} params Loading parameters. As well as the parameters required by this  method, this can also include configs for the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> that this method will create.
      * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
      * @param {Number} params.poid ID of the model's project within BIMServer.
      * @param {Number} params.roid ID of the model's revision within BIMServer. See the class example for how to query the latest project revision ID via the BIMServer client API.
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
-     * @param {Boolean} [params.lambertMaterials=true]
-     * @param {Boolean} [params.quantizeGeometry=true]
-     * @param {Boolean} [params.combineGeometry=true]
-     * @param {Boolean} [params.edges=false]
-     * @param {Boolean} [params.logging=false] Set this true to log info to the console while loading.
-     * @returns {xeogl.Model} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
+     * @param {Object} [params.parent] Optional parent <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a> to attach the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> to.
+     * @param {Float32Array} [params.position=[0,0,0]] Local 3D position.
+     * @param {Float32Array} [params.scale=[1,1,1]] Local scale.
+     * @param {Float32Array} [params.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [params.lambertMaterials=true] When true, will render the model with fast Lambertian flat-shading, otherwise will render with Blin/Phong, which shows shiny specular highlights.
+     * @param {Boolean} [params.edges=false] When true, will emphasise edges when rendering the model.
+     * @param {Boolean} [params.logging=false] Set this true to log some info to the console while loading.
+     * @returns {xeogl.Model} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model.
      */
     load(params) {
 
