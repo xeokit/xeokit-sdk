@@ -3,7 +3,7 @@ import {math, Scene, CameraFlightAnimation, CameraControl} from "../xeogl/xeogl.
 /**
  * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
  *
- * A Viewer wraps a single  <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+ * A Viewer wraps a single <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
  *
  * Add {@link Plugin}s to a Viewer to extend its functionality.
  *
@@ -14,6 +14,11 @@ import {math, Scene, CameraFlightAnimation, CameraControl} from "../xeogl/xeogl.
  */
 class Viewer {
 
+    /**
+     * @constructor
+     * @param {Object} cfg  Viewer configuration.
+     * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of its <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>, which xeogl automatically generates.
+     */
     constructor(cfg) {
 
         /**
@@ -47,6 +52,15 @@ class Viewer {
             gammaInput: true,
             gammaOutput: true
         });
+
+        /**
+         * The Viewer's ID.
+         * @property id
+         *
+         * @type {String|Number}
+         */
+        this.id = cfg.id || this.scene.id;
+
 
         /**
          * The Viewer's <a href="http://xeogl.org/docs/classes/CameraFlightAnimation.html">xeogl.CameraFlightAnimation</a>, which
