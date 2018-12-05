@@ -117,7 +117,7 @@ class BatchingLayer {
      * @param color Quantized RGBA color
      * @param matrix Flat float 4x4 matrix
      * @param aabb Flat float AABB
-     * @params pickColor Quantized pick color
+     * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
     createPortion(positions, normals, indices, edgeIndices, flags, color, matrix, aabb, pickColor) {
