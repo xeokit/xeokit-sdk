@@ -245,7 +245,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
         // protocol version assumed to be 16
         //---------------------------------------------------------------------------------
 
-        const color = new Float32Array(1, 1, 1, 1);
+        const color = new Float32Array([1, 1, 1, 1]);
 
         if (geometryType === 1) {
 
@@ -309,7 +309,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
                 // }
             }
 
-            modelBuilder.createGeometry(geometryDataId, positions, normals, indices);
+            modelBuilder.createGeometry(geometryDataId, positions, normals, indices, reused);
 
             geometriesLoaded[geometryDataId] = true;
 
