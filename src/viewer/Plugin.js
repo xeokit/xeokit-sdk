@@ -75,6 +75,15 @@ class Plugin {
     }
 
     /**
+     * Logs a warning message to the JavaScript developer console, prefixed with the ID of this Plugin.
+     *
+     * @param {String} msg The error message
+     */
+    warn(msg) {
+        console.warn(`[xeoviewer plugin ${this.id}]: ${msg}`);
+    }
+
+    /**
      * Logs an error message to the JavaScript developer console, prefixed with the ID of this Plugin.
      *
      * @param {String} msg The error message
