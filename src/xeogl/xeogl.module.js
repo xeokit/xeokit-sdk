@@ -4,7 +4,7 @@
  * WebGL-based 3D visualization library
  * http://xeogl.org/
  *
- * Built on 2018-11-29
+ * Built on 2018-12-05
  *
  * MIT License
  * Copyright 2018, Lindsay Kay
@@ -13690,6 +13690,7 @@ class ArrayBuf {
 
         this.usage = usage;
         this.length = 0;
+        this.dataLength = numItems;
         this.numItems = 0;
         this.itemSize = itemSize;
         this.normalized = !!normalized;
@@ -13707,7 +13708,7 @@ class ArrayBuf {
         }
         if (this._handle) {
             this._gl.bindBuffer(this.type, this._handle);
-            this._gl.bufferData(this.type, data, this.usage);
+            this._gl.bufferData(this.type, data.length > this.dataLength ? data.slice(0, this.dataLength) : data, this.usage);
             this._gl.bindBuffer(this.type, null);
             this.length = data.length;
             this.numItems = this.length / this.itemSize;
@@ -13930,7 +13931,7 @@ class SceneVertexBufs {
                     lenUVs += geometry.uv.length;
                 }
                 if (this.colors) {
-                    lenColors += geometry.uv.length;
+                    lenColors += geometry.colors.length;
                 }
             }
         }
