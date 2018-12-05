@@ -211,7 +211,7 @@ class BIMServerModelsPlugin extends Plugin {
 
                     fired = true;
 
-                    const bimServerModel = new BIMServerModel(bimServerAPI, apiModel, xeoglModel);
+                    const bimServerModel = new BIMServerModel(bimServerAPI, apiModel);
 
                     bimServerModel.getTree().then(function (tree) {
 
@@ -285,7 +285,7 @@ class BIMServerModelsPlugin extends Plugin {
 
                             },
 
-                            createGeometry: function (geometryDataId, positions, normals, indices) {
+                            createGeometry: function (geometryDataId, positions, normals, indices, reused) {
                                 const geometryId = `${modelId}.${geometryDataId}`;
                                 new Geometry(xeoglModel, {
                                     id: geometryId,
