@@ -35,10 +35,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
 </ul>
 </div>
@@ -58,7 +61,7 @@ class ModelsPlugin extends Plugin {
     /**
      * @constructor
      *
-     * @param {String} [id] ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [id] ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Viewer} viewer The Viewer.
      * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.
      * @param {Object} cfg  Plugin configuration.
@@ -88,8 +91,8 @@ class ModelsPlugin extends Plugin {
     /**
      * Loads a model into this Plugin&apos;s {@link Viewer}.
      *
-     * @param params {*} Configs
-     * @param params.id {String} Optional ID, unique among all components in the viewer&apos;s scene.
+     * @param params {*} Loading params.
+     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer&apos;s xeogl.Scene.
      * @returns {{xeogl.Model}} A &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; representing the loaded model
      */
     load(params, ok) {

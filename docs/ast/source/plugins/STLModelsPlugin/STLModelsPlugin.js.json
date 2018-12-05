@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1505,
+  "end": 1497,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1505,
+    "end": 1497,
     "loc": {
       "start": {
         "line": 1,
@@ -202,9 +202,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
+            "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
             "start": 129,
-            "end": 1003,
+            "end": 998,
             "loc": {
               "start": {
                 "line": 4,
@@ -220,8 +220,8 @@
       },
       {
         "type": "Identifier",
-        "start": 1004,
-        "end": 1479,
+        "start": 999,
+        "end": 1471,
         "loc": {
           "start": {
             "line": 37,
@@ -234,8 +234,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 1010,
-          "end": 1025,
+          "start": 1005,
+          "end": 1020,
           "loc": {
             "start": {
               "line": 37,
@@ -252,8 +252,8 @@
         },
         "superClass": {
           "type": "Identifier",
-          "start": 1034,
-          "end": 1046,
+          "start": 1029,
+          "end": 1041,
           "loc": {
             "start": {
               "line": 37,
@@ -269,8 +269,8 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 1047,
-          "end": 1479,
+          "start": 1042,
+          "end": 1471,
           "loc": {
             "start": {
               "line": 37,
@@ -284,8 +284,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 1312,
-              "end": 1395,
+              "start": 1304,
+              "end": 1387,
               "loc": {
                 "start": {
                   "line": 45,
@@ -300,8 +300,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1312,
-                "end": 1323,
+                "start": 1304,
+                "end": 1315,
                 "loc": {
                   "start": {
                     "line": 45,
@@ -324,8 +324,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1324,
-                  "end": 1330,
+                  "start": 1316,
+                  "end": 1322,
                   "loc": {
                     "start": {
                       "line": 45,
@@ -341,8 +341,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 1332,
-                  "end": 1335,
+                  "start": 1324,
+                  "end": 1327,
                   "loc": {
                     "start": {
                       "line": 45,
@@ -359,8 +359,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1337,
-                "end": 1395,
+                "start": 1329,
+                "end": 1387,
                 "loc": {
                   "start": {
                     "line": 45,
@@ -374,8 +374,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 1347,
-                    "end": 1389,
+                    "start": 1339,
+                    "end": 1381,
                     "loc": {
                       "start": {
                         "line": 46,
@@ -388,8 +388,8 @@
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 1347,
-                      "end": 1388,
+                      "start": 1339,
+                      "end": 1380,
                       "loc": {
                         "start": {
                           "line": 46,
@@ -402,8 +402,8 @@
                       },
                       "callee": {
                         "type": "Super",
-                        "start": 1347,
-                        "end": 1352,
+                        "start": 1339,
+                        "end": 1344,
                         "loc": {
                           "start": {
                             "line": 46,
@@ -418,8 +418,8 @@
                       "arguments": [
                         {
                           "type": "StringLiteral",
-                          "start": 1353,
-                          "end": 1364,
+                          "start": 1345,
+                          "end": 1356,
                           "loc": {
                             "start": {
                               "line": 46,
@@ -438,8 +438,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1366,
-                          "end": 1372,
+                          "start": 1358,
+                          "end": 1364,
                           "loc": {
                             "start": {
                               "line": 46,
@@ -455,8 +455,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1374,
-                          "end": 1382,
+                          "start": 1366,
+                          "end": 1374,
                           "loc": {
                             "start": {
                               "line": 46,
@@ -472,8 +472,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1384,
-                          "end": 1387,
+                          "start": 1376,
+                          "end": 1379,
                           "loc": {
                             "start": {
                               "line": 46,
@@ -497,9 +497,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-                  "start": 1054,
-                  "end": 1307,
+                  "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+                  "start": 1049,
+                  "end": 1299,
                   "loc": {
                     "start": {
                       "line": 39,
@@ -516,8 +516,8 @@
                 {
                   "type": "CommentLine",
                   "value": " TODO: comment",
-                  "start": 1401,
-                  "end": 1417,
+                  "start": 1393,
+                  "end": 1409,
                   "loc": {
                     "start": {
                       "line": 49,
@@ -533,8 +533,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1422,
-              "end": 1477,
+              "start": 1414,
+              "end": 1469,
               "loc": {
                 "start": {
                   "line": 50,
@@ -549,8 +549,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1422,
-                "end": 1426,
+                "start": 1414,
+                "end": 1418,
                 "loc": {
                   "start": {
                     "line": 50,
@@ -573,8 +573,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1427,
-                  "end": 1433,
+                  "start": 1419,
+                  "end": 1425,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -591,8 +591,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1435,
-                "end": 1477,
+                "start": 1427,
+                "end": 1469,
                 "loc": {
                   "start": {
                     "line": 50,
@@ -606,8 +606,8 @@
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 1445,
-                    "end": 1471,
+                    "start": 1437,
+                    "end": 1463,
                     "loc": {
                       "start": {
                         "line": 51,
@@ -620,8 +620,8 @@
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 1452,
-                      "end": 1470,
+                      "start": 1444,
+                      "end": 1462,
                       "loc": {
                         "start": {
                           "line": 51,
@@ -634,8 +634,8 @@
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 1452,
-                        "end": 1462,
+                        "start": 1444,
+                        "end": 1454,
                         "loc": {
                           "start": {
                             "line": 51,
@@ -648,8 +648,8 @@
                         },
                         "object": {
                           "type": "Super",
-                          "start": 1452,
-                          "end": 1457,
+                          "start": 1444,
+                          "end": 1449,
                           "loc": {
                             "start": {
                               "line": 51,
@@ -663,8 +663,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1458,
-                          "end": 1462,
+                          "start": 1450,
+                          "end": 1454,
                           "loc": {
                             "start": {
                               "line": 51,
@@ -683,8 +683,8 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 1463,
-                          "end": 1469,
+                          "start": 1455,
+                          "end": 1461,
                           "loc": {
                             "start": {
                               "line": 51,
@@ -708,8 +708,8 @@
                 {
                   "type": "CommentLine",
                   "value": " TODO: comment",
-                  "start": 1401,
-                  "end": 1417,
+                  "start": 1393,
+                  "end": 1409,
                   "loc": {
                     "start": {
                       "line": 49,
@@ -731,8 +731,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1481,
-        "end": 1505,
+        "start": 1473,
+        "end": 1497,
         "loc": {
           "start": {
             "line": 55,
@@ -747,8 +747,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1489,
-            "end": 1504,
+            "start": 1481,
+            "end": 1496,
             "loc": {
               "start": {
                 "line": 55,
@@ -761,8 +761,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 1489,
-              "end": 1504,
+              "start": 1481,
+              "end": 1496,
               "loc": {
                 "start": {
                   "line": 55,
@@ -778,8 +778,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1489,
-              "end": 1504,
+              "start": 1481,
+              "end": 1496,
               "loc": {
                 "start": {
                   "line": 55,
@@ -799,8 +799,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1481,
-        "end": 1505,
+        "start": 1473,
+        "end": 1497,
         "loc": {
           "start": {
             "line": 55,
@@ -813,8 +813,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1004,
-          "end": 1479,
+          "start": 999,
+          "end": 1471,
           "loc": {
             "start": {
               "line": 37,
@@ -827,8 +827,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 1010,
-            "end": 1025,
+            "start": 1005,
+            "end": 1020,
             "loc": {
               "start": {
                 "line": 37,
@@ -845,8 +845,8 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 1034,
-            "end": 1046,
+            "start": 1029,
+            "end": 1041,
             "loc": {
               "start": {
                 "line": 37,
@@ -862,8 +862,8 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 1047,
-            "end": 1479,
+            "start": 1042,
+            "end": 1471,
             "loc": {
               "start": {
                 "line": 37,
@@ -877,8 +877,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 1312,
-                "end": 1395,
+                "start": 1304,
+                "end": 1387,
                 "loc": {
                   "start": {
                     "line": 45,
@@ -893,8 +893,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1312,
-                  "end": 1323,
+                  "start": 1304,
+                  "end": 1315,
                   "loc": {
                     "start": {
                       "line": 45,
@@ -917,8 +917,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1324,
-                    "end": 1330,
+                    "start": 1316,
+                    "end": 1322,
                     "loc": {
                       "start": {
                         "line": 45,
@@ -934,8 +934,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 1332,
-                    "end": 1335,
+                    "start": 1324,
+                    "end": 1327,
                     "loc": {
                       "start": {
                         "line": 45,
@@ -952,8 +952,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1337,
-                  "end": 1395,
+                  "start": 1329,
+                  "end": 1387,
                   "loc": {
                     "start": {
                       "line": 45,
@@ -967,8 +967,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 1347,
-                      "end": 1389,
+                      "start": 1339,
+                      "end": 1381,
                       "loc": {
                         "start": {
                           "line": 46,
@@ -981,8 +981,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 1347,
-                        "end": 1388,
+                        "start": 1339,
+                        "end": 1380,
                         "loc": {
                           "start": {
                             "line": 46,
@@ -995,8 +995,8 @@
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 1347,
-                          "end": 1352,
+                          "start": 1339,
+                          "end": 1344,
                           "loc": {
                             "start": {
                               "line": 46,
@@ -1011,8 +1011,8 @@
                         "arguments": [
                           {
                             "type": "StringLiteral",
-                            "start": 1353,
-                            "end": 1364,
+                            "start": 1345,
+                            "end": 1356,
                             "loc": {
                               "start": {
                                 "line": 46,
@@ -1031,8 +1031,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1366,
-                            "end": 1372,
+                            "start": 1358,
+                            "end": 1364,
                             "loc": {
                               "start": {
                                 "line": 46,
@@ -1048,8 +1048,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1374,
-                            "end": 1382,
+                            "start": 1366,
+                            "end": 1374,
                             "loc": {
                               "start": {
                                 "line": 46,
@@ -1065,8 +1065,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1384,
-                            "end": 1387,
+                            "start": 1376,
+                            "end": 1379,
                             "loc": {
                               "start": {
                                 "line": 46,
@@ -1090,9 +1090,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-                    "start": 1054,
-                    "end": 1307,
+                    "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+                    "start": 1049,
+                    "end": 1299,
                     "loc": {
                       "start": {
                         "line": 39,
@@ -1109,8 +1109,8 @@
                   {
                     "type": "CommentLine",
                     "value": " TODO: comment",
-                    "start": 1401,
-                    "end": 1417,
+                    "start": 1393,
+                    "end": 1409,
                     "loc": {
                       "start": {
                         "line": 49,
@@ -1126,8 +1126,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1422,
-                "end": 1477,
+                "start": 1414,
+                "end": 1469,
                 "loc": {
                   "start": {
                     "line": 50,
@@ -1142,8 +1142,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1422,
-                  "end": 1426,
+                  "start": 1414,
+                  "end": 1418,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -1166,8 +1166,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1427,
-                    "end": 1433,
+                    "start": 1419,
+                    "end": 1425,
                     "loc": {
                       "start": {
                         "line": 50,
@@ -1184,8 +1184,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1435,
-                  "end": 1477,
+                  "start": 1427,
+                  "end": 1469,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -1199,8 +1199,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 1445,
-                      "end": 1471,
+                      "start": 1437,
+                      "end": 1463,
                       "loc": {
                         "start": {
                           "line": 51,
@@ -1213,8 +1213,8 @@
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 1452,
-                        "end": 1470,
+                        "start": 1444,
+                        "end": 1462,
                         "loc": {
                           "start": {
                             "line": 51,
@@ -1227,8 +1227,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 1452,
-                          "end": 1462,
+                          "start": 1444,
+                          "end": 1454,
                           "loc": {
                             "start": {
                               "line": 51,
@@ -1241,8 +1241,8 @@
                           },
                           "object": {
                             "type": "Super",
-                            "start": 1452,
-                            "end": 1457,
+                            "start": 1444,
+                            "end": 1449,
                             "loc": {
                               "start": {
                                 "line": 51,
@@ -1256,8 +1256,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1458,
-                            "end": 1462,
+                            "start": 1450,
+                            "end": 1454,
                             "loc": {
                               "start": {
                                 "line": 51,
@@ -1276,8 +1276,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 1463,
-                            "end": 1469,
+                            "start": 1455,
+                            "end": 1461,
                             "loc": {
                               "start": {
                                 "line": 51,
@@ -1301,8 +1301,8 @@
                   {
                     "type": "CommentLine",
                     "value": " TODO: comment",
-                    "start": 1401,
-                    "end": 1417,
+                    "start": 1393,
+                    "end": 1409,
                     "loc": {
                       "start": {
                         "line": 49,
@@ -1321,9 +1321,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
+              "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
               "start": 129,
-              "end": 1003,
+              "end": 998,
               "loc": {
                 "start": {
                   "line": 4,
@@ -1349,9 +1349,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
+      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
       "start": 129,
-      "end": 1003,
+      "end": 998,
       "loc": {
         "start": {
           "line": 4,
@@ -1365,9 +1365,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 1054,
-      "end": 1307,
+      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+      "start": 1049,
+      "end": 1299,
       "loc": {
         "start": {
           "line": 39,
@@ -1382,8 +1382,8 @@
     {
       "type": "CommentLine",
       "value": " TODO: comment",
-      "start": 1401,
-      "end": 1417,
+      "start": 1393,
+      "end": 1409,
       "loc": {
         "start": {
           "line": 49,
@@ -1765,9 +1765,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
+      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n ",
       "start": 129,
-      "end": 1003,
+      "end": 998,
       "loc": {
         "start": {
           "line": 4,
@@ -1794,8 +1794,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1004,
-      "end": 1009,
+      "start": 999,
+      "end": 1004,
       "loc": {
         "start": {
           "line": 37,
@@ -1820,8 +1820,8 @@
         "binop": null
       },
       "value": "STLModelsPlugin",
-      "start": 1010,
-      "end": 1025,
+      "start": 1005,
+      "end": 1020,
       "loc": {
         "start": {
           "line": 37,
@@ -1848,8 +1848,8 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 1026,
-      "end": 1033,
+      "start": 1021,
+      "end": 1028,
       "loc": {
         "start": {
           "line": 37,
@@ -1874,8 +1874,8 @@
         "binop": null
       },
       "value": "ModelsPlugin",
-      "start": 1034,
-      "end": 1046,
+      "start": 1029,
+      "end": 1041,
       "loc": {
         "start": {
           "line": 37,
@@ -1899,8 +1899,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1047,
-      "end": 1048,
+      "start": 1042,
+      "end": 1043,
       "loc": {
         "start": {
           "line": 37,
@@ -1914,9 +1914,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 1054,
-      "end": 1307,
+      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+      "start": 1049,
+      "end": 1299,
       "loc": {
         "start": {
           "line": 39,
@@ -1941,8 +1941,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 1312,
-      "end": 1323,
+      "start": 1304,
+      "end": 1315,
       "loc": {
         "start": {
           "line": 45,
@@ -1966,8 +1966,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1323,
-      "end": 1324,
+      "start": 1315,
+      "end": 1316,
       "loc": {
         "start": {
           "line": 45,
@@ -1992,8 +1992,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1324,
-      "end": 1330,
+      "start": 1316,
+      "end": 1322,
       "loc": {
         "start": {
           "line": 45,
@@ -2018,8 +2018,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1330,
-      "end": 1331,
+      "start": 1322,
+      "end": 1323,
       "loc": {
         "start": {
           "line": 45,
@@ -2044,8 +2044,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1332,
-      "end": 1335,
+      "start": 1324,
+      "end": 1327,
       "loc": {
         "start": {
           "line": 45,
@@ -2069,8 +2069,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1335,
-      "end": 1336,
+      "start": 1327,
+      "end": 1328,
       "loc": {
         "start": {
           "line": 45,
@@ -2094,8 +2094,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1337,
-      "end": 1338,
+      "start": 1329,
+      "end": 1330,
       "loc": {
         "start": {
           "line": 45,
@@ -2122,8 +2122,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 1347,
-      "end": 1352,
+      "start": 1339,
+      "end": 1344,
       "loc": {
         "start": {
           "line": 46,
@@ -2147,8 +2147,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1352,
-      "end": 1353,
+      "start": 1344,
+      "end": 1345,
       "loc": {
         "start": {
           "line": 46,
@@ -2174,8 +2174,8 @@
         "updateContext": null
       },
       "value": "STLModels",
-      "start": 1353,
-      "end": 1364,
+      "start": 1345,
+      "end": 1356,
       "loc": {
         "start": {
           "line": 46,
@@ -2200,8 +2200,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1364,
-      "end": 1365,
+      "start": 1356,
+      "end": 1357,
       "loc": {
         "start": {
           "line": 46,
@@ -2226,8 +2226,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1366,
-      "end": 1372,
+      "start": 1358,
+      "end": 1364,
       "loc": {
         "start": {
           "line": 46,
@@ -2252,8 +2252,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1372,
-      "end": 1373,
+      "start": 1364,
+      "end": 1365,
       "loc": {
         "start": {
           "line": 46,
@@ -2278,8 +2278,8 @@
         "binop": null
       },
       "value": "STLModel",
-      "start": 1374,
-      "end": 1382,
+      "start": 1366,
+      "end": 1374,
       "loc": {
         "start": {
           "line": 46,
@@ -2304,8 +2304,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1382,
-      "end": 1383,
+      "start": 1374,
+      "end": 1375,
       "loc": {
         "start": {
           "line": 46,
@@ -2330,8 +2330,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1384,
-      "end": 1387,
+      "start": 1376,
+      "end": 1379,
       "loc": {
         "start": {
           "line": 46,
@@ -2355,8 +2355,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1387,
-      "end": 1388,
+      "start": 1379,
+      "end": 1380,
       "loc": {
         "start": {
           "line": 46,
@@ -2381,8 +2381,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1388,
-      "end": 1389,
+      "start": 1380,
+      "end": 1381,
       "loc": {
         "start": {
           "line": 46,
@@ -2406,8 +2406,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1394,
-      "end": 1395,
+      "start": 1386,
+      "end": 1387,
       "loc": {
         "start": {
           "line": 47,
@@ -2422,8 +2422,8 @@
     {
       "type": "CommentLine",
       "value": " TODO: comment",
-      "start": 1401,
-      "end": 1417,
+      "start": 1393,
+      "end": 1409,
       "loc": {
         "start": {
           "line": 49,
@@ -2448,8 +2448,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 1422,
-      "end": 1426,
+      "start": 1414,
+      "end": 1418,
       "loc": {
         "start": {
           "line": 50,
@@ -2473,8 +2473,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1426,
-      "end": 1427,
+      "start": 1418,
+      "end": 1419,
       "loc": {
         "start": {
           "line": 50,
@@ -2499,8 +2499,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 1427,
-      "end": 1433,
+      "start": 1419,
+      "end": 1425,
       "loc": {
         "start": {
           "line": 50,
@@ -2524,8 +2524,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1433,
-      "end": 1434,
+      "start": 1425,
+      "end": 1426,
       "loc": {
         "start": {
           "line": 50,
@@ -2549,8 +2549,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1435,
-      "end": 1436,
+      "start": 1427,
+      "end": 1428,
       "loc": {
         "start": {
           "line": 50,
@@ -2577,8 +2577,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1445,
-      "end": 1451,
+      "start": 1437,
+      "end": 1443,
       "loc": {
         "start": {
           "line": 51,
@@ -2605,8 +2605,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 1452,
-      "end": 1457,
+      "start": 1444,
+      "end": 1449,
       "loc": {
         "start": {
           "line": 51,
@@ -2631,8 +2631,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1457,
-      "end": 1458,
+      "start": 1449,
+      "end": 1450,
       "loc": {
         "start": {
           "line": 51,
@@ -2657,8 +2657,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 1458,
-      "end": 1462,
+      "start": 1450,
+      "end": 1454,
       "loc": {
         "start": {
           "line": 51,
@@ -2682,8 +2682,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1462,
-      "end": 1463,
+      "start": 1454,
+      "end": 1455,
       "loc": {
         "start": {
           "line": 51,
@@ -2708,8 +2708,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 1463,
-      "end": 1469,
+      "start": 1455,
+      "end": 1461,
       "loc": {
         "start": {
           "line": 51,
@@ -2733,8 +2733,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1469,
-      "end": 1470,
+      "start": 1461,
+      "end": 1462,
       "loc": {
         "start": {
           "line": 51,
@@ -2759,8 +2759,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1470,
-      "end": 1471,
+      "start": 1462,
+      "end": 1463,
       "loc": {
         "start": {
           "line": 51,
@@ -2784,8 +2784,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1476,
-      "end": 1477,
+      "start": 1468,
+      "end": 1469,
       "loc": {
         "start": {
           "line": 52,
@@ -2809,8 +2809,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1478,
-      "end": 1479,
+      "start": 1470,
+      "end": 1471,
       "loc": {
         "start": {
           "line": 53,
@@ -2837,8 +2837,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1481,
-      "end": 1487,
+      "start": 1473,
+      "end": 1479,
       "loc": {
         "start": {
           "line": 55,
@@ -2862,8 +2862,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1488,
-      "end": 1489,
+      "start": 1480,
+      "end": 1481,
       "loc": {
         "start": {
           "line": 55,
@@ -2888,8 +2888,8 @@
         "binop": null
       },
       "value": "STLModelsPlugin",
-      "start": 1489,
-      "end": 1504,
+      "start": 1481,
+      "end": 1496,
       "loc": {
         "start": {
           "line": 55,
@@ -2913,8 +2913,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1504,
-      "end": 1505,
+      "start": 1496,
+      "end": 1497,
       "loc": {
         "start": {
           "line": 55,
@@ -2939,8 +2939,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1505,
-      "end": 1505,
+      "start": 1497,
+      "end": 1497,
       "loc": {
         "start": {
           "line": 55,

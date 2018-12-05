@@ -35,10 +35,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
 </ul>
 </div>
@@ -488,6 +491,35 @@
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html#instance-method-warn">warn</a></span></span><span class="code" data-ice="signature">(msg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Logs a warning message to the JavaScript developer console, prefixed with the ID of this Plugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -532,7 +564,7 @@
       <td data-ice="name" class="code" data-depth="0">id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>ID for this plugin, with which we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
+      <td data-ice="description"><p>ID for this plugin, so that we can find it within <span><a href="class/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -752,14 +784,14 @@
       <td data-ice="name" class="code" data-depth="0">params</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>{*} Configs</p>
+      <td data-ice="description"><p>{*} Loading params.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.id</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>{String} Optional ID, unique among all components in the viewer&apos;s scene.</p>
+      <td data-ice="description"><p>{String} ID to assign to the model, unique among all components in the Viewer&apos;s xeogl.Scene.</p>
 </td>
     </tr>
 </tbody>

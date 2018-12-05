@@ -18,6 +18,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "xeokit-sdk/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html",
+    "<span>ClipsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/ClipsPlugin/ClipsPlugin.js</span>",
+    "class"
+  ],
+  [
     "xeokit-sdk/viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js~gltfbigmodelsplugin",
     "class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html",
     "<span>GLTFBigModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js</span>",
@@ -27,6 +33,12 @@ window.esdocSearchIndex = [
     "xeokit-sdk/viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js~gltfmodelsplugin",
     "class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html",
     "<span>GLTFModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html",
+    "<span>LightsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/LightsPlugin/LightsPlugin.js</span>",
     "class"
   ],
   [
@@ -51,6 +63,12 @@ window.esdocSearchIndex = [
     "xeokit-sdk/viewer/plugins/stlmodelsplugin/stlmodelsplugin.js~stlmodelsplugin",
     "class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html",
     "<span>STLModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html",
+    "<span>SkyboxesPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js</span>",
     "class"
   ],
   [
@@ -444,6 +462,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "viewer/plugin.js~plugin#warn",
+    "class/viewer/Plugin.js~Plugin.html#instance-method-warn",
+    "viewer/Plugin.js~Plugin#warn",
+    "method"
+  ],
+  [
     "viewer/viewer.js",
     "file/viewer/Viewer.js.html",
     "viewer/Viewer.js",
@@ -502,6 +526,12 @@ window.esdocSearchIndex = [
     "class/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot",
     "viewer/Viewer.js~Viewer#getSnapshot",
     "method"
+  ],
+  [
+    "viewer/viewer.js~viewer#id",
+    "class/viewer/Viewer.js~Viewer.html#instance-member-id",
+    "viewer/Viewer.js~Viewer#id",
+    "member"
   ],
   [
     "viewer/viewer.js~viewer#log",
@@ -648,12 +678,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/lib/bimservergeometryloaderold.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoaderOLD.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoaderOLD.js",
-    "file"
-  ],
-  [
     "viewer/plugins/bimservermodelsplugin/lib/bimservermodel.js",
     "file/viewer/plugins/BIMServerModelsPlugin/lib/BIMServerModel.js.html",
     "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerModel.js",
@@ -663,30 +687,6 @@ window.esdocSearchIndex = [
     "viewer/plugins/bimservermodelsplugin/lib/datainputstreamreader.js",
     "file/viewer/plugins/BIMServerModelsPlugin/lib/DataInputStreamReader.js.html",
     "viewer/plugins/BIMServerModelsPlugin/lib/DataInputStreamReader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/eventhandler.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/metadatareader.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/notifier.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/statictreerenderer.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js",
     "file"
   ],
   [
@@ -708,16 +708,52 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/lib/request.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/request.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/request.js",
-    "file"
-  ],
-  [
     "viewer/plugins/bimservermodelsplugin/lib/utils.js",
     "file/viewer/plugins/BIMServerModelsPlugin/lib/utils.js.html",
     "viewer/plugins/BIMServerModelsPlugin/lib/utils.js",
     "file"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js",
+    "file/viewer/plugins/ClipsPlugin/ClipsPlugin.js.html",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clear",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-clear",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clear",
+    "method"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clips",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-member-clips",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clips",
+    "member"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#constructor",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-constructor-constructor",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#constructor",
+    "method"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#createclip",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-createClip",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#createClip",
+    "method"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroy",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroy",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroy",
+    "method"
+  ],
+  [
+    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroyclip",
+    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroyClip",
+    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroyClip",
+    "method"
   ],
   [
     "viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js",
@@ -756,6 +792,42 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "viewer/plugins/lightsplugin/lightsplugin.js",
+    "file/viewer/plugins/LightsPlugin/LightsPlugin.js.html",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#clear",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-clear",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#clear",
+    "method"
+  ],
+  [
+    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#constructor",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-constructor-constructor",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#constructor",
+    "method"
+  ],
+  [
+    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#createlight",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-createLight",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#createLight",
+    "method"
+  ],
+  [
+    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#destroy",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-destroy",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#destroy",
+    "method"
+  ],
+  [
+    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#lights",
+    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-member-lights",
+    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#lights",
+    "member"
+  ],
+  [
     "viewer/plugins/objmodelsplugin/objmodelsplugin.js",
     "file/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js.html",
     "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
@@ -790,6 +862,48 @@ window.esdocSearchIndex = [
     "class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-method-load",
     "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#load",
     "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js",
+    "file/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js.html",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#clear",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-clear",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#clear",
+    "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#constructor",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-constructor-constructor",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#constructor",
+    "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#createskybox",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-createSkybox",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#createSkybox",
+    "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroy",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroy",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroy",
+    "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroyskybox",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroySkybox",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroySkybox",
+    "method"
+  ],
+  [
+    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#skyboxes",
+    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-member-skyboxes",
+    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#skyboxes",
+    "member"
   ],
   [
     "viewer/plugins/xml3dmodelsplugin/xml3dmodel.js",

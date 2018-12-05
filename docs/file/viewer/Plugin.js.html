@@ -35,10 +35,13 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
 </ul>
 </div>
@@ -119,6 +122,15 @@ class Plugin {
      */
     log(msg) {
         console.log(`[xeoviewer plugin ${this.id}]: ${msg}`);
+    }
+
+    /**
+     * Logs a warning message to the JavaScript developer console, prefixed with the ID of this Plugin.
+     *
+     * @param {String} msg The error message
+     */
+    warn(msg) {
+        console.warn(`[xeoviewer plugin ${this.id}]: ${msg}`);
     }
 
     /**

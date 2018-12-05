@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1509,
+  "end": 1501,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1509,
+    "end": 1501,
     "loc": {
       "start": {
         "line": 1,
@@ -202,9 +202,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
+            "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
             "start": 129,
-            "end": 1007,
+            "end": 1002,
             "loc": {
               "start": {
                 "line": 4,
@@ -220,8 +220,8 @@
       },
       {
         "type": "Identifier",
-        "start": 1008,
-        "end": 1483,
+        "start": 1003,
+        "end": 1475,
         "loc": {
           "start": {
             "line": 38,
@@ -234,8 +234,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 1014,
-          "end": 1029,
+          "start": 1009,
+          "end": 1024,
           "loc": {
             "start": {
               "line": 38,
@@ -252,8 +252,8 @@
         },
         "superClass": {
           "type": "Identifier",
-          "start": 1038,
-          "end": 1050,
+          "start": 1033,
+          "end": 1045,
           "loc": {
             "start": {
               "line": 38,
@@ -269,8 +269,8 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 1051,
-          "end": 1483,
+          "start": 1046,
+          "end": 1475,
           "loc": {
             "start": {
               "line": 38,
@@ -284,8 +284,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 1316,
-              "end": 1399,
+              "start": 1308,
+              "end": 1391,
               "loc": {
                 "start": {
                   "line": 46,
@@ -300,8 +300,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1316,
-                "end": 1327,
+                "start": 1308,
+                "end": 1319,
                 "loc": {
                   "start": {
                     "line": 46,
@@ -324,8 +324,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1328,
-                  "end": 1334,
+                  "start": 1320,
+                  "end": 1326,
                   "loc": {
                     "start": {
                       "line": 46,
@@ -341,8 +341,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 1336,
-                  "end": 1339,
+                  "start": 1328,
+                  "end": 1331,
                   "loc": {
                     "start": {
                       "line": 46,
@@ -359,8 +359,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1341,
-                "end": 1399,
+                "start": 1333,
+                "end": 1391,
                 "loc": {
                   "start": {
                     "line": 46,
@@ -374,8 +374,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 1351,
-                    "end": 1393,
+                    "start": 1343,
+                    "end": 1385,
                     "loc": {
                       "start": {
                         "line": 47,
@@ -388,8 +388,8 @@
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 1351,
-                      "end": 1392,
+                      "start": 1343,
+                      "end": 1384,
                       "loc": {
                         "start": {
                           "line": 47,
@@ -402,8 +402,8 @@
                       },
                       "callee": {
                         "type": "Super",
-                        "start": 1351,
-                        "end": 1356,
+                        "start": 1343,
+                        "end": 1348,
                         "loc": {
                           "start": {
                             "line": 47,
@@ -418,8 +418,8 @@
                       "arguments": [
                         {
                           "type": "StringLiteral",
-                          "start": 1357,
-                          "end": 1368,
+                          "start": 1349,
+                          "end": 1360,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -438,8 +438,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1370,
-                          "end": 1376,
+                          "start": 1362,
+                          "end": 1368,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -455,8 +455,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1378,
-                          "end": 1386,
+                          "start": 1370,
+                          "end": 1378,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -472,8 +472,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1388,
-                          "end": 1391,
+                          "start": 1380,
+                          "end": 1383,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -497,9 +497,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-                  "start": 1058,
-                  "end": 1311,
+                  "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+                  "start": 1053,
+                  "end": 1303,
                   "loc": {
                     "start": {
                       "line": 40,
@@ -516,8 +516,8 @@
                 {
                   "type": "CommentLine",
                   "value": " TODO: comment",
-                  "start": 1405,
-                  "end": 1421,
+                  "start": 1397,
+                  "end": 1413,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -533,8 +533,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1426,
-              "end": 1481,
+              "start": 1418,
+              "end": 1473,
               "loc": {
                 "start": {
                   "line": 51,
@@ -549,8 +549,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1426,
-                "end": 1430,
+                "start": 1418,
+                "end": 1422,
                 "loc": {
                   "start": {
                     "line": 51,
@@ -573,8 +573,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1431,
-                  "end": 1437,
+                  "start": 1423,
+                  "end": 1429,
                   "loc": {
                     "start": {
                       "line": 51,
@@ -591,8 +591,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1439,
-                "end": 1481,
+                "start": 1431,
+                "end": 1473,
                 "loc": {
                   "start": {
                     "line": 51,
@@ -606,8 +606,8 @@
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 1449,
-                    "end": 1475,
+                    "start": 1441,
+                    "end": 1467,
                     "loc": {
                       "start": {
                         "line": 52,
@@ -620,8 +620,8 @@
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 1456,
-                      "end": 1474,
+                      "start": 1448,
+                      "end": 1466,
                       "loc": {
                         "start": {
                           "line": 52,
@@ -634,8 +634,8 @@
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 1456,
-                        "end": 1466,
+                        "start": 1448,
+                        "end": 1458,
                         "loc": {
                           "start": {
                             "line": 52,
@@ -648,8 +648,8 @@
                         },
                         "object": {
                           "type": "Super",
-                          "start": 1456,
-                          "end": 1461,
+                          "start": 1448,
+                          "end": 1453,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -663,8 +663,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1462,
-                          "end": 1466,
+                          "start": 1454,
+                          "end": 1458,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -683,8 +683,8 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 1467,
-                          "end": 1473,
+                          "start": 1459,
+                          "end": 1465,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -708,8 +708,8 @@
                 {
                   "type": "CommentLine",
                   "value": " TODO: comment",
-                  "start": 1405,
-                  "end": 1421,
+                  "start": 1397,
+                  "end": 1413,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -731,8 +731,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1485,
-        "end": 1509,
+        "start": 1477,
+        "end": 1501,
         "loc": {
           "start": {
             "line": 56,
@@ -747,8 +747,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1493,
-            "end": 1508,
+            "start": 1485,
+            "end": 1500,
             "loc": {
               "start": {
                 "line": 56,
@@ -761,8 +761,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 1493,
-              "end": 1508,
+              "start": 1485,
+              "end": 1500,
               "loc": {
                 "start": {
                   "line": 56,
@@ -778,8 +778,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1493,
-              "end": 1508,
+              "start": 1485,
+              "end": 1500,
               "loc": {
                 "start": {
                   "line": 56,
@@ -799,8 +799,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1485,
-        "end": 1509,
+        "start": 1477,
+        "end": 1501,
         "loc": {
           "start": {
             "line": 56,
@@ -813,8 +813,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1008,
-          "end": 1483,
+          "start": 1003,
+          "end": 1475,
           "loc": {
             "start": {
               "line": 38,
@@ -827,8 +827,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 1014,
-            "end": 1029,
+            "start": 1009,
+            "end": 1024,
             "loc": {
               "start": {
                 "line": 38,
@@ -845,8 +845,8 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 1038,
-            "end": 1050,
+            "start": 1033,
+            "end": 1045,
             "loc": {
               "start": {
                 "line": 38,
@@ -862,8 +862,8 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 1051,
-            "end": 1483,
+            "start": 1046,
+            "end": 1475,
             "loc": {
               "start": {
                 "line": 38,
@@ -877,8 +877,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 1316,
-                "end": 1399,
+                "start": 1308,
+                "end": 1391,
                 "loc": {
                   "start": {
                     "line": 46,
@@ -893,8 +893,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1316,
-                  "end": 1327,
+                  "start": 1308,
+                  "end": 1319,
                   "loc": {
                     "start": {
                       "line": 46,
@@ -917,8 +917,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1328,
-                    "end": 1334,
+                    "start": 1320,
+                    "end": 1326,
                     "loc": {
                       "start": {
                         "line": 46,
@@ -934,8 +934,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 1336,
-                    "end": 1339,
+                    "start": 1328,
+                    "end": 1331,
                     "loc": {
                       "start": {
                         "line": 46,
@@ -952,8 +952,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1341,
-                  "end": 1399,
+                  "start": 1333,
+                  "end": 1391,
                   "loc": {
                     "start": {
                       "line": 46,
@@ -967,8 +967,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 1351,
-                      "end": 1393,
+                      "start": 1343,
+                      "end": 1385,
                       "loc": {
                         "start": {
                           "line": 47,
@@ -981,8 +981,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 1351,
-                        "end": 1392,
+                        "start": 1343,
+                        "end": 1384,
                         "loc": {
                           "start": {
                             "line": 47,
@@ -995,8 +995,8 @@
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 1351,
-                          "end": 1356,
+                          "start": 1343,
+                          "end": 1348,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -1011,8 +1011,8 @@
                         "arguments": [
                           {
                             "type": "StringLiteral",
-                            "start": 1357,
-                            "end": 1368,
+                            "start": 1349,
+                            "end": 1360,
                             "loc": {
                               "start": {
                                 "line": 47,
@@ -1031,8 +1031,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1370,
-                            "end": 1376,
+                            "start": 1362,
+                            "end": 1368,
                             "loc": {
                               "start": {
                                 "line": 47,
@@ -1048,8 +1048,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1378,
-                            "end": 1386,
+                            "start": 1370,
+                            "end": 1378,
                             "loc": {
                               "start": {
                                 "line": 47,
@@ -1065,8 +1065,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1388,
-                            "end": 1391,
+                            "start": 1380,
+                            "end": 1383,
                             "loc": {
                               "start": {
                                 "line": 47,
@@ -1090,9 +1090,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-                    "start": 1058,
-                    "end": 1311,
+                    "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+                    "start": 1053,
+                    "end": 1303,
                     "loc": {
                       "start": {
                         "line": 40,
@@ -1109,8 +1109,8 @@
                   {
                     "type": "CommentLine",
                     "value": " TODO: comment",
-                    "start": 1405,
-                    "end": 1421,
+                    "start": 1397,
+                    "end": 1413,
                     "loc": {
                       "start": {
                         "line": 50,
@@ -1126,8 +1126,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1426,
-                "end": 1481,
+                "start": 1418,
+                "end": 1473,
                 "loc": {
                   "start": {
                     "line": 51,
@@ -1142,8 +1142,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1426,
-                  "end": 1430,
+                  "start": 1418,
+                  "end": 1422,
                   "loc": {
                     "start": {
                       "line": 51,
@@ -1166,8 +1166,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1431,
-                    "end": 1437,
+                    "start": 1423,
+                    "end": 1429,
                     "loc": {
                       "start": {
                         "line": 51,
@@ -1184,8 +1184,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1439,
-                  "end": 1481,
+                  "start": 1431,
+                  "end": 1473,
                   "loc": {
                     "start": {
                       "line": 51,
@@ -1199,8 +1199,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 1449,
-                      "end": 1475,
+                      "start": 1441,
+                      "end": 1467,
                       "loc": {
                         "start": {
                           "line": 52,
@@ -1213,8 +1213,8 @@
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 1456,
-                        "end": 1474,
+                        "start": 1448,
+                        "end": 1466,
                         "loc": {
                           "start": {
                             "line": 52,
@@ -1227,8 +1227,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 1456,
-                          "end": 1466,
+                          "start": 1448,
+                          "end": 1458,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -1241,8 +1241,8 @@
                           },
                           "object": {
                             "type": "Super",
-                            "start": 1456,
-                            "end": 1461,
+                            "start": 1448,
+                            "end": 1453,
                             "loc": {
                               "start": {
                                 "line": 52,
@@ -1256,8 +1256,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1462,
-                            "end": 1466,
+                            "start": 1454,
+                            "end": 1458,
                             "loc": {
                               "start": {
                                 "line": 52,
@@ -1276,8 +1276,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 1467,
-                            "end": 1473,
+                            "start": 1459,
+                            "end": 1465,
                             "loc": {
                               "start": {
                                 "line": 52,
@@ -1301,8 +1301,8 @@
                   {
                     "type": "CommentLine",
                     "value": " TODO: comment",
-                    "start": 1405,
-                    "end": 1421,
+                    "start": 1397,
+                    "end": 1413,
                     "loc": {
                       "start": {
                         "line": 50,
@@ -1321,9 +1321,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
+              "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
               "start": 129,
-              "end": 1007,
+              "end": 1002,
               "loc": {
                 "start": {
                   "line": 4,
@@ -1349,9 +1349,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
+      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
       "start": 129,
-      "end": 1007,
+      "end": 1002,
       "loc": {
         "start": {
           "line": 4,
@@ -1365,9 +1365,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 1058,
-      "end": 1311,
+      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+      "start": 1053,
+      "end": 1303,
       "loc": {
         "start": {
           "line": 40,
@@ -1382,8 +1382,8 @@
     {
       "type": "CommentLine",
       "value": " TODO: comment",
-      "start": 1405,
-      "end": 1421,
+      "start": 1397,
+      "end": 1413,
       "loc": {
         "start": {
           "line": 50,
@@ -1765,9 +1765,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"glcanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Optional plugin ID\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
+      "value": "*\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n ",
       "start": 129,
-      "end": 1007,
+      "end": 1002,
       "loc": {
         "start": {
           "line": 4,
@@ -1794,8 +1794,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1008,
-      "end": 1013,
+      "start": 1003,
+      "end": 1008,
       "loc": {
         "start": {
           "line": 38,
@@ -1820,8 +1820,8 @@
         "binop": null
       },
       "value": "OBJModelsPlugin",
-      "start": 1014,
-      "end": 1029,
+      "start": 1009,
+      "end": 1024,
       "loc": {
         "start": {
           "line": 38,
@@ -1848,8 +1848,8 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 1030,
-      "end": 1037,
+      "start": 1025,
+      "end": 1032,
       "loc": {
         "start": {
           "line": 38,
@@ -1874,8 +1874,8 @@
         "binop": null
       },
       "value": "ModelsPlugin",
-      "start": 1038,
-      "end": 1050,
+      "start": 1033,
+      "end": 1045,
       "loc": {
         "start": {
           "line": 38,
@@ -1899,8 +1899,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1051,
-      "end": 1052,
+      "start": 1046,
+      "end": 1047,
       "loc": {
         "start": {
           "line": 38,
@@ -1914,9 +1914,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 1058,
-      "end": 1311,
+      "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
+      "start": 1053,
+      "end": 1303,
       "loc": {
         "start": {
           "line": 40,
@@ -1941,8 +1941,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 1316,
-      "end": 1327,
+      "start": 1308,
+      "end": 1319,
       "loc": {
         "start": {
           "line": 46,
@@ -1966,8 +1966,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1327,
-      "end": 1328,
+      "start": 1319,
+      "end": 1320,
       "loc": {
         "start": {
           "line": 46,
@@ -1992,8 +1992,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1328,
-      "end": 1334,
+      "start": 1320,
+      "end": 1326,
       "loc": {
         "start": {
           "line": 46,
@@ -2018,8 +2018,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1334,
-      "end": 1335,
+      "start": 1326,
+      "end": 1327,
       "loc": {
         "start": {
           "line": 46,
@@ -2044,8 +2044,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1336,
-      "end": 1339,
+      "start": 1328,
+      "end": 1331,
       "loc": {
         "start": {
           "line": 46,
@@ -2069,8 +2069,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1339,
-      "end": 1340,
+      "start": 1331,
+      "end": 1332,
       "loc": {
         "start": {
           "line": 46,
@@ -2094,8 +2094,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1341,
-      "end": 1342,
+      "start": 1333,
+      "end": 1334,
       "loc": {
         "start": {
           "line": 46,
@@ -2122,8 +2122,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 1351,
-      "end": 1356,
+      "start": 1343,
+      "end": 1348,
       "loc": {
         "start": {
           "line": 47,
@@ -2147,8 +2147,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1356,
-      "end": 1357,
+      "start": 1348,
+      "end": 1349,
       "loc": {
         "start": {
           "line": 47,
@@ -2174,8 +2174,8 @@
         "updateContext": null
       },
       "value": "OBJModels",
-      "start": 1357,
-      "end": 1368,
+      "start": 1349,
+      "end": 1360,
       "loc": {
         "start": {
           "line": 47,
@@ -2200,8 +2200,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1368,
-      "end": 1369,
+      "start": 1360,
+      "end": 1361,
       "loc": {
         "start": {
           "line": 47,
@@ -2226,8 +2226,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1370,
-      "end": 1376,
+      "start": 1362,
+      "end": 1368,
       "loc": {
         "start": {
           "line": 47,
@@ -2252,8 +2252,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1376,
-      "end": 1377,
+      "start": 1368,
+      "end": 1369,
       "loc": {
         "start": {
           "line": 47,
@@ -2278,8 +2278,8 @@
         "binop": null
       },
       "value": "OBJModel",
-      "start": 1378,
-      "end": 1386,
+      "start": 1370,
+      "end": 1378,
       "loc": {
         "start": {
           "line": 47,
@@ -2304,8 +2304,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1386,
-      "end": 1387,
+      "start": 1378,
+      "end": 1379,
       "loc": {
         "start": {
           "line": 47,
@@ -2330,8 +2330,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1388,
-      "end": 1391,
+      "start": 1380,
+      "end": 1383,
       "loc": {
         "start": {
           "line": 47,
@@ -2355,8 +2355,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1391,
-      "end": 1392,
+      "start": 1383,
+      "end": 1384,
       "loc": {
         "start": {
           "line": 47,
@@ -2381,8 +2381,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1392,
-      "end": 1393,
+      "start": 1384,
+      "end": 1385,
       "loc": {
         "start": {
           "line": 47,
@@ -2406,8 +2406,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1398,
-      "end": 1399,
+      "start": 1390,
+      "end": 1391,
       "loc": {
         "start": {
           "line": 48,
@@ -2422,8 +2422,8 @@
     {
       "type": "CommentLine",
       "value": " TODO: comment",
-      "start": 1405,
-      "end": 1421,
+      "start": 1397,
+      "end": 1413,
       "loc": {
         "start": {
           "line": 50,
@@ -2448,8 +2448,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 1426,
-      "end": 1430,
+      "start": 1418,
+      "end": 1422,
       "loc": {
         "start": {
           "line": 51,
@@ -2473,8 +2473,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1430,
-      "end": 1431,
+      "start": 1422,
+      "end": 1423,
       "loc": {
         "start": {
           "line": 51,
@@ -2499,8 +2499,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 1431,
-      "end": 1437,
+      "start": 1423,
+      "end": 1429,
       "loc": {
         "start": {
           "line": 51,
@@ -2524,8 +2524,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1437,
-      "end": 1438,
+      "start": 1429,
+      "end": 1430,
       "loc": {
         "start": {
           "line": 51,
@@ -2549,8 +2549,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1439,
-      "end": 1440,
+      "start": 1431,
+      "end": 1432,
       "loc": {
         "start": {
           "line": 51,
@@ -2577,8 +2577,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1449,
-      "end": 1455,
+      "start": 1441,
+      "end": 1447,
       "loc": {
         "start": {
           "line": 52,
@@ -2605,8 +2605,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 1456,
-      "end": 1461,
+      "start": 1448,
+      "end": 1453,
       "loc": {
         "start": {
           "line": 52,
@@ -2631,8 +2631,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1461,
-      "end": 1462,
+      "start": 1453,
+      "end": 1454,
       "loc": {
         "start": {
           "line": 52,
@@ -2657,8 +2657,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 1462,
-      "end": 1466,
+      "start": 1454,
+      "end": 1458,
       "loc": {
         "start": {
           "line": 52,
@@ -2682,8 +2682,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1466,
-      "end": 1467,
+      "start": 1458,
+      "end": 1459,
       "loc": {
         "start": {
           "line": 52,
@@ -2708,8 +2708,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 1467,
-      "end": 1473,
+      "start": 1459,
+      "end": 1465,
       "loc": {
         "start": {
           "line": 52,
@@ -2733,8 +2733,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1473,
-      "end": 1474,
+      "start": 1465,
+      "end": 1466,
       "loc": {
         "start": {
           "line": 52,
@@ -2759,8 +2759,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1474,
-      "end": 1475,
+      "start": 1466,
+      "end": 1467,
       "loc": {
         "start": {
           "line": 52,
@@ -2784,8 +2784,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1480,
-      "end": 1481,
+      "start": 1472,
+      "end": 1473,
       "loc": {
         "start": {
           "line": 53,
@@ -2809,8 +2809,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1482,
-      "end": 1483,
+      "start": 1474,
+      "end": 1475,
       "loc": {
         "start": {
           "line": 54,
@@ -2837,8 +2837,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1485,
-      "end": 1491,
+      "start": 1477,
+      "end": 1483,
       "loc": {
         "start": {
           "line": 56,
@@ -2862,8 +2862,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1492,
-      "end": 1493,
+      "start": 1484,
+      "end": 1485,
       "loc": {
         "start": {
           "line": 56,
@@ -2888,8 +2888,8 @@
         "binop": null
       },
       "value": "OBJModelsPlugin",
-      "start": 1493,
-      "end": 1508,
+      "start": 1485,
+      "end": 1500,
       "loc": {
         "start": {
           "line": 56,
@@ -2913,8 +2913,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1508,
-      "end": 1509,
+      "start": 1500,
+      "end": 1501,
       "loc": {
         "start": {
           "line": 56,
@@ -2939,8 +2939,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1509,
-      "end": 1509,
+      "start": 1501,
+      "end": 1501,
       "loc": {
         "start": {
           "line": 56,
