@@ -11,7 +11,7 @@ class ModelsPlugin extends Plugin {
     /**
      * @constructor
      *
-     * @param {String} [id] ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [id] ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Viewer} viewer The Viewer.
      * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.
      * @param {Object} cfg  Plugin configuration.
@@ -41,8 +41,8 @@ class ModelsPlugin extends Plugin {
     /**
      * Loads a model into this Plugin's {@link Viewer}.
      *
-     * @param params {*} Configs
-     * @param params.id {String} Optional ID, unique among all components in the viewer's scene.
+     * @param params {*} Loading params.
+     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.
      * @returns {{xeogl.Model}} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
      */
     load(params, ok) {
