@@ -1,7 +1,7 @@
 {
-  "coverage": "36.58%",
-  "expectCount": 328,
-  "actualCount": 120,
+  "coverage": "35.65%",
+  "expectCount": 387,
+  "actualCount": 138,
   "files": {
     "viewer/ModelsPlugin.js": {
       "expectCount": 13,
@@ -41,9 +41,99 @@
         187
       ]
     },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerGeometryLoader.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerModel.js": {
+      "expectCount": 7,
+      "actualCount": 1,
+      "undocumentLines": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        13
+      ]
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/DataInputStreamReader.js": {
+      "expectCount": 19,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        9,
+        10,
+        11,
+        14,
+        23,
+        27,
+        36,
+        45,
+        51,
+        57,
+        63,
+        69,
+        75,
+        85,
+        91,
+        101,
+        107
+      ]
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/StringView.js": {
+      "expectCount": 16,
+      "actualCount": 1,
+      "undocumentLines": [
+        330,
+        350,
+        393,
+        397,
+        408,
+        425,
+        431,
+        448,
+        467,
+        488,
+        510,
+        523,
+        574,
+        592,
+        629
+      ]
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/defaultMaterials.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/preloadQuery.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerBigModelsPlugin/lib/utils.js": {
+      "expectCount": 3,
+      "actualCount": 1,
+      "undocumentLines": [
+        1,
+        11
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js": {
+      "expectCount": 10,
+      "actualCount": 10,
+      "undocumentLines": []
+    },
     "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js": {
       "expectCount": 10,
       "actualCount": 10,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerBigGeometryLoader.js": {
+      "expectCount": 1,
+      "actualCount": 1,
       "undocumentLines": []
     },
     "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoader.js": {
