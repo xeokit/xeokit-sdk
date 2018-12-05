@@ -50,15 +50,18 @@ bimServerAPI.init(() => {
                 schema: schema,
                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
                 rotation: [-90, 0, 0],          // Model has Z+ axis as "up"
-                edges: true                     // Emphasize edges
+                edges: true,                    // Emphasize edges
+                lambertMaterials: true          // Fast flat shaded rendering
             });
 
             const scene = viewer.scene;  // xeogl.Scene
             const camera = scene.camera; // xeogl.Camera
 
             model.on("loaded", () => {
+
                 camera.orbitPitch(20);
                 viewer.cameraFlight.flyTo(model);
+
                 scene.on("tick", () => {
                     camera.orbitYaw(0.3);
                 })
