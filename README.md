@@ -3,7 +3,7 @@
 **xeokit-sdk** is a software development kit from [xeolabs](http://xeolabs.com) for developing high-performance Web-based 3D viewers on the
 [xeogl](http://xeogl.org) WebGL library.
 
-At its heart of the kit is the [Viewer](http://xeolabs.com/xeokit-sdk/docs/class/viewer/Viewer.js~Viewer.html) class which wraps a [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html) and
+At the heart of the kit is the [Viewer](http://xeolabs.com/xeokit-sdk/docs/class/viewer/Viewer.js~Viewer.html) class, which wraps a [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html) and
 acts as a container for [Plugin](http://xeolabs.com/xeokit-sdk/docs/class/viewer/Plugin.js~Plugin.html) subclasses that implement application-specific functionality. The viewer
 is also able to save and restore its state, and the state of its plugins, as JSON bookmark objects.
 

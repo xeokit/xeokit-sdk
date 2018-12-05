@@ -17,13 +17,13 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
     var protocolVersion = null;
     var currentState = {};
     const progressListeners = [];
-    const objectAddedListeners = [];
-    o.prepareReceived = false;
+    var prepareReceived = false;
     const todo = [];
-    o.geometryIds = {};
-    const dataToInfo = {};
+    const geometriesLoaded = {};
+    const objectsWaitingForGeometryData = {};
 
     o.roid = roid;
+    var infoToOid = {};
 
     this.addProgressListener = function (progressListener) {
         progressListeners.push(progressListener);
@@ -68,10 +68,10 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
         var obj = [];
 
         o.groupId = o.roid;
-        o.infoToOid = o.options.oids;
+        infoToOid = o.options.oids;
 
-        for (var k in o.infoToOid) {
-            var oid = parseInt(o.infoToOid[k]);
+        for (var k in infoToOid) {
+            var oid = parseInt(infoToOid[k]);
             bimServerModel.apiModel.get(oid, function (object) {
                 if (object.object._rgeometry != null) {
                     if (object.model.objects[object.object._rgeometry] != null) {
@@ -167,8 +167,8 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
     function progressHandler(topicId, state) {
         if (topicId === o.topicId) {
             if (state.title === "Done preparing") {
-                if (!o.prepareReceived) {
-                    o.prepareReceived = true;
+                if (!prepareReceived) {
+                    prepareReceived = true;
                     downloadInitiated();
                 }
             }
@@ -206,13 +206,13 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
     function readStart(data) {
         var start = data.readUTF8();
         if (start !== "BGS") {
-            console.error("data does not start with BGS (" + start + ")");
+            modelBuilder.error("data does not start with BGS (" + start + ")");
             return false;
         }
         protocolVersion = data.readByte();
-        console.log("Protocol version", protocolVersion);
+        modelBuilder.log("BIMServer protocol version = " + protocolVersion);
         if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16) {
-            console.error("Unimplemented version");
+            modelBuilder.error("Unimplemented protocol version");
             return false;
         }
         if (protocolVersion > 15) {
@@ -220,7 +220,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
         }
         data.align8();
         var boundary = data.readDoubleArray(6);
-        modelBuilder.gotBoundary(boundary);
+        modelBuilder.gotModelBoundary(boundary);
         currentState.mode = 1;
         progressListeners.forEach(function (progressListener) {
             progressListener("start", currentState.nrObjectsRead, currentState.nrObjectsRead);
@@ -240,226 +240,130 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
     }
 
     function readObject(stream, geometryType) {
-        var geometryId;
-        var numGeometries;
-        var numParts;
-        var objectBounds;
-        var numIndices;
-        var indices;
-        var numPositions;
-        var positions;
-        var numNormals;
-        var normals;
-        var numColors;
-        var colors = null;
-        var reused;
-        var type;
-        var roid;
-        var croid;
-        var hasTransparency;
-        var matrix;
-        var color;
 
-        var i;
+        //---------------------------------------------------------------------------------
+        // protocol version assumed to be 16
+        //---------------------------------------------------------------------------------
 
-        if (protocolVersion < 16) {
-            stream.align8();
-        }
+        const color = new Float32Array(1, 1, 1, 1);
 
         if (geometryType === 1) {
 
-            if (protocolVersion > 15) {
-                reused = stream.readInt();
-                type = stream.readUTF8();
-                stream.align8();
+            //-----------------------------------------------------------------------------
+            // Geometry
+            //-----------------------------------------------------------------------------
 
-                roid = stream.readLong();
-                croid = stream.readLong();
-                hasTransparency = stream.readLong() === 1;
+            let reused = stream.readInt();
+            let ifcType = stream.readUTF8();
+
+            stream.align8();
+
+            let roid = stream.readLong();
+            let croid = stream.readLong();
+            let hasTransparency = stream.readLong() === 1;
+
+            let geometryDataId = stream.readLong();
+            let numIndices = stream.readInt();
+            let indices = stream.readShortArray(numIndices);
+
+            stream.align4();
+
+            let b = stream.readInt();
+            let gotColor = (b === 1);
+
+            if (gotColor) {
+                color[0] = stream.readFloat();
+                color[1] = stream.readFloat();
+                color[2] = stream.readFloat();
+                color[3] = stream.readFloat();
             }
 
-            geometryId = stream.readLong();
-            numIndices = stream.readInt();
-            indices = stream.readShortArray(numIndices);
+            let numPositions = stream.readInt();
+            let positions = stream.readFloatArray(numPositions);
+            let numNormals = stream.readInt();
+            let normals = stream.readFloatArray(numNormals);
+            let numColors = stream.readInt();
 
-            if (protocolVersion >= 11) {
-                stream.align4();
-                var b = stream.readInt();
-                if (b === 1) {
-                    color = {
-                        r: stream.readFloat(),
-                        g: stream.readFloat(),
-                        b: stream.readFloat(),
-                        a: stream.readFloat()
-                    };
-                }
-            }
-
-            numPositions = stream.readInt();
-            positions = stream.readFloatArray(numPositions);
-            numNormals = stream.readInt();
-            normals = stream.readFloatArray(numNormals);
-            numColors = stream.readInt();
+            var colors = null;
 
             if (numColors > 0) {
+
                 colors = stream.readFloatArray(numColors);
-            } else if (color != null) {
+
+                color[0] = colors[0];
+                color[1] = colors[0];
+                color[2] = colors[0];
+                color[3] = colors[0];
+
+            } else if (color !== null) {
+
                 // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
-                colors = new Array(numPositions * 4);
-                for (var i = 0; i < numPositions; i++) {
-                    colors[i * 4] = color.r;
-                    colors[i * 4 + 1] = color.g;
-                    colors[i * 4 + 2] = color.b;
-                    colors[i * 4 + 3] = color.a;
-                }
+
+                // colors = new Array(numPositions * 4);
+                //
+                // for (var i = 0; i < numPositions; i++) {
+                //     colors[i * 4] = color.r;
+                //     colors[i * 4 + 1] = color.g;
+                //     colors[i * 4 + 2] = color.b;
+                //     colors[i * 4 + 3] = color.a;
+                // }
             }
 
-            o.geometryIds[geometryId] = [geometryId];
+            modelBuilder.createGeometry(geometryDataId, positions, normals, indices);
 
-            modelBuilder.createGeometry(geometryId, positions, normals, colors, indices);
+            geometriesLoaded[geometryDataId] = true;
 
-            if (dataToInfo[geometryId] != null) {
-                dataToInfo[geometryId].forEach(function (oid) {
-                    modelBuilder.addGeometryToObject(oid, geometryId);
+            if (objectsWaitingForGeometryData[geometryDataId] !== null) {
 
-                    //     var ob = o.viewer.getObject(o.roid + ":" + oid);
-                    //        ob.add(geometryId);
+                // Object(s) waiting for this geometry
+
+                objectsWaitingForGeometryData[geometryDataId].forEach(function (oid) {
+                    modelBuilder.addGeometryToObject(oid, geometryDataId);
                 });
-                delete dataToInfo[geometryId];
+
+                delete objectsWaitingForGeometryData[geometryDataId];
             }
-
-        } else if (geometryType === 2) {
-
-            console.log("Unimplemented", 2);
-
-        } else if (geometryType === 3) {
-
-            var geometryDataOid = stream.readLong();
-
-            numParts = stream.readInt();
-            o.geometryIds[geometryDataOid] = [];
-
-            var geometryIds = [];
-
-            for (i = 0; i < numParts; i++) {
-                var partId = stream.readLong();
-                geometryId = geometryDataOid + "_" + i;
-                numIndices = stream.readInt();
-
-                if (protocolVersion > 15) {
-                    indices = stream.readIntArray(numIndices);
-                } else {
-                    indices = stream.readShortArray(numIndices);
-                }
-
-                if (protocolVersion >= 11) {
-                    var b = stream.readInt();
-                    if (b === 1) {
-                        color = {
-                            r: stream.readFloat(),
-                            g: stream.readFloat(),
-                            b: stream.readFloat(),
-                            a: stream.readFloat()
-                        };
-                    }
-                }
-                stream.align4();
-
-                numPositions = stream.readInt();
-                positions = stream.readFloatArray(numPositions);
-                numNormals = stream.readInt();
-                normals = stream.readFloatArray(numNormals);
-                numColors = stream.readInt();
-                if (numColors > 0) {
-                    colors = stream.readFloatArray(numColors);
-                } else if (color != null) {
-                    // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
-                    colors = new Array(numPositions * 4);
-                    for (var i = 0; i < numPositions; i++) {
-                        colors[i * 4 + 0] = color.r;
-                        colors[i * 4 + 1] = color.g;
-                        colors[i * 4 + 2] = color.b;
-                        colors[i * 4 + 3] = color.a;
-                    }
-                }
-
-                geometryIds.push(geometryId);
-                o.geometryIds[geometryDataOid].push(geometryId);
-
-                modelBuilder.createGeometry(geometryId, positions, normals, colors, indices);
-            }
-
-            if (dataToInfo[geometryDataOid] != null) {
-                dataToInfo[geometryDataOid].forEach(function (oid) {
-                    var ob = o.viewer.getObject(o.roid + ":" + oid);
-                    geometryIds.forEach(function (geometryId) {
-                        ob.add(geometryId);
-                    });
-                });
-                delete dataToInfo[geometryDataOid];
-            }
-
-        } else if (geometryType === 4) {
-            console.log("Unimplemented", 4);
 
         } else if (geometryType === 5) {
 
-            if (protocolVersion > 15) {
-                oid = stream.readLong();
-                type = stream.readUTF8();
-                stream.align8();
+            //-----------------------------------------------------------------------------
+            // Object
+            //-----------------------------------------------------------------------------
+
+            var oid = stream.readLong();
+            let ifcType = stream.readUTF8();
+
+            stream.align8();
+
+            let roid = stream.readLong();
+            let geometryInfoOid = stream.readLong();
+            let hasTransparency = stream.readLong() === 1;
+            let objectBounds = stream.readDoubleArray(6);
+            let matrix = stream.readDoubleArray(16);
+            let geometryDataId = stream.readLong();
+            let geometryDataOidFound = geometryDataId;
+            oid = infoToOid[geometryInfoOid];
+
+            if (oid === null) {
+                modelBuilder.error("Not found", infoToOid, geometryInfoOid);
+                return;
             }
 
-            roid = stream.readLong();
-            var geometryInfoOid = stream.readLong();
+            let geometryLoaded = geometriesLoaded[geometryDataId];
 
-            if (protocolVersion > 15) {
-                hasTransparency = stream.readLong() === 1;
-            }
+            modelBuilder.createObject(oid, geometryLoaded ? [geometryDataId] : [], ifcType, matrix);
 
-            objectBounds = stream.readDoubleArray(6);
-            matrix = stream.readDoubleArray(16);
+            if (!geometryLoaded) {
 
-            // if (globalTransformationMatrix != null) {
-            //     xeogl.math.mulMat4(matrix, matrix, globalTransformationMatrix);
-            // }
+                // Geometry not yet loaded for this object - save the object as waiting for this geometry
 
-            var geometryDataOid = stream.readLong();
-            var geometryDataOids = o.geometryIds[geometryDataOid];
-            var oid = o.infoToOid[geometryInfoOid];
-
-            if (geometryDataOids == null) {
-                geometryDataOids = [];
-                var list = dataToInfo[geometryDataOid];
-                if (list == null) {
+                var list = objectsWaitingForGeometryData[geometryDataId];
+                if (!list) {
                     list = [];
-                    dataToInfo[geometryDataOid] = list;
+                    objectsWaitingForGeometryData[geometryDataId] = list;
                 }
                 list.push(oid);
             }
-
-            if (oid == null) {
-                console.error("Not found", o.infoToOid, geometryInfoOid);
-            } else {
-
-                bimServerModel.apiModel.get(oid, function (object) {
-
-                    object.gid = geometryInfoOid;
-                    var modelId = o.roid; // TODO: set to the model ID
-
-                    if (currentState.mode === 0) {
-                        console.log("Mode is still 0, should be 1");
-                        return;
-                    }
-
-                    modelBuilder.createObject(oid, geometryDataOids, object.getType(), matrix);
-                });
-            }
-
-        } else {
-
-            o.warn("Unsupported geometry type: " + geometryType);
-            return;
         }
 
         currentState.nrObjectsRead++;

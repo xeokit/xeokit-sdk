@@ -1,5 +1,12 @@
 import {Plugin} from "./../../Plugin.js";
-import {Geometry, Object as xeoglObjectClass, Model as xeoglModelClass, Mesh} from "./../../../xeogl/xeogl.module.js";
+import {
+    LambertMaterial,
+    PhongMaterial,
+    Geometry,
+    Object as xeoglObjectClass,
+    Model as xeoglModelClass,
+    Mesh
+} from "./../../../xeogl/xeogl.module.js";
 import {preloadQuery} from "./lib/preloadQuery.js";
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
@@ -7,9 +14,16 @@ import {BIMServerModel} from "./lib/BIMServerModel.js";
 import {utils} from "./lib/utils.js";
 
 /**
- * A viewer plugin that loads models from a [BIMServer](http://bimserver.org) instance.
+ * A viewer plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
  *
- * In the example below, we'll load the latest revision of a model.
+ * In the example below, we'll load the latest revision of a project's model.
+ *
+ * Note how we instantiate a BIMServerClient, which we use to interface with the BIMServer. We get the
+ * JavaScript client API library from the BIMServer itself. After creating a Viewer, we instantiate and initialize
+ * the BIMServerClient, then add a BIMServerModel then use it to find the project within the BIMServer, from which we get the ID of its latest
+ * revision, along with the IFC schema.
+ *
+ * We then add a BIMServerModelsPlugin to our Viewer, configured with the
  *
  * Read more about this in the [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial.
  *
@@ -128,6 +142,11 @@ class BIMServerModelsPlugin extends Plugin {
      * @param {Number} params.poid ID of the model's project within BIMServer.
      * @param {Number} params.roid ID of the model's revision within BIMServer. See the class example for how to query the latest project revision ID via the BIMServer client API.
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
+     * @param {Boolean} [params.lambertMaterials=true]
+     * @param {Boolean} [params.quantizeGeometry=true]
+     * @param {Boolean} [params.combineGeometry=true]
+     * @param {Boolean} [params.edges=false]
+     * @param {Boolean} [params.logging=false] Set this true to log info to the console while loading.
      * @returns {xeogl.Model} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
      */
     load(params) {
@@ -172,9 +191,22 @@ class BIMServerModelsPlugin extends Plugin {
             return;
         }
 
+        const edges = !!params.edges;
+        const lambertMaterials = params.lambertMaterials !== false;
+        const quantizeGeometry = params.quantizeGeometry !== false;
+        //const combineGeometry = params.combineGeometry !== false;
+        const combineGeometry = false; // Combination is way too slow ATM
+        const logging = !!params.logging;
+
         scene.canvas.spinner.processes++;
 
         const xeoglModel = new xeoglModelClass(scene, params);
+
+        const xeoglMaterial = lambertMaterials ? new LambertMaterial(scene, {
+            backfaces: true
+        }) : new PhongMaterial(scene, {
+            diffuse: [1.0, 1.0, 1.0]
+        });
 
         bimServerAPI.getModel(poid, roid, schema, false, apiModel => {  // TODO: Preload not necessary combined with the bruteforce tree
 
@@ -195,11 +227,7 @@ class BIMServerModelsPlugin extends Plugin {
                         const guidToOid = {};
 
                         const visit = n => {
-                            if (self.BIMSERVER_VERSION == "1.4") {
-                                oids.push(n.id);
-                            } else {
-                                oids[n.gid] = n.id;
-                            }
+                            oids[n.gid] = n.id;
                             oidToGuid[n.id] = n.guid;
                             guidToOid[n.guid] = n.id;
                             for (let i = 0; i < (n.children || []).length; ++i) {
@@ -220,10 +248,23 @@ class BIMServerModelsPlugin extends Plugin {
 
                         const loader = new BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, null, {
 
+                            log: function (msg) {
+                                if (logging) {
+                                    self.log(msg);
+                                }
+                            },
 
-                            gotBoundary: function (boundary) {
+                            error: function (msg) {
+                                self.error(msg);
+                            },
 
-                                console.log("boundary = " + boundary);
+                            warn: function (msg) {
+                                self.warn(msg);
+                            },
+
+                            gotModelBoundary: function (boundary) {
+
+                                //console.log("boundary = " + boundary);
 
                                 const xmin = boundary[0];
                                 const ymin = boundary[1];
@@ -246,48 +287,35 @@ class BIMServerModelsPlugin extends Plugin {
                                 ];
 
                                 // TODO
+
                                 //o.viewer.setScale(scale); // Temporary until we find a better scaling system.
 
                             },
 
-                            createGeometry: function (geometryId, positions, normals, colors, indices) {
-                                //     console.log("createGeometry geometryId=" + geometryId + "");
-                                const geometry = new Geometry(xeoglModel, { // Geometry will be destroyed with the Model
-                                    id: `${modelId}.${geometryId}`,
+                            createGeometry: function (geometryDataId, positions, normals, indices) {
+                                const geometryId = `${modelId}.${geometryDataId}`;
+                                new Geometry(xeoglModel, {
+                                    id: geometryId,
                                     primitive: "triangles",
                                     positions: positions,
                                     normals: normals,
-                                    colors: colors,
-                                    indices: indices
+                                    indices: indices,
+                                    quantized: quantizeGeometry,
+                                    combined: combineGeometry
                                 });
-
-                                // const xeoglMesh = new Mesh(xeoglModel, {
-                                //     geometry: geometry
-                                // });
                             },
 
-                            createObject(oid, geometryIds, ifcType, matrix) {
-
-                                if (geometryIds.length === 0) {
-                                    return;
-                                }
-
+                            createObject(oid, geometryDataIds, ifcType, matrix) {
                                 const objectId = `${modelId}.${oid}`;
-
-                                console.log("createObject " + objectId);
-
                                 if (scene.entities[objectId]) {
                                     self.error(`Can't create object - object with id ${objectId} already exists`);
                                     return;
                                 }
-
                                 if (scene.components[objectId]) {
                                     self.error(`Can't create object - scene component with this ID already exists: ${objectId}`);
                                     return;
                                 }
-
                                 ifcType = ifcType || "DEFAULT";
-
                                 const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                                 const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
                                 const xeoglObject = new xeoglObjectClass(xeoglModel, {
@@ -297,40 +325,47 @@ class BIMServerModelsPlugin extends Plugin {
                                     matrix,
                                     colorize: color, // RGB
                                     opacity: color[3], // A
-                                    visibility: !self.hiddenTypes[ifcType]
+                                    visibility: !self.hiddenTypes[ifcType],
+                                    edges: edges
                                 });
-
                                 xeoglModel.addChild(xeoglObject, false);
-
-                                for (let i = 0, len = geometryIds.length; i < len; i++) {
+                                for (let i = 0, len = geometryDataIds.length; i < len; i++) {
                                     const xeoglMesh = new Mesh(xeoglModel, {
-                                        geometry: `${modelId}.${geometryIds[i]}`
+                                        geometry: `${modelId}.${geometryDataIds[i]}`,
+                                        material: xeoglMaterial
                                     });
-                                    xeoglMesh.colorize = color; // HACK: Overrides state inheritance
                                     xeoglObject.addChild(xeoglMesh, true);
+                                    xeoglMesh.colorize = color; // HACK: Overrides state inheritance
+                                    xeoglMesh.opacity = color[3]; // A
                                 }
                             },
 
-                            addGeometryToObject(objectId, geometryId) {
-                                objectId = `${modelId}.${objectId}`;
+                            addGeometryToObject(oid, geometryDataId) {
+                                const objectId = `${modelId}.${oid}`;
                                 const xeoglObject = xeoglModel.scene.components[objectId];
                                 if (!xeoglObject) {
                                     //self.error(`Can't find object with id ${objectId}`);
                                     return;
                                 }
+                                const geometryId = `${modelId}.${geometryDataId}`;
                                 const xeoglMesh = new Mesh(xeoglModel, {
-                                    geometry: `${modelId}.${geometryId}`
+                                    geometry: geometryId,
+                                    material: xeoglMaterial
                                 });
-                                xeoglMesh.colorize = color; // HACK: Overrides state inheritance
+                                //  xeoglMesh.colorize = color; // HACK: Overrides state inheritance
                                 xeoglObject.addChild(xeoglMesh, true);
                             }
                         });
 
                         loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) => {
-                            if (progress == "start") {
-                                self.log("Started loading geometries");
-                            } else if (progress == "done") {
-                                self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
+                            if (progress === "start") {
+                                if (logging) {
+                                    self.log("Started loading geometries");
+                                }
+                            } else if (progress === "done") {
+                                if (logging) {
+                                    self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
+                                }
                                 viewer.scene.off(onTick);
                                 scene.canvas.spinner.processes--;
                                 xeoglModel.fire("loaded");
@@ -338,8 +373,7 @@ class BIMServerModelsPlugin extends Plugin {
                             }
                         });
 
-                        loader.setLoadOids(oids);
-                        //loader.setLoadOids([bimServerModel.apiModel.roid], oids);
+                        loader.setLoadOids(oids); // TODO: Why do we do this?
 
                         onTick = viewer.scene.on("tick", () => {
                             loader.process();

@@ -4,13 +4,24 @@
   "plugins": [
     {
       "name": "esdoc-standard-plugin",
+      "includeSource": false,
       "option": {
         "lint": {"enable": true},
         "coverage": {"enable": true},
         "accessor": {"access": ["public"], "autoPrivate": true},
         "undocumentIdentifier": {"enable": true},
         "unexportedIdentifier": {"enable": false},
-        "typeInference": {"enable": true}
+        "typeInference": {"enable": true},
+        "includeSource": false,
+        "brand": {
+          "logo": "./images/logo.gif",
+          "title": "xeokit-sdk",
+          "description": "SDK for developing custom 3D viewers on xeogl",
+          "repository": "https://github.com/xeolabs/xeokit-sdk",
+          "site": "http://xeokit.io",
+          "author": "https://twitter.com/xeolabs",
+          "image": "http://my-library.org/logo.png"
+        }
       }
     }
   ]
