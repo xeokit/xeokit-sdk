@@ -23,7 +23,7 @@ class AxisGizmoPlugin extends Plugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="AxisGizmo"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="AxisGizmo"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Array} [cfg.size=[250,250]] Initial size in pixels.
      */
     constructor(viewer, cfg) {

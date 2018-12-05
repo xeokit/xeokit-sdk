@@ -17,9 +17,9 @@ class BCFViewpointsPlugin extends Plugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="BCFViewpoints"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
-     * @param [cfg.originatingSystem] {string} Identifies the originating system for BCF records.
-     * @param [cfg.authoringTool] {string} Identifies the authoring tool for BCF records.
+     * @param {String} [cfg.id="BCFViewpoints"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.originatingSystem] Identifies the originating system for BCF records.
+     * @param {String} [cfg.authoringTool] Identifies the authoring tool for BCF records.
      */
     constructor(viewer, cfg = {}) {
 

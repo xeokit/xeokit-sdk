@@ -12,11 +12,11 @@ import {XML3DModel} from "./XML3DModel.js";
  *
  * @example
  * const viewer = new Viewer({
- *      canvasId: "glcanvas"
+ *      canvasId: "myCanvas"
  * });
  *
  * const plugin = new XML3DModelsPlugin(viewer, {
- *    id: "xml3d",                                               // Optional plugin ID
+ *    id: "xml3d",                                               // Default value
  *    workerScriptsPath : "../../src/plugins/XML3DModels/zipjs/" // Path to zip.js workers dir
  * });
  *
@@ -35,7 +35,7 @@ class XML3DModelsPlugin extends ModelsPlugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="XML3DModels"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="XML3DModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} cfg.workerScriptsPath Path to the directory that contains the
      * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
      * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.

@@ -7,12 +7,12 @@ import {STLModel} from "./../../../xeogl/STLModel/STLModel.js";
  * @example
  * // Create a viewer
  * const viewer = new Viewer({
- *      canvasId: "glcanvas"
+ *      canvasId: "myCanvas"
  * });
  *
  * // Create an STLModels plugin within the viewer
  * var plugin = new SSTLModelsPlugin(viewer, {
- *      id: "STLModels"  // Optional plugin ID
+ *      id: "STLModels"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the viewer
@@ -40,7 +40,7 @@ class STLModelsPlugin extends ModelsPlugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="STLModels"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="STLModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
         super("STLModels", viewer, STLModel, cfg);

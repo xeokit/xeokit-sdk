@@ -8,12 +8,12 @@ import {OBJModel} from "./../../../xeogl/OBJModel/OBJModel.js";
  *
  * // Create a viewer
  * const viewer = new Viewer({
- *      canvasId: "glcanvas"
+ *      canvasId: "myCanvas"
  * });
  *
  * // Create an OBJModels plugin within the viewer
  * var plugin = new OBJModelsPlugin(viewer, {
- *      id: "OBJModels"  // Optional plugin ID
+ *      id: "OBJModels"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the viewer
@@ -41,7 +41,7 @@ class OBJModelsPlugin extends ModelsPlugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="OBJModels"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="OBJModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
         super("OBJModels", viewer, OBJModel, cfg);

@@ -8,12 +8,12 @@ import {GLTFBigModel} from "../../../xeogl/GLTFBigModel/GLTFBigModel.js";
  *
  * // Create a viewer
  * const viewer = new Viewer({
- *      canvasId: "glcanvas"
+ *      canvasId: "myCanvas"
  * });
  *
  * // Create a GLTFBigModels plugin within the viewer
  * var plugin = new GLTFBigModelsPlugin(viewer, {
- *      id: "GLTFBigModels"  // Optional plugin ID
+ *      id: "GLTFBigModels"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the viewer
@@ -42,7 +42,7 @@ class GLTFBigModelsPlugin extends ModelsPlugin {
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="GLTFBigModels"] Optional ID for this plugin, with which we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="GLTFBigModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
         super("GLTFBigModels", viewer, GLTFBigModel, cfg);
