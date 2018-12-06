@@ -11,7 +11,7 @@ const viewer = new Viewer({
 
 new AxisGizmoPlugin(viewer, {size: [250, 250]});
 
-var loader = new GLTFBigModelsPlugin(viewer, {id: "GLTFBigModels"});
+var loader = new GLTFBigModelsPlugin(viewer);
 
 var structure = loader.load({
     id: "structure",
