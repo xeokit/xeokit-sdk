@@ -30,7 +30,7 @@ import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
  * // These params can include all the xeogl.GLTFModel configs
  * const model = plugin.load({
  *      id: "myModel",
- *      src: "./models/gltf/mygltfmodel.gltf",
+ *      src: "models/mygltfmodel.gltf",
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
@@ -93,7 +93,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] The
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
      * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
@@ -113,7 +113,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * [xeogl.Meshes](http://xeogl.org/docs/classes/Meshes.html) are created as the glTF node hierarchy is
      * parsed. See usage examples.
      *
-     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded model.
+     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded glTF model.
      */
     load(params) {
 

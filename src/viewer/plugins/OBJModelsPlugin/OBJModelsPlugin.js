@@ -28,7 +28,7 @@ import {OBJModel} from "./../../../xeogl/OBJModel/OBJModel.js";
  * // These params can include all the xeogl.OBJModel configs
  * const model = plugin.load({
  *      id: "myModel",
- *      src: "./models/gltf/myObjModel.obj",
+ *      src: "models/myObjModel.obj",
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
@@ -91,14 +91,14 @@ class OBJModelsPlugin extends ModelsPlugin {
      * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] The
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
      * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded model.
+     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded OBJ model.
      */
     load(params) {
         return super.load(params);
