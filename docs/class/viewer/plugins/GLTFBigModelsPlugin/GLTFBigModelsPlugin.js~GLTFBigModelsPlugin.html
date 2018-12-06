@@ -49,13 +49,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFBigModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber39">xeokit-sdk/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFBigModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber58">xeokit-sdk/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber39">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber58">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -75,7 +75,11 @@
 
   
   
-  <div class="description" data-ice="description"><p>A viewer plugin that loads large models from <a href="https://www.khronos.org/gltf/">glTF</a>.</p>
+  <div class="description" data-ice="description"><p>A viewer plugin that loads large scale models from <a href="https://www.khronos.org/gltf/">glTF</a>.</p>
+<p>For each model loaded, creates a <a href="http://xeogl.org/docs/classes/BigModel.html">xeogl.BigModel</a> within its
+<span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+<p>See the <span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html#instance-method-load">GLTFBigModelsPlugin#load</a></span> method for parameters that you can configure
+each <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with as you load it.</p>
 </div>
   
 
@@ -86,33 +90,45 @@
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">
-// Create a viewer
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Create a xeokit Viewer
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
 });
 
-// Create a GLTFBigModels plugin within the viewer
+// Add a GLTFBigModelsPlugin to the Viewer
 var plugin = new GLTFBigModelsPlugin(viewer, {
      id: &quot;GLTFBigModels&quot;  // Default value
 });
 
-// We can also get the plugin by its ID on the viewer
+// We can also get the plugin by its ID on the Viewer
 plugin = viewer.plugins.GLTFBigModels;
 
-// Load the big glTF model
+// Load the glTF model
 // These params can include all the xeogl.GLTFModel configs
 const model = plugin.load({
      id: &quot;myModel&quot;,
-     src: &quot;./models/gltf/mygltfmodel.gltf&quot;
+     src: &quot;models/mygltfmodel.gltf&quot;,
+     scale: [0.1, 0.1, 0.1],
+     rotate: [90, 0, 0],
+     translate: [100,0,0],
+     edges: true
 });
 
-// The model is a xeogl.Model
+// Recall that the model is a xeogl.Model
 
 // When the model has loaded, fit it to view
 model.on(&quot;loaded&quot;, function() {
      viewer.cameraFlight.flyTo(model);
-});</code></pre>
+});
+
+// Update properties of the model via the xeogl.Model
+model.translate = [200,0,0];
+
+// You can unload the model via the plugin
+plugin.unload(&quot;myModel&quot;);
+
+// Or unload it by calling destroy() on the xeogl.Model itself
+model.destroy();</code></pre>
     </div>
 </div>
 
@@ -183,7 +199,7 @@ model.on(&quot;loaded&quot;, function() {
       <div>
         
         
-        <div data-ice="description"><p>Loads a glTF model from the file system into the viewer.</p>
+        <div data-ice="description"><p>Loads a large-scale glTF model from the file system into the viewer.</p>
 </div>
       </div>
     </td>
@@ -604,7 +620,7 @@ model.on(&quot;loaded&quot;, function() {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -684,14 +700,14 @@ model.on(&quot;loaded&quot;, function() {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Loads a glTF model from the file system into the viewer.</p>
+  <div data-ice="description"><p>Loads a large-scale glTF model from the file system into the viewer.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">ModelsPlugin#load</a></span></div>

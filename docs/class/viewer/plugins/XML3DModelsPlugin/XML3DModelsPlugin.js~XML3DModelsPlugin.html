@@ -80,12 +80,12 @@
 <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
 <p>Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript
 class name cannot begin with a numeral.</p>
-<p>An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the
+<p>An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the
 <a href="https://gildas-lormeau.github.io/zip.js/">zip.js</a> library to unzip them before loading. The zip.js library uses
-<a href="https://www.w3.org/TR/workers/">Web workers</a> for fast unzipping, so XML3DPlugin requires that we configure it
+<a href="https://www.w3.org/TR/workers/">Web workers</a> for fast unzipping, so XML3DModelsPlugin requires that we configure it
 with a <code>workerScriptsPath</code> property specifying the directory where zip.js keeps its Web worker script. See 
 the example for how to do that. </p>
-<p>See the <span>XML3DModels#load</span> method for parameters that you can configure
+<p>See the <span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html#instance-method-load">XML3DModelsPlugin#load</a></span> method for parameters that you can configure
 each <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with as you load it.</p>
 </div>
   
@@ -115,7 +115,7 @@ plugin = viewer.plugins.XML3DModels;
 // These params can include all the xeogl.OBJModel configs
 const model = plugin.load({
      id: &quot;myModel&quot;,
-     src: &quot;models/my3DXMLModel.obj&quot;,
+     src: &quot;models/my3DXMLModel.3dxml&quot;,
      scale: [0.1, 0.1, 0.1],
      rotate: [90, 0, 0],
      translate: [100,0,0],

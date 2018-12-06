@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 6261,
+  "end": 6281,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 6261,
+    "end": 6281,
     "loc": {
       "start": {
         "line": 1,
@@ -202,9 +202,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+            "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DModelsPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.3dxml\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
             "start": 99,
-            "end": 2419,
+            "end": 2439,
             "loc": {
               "start": {
                 "line": 4,
@@ -220,8 +220,8 @@
       },
       {
         "type": "Identifier",
-        "start": 2421,
-        "end": 6233,
+        "start": 2441,
+        "end": 6253,
         "loc": {
           "start": {
             "line": 67,
@@ -234,8 +234,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 2427,
-          "end": 2444,
+          "start": 2447,
+          "end": 2464,
           "loc": {
             "start": {
               "line": 67,
@@ -252,8 +252,8 @@
         },
         "superClass": {
           "type": "Identifier",
-          "start": 2453,
-          "end": 2465,
+          "start": 2473,
+          "end": 2485,
           "loc": {
             "start": {
               "line": 67,
@@ -269,8 +269,8 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 2466,
-          "end": 6233,
+          "start": 2486,
+          "end": 6253,
           "loc": {
             "start": {
               "line": 67,
@@ -284,8 +284,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 3084,
-              "end": 3382,
+              "start": 3104,
+              "end": 3402,
               "loc": {
                 "start": {
                   "line": 78,
@@ -300,8 +300,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 3084,
-                "end": 3095,
+                "start": 3104,
+                "end": 3115,
                 "loc": {
                   "start": {
                     "line": 78,
@@ -324,8 +324,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 3096,
-                  "end": 3102,
+                  "start": 3116,
+                  "end": 3122,
                   "loc": {
                     "start": {
                       "line": 78,
@@ -341,8 +341,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 3104,
-                  "end": 3107,
+                  "start": 3124,
+                  "end": 3127,
                   "loc": {
                     "start": {
                       "line": 78,
@@ -359,8 +359,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 3109,
-                "end": 3382,
+                "start": 3129,
+                "end": 3402,
                 "loc": {
                   "start": {
                     "line": 78,
@@ -374,8 +374,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 3119,
-                    "end": 3165,
+                    "start": 3139,
+                    "end": 3185,
                     "loc": {
                       "start": {
                         "line": 79,
@@ -388,8 +388,8 @@
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 3119,
-                      "end": 3164,
+                      "start": 3139,
+                      "end": 3184,
                       "loc": {
                         "start": {
                           "line": 79,
@@ -402,8 +402,8 @@
                       },
                       "callee": {
                         "type": "Super",
-                        "start": 3119,
-                        "end": 3124,
+                        "start": 3139,
+                        "end": 3144,
                         "loc": {
                           "start": {
                             "line": 79,
@@ -418,8 +418,8 @@
                       "arguments": [
                         {
                           "type": "StringLiteral",
-                          "start": 3125,
-                          "end": 3138,
+                          "start": 3145,
+                          "end": 3158,
                           "loc": {
                             "start": {
                               "line": 79,
@@ -438,8 +438,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 3140,
-                          "end": 3146,
+                          "start": 3160,
+                          "end": 3166,
                           "loc": {
                             "start": {
                               "line": 79,
@@ -455,8 +455,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 3148,
-                          "end": 3158,
+                          "start": 3168,
+                          "end": 3178,
                           "loc": {
                             "start": {
                               "line": 79,
@@ -472,8 +472,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 3160,
-                          "end": 3163,
+                          "start": 3180,
+                          "end": 3183,
                           "loc": {
                             "start": {
                               "line": 79,
@@ -492,8 +492,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3174,
-                    "end": 3190,
+                    "start": 3194,
+                    "end": 3210,
                     "loc": {
                       "start": {
                         "line": 80,
@@ -506,8 +506,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3174,
-                      "end": 3189,
+                      "start": 3194,
+                      "end": 3209,
                       "loc": {
                         "start": {
                           "line": 80,
@@ -521,8 +521,8 @@
                       "operator": "=",
                       "left": {
                         "type": "Identifier",
-                        "start": 3174,
-                        "end": 3177,
+                        "start": 3194,
+                        "end": 3197,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -538,8 +538,8 @@
                       },
                       "right": {
                         "type": "LogicalExpression",
-                        "start": 3180,
-                        "end": 3189,
+                        "start": 3200,
+                        "end": 3209,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -552,8 +552,8 @@
                         },
                         "left": {
                           "type": "Identifier",
-                          "start": 3180,
-                          "end": 3183,
+                          "start": 3200,
+                          "end": 3203,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -570,8 +570,8 @@
                         "operator": "||",
                         "right": {
                           "type": "ObjectExpression",
-                          "start": 3187,
-                          "end": 3189,
+                          "start": 3207,
+                          "end": 3209,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -589,8 +589,8 @@
                   },
                   {
                     "type": "IfStatement",
-                    "start": 3199,
-                    "end": 3319,
+                    "start": 3219,
+                    "end": 3339,
                     "loc": {
                       "start": {
                         "line": 81,
@@ -603,8 +603,8 @@
                     },
                     "test": {
                       "type": "UnaryExpression",
-                      "start": 3203,
-                      "end": 3225,
+                      "start": 3223,
+                      "end": 3245,
                       "loc": {
                         "start": {
                           "line": 81,
@@ -619,8 +619,8 @@
                       "prefix": true,
                       "argument": {
                         "type": "MemberExpression",
-                        "start": 3204,
-                        "end": 3225,
+                        "start": 3224,
+                        "end": 3245,
                         "loc": {
                           "start": {
                             "line": 81,
@@ -633,8 +633,8 @@
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 3204,
-                          "end": 3207,
+                          "start": 3224,
+                          "end": 3227,
                           "loc": {
                             "start": {
                               "line": 81,
@@ -650,8 +650,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3208,
-                          "end": 3225,
+                          "start": 3228,
+                          "end": 3245,
                           "loc": {
                             "start": {
                               "line": 81,
@@ -673,8 +673,8 @@
                     },
                     "consequent": {
                       "type": "BlockStatement",
-                      "start": 3227,
-                      "end": 3319,
+                      "start": 3247,
+                      "end": 3339,
                       "loc": {
                         "start": {
                           "line": 81,
@@ -688,8 +688,8 @@
                       "body": [
                         {
                           "type": "ExpressionStatement",
-                          "start": 3241,
-                          "end": 3290,
+                          "start": 3261,
+                          "end": 3310,
                           "loc": {
                             "start": {
                               "line": 82,
@@ -702,8 +702,8 @@
                           },
                           "expression": {
                             "type": "CallExpression",
-                            "start": 3241,
-                            "end": 3289,
+                            "start": 3261,
+                            "end": 3309,
                             "loc": {
                               "start": {
                                 "line": 82,
@@ -716,8 +716,8 @@
                             },
                             "callee": {
                               "type": "MemberExpression",
-                              "start": 3241,
-                              "end": 3251,
+                              "start": 3261,
+                              "end": 3271,
                               "loc": {
                                 "start": {
                                   "line": 82,
@@ -730,8 +730,8 @@
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 3241,
-                                "end": 3245,
+                                "start": 3261,
+                                "end": 3265,
                                 "loc": {
                                   "start": {
                                     "line": 82,
@@ -745,8 +745,8 @@
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 3246,
-                                "end": 3251,
+                                "start": 3266,
+                                "end": 3271,
                                 "loc": {
                                   "start": {
                                     "line": 82,
@@ -765,8 +765,8 @@
                             "arguments": [
                               {
                                 "type": "StringLiteral",
-                                "start": 3252,
-                                "end": 3288,
+                                "start": 3272,
+                                "end": 3308,
                                 "loc": {
                                   "start": {
                                     "line": 82,
@@ -788,8 +788,8 @@
                         },
                         {
                           "type": "ReturnStatement",
-                          "start": 3303,
-                          "end": 3309,
+                          "start": 3323,
+                          "end": 3329,
                           "loc": {
                             "start": {
                               "line": 83,
@@ -809,8 +809,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3328,
-                    "end": 3376,
+                    "start": 3348,
+                    "end": 3396,
                     "loc": {
                       "start": {
                         "line": 85,
@@ -823,8 +823,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3328,
-                      "end": 3375,
+                      "start": 3348,
+                      "end": 3395,
                       "loc": {
                         "start": {
                           "line": 85,
@@ -838,8 +838,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3328,
-                        "end": 3351,
+                        "start": 3348,
+                        "end": 3371,
                         "loc": {
                           "start": {
                             "line": 85,
@@ -852,8 +852,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3328,
-                          "end": 3332,
+                          "start": 3348,
+                          "end": 3352,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -867,8 +867,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3333,
-                          "end": 3351,
+                          "start": 3353,
+                          "end": 3371,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -886,8 +886,8 @@
                       },
                       "right": {
                         "type": "MemberExpression",
-                        "start": 3354,
-                        "end": 3375,
+                        "start": 3374,
+                        "end": 3395,
                         "loc": {
                           "start": {
                             "line": 85,
@@ -900,8 +900,8 @@
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 3354,
-                          "end": 3357,
+                          "start": 3374,
+                          "end": 3377,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -917,8 +917,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3358,
-                          "end": 3375,
+                          "start": 3378,
+                          "end": 3395,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -944,8 +944,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-                  "start": 2473,
-                  "end": 3079,
+                  "start": 2493,
+                  "end": 3099,
                   "loc": {
                     "start": {
                       "line": 69,
@@ -962,8 +962,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-                  "start": 3388,
-                  "end": 6111,
+                  "start": 3408,
+                  "end": 6131,
                   "loc": {
                     "start": {
                       "line": 88,
@@ -979,8 +979,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6116,
-              "end": 6231,
+              "start": 6136,
+              "end": 6251,
               "loc": {
                 "start": {
                   "line": 131,
@@ -995,8 +995,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6116,
-                "end": 6120,
+                "start": 6136,
+                "end": 6140,
                 "loc": {
                   "start": {
                     "line": 131,
@@ -1019,8 +1019,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6121,
-                  "end": 6127,
+                  "start": 6141,
+                  "end": 6147,
                   "loc": {
                     "start": {
                       "line": 131,
@@ -1037,8 +1037,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6129,
-                "end": 6231,
+                "start": 6149,
+                "end": 6251,
                 "loc": {
                   "start": {
                     "line": 131,
@@ -1052,8 +1052,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 6139,
-                    "end": 6190,
+                    "start": 6159,
+                    "end": 6210,
                     "loc": {
                       "start": {
                         "line": 132,
@@ -1066,8 +1066,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 6139,
-                      "end": 6189,
+                      "start": 6159,
+                      "end": 6209,
                       "loc": {
                         "start": {
                           "line": 132,
@@ -1081,8 +1081,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 6139,
-                        "end": 6163,
+                        "start": 6159,
+                        "end": 6183,
                         "loc": {
                           "start": {
                             "line": 132,
@@ -1095,8 +1095,8 @@
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 6139,
-                          "end": 6145,
+                          "start": 6159,
+                          "end": 6165,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -1112,8 +1112,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 6146,
-                          "end": 6163,
+                          "start": 6166,
+                          "end": 6183,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -1131,8 +1131,8 @@
                       },
                       "right": {
                         "type": "MemberExpression",
-                        "start": 6166,
-                        "end": 6189,
+                        "start": 6186,
+                        "end": 6209,
                         "loc": {
                           "start": {
                             "line": 132,
@@ -1145,8 +1145,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 6166,
-                          "end": 6170,
+                          "start": 6186,
+                          "end": 6190,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -1160,8 +1160,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 6171,
-                          "end": 6189,
+                          "start": 6191,
+                          "end": 6209,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -1181,8 +1181,8 @@
                   },
                   {
                     "type": "ReturnStatement",
-                    "start": 6199,
-                    "end": 6225,
+                    "start": 6219,
+                    "end": 6245,
                     "loc": {
                       "start": {
                         "line": 133,
@@ -1195,8 +1195,8 @@
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 6206,
-                      "end": 6224,
+                      "start": 6226,
+                      "end": 6244,
                       "loc": {
                         "start": {
                           "line": 133,
@@ -1209,8 +1209,8 @@
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 6206,
-                        "end": 6216,
+                        "start": 6226,
+                        "end": 6236,
                         "loc": {
                           "start": {
                             "line": 133,
@@ -1223,8 +1223,8 @@
                         },
                         "object": {
                           "type": "Super",
-                          "start": 6206,
-                          "end": 6211,
+                          "start": 6226,
+                          "end": 6231,
                           "loc": {
                             "start": {
                               "line": 133,
@@ -1238,8 +1238,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 6212,
-                          "end": 6216,
+                          "start": 6232,
+                          "end": 6236,
                           "loc": {
                             "start": {
                               "line": 133,
@@ -1258,8 +1258,8 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 6217,
-                          "end": 6223,
+                          "start": 6237,
+                          "end": 6243,
                           "loc": {
                             "start": {
                               "line": 133,
@@ -1283,8 +1283,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-                  "start": 3388,
-                  "end": 6111,
+                  "start": 3408,
+                  "end": 6131,
                   "loc": {
                     "start": {
                       "line": 88,
@@ -1306,8 +1306,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 6235,
-        "end": 6261,
+        "start": 6255,
+        "end": 6281,
         "loc": {
           "start": {
             "line": 137,
@@ -1322,8 +1322,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 6243,
-            "end": 6260,
+            "start": 6263,
+            "end": 6280,
             "loc": {
               "start": {
                 "line": 137,
@@ -1336,8 +1336,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 6243,
-              "end": 6260,
+              "start": 6263,
+              "end": 6280,
               "loc": {
                 "start": {
                   "line": 137,
@@ -1353,8 +1353,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 6243,
-              "end": 6260,
+              "start": 6263,
+              "end": 6280,
               "loc": {
                 "start": {
                   "line": 137,
@@ -1374,8 +1374,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 6235,
-        "end": 6261,
+        "start": 6255,
+        "end": 6281,
         "loc": {
           "start": {
             "line": 137,
@@ -1388,8 +1388,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 2421,
-          "end": 6233,
+          "start": 2441,
+          "end": 6253,
           "loc": {
             "start": {
               "line": 67,
@@ -1402,8 +1402,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 2427,
-            "end": 2444,
+            "start": 2447,
+            "end": 2464,
             "loc": {
               "start": {
                 "line": 67,
@@ -1420,8 +1420,8 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 2453,
-            "end": 2465,
+            "start": 2473,
+            "end": 2485,
             "loc": {
               "start": {
                 "line": 67,
@@ -1437,8 +1437,8 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 2466,
-            "end": 6233,
+            "start": 2486,
+            "end": 6253,
             "loc": {
               "start": {
                 "line": 67,
@@ -1452,8 +1452,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 3084,
-                "end": 3382,
+                "start": 3104,
+                "end": 3402,
                 "loc": {
                   "start": {
                     "line": 78,
@@ -1468,8 +1468,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3084,
-                  "end": 3095,
+                  "start": 3104,
+                  "end": 3115,
                   "loc": {
                     "start": {
                       "line": 78,
@@ -1492,8 +1492,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 3096,
-                    "end": 3102,
+                    "start": 3116,
+                    "end": 3122,
                     "loc": {
                       "start": {
                         "line": 78,
@@ -1509,8 +1509,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 3104,
-                    "end": 3107,
+                    "start": 3124,
+                    "end": 3127,
                     "loc": {
                       "start": {
                         "line": 78,
@@ -1527,8 +1527,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3109,
-                  "end": 3382,
+                  "start": 3129,
+                  "end": 3402,
                   "loc": {
                     "start": {
                       "line": 78,
@@ -1542,8 +1542,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 3119,
-                      "end": 3165,
+                      "start": 3139,
+                      "end": 3185,
                       "loc": {
                         "start": {
                           "line": 79,
@@ -1556,8 +1556,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 3119,
-                        "end": 3164,
+                        "start": 3139,
+                        "end": 3184,
                         "loc": {
                           "start": {
                             "line": 79,
@@ -1570,8 +1570,8 @@
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 3119,
-                          "end": 3124,
+                          "start": 3139,
+                          "end": 3144,
                           "loc": {
                             "start": {
                               "line": 79,
@@ -1586,8 +1586,8 @@
                         "arguments": [
                           {
                             "type": "StringLiteral",
-                            "start": 3125,
-                            "end": 3138,
+                            "start": 3145,
+                            "end": 3158,
                             "loc": {
                               "start": {
                                 "line": 79,
@@ -1606,8 +1606,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 3140,
-                            "end": 3146,
+                            "start": 3160,
+                            "end": 3166,
                             "loc": {
                               "start": {
                                 "line": 79,
@@ -1623,8 +1623,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 3148,
-                            "end": 3158,
+                            "start": 3168,
+                            "end": 3178,
                             "loc": {
                               "start": {
                                 "line": 79,
@@ -1640,8 +1640,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 3160,
-                            "end": 3163,
+                            "start": 3180,
+                            "end": 3183,
                             "loc": {
                               "start": {
                                 "line": 79,
@@ -1660,8 +1660,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3174,
-                      "end": 3190,
+                      "start": 3194,
+                      "end": 3210,
                       "loc": {
                         "start": {
                           "line": 80,
@@ -1674,8 +1674,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3174,
-                        "end": 3189,
+                        "start": 3194,
+                        "end": 3209,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -1689,8 +1689,8 @@
                         "operator": "=",
                         "left": {
                           "type": "Identifier",
-                          "start": 3174,
-                          "end": 3177,
+                          "start": 3194,
+                          "end": 3197,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -1706,8 +1706,8 @@
                         },
                         "right": {
                           "type": "LogicalExpression",
-                          "start": 3180,
-                          "end": 3189,
+                          "start": 3200,
+                          "end": 3209,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -1720,8 +1720,8 @@
                           },
                           "left": {
                             "type": "Identifier",
-                            "start": 3180,
-                            "end": 3183,
+                            "start": 3200,
+                            "end": 3203,
                             "loc": {
                               "start": {
                                 "line": 80,
@@ -1738,8 +1738,8 @@
                           "operator": "||",
                           "right": {
                             "type": "ObjectExpression",
-                            "start": 3187,
-                            "end": 3189,
+                            "start": 3207,
+                            "end": 3209,
                             "loc": {
                               "start": {
                                 "line": 80,
@@ -1757,8 +1757,8 @@
                     },
                     {
                       "type": "IfStatement",
-                      "start": 3199,
-                      "end": 3319,
+                      "start": 3219,
+                      "end": 3339,
                       "loc": {
                         "start": {
                           "line": 81,
@@ -1771,8 +1771,8 @@
                       },
                       "test": {
                         "type": "UnaryExpression",
-                        "start": 3203,
-                        "end": 3225,
+                        "start": 3223,
+                        "end": 3245,
                         "loc": {
                           "start": {
                             "line": 81,
@@ -1787,8 +1787,8 @@
                         "prefix": true,
                         "argument": {
                           "type": "MemberExpression",
-                          "start": 3204,
-                          "end": 3225,
+                          "start": 3224,
+                          "end": 3245,
                           "loc": {
                             "start": {
                               "line": 81,
@@ -1801,8 +1801,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 3204,
-                            "end": 3207,
+                            "start": 3224,
+                            "end": 3227,
                             "loc": {
                               "start": {
                                 "line": 81,
@@ -1818,8 +1818,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3208,
-                            "end": 3225,
+                            "start": 3228,
+                            "end": 3245,
                             "loc": {
                               "start": {
                                 "line": 81,
@@ -1841,8 +1841,8 @@
                       },
                       "consequent": {
                         "type": "BlockStatement",
-                        "start": 3227,
-                        "end": 3319,
+                        "start": 3247,
+                        "end": 3339,
                         "loc": {
                           "start": {
                             "line": 81,
@@ -1856,8 +1856,8 @@
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 3241,
-                            "end": 3290,
+                            "start": 3261,
+                            "end": 3310,
                             "loc": {
                               "start": {
                                 "line": 82,
@@ -1870,8 +1870,8 @@
                             },
                             "expression": {
                               "type": "CallExpression",
-                              "start": 3241,
-                              "end": 3289,
+                              "start": 3261,
+                              "end": 3309,
                               "loc": {
                                 "start": {
                                   "line": 82,
@@ -1884,8 +1884,8 @@
                               },
                               "callee": {
                                 "type": "MemberExpression",
-                                "start": 3241,
-                                "end": 3251,
+                                "start": 3261,
+                                "end": 3271,
                                 "loc": {
                                   "start": {
                                     "line": 82,
@@ -1898,8 +1898,8 @@
                                 },
                                 "object": {
                                   "type": "ThisExpression",
-                                  "start": 3241,
-                                  "end": 3245,
+                                  "start": 3261,
+                                  "end": 3265,
                                   "loc": {
                                     "start": {
                                       "line": 82,
@@ -1913,8 +1913,8 @@
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 3246,
-                                  "end": 3251,
+                                  "start": 3266,
+                                  "end": 3271,
                                   "loc": {
                                     "start": {
                                       "line": 82,
@@ -1933,8 +1933,8 @@
                               "arguments": [
                                 {
                                   "type": "StringLiteral",
-                                  "start": 3252,
-                                  "end": 3288,
+                                  "start": 3272,
+                                  "end": 3308,
                                   "loc": {
                                     "start": {
                                       "line": 82,
@@ -1956,8 +1956,8 @@
                           },
                           {
                             "type": "ReturnStatement",
-                            "start": 3303,
-                            "end": 3309,
+                            "start": 3323,
+                            "end": 3329,
                             "loc": {
                               "start": {
                                 "line": 83,
@@ -1977,8 +1977,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3328,
-                      "end": 3376,
+                      "start": 3348,
+                      "end": 3396,
                       "loc": {
                         "start": {
                           "line": 85,
@@ -1991,8 +1991,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3328,
-                        "end": 3375,
+                        "start": 3348,
+                        "end": 3395,
                         "loc": {
                           "start": {
                             "line": 85,
@@ -2006,8 +2006,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3328,
-                          "end": 3351,
+                          "start": 3348,
+                          "end": 3371,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -2020,8 +2020,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3328,
-                            "end": 3332,
+                            "start": 3348,
+                            "end": 3352,
                             "loc": {
                               "start": {
                                 "line": 85,
@@ -2035,8 +2035,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3333,
-                            "end": 3351,
+                            "start": 3353,
+                            "end": 3371,
                             "loc": {
                               "start": {
                                 "line": 85,
@@ -2054,8 +2054,8 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 3354,
-                          "end": 3375,
+                          "start": 3374,
+                          "end": 3395,
                           "loc": {
                             "start": {
                               "line": 85,
@@ -2068,8 +2068,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 3354,
-                            "end": 3357,
+                            "start": 3374,
+                            "end": 3377,
                             "loc": {
                               "start": {
                                 "line": 85,
@@ -2085,8 +2085,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3358,
-                            "end": 3375,
+                            "start": 3378,
+                            "end": 3395,
                             "loc": {
                               "start": {
                                 "line": 85,
@@ -2112,8 +2112,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-                    "start": 2473,
-                    "end": 3079,
+                    "start": 2493,
+                    "end": 3099,
                     "loc": {
                       "start": {
                         "line": 69,
@@ -2130,8 +2130,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-                    "start": 3388,
-                    "end": 6111,
+                    "start": 3408,
+                    "end": 6131,
                     "loc": {
                       "start": {
                         "line": 88,
@@ -2147,8 +2147,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6116,
-                "end": 6231,
+                "start": 6136,
+                "end": 6251,
                 "loc": {
                   "start": {
                     "line": 131,
@@ -2163,8 +2163,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6116,
-                  "end": 6120,
+                  "start": 6136,
+                  "end": 6140,
                   "loc": {
                     "start": {
                       "line": 131,
@@ -2187,8 +2187,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6121,
-                    "end": 6127,
+                    "start": 6141,
+                    "end": 6147,
                     "loc": {
                       "start": {
                         "line": 131,
@@ -2205,8 +2205,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6129,
-                  "end": 6231,
+                  "start": 6149,
+                  "end": 6251,
                   "loc": {
                     "start": {
                       "line": 131,
@@ -2220,8 +2220,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 6139,
-                      "end": 6190,
+                      "start": 6159,
+                      "end": 6210,
                       "loc": {
                         "start": {
                           "line": 132,
@@ -2234,8 +2234,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 6139,
-                        "end": 6189,
+                        "start": 6159,
+                        "end": 6209,
                         "loc": {
                           "start": {
                             "line": 132,
@@ -2249,8 +2249,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 6139,
-                          "end": 6163,
+                          "start": 6159,
+                          "end": 6183,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -2263,8 +2263,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 6139,
-                            "end": 6145,
+                            "start": 6159,
+                            "end": 6165,
                             "loc": {
                               "start": {
                                 "line": 132,
@@ -2280,8 +2280,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 6146,
-                            "end": 6163,
+                            "start": 6166,
+                            "end": 6183,
                             "loc": {
                               "start": {
                                 "line": 132,
@@ -2299,8 +2299,8 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 6166,
-                          "end": 6189,
+                          "start": 6186,
+                          "end": 6209,
                           "loc": {
                             "start": {
                               "line": 132,
@@ -2313,8 +2313,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 6166,
-                            "end": 6170,
+                            "start": 6186,
+                            "end": 6190,
                             "loc": {
                               "start": {
                                 "line": 132,
@@ -2328,8 +2328,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 6171,
-                            "end": 6189,
+                            "start": 6191,
+                            "end": 6209,
                             "loc": {
                               "start": {
                                 "line": 132,
@@ -2349,8 +2349,8 @@
                     },
                     {
                       "type": "ReturnStatement",
-                      "start": 6199,
-                      "end": 6225,
+                      "start": 6219,
+                      "end": 6245,
                       "loc": {
                         "start": {
                           "line": 133,
@@ -2363,8 +2363,8 @@
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 6206,
-                        "end": 6224,
+                        "start": 6226,
+                        "end": 6244,
                         "loc": {
                           "start": {
                             "line": 133,
@@ -2377,8 +2377,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 6206,
-                          "end": 6216,
+                          "start": 6226,
+                          "end": 6236,
                           "loc": {
                             "start": {
                               "line": 133,
@@ -2391,8 +2391,8 @@
                           },
                           "object": {
                             "type": "Super",
-                            "start": 6206,
-                            "end": 6211,
+                            "start": 6226,
+                            "end": 6231,
                             "loc": {
                               "start": {
                                 "line": 133,
@@ -2406,8 +2406,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 6212,
-                            "end": 6216,
+                            "start": 6232,
+                            "end": 6236,
                             "loc": {
                               "start": {
                                 "line": 133,
@@ -2426,8 +2426,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 6217,
-                            "end": 6223,
+                            "start": 6237,
+                            "end": 6243,
                             "loc": {
                               "start": {
                                 "line": 133,
@@ -2451,8 +2451,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-                    "start": 3388,
-                    "end": 6111,
+                    "start": 3408,
+                    "end": 6131,
                     "loc": {
                       "start": {
                         "line": 88,
@@ -2471,9 +2471,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+              "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DModelsPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.3dxml\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
               "start": 99,
-              "end": 2419,
+              "end": 2439,
               "loc": {
                 "start": {
                   "line": 4,
@@ -2499,9 +2499,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DModelsPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.3dxml\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
       "start": 99,
-      "end": 2419,
+      "end": 2439,
       "loc": {
         "start": {
           "line": 4,
@@ -2516,8 +2516,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-      "start": 2473,
-      "end": 3079,
+      "start": 2493,
+      "end": 3099,
       "loc": {
         "start": {
           "line": 69,
@@ -2532,8 +2532,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-      "start": 3388,
-      "end": 6111,
+      "start": 3408,
+      "end": 6131,
       "loc": {
         "start": {
           "line": 88,
@@ -2915,9 +2915,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DModelsPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.3dxml\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
       "start": 99,
-      "end": 2419,
+      "end": 2439,
       "loc": {
         "start": {
           "line": 4,
@@ -2944,8 +2944,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 2421,
-      "end": 2426,
+      "start": 2441,
+      "end": 2446,
       "loc": {
         "start": {
           "line": 67,
@@ -2970,8 +2970,8 @@
         "binop": null
       },
       "value": "XML3DModelsPlugin",
-      "start": 2427,
-      "end": 2444,
+      "start": 2447,
+      "end": 2464,
       "loc": {
         "start": {
           "line": 67,
@@ -2998,8 +2998,8 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 2445,
-      "end": 2452,
+      "start": 2465,
+      "end": 2472,
       "loc": {
         "start": {
           "line": 67,
@@ -3024,8 +3024,8 @@
         "binop": null
       },
       "value": "ModelsPlugin",
-      "start": 2453,
-      "end": 2465,
+      "start": 2473,
+      "end": 2485,
       "loc": {
         "start": {
           "line": 67,
@@ -3049,8 +3049,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2466,
-      "end": 2467,
+      "start": 2486,
+      "end": 2487,
       "loc": {
         "start": {
           "line": 67,
@@ -3065,8 +3065,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-      "start": 2473,
-      "end": 3079,
+      "start": 2493,
+      "end": 3099,
       "loc": {
         "start": {
           "line": 69,
@@ -3091,8 +3091,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 3084,
-      "end": 3095,
+      "start": 3104,
+      "end": 3115,
       "loc": {
         "start": {
           "line": 78,
@@ -3116,8 +3116,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3095,
-      "end": 3096,
+      "start": 3115,
+      "end": 3116,
       "loc": {
         "start": {
           "line": 78,
@@ -3142,8 +3142,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 3096,
-      "end": 3102,
+      "start": 3116,
+      "end": 3122,
       "loc": {
         "start": {
           "line": 78,
@@ -3168,8 +3168,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3102,
-      "end": 3103,
+      "start": 3122,
+      "end": 3123,
       "loc": {
         "start": {
           "line": 78,
@@ -3194,8 +3194,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3104,
-      "end": 3107,
+      "start": 3124,
+      "end": 3127,
       "loc": {
         "start": {
           "line": 78,
@@ -3219,8 +3219,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3107,
-      "end": 3108,
+      "start": 3127,
+      "end": 3128,
       "loc": {
         "start": {
           "line": 78,
@@ -3244,8 +3244,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3109,
-      "end": 3110,
+      "start": 3129,
+      "end": 3130,
       "loc": {
         "start": {
           "line": 78,
@@ -3272,8 +3272,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 3119,
-      "end": 3124,
+      "start": 3139,
+      "end": 3144,
       "loc": {
         "start": {
           "line": 79,
@@ -3297,8 +3297,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3124,
-      "end": 3125,
+      "start": 3144,
+      "end": 3145,
       "loc": {
         "start": {
           "line": 79,
@@ -3324,8 +3324,8 @@
         "updateContext": null
       },
       "value": "XML3DModels",
-      "start": 3125,
-      "end": 3138,
+      "start": 3145,
+      "end": 3158,
       "loc": {
         "start": {
           "line": 79,
@@ -3350,8 +3350,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3138,
-      "end": 3139,
+      "start": 3158,
+      "end": 3159,
       "loc": {
         "start": {
           "line": 79,
@@ -3376,8 +3376,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 3140,
-      "end": 3146,
+      "start": 3160,
+      "end": 3166,
       "loc": {
         "start": {
           "line": 79,
@@ -3402,8 +3402,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3146,
-      "end": 3147,
+      "start": 3166,
+      "end": 3167,
       "loc": {
         "start": {
           "line": 79,
@@ -3428,8 +3428,8 @@
         "binop": null
       },
       "value": "XML3DModel",
-      "start": 3148,
-      "end": 3158,
+      "start": 3168,
+      "end": 3178,
       "loc": {
         "start": {
           "line": 79,
@@ -3454,8 +3454,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3158,
-      "end": 3159,
+      "start": 3178,
+      "end": 3179,
       "loc": {
         "start": {
           "line": 79,
@@ -3480,8 +3480,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3160,
-      "end": 3163,
+      "start": 3180,
+      "end": 3183,
       "loc": {
         "start": {
           "line": 79,
@@ -3505,8 +3505,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3163,
-      "end": 3164,
+      "start": 3183,
+      "end": 3184,
       "loc": {
         "start": {
           "line": 79,
@@ -3531,8 +3531,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3164,
-      "end": 3165,
+      "start": 3184,
+      "end": 3185,
       "loc": {
         "start": {
           "line": 79,
@@ -3557,8 +3557,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3174,
-      "end": 3177,
+      "start": 3194,
+      "end": 3197,
       "loc": {
         "start": {
           "line": 80,
@@ -3584,8 +3584,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3178,
-      "end": 3179,
+      "start": 3198,
+      "end": 3199,
       "loc": {
         "start": {
           "line": 80,
@@ -3610,8 +3610,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3180,
-      "end": 3183,
+      "start": 3200,
+      "end": 3203,
       "loc": {
         "start": {
           "line": 80,
@@ -3637,8 +3637,8 @@
         "updateContext": null
       },
       "value": "||",
-      "start": 3184,
-      "end": 3186,
+      "start": 3204,
+      "end": 3206,
       "loc": {
         "start": {
           "line": 80,
@@ -3662,8 +3662,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3187,
-      "end": 3188,
+      "start": 3207,
+      "end": 3208,
       "loc": {
         "start": {
           "line": 80,
@@ -3687,8 +3687,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3188,
-      "end": 3189,
+      "start": 3208,
+      "end": 3209,
       "loc": {
         "start": {
           "line": 80,
@@ -3713,8 +3713,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3189,
-      "end": 3190,
+      "start": 3209,
+      "end": 3210,
       "loc": {
         "start": {
           "line": 80,
@@ -3741,8 +3741,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 3199,
-      "end": 3201,
+      "start": 3219,
+      "end": 3221,
       "loc": {
         "start": {
           "line": 81,
@@ -3766,8 +3766,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3202,
-      "end": 3203,
+      "start": 3222,
+      "end": 3223,
       "loc": {
         "start": {
           "line": 81,
@@ -3793,8 +3793,8 @@
         "updateContext": null
       },
       "value": "!",
-      "start": 3203,
-      "end": 3204,
+      "start": 3223,
+      "end": 3224,
       "loc": {
         "start": {
           "line": 81,
@@ -3819,8 +3819,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3204,
-      "end": 3207,
+      "start": 3224,
+      "end": 3227,
       "loc": {
         "start": {
           "line": 81,
@@ -3845,8 +3845,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3207,
-      "end": 3208,
+      "start": 3227,
+      "end": 3228,
       "loc": {
         "start": {
           "line": 81,
@@ -3871,8 +3871,8 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 3208,
-      "end": 3225,
+      "start": 3228,
+      "end": 3245,
       "loc": {
         "start": {
           "line": 81,
@@ -3896,8 +3896,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3225,
-      "end": 3226,
+      "start": 3245,
+      "end": 3246,
       "loc": {
         "start": {
           "line": 81,
@@ -3921,8 +3921,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3227,
-      "end": 3228,
+      "start": 3247,
+      "end": 3248,
       "loc": {
         "start": {
           "line": 81,
@@ -3949,8 +3949,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3241,
-      "end": 3245,
+      "start": 3261,
+      "end": 3265,
       "loc": {
         "start": {
           "line": 82,
@@ -3975,8 +3975,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3245,
-      "end": 3246,
+      "start": 3265,
+      "end": 3266,
       "loc": {
         "start": {
           "line": 82,
@@ -4001,8 +4001,8 @@
         "binop": null
       },
       "value": "error",
-      "start": 3246,
-      "end": 3251,
+      "start": 3266,
+      "end": 3271,
       "loc": {
         "start": {
           "line": 82,
@@ -4026,8 +4026,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3251,
-      "end": 3252,
+      "start": 3271,
+      "end": 3272,
       "loc": {
         "start": {
           "line": 82,
@@ -4053,8 +4053,8 @@
         "updateContext": null
       },
       "value": "Config expected: workerScriptsPath",
-      "start": 3252,
-      "end": 3288,
+      "start": 3272,
+      "end": 3308,
       "loc": {
         "start": {
           "line": 82,
@@ -4078,8 +4078,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3288,
-      "end": 3289,
+      "start": 3308,
+      "end": 3309,
       "loc": {
         "start": {
           "line": 82,
@@ -4104,8 +4104,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3289,
-      "end": 3290,
+      "start": 3309,
+      "end": 3310,
       "loc": {
         "start": {
           "line": 82,
@@ -4132,8 +4132,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 3303,
-      "end": 3309,
+      "start": 3323,
+      "end": 3329,
       "loc": {
         "start": {
           "line": 83,
@@ -4157,8 +4157,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3318,
-      "end": 3319,
+      "start": 3338,
+      "end": 3339,
       "loc": {
         "start": {
           "line": 84,
@@ -4185,8 +4185,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3328,
-      "end": 3332,
+      "start": 3348,
+      "end": 3352,
       "loc": {
         "start": {
           "line": 85,
@@ -4211,8 +4211,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3332,
-      "end": 3333,
+      "start": 3352,
+      "end": 3353,
       "loc": {
         "start": {
           "line": 85,
@@ -4237,8 +4237,8 @@
         "binop": null
       },
       "value": "_workerScriptsPath",
-      "start": 3333,
-      "end": 3351,
+      "start": 3353,
+      "end": 3371,
       "loc": {
         "start": {
           "line": 85,
@@ -4264,8 +4264,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3352,
-      "end": 3353,
+      "start": 3372,
+      "end": 3373,
       "loc": {
         "start": {
           "line": 85,
@@ -4290,8 +4290,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 3354,
-      "end": 3357,
+      "start": 3374,
+      "end": 3377,
       "loc": {
         "start": {
           "line": 85,
@@ -4316,8 +4316,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3357,
-      "end": 3358,
+      "start": 3377,
+      "end": 3378,
       "loc": {
         "start": {
           "line": 85,
@@ -4342,8 +4342,8 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 3358,
-      "end": 3375,
+      "start": 3378,
+      "end": 3395,
       "loc": {
         "start": {
           "line": 85,
@@ -4368,8 +4368,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3375,
-      "end": 3376,
+      "start": 3395,
+      "end": 3396,
       "loc": {
         "start": {
           "line": 85,
@@ -4393,8 +4393,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3381,
-      "end": 3382,
+      "start": 3401,
+      "end": 3402,
       "loc": {
         "start": {
           "line": 86,
@@ -4409,8 +4409,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
-      "start": 3388,
-      "end": 6111,
+      "start": 3408,
+      "end": 6131,
       "loc": {
         "start": {
           "line": 88,
@@ -4435,8 +4435,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 6116,
-      "end": 6120,
+      "start": 6136,
+      "end": 6140,
       "loc": {
         "start": {
           "line": 131,
@@ -4460,8 +4460,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6120,
-      "end": 6121,
+      "start": 6140,
+      "end": 6141,
       "loc": {
         "start": {
           "line": 131,
@@ -4486,8 +4486,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 6121,
-      "end": 6127,
+      "start": 6141,
+      "end": 6147,
       "loc": {
         "start": {
           "line": 131,
@@ -4511,8 +4511,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6127,
-      "end": 6128,
+      "start": 6147,
+      "end": 6148,
       "loc": {
         "start": {
           "line": 131,
@@ -4536,8 +4536,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6129,
-      "end": 6130,
+      "start": 6149,
+      "end": 6150,
       "loc": {
         "start": {
           "line": 131,
@@ -4562,8 +4562,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 6139,
-      "end": 6145,
+      "start": 6159,
+      "end": 6165,
       "loc": {
         "start": {
           "line": 132,
@@ -4588,8 +4588,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6145,
-      "end": 6146,
+      "start": 6165,
+      "end": 6166,
       "loc": {
         "start": {
           "line": 132,
@@ -4614,8 +4614,8 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 6146,
-      "end": 6163,
+      "start": 6166,
+      "end": 6183,
       "loc": {
         "start": {
           "line": 132,
@@ -4641,8 +4641,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 6164,
-      "end": 6165,
+      "start": 6184,
+      "end": 6185,
       "loc": {
         "start": {
           "line": 132,
@@ -4669,8 +4669,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 6166,
-      "end": 6170,
+      "start": 6186,
+      "end": 6190,
       "loc": {
         "start": {
           "line": 132,
@@ -4695,8 +4695,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6170,
-      "end": 6171,
+      "start": 6190,
+      "end": 6191,
       "loc": {
         "start": {
           "line": 132,
@@ -4721,8 +4721,8 @@
         "binop": null
       },
       "value": "_workerScriptsPath",
-      "start": 6171,
-      "end": 6189,
+      "start": 6191,
+      "end": 6209,
       "loc": {
         "start": {
           "line": 132,
@@ -4747,8 +4747,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6189,
-      "end": 6190,
+      "start": 6209,
+      "end": 6210,
       "loc": {
         "start": {
           "line": 132,
@@ -4775,8 +4775,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 6199,
-      "end": 6205,
+      "start": 6219,
+      "end": 6225,
       "loc": {
         "start": {
           "line": 133,
@@ -4803,8 +4803,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 6206,
-      "end": 6211,
+      "start": 6226,
+      "end": 6231,
       "loc": {
         "start": {
           "line": 133,
@@ -4829,8 +4829,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6211,
-      "end": 6212,
+      "start": 6231,
+      "end": 6232,
       "loc": {
         "start": {
           "line": 133,
@@ -4855,8 +4855,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 6212,
-      "end": 6216,
+      "start": 6232,
+      "end": 6236,
       "loc": {
         "start": {
           "line": 133,
@@ -4880,8 +4880,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6216,
-      "end": 6217,
+      "start": 6236,
+      "end": 6237,
       "loc": {
         "start": {
           "line": 133,
@@ -4906,8 +4906,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 6217,
-      "end": 6223,
+      "start": 6237,
+      "end": 6243,
       "loc": {
         "start": {
           "line": 133,
@@ -4931,8 +4931,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6223,
-      "end": 6224,
+      "start": 6243,
+      "end": 6244,
       "loc": {
         "start": {
           "line": 133,
@@ -4957,8 +4957,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6224,
-      "end": 6225,
+      "start": 6244,
+      "end": 6245,
       "loc": {
         "start": {
           "line": 133,
@@ -4982,8 +4982,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6230,
-      "end": 6231,
+      "start": 6250,
+      "end": 6251,
       "loc": {
         "start": {
           "line": 134,
@@ -5007,8 +5007,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6232,
-      "end": 6233,
+      "start": 6252,
+      "end": 6253,
       "loc": {
         "start": {
           "line": 135,
@@ -5035,8 +5035,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 6235,
-      "end": 6241,
+      "start": 6255,
+      "end": 6261,
       "loc": {
         "start": {
           "line": 137,
@@ -5060,8 +5060,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6242,
-      "end": 6243,
+      "start": 6262,
+      "end": 6263,
       "loc": {
         "start": {
           "line": 137,
@@ -5086,8 +5086,8 @@
         "binop": null
       },
       "value": "XML3DModelsPlugin",
-      "start": 6243,
-      "end": 6260,
+      "start": 6263,
+      "end": 6280,
       "loc": {
         "start": {
           "line": 137,
@@ -5111,8 +5111,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6260,
-      "end": 6261,
+      "start": 6280,
+      "end": 6281,
       "loc": {
         "start": {
           "line": 137,
@@ -5137,8 +5137,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6261,
-      "end": 6261,
+      "start": 6281,
+      "end": 6281,
       "loc": {
         "start": {
           "line": 137,

@@ -53,39 +53,58 @@
 import {GLTFBigModel} from &quot;../../../xeogl/GLTFBigModel/GLTFBigModel.js&quot;;
 
 /**
- * A viewer plugin that loads large models from [glTF](https://www.khronos.org/gltf/).
+ * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
+ *
+ * For each model loaded, creates a [xeogl.BigModel](http://xeogl.org/docs/classes/BigModel.html) within its
+ * {@link Viewer}&apos;s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+ *
+ *
+ *
+ * See the {@link GLTFBigModelsPlugin#load} method for parameters that you can configure
+ * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.
  *
  * @example
- *
- * // Create a viewer
+ * // Create a xeokit Viewer
  * const viewer = new Viewer({
  *      canvasId: &quot;myCanvas&quot;
  * });
  *
- * // Create a GLTFBigModels plugin within the viewer
+ * // Add a GLTFBigModelsPlugin to the Viewer
  * var plugin = new GLTFBigModelsPlugin(viewer, {
  *      id: &quot;GLTFBigModels&quot;  // Default value
  * });
  *
- * // We can also get the plugin by its ID on the viewer
+ * // We can also get the plugin by its ID on the Viewer
  * plugin = viewer.plugins.GLTFBigModels;
  *
- * // Load the big glTF model
+ * // Load the glTF model
  * // These params can include all the xeogl.GLTFModel configs
  * const model = plugin.load({
  *      id: &quot;myModel&quot;,
- *      src: &quot;./models/gltf/mygltfmodel.gltf&quot;
+ *      src: &quot;models/mygltfmodel.gltf&quot;,
+ *      scale: [0.1, 0.1, 0.1],
+ *      rotate: [90, 0, 0],
+ *      translate: [100,0,0],
+ *      edges: true
  * });
  *
- * // The model is a xeogl.Model
+ * // Recall that the model is a xeogl.Model
  *
  * // When the model has loaded, fit it to view
  * model.on(&quot;loaded&quot;, function() {
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * @class GLTFBigModelsPlugin
+ * // Update properties of the model via the xeogl.Model
+ * model.translate = [200,0,0];
  *
+ * // You can unload the model via the plugin
+ * plugin.unload(&quot;myModel&quot;);
+ *
+ * // Or unload it by calling destroy() on the xeogl.Model itself
+ * model.destroy();
+ *
+ * @class GLTFBigModelsPlugin
  */
 class GLTFBigModelsPlugin extends ModelsPlugin {
 
@@ -100,7 +119,7 @@ class GLTFBigModelsPlugin extends ModelsPlugin {
     }
 
     /**
-     Loads a glTF model from the file system into the viewer.
+     Loads a large-scale glTF model from the file system into the viewer.
 
      @param params {*} Configs
      @param [params.id] {String} Optional ID, unique among all components in the parent {{#crossLink &quot;Scene&quot;}}Scene{{/crossLink}},

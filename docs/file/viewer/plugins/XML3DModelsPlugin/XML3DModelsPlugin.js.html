@@ -61,13 +61,13 @@ import {XML3DModel} from &quot;./XML3DModel.js&quot;;
  * Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript
  * class name cannot begin with a numeral.
  *
- * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the
+ * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DModelsPlugin uses the
  * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses
- * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it
+ * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DModelsPlugin requires that we configure it
  * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See 
  * the example for how to do that. 
  *
- * See the {@link XML3DModels#load} method for parameters that you can configure
+ * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure
  * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.
  *
  * @example
@@ -89,7 +89,7 @@ import {XML3DModel} from &quot;./XML3DModel.js&quot;;
  * // These params can include all the xeogl.OBJModel configs
  * const model = plugin.load({
  *      id: &quot;myModel&quot;,
- *      src: &quot;models/my3DXMLModel.obj&quot;,
+ *      src: &quot;models/my3DXMLModel.3dxml&quot;,
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
