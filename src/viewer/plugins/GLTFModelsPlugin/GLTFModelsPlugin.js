@@ -44,6 +44,15 @@ import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
+ * // Update properties of the model via the xeogl.Model
+ * model.translate = [200,0,0];
+ *
+ * // You can unload the model via the plugin
+ * plugin.unload("myModel");
+ *
+ * // Or unload it by calling destroy() on the xeogl.Model itself
+ * model.destroy();
+ *
  * @class GLTFModelsPlugin
  */
 class GLTFModelsPlugin extends ModelsPlugin {
