@@ -1,13 +1,13 @@
 {
-  "coverage": "35.65%",
+  "coverage": "36.17%",
   "expectCount": 387,
-  "actualCount": 138,
+  "actualCount": 140,
   "files": {
     "viewer/ModelsPlugin.js": {
       "expectCount": 13,
       "actualCount": 12,
       "undocumentLines": [
-        122
+        119
       ]
     },
     "viewer/Plugin.js": {
@@ -232,7 +232,7 @@
       "expectCount": 4,
       "actualCount": 3,
       "undocumentLines": [
-        65
+        130
       ]
     },
     "viewer/plugins/LightsPlugin/LightsPlugin.js": {
@@ -245,17 +245,13 @@
     },
     "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js": {
       "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        51
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js": {
       "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        50
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
       "expectCount": 10,
@@ -301,7 +297,7 @@
       "expectCount": 4,
       "actualCount": 3,
       "undocumentLines": [
-        50
+        85
       ]
     },
     "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test1.js": {

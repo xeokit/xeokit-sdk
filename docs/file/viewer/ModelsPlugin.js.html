@@ -53,7 +53,7 @@
 import {Plugin} from &quot;./Plugin.js&quot;;
 
 /**
- Base class for Viewer plugins that load models.
+ Base class for {@link Viewer} plugins that load models.
 
  @class ModelsPlugin
  */
@@ -92,11 +92,11 @@ class ModelsPlugin extends Plugin {
     /**
      * Loads a model into this Plugin&apos;s {@link Viewer}.
      *
-     * @param params {*} Loading params.
-     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer&apos;s xeogl.Scene.
+     * @param {*} params  Loading params.
+     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer&apos;s xeogl.Scene.
      * @returns {{xeogl.Model}} A &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; representing the loaded model
      */
-    load(params, ok) {
+    load(params) {
         const id = params.id;
         if (!id) {
             this.error(&quot;load() param expected: id&quot;);
@@ -113,14 +113,11 @@ class ModelsPlugin extends Plugin {
             delete this.models[id];
             delete this._modelLoadParams[id];
         });
-        if (ok) {
-            model.once(&quot;loaded&quot;, ok);
-        }
         return model;
     }
 
     /**
-     * Unloads and destroys a model that was previously loaded by this Plugin.
+     * Unloads a model that was previously loaded by this Plugin.
      *
      * @param {String} id  ID of model to unload.
      */
@@ -181,7 +178,7 @@ class ModelsPlugin extends Plugin {
     }
 
     /**
-     * Destroys models loaded by this plugin.
+     * Unloads models loaded by this plugin.
      */
     clear() {
         for (const id in this.models) {

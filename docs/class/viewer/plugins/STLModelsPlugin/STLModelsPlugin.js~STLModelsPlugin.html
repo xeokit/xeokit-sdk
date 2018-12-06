@@ -49,13 +49,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {STLModelsPlugin} from &apos;<span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber37">xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {STLModelsPlugin} from &apos;<span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber81">xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber37">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber81">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -75,7 +75,25 @@
 
   
   
-  <div class="description" data-ice="description"><p>A viewer plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> format.</p>
+  <div class="description" data-ice="description"><p>A viewer plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.</p>
+<p>For each model loaded, creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within its
+<span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+<p>Supports both binary and ASCII formats.</p>
+<h2 id="smoothing-stl-normals">Smoothing STL Normals</h2><p>STL models are normally flat-shaded, however providing a <code>smoothNormals</code> parameter when loading gives a smooth
+appearance. Triangles in STL are disjoint, where each triangle has its own separate vertex positions, normals and
+(optionally) colors. This means that you can have gaps between triangles in an STL model. Normals for each triangle
+are perpendicular to the triangle&apos;s surface, which gives the model a faceted appearance by default.</p>
+<p>The <code>smoothNormals</code> parameter causes the plugin to recalculate the STL normals, so that each normal&apos;s direction is
+the average of the orientations of the triangles adjacent to its vertex. When smoothing, each vertex normal is set to
+the average of the orientations of all other triangles that have a vertex at the same position, excluding those triangles
+whose direction deviates from the direction of the vertice&apos;s triangle by a threshold given in
+the <code>smoothNormalsAngleThreshold</code> loading parameter. This makes smoothing robust for hard edges.</p>
+<h2 id="creating-separate-meshes">Creating Separate Meshes</h2><p>An STL model is normally one single mesh, however providing a <code>splitMeshes</code> parameter when loading
+will create a separate <a href="http://xeogl.org/docs/classes/Mesh.html">xeogl.Mesh</a> within the
+<a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> for each group of faces that share the same vertex colors.
+This option only works with binary STL files.</p>
+<p>See the <span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-method-load">STLModelsPlugin#load</a></span> method for parameters that you can configure
+each <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with as you load it.</p>
 </div>
   
 
@@ -86,32 +104,48 @@
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Create a viewer
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Create a xeokit Viewer
 const viewer = new Viewer({
      canvasId: &quot;myCanvas&quot;
 });
 
-// Create an STLModels plugin within the viewer
-var plugin = new SSTLModelsPlugin(viewer, {
+// Add an STLModelsPlugin to the Viewer
+var plugin = new GLTFModelsPlugin(viewer, {
      id: &quot;STLModels&quot;  // Default value
 });
 
-// We can also get the plugin by its ID on the viewer
+// We can also get the plugin by its ID on the Viewer
 plugin = viewer.plugins.STLModels;
 
-// Load the STL model
+// Load the glTF model
 // These params can include all the xeogl.STLModel configs
 const model = plugin.load({
      id: &quot;myModel&quot;,
-     src: &quot;./models/stl/mystlmodel.obj&quot;
+     src: &quot;models/mySTLModel.stl&quot;,
+     scale: [0.1, 0.1, 0.1],
+     rotate: [90, 0, 0],
+     translate: [100,0,0],
+     edges: true,
+     smoothNormals: true,                // Default
+     smoothNormalsAngleThreshold: 20,    // Default
+     splitMeshes: true                   // Default
 });
 
-// The model is a xeogl.Model
+// Recall that the model is a xeogl.Model
 
 // When the model has loaded, fit it to view
 model.on(&quot;loaded&quot;, function() {
      viewer.cameraFlight.flyTo(model);
-});</code></pre>
+});
+
+// Update properties of the model via the xeogl.Model
+model.translate = [200,0,0];
+
+// You can unload the model via the plugin
+plugin.unload(&quot;myModel&quot;);
+
+// Or unload it by calling destroy() on the xeogl.Model itself
+model.destroy();</code></pre>
     </div>
 </div>
 
@@ -176,13 +210,15 @@ model.on(&quot;loaded&quot;, function() {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Loads an STL model from a file into this STLModelsPlugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -486,7 +522,7 @@ model.on(&quot;loaded&quot;, function() {
       <div>
         
         
-        <div data-ice="description"><p>Destroys models loaded by this plugin.</p>
+        <div data-ice="description"><p>Unloads models loaded by this plugin.</p>
 </div>
       </div>
     </td>
@@ -573,7 +609,7 @@ model.on(&quot;loaded&quot;, function() {
       <div>
         
         
-        <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
+        <div data-ice="description"><p>Unloads a model that was previously loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -602,7 +638,7 @@ model.on(&quot;loaded&quot;, function() {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -678,18 +714,19 @@ model.on(&quot;loaded&quot;, function() {
     
     
     
-    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): <span>*</span></span>
+    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber50">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Loads a model into this Plugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+  <div data-ice="description"><p>Loads an STL model from a file into this STLModelsPlugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">ModelsPlugin#load</a></span></div>
@@ -706,7 +743,122 @@ model.on(&quot;loaded&quot;, function() {
       <td data-ice="name" class="code" data-depth="0">params</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Loading parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>ID to assign to the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>,
+unique among all components in the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.src</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to an STL file.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.parent</td>
+      <td data-ice="type" class="code"><span>xeogl.Object</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The parent <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a>,
+if we want to graft the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> into a xeogl object hierarchy.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether or not xeogl renders the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with edges emphasized.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.position</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local 3D position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.scale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,1,1]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local scale.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.rotation</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local
+rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
+      <td data-ice="description"><p>The
+<a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local modelling transform matrix. Overrides
+the position, scale and rotation parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.backfaces</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When true, allows visible backfaces, wherever specified in the STL.
+When false, ignores backfaces.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.smoothNormals</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, automatically converts face-oriented normals to vertex
+normals for a smooth appearance.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.smoothNormalsAngleThreshold</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 20</li></ul></td>
+      <td data-ice="description"><p>When ghosting, highlighting, selecting or edging, this is the threshold
+angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edgeThreshold</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 20</li></ul></td>
+      <td data-ice="description"><p>When ghosting, highlighting, selecting or edging, this is the threshold
+angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.splitMeshes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, creates a
+separate <a href="http://xeogl.org/docs/classes/Mesh.html">xeogl.Mesh</a> for each group of faces that share the same vertex
+colors. Only works with binary STL.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -718,8 +870,9 @@ model.on(&quot;loaded&quot;, function() {
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded STL model.</p>
+</td>
         </tr>
       </tbody>
     </table>

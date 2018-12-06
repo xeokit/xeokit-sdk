@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2232,
+  "end": 6261,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 63,
+      "line": 137,
       "column": 26
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2232,
+    "end": 6261,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 63,
+        "line": 137,
         "column": 26
       }
     },
@@ -202,16 +202,16 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Default value\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n ",
-            "start": 100,
-            "end": 1060,
+            "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+            "start": 99,
+            "end": 2419,
             "loc": {
               "start": {
-                "line": 5,
+                "line": 4,
                 "column": 0
               },
               "end": {
-                "line": 31,
+                "line": 65,
                 "column": 3
               }
             }
@@ -220,29 +220,29 @@
       },
       {
         "type": "Identifier",
-        "start": 1061,
-        "end": 2204,
+        "start": 2421,
+        "end": 6233,
         "loc": {
           "start": {
-            "line": 32,
+            "line": 67,
             "column": 0
           },
           "end": {
-            "line": 61,
+            "line": 135,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 1067,
-          "end": 1084,
+          "start": 2427,
+          "end": 2444,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 67,
               "column": 6
             },
             "end": {
-              "line": 32,
+              "line": 67,
               "column": 23
             },
             "identifierName": "XML3DModelsPlugin"
@@ -252,15 +252,15 @@
         },
         "superClass": {
           "type": "Identifier",
-          "start": 1093,
-          "end": 1105,
+          "start": 2453,
+          "end": 2465,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 67,
               "column": 32
             },
             "end": {
-              "line": 32,
+              "line": 67,
               "column": 44
             },
             "identifierName": "ModelsPlugin"
@@ -269,30 +269,30 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 1106,
-          "end": 2204,
+          "start": 2466,
+          "end": 6233,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 67,
               "column": 45
             },
             "end": {
-              "line": 61,
+              "line": 135,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 1724,
-              "end": 2022,
+              "start": 3084,
+              "end": 3382,
               "loc": {
                 "start": {
-                  "line": 43,
+                  "line": 78,
                   "column": 4
                 },
                 "end": {
-                  "line": 51,
+                  "line": 86,
                   "column": 5
                 }
               },
@@ -300,15 +300,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1724,
-                "end": 1735,
+                "start": 3084,
+                "end": 3095,
                 "loc": {
                   "start": {
-                    "line": 43,
+                    "line": 78,
                     "column": 4
                   },
                   "end": {
-                    "line": 43,
+                    "line": 78,
                     "column": 15
                   },
                   "identifierName": "constructor"
@@ -324,15 +324,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 1736,
-                  "end": 1742,
+                  "start": 3096,
+                  "end": 3102,
                   "loc": {
                     "start": {
-                      "line": 43,
+                      "line": 78,
                       "column": 16
                     },
                     "end": {
-                      "line": 43,
+                      "line": 78,
                       "column": 22
                     },
                     "identifierName": "viewer"
@@ -341,15 +341,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 1744,
-                  "end": 1747,
+                  "start": 3104,
+                  "end": 3107,
                   "loc": {
                     "start": {
-                      "line": 43,
+                      "line": 78,
                       "column": 24
                     },
                     "end": {
-                      "line": 43,
+                      "line": 78,
                       "column": 27
                     },
                     "identifierName": "cfg"
@@ -359,58 +359,58 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 1749,
-                "end": 2022,
+                "start": 3109,
+                "end": 3382,
                 "loc": {
                   "start": {
-                    "line": 43,
+                    "line": 78,
                     "column": 29
                   },
                   "end": {
-                    "line": 51,
+                    "line": 86,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 1759,
-                    "end": 1805,
+                    "start": 3119,
+                    "end": 3165,
                     "loc": {
                       "start": {
-                        "line": 44,
+                        "line": 79,
                         "column": 8
                       },
                       "end": {
-                        "line": 44,
+                        "line": 79,
                         "column": 54
                       }
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 1759,
-                      "end": 1804,
+                      "start": 3119,
+                      "end": 3164,
                       "loc": {
                         "start": {
-                          "line": 44,
+                          "line": 79,
                           "column": 8
                         },
                         "end": {
-                          "line": 44,
+                          "line": 79,
                           "column": 53
                         }
                       },
                       "callee": {
                         "type": "Super",
-                        "start": 1759,
-                        "end": 1764,
+                        "start": 3119,
+                        "end": 3124,
                         "loc": {
                           "start": {
-                            "line": 44,
+                            "line": 79,
                             "column": 8
                           },
                           "end": {
-                            "line": 44,
+                            "line": 79,
                             "column": 13
                           }
                         }
@@ -418,15 +418,15 @@
                       "arguments": [
                         {
                           "type": "StringLiteral",
-                          "start": 1765,
-                          "end": 1778,
+                          "start": 3125,
+                          "end": 3138,
                           "loc": {
                             "start": {
-                              "line": 44,
+                              "line": 79,
                               "column": 14
                             },
                             "end": {
-                              "line": 44,
+                              "line": 79,
                               "column": 27
                             }
                           },
@@ -438,15 +438,15 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1780,
-                          "end": 1786,
+                          "start": 3140,
+                          "end": 3146,
                           "loc": {
                             "start": {
-                              "line": 44,
+                              "line": 79,
                               "column": 29
                             },
                             "end": {
-                              "line": 44,
+                              "line": 79,
                               "column": 35
                             },
                             "identifierName": "viewer"
@@ -455,15 +455,15 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1788,
-                          "end": 1798,
+                          "start": 3148,
+                          "end": 3158,
                           "loc": {
                             "start": {
-                              "line": 44,
+                              "line": 79,
                               "column": 37
                             },
                             "end": {
-                              "line": 44,
+                              "line": 79,
                               "column": 47
                             },
                             "identifierName": "XML3DModel"
@@ -472,15 +472,15 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 1800,
-                          "end": 1803,
+                          "start": 3160,
+                          "end": 3163,
                           "loc": {
                             "start": {
-                              "line": 44,
+                              "line": 79,
                               "column": 49
                             },
                             "end": {
-                              "line": 44,
+                              "line": 79,
                               "column": 52
                             },
                             "identifierName": "cfg"
@@ -492,44 +492,44 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 1814,
-                    "end": 1830,
+                    "start": 3174,
+                    "end": 3190,
                     "loc": {
                       "start": {
-                        "line": 45,
+                        "line": 80,
                         "column": 8
                       },
                       "end": {
-                        "line": 45,
+                        "line": 80,
                         "column": 24
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 1814,
-                      "end": 1829,
+                      "start": 3174,
+                      "end": 3189,
                       "loc": {
                         "start": {
-                          "line": 45,
+                          "line": 80,
                           "column": 8
                         },
                         "end": {
-                          "line": 45,
+                          "line": 80,
                           "column": 23
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "Identifier",
-                        "start": 1814,
-                        "end": 1817,
+                        "start": 3174,
+                        "end": 3177,
                         "loc": {
                           "start": {
-                            "line": 45,
+                            "line": 80,
                             "column": 8
                           },
                           "end": {
-                            "line": 45,
+                            "line": 80,
                             "column": 11
                           },
                           "identifierName": "cfg"
@@ -538,29 +538,29 @@
                       },
                       "right": {
                         "type": "LogicalExpression",
-                        "start": 1820,
-                        "end": 1829,
+                        "start": 3180,
+                        "end": 3189,
                         "loc": {
                           "start": {
-                            "line": 45,
+                            "line": 80,
                             "column": 14
                           },
                           "end": {
-                            "line": 45,
+                            "line": 80,
                             "column": 23
                           }
                         },
                         "left": {
                           "type": "Identifier",
-                          "start": 1820,
-                          "end": 1823,
+                          "start": 3180,
+                          "end": 3183,
                           "loc": {
                             "start": {
-                              "line": 45,
+                              "line": 80,
                               "column": 14
                             },
                             "end": {
-                              "line": 45,
+                              "line": 80,
                               "column": 17
                             },
                             "identifierName": "cfg"
@@ -570,15 +570,15 @@
                         "operator": "||",
                         "right": {
                           "type": "ObjectExpression",
-                          "start": 1827,
-                          "end": 1829,
+                          "start": 3187,
+                          "end": 3189,
                           "loc": {
                             "start": {
-                              "line": 45,
+                              "line": 80,
                               "column": 21
                             },
                             "end": {
-                              "line": 45,
+                              "line": 80,
                               "column": 23
                             }
                           },
@@ -589,29 +589,29 @@
                   },
                   {
                     "type": "IfStatement",
-                    "start": 1839,
-                    "end": 1959,
+                    "start": 3199,
+                    "end": 3319,
                     "loc": {
                       "start": {
-                        "line": 46,
+                        "line": 81,
                         "column": 8
                       },
                       "end": {
-                        "line": 49,
+                        "line": 84,
                         "column": 9
                       }
                     },
                     "test": {
                       "type": "UnaryExpression",
-                      "start": 1843,
-                      "end": 1865,
+                      "start": 3203,
+                      "end": 3225,
                       "loc": {
                         "start": {
-                          "line": 46,
+                          "line": 81,
                           "column": 12
                         },
                         "end": {
-                          "line": 46,
+                          "line": 81,
                           "column": 34
                         }
                       },
@@ -619,29 +619,29 @@
                       "prefix": true,
                       "argument": {
                         "type": "MemberExpression",
-                        "start": 1844,
-                        "end": 1865,
+                        "start": 3204,
+                        "end": 3225,
                         "loc": {
                           "start": {
-                            "line": 46,
+                            "line": 81,
                             "column": 13
                           },
                           "end": {
-                            "line": 46,
+                            "line": 81,
                             "column": 34
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 1844,
-                          "end": 1847,
+                          "start": 3204,
+                          "end": 3207,
                           "loc": {
                             "start": {
-                              "line": 46,
+                              "line": 81,
                               "column": 13
                             },
                             "end": {
-                              "line": 46,
+                              "line": 81,
                               "column": 16
                             },
                             "identifierName": "cfg"
@@ -650,15 +650,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1848,
-                          "end": 1865,
+                          "start": 3208,
+                          "end": 3225,
                           "loc": {
                             "start": {
-                              "line": 46,
+                              "line": 81,
                               "column": 17
                             },
                             "end": {
-                              "line": 46,
+                              "line": 81,
                               "column": 34
                             },
                             "identifierName": "workerScriptsPath"
@@ -673,87 +673,87 @@
                     },
                     "consequent": {
                       "type": "BlockStatement",
-                      "start": 1867,
-                      "end": 1959,
+                      "start": 3227,
+                      "end": 3319,
                       "loc": {
                         "start": {
-                          "line": 46,
+                          "line": 81,
                           "column": 36
                         },
                         "end": {
-                          "line": 49,
+                          "line": 84,
                           "column": 9
                         }
                       },
                       "body": [
                         {
                           "type": "ExpressionStatement",
-                          "start": 1881,
-                          "end": 1930,
+                          "start": 3241,
+                          "end": 3290,
                           "loc": {
                             "start": {
-                              "line": 47,
+                              "line": 82,
                               "column": 12
                             },
                             "end": {
-                              "line": 47,
+                              "line": 82,
                               "column": 61
                             }
                           },
                           "expression": {
                             "type": "CallExpression",
-                            "start": 1881,
-                            "end": 1929,
+                            "start": 3241,
+                            "end": 3289,
                             "loc": {
                               "start": {
-                                "line": 47,
+                                "line": 82,
                                 "column": 12
                               },
                               "end": {
-                                "line": 47,
+                                "line": 82,
                                 "column": 60
                               }
                             },
                             "callee": {
                               "type": "MemberExpression",
-                              "start": 1881,
-                              "end": 1891,
+                              "start": 3241,
+                              "end": 3251,
                               "loc": {
                                 "start": {
-                                  "line": 47,
+                                  "line": 82,
                                   "column": 12
                                 },
                                 "end": {
-                                  "line": 47,
+                                  "line": 82,
                                   "column": 22
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 1881,
-                                "end": 1885,
+                                "start": 3241,
+                                "end": 3245,
                                 "loc": {
                                   "start": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 12
                                   },
                                   "end": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 16
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 1886,
-                                "end": 1891,
+                                "start": 3246,
+                                "end": 3251,
                                 "loc": {
                                   "start": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 17
                                   },
                                   "end": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 22
                                   },
                                   "identifierName": "error"
@@ -765,15 +765,15 @@
                             "arguments": [
                               {
                                 "type": "StringLiteral",
-                                "start": 1892,
-                                "end": 1928,
+                                "start": 3252,
+                                "end": 3288,
                                 "loc": {
                                   "start": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 23
                                   },
                                   "end": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 59
                                   }
                                 },
@@ -788,15 +788,15 @@
                         },
                         {
                           "type": "ReturnStatement",
-                          "start": 1943,
-                          "end": 1949,
+                          "start": 3303,
+                          "end": 3309,
                           "loc": {
                             "start": {
-                              "line": 48,
+                              "line": 83,
                               "column": 12
                             },
                             "end": {
-                              "line": 48,
+                              "line": 83,
                               "column": 18
                             }
                           },
@@ -809,73 +809,73 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 1968,
-                    "end": 2016,
+                    "start": 3328,
+                    "end": 3376,
                     "loc": {
                       "start": {
-                        "line": 50,
+                        "line": 85,
                         "column": 8
                       },
                       "end": {
-                        "line": 50,
+                        "line": 85,
                         "column": 56
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 1968,
-                      "end": 2015,
+                      "start": 3328,
+                      "end": 3375,
                       "loc": {
                         "start": {
-                          "line": 50,
+                          "line": 85,
                           "column": 8
                         },
                         "end": {
-                          "line": 50,
+                          "line": 85,
                           "column": 55
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 1968,
-                        "end": 1991,
+                        "start": 3328,
+                        "end": 3351,
                         "loc": {
                           "start": {
-                            "line": 50,
+                            "line": 85,
                             "column": 8
                           },
                           "end": {
-                            "line": 50,
+                            "line": 85,
                             "column": 31
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1968,
-                          "end": 1972,
+                          "start": 3328,
+                          "end": 3332,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 8
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 12
                             }
                           }
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1973,
-                          "end": 1991,
+                          "start": 3333,
+                          "end": 3351,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 13
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 31
                             },
                             "identifierName": "_workerScriptsPath"
@@ -886,29 +886,29 @@
                       },
                       "right": {
                         "type": "MemberExpression",
-                        "start": 1994,
-                        "end": 2015,
+                        "start": 3354,
+                        "end": 3375,
                         "loc": {
                           "start": {
-                            "line": 50,
+                            "line": 85,
                             "column": 34
                           },
                           "end": {
-                            "line": 50,
+                            "line": 85,
                             "column": 55
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 1994,
-                          "end": 1997,
+                          "start": 3354,
+                          "end": 3357,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 34
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 37
                             },
                             "identifierName": "cfg"
@@ -917,15 +917,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1998,
-                          "end": 2015,
+                          "start": 3358,
+                          "end": 3375,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 38
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 55
                             },
                             "identifierName": "workerScriptsPath"
@@ -944,15 +944,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-                  "start": 1113,
-                  "end": 1719,
+                  "start": 2473,
+                  "end": 3079,
                   "loc": {
                     "start": {
-                      "line": 34,
+                      "line": 69,
                       "column": 4
                     },
                     "end": {
-                      "line": 42,
+                      "line": 77,
                       "column": 7
                     }
                   }
@@ -961,16 +961,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-                  "start": 2028,
-                  "end": 2082,
+                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+                  "start": 3388,
+                  "end": 6111,
                   "loc": {
                     "start": {
-                      "line": 53,
+                      "line": 88,
                       "column": 4
                     },
                     "end": {
-                      "line": 56,
+                      "line": 130,
                       "column": 7
                     }
                   }
@@ -979,15 +979,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 2087,
-              "end": 2202,
+              "start": 6116,
+              "end": 6231,
               "loc": {
                 "start": {
-                  "line": 57,
+                  "line": 131,
                   "column": 4
                 },
                 "end": {
-                  "line": 60,
+                  "line": 134,
                   "column": 5
                 }
               },
@@ -995,15 +995,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 2087,
-                "end": 2091,
+                "start": 6116,
+                "end": 6120,
                 "loc": {
                   "start": {
-                    "line": 57,
+                    "line": 131,
                     "column": 4
                   },
                   "end": {
-                    "line": 57,
+                    "line": 131,
                     "column": 8
                   },
                   "identifierName": "load"
@@ -1019,15 +1019,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 2092,
-                  "end": 2098,
+                  "start": 6121,
+                  "end": 6127,
                   "loc": {
                     "start": {
-                      "line": 57,
+                      "line": 131,
                       "column": 9
                     },
                     "end": {
-                      "line": 57,
+                      "line": 131,
                       "column": 15
                     },
                     "identifierName": "params"
@@ -1037,73 +1037,73 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 2100,
-                "end": 2202,
+                "start": 6129,
+                "end": 6231,
                 "loc": {
                   "start": {
-                    "line": 57,
+                    "line": 131,
                     "column": 17
                   },
                   "end": {
-                    "line": 60,
+                    "line": 134,
                     "column": 5
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 2110,
-                    "end": 2161,
+                    "start": 6139,
+                    "end": 6190,
                     "loc": {
                       "start": {
-                        "line": 58,
+                        "line": 132,
                         "column": 8
                       },
                       "end": {
-                        "line": 58,
+                        "line": 132,
                         "column": 59
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 2110,
-                      "end": 2160,
+                      "start": 6139,
+                      "end": 6189,
                       "loc": {
                         "start": {
-                          "line": 58,
+                          "line": 132,
                           "column": 8
                         },
                         "end": {
-                          "line": 58,
+                          "line": 132,
                           "column": 58
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 2110,
-                        "end": 2134,
+                        "start": 6139,
+                        "end": 6163,
                         "loc": {
                           "start": {
-                            "line": 58,
+                            "line": 132,
                             "column": 8
                           },
                           "end": {
-                            "line": 58,
+                            "line": 132,
                             "column": 32
                           }
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 2110,
-                          "end": 2116,
+                          "start": 6139,
+                          "end": 6145,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 8
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 14
                             },
                             "identifierName": "params"
@@ -1112,15 +1112,15 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2117,
-                          "end": 2134,
+                          "start": 6146,
+                          "end": 6163,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 15
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 32
                             },
                             "identifierName": "workerScriptsPath"
@@ -1131,44 +1131,44 @@
                       },
                       "right": {
                         "type": "MemberExpression",
-                        "start": 2137,
-                        "end": 2160,
+                        "start": 6166,
+                        "end": 6189,
                         "loc": {
                           "start": {
-                            "line": 58,
+                            "line": 132,
                             "column": 35
                           },
                           "end": {
-                            "line": 58,
+                            "line": 132,
                             "column": 58
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 2137,
-                          "end": 2141,
+                          "start": 6166,
+                          "end": 6170,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 35
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 39
                             }
                           }
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2142,
-                          "end": 2160,
+                          "start": 6171,
+                          "end": 6189,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 40
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 58
                             },
                             "identifierName": "_workerScriptsPath"
@@ -1181,72 +1181,72 @@
                   },
                   {
                     "type": "ReturnStatement",
-                    "start": 2170,
-                    "end": 2196,
+                    "start": 6199,
+                    "end": 6225,
                     "loc": {
                       "start": {
-                        "line": 59,
+                        "line": 133,
                         "column": 8
                       },
                       "end": {
-                        "line": 59,
+                        "line": 133,
                         "column": 34
                       }
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 2177,
-                      "end": 2195,
+                      "start": 6206,
+                      "end": 6224,
                       "loc": {
                         "start": {
-                          "line": 59,
+                          "line": 133,
                           "column": 15
                         },
                         "end": {
-                          "line": 59,
+                          "line": 133,
                           "column": 33
                         }
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 2177,
-                        "end": 2187,
+                        "start": 6206,
+                        "end": 6216,
                         "loc": {
                           "start": {
-                            "line": 59,
+                            "line": 133,
                             "column": 15
                           },
                           "end": {
-                            "line": 59,
+                            "line": 133,
                             "column": 25
                           }
                         },
                         "object": {
                           "type": "Super",
-                          "start": 2177,
-                          "end": 2182,
+                          "start": 6206,
+                          "end": 6211,
                           "loc": {
                             "start": {
-                              "line": 59,
+                              "line": 133,
                               "column": 15
                             },
                             "end": {
-                              "line": 59,
+                              "line": 133,
                               "column": 20
                             }
                           }
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2183,
-                          "end": 2187,
+                          "start": 6212,
+                          "end": 6216,
                           "loc": {
                             "start": {
-                              "line": 59,
+                              "line": 133,
                               "column": 21
                             },
                             "end": {
-                              "line": 59,
+                              "line": 133,
                               "column": 25
                             },
                             "identifierName": "load"
@@ -1258,15 +1258,15 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 2188,
-                          "end": 2194,
+                          "start": 6217,
+                          "end": 6223,
                           "loc": {
                             "start": {
-                              "line": 59,
+                              "line": 133,
                               "column": 26
                             },
                             "end": {
-                              "line": 59,
+                              "line": 133,
                               "column": 32
                             },
                             "identifierName": "params"
@@ -1282,16 +1282,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-                  "start": 2028,
-                  "end": 2082,
+                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+                  "start": 3388,
+                  "end": 6111,
                   "loc": {
                     "start": {
-                      "line": 53,
+                      "line": 88,
                       "column": 4
                     },
                     "end": {
-                      "line": 56,
+                      "line": 130,
                       "column": 7
                     }
                   }
@@ -1306,15 +1306,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2206,
-        "end": 2232,
+        "start": 6235,
+        "end": 6261,
         "loc": {
           "start": {
-            "line": 63,
+            "line": 137,
             "column": 0
           },
           "end": {
-            "line": 63,
+            "line": 137,
             "column": 26
           }
         },
@@ -1322,29 +1322,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 2214,
-            "end": 2231,
+            "start": 6243,
+            "end": 6260,
             "loc": {
               "start": {
-                "line": 63,
+                "line": 137,
                 "column": 8
               },
               "end": {
-                "line": 63,
+                "line": 137,
                 "column": 25
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 2214,
-              "end": 2231,
+              "start": 6243,
+              "end": 6260,
               "loc": {
                 "start": {
-                  "line": 63,
+                  "line": 137,
                   "column": 8
                 },
                 "end": {
-                  "line": 63,
+                  "line": 137,
                   "column": 25
                 },
                 "identifierName": "XML3DModelsPlugin"
@@ -1353,15 +1353,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 2214,
-              "end": 2231,
+              "start": 6243,
+              "end": 6260,
               "loc": {
                 "start": {
-                  "line": 63,
+                  "line": 137,
                   "column": 8
                 },
                 "end": {
-                  "line": 63,
+                  "line": 137,
                   "column": 25
                 },
                 "identifierName": "XML3DModelsPlugin"
@@ -1374,43 +1374,43 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 2206,
-        "end": 2232,
+        "start": 6235,
+        "end": 6261,
         "loc": {
           "start": {
-            "line": 63,
+            "line": 137,
             "column": 0
           },
           "end": {
-            "line": 63,
+            "line": 137,
             "column": 26
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1061,
-          "end": 2204,
+          "start": 2421,
+          "end": 6233,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 67,
               "column": 0
             },
             "end": {
-              "line": 61,
+              "line": 135,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 1067,
-            "end": 1084,
+            "start": 2427,
+            "end": 2444,
             "loc": {
               "start": {
-                "line": 32,
+                "line": 67,
                 "column": 6
               },
               "end": {
-                "line": 32,
+                "line": 67,
                 "column": 23
               },
               "identifierName": "XML3DModelsPlugin"
@@ -1420,15 +1420,15 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 1093,
-            "end": 1105,
+            "start": 2453,
+            "end": 2465,
             "loc": {
               "start": {
-                "line": 32,
+                "line": 67,
                 "column": 32
               },
               "end": {
-                "line": 32,
+                "line": 67,
                 "column": 44
               },
               "identifierName": "ModelsPlugin"
@@ -1437,30 +1437,30 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 1106,
-            "end": 2204,
+            "start": 2466,
+            "end": 6233,
             "loc": {
               "start": {
-                "line": 32,
+                "line": 67,
                 "column": 45
               },
               "end": {
-                "line": 61,
+                "line": 135,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 1724,
-                "end": 2022,
+                "start": 3084,
+                "end": 3382,
                 "loc": {
                   "start": {
-                    "line": 43,
+                    "line": 78,
                     "column": 4
                   },
                   "end": {
-                    "line": 51,
+                    "line": 86,
                     "column": 5
                   }
                 },
@@ -1468,15 +1468,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1724,
-                  "end": 1735,
+                  "start": 3084,
+                  "end": 3095,
                   "loc": {
                     "start": {
-                      "line": 43,
+                      "line": 78,
                       "column": 4
                     },
                     "end": {
-                      "line": 43,
+                      "line": 78,
                       "column": 15
                     },
                     "identifierName": "constructor"
@@ -1492,15 +1492,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1736,
-                    "end": 1742,
+                    "start": 3096,
+                    "end": 3102,
                     "loc": {
                       "start": {
-                        "line": 43,
+                        "line": 78,
                         "column": 16
                       },
                       "end": {
-                        "line": 43,
+                        "line": 78,
                         "column": 22
                       },
                       "identifierName": "viewer"
@@ -1509,15 +1509,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 1744,
-                    "end": 1747,
+                    "start": 3104,
+                    "end": 3107,
                     "loc": {
                       "start": {
-                        "line": 43,
+                        "line": 78,
                         "column": 24
                       },
                       "end": {
-                        "line": 43,
+                        "line": 78,
                         "column": 27
                       },
                       "identifierName": "cfg"
@@ -1527,58 +1527,58 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1749,
-                  "end": 2022,
+                  "start": 3109,
+                  "end": 3382,
                   "loc": {
                     "start": {
-                      "line": 43,
+                      "line": 78,
                       "column": 29
                     },
                     "end": {
-                      "line": 51,
+                      "line": 86,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 1759,
-                      "end": 1805,
+                      "start": 3119,
+                      "end": 3165,
                       "loc": {
                         "start": {
-                          "line": 44,
+                          "line": 79,
                           "column": 8
                         },
                         "end": {
-                          "line": 44,
+                          "line": 79,
                           "column": 54
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 1759,
-                        "end": 1804,
+                        "start": 3119,
+                        "end": 3164,
                         "loc": {
                           "start": {
-                            "line": 44,
+                            "line": 79,
                             "column": 8
                           },
                           "end": {
-                            "line": 44,
+                            "line": 79,
                             "column": 53
                           }
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 1759,
-                          "end": 1764,
+                          "start": 3119,
+                          "end": 3124,
                           "loc": {
                             "start": {
-                              "line": 44,
+                              "line": 79,
                               "column": 8
                             },
                             "end": {
-                              "line": 44,
+                              "line": 79,
                               "column": 13
                             }
                           }
@@ -1586,15 +1586,15 @@
                         "arguments": [
                           {
                             "type": "StringLiteral",
-                            "start": 1765,
-                            "end": 1778,
+                            "start": 3125,
+                            "end": 3138,
                             "loc": {
                               "start": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 14
                               },
                               "end": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 27
                               }
                             },
@@ -1606,15 +1606,15 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1780,
-                            "end": 1786,
+                            "start": 3140,
+                            "end": 3146,
                             "loc": {
                               "start": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 29
                               },
                               "end": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 35
                               },
                               "identifierName": "viewer"
@@ -1623,15 +1623,15 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1788,
-                            "end": 1798,
+                            "start": 3148,
+                            "end": 3158,
                             "loc": {
                               "start": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 37
                               },
                               "end": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 47
                               },
                               "identifierName": "XML3DModel"
@@ -1640,15 +1640,15 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 1800,
-                            "end": 1803,
+                            "start": 3160,
+                            "end": 3163,
                             "loc": {
                               "start": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 49
                               },
                               "end": {
-                                "line": 44,
+                                "line": 79,
                                 "column": 52
                               },
                               "identifierName": "cfg"
@@ -1660,44 +1660,44 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 1814,
-                      "end": 1830,
+                      "start": 3174,
+                      "end": 3190,
                       "loc": {
                         "start": {
-                          "line": 45,
+                          "line": 80,
                           "column": 8
                         },
                         "end": {
-                          "line": 45,
+                          "line": 80,
                           "column": 24
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 1814,
-                        "end": 1829,
+                        "start": 3174,
+                        "end": 3189,
                         "loc": {
                           "start": {
-                            "line": 45,
+                            "line": 80,
                             "column": 8
                           },
                           "end": {
-                            "line": 45,
+                            "line": 80,
                             "column": 23
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "Identifier",
-                          "start": 1814,
-                          "end": 1817,
+                          "start": 3174,
+                          "end": 3177,
                           "loc": {
                             "start": {
-                              "line": 45,
+                              "line": 80,
                               "column": 8
                             },
                             "end": {
-                              "line": 45,
+                              "line": 80,
                               "column": 11
                             },
                             "identifierName": "cfg"
@@ -1706,29 +1706,29 @@
                         },
                         "right": {
                           "type": "LogicalExpression",
-                          "start": 1820,
-                          "end": 1829,
+                          "start": 3180,
+                          "end": 3189,
                           "loc": {
                             "start": {
-                              "line": 45,
+                              "line": 80,
                               "column": 14
                             },
                             "end": {
-                              "line": 45,
+                              "line": 80,
                               "column": 23
                             }
                           },
                           "left": {
                             "type": "Identifier",
-                            "start": 1820,
-                            "end": 1823,
+                            "start": 3180,
+                            "end": 3183,
                             "loc": {
                               "start": {
-                                "line": 45,
+                                "line": 80,
                                 "column": 14
                               },
                               "end": {
-                                "line": 45,
+                                "line": 80,
                                 "column": 17
                               },
                               "identifierName": "cfg"
@@ -1738,15 +1738,15 @@
                           "operator": "||",
                           "right": {
                             "type": "ObjectExpression",
-                            "start": 1827,
-                            "end": 1829,
+                            "start": 3187,
+                            "end": 3189,
                             "loc": {
                               "start": {
-                                "line": 45,
+                                "line": 80,
                                 "column": 21
                               },
                               "end": {
-                                "line": 45,
+                                "line": 80,
                                 "column": 23
                               }
                             },
@@ -1757,29 +1757,29 @@
                     },
                     {
                       "type": "IfStatement",
-                      "start": 1839,
-                      "end": 1959,
+                      "start": 3199,
+                      "end": 3319,
                       "loc": {
                         "start": {
-                          "line": 46,
+                          "line": 81,
                           "column": 8
                         },
                         "end": {
-                          "line": 49,
+                          "line": 84,
                           "column": 9
                         }
                       },
                       "test": {
                         "type": "UnaryExpression",
-                        "start": 1843,
-                        "end": 1865,
+                        "start": 3203,
+                        "end": 3225,
                         "loc": {
                           "start": {
-                            "line": 46,
+                            "line": 81,
                             "column": 12
                           },
                           "end": {
-                            "line": 46,
+                            "line": 81,
                             "column": 34
                           }
                         },
@@ -1787,29 +1787,29 @@
                         "prefix": true,
                         "argument": {
                           "type": "MemberExpression",
-                          "start": 1844,
-                          "end": 1865,
+                          "start": 3204,
+                          "end": 3225,
                           "loc": {
                             "start": {
-                              "line": 46,
+                              "line": 81,
                               "column": 13
                             },
                             "end": {
-                              "line": 46,
+                              "line": 81,
                               "column": 34
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 1844,
-                            "end": 1847,
+                            "start": 3204,
+                            "end": 3207,
                             "loc": {
                               "start": {
-                                "line": 46,
+                                "line": 81,
                                 "column": 13
                               },
                               "end": {
-                                "line": 46,
+                                "line": 81,
                                 "column": 16
                               },
                               "identifierName": "cfg"
@@ -1818,15 +1818,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1848,
-                            "end": 1865,
+                            "start": 3208,
+                            "end": 3225,
                             "loc": {
                               "start": {
-                                "line": 46,
+                                "line": 81,
                                 "column": 17
                               },
                               "end": {
-                                "line": 46,
+                                "line": 81,
                                 "column": 34
                               },
                               "identifierName": "workerScriptsPath"
@@ -1841,87 +1841,87 @@
                       },
                       "consequent": {
                         "type": "BlockStatement",
-                        "start": 1867,
-                        "end": 1959,
+                        "start": 3227,
+                        "end": 3319,
                         "loc": {
                           "start": {
-                            "line": 46,
+                            "line": 81,
                             "column": 36
                           },
                           "end": {
-                            "line": 49,
+                            "line": 84,
                             "column": 9
                           }
                         },
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 1881,
-                            "end": 1930,
+                            "start": 3241,
+                            "end": 3290,
                             "loc": {
                               "start": {
-                                "line": 47,
+                                "line": 82,
                                 "column": 12
                               },
                               "end": {
-                                "line": 47,
+                                "line": 82,
                                 "column": 61
                               }
                             },
                             "expression": {
                               "type": "CallExpression",
-                              "start": 1881,
-                              "end": 1929,
+                              "start": 3241,
+                              "end": 3289,
                               "loc": {
                                 "start": {
-                                  "line": 47,
+                                  "line": 82,
                                   "column": 12
                                 },
                                 "end": {
-                                  "line": 47,
+                                  "line": 82,
                                   "column": 60
                                 }
                               },
                               "callee": {
                                 "type": "MemberExpression",
-                                "start": 1881,
-                                "end": 1891,
+                                "start": 3241,
+                                "end": 3251,
                                 "loc": {
                                   "start": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 12
                                   },
                                   "end": {
-                                    "line": 47,
+                                    "line": 82,
                                     "column": 22
                                   }
                                 },
                                 "object": {
                                   "type": "ThisExpression",
-                                  "start": 1881,
-                                  "end": 1885,
+                                  "start": 3241,
+                                  "end": 3245,
                                   "loc": {
                                     "start": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 12
                                     },
                                     "end": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 16
                                     }
                                   }
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 1886,
-                                  "end": 1891,
+                                  "start": 3246,
+                                  "end": 3251,
                                   "loc": {
                                     "start": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 17
                                     },
                                     "end": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 22
                                     },
                                     "identifierName": "error"
@@ -1933,15 +1933,15 @@
                               "arguments": [
                                 {
                                   "type": "StringLiteral",
-                                  "start": 1892,
-                                  "end": 1928,
+                                  "start": 3252,
+                                  "end": 3288,
                                   "loc": {
                                     "start": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 23
                                     },
                                     "end": {
-                                      "line": 47,
+                                      "line": 82,
                                       "column": 59
                                     }
                                   },
@@ -1956,15 +1956,15 @@
                           },
                           {
                             "type": "ReturnStatement",
-                            "start": 1943,
-                            "end": 1949,
+                            "start": 3303,
+                            "end": 3309,
                             "loc": {
                               "start": {
-                                "line": 48,
+                                "line": 83,
                                 "column": 12
                               },
                               "end": {
-                                "line": 48,
+                                "line": 83,
                                 "column": 18
                               }
                             },
@@ -1977,73 +1977,73 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 1968,
-                      "end": 2016,
+                      "start": 3328,
+                      "end": 3376,
                       "loc": {
                         "start": {
-                          "line": 50,
+                          "line": 85,
                           "column": 8
                         },
                         "end": {
-                          "line": 50,
+                          "line": 85,
                           "column": 56
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 1968,
-                        "end": 2015,
+                        "start": 3328,
+                        "end": 3375,
                         "loc": {
                           "start": {
-                            "line": 50,
+                            "line": 85,
                             "column": 8
                           },
                           "end": {
-                            "line": 50,
+                            "line": 85,
                             "column": 55
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 1968,
-                          "end": 1991,
+                          "start": 3328,
+                          "end": 3351,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 8
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 31
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 1968,
-                            "end": 1972,
+                            "start": 3328,
+                            "end": 3332,
                             "loc": {
                               "start": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 8
                               },
                               "end": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 12
                               }
                             }
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1973,
-                            "end": 1991,
+                            "start": 3333,
+                            "end": 3351,
                             "loc": {
                               "start": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 13
                               },
                               "end": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 31
                               },
                               "identifierName": "_workerScriptsPath"
@@ -2054,29 +2054,29 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 1994,
-                          "end": 2015,
+                          "start": 3354,
+                          "end": 3375,
                           "loc": {
                             "start": {
-                              "line": 50,
+                              "line": 85,
                               "column": 34
                             },
                             "end": {
-                              "line": 50,
+                              "line": 85,
                               "column": 55
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 1994,
-                            "end": 1997,
+                            "start": 3354,
+                            "end": 3357,
                             "loc": {
                               "start": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 34
                               },
                               "end": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 37
                               },
                               "identifierName": "cfg"
@@ -2085,15 +2085,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1998,
-                            "end": 2015,
+                            "start": 3358,
+                            "end": 3375,
                             "loc": {
                               "start": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 38
                               },
                               "end": {
-                                "line": 50,
+                                "line": 85,
                                 "column": 55
                               },
                               "identifierName": "workerScriptsPath"
@@ -2112,15 +2112,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-                    "start": 1113,
-                    "end": 1719,
+                    "start": 2473,
+                    "end": 3079,
                     "loc": {
                       "start": {
-                        "line": 34,
+                        "line": 69,
                         "column": 4
                       },
                       "end": {
-                        "line": 42,
+                        "line": 77,
                         "column": 7
                       }
                     }
@@ -2129,16 +2129,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-                    "start": 2028,
-                    "end": 2082,
+                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+                    "start": 3388,
+                    "end": 6111,
                     "loc": {
                       "start": {
-                        "line": 53,
+                        "line": 88,
                         "column": 4
                       },
                       "end": {
-                        "line": 56,
+                        "line": 130,
                         "column": 7
                       }
                     }
@@ -2147,15 +2147,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2087,
-                "end": 2202,
+                "start": 6116,
+                "end": 6231,
                 "loc": {
                   "start": {
-                    "line": 57,
+                    "line": 131,
                     "column": 4
                   },
                   "end": {
-                    "line": 60,
+                    "line": 134,
                     "column": 5
                   }
                 },
@@ -2163,15 +2163,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2087,
-                  "end": 2091,
+                  "start": 6116,
+                  "end": 6120,
                   "loc": {
                     "start": {
-                      "line": 57,
+                      "line": 131,
                       "column": 4
                     },
                     "end": {
-                      "line": 57,
+                      "line": 131,
                       "column": 8
                     },
                     "identifierName": "load"
@@ -2187,15 +2187,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 2092,
-                    "end": 2098,
+                    "start": 6121,
+                    "end": 6127,
                     "loc": {
                       "start": {
-                        "line": 57,
+                        "line": 131,
                         "column": 9
                       },
                       "end": {
-                        "line": 57,
+                        "line": 131,
                         "column": 15
                       },
                       "identifierName": "params"
@@ -2205,73 +2205,73 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2100,
-                  "end": 2202,
+                  "start": 6129,
+                  "end": 6231,
                   "loc": {
                     "start": {
-                      "line": 57,
+                      "line": 131,
                       "column": 17
                     },
                     "end": {
-                      "line": 60,
+                      "line": 134,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 2110,
-                      "end": 2161,
+                      "start": 6139,
+                      "end": 6190,
                       "loc": {
                         "start": {
-                          "line": 58,
+                          "line": 132,
                           "column": 8
                         },
                         "end": {
-                          "line": 58,
+                          "line": 132,
                           "column": 59
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2110,
-                        "end": 2160,
+                        "start": 6139,
+                        "end": 6189,
                         "loc": {
                           "start": {
-                            "line": 58,
+                            "line": 132,
                             "column": 8
                           },
                           "end": {
-                            "line": 58,
+                            "line": 132,
                             "column": 58
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 2110,
-                          "end": 2134,
+                          "start": 6139,
+                          "end": 6163,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 8
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 32
                             }
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 2110,
-                            "end": 2116,
+                            "start": 6139,
+                            "end": 6145,
                             "loc": {
                               "start": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 8
                               },
                               "end": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 14
                               },
                               "identifierName": "params"
@@ -2280,15 +2280,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2117,
-                            "end": 2134,
+                            "start": 6146,
+                            "end": 6163,
                             "loc": {
                               "start": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 15
                               },
                               "end": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 32
                               },
                               "identifierName": "workerScriptsPath"
@@ -2299,44 +2299,44 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 2137,
-                          "end": 2160,
+                          "start": 6166,
+                          "end": 6189,
                           "loc": {
                             "start": {
-                              "line": 58,
+                              "line": 132,
                               "column": 35
                             },
                             "end": {
-                              "line": 58,
+                              "line": 132,
                               "column": 58
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 2137,
-                            "end": 2141,
+                            "start": 6166,
+                            "end": 6170,
                             "loc": {
                               "start": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 35
                               },
                               "end": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 39
                               }
                             }
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2142,
-                            "end": 2160,
+                            "start": 6171,
+                            "end": 6189,
                             "loc": {
                               "start": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 40
                               },
                               "end": {
-                                "line": 58,
+                                "line": 132,
                                 "column": 58
                               },
                               "identifierName": "_workerScriptsPath"
@@ -2349,72 +2349,72 @@
                     },
                     {
                       "type": "ReturnStatement",
-                      "start": 2170,
-                      "end": 2196,
+                      "start": 6199,
+                      "end": 6225,
                       "loc": {
                         "start": {
-                          "line": 59,
+                          "line": 133,
                           "column": 8
                         },
                         "end": {
-                          "line": 59,
+                          "line": 133,
                           "column": 34
                         }
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 2177,
-                        "end": 2195,
+                        "start": 6206,
+                        "end": 6224,
                         "loc": {
                           "start": {
-                            "line": 59,
+                            "line": 133,
                             "column": 15
                           },
                           "end": {
-                            "line": 59,
+                            "line": 133,
                             "column": 33
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 2177,
-                          "end": 2187,
+                          "start": 6206,
+                          "end": 6216,
                           "loc": {
                             "start": {
-                              "line": 59,
+                              "line": 133,
                               "column": 15
                             },
                             "end": {
-                              "line": 59,
+                              "line": 133,
                               "column": 25
                             }
                           },
                           "object": {
                             "type": "Super",
-                            "start": 2177,
-                            "end": 2182,
+                            "start": 6206,
+                            "end": 6211,
                             "loc": {
                               "start": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 15
                               },
                               "end": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 20
                               }
                             }
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2183,
-                            "end": 2187,
+                            "start": 6212,
+                            "end": 6216,
                             "loc": {
                               "start": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 21
                               },
                               "end": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 25
                               },
                               "identifierName": "load"
@@ -2426,15 +2426,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 2188,
-                            "end": 2194,
+                            "start": 6217,
+                            "end": 6223,
                             "loc": {
                               "start": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 26
                               },
                               "end": {
-                                "line": 59,
+                                "line": 133,
                                 "column": 32
                               },
                               "identifierName": "params"
@@ -2450,16 +2450,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-                    "start": 2028,
-                    "end": 2082,
+                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+                    "start": 3388,
+                    "end": 6111,
                     "loc": {
                       "start": {
-                        "line": 53,
+                        "line": 88,
                         "column": 4
                       },
                       "end": {
-                        "line": 56,
+                        "line": 130,
                         "column": 7
                       }
                     }
@@ -2471,16 +2471,16 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Default value\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n ",
-              "start": 100,
-              "end": 1060,
+              "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+              "start": 99,
+              "end": 2419,
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 4,
                   "column": 0
                 },
                 "end": {
-                  "line": 31,
+                  "line": 65,
                   "column": 3
                 }
               }
@@ -2499,16 +2499,16 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Default value\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n ",
-      "start": 100,
-      "end": 1060,
+      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+      "start": 99,
+      "end": 2419,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 31,
+          "line": 65,
           "column": 3
         }
       }
@@ -2516,31 +2516,31 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-      "start": 1113,
-      "end": 1719,
+      "start": 2473,
+      "end": 3079,
       "loc": {
         "start": {
-          "line": 34,
+          "line": 69,
           "column": 4
         },
         "end": {
-          "line": 42,
+          "line": 77,
           "column": 7
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-      "start": 2028,
-      "end": 2082,
+      "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+      "start": 3388,
+      "end": 6111,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 88,
           "column": 4
         },
         "end": {
-          "line": 56,
+          "line": 130,
           "column": 7
         }
       }
@@ -2915,16 +2915,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Default value\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n ",
-      "start": 100,
-      "end": 1060,
+      "value": "*\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n ",
+      "start": 99,
+      "end": 2419,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 31,
+          "line": 65,
           "column": 3
         }
       }
@@ -2944,15 +2944,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1061,
-      "end": 1066,
+      "start": 2421,
+      "end": 2426,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 67,
           "column": 0
         },
         "end": {
-          "line": 32,
+          "line": 67,
           "column": 5
         }
       }
@@ -2970,15 +2970,15 @@
         "binop": null
       },
       "value": "XML3DModelsPlugin",
-      "start": 1067,
-      "end": 1084,
+      "start": 2427,
+      "end": 2444,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 67,
           "column": 6
         },
         "end": {
-          "line": 32,
+          "line": 67,
           "column": 23
         }
       }
@@ -2998,15 +2998,15 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 1085,
-      "end": 1092,
+      "start": 2445,
+      "end": 2452,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 67,
           "column": 24
         },
         "end": {
-          "line": 32,
+          "line": 67,
           "column": 31
         }
       }
@@ -3024,15 +3024,15 @@
         "binop": null
       },
       "value": "ModelsPlugin",
-      "start": 1093,
-      "end": 1105,
+      "start": 2453,
+      "end": 2465,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 67,
           "column": 32
         },
         "end": {
-          "line": 32,
+          "line": 67,
           "column": 44
         }
       }
@@ -3049,15 +3049,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1106,
-      "end": 1107,
+      "start": 2466,
+      "end": 2467,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 67,
           "column": 45
         },
         "end": {
-          "line": 32,
+          "line": 67,
           "column": 46
         }
       }
@@ -3065,15 +3065,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     ",
-      "start": 1113,
-      "end": 1719,
+      "start": 2473,
+      "end": 3079,
       "loc": {
         "start": {
-          "line": 34,
+          "line": 69,
           "column": 4
         },
         "end": {
-          "line": 42,
+          "line": 77,
           "column": 7
         }
       }
@@ -3091,15 +3091,15 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 1724,
-      "end": 1735,
+      "start": 3084,
+      "end": 3095,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 4
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 15
         }
       }
@@ -3116,15 +3116,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1735,
-      "end": 1736,
+      "start": 3095,
+      "end": 3096,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 15
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 16
         }
       }
@@ -3142,15 +3142,15 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1736,
-      "end": 1742,
+      "start": 3096,
+      "end": 3102,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 16
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 22
         }
       }
@@ -3168,15 +3168,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1742,
-      "end": 1743,
+      "start": 3102,
+      "end": 3103,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 22
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 23
         }
       }
@@ -3194,15 +3194,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1744,
-      "end": 1747,
+      "start": 3104,
+      "end": 3107,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 24
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 27
         }
       }
@@ -3219,15 +3219,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1747,
-      "end": 1748,
+      "start": 3107,
+      "end": 3108,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 27
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 28
         }
       }
@@ -3244,15 +3244,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1749,
-      "end": 1750,
+      "start": 3109,
+      "end": 3110,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 78,
           "column": 29
         },
         "end": {
-          "line": 43,
+          "line": 78,
           "column": 30
         }
       }
@@ -3272,15 +3272,15 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 1759,
-      "end": 1764,
+      "start": 3119,
+      "end": 3124,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 8
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 13
         }
       }
@@ -3297,15 +3297,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1764,
-      "end": 1765,
+      "start": 3124,
+      "end": 3125,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 13
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 14
         }
       }
@@ -3324,15 +3324,15 @@
         "updateContext": null
       },
       "value": "XML3DModels",
-      "start": 1765,
-      "end": 1778,
+      "start": 3125,
+      "end": 3138,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 14
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 27
         }
       }
@@ -3350,15 +3350,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1778,
-      "end": 1779,
+      "start": 3138,
+      "end": 3139,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 27
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 28
         }
       }
@@ -3376,15 +3376,15 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 1780,
-      "end": 1786,
+      "start": 3140,
+      "end": 3146,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 29
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 35
         }
       }
@@ -3402,15 +3402,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1786,
-      "end": 1787,
+      "start": 3146,
+      "end": 3147,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 35
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 36
         }
       }
@@ -3428,15 +3428,15 @@
         "binop": null
       },
       "value": "XML3DModel",
-      "start": 1788,
-      "end": 1798,
+      "start": 3148,
+      "end": 3158,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 37
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 47
         }
       }
@@ -3454,15 +3454,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1798,
-      "end": 1799,
+      "start": 3158,
+      "end": 3159,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 47
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 48
         }
       }
@@ -3480,15 +3480,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1800,
-      "end": 1803,
+      "start": 3160,
+      "end": 3163,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 49
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 52
         }
       }
@@ -3505,15 +3505,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1803,
-      "end": 1804,
+      "start": 3163,
+      "end": 3164,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 52
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 53
         }
       }
@@ -3531,15 +3531,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1804,
-      "end": 1805,
+      "start": 3164,
+      "end": 3165,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 79,
           "column": 53
         },
         "end": {
-          "line": 44,
+          "line": 79,
           "column": 54
         }
       }
@@ -3557,15 +3557,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1814,
-      "end": 1817,
+      "start": 3174,
+      "end": 3177,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 8
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 11
         }
       }
@@ -3584,15 +3584,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1818,
-      "end": 1819,
+      "start": 3178,
+      "end": 3179,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 12
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 13
         }
       }
@@ -3610,15 +3610,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1820,
-      "end": 1823,
+      "start": 3180,
+      "end": 3183,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 14
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 17
         }
       }
@@ -3637,15 +3637,15 @@
         "updateContext": null
       },
       "value": "||",
-      "start": 1824,
-      "end": 1826,
+      "start": 3184,
+      "end": 3186,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 18
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 20
         }
       }
@@ -3662,15 +3662,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1827,
-      "end": 1828,
+      "start": 3187,
+      "end": 3188,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 21
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 22
         }
       }
@@ -3687,15 +3687,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1828,
-      "end": 1829,
+      "start": 3188,
+      "end": 3189,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 22
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 23
         }
       }
@@ -3713,15 +3713,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1829,
-      "end": 1830,
+      "start": 3189,
+      "end": 3190,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 80,
           "column": 23
         },
         "end": {
-          "line": 45,
+          "line": 80,
           "column": 24
         }
       }
@@ -3741,15 +3741,15 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 1839,
-      "end": 1841,
+      "start": 3199,
+      "end": 3201,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 8
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 10
         }
       }
@@ -3766,15 +3766,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1842,
-      "end": 1843,
+      "start": 3202,
+      "end": 3203,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 11
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 12
         }
       }
@@ -3793,15 +3793,15 @@
         "updateContext": null
       },
       "value": "!",
-      "start": 1843,
-      "end": 1844,
+      "start": 3203,
+      "end": 3204,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 12
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 13
         }
       }
@@ -3819,15 +3819,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1844,
-      "end": 1847,
+      "start": 3204,
+      "end": 3207,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 13
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 16
         }
       }
@@ -3845,15 +3845,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1847,
-      "end": 1848,
+      "start": 3207,
+      "end": 3208,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 16
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 17
         }
       }
@@ -3871,15 +3871,15 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 1848,
-      "end": 1865,
+      "start": 3208,
+      "end": 3225,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 17
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 34
         }
       }
@@ -3896,15 +3896,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1865,
-      "end": 1866,
+      "start": 3225,
+      "end": 3226,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 34
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 35
         }
       }
@@ -3921,15 +3921,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1867,
-      "end": 1868,
+      "start": 3227,
+      "end": 3228,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 81,
           "column": 36
         },
         "end": {
-          "line": 46,
+          "line": 81,
           "column": 37
         }
       }
@@ -3949,15 +3949,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1881,
-      "end": 1885,
+      "start": 3241,
+      "end": 3245,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 12
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 16
         }
       }
@@ -3975,15 +3975,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1885,
-      "end": 1886,
+      "start": 3245,
+      "end": 3246,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 16
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 17
         }
       }
@@ -4001,15 +4001,15 @@
         "binop": null
       },
       "value": "error",
-      "start": 1886,
-      "end": 1891,
+      "start": 3246,
+      "end": 3251,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 17
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 22
         }
       }
@@ -4026,15 +4026,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1891,
-      "end": 1892,
+      "start": 3251,
+      "end": 3252,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 22
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 23
         }
       }
@@ -4053,15 +4053,15 @@
         "updateContext": null
       },
       "value": "Config expected: workerScriptsPath",
-      "start": 1892,
-      "end": 1928,
+      "start": 3252,
+      "end": 3288,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 23
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 59
         }
       }
@@ -4078,15 +4078,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1928,
-      "end": 1929,
+      "start": 3288,
+      "end": 3289,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 59
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 60
         }
       }
@@ -4104,15 +4104,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1929,
-      "end": 1930,
+      "start": 3289,
+      "end": 3290,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 82,
           "column": 60
         },
         "end": {
-          "line": 47,
+          "line": 82,
           "column": 61
         }
       }
@@ -4132,15 +4132,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1943,
-      "end": 1949,
+      "start": 3303,
+      "end": 3309,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 83,
           "column": 12
         },
         "end": {
-          "line": 48,
+          "line": 83,
           "column": 18
         }
       }
@@ -4157,15 +4157,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1958,
-      "end": 1959,
+      "start": 3318,
+      "end": 3319,
       "loc": {
         "start": {
-          "line": 49,
+          "line": 84,
           "column": 8
         },
         "end": {
-          "line": 49,
+          "line": 84,
           "column": 9
         }
       }
@@ -4185,15 +4185,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1968,
-      "end": 1972,
+      "start": 3328,
+      "end": 3332,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 8
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 12
         }
       }
@@ -4211,15 +4211,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1972,
-      "end": 1973,
+      "start": 3332,
+      "end": 3333,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 12
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 13
         }
       }
@@ -4237,15 +4237,15 @@
         "binop": null
       },
       "value": "_workerScriptsPath",
-      "start": 1973,
-      "end": 1991,
+      "start": 3333,
+      "end": 3351,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 13
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 31
         }
       }
@@ -4264,15 +4264,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1992,
-      "end": 1993,
+      "start": 3352,
+      "end": 3353,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 32
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 33
         }
       }
@@ -4290,15 +4290,15 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 1994,
-      "end": 1997,
+      "start": 3354,
+      "end": 3357,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 34
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 37
         }
       }
@@ -4316,15 +4316,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1997,
-      "end": 1998,
+      "start": 3357,
+      "end": 3358,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 37
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 38
         }
       }
@@ -4342,15 +4342,15 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 1998,
-      "end": 2015,
+      "start": 3358,
+      "end": 3375,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 38
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 55
         }
       }
@@ -4368,15 +4368,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2015,
-      "end": 2016,
+      "start": 3375,
+      "end": 3376,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 85,
           "column": 55
         },
         "end": {
-          "line": 50,
+          "line": 85,
           "column": 56
         }
       }
@@ -4393,31 +4393,31 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2021,
-      "end": 2022,
+      "start": 3381,
+      "end": 3382,
       "loc": {
         "start": {
-          "line": 51,
+          "line": 86,
           "column": 4
         },
         "end": {
-          "line": 51,
+          "line": 86,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     Loads a 3DXML model into the viewer.\n\n     ",
-      "start": 2028,
-      "end": 2082,
+      "value": "*\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     ",
+      "start": 3388,
+      "end": 6111,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 88,
           "column": 4
         },
         "end": {
-          "line": 56,
+          "line": 130,
           "column": 7
         }
       }
@@ -4435,15 +4435,15 @@
         "binop": null
       },
       "value": "load",
-      "start": 2087,
-      "end": 2091,
+      "start": 6116,
+      "end": 6120,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 131,
           "column": 4
         },
         "end": {
-          "line": 57,
+          "line": 131,
           "column": 8
         }
       }
@@ -4460,15 +4460,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2091,
-      "end": 2092,
+      "start": 6120,
+      "end": 6121,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 131,
           "column": 8
         },
         "end": {
-          "line": 57,
+          "line": 131,
           "column": 9
         }
       }
@@ -4486,15 +4486,15 @@
         "binop": null
       },
       "value": "params",
-      "start": 2092,
-      "end": 2098,
+      "start": 6121,
+      "end": 6127,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 131,
           "column": 9
         },
         "end": {
-          "line": 57,
+          "line": 131,
           "column": 15
         }
       }
@@ -4511,15 +4511,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2098,
-      "end": 2099,
+      "start": 6127,
+      "end": 6128,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 131,
           "column": 15
         },
         "end": {
-          "line": 57,
+          "line": 131,
           "column": 16
         }
       }
@@ -4536,15 +4536,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2100,
-      "end": 2101,
+      "start": 6129,
+      "end": 6130,
       "loc": {
         "start": {
-          "line": 57,
+          "line": 131,
           "column": 17
         },
         "end": {
-          "line": 57,
+          "line": 131,
           "column": 18
         }
       }
@@ -4562,15 +4562,15 @@
         "binop": null
       },
       "value": "params",
-      "start": 2110,
-      "end": 2116,
+      "start": 6139,
+      "end": 6145,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 8
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 14
         }
       }
@@ -4588,15 +4588,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2116,
-      "end": 2117,
+      "start": 6145,
+      "end": 6146,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 14
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 15
         }
       }
@@ -4614,15 +4614,15 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 2117,
-      "end": 2134,
+      "start": 6146,
+      "end": 6163,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 15
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 32
         }
       }
@@ -4641,15 +4641,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2135,
-      "end": 2136,
+      "start": 6164,
+      "end": 6165,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 33
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 34
         }
       }
@@ -4669,15 +4669,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 2137,
-      "end": 2141,
+      "start": 6166,
+      "end": 6170,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 35
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 39
         }
       }
@@ -4695,15 +4695,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2141,
-      "end": 2142,
+      "start": 6170,
+      "end": 6171,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 39
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 40
         }
       }
@@ -4721,15 +4721,15 @@
         "binop": null
       },
       "value": "_workerScriptsPath",
-      "start": 2142,
-      "end": 2160,
+      "start": 6171,
+      "end": 6189,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 40
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 58
         }
       }
@@ -4747,15 +4747,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2160,
-      "end": 2161,
+      "start": 6189,
+      "end": 6190,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 132,
           "column": 58
         },
         "end": {
-          "line": 58,
+          "line": 132,
           "column": 59
         }
       }
@@ -4775,15 +4775,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 2170,
-      "end": 2176,
+      "start": 6199,
+      "end": 6205,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 8
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 14
         }
       }
@@ -4803,15 +4803,15 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 2177,
-      "end": 2182,
+      "start": 6206,
+      "end": 6211,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 15
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 20
         }
       }
@@ -4829,15 +4829,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2182,
-      "end": 2183,
+      "start": 6211,
+      "end": 6212,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 20
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 21
         }
       }
@@ -4855,15 +4855,15 @@
         "binop": null
       },
       "value": "load",
-      "start": 2183,
-      "end": 2187,
+      "start": 6212,
+      "end": 6216,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 21
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 25
         }
       }
@@ -4880,15 +4880,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2187,
-      "end": 2188,
+      "start": 6216,
+      "end": 6217,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 25
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 26
         }
       }
@@ -4906,15 +4906,15 @@
         "binop": null
       },
       "value": "params",
-      "start": 2188,
-      "end": 2194,
+      "start": 6217,
+      "end": 6223,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 26
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 32
         }
       }
@@ -4931,15 +4931,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2194,
-      "end": 2195,
+      "start": 6223,
+      "end": 6224,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 32
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 33
         }
       }
@@ -4957,15 +4957,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2195,
-      "end": 2196,
+      "start": 6224,
+      "end": 6225,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 133,
           "column": 33
         },
         "end": {
-          "line": 59,
+          "line": 133,
           "column": 34
         }
       }
@@ -4982,15 +4982,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2201,
-      "end": 2202,
+      "start": 6230,
+      "end": 6231,
       "loc": {
         "start": {
-          "line": 60,
+          "line": 134,
           "column": 4
         },
         "end": {
-          "line": 60,
+          "line": 134,
           "column": 5
         }
       }
@@ -5007,15 +5007,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2203,
-      "end": 2204,
+      "start": 6232,
+      "end": 6233,
       "loc": {
         "start": {
-          "line": 61,
+          "line": 135,
           "column": 0
         },
         "end": {
-          "line": 61,
+          "line": 135,
           "column": 1
         }
       }
@@ -5035,15 +5035,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 2206,
-      "end": 2212,
+      "start": 6235,
+      "end": 6241,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 137,
           "column": 0
         },
         "end": {
-          "line": 63,
+          "line": 137,
           "column": 6
         }
       }
@@ -5060,15 +5060,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2213,
-      "end": 2214,
+      "start": 6242,
+      "end": 6243,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 137,
           "column": 7
         },
         "end": {
-          "line": 63,
+          "line": 137,
           "column": 8
         }
       }
@@ -5086,15 +5086,15 @@
         "binop": null
       },
       "value": "XML3DModelsPlugin",
-      "start": 2214,
-      "end": 2231,
+      "start": 6243,
+      "end": 6260,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 137,
           "column": 8
         },
         "end": {
-          "line": 63,
+          "line": 137,
           "column": 25
         }
       }
@@ -5111,15 +5111,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2231,
-      "end": 2232,
+      "start": 6260,
+      "end": 6261,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 137,
           "column": 25
         },
         "end": {
-          "line": 63,
+          "line": 137,
           "column": 26
         }
       }
@@ -5137,15 +5137,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2232,
-      "end": 2232,
+      "start": 6261,
+      "end": 6261,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 137,
           "column": 26
         },
         "end": {
-          "line": 63,
+          "line": 137,
           "column": 26
         }
       }

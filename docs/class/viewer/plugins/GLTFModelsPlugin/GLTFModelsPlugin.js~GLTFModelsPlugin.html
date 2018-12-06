@@ -49,13 +49,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber38">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFModelsPlugin} from &apos;<span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber58">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber38">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber58">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -76,33 +76,61 @@
   
   
   <div class="description" data-ice="description"><p>A viewer plugin that loads models from <a href="https://www.khronos.org/gltf/">glTF</a>.</p>
-<p>// Create a viewer
-const viewer = new Viewer({
-     canvasId: &quot;myCanvas&quot;
-});</p>
-<p>// Create a GLTFModels plugin within the viewer
-var plugin = new GLTFModelsPlugin(viewer, {
-     id: &quot;GLTFModels&quot;  // Default value
-});</p>
-<p>// We can also get the plugin by its ID on the viewer
-plugin = viewer.plugins.GLTFModels;</p>
-<p>// Load the glTF model
-// These params can include all the xeogl.GLTFModel configs
-const model = plugin.load({
-     id: &quot;myModel&quot;,
-     src: &quot;./models/gltf/mygltfmodel.gltf&quot;
-});</p>
-<p>// The model is a xeogl.Model</p>
-<p>// When the model has loaded, fit it to view
-model.on(&quot;loaded&quot;, function() {
-     viewer.cameraFlight.flyTo(model);
-});</p>
+<p>For each model loaded, creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within its
+<span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+<p>See the <span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-method-load">GLTFModelsPlugin#load</a></span> method for parameters that you can configure
+each <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with as you load it.</p>
 </div>
   
 
   
 
-  
+  <div data-ice="exampleDocs">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Create a xeokit Viewer
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+// Add a GLTFModelsPlugin to the Viewer
+var plugin = new GLTFModelsPlugin(viewer, {
+     id: &quot;GLTFModels&quot;  // Default value
+});
+
+// We can also get the plugin by its ID on the Viewer
+plugin = viewer.plugins.GLTFModels;
+
+// Load the glTF model
+// These params can include all the xeogl.GLTFModel configs
+const model = plugin.load({
+     id: &quot;myModel&quot;,
+     src: &quot;models/mygltfmodel.gltf&quot;,
+     scale: [0.1, 0.1, 0.1],
+     rotate: [90, 0, 0],
+     translate: [100,0,0],
+     edges: true
+});
+
+// Recall that the model is a xeogl.Model
+
+// When the model has loaded, fit it to view
+model.on(&quot;loaded&quot;, function() {
+     viewer.cameraFlight.flyTo(model);
+});
+
+// Update properties of the model via the xeogl.Model
+model.translate = [200,0,0];
+
+// You can unload the model via the plugin
+plugin.unload(&quot;myModel&quot;);
+
+// Or unload it by calling destroy() on the xeogl.Model itself
+model.destroy();</code></pre>
+    </div>
+</div>
 
   
 
@@ -165,13 +193,14 @@ model.on(&quot;loaded&quot;, function() {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Loads a glTF model from the file system into the viewer.</p>
+        <div data-ice="description"><p>Loads a glTF model from a file into this GLTFModelsPlugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
 </div>
       </div>
     </td>
@@ -476,7 +505,7 @@ model.on(&quot;loaded&quot;, function() {
       <div>
         
         
-        <div data-ice="description"><p>Destroys models loaded by this plugin.</p>
+        <div data-ice="description"><p>Unloads models loaded by this plugin.</p>
 </div>
       </div>
     </td>
@@ -563,7 +592,7 @@ model.on(&quot;loaded&quot;, function() {
       <div>
         
         
-        <div data-ice="description"><p>Unloads and destroys a model that was previously loaded by this Plugin.</p>
+        <div data-ice="description"><p>Unloads a model that was previously loaded by this Plugin.</p>
 </div>
       </div>
     </td>
@@ -592,7 +621,7 @@ model.on(&quot;loaded&quot;, function() {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -668,18 +697,19 @@ model.on(&quot;loaded&quot;, function() {
     
     
     
-    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): <span>*</span></span>
+    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Loads a glTF model from the file system into the viewer.</p>
+  <div data-ice="description"><p>Loads a glTF model from a file into this GLTFModelsPlugin&apos;s <span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+<p>Creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load">ModelsPlugin#load</a></span></div>
@@ -696,7 +726,115 @@ model.on(&quot;loaded&quot;, function() {
       <td data-ice="name" class="code" data-depth="0">params</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Loading parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>ID to assign to the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>,
+unique among all components in the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.src</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to a glTF file.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.parent</td>
+      <td data-ice="type" class="code"><span>xeogl.Object</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The parent <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a>,
+if we want to graft the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> into a xeogl object hierarchy.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether or not xeogl renders the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with edges emphasized.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.position</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local 3D position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.scale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,1,1]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local scale.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.rotation</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local
+rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
+      <td data-ice="description"><p>The
+<a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local modelling transform matrix. Overrides
+the position, scale and rotation parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.lambertMaterials</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When true, gives each <a href="http://xeogl.org/docs/classes/Mesh.html">xeogl.Mesh</a>
+the same <a href="http://xeogl.org/docs/classes/LambertMaterial.html">xeogl.LambertMaterial</a> and a <code>colorize</code>
+value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and
+will cause loading to ignore textures in the glTF.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.backfaces</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When true, allows visible backfaces, wherever specified in the glTF.
+When false, ignores backfaces.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edgeThreshold</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 20</li></ul></td>
+      <td data-ice="description"><p>When ghosting, highlighting, selecting or edging, this is the threshold
+angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.handleNode</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional callback to control how
+<a href="http://xeogl.org/docs/classes/Object.html">xeogl.Objects</a> and
+<a href="http://xeogl.org/docs/classes/Meshes.html">xeogl.Meshes</a> are created as the glTF node hierarchy is
+parsed. See usage examples.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -708,8 +846,9 @@ model.on(&quot;loaded&quot;, function() {
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded glTF model.</p>
+</td>
         </tr>
       </tbody>
     </table>

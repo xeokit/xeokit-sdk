@@ -1,50 +1,5 @@
 [
   {
-    "name": "ModelsPlugin#load",
-    "filePath": "viewer/ModelsPlugin.js",
-    "lines": [
-      {
-        "lineNumber": 40,
-        "line": "    /**"
-      },
-      {
-        "lineNumber": 41,
-        "line": "     * Loads a model into this Plugin's {@link Viewer}."
-      },
-      {
-        "lineNumber": 42,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 43,
-        "line": "     * @param params {*} Loading params."
-      },
-      {
-        "lineNumber": 44,
-        "line": "     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer's xeogl.Scene."
-      },
-      {
-        "lineNumber": 45,
-        "line": "     * @returns {{xeogl.Model}} A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model"
-      },
-      {
-        "lineNumber": 46,
-        "line": "     */"
-      },
-      {
-        "lineNumber": 47,
-        "line": "    load(params, ok) {"
-      }
-    ],
-    "codeParams": [
-      "params",
-      "ok"
-    ],
-    "docParams": [
-      "params"
-    ]
-  },
-  {
     "name": "LightsPlugin#createLight",
     "filePath": "viewer/plugins/LightsPlugin/LightsPlugin.js",
     "lines": [

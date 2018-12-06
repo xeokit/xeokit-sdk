@@ -567,7 +567,7 @@
     "__docId__": 48,
     "kind": "file",
     "name": "viewer/ModelsPlugin.js",
-    "content": "import {_apply} from \"../xeogl/xeogl.module.js\"\nimport {Plugin} from \"./Plugin.js\";\n\n/**\n Base class for Viewer plugins that load models.\n\n @class ModelsPlugin\n */\nclass ModelsPlugin extends Plugin {\n\n    /**\n     * @constructor\n     *\n     * @param {String} [id] ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {Viewer} viewer The Viewer.\n     * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.\n     * @param {Object} cfg  Plugin configuration.\n     */\n    constructor(id, viewer, modelClass, cfg) {\n\n        super(id, viewer, cfg);\n\n        /**\n         * @private\n         */\n        this._modelClass = modelClass;\n\n        /**\n         * <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Models</a> currently loaded by this Plugin.\n         * @type {{String:Model}}\n         */\n        this.models = {};\n\n        /**\n         * Saves load params for bookmarks.\n         * @private\n         */\n        this._modelLoadParams = {};\n    }\n\n    /**\n     * Loads a model into this Plugin's {@link Viewer}.\n     *\n     * @param params {*} Loading params.\n     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.\n     * @returns {{xeogl.Model}} A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model\n     */\n    load(params, ok) {\n        const id = params.id;\n        if (!id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[id]) {\n            this.error(`Component with this ID already exists in viewer: ${id}`);\n            return;\n        }\n        const model = new this._modelClass(this.viewer.scene, params);\n        this._modelLoadParams[id] = _apply(params, {});\n        this.models[id] = model;\n        model.once(\"destroyed\", () => {\n            delete this.models[id];\n            delete this._modelLoadParams[id];\n        });\n        if (ok) {\n            model.once(\"loaded\", ok);\n        }\n        return model;\n    }\n\n    /**\n     * Unloads and destroys a model that was previously loaded by this Plugin.\n     *\n     * @param {String} id  ID of model to unload.\n     */\n    unload(id) {\n        const model = this.models;\n        if (!model) {\n            this.error(`unload() model with this ID not found: ${id}`);\n            return;\n        }\n        model.destroy();\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        switch (name) {\n            case \"clear\":\n                this.clear();\n                break;\n        }\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        bookmark[this.id] = this._modelLoadParams;\n    }\n\n    /**\n     * @private\n     */\n    readBookmarkAsynch(bookmark, ok) {\n        this.clear();\n        var modelLoadParams = bookmark[this.id];\n        if (modelLoadParams) {\n            var modelParamsList = [];\n            for (const id in modelLoadParams) {\n                modelParamsList.push(modelLoadParams[id]);\n            }\n            if (modelParamsList.length === 0) {\n                ok();\n                return;\n            }\n            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);\n        }\n    }\n\n    _loadModel(modelLoadParams, i, ok) {\n        this.load(modelLoadParams[i], function () {\n            if (i === 0) {\n                ok();\n            } else {\n                this._loadModel(modelLoadParams, i - 1, ok);\n            }\n        });\n    }\n\n    /**\n     * Destroys models loaded by this plugin.\n     */\n    clear() {\n        for (const id in this.models) {\n            this.models[id].destroy();\n        }\n    }\n\n    /**\n     * Destroys this plugin, after first destroying any models it has loaded.\n     */\n    destroy() {\n        this.clear();\n        super.destroy();\n    }\n}\n\nexport {ModelsPlugin}",
+    "content": "import {_apply} from \"../xeogl/xeogl.module.js\"\nimport {Plugin} from \"./Plugin.js\";\n\n/**\n Base class for {@link Viewer} plugins that load models.\n\n @class ModelsPlugin\n */\nclass ModelsPlugin extends Plugin {\n\n    /**\n     * @constructor\n     *\n     * @param {String} [id] ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {Viewer} viewer The Viewer.\n     * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.\n     * @param {Object} cfg  Plugin configuration.\n     */\n    constructor(id, viewer, modelClass, cfg) {\n\n        super(id, viewer, cfg);\n\n        /**\n         * @private\n         */\n        this._modelClass = modelClass;\n\n        /**\n         * <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Models</a> currently loaded by this Plugin.\n         * @type {{String:Model}}\n         */\n        this.models = {};\n\n        /**\n         * Saves load params for bookmarks.\n         * @private\n         */\n        this._modelLoadParams = {};\n    }\n\n    /**\n     * Loads a model into this Plugin's {@link Viewer}.\n     *\n     * @param {*} params  Loading params.\n     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.\n     * @returns {{xeogl.Model}} A <a href=\"http://xeogl.org/docs/classes/Model.html\">xeogl.Model</a> representing the loaded model\n     */\n    load(params) {\n        const id = params.id;\n        if (!id) {\n            this.error(\"load() param expected: id\");\n            return;\n        }\n        if (this.viewer.scene.components[id]) {\n            this.error(`Component with this ID already exists in viewer: ${id}`);\n            return;\n        }\n        const model = new this._modelClass(this.viewer.scene, params);\n        this._modelLoadParams[id] = _apply(params, {});\n        this.models[id] = model;\n        model.once(\"destroyed\", () => {\n            delete this.models[id];\n            delete this._modelLoadParams[id];\n        });\n        return model;\n    }\n\n    /**\n     * Unloads a model that was previously loaded by this Plugin.\n     *\n     * @param {String} id  ID of model to unload.\n     */\n    unload(id) {\n        const model = this.models;\n        if (!model) {\n            this.error(`unload() model with this ID not found: ${id}`);\n            return;\n        }\n        model.destroy();\n    }\n\n    /**\n     * @private\n     */\n    send(name, value) {\n        switch (name) {\n            case \"clear\":\n                this.clear();\n                break;\n        }\n    }\n\n    /**\n     * @private\n     */\n    writeBookmark(bookmark) {\n        bookmark[this.id] = this._modelLoadParams;\n    }\n\n    /**\n     * @private\n     */\n    readBookmarkAsynch(bookmark, ok) {\n        this.clear();\n        var modelLoadParams = bookmark[this.id];\n        if (modelLoadParams) {\n            var modelParamsList = [];\n            for (const id in modelLoadParams) {\n                modelParamsList.push(modelLoadParams[id]);\n            }\n            if (modelParamsList.length === 0) {\n                ok();\n                return;\n            }\n            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);\n        }\n    }\n\n    _loadModel(modelLoadParams, i, ok) {\n        this.load(modelLoadParams[i], function () {\n            if (i === 0) {\n                ok();\n            } else {\n                this._loadModel(modelLoadParams, i - 1, ok);\n            }\n        });\n    }\n\n    /**\n     * Unloads models loaded by this plugin.\n     */\n    clear() {\n        for (const id in this.models) {\n            this.models[id].destroy();\n        }\n    }\n\n    /**\n     * Destroys this plugin, after first destroying any models it has loaded.\n     */\n    destroy() {\n        this.clear();\n        super.destroy();\n    }\n}\n\nexport {ModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/ModelsPlugin.js",
     "access": "public",
@@ -585,7 +585,7 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/ModelsPlugin.js",
     "importStyle": "{ModelsPlugin}",
-    "description": "Base class for Viewer plugins that load models.",
+    "description": "Base class for {@link Viewer} plugins that load models.",
     "lineNumber": 9,
     "unknown": [
       {
@@ -739,17 +739,17 @@
         "spread": false,
         "optional": false,
         "name": "params",
-        "description": "{*} Loading params."
+        "description": "Loading params."
       },
       {
         "nullable": null,
         "types": [
-          "*"
+          "String"
         ],
         "spread": false,
         "optional": false,
         "name": "params.id",
-        "description": "{String} ID to assign to the model, unique among all components in the Viewer's xeogl.Scene."
+        "description": "ID to assign to the model, unique among all components in the Viewer's xeogl.Scene."
       }
     ],
     "return": {
@@ -771,8 +771,8 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#unload",
     "access": "public",
-    "description": "Unloads and destroys a model that was previously loaded by this Plugin.",
-    "lineNumber": 76,
+    "description": "Unloads a model that was previously loaded by this Plugin.",
+    "lineNumber": 73,
     "params": [
       {
         "nullable": null,
@@ -798,7 +798,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#send",
     "access": "private",
     "description": "",
-    "lineNumber": 88,
+    "lineNumber": 85,
     "ignore": true,
     "params": [
       {
@@ -827,7 +827,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#writeBookmark",
     "access": "private",
     "description": "",
-    "lineNumber": 99,
+    "lineNumber": 96,
     "ignore": true,
     "params": [
       {
@@ -850,7 +850,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#readBookmarkAsynch",
     "access": "private",
     "description": "",
-    "lineNumber": 106,
+    "lineNumber": 103,
     "ignore": true,
     "params": [
       {
@@ -879,7 +879,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#_loadModel",
     "access": "private",
     "description": null,
-    "lineNumber": 122,
+    "lineNumber": 119,
     "undocument": true,
     "ignore": true,
     "params": [
@@ -914,8 +914,8 @@
     "static": false,
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#clear",
     "access": "public",
-    "description": "Destroys models loaded by this plugin.",
-    "lineNumber": 135,
+    "description": "Unloads models loaded by this plugin.",
+    "lineNumber": 132,
     "params": [],
     "return": null
   },
@@ -930,7 +930,7 @@
     "longname": "viewer/ModelsPlugin.js~ModelsPlugin#destroy",
     "access": "public",
     "description": "Destroys this plugin, after first destroying any models it has loaded.",
-    "lineNumber": 144,
+    "lineNumber": 141,
     "params": [],
     "return": null
   },
@@ -6981,7 +6981,7 @@
     "__docId__": 295,
     "kind": "file",
     "name": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
-    "content": "import {_apply} from \"../../../xeogl/xeogl.module.js\"\nimport {GLTFModel} from \"././../../../xeogl/GLTFModel/GLTFModel.js\";\n\nimport {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\n\n/**\n * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create a GLTFModels plugin within the viewer\n * var plugin = new GLTFModelsPlugin(viewer, {\n *      id: \"GLTFModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.GLTFModels;\n *\n * // Load the glTF model\n * // These params can include all the xeogl.GLTFModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/gltf/mygltfmodel.gltf\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class GLTFModelsPlugin\n */\nclass GLTFModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"GLTFModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"GLTFModels\", viewer, GLTFModel, cfg);\n    }\n\n    /**\n     Loads a glTF model from the file system into the viewer.\n     */\n    load(params) {\n\n        var modelId = params.id;\n        var self = this;\n\n        return super.load(_apply(params, {\n            handleNode: function (nodeInfo, actions) {\n                return self._defaultHhandleNode(modelId, nodeInfo, actions);\n            }\n        }));\n    }\n\n    _defaultHhandleNode(modelId, nodeInfo, actions) {\n        var name = nodeInfo.name;\n        if (!name) {\n            return true; // Continue descending this node subtree\n        }\n        actions.createObject = {\n            id: modelId + \"#\" + name,\n            entityType: \"default\",\n            visible: true\n        };\n        return true; // Continue descending this glTF node subtree\n    }\n}\n\nexport {GLTFModelsPlugin}",
+    "content": "import {_apply} from \"../../../xeogl/xeogl.module.js\"\nimport {GLTFModel} from \"././../../../xeogl/GLTFModel/GLTFModel.js\";\n\nimport {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\n\n/**\n * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * See the {@link GLTFModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add a GLTFModelsPlugin to the Viewer\n * var plugin = new GLTFModelsPlugin(viewer, {\n *      id: \"GLTFModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.GLTFModels;\n *\n * // Load the glTF model\n * // These params can include all the xeogl.GLTFModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/mygltfmodel.gltf\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class GLTFModelsPlugin\n */\nclass GLTFModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"GLTFModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"GLTFModels\", viewer, GLTFModel, cfg);\n    }\n\n    /**\n     * Loads a glTF model from a file into this GLTFModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a glTF file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the glTF.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @param {Function} [params.handleNode] Optional callback to control how\n     * [xeogl.Objects](http://xeogl.org/docs/classes/Object.html) and\n     * [xeogl.Meshes](http://xeogl.org/docs/classes/Meshes.html) are created as the glTF node hierarchy is\n     * parsed. See usage examples.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded glTF model.\n     */\n    load(params) {\n\n        var modelId = params.id;\n        var self = this;\n\n        return super.load(_apply(params, {\n            handleNode: function (nodeInfo, actions) {\n                return self._defaultHhandleNode(modelId, nodeInfo, actions);\n            }\n        }));\n    }\n\n    _defaultHhandleNode(modelId, nodeInfo, actions) {\n        var name = nodeInfo.name;\n        if (!name) {\n            return true; // Continue descending this node subtree\n        }\n        actions.createObject = {\n            id: modelId + \"#\" + name,\n            entityType: \"default\",\n            visible: true\n        };\n        return true; // Continue descending this glTF node subtree\n    }\n}\n\nexport {GLTFModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
     "access": "public",
@@ -6999,8 +6999,11 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
     "importStyle": "{GLTFModelsPlugin}",
-    "description": "A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n\n// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Create a GLTFModels plugin within the viewer\nvar plugin = new GLTFModelsPlugin(viewer, {\n     id: \"GLTFModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.GLTFModels;\n\n// Load the glTF model\n// These params can include all the xeogl.GLTFModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/gltf/mygltfmodel.gltf\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});",
-    "lineNumber": 38,
+    "description": "A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).\n\nFor each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n{@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n\nSee the {@link GLTFModelsPlugin#load} method for parameters that you can configure\neach [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.",
+    "examples": [
+      "// Create a xeokit Viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Add a GLTFModelsPlugin to the Viewer\nvar plugin = new GLTFModelsPlugin(viewer, {\n     id: \"GLTFModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the Viewer\nplugin = viewer.plugins.GLTFModels;\n\n// Load the glTF model\n// These params can include all the xeogl.GLTFModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"models/mygltfmodel.gltf\",\n     scale: [0.1, 0.1, 0.1],\n     rotate: [90, 0, 0],\n     translate: [100,0,0],\n     edges: true\n});\n\n// Recall that the model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});\n\n// Update properties of the model via the xeogl.Model\nmodel.translate = [200,0,0];\n\n// You can unload the model via the plugin\nplugin.unload(\"myModel\");\n\n// Or unload it by calling destroy() on the xeogl.Model itself\nmodel.destroy();"
+    ],
+    "lineNumber": 58,
     "unknown": [
       {
         "tagName": "@class",
@@ -7023,7 +7026,7 @@
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 46,
+    "lineNumber": 66,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -7075,20 +7078,198 @@
     "static": false,
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#load",
     "access": "public",
-    "description": "Loads a glTF model from the file system into the viewer.",
-    "lineNumber": 53,
+    "description": "Loads a glTF model from a file into this GLTFModelsPlugin's {@link Viewer}.\n\nCreates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).",
+    "lineNumber": 118,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded glTF model."
+      }
+    ],
     "params": [
       {
-        "name": "params",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "Loading parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params.id",
+        "description": "ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\nunique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html)."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.src",
+        "description": "Path to a glTF file."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "xeogl.Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.parent",
+        "description": "The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\nif we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.edges",
+        "description": "Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.position",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal 3D position."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,1,1]",
+        "defaultRaw": [
+          1,
+          1,
+          1
+        ],
+        "name": "params.scale",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal scale."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.rotation",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\nrotation, as Euler angles given in degrees, for each of the X, Y and Z axis."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]",
+        "defaultRaw": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "name": "params.matrix",
+        "description": "The\n[xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\nthe position, scale and rotation parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.lambertMaterials",
+        "description": "When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\nthe same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\nvalue set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and\nwill cause loading to ignore textures in the glTF."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.backfaces",
+        "description": "When true, allows visible backfaces, wherever specified in the glTF.\nWhen false, ignores backfaces."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "20",
+        "defaultRaw": 20,
+        "name": "params.edgeThreshold",
+        "description": "When ghosting, highlighting, selecting or edging, this is the threshold\nangle between normals of adjacent triangles, below which their shared wireframe edge is not drawn."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.handleNode",
+        "description": "Optional callback to control how\n[xeogl.Objects](http://xeogl.org/docs/classes/Object.html) and\n[xeogl.Meshes](http://xeogl.org/docs/classes/Meshes.html) are created as the glTF node hierarchy is\nparsed. See usage examples."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "{xeogl.Model}"
+      ],
+      "spread": false,
+      "description": "A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded glTF model."
     }
   },
   {
@@ -7102,7 +7283,7 @@
     "longname": "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#_defaultHhandleNode",
     "access": "private",
     "description": null,
-    "lineNumber": 65,
+    "lineNumber": 130,
     "undocument": true,
     "ignore": true,
     "params": [
@@ -7406,7 +7587,7 @@
     "__docId__": 310,
     "kind": "file",
     "name": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {OBJModel} from \"./../../../xeogl/OBJModel/OBJModel.js\";\n\n/**\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.\n *\n * @example\n *\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an OBJModels plugin within the viewer\n * var plugin = new OBJModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the OBJ model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/obj/myobjmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class OBJModelsPlugin\n */\nclass OBJModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"OBJModels\", viewer, OBJModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {OBJModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {OBJModel} from \"./../../../xeogl/OBJModel/OBJModel.js\";\n\n/**\n * A viewer plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * See the {@link OBJModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an OBJModelsPlugin to the Viewer\n * var plugin = new GLTFModelsPlugin(viewer, {\n *      id: \"OBJModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.OBJModels;\n *\n * // Load the glTF model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/myObjModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class OBJModelsPlugin\n */\nclass OBJModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"OBJModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"OBJModels\", viewer, OBJModel, cfg);\n    }\n\n    /**\n     * Loads an OBJ model from a file into this OBJModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to an OBJ file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded OBJ model.\n     */\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {OBJModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
     "access": "public",
@@ -7424,11 +7605,11 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
     "importStyle": "{OBJModelsPlugin}",
-    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/Wavefront_.obj_file\">OBJ</a> format.",
+    "description": "A viewer plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.\n\nFor each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n{@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n\nSee the {@link OBJModelsPlugin#load} method for parameters that you can configure\neach [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.",
     "examples": [
-      "\n// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Create an OBJModels plugin within the viewer\nvar plugin = new OBJModelsPlugin(viewer, {\n     id: \"OBJModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.OBJModels;\n\n// Load the OBJ model\n// These params can include all the xeogl.OBJModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/obj/myobjmodel.obj\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});"
+      "// Create a xeokit Viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Add an OBJModelsPlugin to the Viewer\nvar plugin = new GLTFModelsPlugin(viewer, {\n     id: \"OBJModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the Viewer\nplugin = viewer.plugins.OBJModels;\n\n// Load the glTF model\n// These params can include all the xeogl.OBJModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"models/myObjModel.obj\",\n     scale: [0.1, 0.1, 0.1],\n     rotate: [90, 0, 0],\n     translate: [100,0,0],\n     edges: true\n});\n\n// Recall that the model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});\n\n// Update properties of the model via the xeogl.Model\nmodel.translate = [200,0,0];\n\n// You can unload the model via the plugin\nplugin.unload(\"myModel\");\n\n// Or unload it by calling destroy() on the xeogl.Model itself\nmodel.destroy();"
     ],
-    "lineNumber": 38,
+    "lineNumber": 56,
     "unknown": [
       {
         "tagName": "@class",
@@ -7451,7 +7632,7 @@
     "longname": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 46,
+    "lineNumber": 64,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -7503,28 +7684,171 @@
     "static": false,
     "longname": "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#load",
     "access": "public",
-    "description": null,
-    "lineNumber": 51,
-    "undocument": true,
+    "description": "Loads an OBJ model from a file into this OBJModelsPlugin's {@link Viewer}.\n\nCreates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).",
+    "lineNumber": 103,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded OBJ model."
+      }
+    ],
     "params": [
       {
-        "name": "params",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "Loading parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params.id",
+        "description": "ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\nunique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html)."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.src",
+        "description": "Path to an OBJ file."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "xeogl.Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.parent",
+        "description": "The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\nif we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.edges",
+        "description": "Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.position",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal 3D position."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,1,1]",
+        "defaultRaw": [
+          1,
+          1,
+          1
+        ],
+        "name": "params.scale",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal scale."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.rotation",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\nrotation, as Euler angles given in degrees, for each of the X, Y and Z axis."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]",
+        "defaultRaw": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "name": "params.matrix",
+        "description": "The\n[xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\nthe position, scale and rotation parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "20",
+        "defaultRaw": 20,
+        "name": "params.edgeThreshold",
+        "description": "When ghosting, highlighting, selecting or edging, this is the threshold\nangle between normals of adjacent triangles, below which their shared wireframe edge is not drawn."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "{xeogl.Model}"
+      ],
+      "spread": false,
+      "description": "A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded OBJ model."
     }
   },
   {
     "__docId__": 314,
     "kind": "file",
     "name": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {STLModel} from \"./../../../xeogl/STLModel/STLModel.js\";\n\n/**\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.\n *\n * @example\n * // Create a viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Create an STLModels plugin within the viewer\n * var plugin = new SSTLModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the STL model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"./models/stl/mystlmodel.obj\"\n * });\n *\n * // The model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * @class STLModelsPlugin\n */\nclass STLModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"STLModels\", viewer, STLModel, cfg);\n    }\n\n    // TODO: comment\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {STLModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../../viewer/ModelsPlugin.js\";\nimport {STLModel} from \"./../../../xeogl/STLModel/STLModel.js\";\n\n/**\n * A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Supports both binary and ASCII formats.\n *\n * ## Smoothing STL Normals\n *\n * STL models are normally flat-shaded, however providing a ````smoothNormals```` parameter when loading gives a smooth\n * appearance. Triangles in STL are disjoint, where each triangle has its own separate vertex positions, normals and\n * (optionally) colors. This means that you can have gaps between triangles in an STL model. Normals for each triangle\n * are perpendicular to the triangle's surface, which gives the model a faceted appearance by default.\n *\n * The ```smoothNormals``` parameter causes the plugin to recalculate the STL normals, so that each normal's direction is\n * the average of the orientations of the triangles adjacent to its vertex. When smoothing, each vertex normal is set to\n * the average of the orientations of all other triangles that have a vertex at the same position, excluding those triangles\n * whose direction deviates from the direction of the vertice's triangle by a threshold given in\n * the ````smoothNormalsAngleThreshold```` loading parameter. This makes smoothing robust for hard edges.\n *\n * ## Creating Separate Meshes\n *\n * An STL model is normally one single mesh, however providing a ````splitMeshes```` parameter when loading\n * will create a separate [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html) within the\n * [xeogl.Model](http://xeogl.org/docs/classes/Model.html) for each group of faces that share the same vertex colors.\n * This option only works with binary STL files.\n *\n * See the {@link STLModelsPlugin#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an STLModelsPlugin to the Viewer\n * var plugin = new GLTFModelsPlugin(viewer, {\n *      id: \"STLModels\"  // Default value\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.STLModels;\n *\n * // Load the glTF model\n * // These params can include all the xeogl.STLModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/mySTLModel.stl\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true,\n *      smoothNormals: true,                // Default\n *      smoothNormalsAngleThreshold: 20,    // Default\n *      splitMeshes: true                   // Default\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class STLModelsPlugin\n */\nclass STLModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"STLModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     */\n    constructor(viewer, cfg) {\n        super(\"STLModels\", viewer, STLModel, cfg);\n    }\n\n    /**\n     * Loads an STL model from a file into this STLModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to an STL file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the STL.\n     * When false, ignores backfaces.\n     *\n     * @param {Boolean} [params.smoothNormals=true] When true, automatically converts face-oriented normals to vertex\n     * normals for a smooth appearance.\n     *\n     * @param {Number} [params.smoothNormalsAngleThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @param {Boolean} [params.splitMeshes=true] When true, creates a\n     * separate [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html) for each group of faces that share the same vertex\n     * colors. Only works with binary STL.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded STL model.\n     */\n    load(params) {\n        return super.load(params);\n    }\n}\n\nexport {STLModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
     "access": "public",
@@ -7542,11 +7866,11 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
     "importStyle": "{STLModelsPlugin}",
-    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> format.",
+    "description": "A viewer plugin that loads models from <a href=\"https://en.wikipedia.org/wiki/STL_(file_format)\">STL</a> files.\n\nFor each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n{@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n\nSupports both binary and ASCII formats.\n\n## Smoothing STL Normals\n\nSTL models are normally flat-shaded, however providing a ````smoothNormals```` parameter when loading gives a smooth\nappearance. Triangles in STL are disjoint, where each triangle has its own separate vertex positions, normals and\n(optionally) colors. This means that you can have gaps between triangles in an STL model. Normals for each triangle\nare perpendicular to the triangle's surface, which gives the model a faceted appearance by default.\n\nThe ```smoothNormals``` parameter causes the plugin to recalculate the STL normals, so that each normal's direction is\nthe average of the orientations of the triangles adjacent to its vertex. When smoothing, each vertex normal is set to\nthe average of the orientations of all other triangles that have a vertex at the same position, excluding those triangles\nwhose direction deviates from the direction of the vertice's triangle by a threshold given in\nthe ````smoothNormalsAngleThreshold```` loading parameter. This makes smoothing robust for hard edges.\n\n## Creating Separate Meshes\n\nAn STL model is normally one single mesh, however providing a ````splitMeshes```` parameter when loading\nwill create a separate [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html) within the\n[xeogl.Model](http://xeogl.org/docs/classes/Model.html) for each group of faces that share the same vertex colors.\nThis option only works with binary STL files.\n\nSee the {@link STLModelsPlugin#load} method for parameters that you can configure\neach [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.",
     "examples": [
-      "// Create a viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Create an STLModels plugin within the viewer\nvar plugin = new SSTLModelsPlugin(viewer, {\n     id: \"STLModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the viewer\nplugin = viewer.plugins.STLModels;\n\n// Load the STL model\n// These params can include all the xeogl.STLModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"./models/stl/mystlmodel.obj\"\n});\n\n// The model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});"
+      "// Create a xeokit Viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Add an STLModelsPlugin to the Viewer\nvar plugin = new GLTFModelsPlugin(viewer, {\n     id: \"STLModels\"  // Default value\n});\n\n// We can also get the plugin by its ID on the Viewer\nplugin = viewer.plugins.STLModels;\n\n// Load the glTF model\n// These params can include all the xeogl.STLModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"models/mySTLModel.stl\",\n     scale: [0.1, 0.1, 0.1],\n     rotate: [90, 0, 0],\n     translate: [100,0,0],\n     edges: true,\n     smoothNormals: true,                // Default\n     smoothNormalsAngleThreshold: 20,    // Default\n     splitMeshes: true                   // Default\n});\n\n// Recall that the model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});\n\n// Update properties of the model via the xeogl.Model\nmodel.translate = [200,0,0];\n\n// You can unload the model via the plugin\nplugin.unload(\"myModel\");\n\n// Or unload it by calling destroy() on the xeogl.Model itself\nmodel.destroy();"
     ],
-    "lineNumber": 37,
+    "lineNumber": 81,
     "unknown": [
       {
         "tagName": "@class",
@@ -7569,7 +7893,7 @@
     "longname": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 45,
+    "lineNumber": 89,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -7621,21 +7945,212 @@
     "static": false,
     "longname": "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#load",
     "access": "public",
-    "description": null,
-    "lineNumber": 50,
-    "undocument": true,
+    "description": "Loads an STL model from a file into this STLModelsPlugin's {@link Viewer}.\n\nCreates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).",
+    "lineNumber": 141,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded STL model."
+      }
+    ],
     "params": [
       {
-        "name": "params",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "Loading parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params.id",
+        "description": "ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\nunique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html)."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.src",
+        "description": "Path to an STL file."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "xeogl.Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.parent",
+        "description": "The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\nif we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.edges",
+        "description": "Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.position",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal 3D position."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,1,1]",
+        "defaultRaw": [
+          1,
+          1,
+          1
+        ],
+        "name": "params.scale",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal scale."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.rotation",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\nrotation, as Euler angles given in degrees, for each of the X, Y and Z axis."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]",
+        "defaultRaw": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "name": "params.matrix",
+        "description": "The\n[xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\nthe position, scale and rotation parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.backfaces",
+        "description": "When true, allows visible backfaces, wherever specified in the STL.\nWhen false, ignores backfaces."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "true",
+        "defaultRaw": true,
+        "name": "params.smoothNormals",
+        "description": "When true, automatically converts face-oriented normals to vertex\nnormals for a smooth appearance."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "20",
+        "defaultRaw": 20,
+        "name": "params.smoothNormalsAngleThreshold",
+        "description": "When ghosting, highlighting, selecting or edging, this is the threshold\nangle between normals of adjacent triangles, below which their shared wireframe edge is not drawn."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "20",
+        "defaultRaw": 20,
+        "name": "params.edgeThreshold",
+        "description": "When ghosting, highlighting, selecting or edging, this is the threshold\nangle between normals of adjacent triangles, below which their shared wireframe edge is not drawn."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "true",
+        "defaultRaw": true,
+        "name": "params.splitMeshes",
+        "description": "When true, creates a\nseparate [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html) for each group of faces that share the same vertex\ncolors. Only works with binary STL."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "{xeogl.Model}"
+      ],
+      "spread": false,
+      "description": "A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded STL model."
     }
   },
   {
@@ -8939,7 +9454,7 @@
     "__docId__": 371,
     "kind": "file",
     "name": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
-    "content": "import {ModelsPlugin} from \"./../../ModelsPlugin.js\";\nimport {XML3DModel} from \"./XML3DModel.js\";\n\n\n/**\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n *\n * # Overview\n *\n * - Supports the 3DXML V4.2 Schema\n * - We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.\n *\n * @example\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * const plugin = new XML3DModelsPlugin(viewer, {\n *    id: \"xml3d\",                                               // Default value\n *    workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * const model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n *   id: \"myModel\",\n *   src: \"./models/XML3D/3dpreview.3dxml\",\n *   edges: true,                                                // Default is false\n *   scale: [1.0, 1.0, 1.0]                                      // Default\n * });\n *\n * @class XML3DModelsPlugin\n */\nclass XML3DModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     */\n    constructor(viewer, cfg) {\n        super(\"XML3DModels\", viewer, XML3DModel, cfg);\n        cfg = cfg || {};\n        if (!cfg.workerScriptsPath) {\n            this.error(\"Config expected: workerScriptsPath\");\n            return\n        }\n        this._workerScriptsPath = cfg.workerScriptsPath;\n    }\n\n    /**\n     Loads a 3DXML model into the viewer.\n\n     */\n    load(params) {\n        params.workerScriptsPath = this._workerScriptsPath;\n        return super.load(params);\n    }\n}\n\nexport {XML3DModelsPlugin}",
+    "content": "import {ModelsPlugin} from \"./../../ModelsPlugin.js\";\nimport {XML3DModel} from \"./XML3DModel.js\";\n\n/**\n * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n *\n * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n *\n * Note that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\n * class name cannot begin with a numeral.\n *\n * An XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\n * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \n * the example for how to do that. \n *\n * See the {@link XML3DModels#load} method for parameters that you can configure\n * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.\n *\n * @example\n * // Create a xeokit Viewer\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n * });\n *\n * // Add an XML3DModelsPlugin to the Viewer\n * var plugin = new XML3DModelsPlugin(viewer, {\n *      id: \"XML3DModels\",  // Default value\n *      workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n * });\n *\n * // We can also get the plugin by its ID on the Viewer\n * plugin = viewer.plugins.XML3DModels;\n *\n * // Load the 3DXML model\n * // These params can include all the xeogl.OBJModel configs\n * const model = plugin.load({\n *      id: \"myModel\",\n *      src: \"models/my3DXMLModel.obj\",\n *      scale: [0.1, 0.1, 0.1],\n *      rotate: [90, 0, 0],\n *      translate: [100,0,0],\n *      edges: true\n * });\n *\n * // Recall that the model is a xeogl.Model\n *\n * // When the model has loaded, fit it to view\n * model.on(\"loaded\", function() {\n *      viewer.cameraFlight.flyTo(model);\n * });\n *\n * // Update properties of the model via the xeogl.Model\n * model.translate = [200,0,0];\n *\n * // You can unload the model via the plugin\n * plugin.unload(\"myModel\");\n *\n * // Or unload it by calling destroy() on the xeogl.Model itself\n * model.destroy();\n *\n * @class XML3DModels\n */\n\nclass XML3DModelsPlugin extends ModelsPlugin {\n\n    /**\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"XML3DModels\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     * @param {String} cfg.workerScriptsPath Path to the directory that contains the\n     * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory\n     * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.\n     */\n    constructor(viewer, cfg) {\n        super(\"XML3DModels\", viewer, XML3DModel, cfg);\n        cfg = cfg || {};\n        if (!cfg.workerScriptsPath) {\n            this.error(\"Config expected: workerScriptsPath\");\n            return\n        }\n        this._workerScriptsPath = cfg.workerScriptsPath;\n    }\n\n    /**\n     * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n     *\n     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\n     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\n     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\n     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.\n     */\n    load(params) {\n        params.workerScriptsPath = this._workerScriptsPath;\n        return super.load(params);\n    }\n}\n\nexport {XML3DModelsPlugin}",
     "static": true,
     "longname": "/home/lindsay/xeolabs/xeokit/xeokit-sdk/src/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
     "access": "public",
@@ -8957,15 +9472,15 @@
     "export": true,
     "importPath": "xeokit-sdk/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
     "importStyle": "{XML3DModelsPlugin}",
-    "description": "A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML).\n\n# Overview\n\n- Supports the 3DXML V4.2 Schema\n- We've massaged the name to XML3DModelsPlugin because it's not permitted to start a ECMA6 class name with a numeral.",
+    "description": "A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.\n\nFor each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its\n{@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).\n\nNote that the name of this plugin is intentionally munged to \"XML3D\" because a JavaScript\nclass name cannot begin with a numeral.\n\nAn XML3D model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DPlugin uses the\n[zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses\n[Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DPlugin requires that we configure it\nwith a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See \nthe example for how to do that. \n\nSee the {@link XML3DModels#load} method for parameters that you can configure\neach [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.",
     "examples": [
-      "const viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\nconst plugin = new XML3DModelsPlugin(viewer, {\n   id: \"xml3d\",                                               // Default value\n   workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n});\n\nconst model = viewer.plugins.xml3d.load({                     // Find plugin on Viewer using its ID\n  id: \"myModel\",\n  src: \"./models/XML3D/3dpreview.3dxml\",\n  edges: true,                                                // Default is false\n  scale: [1.0, 1.0, 1.0]                                      // Default\n});"
+      "// Create a xeokit Viewer\nconst viewer = new Viewer({\n     canvasId: \"myCanvas\"\n});\n\n// Add an XML3DModelsPlugin to the Viewer\nvar plugin = new XML3DModelsPlugin(viewer, {\n     id: \"XML3DModels\",  // Default value\n     workerScriptsPath : \"../../src/plugins/XML3DModels/zipjs/\" // Path to zip.js workers dir\n});\n\n// We can also get the plugin by its ID on the Viewer\nplugin = viewer.plugins.XML3DModels;\n\n// Load the 3DXML model\n// These params can include all the xeogl.OBJModel configs\nconst model = plugin.load({\n     id: \"myModel\",\n     src: \"models/my3DXMLModel.obj\",\n     scale: [0.1, 0.1, 0.1],\n     rotate: [90, 0, 0],\n     translate: [100,0,0],\n     edges: true\n});\n\n// Recall that the model is a xeogl.Model\n\n// When the model has loaded, fit it to view\nmodel.on(\"loaded\", function() {\n     viewer.cameraFlight.flyTo(model);\n});\n\n// Update properties of the model via the xeogl.Model\nmodel.translate = [200,0,0];\n\n// You can unload the model via the plugin\nplugin.unload(\"myModel\");\n\n// Or unload it by calling destroy() on the xeogl.Model itself\nmodel.destroy();"
     ],
-    "lineNumber": 32,
+    "lineNumber": 67,
     "unknown": [
       {
         "tagName": "@class",
-        "tagValue": "XML3DModelsPlugin"
+        "tagValue": "XML3DModels"
       }
     ],
     "interface": false,
@@ -8984,7 +9499,7 @@
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#constructor",
     "access": "public",
     "description": "",
-    "lineNumber": 43,
+    "lineNumber": 78,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -9045,7 +9560,7 @@
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#_workerScriptsPath",
     "access": "private",
     "description": null,
-    "lineNumber": 50,
+    "lineNumber": 85,
     "undocument": true,
     "ignore": true,
     "type": {
@@ -9064,20 +9579,188 @@
     "static": false,
     "longname": "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#load",
     "access": "public",
-    "description": "Loads a 3DXML model into the viewer.",
-    "lineNumber": 57,
+    "description": "Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.\n\nCreates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).",
+    "lineNumber": 131,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model."
+      }
+    ],
     "params": [
       {
-        "name": "params",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params",
+        "description": "Loading parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "params.id",
+        "description": "ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),\nunique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html)."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.src",
+        "description": "Path to a 3DXML file."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "xeogl.Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "params.parent",
+        "description": "The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),\nif we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.edges",
+        "description": "Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.position",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal 3D position."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,1,1]",
+        "defaultRaw": [
+          1,
+          1,
+          1
+        ],
+        "name": "params.scale",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s\nlocal scale."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[0,0,0]",
+        "defaultRaw": [
+          0,
+          0,
+          0
+        ],
+        "name": "params.rotation",
+        "description": "The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local\nrotation, as Euler angles given in degrees, for each of the X, Y and Z axis."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Float32Array"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]",
+        "defaultRaw": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "name": "params.matrix",
+        "description": "The\n[xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides\nthe position, scale and rotation parameters."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.lambertMaterials",
+        "description": "When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)\nthe same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````\nvalue set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\nwill cause loading to ignore textures in the 3DXML."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "params.backfaces",
+        "description": "When true, allows visible backfaces, wherever specified in the 3DXML.\nWhen false, ignores backfaces."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "20",
+        "defaultRaw": 20,
+        "name": "params.edgeThreshold",
+        "description": "When ghosting, highlighting, selecting or edging, this is the threshold\nangle between normals of adjacent triangles, below which their shared wireframe edge is not drawn."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "{xeogl.Model}"
+      ],
+      "spread": false,
+      "description": "A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model."
     }
   },
   {
