@@ -12,9 +12,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "xeokit-sdk/viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html",
-    "<span>BIMServerModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js</span>",
+    "xeokit-sdk/viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html",
+    "<span>BIMServerBigModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js</span>",
     "class"
   ],
   [
@@ -684,39 +684,39 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#bimserver_version",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-BIMSERVER_VERSION",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#BIMSERVER_VERSION",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#bimserver_version",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-BIMSERVER_VERSION",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#BIMSERVER_VERSION",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#bimserverapi",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-bimServerAPI",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#bimServerAPI",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#bimserverapi",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-bimServerAPI",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#bimServerAPI",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#constructor",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#constructor",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#constructor",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-constructor-constructor",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#constructor",
     "method"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#destroy",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-destroy",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#destroy",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#destroy",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-method-destroy",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#destroy",
     "method"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#hiddentypes",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-hiddenTypes",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#hiddenTypes",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#hiddentypes",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-hiddenTypes",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#hiddenTypes",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimservermodelsplugin#load",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-load",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin#load",
+    "viewer/plugins/bimservermodelsplugin/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#load",
+    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-method-load",
+    "viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#load",
     "method"
   ],
   [

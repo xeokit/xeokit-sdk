@@ -34,7 +34,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
@@ -49,13 +49,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerModelsPlugin} from &apos;<span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber89">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerModelsPlugin} from &apos;<span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber110">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber89">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber110">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -75,9 +75,23 @@
 
   
   
-  <div class="description" data-ice="description"><p>A viewer plugin that loads models from a <a href="http://bimserver.org">BIMServer</a> (1.5 or later).</p>
-<p>In the example below, we&apos;ll load the latest revision of a project&apos;s model.</p>
-<p>Read more about this example in the <a href="https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer">Loading IFC Models from BIMServer</a> tutorial.</p>
+  <div class="description" data-ice="description"><p>A viewer plugin that loads models from a <a href="http://bimserver.org">BIMServer</a>.</p>
+<p>For each model loaded, BIMServerModelsPlugin creates a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within its
+<span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>. You can load multiple models into the same
+Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.</p>
+<p>A BIMServerModelsPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
+API that provides a client interface through which you can query BIMServer and download models. We use that class to
+query BIMServer&apos;s database, while BIMServerModelsPlugin uses it to download models.</p>
+<p>In the example below, we&apos;ll load the latest revision of a project&apos;s model. We&apos;ll assume that we have a BIMServer
+instance running and serving requests on port 8082, with a model loaded for project ID <code>131073</code>. We&apos;ll get
+the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
+version of the API for the BIMServer version.</p>
+<p>Since xeogl&apos;s default World &quot;up&quot; direction is +Y, while the model&apos;s &quot;up&quot; is +Z, we&apos;ll rotate the
+model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeogl to use +Z as &quot;up&quot;.</p>
+<p>Note that BIMServerModelsPlugin works with BIMServer V1.5 or later.</p>
+<p>Read more about this example, as well as how to set up the BIMServer instance and load a model, in the
+<a href="https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer">Loading IFC Models from BIMServer</a> tutorial
+in the xeokit SDK wiki.</p>
 </div>
   
 
@@ -95,17 +109,17 @@ import {BIMServerModelsPlugin} from &quot;../../../src/viewer/plugins/BIMServerM
 const bimServerAddress = &quot;http://localhost:8082&quot;;
 const username = &quot;admin@bimserver.org&quot;;
 const password = &quot;admin&quot;;
-const poid = 131073;
+const poid = 131073;     // Project ID
 
-// Create a Viewer
+// Create a xeokit Viewer
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;
 });
 
-// Create a BIMServer client
+// Create a BimServerClient
 const bimServerAPI = new BimServerClient(bimServerAddress);
 
-// Add a BIMServerModelsPlugin that uses the client
+// Add a BIMServerModelsPlugin to the Viewer, configured with the BIMServerClient
 const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
     bimServerAPI: bimServerAPI
 });
@@ -121,6 +135,9 @@ bimServerAPI.init(() =&gt; {
             poid: poid
         }, (project) =&gt; {
 
+            // From the project info returned by BIMServerClient, we&apos;ll get the ID of the latest
+            // model revision and the version of the IFC schema to which the model conforms.
+
             // Load the latest revision of the project
 
             const roid = project.lastRevisionId;
@@ -128,13 +145,13 @@ bimServerAPI.init(() =&gt; {
 
             const model = bimServerModelsPlugin.load({ // Returns a xeogl.Model
                 id: &quot;myModel&quot;,
-                poid: poid,
-                roid: roid,
-                schema: schema,
-                edges: true,                    // Render with emphasized edges
-                lambertMaterials: true,         // Lambertian flat-shading instead of Blinn/Phong
-                scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
-                rotation: [-90, 0, 0]           // Rotate model for World +Y &quot;up&quot;
+                poid: poid,                      // Project ID
+                roid: roid,                      // Revision ID
+                schema: schema,                  // Schema version
+                edges: true,                     // Render with emphasized edges (default is false)
+                lambertMaterials: true,          // Lambertian flat-shading instead of default Blinn/Phong
+                scale: [0.001, 0.001, 0.001],    // Shrink the model a bit
+                rotation: [-90, 0, 0]            // Rotate model for World +Y &quot;up&quot;
             });
 
             const scene = viewer.scene;  // xeogl.Scene
@@ -336,7 +353,7 @@ bimServerAPI.init(() =&gt; {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span>xeogl.Model</span></span>
+          <span class="code" data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-load">load</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
         </p>
       </div>
       <div>
@@ -611,7 +628,7 @@ bimServerAPI.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -655,7 +672,7 @@ bimServerAPI.init(() =&gt; {
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.bimServerAPI</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type" class="code"><span>BimServerClient</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>A BIMServer client API instance.</p>
 </td>
@@ -697,7 +714,7 @@ bimServerAPI.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber106">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -741,7 +758,7 @@ bimServerAPI.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -785,7 +802,7 @@ bimServerAPI.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -832,7 +849,7 @@ bimServerAPI.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber409">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber456">source</a></span></span>
     </span>
   </h3>
 
@@ -872,11 +889,11 @@ bimServerAPI.init(() =&gt; {
     
     
     
-    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span>xeogl.Model</span></span>
+    <span class="code" data-ice="name">load</span><span class="code" data-ice="signature">(params: <span>*</span>): *</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -898,16 +915,17 @@ bimServerAPI.init(() =&gt; {
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">params</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Loading parameters. As well as the parameters required by this  method, this can also include configs for the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> that this method will create.</p>
+      <td data-ice="description"><p>Loading parameters.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>ID to assign to the model, unique among all components in the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
+      <td data-ice="description"><p>ID to assign to the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>,
+unique among all components in the Viewer&apos;s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -933,49 +951,10 @@ bimServerAPI.init(() =&gt; {
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.parent</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type" class="code"><span>xeogl.Object</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Optional parent <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a> to attach the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> to.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.position</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>Local 3D position.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.scale</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [1,1,1]</li></ul></td>
-      <td data-ice="description"><p>Local scale.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.rotation</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [0,0,0]</li></ul></td>
-      <td data-ice="description"><p>Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
-      <td data-ice="description"><p>Local modelling transform matrix. Overrides the position, scale and rotation parameters.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.lambertMaterials</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
-      <td data-ice="description"><p>When true, will render the model with fast Lambertian flat-shading, otherwise will render with Blin/Phong, which shows shiny specular highlights.</p>
+      <td data-ice="description"><p>A parent <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a>,
+if we want to graft the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> into a xeogl object hierarchy.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -983,15 +962,72 @@ bimServerAPI.init(() =&gt; {
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>When true, will emphasise edges when rendering the model.</p>
+      <td data-ice="description"><p>Whether or not xeogl renders the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> with edges emphasized.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.logging</td>
+      <td data-ice="name" class="code" data-depth="1">params.position</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local 3D position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.scale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,1,1]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s
+local scale.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.rotation</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local
+rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
+      <td data-ice="description"><p>The
+<a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>&apos;s local modelling transform matrix. Overrides
+the position, scale and rotation parameters.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.lambertMaterials</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, gives each <a href="http://xeogl.org/docs/classes/Mesh.html">xeogl.Mesh</a>
+the same <a href="http://xeogl.org/docs/classes/LambertMaterial.html">xeogl.LambertMaterial</a> and a <code>colorize</code>
+value set the to the corresponding IFC element color. This is typically used for large models, for a lower
+memory footprint and smoother performance.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.backfaces</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>Set this true to log some info to the console while loading.</p>
+      <td data-ice="description"><p>When true, allows visible backfaces.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.edgeThreshold</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 20</li></ul></td>
+      <td data-ice="description"><p>When ghosting, highlighting, selecting or edging, this is the threshold
+angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.</p>
 </td>
     </tr>
 </tbody>
@@ -1004,8 +1040,8 @@ bimServerAPI.init(() =&gt; {
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>xeogl.Model</span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model.</p>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded BIMserver model.</p>
 </td>
         </tr>
       </tbody>

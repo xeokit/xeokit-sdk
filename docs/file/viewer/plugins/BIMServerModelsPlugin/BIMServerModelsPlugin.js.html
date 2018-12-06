@@ -34,7 +34,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
@@ -65,11 +65,29 @@ import {BIMServerModel} from &quot;./lib/BIMServerModel.js&quot;;
 import {utils} from &quot;./lib/utils.js&quot;;
 
 /**
- * A viewer plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
+ * A viewer plugin that loads models from a [BIMServer](http://bimserver.org).
  *
- * In the example below, we&apos;ll load the latest revision of a project&apos;s model.
+ * For each model loaded, BIMServerModelsPlugin creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its
+ * {@link Viewer}&apos;s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html). You can load multiple models into the same
+ * Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.
  *
- * Read more about this example in the [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial.
+ * A BIMServerModelsPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
+ * API that provides a client interface through which you can query BIMServer and download models. We use that class to
+ * query BIMServer&apos;s database, while BIMServerModelsPlugin uses it to download models.
+ *
+ * In the example below, we&apos;ll load the latest revision of a project&apos;s model. We&apos;ll assume that we have a BIMServer
+ * instance running and serving requests on port 8082, with a model loaded for project ID ````131073````. We&apos;ll get
+ * the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
+ * version of the API for the BIMServer version.
+ *
+ * Since xeogl&apos;s default World &quot;up&quot; direction is +Y, while the model&apos;s &quot;up&quot; is +Z, we&apos;ll rotate the
+ * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeogl to use +Z as &quot;up&quot;.
+ *
+ * Note that BIMServerModelsPlugin works with BIMServer V1.5 or later.
+ *
+ * Read more about this example, as well as how to set up the BIMServer instance and load a model, in the
+ * [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial
+ * in the xeokit SDK wiki.
  *
  * @example
  * import BimServerClient from &quot;http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js&quot;;
@@ -79,17 +97,17 @@ import {utils} from &quot;./lib/utils.js&quot;;
  * const bimServerAddress = &quot;http://localhost:8082&quot;;
  * const username = &quot;admin@bimserver.org&quot;;
  * const password = &quot;admin&quot;;
- * const poid = 131073;
+ * const poid = 131073;     // Project ID
  *
- * // Create a Viewer
+ * // Create a xeokit Viewer
  * const viewer = new Viewer({
  *     canvasId: &quot;myCanvas&quot;
  * });
  *
- * // Create a BIMServer client
+ * // Create a BimServerClient
  * const bimServerAPI = new BimServerClient(bimServerAddress);
  *
- * // Add a BIMServerModelsPlugin that uses the client
+ * // Add a BIMServerModelsPlugin to the Viewer, configured with the BIMServerClient
  * const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
  *     bimServerAPI: bimServerAPI
  * });
@@ -105,6 +123,9 @@ import {utils} from &quot;./lib/utils.js&quot;;
  *             poid: poid
  *         }, (project) =&gt; {
  *
+ *             // From the project info returned by BIMServerClient, we&apos;ll get the ID of the latest
+ *             // model revision and the version of the IFC schema to which the model conforms.
+ *
  *             // Load the latest revision of the project
  *
  *             const roid = project.lastRevisionId;
@@ -112,13 +133,13 @@ import {utils} from &quot;./lib/utils.js&quot;;
  *
  *             const model = bimServerModelsPlugin.load({ // Returns a xeogl.Model
  *                 id: &quot;myModel&quot;,
- *                 poid: poid,
- *                 roid: roid,
- *                 schema: schema,
- *                 edges: true,                    // Render with emphasized edges
- *                 lambertMaterials: true,         // Lambertian flat-shading instead of Blinn/Phong
- *                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
- *                 rotation: [-90, 0, 0]           // Rotate model for World +Y &quot;up&quot;
+ *                 poid: poid,                      // Project ID
+ *                 roid: roid,                      // Revision ID
+ *                 schema: schema,                  // Schema version
+ *                 edges: true,                     // Render with emphasized edges (default is false)
+ *                 lambertMaterials: true,          // Lambertian flat-shading instead of default Blinn/Phong
+ *                 scale: [0.001, 0.001, 0.001],    // Shrink the model a bit
+ *                 rotation: [-90, 0, 0]            // Rotate model for World +Y &quot;up&quot;
  *             });
  *
  *             const scene = viewer.scene;  // xeogl.Scene
@@ -144,7 +165,7 @@ class BIMServerModelsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id=&quot;BIMServerModels&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Object} cfg.bimServerAPI A BIMServer client API instance.
+     * @param {BimServerClient} cfg.bimServerAPI A BIMServer client API instance.
      */
     constructor(viewer, cfg) {
 
@@ -178,20 +199,46 @@ class BIMServerModelsPlugin extends Plugin {
     /**
      * Loads a &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; from BIMServer into the {@link Viewer}&apos;s &lt;a href=&quot;http://xeogl.org/docs/classes/Scene.html&quot;&gt;xeogl.Scene&lt;/a&gt;.
      *
-     * @param {Object} params Loading parameters. As well as the parameters required by this  method, this can also include configs for the &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; that this method will create.
-     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer&apos;s &lt;a href=&quot;http://xeogl.org/docs/classes/Scene.html&quot;&gt;xeogl.Scene&lt;/a&gt;.
+     * @param {*} params  Loading parameters.
+     *
+     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),
+     * unique among all components in the Viewer&apos;s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+     *
      * @param {Number} params.poid ID of the model&apos;s project within BIMServer.
+     *
      * @param {Number} params.roid ID of the model&apos;s revision within BIMServer. See the class example for how to query the latest project revision ID via the BIMServer client API.
+     *
      * @param {Number} params.schema The model&apos;s IFC schema. See the class example for how to query the project&apos;s schema via the BIMServer client API.
-     * @param {Object} [params.parent] Optional parent &lt;a href=&quot;http://xeogl.org/docs/classes/Object.html&quot;&gt;xeogl.Object&lt;/a&gt; to attach the &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; to.
-     * @param {Float32Array} [params.position=[0,0,0]] Local 3D position.
-     * @param {Float32Array} [params.scale=[1,1,1]] Local scale.
-     * @param {Float32Array} [params.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     * @param {Boolean} [params.lambertMaterials=true] When true, will render the model with fast Lambertian flat-shading, otherwise will render with Blin/Phong, which shows shiny specular highlights.
-     * @param {Boolean} [params.edges=false] When true, will emphasise edges when rendering the model.
-     * @param {Boolean} [params.logging=false] Set this true to log some info to the console while loading.
-     * @returns {xeogl.Model} A &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; representing the loaded model.
+     *
+     * @param {xeogl.Object} [params.parent] A parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),
+     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.
+     *
+     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.
+     *
+     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)&apos;s
+     * local 3D position.
+     *
+     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)&apos;s
+     * local scale.
+     *
+     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)&apos;s local
+     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
+     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)&apos;s local modelling transform matrix. Overrides
+     * the position, scale and rotation parameters.
+     *
+     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)
+     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````
+     * value set the to the corresponding IFC element color. This is typically used for large models, for a lower
+     * memory footprint and smoother performance.
+     *
+     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces.
+     *
+     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
+     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     *
+     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded BIMserver model.
      */
     load(params) {
 
