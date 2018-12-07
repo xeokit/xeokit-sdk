@@ -1,43 +1,32 @@
 /*
  * A minimal app that views a glTF file.
  */
+
 import {Viewer} from "../../../src/viewer/Viewer.js";
 import {GLTFModelsPlugin} from "../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
 import {AxisGizmoPlugin} from "../../../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
 
-export default class GLTFViewerApp {
+const viewer = new Viewer({
+    canvasId: "myCanvas"
+});
 
-    constructor(cfg) {
-        this.src = "./../../models/gltf/schependomlaan/schependomlaan.gltf";
-    }
+new GLTFModelsPlugin(viewer, {id: "gltf"});
+new AxisGizmoPlugin(viewer, {id: "axis", size: [250, 250]});
 
-    start() {
+const model = viewer.plugins.gltf.load({
+    id: "foo",
+    src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
+    edges: true
+});
 
-        const viewer = new Viewer({
-            canvasId: "glcanvas"
-        });
+const scene = viewer.scene;
+const camera = scene.camera;
 
-        new GLTFModelsPlugin(viewer, {id: "gltf"});
-        new AxisGizmoPlugin(viewer, {id: "axis", size: [250, 250]});
+camera.orbitPitch(20);
 
-        const model = viewer.plugins.gltf.load({
-            id: "foo",
-            src: this.src,
-            edges: true
-        });
-
-        const scene = viewer.scene;
-        const camera = scene.camera;
-
-        camera.orbitPitch(20);
-
-        model.on("loaded", () => {
-            viewer.cameraFlight.flyTo(model);
-            scene.on("tick", () => {
-                camera.orbitYaw(0.4);
-            })
-        });
-    }
-}
-
-new GLTFViewerApp().start();
+model.on("loaded", () => {
+    viewer.cameraFlight.flyTo(model);
+    scene.on("tick", () => {
+        camera.orbitYaw(0.4);
+    })
+});
