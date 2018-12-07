@@ -356,13 +356,13 @@ class BIMServerModelsPlugin extends Plugin {
                                     return;
                                 }
                                 ifcType = ifcType || "DEFAULT";
-                                const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
+                              //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                                 const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
                                 const xeoglObject = new xeoglObjectClass(xeoglModel, {
                                     id: objectId,
-                                    guid,
+                                   // guid: guid,
                                     entityType: ifcType,
-                                    matrix,
+                                    matrix: matrix,
                                     colorize: color, // RGB
                                     opacity: color[3], // A
                                     visibility: !self.hiddenTypes[ifcType],
