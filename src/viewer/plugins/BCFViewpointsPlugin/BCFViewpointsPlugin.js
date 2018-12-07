@@ -4,12 +4,49 @@ import {Clip, math} from "../../../xeogl/xeogl.module.js"
 const tempVec3 = math.vec3();
 
 /**
- Viewer plugin that saves and loads BCF viewpoints as JSON objects.
-
- BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
- the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
-
- @class BCFViewpointsPlugin
+ * Viewer plugin that saves and loads BCF viewpoints as JSON objects.
+ *
+ * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
+ * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
+ *
+ * In the example below, we'll use a {@link GLTFModelsPlugin} to load a model from a glTF file, then once that model
+ * has loaded, we'll arrange the camera
+ *
+ * @example
+ * import {Viewer} from "../../../src/viewer/Viewer.js";
+ * import {GLTFModelsPlugin} from "../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
+ * import {BCFViewpointsPlugin} from "../../../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+ *
+ * // Create a xeokit Viewer
+ * const viewer = new Viewer({
+ *    canvasId: "myCanvas"
+ * });
+ *
+ * // Add a GLTFModelsPlugin
+ * const glTFModels = new GLTFModelsPlugin(viewer);
+ *
+ * // Add a BCFViewpointsPlugin
+ * const bcfViewpoints = new BCFViewpointsPlugin(viewer);
+ *
+ * // Load a glTF model
+ * const model = glTFModels.load({
+ *    id: "myModel",
+ *    src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
+ *    edges: true
+ * });
+ *
+ * // When the model has loaded, arrange the camera and save a BCF viewpoint
+ * model.on("loaded", () => {
+ *
+ *     viewer.scene.camera.orbitPitch(20);
+ *     viewer.cameraFlight.flyTo(model);
+ *
+ *     const viewpoint = bcfViewpoints.getViewpoint();
+ *
+ *     console.log(JSON.stringify(viewpoint, null, "\t"));
+ * });
+ *
+ *  @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {
 
@@ -98,8 +135,8 @@ class BCFViewpointsPlugin extends Plugin {
      *             default_visibility: false,
      *             exceptions: [{
      *                 ifc_guid: 4$cshxZO9AJBebsni$z9Yk,
-     *                 originating_system: BIMData.io,
-     *                 authoring_tool_id: BIMViewer/v1.0
+     *                 originating_system: xeokit.io,
+     *                 authoring_tool_id: xeokit/v1.0
      *             }]
      *        },
      *         selection: [{
@@ -109,8 +146,6 @@ class BCFViewpointsPlugin extends Plugin {
      * }
      */
     getViewpoint() {
-
-        // https://github.com/buildingSMART/BCF-API
 
         const scene = this.viewer.scene;
         const camera = scene.camera;
@@ -140,12 +175,14 @@ class BCFViewpointsPlugin extends Plugin {
 
         bcfViewpoint.clipping_planes = [];
         const clips = scene.clips;
-        for (const id in clips) {
-            let clip = clips[id];
-            bcfViewpoint.clipping_planes.push({
-                location: xyzArrayToObject(clip.pos),
-                direction: xyzArrayToObject(clip.dir)
-            });
+        for (let id in clips) {
+            if (clips.hasOwnProperty(id)) {
+                let clip = clips[id];
+                bcfViewpoint.clipping_planes.push({
+                    location: xyzArrayToObject(clip.pos),
+                    direction: xyzArrayToObject(clip.dir)
+                });
+            }
         }
 
         // Entity states
@@ -187,8 +224,8 @@ class BCFViewpointsPlugin extends Plugin {
     _objectIdToComponent(o) {
         return {
             ifc_guid: o.split('#')[1],
-            originating_system: this.originatingSystem || "xeoviewer.org",
-            authoring_tool_id: this.authoringTool || "xeoviewer.org"
+            originating_system: this.originatingSystem || "xeokit.io",
+            authoring_tool_id: this.authoringTool || "xeokit.io"
         };
     }
 
@@ -240,24 +277,28 @@ class BCFViewpointsPlugin extends Plugin {
             });
         }
 
-        // TODO
+        if (bcfViewpoint.components) {
+            if (!bcfViewpoint.components.visibility.default_visibility) {
+                scene.setVisible(scene.visibleEntities, false);
+                Object.keys(scene.models).forEach(modelId => {
+                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(modelId + '#' + x.ifc_guid, true));
+                });
+            } else {
+                scene.setVisible(scene.visibleEntities, true);
+                scene.setVisible("space", false);
+                Object.keys(scene.models).forEach(modelId => {
+                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(modelId + '#' + x.ifc_guid, false));
+                });
+            }
+        }
 
-        // if (bcfViewpoint.components) {
-        //     if (!bcfViewpoint.components.visibility.default_visibility) {
-        //         this.hide();
-        //         this.getModels().forEach(model => {
-        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.show(model + '#' + x.ifc_guid));
-        //         });
-        //     } else {
-        //         this.show();
-        //         this.hide('space');
-        //         this.getModels().forEach(model => {
-        //             bcfViewpoint.components.visibility.exceptions.forEach(x => self.hide(model + '#' + x.ifc_guid));
-        //         });
-        //     }
-        // }
+        if (bcfViewpoint.components.selection) {
+            scene.setSelected(scene.selectedEntities, false);
+            Object.keys(scene.models).forEach(modelId => {
+                bcfViewpoint.components.selection.forEach(x => scene.setSelected(modelId + '#' + x.ifc_guid, true));
+            });
+        }
     }
-
 
     /**
      * Destroys this plugin.
