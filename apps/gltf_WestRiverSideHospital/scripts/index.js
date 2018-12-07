@@ -9,26 +9,26 @@ const viewer = new Viewer({
     canvasId: "myCanvas"
 });
 
-new AxisGizmoPlugin(viewer, {size: [250, 250]});
+const axisGizmo = new AxisGizmoPlugin(viewer, {size: [250, 250]});
 
-var loader = new GLTFBigModelsPlugin(viewer);
+const loader = new GLTFBigModelsPlugin(viewer);
 
-var structure = loader.load({
+const structure = loader.load({
     id: "structure",
     src: "../../models/gltf/WestRiverSideHospital/structure.gltf"
 });
 
-var electrical = loader.load({
+const electrical = loader.load({
     id: "electrical",
     src: "../../models/gltf/WestRiverSideHospital/electrical.gltf"
 });
 
-var fireAlarms = loader.load({
+const fireAlarms = loader.load({
     id: "fireAlarms",
     src: "../../models/gltf/WestRiverSideHospital/fireAlarms.gltf"
 });
 
-var sprinklers = loader.load({
+const sprinklers = loader.load({
     id: "sprinklers",
     src: "../../models/gltf/WestRiverSideHospital/sprinklers.gltf"
 });
