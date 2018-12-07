@@ -1,4 +1,4 @@
-import {ModelsPlugin} from "./../../../viewer/Plugin.js";
+import {Plugin} from "./../../../viewer/Plugin.js";
 
 /**
  * A viewer plugin that supports WebVR.
