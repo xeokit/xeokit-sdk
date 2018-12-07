@@ -14,7 +14,7 @@ class WebVRPlugin extends Plugin {
      * @param {String} [cfg.id="WebVR"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
-        super("WebVR", viewer, STLModel, cfg);
+        super("WebVR", viewer, cfg);
     }
 }
 
