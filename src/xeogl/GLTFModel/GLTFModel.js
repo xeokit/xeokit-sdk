@@ -1202,8 +1202,6 @@ var parseGLTF = (function () {
 
                     // Case 6: Creating explicit object, node has meshes OR node has child nodes
 
-                    console.log("Case 6");
-
                     var groupCfg = {
                         matrix: matrix
                     };
