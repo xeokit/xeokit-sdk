@@ -193,8 +193,9 @@ class BigModel extends Component {
         this._objectIds = [];
         this._buffer = getBatchingBuffer(); // Each BigModel gets it's own batching buffer - allows multiple BigModels to load concurrently
 
+
         /**
-         All contained {{#crossLink "BigModelMesh"}}BigModelMeshs{{/crossLink}}, mapped to their IDs.
+         All contained {{#crossLink "BigModelMesh"}}BigModelMesh{{/crossLink}} instances, mapped to their IDs.
 
          @property meshes
          @final
@@ -203,7 +204,7 @@ class BigModel extends Component {
         this.meshes = {};
 
         /**
-         All contained {{#crossLink "BigModelObject"}}BigModelObject{{/crossLink}}, mapped to their IDs.
+         All contained {{#crossLink "BigModelObject"}}BigModelObject{{/crossLink}} instances, mapped to their IDs.
 
          @property objects
          @final
