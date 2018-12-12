@@ -1,16 +1,9 @@
 import {DataInputStreamReader} from "./DataInputStreamReader.js";
 
 /**
- *
- * @param bimServerAPI
- * @param bimServerModel
- * @param roid
- * @param globalTransformationMatrix
- * @param modelBuilder
- * @constructor
  * @private
  */
-function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTransformationMatrix, modelBuilder) {
+function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, modelBuilder) {
 
     var o = this;
 
@@ -72,7 +65,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
 
         for (var k in infoToOid) {
             var oid = parseInt(infoToOid[k]);
-            bimServerModel.apiModel.get(oid, function (object) {
+            bimServerClientModel.get(oid, function (object) {
                 if (object.object._rgeometry != null) {
                     if (object.model.objects[object.object._rgeometry] != null) {
                         // Only if this data is preloaded, otherwise just don't include any gi
@@ -144,23 +137,23 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
         var useNewQuery = false;
 
         var pluginCallback = function (serializer) {
-            bimServerAPI.call("ServiceInterface", "download", {
+            bimServerClient.call("ServiceInterface", "download", {
                 roids: [o.roid],
                 query: JSON.stringify(useNewQuery ? newQuery : oldQuery),
                 serializerOid: serializer.oid,
                 sync: false
             }, function (topicId) {
                 o.topicId = topicId;
-                bimServerAPI.registerProgressHandler(o.topicId, progressHandler);
+                bimServerClient.registerProgressHandler(o.topicId, progressHandler);
             });
         };
 
-        var promise = bimServerAPI.getSerializerByPluginClassName(serializerName + "3", pluginCallback);
+        var promise = bimServerClient.getSerializerByPluginClassName(serializerName + "3", pluginCallback);
         if (promise) {
             // If this returns a promise (it'll never be cancelled btw. even in case of error) we're
             // talking to a newer version of the plugin ecosystem and we can try the new query.
             useNewQuery = true;
-            bimServerAPI.getSerializerByPluginClassName(serializerName).then(pluginCallback);
+            bimServerClient.getSerializerByPluginClassName(serializerName).then(pluginCallback);
         }
     };
 
@@ -173,7 +166,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
                 }
             }
             if (state.state === "FINISHED") {
-                bimServerAPI.unregisterProgressHandler(o.topicId, progressHandler);
+                bimServerClient.unregisterProgressHandler(o.topicId, progressHandler);
             }
         }
     }
@@ -184,8 +177,8 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
             nrObjectsRead: 0,
             nrObjects: 0
         };
-        bimServerAPI.setBinaryDataListener(o.topicId, binaryDataListener);
-        bimServerAPI.downloadViaWebsocket({
+        bimServerClient.setBinaryDataListener(o.topicId, binaryDataListener);
+        bimServerClient.downloadViaWebsocket({
             longActionId: o.topicId,
             topicId: o.topicId
         });
@@ -196,7 +189,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
     }
 
     function afterRegistration(topicId) {
-        bimServerAPI.call("Bimsie1NotificationRegistryInterface", "getProgress", {
+        bimServerClient.call("Bimsie1NotificationRegistryInterface", "getProgress", {
             topicId: o.topicId
         }, function (state) {
             progressHandler(o.topicId, state);
@@ -232,7 +225,7 @@ function BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, globalTrans
         progressListeners.forEach(function (progressListener) {
             progressListener("done", currentState.nrObjectsRead, currentState.nrObjectsRead);
         });
-        bimServerAPI.call("ServiceInterface", "cleanupLongAction", {topicId: o.topicId}, function () {
+        bimServerClient.call("ServiceInterface", "cleanupLongAction", {topicId: o.topicId}, function () {
         });
     }
 
