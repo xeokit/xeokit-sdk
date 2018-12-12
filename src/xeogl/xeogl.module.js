@@ -4,7 +4,7 @@
  * WebGL-based 3D visualization library
  * http://xeogl.org/
  *
- * Built on 2018-12-05
+ * Built on 2018-12-11
  *
  * MIT License
  * Copyright 2018, Lindsay Kay
@@ -25908,346 +25908,9 @@ EmphasisEdgesRenderer.prototype._bindProgram = function (frame) {
  * @author xeolabs / https://github.com/xeolabs
  */
 
-class ShadowShaderSource {
-    constructor(mesh) {
-        this.vertex = buildVertex$2(mesh);
-        this.fragment = buildFragment$2(mesh);
-    }
-}
-
-function buildVertex$2(mesh) {
-    const scene = mesh.scene;
-    const clipping = scene._clipsState.clips.length > 0;
-    const quantizedGeometry = !!mesh._geometry._state.quantized;
-    const billboard = mesh._state.billboard;
-    const stationary = mesh._state.stationary;
-    const src = [];
-    src.push("// Shadow drawing vertex shader");
-    src.push("attribute vec3 position;");
-    src.push("uniform mat4 modelMatrix;");
-    src.push("uniform mat4 viewMatrix;");
-    src.push("uniform mat4 projMatrix;");
-    if (quantizedGeometry) {
-        src.push("uniform mat4 positionsDecodeMatrix;");
-    }
-    if (clipping) {
-        src.push("varying vec4 vWorldPosition;");
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("void billboard(inout mat4 mat) {");
-        src.push("   mat[0][0] = 1.0;");
-        src.push("   mat[0][1] = 0.0;");
-        src.push("   mat[0][2] = 0.0;");
-        if (billboard === "spherical") {
-            src.push("   mat[1][0] = 0.0;");
-            src.push("   mat[1][1] = 1.0;");
-            src.push("   mat[1][2] = 0.0;");
-        }
-        src.push("   mat[2][0] = 0.0;");
-        src.push("   mat[2][1] = 0.0;");
-        src.push("   mat[2][2] =1.0;");
-        src.push("}");
-    }
-    src.push("void main(void) {");
-    src.push("vec4 localPosition = vec4(position, 1.0); ");
-    src.push("vec4 worldPosition;");
-    if (quantizedGeometry) {
-        src.push("localPosition = positionsDecodeMatrix * localPosition;");
-    }
-    src.push("mat4 viewMatrix2 = viewMatrix;");
-    src.push("mat4 modelMatrix2 = modelMatrix;");
-    if (stationary) {
-        src.push("viewMatrix2[3][0] = viewMatrix2[3][1] = viewMatrix2[3][2] = 0.0;");
-    }
-    if (billboard === "spherical" || billboard === "cylindrical") {
-        src.push("mat4 modelViewMatrix = viewMatrix2 * modelMatrix2;");
-        src.push("billboard(modelMatrix2);");
-        src.push("billboard(viewMatrix2);");
-    }
-    src.push("worldPosition = modelMatrix2 * localPosition;");
-    src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
-    if (clipping) {
-        src.push("vWorldPosition = worldPosition;");
-    }
-    src.push("   gl_Position = projMatrix * viewPosition;");
-    src.push("}");
-    return src;
-}
-
-function buildFragment$2(mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    const clipsState = scene._clipsState;
-    const clipping = clipsState.clips.length > 0;
-    const src = [];
-    src.push("// Shadow fragment shader");
-    src.push("precision " + getFragmentFloatPrecision$1(gl) + " float;");
-    if (clipping) {
-        src.push("uniform bool clippable;");
-        src.push("varying vec4 vWorldPosition;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
-        }
-    }
-    src.push("vec4 packDepth (float depth) {");
-    src.push("  const vec4 bitShift = vec4(1.0, 256.0, 256.0 * 256.0, 256.0 * 256.0 * 256.0);");
-    src.push("  const vec4 bitMask = vec4(1.0/256.0, 1.0/256.0, 1.0/256.0, 0.0);");
-    src.push("  vec4 comp = fract(depth * bitShift);");
-    src.push("  comp -= comp.gbaa * bitMask;");
-    src.push("  return comp;");
-    src.push("}");
-
-    src.push("void main(void) {");
-    if (clipping) {
-        src.push("if (clippable) {");
-        src.push("  float dist = 0.0;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
-            src.push("}");
-        }
-        src.push("  if (dist > 0.0) { discard; }");
-        src.push("}");
-    }
-    src.push("gl_FragColor = packDepth(gl_FragCoord.z);");
-    src.push("}");
-    return src;
-}
-
-function getFragmentFloatPrecision$1(gl) {
-    if (!gl.getShaderPrecisionFormat) {
-        return "mediump";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
-        return "highp";
-    }
-    if (gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT).precision > 0) {
-        return "mediump";
-    }
-    return "lowp";
-}
-
 /**
  * @author xeolabs / https://github.com/xeolabs
  */
-
-const ShadowRenderer = function (hash, mesh) {
-    this._hash = hash;
-    this._shaderSource = new ShadowShaderSource(mesh);
-    this._scene = mesh.scene;
-    this._useCount = 0;
-    this._allocate(mesh);
-};
-
-const renderers$1 = {};
-
-ShadowRenderer.get = function (mesh) {
-    const scene = mesh.scene;
-    const hash = [
-        scene.canvas.canvas.id,
-        scene._clipsState.getHash(),
-        mesh._geometry._state.hash,
-        mesh._state.hash].join(";");
-    let renderer = renderers$1[hash];
-    if (!renderer) {
-        renderer = new ShadowRenderer(hash, mesh);
-        if (renderer.errors) {
-            console.log(renderer.errors.join("\n"));
-            return null;
-        }
-        renderers$1[hash] = renderer;
-        stats.memory.programs++;
-    }
-    renderer._useCount++;
-    return renderer;
-};
-
-ShadowRenderer.prototype.put = function () {
-    if (--this._useCount === 0) {
-        if (this._program) {
-            this._program.destroy();
-        }
-        delete renderers$1[this._hash];
-        stats.memory.programs--;
-    }
-};
-
-ShadowRenderer.prototype.webglContextRestored = function () {
-    this._program = null;
-};
-
-
-ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const materialState = mesh._material._state;
-    const geometryState = mesh._geometry._state;
-    if (frame.lastProgramId !== this._program.id) {
-        frame.lastProgramId = this._program.id;
-        this._bindProgram(frame);
-    }
-    frame.textureUnit = 0;
-    if (light.id !== this._lastLightId) {
-        gl.uniformMatrix4fv(this._uViewMatrix, false, light.getShadowViewMatrix());
-        gl.uniformMatrix4fv(this._uProjMatrix, false, light.getShadowProjMatrix());
-        this._lastLightId = light.id;
-    }
-    // gl.uniformMatrix4fv(this._uViewMatrix, false, this._scene.viewTransform.matrix);
-    // gl.uniformMatrix4fv(this._uProjMatrix, false, this._scene.projTransform.matrix);
-    if (materialState.id !== this._lastMaterialId) {
-        const backfaces = materialState.backfaces;
-        if (frame.backfaces !== backfaces) {
-            if (backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frame.backfaces = backfaces;
-        }
-        const frontface = materialState.frontface;
-        if (frame.frontface !== frontface) {
-            if (frontface) {
-                gl.frontFace(gl.CCW);
-            } else {
-                gl.frontFace(gl.CW);
-            }
-            frame.frontface = frontface;
-        }
-        if (frame.lineWidth !== materialState.lineWidth) {
-            gl.lineWidth(materialState.lineWidth);
-            frame.lineWidth = materialState.lineWidth;
-        }
-        if (this._uPointSize) {
-            gl.uniform1i(this._uPointSize, materialState.pointSize);
-        }
-        this._lastMaterialId = materialState.id;
-    }
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (geometryState.combined) {
-        const vertexBufs = mesh.vertexBufs;
-        if (vertexBufs.id !== this._lastVertexBufsId) {
-            if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
-            }
-            this._lastVertexBufsId = vertexBufs.id;
-        }
-    }
-    if (this._uClippable) {
-        gl.uniform1i(this._uClippable, mesh._state.clippable);
-    }
-    if (geometryState.id !== this._lastGeometryId) {
-        if (this._uPositionsDecodeMatrix) {
-            gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-        }
-        if (geometryState.combined) { // VBOs were bound by the preceding VertexBufs chunk
-            if (geometryState.indicesBufCombined) {
-                geometryState.indicesBufCombined.bind();
-                frame.bindArray++;
-            }
-        } else {
-            if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
-            }
-            if (geometryState.indicesBuf) {
-                geometryState.indicesBuf.bind();
-                frame.bindArray++;
-            }
-        }
-        this._lastGeometryId = geometryState.id;
-    }
-    if (geometryState.combined) {
-        if (geometryState.indicesBufCombined) {
-            gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
-            frame.drawElements++;
-        } else {
-            // TODO: drawArrays() with VertexBufs positions
-        }
-    } else {
-        if (geometryState.indicesBuf) {
-            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            frame.drawElements++;
-        } else if (geometryState.positions) {
-            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
-            frame.drawArrays++;
-        }
-    }
-};
-
-ShadowRenderer.prototype._allocate = function (mesh) {
-    const scene = mesh.scene;
-    const gl = scene.canvas.gl;
-    this._program = new Program(gl, this._shaderSource);
-    this._scene = scene;
-    this._useCount = 0;
-    if (this._program.errors) {
-        this.errors = this._program.errors;
-        return;
-    }
-    const program = this._program;
-    this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
-    this._uViewMatrix = program.getLocation("viewMatrix");
-    this._uProjMatrix = program.getLocation("projMatrix");
-    this._uClips = {};
-    const clips = scene._clipsState.clips;
-    for (let i = 0, len = clips.length; i < len; i++) {
-        this._uClips.push({
-            active: program.getLocation("clipActive" + i),
-            pos: program.getLocation("clipPos" + i),
-            dir: program.getLocation("clipDir" + i)
-        });
-    }
-    this._aPosition = program.getAttribute("position");
-    this._uClippable = program.getLocation("clippable");
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-};
-
-ShadowRenderer.prototype._bindProgram = function (frame) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
-    const scene = this._scene;
-    const gl = scene.canvas.gl;
-    const clipsState = scene._clipsState;
-    this._program.bind();
-    frame.useProgram++;
-    this._lastLightId = null;
-    this._lastMaterialId = null;
-    this._lastVertexBufsId = null;
-    this._lastGeometryId = null;
-    if (clipsState.clips.length > 0) {
-        let clipUniforms;
-        let uClipActive;
-        let clip;
-        let uClipPos;
-        let uClipDir;
-        for (let i = 0, len = this._uClips.length; i < len; i++) {
-            clipUniforms = this._uClips[i];
-            uClipActive = clipUniforms.active;
-            clip = clipsState.clips[i];
-            if (uClipActive) {
-                gl.uniform1i(uClipActive, clip.active);
-            }
-            uClipPos = clipUniforms.pos;
-            if (uClipPos) {
-                gl.uniform3fv(clipUniforms.pos, clip.pos);
-            }
-            uClipDir = clipUniforms.dir;
-            if (uClipDir) {
-                gl.uniform3fv(clipUniforms.dir, clip.dir);
-            }
-        }
-    }
-};
 
 /**
  * @author xeolabs / https://github.com/xeolabs
@@ -27885,7 +27548,8 @@ class Mesh extends xeoglObject {
             layer: null,
             colorize: null,
             pickID: this.scene._renderer.getPickID(this), // TODO: somehow puch this down into xeogl framework?
-            hash: ""
+            drawHash: "",
+            pickHash: ""
         });
 
         this._drawRenderer = null;
@@ -27928,14 +27592,19 @@ class Mesh extends xeoglObject {
      * @public
      */
     compile() {
-        var hash = this._makeHash();
-        if (this._state.hash !== hash) {
-            this._state.hash = hash;
-            this._putRenderers();
+        var drawHash = this._makeDrawHash();
+        if (this._state.drawHash !== drawHash) {
+            this._state.drawHash = drawHash;
+            this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-            this._shadowRenderer = ShadowRenderer.get(this);
+           // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
+        }
+        var pickHash = this._makePickHash();
+        if (this._state.pickHash !== pickHash) {
+            this._state.pickHash = pickHash;
+            this._putPickRenderers();
             this._pickMeshRenderer = PickMeshRenderer.get(this);
         }
     }
@@ -27961,31 +27630,56 @@ class Mesh extends xeoglObject {
         }
     }
 
-    _makeHash() {
-        const hash = [];
+    _makeDrawHash() {
+        const scene = this.scene;
+        const drawHash = [
+            scene.canvas.canvas.id,
+            (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
+            scene._lightsState.getHash(),
+            scene._clipsState.getHash(),
+        ];
         const state = this._state;
         if (state.stationary) {
-            hash.push("/s");
+            drawHash.push("/s");
         }
         if (state.billboard === "none") {
-            hash.push("/n");
+            drawHash.push("/n");
         } else if (state.billboard === "spherical") {
-            hash.push("/s");
+            drawHash.push("/s");
         } else if (state.billboard === "cylindrical") {
-            hash.push("/c");
+            drawHash.push("/c");
         }
         if (state.receiveShadow) {
-            hash.push("/rs");
+            drawHash.push("/rs");
         }
-        hash.push(";");
-        return hash.join("");
+        drawHash.push(";");
+        return drawHash.join("");
+    }
+
+    _makePickHash() {
+        const pickHash = [];
+        const state = this._state;
+        if (state.stationary) {
+            pickHash.push("/s");
+        }
+        if (state.billboard === "none") {
+            pickHash.push("/n");
+        } else if (state.billboard === "spherical") {
+            pickHash.push("/s");
+        } else if (state.billboard === "cylindrical") {
+            pickHash.push("/c");
+        }
+        if (state.receiveShadow) {
+            pickHash.push("/rs");
+        }
+        pickHash.push(";");
+        return pickHash.join("");
     }
 
     _buildAABB(worldMatrix, aabb) {
         math.transformOBB3(worldMatrix, this._geometry.obb, obb);
         math.OBB3ToAABB3(obb, aabb);
     }
-
 
     /**
      World-space 3D vertex positions.
@@ -28789,7 +28483,7 @@ class Mesh extends xeoglObject {
         getPickResult(this, pickResult);
     }
 
-    _putRenderers() {
+    _putDrawRenderers() {
         if (this._drawRenderer) {
             this._drawRenderer.put();
             this._drawRenderer = null;
@@ -28810,6 +28504,9 @@ class Mesh extends xeoglObject {
             this._outlineRenderer.put();
             this._outlineRenderer = null;
         }
+    }
+
+    _putPickRenderers() {
         if (this._pickMeshRenderer) {
             this._pickMeshRenderer.put();
             this._pickMeshRenderer = null;
@@ -28829,7 +28526,8 @@ class Mesh extends xeoglObject {
      */
     destroy() {
         super.destroy(); // xeogl.Object
-        this._putRenderers();
+        this._putDrawRenderers();
+        this._putPickRenderers();
         this.scene._meshDestroyed(this);
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeogl framework?
         this.glRedraw();
