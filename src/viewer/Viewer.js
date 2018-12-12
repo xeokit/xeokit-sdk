@@ -4,12 +4,15 @@ import {ObjectMetadata} from "./ObjectMetadata.js";
 /**
  * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
  *
- * A Viewer wraps a single <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
- *
- * Add {@link Plugin}s to a Viewer to extend its functionality.
- *
- * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
+ * * A Viewer wraps a single <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+ * * Add {@link Plugin}s to a Viewer to extend its functionality.
+ * * {@link Viewer#metadata} holds metadata about <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>s in the
+ * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>. Load and unload metadata using {@link Viewer#createMetadata}
+ * and {@link Viewer#destroyMetadata}.
+ * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
  * {@link Plugin} instances will also save and load their state to and from the JSON.
+ * * Use {@link Viewer#cameraFlight} to fly or jump the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>'s
+ * <a href="http://xeogl.org/docs/classes/Camera.html">xeogl.Camera</a> to target positions, boundaries or <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a>s.
  *
  * @public
  */
