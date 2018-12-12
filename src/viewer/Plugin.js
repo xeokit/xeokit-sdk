@@ -27,7 +27,7 @@ class Plugin {
         this.viewer = viewer;
 
         /**
-         * Subscriptions to events fired on this Plugin.
+         * Subscriptions to events fired at this Plugin.
          * @private
          */
         this._eventSubs = {};

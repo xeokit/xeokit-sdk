@@ -1,4 +1,5 @@
 import {math, Scene, CameraFlightAnimation, CameraControl} from "../xeogl/xeogl.module.js";
+import {ObjectMetadata} from "./ObjectMetadata.js";
 
 /**
  * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
@@ -22,25 +23,27 @@ class Viewer {
     constructor(cfg) {
 
         /**
-         * Metadata about this Viewer.
+         * Metadata about this Viewer and the content within it.
          *
-         * @property meta
-         * @type {{system: string}}
+         * @property {object} metadata Metadata for this Viewer and the content within its <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+         *
+         * @property {string} metadata.systemId Identifies this Viewer.
+         *
+         * @property {object} metadata.objects {@link ObjectMetadata}s corresponding to
+         * <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a>s within the {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+         *
+         * @property {object} metadata.structures For each <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer's
+         * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a> that has metadata, a tree of {@link ObjectMetadata}s describing its structure.
          */
-        this.meta = {
-            systemId: "xeoviewer.org",
-            authoring_tool: "xeoviewer.org"
+        this.metadata = {
+            systemId: "xeokit.io",
+            authoring_tool: "xeokit.io",
+            objects: {},
+            structures: {}
         };
 
         /**
-         * Subscriptions to events sent with {@link fire}.
-         * @private
-         */
-        this._eventSubs = {};
-
-        /**
          * The Viewer's <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
-         *
          * @property scene
          * @type {xeogl.Scene}
          */
@@ -61,11 +64,9 @@ class Viewer {
          */
         this.id = cfg.id || this.scene.id;
 
-
         /**
          * The Viewer's <a href="http://xeogl.org/docs/classes/CameraFlightAnimation.html">xeogl.CameraFlightAnimation</a>, which
          * is used to fly the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>'s <a href="http://xeogl.org/docs/classes/Camera.html">xeogl.Camera</a> to given targets.
-         *
          * @property cameraFlight
          * @type {xeogl.CameraFlightAnimation}
          */
@@ -77,7 +78,6 @@ class Viewer {
         /**
          * The Viewer's <a href="http://xeogl.org/docs/classes/CameraControl.html">xeogl.CameraControl</a>, which
          * controls the <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>'s <a href="http://xeogl.org/docs/classes/Camera.html">xeogl.Camera</a> with mouse,  touch and keyboard input.
-         *
          * @property cameraControl
          * @type {xeogl.CameraControl}
          */
@@ -85,11 +85,79 @@ class Viewer {
 
         /**
          * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.
-         *
          * @property plugins
          * @type {{string:Plugin}}
          */
         this.plugins = {};
+
+        /**
+         * Subscriptions to events sent with {@link fire}.
+         * @private
+         */
+        this._eventSubs = {};
+    }
+
+    /**
+     * Loads metadata corresponding to a
+     * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer's
+     * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+     *
+     * Metadata is kept in Metadata is kept within from {@link Viewer#metadata}.
+     *
+     * Fires a "metadata-created" event with the ID of the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
+     *
+     * @param {string} modelId ID of the target <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
+     * @param {object} metadata The metadata - (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     */
+    createMetadata(modelId, metadata) {
+        var objects = this.metadata.objects;
+        var structures = this.metadata.structures;
+        var newObjects = metadata.objects;
+        for (let i = 0, len = newObjects.length; i < len; i++) {
+            const object = new ObjectMetadata(newObjects[i]);
+            objects[object.id] = object;
+        }
+        for (let i = 0, len = newObjects.length; i < len; i++) {
+            const object = newObjects[i];
+            if (object.parent === undefined || object.parent === null) {
+                structures[modelId] = object;
+            } else {
+                const parent = objects[object.parent];
+                (parent.children || (parent.children = [])).push(object);
+            }
+        }
+        this.fire("metadata-created", modelId);
+    }
+
+    /**
+     * Removes metadata corresponding to a
+     * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer's
+     * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+     *
+     * Metadata is kept within from {@link Viewer#metadata}.
+     *
+     * Fires a "metadata-destroyed" event with the ID of the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
+     *
+     * @param {string} modelId ID of the target <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
+     */
+    destroyMetadata(modelId) {
+        var root = this.structures[modelId];
+        if (!root) {
+            return;
+        }
+        var objects = this.objects;
+        function visit(object) {
+            delete objects[object.id];
+            const children = object.children;
+            if (children) {
+                for (let i = 0, len = children.length; i < len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+        visit(root);
+        delete this.structures[modelId];
+        this.fire("metadata-destroyed", modelId);
     }
 
     /**
@@ -120,6 +188,14 @@ class Viewer {
                 subs[i](value);
             }
         }
+    }
+
+    /**
+     * Unsubscribes from an event fired at this Viewer.
+     * @param event
+     */
+    off(event) { // TODO
+
     }
 
     /**
@@ -204,6 +280,8 @@ class Viewer {
      */
     resetView() {
         this.sendToPlugins("resetView");
+
+        // Clear clips at xeogl level
 
         // TODO
         // this.show();

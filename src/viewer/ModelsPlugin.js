@@ -1,8 +1,9 @@
 import {_apply} from "../xeogl/xeogl.module.js"
 import {Plugin} from "./Plugin.js";
+import {loadJSON} from "./utils.js";
 
 /**
- Base class for Viewer plugins that load models.
+ Base class for {@link Viewer} plugins that load models.
 
  @class ModelsPlugin
  */
@@ -41,11 +42,13 @@ class ModelsPlugin extends Plugin {
     /**
      * Loads a model into this Plugin's {@link Viewer}.
      *
-     * @param params {*} Loading params.
-     * @param params.id {String} ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.
+     * @param {*} params  Loading params.
+     * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.
      * @returns {{xeogl.Model}} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
      */
-    load(params, ok) {
+    load(params) {
+        const self = this;
         const id = params.id;
         if (!id) {
             this.error("load() param expected: id");
@@ -55,21 +58,34 @@ class ModelsPlugin extends Plugin {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
-        const model = new this._modelClass(this.viewer.scene, params);
+        var model = new this._modelClass(this.viewer.scene, params);
         this._modelLoadParams[id] = _apply(params, {});
         this.models[id] = model;
         model.once("destroyed", () => {
             delete this.models[id];
             delete this._modelLoadParams[id];
+            this.viewer.destroyMetadata(id);
+            this.fire("unloaded", id);
         });
-        if (ok) {
-            model.once("loaded", ok);
+        if (params.metadataSrc) {
+            const metadataSrc = params.metadataSrc;
+            loadJSON(metadataSrc, function (json) {
+                var metadata;
+                try {
+                    metadata = eval(json);
+                } catch (e) {
+                    self.error(`load(): Failed to parse model metadata for model '${id} from  '${metadataSrc}' - ${e}`);
+                }
+                self.viewer.createMetadata(id, metadata);
+            }, function (errMsg) {
+                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+            });
         }
         return model;
     }
 
     /**
-     * Unloads and destroys a model that was previously loaded by this Plugin.
+     * Unloads a model that was previously loaded by this Plugin.
      *
      * @param {String} id  ID of model to unload.
      */
@@ -130,7 +146,7 @@ class ModelsPlugin extends Plugin {
     }
 
     /**
-     * Destroys models loaded by this plugin.
+     * Unloads models loaded by this plugin.
      */
     clear() {
         for (const id in this.models) {

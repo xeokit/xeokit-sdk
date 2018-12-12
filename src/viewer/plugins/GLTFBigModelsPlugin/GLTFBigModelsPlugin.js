@@ -91,7 +91,8 @@ class GLTFBigModelsPlugin extends ModelsPlugin {
      @param [params.scale=[1,1,1]] {Float32Array} The GLTFModel's local scale.
      @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     @param [params.src] {String} Path to a glTF file. You can set this to a new file path at any time, which will cause the
+     @param [params.src] {String} Path to a glTF file.
+     @param  [params.metadataSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      @param [params.lambertMaterials=false] {Boolean} When true, gives each {{#crossLink "Mesh"}}{{/crossLink}} the same {{#crossLink "LambertMaterial"}}{{/crossLink}} and a {{#crossLink "Mesh/colorize:property"}}{{/crossLink}} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
      @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.
      @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.

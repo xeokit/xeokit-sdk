@@ -97,6 +97,8 @@ class XML3DModelsPlugin extends ModelsPlugin {
      *
      * @param {String} [params.src] Path to a 3DXML file.
      *
+     * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     *
      * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),
      * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.
      *

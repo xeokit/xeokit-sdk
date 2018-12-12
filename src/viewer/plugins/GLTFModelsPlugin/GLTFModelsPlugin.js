@@ -77,7 +77,9 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),
      * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
      *
-     * @param {String} [params.src] Path to a glTF file.
+     * @param {String} params.src Path to a glTF file.
+     *
+     * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
      * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),
      * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.
@@ -122,12 +124,12 @@ class GLTFModelsPlugin extends ModelsPlugin {
 
         return super.load(_apply(params, {
             handleNode: function (nodeInfo, actions) {
-                return self._defaultHhandleNode(modelId, nodeInfo, actions);
+                return self.defaultHandleNode(modelId, nodeInfo, actions);
             }
         }));
     }
 
-    _defaultHhandleNode(modelId, nodeInfo, actions) {
+    defaultHandleNode(modelId, nodeInfo, actions) {
         var name = nodeInfo.name;
         if (!name) {
             return true; // Continue descending this node subtree

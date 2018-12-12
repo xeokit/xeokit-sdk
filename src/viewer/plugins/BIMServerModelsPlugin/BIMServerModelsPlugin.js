@@ -7,14 +7,13 @@ import {
     Model as xeoglModelClass,
     Mesh
 } from "./../../../xeogl/xeogl.module.js";
-import {preloadQuery} from "./lib/preloadQuery.js";
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
-import {BIMServerModel} from "./lib/BIMServerModel.js";
-import {utils} from "./lib/utils.js";
 
 /**
  * A viewer plugin that loads models from a [BIMServer](http://bimserver.org).
+ *
+ * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
  *
  * For each model loaded, BIMServerModelsPlugin creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its
  * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html). You can load multiple models into the same
@@ -54,21 +53,21 @@ import {utils} from "./lib/utils.js";
  * });
  *
  * // Create a BimServerClient
- * const bimServerAPI = new BimServerClient(bimServerAddress);
+ * const bimServerClient = new BimServerClient(bimServerAddress);
  *
  * // Add a BIMServerModelsPlugin to the Viewer, configured with the BIMServerClient
  * const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
- *     bimServerAPI: bimServerAPI
+ *     bimServerClient: bimServerClient
  * });
  *
  * // Initialize the BIMServer client
- * bimServerAPI.init(() => {
+ * bimServerClient.init(() => {
  *
  *     // Login to BIMServer
- *     bimServerAPI.login(username, password, () => {
+ *     bimServerClient.login(username, password, () => {
  *
  *         // Query a project by ID
- *         bimServerAPI.call("ServiceInterface", "getProjectByPoid", {
+ *         bimServerClient.call("ServiceInterface", "getProjectByPoid", {
  *             poid: poid
  *         }, (project) => {
  *
@@ -114,39 +113,56 @@ class BIMServerModelsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="BIMServerModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {BimServerClient} cfg.bimServerAPI A BIMServer client API instance.
+     * @param {BimServerClient} cfg.bimServerClient A BIMServer client API instance.
      */
     constructor(viewer, cfg) {
 
         super("BIMServerModels", viewer, cfg);
 
+        if (!cfg.bimServerClient) {
+            this.error("Config expected: bimServerClient");
+        }
+
         /**
          * Version of BIMServer supported by this plugin.
+         *
+         *
          * @type {string}
          */
         this.BIMSERVER_VERSION = "1.5";
 
-        if (!cfg.bimServerAPI) {
-            this.error("Config expected: bimServerAPI");
-        }
-
         /**
-         * The BIMServer API.
+         * The BIMServer API client
+         *
+         * @property bimServerClient.
+         * @type {BIMServerClient}
          */
-        this.bimServerAPI = cfg.bimServerAPI;
+        this.bimServerClient = cfg.bimServerClient;
 
         /**
          * IFC types that are hidden by default.
+         *
+         * @property hiddenTypes
          * @type {{IfcOpeningElement: boolean, IfcSpace: boolean}}
          */
         this.hiddenTypes = {
             "IfcOpeningElement": true,
             "IfcSpace": true
         };
+
+        /**
+         * IFCModels loaded by this BIMServerModelsPlugin.
+         *
+         * @property ifcModels
+         * @type {{String: IFCModel}}
+         */
+        this.ifcModels = {};
     }
 
     /**
      * Loads a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> from BIMServer into the {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+     *
+     * Creates IFC metadata for the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within {@link Viewer#metadata}.
      *
      * @param {*} params  Loading parameters.
      *
@@ -199,7 +215,7 @@ class BIMServerModelsPlugin extends Plugin {
         const schema = params.schema;
         const viewer = this.viewer;
         const scene = viewer.scene;
-        const bimServerAPI = this.bimServerAPI;
+        const bimServerClient = this.bimServerClient;
         const idMapping = { // This are arrays as multiple models might be loaded or unloaded.
             'toGuid': [],
             'toId': []
@@ -248,185 +264,316 @@ class BIMServerModelsPlugin extends Plugin {
             diffuse: [1.0, 1.0, 1.0]
         });
 
-        bimServerAPI.getModel(poid, roid, schema, false, apiModel => {  // TODO: Preload not necessary combined with the bruteforce tree
+        bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {
 
-            let fired = false;
+            this.loadMetadata(modelId, bimServerClientModel).then(function () {
 
-            apiModel.query(preloadQuery, () => {
+                xeoglModel.once("destroyed", function () {
+                   viewer.destroyMetadata(modelId);
+                });
 
-                if (!fired) {
+                const oids = [];
+                const oidToGuid = {};
+                const guidToOid = {};
 
-                    fired = true;
+                const visit = n => {
+                    oids[n.gid] = n.id;
+                    oidToGuid[n.id] = n.guid;
+                    guidToOid[n.guid] = n.id;
+                    for (let i = 0; i < (n.children || []).length; ++i) {
+                        visit(n.children[i]);
+                    }
+                };
 
-                    const bimServerModel = new BIMServerModel(bimServerAPI, apiModel);
+                const structure = viewer.metadata.structures[modelId];
 
-                    bimServerModel.getTree().then(function (tree) {
+                visit(structure);
 
-                        const oids = [];
-                        const oidToGuid = {};
-                        const guidToOid = {};
+                idMapping.toGuid.push(oidToGuid);
+                idMapping.toId.push(guidToOid);
 
-                        const visit = n => {
-                            oids[n.gid] = n.id;
-                            oidToGuid[n.id] = n.guid;
-                            guidToOid[n.guid] = n.id;
-                            for (let i = 0; i < (n.children || []).length; ++i) {
-                                visit(n.children[i]);
-                            }
-                        };
+                const loader = new BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
 
-                        visit(tree);
+                    log: function (msg) {
+                        if (logging) {
+                            self.log(msg);
+                        }
+                    },
 
-                        idMapping.toGuid.push(oidToGuid);
-                        idMapping.toId.push(guidToOid);
+                    error: function (msg) {
+                        self.error(msg);
+                    },
 
-                        const models = {};
+                    warn: function (msg) {
+                        self.warn(msg);
+                    },
 
-                        models[bimServerModel.apiModel.roid] = bimServerModel.apiModel; // TODO: Ugh. Undecorate some of the newly created classes
+                    gotModelBoundary: function (boundary) {
 
-                        const roid = params.roid;
+                        //console.log("boundary = " + boundary);
 
-                        const loader = new BIMServerGeometryLoader(bimServerAPI, bimServerModel, roid, null, {
+                        const xmin = boundary[0];
+                        const ymin = boundary[1];
+                        const zmin = boundary[2];
+                        const xmax = boundary[3];
+                        const ymax = boundary[4];
+                        const zmax = boundary[5];
 
-                            log: function (msg) {
-                                if (logging) {
-                                    self.log(msg);
-                                }
-                            },
+                        const diagonal = Math.sqrt(
+                            Math.pow(xmax - xmin, 2) +
+                            Math.pow(ymax - ymin, 2) +
+                            Math.pow(zmax - zmin, 2));
 
-                            error: function (msg) {
-                                self.error(msg);
-                            },
+                        const scale = 100 / diagonal;
 
-                            warn: function (msg) {
-                                self.warn(msg);
-                            },
+                        const center = [
+                            scale * ((xmax + xmin) / 2),
+                            scale * ((ymax + ymin) / 2),
+                            scale * ((zmax + zmin) / 2)
+                        ];
 
-                            gotModelBoundary: function (boundary) {
+                        // TODO
 
-                                //console.log("boundary = " + boundary);
+                        //o.viewer.setScale(scale); // Temporary until we find a better scaling system.
 
-                                const xmin = boundary[0];
-                                const ymin = boundary[1];
-                                const zmin = boundary[2];
-                                const xmax = boundary[3];
-                                const ymax = boundary[4];
-                                const zmax = boundary[5];
+                    },
 
-                                const diagonal = Math.sqrt(
-                                    Math.pow(xmax - xmin, 2) +
-                                    Math.pow(ymax - ymin, 2) +
-                                    Math.pow(zmax - zmin, 2));
-
-                                const scale = 100 / diagonal;
-
-                                const center = [
-                                    scale * ((xmax + xmin) / 2),
-                                    scale * ((ymax + ymin) / 2),
-                                    scale * ((zmax + zmin) / 2)
-                                ];
-
-                                // TODO
-
-                                //o.viewer.setScale(scale); // Temporary until we find a better scaling system.
-
-                            },
-
-                            createGeometry: function (geometryDataId, positions, normals, indices, reused) {
-                                const geometryId = `${modelId}.${geometryDataId}`;
-                                new Geometry(xeoglModel, {
-                                    id: geometryId,
-                                    primitive: "triangles",
-                                    positions: positions,
-                                    normals: normals,
-                                    indices: indices,
-                                    quantized: quantizeGeometry,
-                                    combined: combineGeometry
-                                });
-                            },
-
-                            createObject(oid, geometryDataIds, ifcType, matrix) {
-                                const objectId = `${modelId}.${oid}`;
-                                if (scene.entities[objectId]) {
-                                    self.error(`Can't create object - object with id ${objectId} already exists`);
-                                    return;
-                                }
-                                if (scene.components[objectId]) {
-                                    self.error(`Can't create object - scene component with this ID already exists: ${objectId}`);
-                                    return;
-                                }
-                                ifcType = ifcType || "DEFAULT";
-                              //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
-                                const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
-                                const xeoglObject = new xeoglObjectClass(xeoglModel, {
-                                    id: objectId,
-                                   // guid: guid,
-                                    entityType: ifcType,
-                                    matrix: matrix,
-                                    colorize: color, // RGB
-                                    opacity: color[3], // A
-                                    visibility: !self.hiddenTypes[ifcType],
-                                    edges: edges
-                                });
-                                xeoglModel.addChild(xeoglObject, false);
-                                for (let i = 0, len = geometryDataIds.length; i < len; i++) {
-                                    const xeoglMesh = new Mesh(xeoglModel, {
-                                        geometry: `${modelId}.${geometryDataIds[i]}`,
-                                        material: xeoglMaterial
-                                    });
-                                    xeoglObject.addChild(xeoglMesh, true);
-                                    xeoglMesh.colorize = color; // HACK: Overrides state inheritance
-                                    xeoglMesh.opacity = color[3]; // A
-                                }
-                            },
-
-                            addGeometryToObject(oid, geometryDataId) {
-                                const objectId = `${modelId}.${oid}`;
-                                const xeoglObject = xeoglModel.scene.components[objectId];
-                                if (!xeoglObject) {
-                                    //self.error(`Can't find object with id ${objectId}`);
-                                    return;
-                                }
-                                const geometryId = `${modelId}.${geometryDataId}`;
-                                const xeoglMesh = new Mesh(xeoglModel, {
-                                    geometry: geometryId,
-                                    material: xeoglMaterial
-                                });
-                                //  xeoglMesh.colorize = color; // HACK: Overrides state inheritance
-                                xeoglObject.addChild(xeoglMesh, true);
-                            }
+                    createGeometry: function (geometryDataId, positions, normals, indices, reused) {
+                        const geometryId = `${modelId}.${geometryDataId}`;
+                        new Geometry(xeoglModel, {
+                            id: geometryId,
+                            primitive: "triangles",
+                            positions: positions,
+                            normals: normals,
+                            indices: indices,
+                            quantized: quantizeGeometry,
+                            combined: combineGeometry
                         });
+                    },
 
-                        loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) => {
-                            if (progress === "start") {
-                                if (logging) {
-                                    self.log("Started loading geometries");
-                                }
-                            } else if (progress === "done") {
-                                if (logging) {
-                                    self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
-                                }
-                                viewer.scene.off(onTick);
-                                scene.canvas.spinner.processes--;
-                                xeoglModel.fire("loaded");
-
-                            }
+                    createObject(oid, geometryDataIds, ifcType, matrix) {
+                        const objectId = `${modelId}.${oid}`;
+                        if (scene.entities[objectId]) {
+                            self.error(`Can't create object - object with id ${objectId} already exists`);
+                            return;
+                        }
+                        if (scene.components[objectId]) {
+                            self.error(`Can't create object - scene component with this ID already exists: ${objectId}`);
+                            return;
+                        }
+                        ifcType = ifcType || "DEFAULT";
+                        //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
+                        const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
+                        const xeoglObject = new xeoglObjectClass(xeoglModel, {
+                            id: objectId,
+                            // guid: guid,
+                            entityType: ifcType,
+                            matrix: matrix,
+                            colorize: color, // RGB
+                            opacity: color[3], // A
+                            visibility: !self.hiddenTypes[ifcType],
+                            edges: edges
                         });
+                        xeoglModel.addChild(xeoglObject, false);
+                        for (let i = 0, len = geometryDataIds.length; i < len; i++) {
+                            const xeoglMesh = new Mesh(xeoglModel, {
+                                geometry: `${modelId}.${geometryDataIds[i]}`,
+                                material: xeoglMaterial
+                            });
+                            xeoglObject.addChild(xeoglMesh, true);
+                            xeoglMesh.colorize = color; // HACK: Overrides state inheritance
+                            xeoglMesh.opacity = color[3]; // A
+                        }
+                    },
 
-                        loader.setLoadOids(oids); // TODO: Why do we do this?
-
-                        onTick = viewer.scene.on("tick", () => {
-                            loader.process();
+                    addGeometryToObject(oid, geometryDataId) {
+                        const objectId = `${modelId}.${oid}`;
+                        const xeoglObject = xeoglModel.scene.components[objectId];
+                        if (!xeoglObject) {
+                            //self.error(`Can't find object with id ${objectId}`);
+                            return;
+                        }
+                        const geometryId = `${modelId}.${geometryDataId}`;
+                        const xeoglMesh = new Mesh(xeoglModel, {
+                            geometry: geometryId,
+                            material: xeoglMaterial
                         });
+                        //  xeoglMesh.colorize = color; // HACK: Overrides state inheritance
+                        xeoglObject.addChild(xeoglMesh, true);
+                    }
+                });
 
-                        loader.start();
-                    });
-                }
+                loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) => {
+                    if (progress === "start") {
+                        if (logging) {
+                            self.log("Started loading geometries");
+                        }
+                    } else if (progress === "done") {
+                        if (logging) {
+                            self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
+                        }
+                        viewer.scene.off(onTick);
+                        scene.canvas.spinner.processes--;
+
+                        xeoglModel.fire("loaded");
+
+                        viewer.fire("loaded", xeoglModel);
+                        self.fire("loaded", xeoglModel);
+                    }
+                });
+
+                loader.setLoadOids(oids); // TODO: Why do we do this?
+
+                onTick = viewer.scene.on("tick", () => {
+                    loader.process();
+                });
+
+                loader.start();
             });
         });
 
         return xeoglModel;
-    };
+    }
+
+    loadMetadata(modelId, bimServerClientModel) {
+
+        function isArray(value) {
+            return Object.prototype.toString.call(value) === "[object Array]";
+        }
+
+        const self = this;
+
+        return new Promise(function (resolve, reject) {
+
+            const query = {
+                defines: {
+                    Representation: {type: "IfcProduct", field: "Representation"},
+                    ContainsElementsDefine: {
+                        type: "IfcSpatialStructureElement",
+                        field: "ContainsElements",
+                        include: {
+                            type: "IfcRelContainedInSpatialStructure",
+                            field: "RelatedElements",
+                            includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
+                        }
+                    },
+                    IsDecomposedByDefine: {
+                        type: "IfcObjectDefinition",
+                        field: "IsDecomposedBy",
+                        include: {
+                            type: "IfcRelDecomposes",
+                            field: "RelatedObjects",
+                            includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
+                        }
+                    },
+                },
+                queries: [
+                    {type: "IfcProject", includes: ["IsDecomposedByDefine", "ContainsElementsDefine"]},
+                    {type: "IfcRepresentation", includeAllSubtypes: true},
+                    {type: "IfcProductRepresentation"},
+                    {type: "IfcPresentationLayerWithStyle"},
+                    {type: "IfcProduct", includeAllSubtypes: true},
+                    {type: "IfcProductDefinitionShape"},
+                    {type: "IfcPresentationLayerAssignment"},
+                    {
+                        type: "IfcRelAssociatesClassification",
+                        includes: [
+                            {type: "IfcRelAssociatesClassification", field: "RelatedObjects"},
+                            {type: "IfcRelAssociatesClassification", field: "RelatingClassification"}
+                        ]
+                    },
+                    {type: "IfcSIUnit"},
+                    {type: "IfcPresentationLayerAssignment"}
+                ]
+            };
+
+            bimServerClientModel.query(query, function () {
+            }).done(function () {
+
+                const entityCardinalities = { // Parent-child cardinalities for entities
+                    'IfcRelDecomposes': 1,
+                    'IfcRelAggregates': 1,
+                    'IfcRelContainedInSpatialStructure': 1,
+                    'IfcRelFillsElement': 1,
+                    'IfcRelVoidsElement': 1
+                };
+
+                const clientObjectMap = {}; // Create a mapping from id->instance
+                const clientObjectList = [];
+
+                for (let clientObjectId in bimServerClientModel.objects) { // The root node in a dojo store should have its parent set to null, not just something that evaluates to false
+                    const clientObject = bimServerClientModel.objects[clientObjectId].object;
+                    clientObject.parent = null;
+                    clientObjectMap[clientObject._i] = clientObject;
+                    clientObjectList.push(clientObject);
+                }
+
+                const relationships = clientObjectList.filter(function (clientObject) { // Filter all instances based on relationship entities
+                    return entityCardinalities[clientObject._t];
+                });
+
+                const parents = relationships.map(function (clientObject) { // Construct a tuple of {parent, child} ids
+                    const keys = Object.keys(clientObject);
+                    const related = keys.filter(function (key) {
+                        return key.indexOf("Related") !== -1;
+                    });
+                    const relating = keys.filter(function (key) {
+                        return key.indexOf("Relating") !== -1;
+                    });
+                    return [clientObject[relating[0]], clientObject[related[0]]];
+                });
+
+                const data = [];
+                const visited = {};
+
+                parents.forEach(function (a) {
+                    const ps = isArray(a[0]) ? a[0] : [a[0]]; // Relationships in IFC can be one to one/many
+                    const cs = isArray(a[1]) ? a[1] : [a[1]];
+                    for (let i = 0; i < ps.length; ++i) {
+                        for (let j = 0; j < cs.length; ++j) {
+                            const parent = clientObjectMap[ps[i]._i]; // Look up the instance ids in the mapping
+                            const child = clientObjectMap[cs[j]._i];
+                            child.parent = parent.id = parent._i; // parent, id, hasChildren are significant attributes in a dojo store
+                            child.id = child._i;
+                            parent.hasChildren = true;
+                            if (!visited[child.id]) { // Make sure to only add instances once
+                                data.push(child);
+                            }
+                            if (!visited[parent.id]) {
+                                data.push(parent);
+                            }
+                            visited[parent.id] = visited[child.id] = true;
+                        }
+                    }
+                });
+
+                const newObjects = data.map(function (clientObject) {
+                    var object = {
+                        id: clientObject.id,
+                        name: clientObject.Name,
+                        type: clientObject._t,
+                        guid: clientObject.GlobalId
+                    };
+                    if (clientObject.parent !== undefined && clientObject.parent !== null) {
+                        object.parent = clientObject.parent;
+                    }
+                    if (clientObject._rgeometry !== null && clientObject._rgeometry !== undefined) {
+                        object.gid = clientObject._rgeometry._i
+                    }
+                    if (clientObject.hasChildren) {
+                        object.children = [];
+                    }
+                    return object;
+                });
+
+                console.log(JSON.stringify({objects: newObjects}, null, "\t"));
+
+                self.viewer.createMetadata(modelId, newObjects);
+
+                resolve();
+            });
+        });
+    }
 
     /**
      * @private
