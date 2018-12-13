@@ -568,7 +568,7 @@ class BIMServerModelsPlugin extends Plugin {
 
                 console.log(JSON.stringify({objects: newObjects}, null, "\t"));
 
-                self.viewer.createMetadata(modelId, newObjects);
+                self.viewer.createMetadata(modelId, { objects: newObjects });
 
                 resolve();
             });
