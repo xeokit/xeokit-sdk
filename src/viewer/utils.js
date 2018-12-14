@@ -156,33 +156,34 @@ var delay = function (dt) {
  * @private
  */
 function loadJSON(url, ok, err) {
+    // Avoid checking ok and err on each use.
+    var defaultCallback = (_value) => undefined;
+    ok = ok || defaultCallback;
+    err = error || defaultCallback;
+
     var request = new XMLHttpRequest();
     request.overrideMimeType("application/json");
     request.open('GET', url, true);
     request.addEventListener('load', function (event) {
         var response = event.target.response;
         if (this.status === 200) {
-            if (ok) {
-                ok(response);
+            try {
+                ok(JSON.parse(response));
+            } catch(e) {
+                err(`loadJSON(): Failed to parse JSON response - ${e}`);
             }
         } else if (this.status === 0) {
             // Some browsers return HTTP Status 0 when using non-http protocol
             // e.g. 'file://' or 'data://'. Handle as success.
             console.warn('loadFile: HTTP Status 0 received.');
-            if (ok) {
-                ok(response);
-            }
+            ok(response);
         } else {
-            if (err) {
-                err(event);
-            }
+            err(event);
         }
     }, false);
 
     request.addEventListener('error', function (event) {
-        if (err) {
-            err(event);
-        }
+        err(event);
     }, false);
     request.send(null);
 }

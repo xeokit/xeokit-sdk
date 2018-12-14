@@ -1,5 +1,6 @@
 import {_isString, utils, scheduleTask, math} from "../../xeogl/xeogl.module.js";
 import {BigModel} from "../BigModel/BigModel.js";
+import {loadJSON} from "../../viewer/utils.js";
 
 /**
  * @private
@@ -79,49 +80,12 @@ const INSTANCE_THRESHOLD = 1;
 var loadGLTF = (function () {
 
     return function (model, src, options, ok, error) {
-        loadJSON(src, function (response) { // OK
-                var json;
-                try {
-                    json = JSON.parse(response);
-                } catch (e) {
-                    error(e);
-                }
+        loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, model, ok, error);
             },
             error);
     };
-
-    function loadJSON(url, ok, err) {
-        var request = new XMLHttpRequest();
-        request.overrideMimeType("application/json");
-        request.open('GET', url, true);
-        request.addEventListener('load', function (event) {
-            var response = event.target.response;
-            if (this.status === 200) {
-                if (ok) {
-                    ok(response);
-                }
-            } else if (this.status === 0) {
-                // Some browsers return HTTP Status 0 when using non-http protocol e.g. 'file://' or 'data://'. Handle as success.
-                console.warn('loadFile: HTTP Status 0 received.');
-                if (ok) {
-                    ok(response);
-                }
-            } else {
-                if (err) {
-                    err(event);
-                }
-            }
-        }, false);
-
-        request.addEventListener('error', function (event) {
-            if (err) {
-                err(event);
-            }
-        }, false);
-        request.send(null);
-    }
 
     function getBasePath(src) {
         var i = src.lastIndexOf("/");
