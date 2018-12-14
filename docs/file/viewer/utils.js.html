@@ -33,6 +33,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
@@ -212,33 +214,34 @@ var delay = function (dt) {
  * @private
  */
 function loadJSON(url, ok, err) {
+    // Avoid checking ok and err on each use.
+    var defaultCallback = (_value) =&gt; undefined;
+    ok = ok || defaultCallback;
+    err = err || defaultCallback;
+
     var request = new XMLHttpRequest();
     request.overrideMimeType(&quot;application/json&quot;);
     request.open(&apos;GET&apos;, url, true);
     request.addEventListener(&apos;load&apos;, function (event) {
         var response = event.target.response;
         if (this.status === 200) {
-            if (ok) {
-                ok(response);
+            try {
+                ok(JSON.parse(response));
+            } catch(e) {
+                err(`loadJSON(): Failed to parse JSON response - ${e}`);
             }
         } else if (this.status === 0) {
             // Some browsers return HTTP Status 0 when using non-http protocol
             // e.g. &apos;file://&apos; or &apos;data://&apos;. Handle as success.
             console.warn(&apos;loadFile: HTTP Status 0 received.&apos;);
-            if (ok) {
-                ok(response);
-            }
+            ok(response);
         } else {
-            if (err) {
-                err(event);
-            }
+            err(event);
         }
     }, false);
 
     request.addEventListener(&apos;error&apos;, function (event) {
-        if (err) {
-            err(event);
-        }
+        err(event);
     }, false);
     request.send(null);
 }

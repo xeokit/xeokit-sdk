@@ -1,5 +1,17 @@
 window.esdocSearchIndex = [
   [
+    "xeokit-sdk/viewer/plugins/annotationsplugin/annotation.js~annotation",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html",
+    "<span>Annotation</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AnnotationsPlugin/annotation.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html",
+    "<span>AnnotationsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js</span>",
+    "class"
+  ],
+  [
     "xeokit-sdk/viewer/plugins/axisgizmoplugin/axisgizmoplugin.js~axisgizmoplugin",
     "class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html",
     "<span>AxisGizmoPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</span>",
@@ -690,6 +702,168 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "viewer/plugins/annotationsplugin/annotation.js",
+    "file/viewer/plugins/AnnotationsPlugin/annotation.js.html",
+    "viewer/plugins/AnnotationsPlugin/annotation.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#desc",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-desc",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#desc",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#desc",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-desc",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#desc",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#destroy",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-destroy",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#destroy",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#eye",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-eye",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#eye",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#eye",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-eye",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#eye",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#getjson",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-getJSON",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#getJSON",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#glyph",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-glyph",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#glyph",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#glyph",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-glyph",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#glyph",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#init",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-init",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#init",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#labelshown",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-labelShown",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#labelShown",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#labelshown",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-labelShown",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#labelShown",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#look",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-look",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#look",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#look",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-look",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#look",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#pinshown",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-pinShown",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#pinShown",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#pinshown",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-pinShown",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#pinShown",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#title",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-title",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#title",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#title",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-title",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#title",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#type",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-type",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#type",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#up",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-up",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#up",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotation.js~annotation#up",
+    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-up",
+    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#up",
+    "member"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js",
+    "file/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js.html",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#constructor",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-constructor-constructor",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#constructor",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#destroy",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-destroy",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#destroy",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#readbookmark",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-readBookmark",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#readBookmark",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#send",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-send",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#send",
+    "method"
+  ],
+  [
+    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#writebookmark",
+    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-writeBookmark",
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#writeBookmark",
+    "method"
+  ],
+  [
     "viewer/plugins/axisgizmoplugin/axisgizmoplugin.js",
     "file/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html",
     "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
@@ -858,6 +1032,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "viewer/plugins/bimservermodelsplugin/lib/eventhandler.js",
+    "file/viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js.html",
+    "viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/bimservermodelsplugin/lib/metadatareader.js",
+    "file/viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js.html",
+    "viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/bimservermodelsplugin/lib/notifier.js",
+    "file/viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js.html",
+    "viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js",
+    "file"
+  ],
+  [
     "viewer/plugins/bimservermodelsplugin/lib/statictreerenderer.js",
     "file/viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js.html",
     "viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js",
@@ -879,6 +1071,12 @@ window.esdocSearchIndex = [
     "viewer/plugins/bimservermodelsplugin/lib/preloadquery.js",
     "file/viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js.html",
     "viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js",
+    "file"
+  ],
+  [
+    "viewer/plugins/bimservermodelsplugin/lib/request.js",
+    "file/viewer/plugins/BIMServerModelsPlugin/lib/request.js.html",
+    "viewer/plugins/BIMServerModelsPlugin/lib/request.js",
     "file"
   ],
   [

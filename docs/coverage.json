@@ -1,13 +1,13 @@
 {
-  "coverage": "40.52%",
-  "expectCount": 459,
-  "actualCount": 186,
+  "coverage": "39.13%",
+  "expectCount": 511,
+  "actualCount": 200,
   "files": {
     "viewer/ModelsPlugin.js": {
       "expectCount": 13,
       "actualCount": 12,
       "undocumentLines": [
-        138
+        132
       ]
     },
     "viewer/ObjectMetadata.js": {
@@ -33,6 +33,51 @@
         450
       ]
     },
+    "viewer/plugins/AnnotationsPlugin/annotation.js": {
+      "expectCount": 36,
+      "actualCount": 9,
+      "undocumentLines": [
+        3,
+        18,
+        22,
+        26,
+        30,
+        35,
+        39,
+        44,
+        59,
+        66,
+        95,
+        107,
+        129,
+        141,
+        162,
+        174,
+        206,
+        238,
+        270,
+        291,
+        304,
+        325,
+        337,
+        341,
+        348,
+        367,
+        389
+      ]
+    },
+    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        6,
+        11,
+        15,
+        19,
+        23
+      ]
+    },
     "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
       "expectCount": 2,
       "actualCount": 2,
@@ -43,8 +88,8 @@
       "actualCount": 7,
       "undocumentLines": [
         4,
-        309,
-        313,
+        311,
+        315,
         224
       ]
     },
@@ -169,6 +214,28 @@
         107
       ]
     },
+    "viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js": {
+      "expectCount": 4,
+      "actualCount": 1,
+      "undocumentLines": [
+        8,
+        12,
+        27
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js": {
+      "expectCount": 4,
+      "actualCount": 2,
+      "undocumentLines": [
+        28,
+        64
+      ]
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
     "viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js": {
       "expectCount": 1,
       "actualCount": 1,
@@ -201,6 +268,11 @@
       "undocumentLines": []
     },
     "viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "viewer/plugins/BIMServerModelsPlugin/lib/request.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
