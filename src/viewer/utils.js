@@ -159,7 +159,7 @@ function loadJSON(url, ok, err) {
     // Avoid checking ok and err on each use.
     var defaultCallback = (_value) => undefined;
     ok = ok || defaultCallback;
-    err = error || defaultCallback;
+    err = err || defaultCallback;
 
     var request = new XMLHttpRequest();
     request.overrideMimeType("application/json");
