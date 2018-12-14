@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../../">
+  <title data-ice="title">viewer/plugins/XML3DModelsPlugin/zipjs/tests/dataview.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/XML3DModelsPlugin/zipjs/tests/dataview.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+/* 
+ * DataView.js:
+ * An implementation of the DataView class on top of typed arrays.
+ * Useful for Firefox 4 which implements TypedArrays but not DataView.
+ *
+ * Copyright 2011, David Flanagan
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ * are permitted provided that the following conditions are met:
+ *
+ *   Redistributions of source code must retain the above copyright notice, 
+ *   this list of conditions and the following disclaimer.
+ *
+ *   Redistributions in binary form must reproduce the above copyright notice, 
+ *   this list of conditions and the following disclaimer in the documentation.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+&quot;use strict&quot;;
+
+(function(global) {
+    // If DataView already exists, do nothing
+    if (global.DataView) return;
+
+    // If ArrayBuffer is not supported, fail with an error
+    if (!global.ArrayBuffer) fail(&quot;ArrayBuffer not supported&quot;);
+
+    // If ES5 is not supported, fail
+    if (!Object.defineProperties) fail(&quot;This module requires ECMAScript 5&quot;);
+
+    // Figure if the platform is natively little-endian.
+    // If the integer 0x00000001 is arranged in memory as 01 00 00 00 then
+    // we&apos;re on a little endian platform. On a big-endian platform we&apos;d get
+    // get bytes 00 00 00 01 instead.
+    var nativele = new Int8Array(new Int32Array([1]).buffer)[0] === 1;
+
+    // A temporary array for copying or reversing bytes into.
+    // Since js is single-threaded, we only need this one static copy
+    var temp = new Uint8Array(8);
+
+    // The DataView() constructor
+    global.DataView = function DataView(buffer, offset, length) {
+        if (!(buffer instanceof ArrayBuffer)) fail(&quot;Bad ArrayBuffer&quot;);
+
+        // Default values for omitted arguments
+        offset = offset || 0;
+        length = length || (buffer.byteLength - offset);
+
+        if (offset &lt; 0 || length &lt; 0 || offset + length &gt; buffer.byteLength) fail(&quot;Illegal offset and/or length&quot;);
+
+        // Define the 3 read-only, non-enumerable ArrayBufferView properties
+        Object.defineProperties(this, {
+            buffer: {
+                value: buffer,
+                enumerable: false,
+                writable: false,
+                configurable: false
+            },
+            byteOffset: {
+                value: offset,
+                enumerable: false,
+                writable: false,
+                configurable: false
+            },
+            byteLength: {
+                value: length,
+                enumerable: false,
+                writable: false,
+                configurable: false
+            },
+            _bytes: {
+                value: new Uint8Array(buffer, offset, length),
+                enumerable: false,
+                writable: false,
+                configurable: false
+            }
+        });
+    }
+
+    // The DataView prototype object
+    global.DataView.prototype = {
+        constructor: DataView,
+
+        getInt8: function getInt8(offset) {
+            return get(this, Int8Array, 1, offset);
+        },
+        getUint8: function getUint8(offset) {
+            return get(this, Uint8Array, 1, offset);
+        },
+        getInt16: function getInt16(offset, le) {
+            return get(this, Int16Array, 2, offset, le);
+        },
+        getUint16: function getUint16(offset, le) {
+            return get(this, Uint16Array, 2, offset, le);
+        },
+        getInt32: function getInt32(offset, le) {
+            return get(this, Int32Array, 4, offset, le);
+        },
+        getUint32: function getUint32(offset, le) {
+            return get(this, Uint32Array, 4, offset, le);
+        },
+        getFloat32: function getFloat32(offset, le) {
+            return get(this, Float32Array, 4, offset, le);
+        },
+        getFloat64: function getFloat32(offset, le) {
+            return get(this, Float64Array, 8, offset, le);
+        },
+
+
+        setInt8: function setInt8(offset, value) {
+            set(this, Int8Array, 1, offset, value);
+        },
+        setUint8: function setUint8(offset, value) {
+            set(this, Uint8Array, 1, offset, value);
+        },
+        setInt16: function setInt16(offset, value, le) {
+            set(this, Int16Array, 2, offset, value, le);
+        },
+        setUint16: function setUint16(offset, value, le) {
+            set(this, Uint16Array, 2, offset, value, le);
+        },
+        setInt32: function setInt32(offset, value, le) {
+            set(this, Int32Array, 4, offset, value, le);
+        },
+        setUint32: function setUint32(offset, value, le) {
+            set(this, Uint32Array, 4, offset, value, le);
+        },
+        setFloat32: function setFloat32(offset, value, le) {
+            set(this, Float32Array, 4, offset, value, le);
+        },
+        setFloat64: function setFloat64(offset, value, le) {
+            set(this, Float64Array, 8, offset, value, le);
+        }
+    };
+
+    // The get() utility function used by the get methods
+
+
+    function get(view, type, size, offset, le) {
+        if (offset === undefined) fail(&quot;Missing required offset argument&quot;);
+
+        if (offset &lt; 0 || offset + size &gt; view.byteLength) fail(&quot;Invalid index: &quot; + offset);
+
+        if (size === 1 || !! le === nativele) {
+            // This is the easy case: the desired endianness 
+            // matches the native endianness.
+            // Typed arrays require proper alignment.  DataView does not.
+            if ((view.byteOffset + offset) % size === 0) return (new type(view.buffer, view.byteOffset + offset, 1))[0];
+            else {
+                // Copy bytes into the temp array, to fix alignment
+                for (var i = 0; i &lt; size; i++)
+                temp[i] = view._bytes[offset + i];
+                // Now wrap that buffer with an array of the desired type
+                return (new type(temp.buffer))[0];
+            }
+        } else {
+            // If the native endianness doesn&apos;t match the desired, then
+            // we have to reverse the bytes
+            for (var i = 0; i &lt; size; i++)
+            temp[size - i - 1] = view._bytes[offset + i];
+            return (new type(temp.buffer))[0];
+        }
+    }
+
+    // The set() utility function used by the set methods
+
+
+    function set(view, type, size, offset, value, le) {
+        if (offset === undefined) fail(&quot;Missing required offset argument&quot;);
+        if (value === undefined) fail(&quot;Missing required value argument&quot;);
+
+        if (offset &lt; 0 || offset + size &gt; view.byteLength) fail(&quot;Invalid index: &quot; + offset);
+
+        if (size === 1 || !! le === nativele) {
+            // This is the easy case: the desired endianness 
+            // matches the native endianness.
+            if ((view.byteOffset + offset) % size === 0) {
+                (new type(view.buffer, view.byteOffset + offset, 1))[0] = value;
+            } else {
+                (new type(temp.buffer))[0] = value;
+                // Now copy the bytes into the view&apos;s buffer
+                for (var i = 0; i &lt; size; i++)
+                view._bytes[i + offset] = temp[i];
+            }
+        } else {
+            // If the native endianness doesn&apos;t match the desired, then
+            // we have to reverse the bytes
+            // Store the value into our temporary buffer
+            (new type(temp.buffer))[0] = value;
+
+            // Now copy the bytes, in reverse order, into the view&apos;s buffer
+            for (var i = 0; i &lt; size; i++)
+            view._bytes[offset + i] = temp[size - 1 - i];
+        }
+    }
+
+    function fail(msg) {
+        throw new Error(msg);
+    }
+}(this)); </code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;./../../Plugin.js&quot;;
+
+class Section {
+
+    constructor(domNode) {
+
+        this._div = document.createElement(&quot;div&quot;);
+        this._nameh = document.createElement(&quot;h3&quot;);
+        this._table = document.createElement(&quot;table&quot;);
+        const tr = document.createElement(&quot;tr&quot;);
+        this._table.appendChild(tr);
+
+        const nameth = document.createElement(&quot;th&quot;);
+        const valueth = document.createElement(&quot;th&quot;);
+
+        nameth.appendChild(document.createTextNode(&quot;Name&quot;));
+        valueth.appendChild(document.createTextNode(&quot;Value&quot;));
+        tr.appendChild(nameth);
+        tr.appendChild(valueth);
+
+        this._div.appendChild(this._nameh);
+        this._div.appendChild(this._table);
+
+        domNode.appendChild(this._div);
+    }
+
+    setName(name) {
+        this._nameh.appendChild(document.createTextNode(name));
+    };
+
+    addRow() {
+        const tr = document.createElement(&quot;tr&quot;);
+        this._table.appendChild(tr);
+        const nametd = document.createElement(&quot;td&quot;);
+        const valuetd = document.createElement(&quot;td&quot;);
+        tr.appendChild(nametd);
+        tr.appendChild(valuetd);
+        return new Row(nametd, valuetd);
+    }
+}
+
+class Row {
+
+    constructor(nametd, valuetd) {
+        this._nameElem = nametd;
+        this._valuetd = valuetd;
+        this._num_names = 0;
+        this._num_values = 0;
+    }
+
+    setName(name) {
+        if (this._num_names++ &gt; 0) {
+            this._nameElem.appendChild(document.createTextNode(&quot; &quot;));
+        }
+        this._nameElem.appendChild(document.createTextNode(name));
+    }
+
+    setValue(value) {
+        if (this._num_values++ &gt; 0) {
+            this._valuetd.appendChild(document.createTextNode(&quot;, &quot;));
+        }
+        this._valuetd.appendChild(document.createTextNode(value));
+    };
+}
+
+/**
+ * A {@link Viewer} plugin that renders an HTML panel showing the values of {@link ObjectMetadata#properties} of
+ * an {@link ObjectMetadata} within {@link Viewer#metadata}.
+ *
+ * @example
+ *
+ * @class PropertiesPanelPlugin
+ */
+class PropertiesPanelPlugin extends Plugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;PropertiesPanel&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} cfg.domElementId ID of HTML DOM element within which to build the tree.
+     */
+    constructor(viewer, cfg) {
+
+        super(&quot;PropertiesPanel&quot;, viewer);
+
+        this._models = {};
+
+        if (!cfg.domElementId) {
+            throw &quot;Config expected: domElementId&quot;;
+        }
+        this.domElement = document.getElementById(cfg.domElementId);
+
+        if (!this.domElement) {
+            throw &quot;Document element not found: &apos;&quot; + cfg.domElementId + &quot;&apos;&quot;;
+        }
+    }
+
+    addModel(id, model) {
+        this._models[id] = model;
+    }
+
+    _renderAttributes(elem) {
+
+        var section = new Section(this.domElement);
+
+        section.setName(elem.type || elem.getType());
+
+        [&quot;GlobalId&quot;, &quot;Name&quot;, &quot;OverallWidth&quot;, &quot;OverallHeight&quot;, &quot;Tag&quot;].forEach(function (name) {
+
+            var value = elem[name];
+
+            if (typeof(value) === &quot;undefined&quot;) {
+                var fn = elem[&quot;get&quot; + name];
+                if (fn) {
+                    value = fn.apply(elem);
+                }
+            }
+
+            if (typeof(value) !== &quot;undefined&quot;) {
+                const row = section.addRow();
+                row.setName(name);
+                row.setValue(value);
+            }
+        });
+
+        return section;
+    };
+
+    setSelected(oid) {
+
+        var self = this;
+
+        if (oid.length !== 1) {
+            this.domElement.innerHTML = &quot;&amp;nbsp;&lt;br&gt;Select a single element in order to see object properties.&quot;;
+            return;
+        }
+
+        this.domElement.innerHTML = &quot;&quot;;
+
+        oid = oid[0];
+
+        if (oid.indexOf(&apos;:&apos;) !== -1) {
+            oid = oid.split(&apos;:&apos;);
+            var o = this._models[oid[0]].model.objects[oid[1]];
+
+            this._renderAttributes(o);
+
+            o.getIsDefinedBy(function (isDefinedBy) {
+                if (isDefinedBy.getType() == &quot;IfcRelDefinesByProperties&quot;) {
+                    isDefinedBy.getRelatingPropertyDefinition(function (pset) {
+                        if (pset.getType() == &quot;IfcPropertySet&quot;) {
+                            self.renderPSet(pset);
+                        }
+                    });
+                }
+            });
+
+        } else {
+
+            var o = this._models[&quot;1&quot;].model.objects[oid];
+            this._renderAttributes(o);
+            o.properties.forEach(function (propertySet) {
+                self._renderPropertySet(propertySet);
+            });
+        }
+    }
+
+    _renderPropertySet(propertySet) {
+
+        var section = new Section(this.domElement);
+
+        if (propertySet.name &amp;&amp; propertySet.children) {
+
+            section.setName(propertySet.name);
+
+            propertySet.children.forEach(function (v) {
+                var r = section.addRow();
+                r.setName(v.name);
+                r.setValue(v.NominalValue);
+            });
+
+        } else {
+
+            propertySet.getName(function (name) {
+                section.setName(name);
+            });
+
+            var render = function (prop, index, row) {
+                var r = row || section.addRow();
+                prop.getName(function (name) {
+                    r.setName(name);
+                });
+                if (prop.getNominalValue) {
+                    prop.getNominalValue(function (value) {
+                        r.setValue(value._v);
+                    });
+                }
+                if (prop.getHasProperties) {
+                    prop.getHasProperties(function (prop, index) {
+                        render(prop, index, r);
+                    });
+                }
+            };
+
+            propertySet.getHasProperties(render);
+        }
+
+        return section;
+    }
+}
+
+export {PropertiesPanelPlugin}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

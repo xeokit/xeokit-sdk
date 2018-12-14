@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;./../../Plugin.js&quot;;
+import {BigModel} from &quot;./../../../xeogl/BigModel/BigModel.js&quot;;
+import {preloadQuery} from &quot;./lib/preloadQuery.js&quot;;
+import {BIMServerBigGeometryLoader} from &quot;./lib/BIMServerBigGeometryLoader.js&quot;;
+import {defaultMaterials} from &quot;./lib/defaultMaterials.js&quot;;
+import {BIMServerDataModel} from &quot;./lib/BIMServerDataModel.js&quot;;
+import {utils} from &quot;./lib/utils.js&quot;;
+
+/**
+ * A viewer plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
+ *
+ * In the example below, we&apos;ll load the latest revision of a project&apos;s model.
+ *
+ * Read more about this example in the [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial.
+ *
+ * @example
+ * import BimServerClient from &quot;http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js&quot;;
+ * import {Viewer} from &quot;../../../src/viewer/Viewer.js&quot;;
+ * import {BIMServerBigModelsPlugin} from &quot;../../../src/viewer/plugins/BIMServerBigModelsPlugin/BIMServerBigModelsPlugin.js&quot;;
+ *
+ * const bimServerAddress = &quot;http://localhost:8082&quot;;
+ * const username = &quot;admin@bimserver.org&quot;;
+ * const password = &quot;admin&quot;;
+ * const poid = 131073;
+ *
+ * // Create a Viewer
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;
+ * });
+ *
+ * // Create a BIMServer client
+ * const bimServerClient = new BimServerClient(bimServerAddress);
+ *
+ * // Add a BIMServerBigModelsPlugin that uses the client
+ * const BIMServerBigModelsPlugin = new BIMServerBigModelsPlugin(viewer, {
+ *     bimServerClient: bimServerClient
+ * });
+ *
+ * // Initialize the BIMServer client
+ * bimServerClient.init(() =&gt; {
+ *
+ *     // Login to BIMServer
+ *     bimServerClient.login(username, password, () =&gt; {
+ *
+ *         // Query a project by ID
+ *         bimServerClient.call(&quot;ServiceInterface&quot;, &quot;getProjectByPoid&quot;, {
+ *             poid: poid
+ *         }, (project) =&gt; {
+ *
+ *             // Load the latest revision of the project
+ *
+ *             const roid = project.lastRevisionId;
+ *             const schema = project.schema;
+ *
+ *             const model = BIMServerBigModelsPlugin.load({ // Returns a xeogl.Model
+ *                 id: &quot;myModel&quot;,
+ *                 poid: poid,
+ *                 roid: roid,
+ *                 schema: schema,
+ *                 edges: true,                    // Render with emphasized edges
+ *                 lambertMaterials: true,         // Lambertian flat-shading instead of Blinn/Phong
+ *                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
+ *                 rotation: [-90, 0, 0]           // Rotate model for World +Y &quot;up&quot;
+ *             });
+ *
+ *             const scene = viewer.scene;  // xeogl.Scene
+ *             const camera = scene.camera; // xeogl.Camera
+ *
+ *             model.on(&quot;loaded&quot;, () =&gt; { // When loaded, fit camera and start orbiting
+ *                 camera.orbitPitch(20);
+ *                 viewer.cameraFlight.flyTo(model);
+ *                 scene.on(&quot;tick&quot;, () =&gt; {
+ *                     camera.orbitYaw(0.3);
+ *                 })
+ *             });
+ *         });
+ *     });
+ * });
+ *
+ * @class BIMServerBigModelsPlugin
+ */
+class BIMServerBigModelsPlugin extends Plugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;BIMServerModels&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Object} cfg.bimServerClient A BIMServer client API instance.
+     */
+    constructor(viewer, cfg) {
+
+        super(&quot;BIMServerModels&quot;, viewer, cfg);
+
+        /**
+         * Version of BIMServer supported by this plugin.
+         * @type {string}
+         */
+        this.BIMSERVER_VERSION = &quot;1.5&quot;;
+
+        if (!cfg.bimServerClient) {
+            this.error(&quot;Config expected: bimServerClient&quot;);
+        }
+
+        /**
+         * The BIMServer API.
+         */
+        this.bimServerClient = cfg.bimServerClient;
+
+        /**
+         * IFC types that are hidden by default.
+         * @type {{IfcOpeningElement: boolean, IfcSpace: boolean}}
+         */
+        this.hiddenTypes = {
+            &quot;IfcOpeningElement&quot;: true,
+            &quot;IfcSpace&quot;: true
+        };
+    }
+
+    /**
+     * Loads a &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; from BIMServer into the {@link Viewer}&apos;s &lt;a href=&quot;http://xeogl.org/docs/classes/Scene.html&quot;&gt;xeogl.Scene&lt;/a&gt;.
+     *
+     * @param {Object} params Loading parameters. As well as the parameters required by this  method, this can also include configs for the &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; that this method will create.
+     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer&apos;s &lt;a href=&quot;http://xeogl.org/docs/classes/Scene.html&quot;&gt;xeogl.Scene&lt;/a&gt;.
+     * @param {Number} params.poid ID of the model&apos;s project within BIMServer.
+     * @param {Number} params.roid ID of the model&apos;s revision within BIMServer. See the class example for how to query the latest project revision ID via the BIMServer client API.
+     * @param {Number} params.schema The model&apos;s IFC schema. See the class example for how to query the project&apos;s schema via the BIMServer client API.
+     * @param {Float32Array} [params.position=[0,0,0]] Local 3D position.
+     * @param {Float32Array} [params.scale=[1,1,1]] Local scale.
+     * @param {Float32Array} [params.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [params.edges=false] When true, will emphasise edges when rendering the model.
+     * @param {Boolean} [params.logging=false] Set this true to log some info to the console while loading.
+     * @returns {xeogl.Model} A &lt;a href=&quot;http://xeogl.org/docs/classes/Model.html&quot;&gt;xeogl.Model&lt;/a&gt; representing the loaded model.
+     */
+    load(params) {
+
+        const self = this;
+
+        const modelId = params.id;
+        const poid = params.poid;
+        const roid = params.roid;
+        const schema = params.schema;
+        const viewer = this.viewer;
+        const scene = viewer.scene;
+        const bimServerClient = this.bimServerClient;
+        const idMapping = { // This are arrays as multiple models might be loaded or unloaded.
+            &apos;toGuid&apos;: [],
+            &apos;toId&apos;: []
+        };
+        var onTick;
+
+        if (!modelId) {
+            this.error(&quot;load() param expected: id&quot;);
+            return;
+        }
+
+        if (!poid) {
+            this.error(&quot;load() param expected: poid&quot;);
+            return;
+        }
+
+        if (!roid) {
+            this.error(&quot;load() param expected: roid&quot;);
+            return;
+        }
+
+        if (!schema) {
+            this.error(&quot;load() param expected: schema&quot;);
+            return;
+        }
+
+        if (scene.components[modelId]) {
+            this.error(&quot;Component with this ID already exists in viewer: &quot; + modelId);
+            return;
+        }
+
+        const edges = !!params.edges;
+        const logging = !!params.logging;
+
+        scene.canvas.spinner.processes++;
+
+        const xeoglBigModel = new BigModel(scene, params);
+
+        bimServerClient.getModel(poid, roid, schema, false, clientModel =&gt; {  // TODO: Preload not necessary combined with the bruteforce tree
+
+            let fired = false;
+
+            clientModel.query(preloadQuery, () =&gt; {
+
+                if (!fired) {
+
+                    fired = true;
+
+                    const bimServerModel = new BIMServerDataModel(bimServerClient, clientModel);
+
+                    bimServerModel.getTree().then(function (tree) {
+
+                        const oids = [];
+                        const oidToGuid = {};
+                        const guidToOid = {};
+
+                        const visit = n =&gt; {
+                            oids[n.gid] = n.id;
+                            oidToGuid[n.id] = n.guid;
+                            guidToOid[n.guid] = n.id;
+                            for (let i = 0; i &lt; (n.children || []).length; ++i) {
+                                visit(n.children[i]);
+                            }
+                        };
+
+                        visit(tree);
+
+                        idMapping.toGuid.push(oidToGuid);
+                        idMapping.toId.push(guidToOid);
+
+                        const models = {};
+
+                        models[bimServerModel.clientModel.roid] = bimServerModel.clientModel; // TODO: Ugh. Undecorate some of the newly created classes
+
+                        const roid = params.roid;
+
+                        const loader = new BIMServerBigGeometryLoader(bimServerClient, bimServerModel, roid, null, {
+
+                            log: function (msg) {
+                                if (logging) {
+                                    self.log(msg);
+                                }
+                            },
+
+                            error: function (msg) {
+                                self.error(msg);
+                            },
+
+                            warn: function (msg) {
+                                self.warn(msg);
+                            },
+
+                            gotModelBoundary: function (boundary) {
+
+                                //console.log(&quot;boundary = &quot; + boundary);
+
+                                const xmin = boundary[0];
+                                const ymin = boundary[1];
+                                const zmin = boundary[2];
+                                const xmax = boundary[3];
+                                const ymax = boundary[4];
+                                const zmax = boundary[5];
+
+                                const diagonal = Math.sqrt(
+                                    Math.pow(xmax - xmin, 2) +
+                                    Math.pow(ymax - ymin, 2) +
+                                    Math.pow(zmax - zmin, 2));
+
+                                const scale = 100 / diagonal;
+
+                                const center = [
+                                    scale * ((xmax + xmin) / 2),
+                                    scale * ((ymax + ymin) / 2),
+                                    scale * ((zmax + zmin) / 2)
+                                ];
+
+                                // TODO
+
+                                //o.viewer.setScale(scale); // Temporary until we find a better scaling system.
+
+                            },
+
+                            createGeometry: function (geometryDataId, positions, normals, indices, reused) {
+                                const geometryId = `${modelId}.${geometryDataId}`;
+                                xeoglBigModel.createGeometry({
+                                    id: geometryId,
+                                    primitive: &quot;triangles&quot;,
+                                    positions: positions,
+                                    normals: normals,
+                                    indices: indices
+                                });
+                            },
+
+                            createMeshInstancingGeometry: function(geometryDataId, matrix, color) {
+                                const meshId = `${modelId}.${geometryDataId}.mesh`;
+                                const geometryId = `${modelId}.${geometryDataId}`;
+                                xeoglBigModel.createMesh({
+                                    id: meshId,
+                                    geometryId: geometryId,
+                                    matrix: matrix,
+                                    color: color || [1,1,1,1]
+                                });
+                            },
+
+                            createMeshWithGeometry: function(geometryDataId, positions, normals, indices, matrix, color) {
+                                const meshId = `${modelId}.${geometryDataId}.mesh`;
+                                xeoglBigModel.createMesh({
+                                    id: meshId,
+                                    primitive: &quot;triangles&quot;,
+                                    positions: positions,
+                                    normals: normals,
+                                    indices: indices,
+                                    matrix: matrix,
+                                    color: color || [1,1,1,1]
+                                });
+                            },
+
+                            createObject(oid, geometryDataId, ifcType) {
+                                const objectId = `${modelId}.${oid}`;
+                                const meshId = `${modelId}.${geometryDataId}.mesh`;
+                                if (scene.entities[objectId]) {
+                                    self.error(`Can&apos;t create object - object with id ${objectId} already exists`);
+                                    return;
+                                }
+                                if (scene.components[objectId]) {
+                                    self.error(`Can&apos;t create object - scene component with this ID already exists: ${objectId}`);
+                                    return;
+                                }
+                                ifcType = ifcType || &quot;DEFAULT&quot;;
+                                // const guid = (objectId.includes(&quot;#&quot;)) ? utils.CompressGuid(objectId.split(&quot;#&quot;)[1].substr(8, 36).replace(/-/g, &quot;&quot;)) : null; // TODO: Computing GUID looks like a performance bottleneck
+                                // const color = defaultMaterials[ifcType] || defaultMaterials[&quot;DEFAULT&quot;];
+
+                                xeoglBigModel.createObject({
+                                    entityType: ifcType,
+                                    meshIds: [meshId]
+                                });
+                            }
+                        });
+
+                        loader.addProgressListener((progress, nrObjectsRead, totalNrObjects) =&gt; {
+                            if (progress === &quot;start&quot;) {
+                                if (logging) {
+                                    self.log(&quot;Started loading geometries&quot;);
+                                }
+                            } else if (progress === &quot;done&quot;) {
+                                if (logging) {
+                                    self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
+                                }
+                                viewer.scene.off(onTick);
+                                scene.canvas.spinner.processes--;
+                                xeoglBigModel.finalize();
+                                xeoglBigModel.fire(&quot;loaded&quot;);
+
+                            }
+                        });
+
+                        loader.setLoadOids(oids); // TODO: Why do we do this?
+
+                        onTick = viewer.scene.on(&quot;tick&quot;, () =&gt; {
+                            loader.process();
+                        });
+
+                        loader.start();
+                    });
+                }
+            });
+        });
+
+        return xeoglBigModel;
+    };
+
+    /**
+     * @private
+     */
+    send(name, value) {
+        //...
+    }
+
+    /**
+     * @private
+     */
+    writeBookmark(bookmark) {
+        //...
+    }
+
+    /**
+     * @private
+     */
+    readBookmark(bookmark, done) {
+        //...
+        done();
+    }
+
+    /**
+     * Destroys this plugin.
+     */
+    destroy() {
+        super.destroy();
+    }
+}
+
+export {BIMServerBigModelsPlugin}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

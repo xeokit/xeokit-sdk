@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {ModelsPlugin} from &quot;./../../../viewer/ModelsPlugin.js&quot;;
+import {GLTFBigModel} from &quot;../../../xeogl/GLTFBigModel/GLTFBigModel.js&quot;;
+
+/**
+ * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
+ *
+ * For each model loaded, creates a [xeogl.BigModel](http://xeogl.org/docs/classes/BigModel.html) within its
+ * {@link Viewer}&apos;s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+ *
+ *
+ *
+ * See the {@link GLTFBigModelsPlugin#load} method for parameters that you can configure
+ * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.
+ *
+ * @example
+ * // Create a xeokit Viewer
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;
+ * });
+ *
+ * // Add a GLTFBigModelsPlugin to the Viewer
+ * var plugin = new GLTFBigModelsPlugin(viewer, {
+ *      id: &quot;GLTFBigModels&quot;  // Default value
+ * });
+ *
+ * // We can also get the plugin by its ID on the Viewer
+ * plugin = viewer.plugins.GLTFBigModels;
+ *
+ * // Load the glTF model
+ * // These params can include all the xeogl.GLTFModel configs
+ * const model = plugin.load({
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;models/mygltfmodel.gltf&quot;,
+ *      scale: [0.1, 0.1, 0.1],
+ *      rotate: [90, 0, 0],
+ *      translate: [100,0,0],
+ *      edges: true
+ * });
+ *
+ * // Recall that the model is a xeogl.Model
+ *
+ * // When the model has loaded, fit it to view
+ * model.on(&quot;loaded&quot;, function() {
+ *      viewer.cameraFlight.flyTo(model);
+ * });
+ *
+ * // Update properties of the model via the xeogl.Model
+ * model.translate = [200,0,0];
+ *
+ * // You can unload the model via the plugin
+ * plugin.unload(&quot;myModel&quot;);
+ *
+ * // Or unload it by calling destroy() on the xeogl.Model itself
+ * model.destroy();
+ *
+ * @class GLTFBigModelsPlugin
+ */
+class GLTFBigModelsPlugin extends ModelsPlugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;GLTFBigModels&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     */
+    constructor(viewer, cfg) {
+        super(&quot;GLTFBigModels&quot;, viewer, GLTFBigModel, cfg);
+    }
+
+    /**
+     Loads a large-scale glTF model from the file system into the viewer.
+
+     @param params {*} Configs
+     @param [params.id] {String} Optional ID, unique among all components in the parent {{#crossLink &quot;Scene&quot;}}Scene{{/crossLink}},
+     generated automatically when omitted.
+     @param [params.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink &quot;Object&quot;}}{{/crossLink}} documentation for usage.
+     @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.
+     @param [params.parent] The parent Object.
+     @param [params.visible=true] {Boolean}  Indicates if this GLTFModel is visible.
+     @param [params.culled=false] {Boolean}  Indicates if this GLTFModel is culled from view.
+     @param [params.pickable=true] {Boolean}  Indicates if this GLTFModel is pickable.
+     @param [params.clippable=true] {Boolean} Indicates if this GLTFModel is clippable.
+     @param [params.outlined=false] {Boolean} Whether an outline is rendered around this GLTFModel.
+     @param [params.ghosted=false] {Boolean} Whether this GLTFModel is rendered ghosted.
+     @param [params.highlighted=false] {Boolean} Whether this GLTFModel is rendered highlighted.
+     @param [params.selected=false] {Boolean} Whether this GLTFModel is rendered selected.
+     @param [params.edges=false] {Boolean} Whether this GLTFModel is rendered with edges emphasized.
+     @param [params.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
+     @param [params.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
+     @param [params.position=[0,0,0]] {Float32Array} The GLTFModel&apos;s local 3D position.
+     @param [params.scale=[1,1,1]] {Float32Array} The GLTFModel&apos;s local scale.
+     @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel&apos;s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model&apos;s local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     @param [params.src] {String} Path to a glTF file.
+     @param  [params.metadataSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     @param [params.lambertMaterials=false] {Boolean} When true, gives each {{#crossLink &quot;Mesh&quot;}}{{/crossLink}} the same {{#crossLink &quot;LambertMaterial&quot;}}{{/crossLink}} and a {{#crossLink &quot;Mesh/colorize:property&quot;}}{{/crossLink}} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
+     @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.
+     @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.
+     @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
+     @param [params.edgeThreshold=20] {Number} When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     @param [params.handleNode] {Function} Optional callback to mask which {{#crossLink &quot;Object&quot;}}Objects{{/crossLink}} are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.
+     */
+    load(params) {
+        if (!params.id) {
+            this.error(&quot;load() param expected: id&quot;);
+            return;
+        }
+        if (this.viewer.scene.components[params.id]) {
+            this.error(&quot;Component with this ID already exists in viewer: &quot; + id);
+            return;
+        }
+        var model = new GLTFBigModel(this.viewer.scene, params);
+        return model; // TODO: register loading params within this plugin for inclusion in bookmarks
+    }
+}
+
+export {GLTFBigModelsPlugin}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../">
+  <title data-ice="title">viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerModel.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerModel.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * @private
+ */
+class BIMServerModel {
+
+    constructor(bimServerAPI, apiModel) {
+        this.bimServerAPI = bimServerAPI;
+        this.apiModel = apiModel;
+        this.tree = null;
+        this.treePromise = null;
+    }
+
+    getTree(args) {
+
+        /*
+         // TODO: This is rather tricky. Never know when the list of Projects is exhausted.
+         // Luckily a valid IFC contains one and only one. Let&apos;s assume there is just one.
+         var projectEncountered = false;
+
+         this.model.getAllOfType(&quot;IfcProject&quot;, false, function(project) {
+         if (projectEncountered) {
+         throw new Error(&quot;More than a single project encountered, bleh!&quot;);
+         }
+         console.log(&apos;project&apos;, project);
+         });
+         */
+
+        var self = this;
+
+        return self.treePromise || (self.treePromise = new Promise(function (resolve, reject) {
+
+            if (self.tree) {
+                resolve(self.tree);
+            }
+
+            var query =
+                {
+                    defines: {
+                        Representation: {
+                            type: &quot;IfcProduct&quot;,
+                            field: &quot;Representation&quot;
+                        },
+                        ContainsElementsDefine: {
+                            type: &quot;IfcSpatialStructureElement&quot;,
+                            field: &quot;ContainsElements&quot;,
+                            include: {
+                                type: &quot;IfcRelContainedInSpatialStructure&quot;,
+                                field: &quot;RelatedElements&quot;,
+                                includes: [
+                                    &quot;IsDecomposedByDefine&quot;,
+                                    &quot;ContainsElementsDefine&quot;,
+                                    &quot;Representation&quot;
+                                ]
+                            }
+                        },
+                        IsDecomposedByDefine: {
+                            type: &quot;IfcObjectDefinition&quot;,
+                            field: &quot;IsDecomposedBy&quot;,
+                            include: {
+                                type: &quot;IfcRelDecomposes&quot;,
+                                field: &quot;RelatedObjects&quot;,
+                                includes: [
+                                    &quot;IsDecomposedByDefine&quot;,
+                                    &quot;ContainsElementsDefine&quot;,
+                                    &quot;Representation&quot;
+                                ]
+                            }
+                        },
+                    },
+                    queries: [{
+                        type: &quot;IfcProject&quot;,
+                        includes: [
+                            &quot;IsDecomposedByDefine&quot;,
+                            &quot;ContainsElementsDefine&quot;
+                        ]
+                    }, {
+                        type: &quot;IfcRepresentation&quot;,
+                        includeAllSubtypes: true
+                    }, {
+                        type: &quot;IfcProductRepresentation&quot;
+                    }, {
+                        type: &quot;IfcPresentationLayerWithStyle&quot;
+                    }, {
+                        type: &quot;IfcProduct&quot;,
+                        includeAllSubtypes: true
+                    }, {
+                        type: &quot;IfcProductDefinitionShape&quot;
+                    }, {
+                        type: &quot;IfcPresentationLayerAssignment&quot;
+                    }, {
+                        type: &quot;IfcRelAssociatesClassification&quot;,
+                        includes: [{
+                            type: &quot;IfcRelAssociatesClassification&quot;,
+                            field: &quot;RelatedObjects&quot;
+                        }, {
+                            type: &quot;IfcRelAssociatesClassification&quot;,
+                            field: &quot;RelatingClassification&quot;
+                        }]
+                    }, {
+                        type: &quot;IfcSIUnit&quot;
+                    }, {
+                        type: &quot;IfcPresentationLayerAssignment&quot;
+                    }]
+                };
+
+            // Perform the download
+            self.apiModel.query(query, function (o) {
+            }).done(function () {
+
+                // A list of entities that define parent-child relationships
+                var entities = {
+                    &apos;IfcRelDecomposes&apos;: 1,
+                    &apos;IfcRelAggregates&apos;: 1,
+                    &apos;IfcRelContainedInSpatialStructure&apos;: 1,
+                    &apos;IfcRelFillsElement&apos;: 1,
+                    &apos;IfcRelVoidsElement&apos;: 1
+                };
+
+                // Create a mapping from id-&gt;instance
+                var instance_by_id = {};
+                var objects = [];
+
+                for (var e in self.apiModel.objects) {
+                    // The root node in a dojo store should have its parent
+                    // set to null, not just something that evaluates to false
+                    var o = self.apiModel.objects[e].object;
+                    o.parent = null;
+                    instance_by_id[o._i] = o;
+                    objects.push(o);
+                }
+
+                // Filter all instances based on relationship entities
+                var relationships = objects.filter(function (o) {
+                    return entities[o._t];
+                });
+
+                // Construct a tuple of {parent, child} ids
+                var parents = relationships.map(function (o) {
+                    var ks = Object.keys(o);
+                    var related = ks.filter(function (k) {
+                        return k.indexOf(&apos;Related&apos;) !== -1;
+                    });
+                    var relating = ks.filter(function (k) {
+                        return k.indexOf(&apos;Relating&apos;) !== -1;
+                    });
+                    return [o[relating[0]], o[related[0]]];
+                });
+
+                var is_array = function (o) {
+                    return Object.prototype.toString.call(o) === &apos;[object Array]&apos;;
+                };
+
+                var data = [];
+                var visited = {};
+                parents.forEach(function (a) {
+                    // Relationships in IFC can be one to one/many
+                    var ps = is_array(a[0]) ? a[0] : [a[0]];
+                    var cs = is_array(a[1]) ? a[1] : [a[1]];
+                    for (var i = 0; i &lt; ps.length; ++i) {
+                        for (var j = 0; j &lt; cs.length; ++j) {
+                            // Lookup the instance ids in the mapping
+                            var p = instance_by_id[ps[i]._i];
+                            var c = instance_by_id[cs[j]._i];
+
+                            // parent, id, hasChildren are significant attributes in a dojo store
+                            c.parent = p.id = p._i;
+                            c.id = c._i;
+                            p.hasChildren = true;
+
+                            // Make sure to only add instances once
+                            if (!visited[c.id]) {
+                                data.push(c);
+                            }
+                            if (!visited[p.id]) {
+                                data.push(p);
+                            }
+                            visited[p.id] = visited[c.id] = true;
+                        }
+                    }
+                });
+
+                var make_element = function (o) {
+                    return {
+                        name: o.Name,
+                        id: o.id,
+                        guid: o.GlobalId,
+                        parent: o.parent,
+                        gid: (o._rgeometry == null ? null : o._rgeometry._i)
+                    };
+                };
+
+                var fold = (function () {
+                    var root = null;
+                    return function (li) {
+                        var by_oid = {};
+                        li.forEach(function (elem) {
+                            by_oid[elem.id] = elem;
+                        });
+                        li.forEach(function (elem) {
+                            if (elem.parent === null) {
+                                root = elem;
+                            } else {
+                                var p = by_oid[elem.parent];
+                                (p.children || (p.children = [])).push(elem);
+                            }
+                        });
+                        return root;
+                    }
+                })();
+
+                resolve(self.tree = fold(data.map(make_element)));
+            });
+        }));
+    };
+
+}
+
+export {BIMServerModel}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

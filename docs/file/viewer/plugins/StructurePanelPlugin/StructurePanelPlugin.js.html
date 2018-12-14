@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ModelsPlugin.js~ModelsPlugin.html">ModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/ObjectMetadata.js~ObjectMetadata.html">ObjectMetadata</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimservermodelsplugin">plugins/BIMServerModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html">BIMServerModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverplugins">plugins/BIMServerPlugins</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html">BIMServerBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-clipsplugin">plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfbigmodelsplugin">plugins/GLTFBigModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html">GLTFBigModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfmodelsplugin">plugins/GLTFModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html">GLTFModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lightsplugin">plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objmodelsplugin">plugins/OBJModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html">OBJModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-propertiespanelplugin">plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlmodelsplugin">plugins/STLModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html">STLModelsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structurepanelplugin">plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webvrplugin">plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dmodelsplugin">plugins/XML3DModelsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html">XML3DModelsPlugin</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;./../../Plugin.js&quot;;
+
+/**
+ * A {@link Viewer} plugin that renders an HTML explorer tree for navigating the structure metadata within {@link Viewer#metadata}.
+ *
+ * Each node in the tree corresponds to an {@link ObjectMetadata} in the structure metadata.
+ *
+ * Refreshes itself whenever it gets &quot;metadata-created&quot; and &quot;metadata-destroyed&quot; events from the {@link Viewer}.
+ *
+ * @example
+ *
+ * @class StructurePanelPlugin
+ */
+class StructurePanelPlugin extends Plugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id=&quot;StructurePanel&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} cfg.domElementId ID of HTML DOM element within which to build the tree.
+     */
+    constructor(viewer, cfg) {
+
+        super(&quot;StructurePanel&quot;, viewer);
+
+        if (!cfg.domElementId) {
+            throw &quot;Config expected: domElementId&quot;;
+        }
+
+        this._domElement = document.getElementById(cfg.domElementId);
+
+        if (!this._domElement) {
+            throw &quot;Document element not found: &apos;&quot; + cfg.domElementId + &quot;&apos;&quot;;
+        }
+
+        this.TOGGLE = 0;
+        this.SELECT = 1;
+        this.SELECT_EXCLUSIVE = 2;
+        this.DESELECT = 3;
+
+        this._initError = false;
+        this._fromXml = false;
+        this._domElements = {};
+        this.selectionState = {};
+
+        this._onLoaded = this.viewer.on(&quot;metadata-created&quot;, modelId =&gt; {
+            if (this.viewer.metadata.structures[modelId]) {
+                this._build();
+            }
+        });
+
+        this._onUnloaded = this.viewer.on(&quot;metadata-destroyed&quot;, modelId =&gt; { // TODO: How to only rebuild when structure deleted?
+            this._build();
+        });
+    }
+
+    /**
+     * @private
+     */
+    _build() {
+        var structures = this.viewer.metadata.structures;
+        for (var modelId in structures) { // TODO: Blow away old HTMl elements
+            if (structures.hasOwnProperty(modelId)) {
+                const structure = structures[modelId];
+                var div = document.createElement(&quot;div&quot;);
+                div.className = &quot;item&quot;;
+                if (structure) {
+                    this._build2(modelId, div, structure);
+                }
+                this._domElement.appendChild(div);
+            }
+        }
+    }
+
+    /**
+     * @private
+     */
+    _build2(modelId, div, ifcElement) {
+        const viewerObjectId = modelId + &quot;.&quot; + ifcElement.id;
+        const label = document.createElement(&quot;div&quot;);
+        const children = document.createElement(&quot;div&quot;);
+
+        label.className = &quot;label&quot;;
+        label.appendChild(document.createTextNode(ifcElement.name || ifcElement.guid));
+        div.appendChild(label);
+        children.className = &quot;children&quot;;
+        div.appendChild(children);
+        this._domElements[viewerObjectId] = label;
+
+        const self = this;
+
+        label.onclick = function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            self.setSelected([viewerObjectId], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
+            self.fire(&quot;click&quot;, {
+                objectId: ifcElement.id,
+                viewerObjectId: viewerObjectId
+            });
+            return false;
+        };
+
+        for (var i = 0; i &lt; (ifcElement.children || []).length; ++i) {
+            const child = ifcElement.children[i];
+            const childDiv = document.createElement(&quot;div&quot;);
+            childDiv.className = &quot;item&quot;;
+            children.appendChild(childDiv);
+            this._build2(modelId, childDiv, child);
+        }
+    };
+
+    /**
+     * @private
+     */
+    send(name, value) {
+
+    }
+
+    /**
+     * @private
+     */
+    _getOffset(elem) {
+        var y = 0;
+        while (true) {
+            y += elem.offsetTop;
+            if (elem === this._domElement) {
+                break;
+            }
+            elem = elem.offsetParent;
+        }
+        return y;
+    }
+
+    /**
+     * Sets which nodes in the StructurePanel are currently selected.
+     * @param ids
+     * @param mode
+     */
+    setSelected(ids, mode) {
+
+        if (this.mode === this.SELECT_EXCLUSIVE) {
+            this.setSelected(this.getSelected(true), this.DESELECT);
+        }
+
+        var self = this;
+
+        ids.forEach(function (id) {
+            var s = null;
+            if (self.mode === self.TOGGLE) {
+                s = self.selectionState[id] = !self.selectionState[id];
+            } else if (self.mode === self.SELECT || self.mode === self.SELECT_EXCLUSIVE) {
+                s = self.selectionState[id] = true;
+            } else if (self.mode === self.DESELECT) {
+                s = self.selectionState[id] = false;
+            }
+            self._domElements[id].className = s ? &quot;label selected&quot; : &quot;label&quot;;
+        });
+
+        var desiredViewRange = this.getSelected().map(function (id) {
+            return self._getOffset(self._domElements[id]);
+        });
+
+        if (desiredViewRange.length) {
+            desiredViewRange.sort();
+            desiredViewRange = [desiredViewRange[0], desiredViewRange[desiredViewRange.length - 1]];
+            var domElement = this._domElement;
+            var currentViewRange = [domElement.scrollTop, domElement.scrollTop + domElement.offsetHeight];
+            if (!(desiredViewRange[0] &gt;= currentViewRange[0] &amp;&amp; desiredViewRange[1] &lt;= currentViewRange[1])) {
+                if ((desiredViewRange[1] - desiredViewRange[0]) &gt; (currentViewRange[1] - currentViewRange[0])) {
+                    domElement.scrollTop = desiredViewRange[0];
+                } else {
+                    var l = parseInt((desiredViewRange[1] + desiredViewRange[0]) / 2. - (currentViewRange[1] - currentViewRange[0]) / 2., 10);
+                    l = Math.max(l, 0);
+                    l = Math.min(l, domElement.scrollHeight - domElement.offsetHeight);
+                    domElement.scrollTop = l;
+                }
+            }
+        }
+
+        this.fire(&quot;selection-changed&quot;, [this.getSelected(true)])
+    }
+
+    /**
+     * Gets which nodes in the StructurePanel are currently selected.
+     * @param b
+     * @returns {Array}
+     */
+    getSelected(b) {
+        b = typeof (b) === &apos;undefined&apos; ? true : !!b;
+        var l = [];
+        const self = this;
+        Object.keys(this.selectionState).forEach(function (k) {
+            if (!!self.selectionState[k] === b) {
+                l.push(k);
+            }
+        });
+        return l;
+    };
+
+    /**
+     * Destroys this StructurePanel.
+     */
+    destroy() {
+
+        this.viewer.off(this._onLoaded);
+        this.viewer.off(this._onUnloaded);
+
+        super.destroy();
+    }
+}
+
+export {StructurePanelPlugin}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

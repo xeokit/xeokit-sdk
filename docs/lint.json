@@ -1,0 +1,64 @@
+[
+  {
+    "name": "LightsPlugin#createLight",
+    "filePath": "viewer/plugins/LightsPlugin/LightsPlugin.js",
+    "lines": [
+      {
+        "lineNumber": 113,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 114,
+        "line": "     Creates a directional light source."
+      },
+      {
+        "lineNumber": 115,
+        "line": ""
+      },
+      {
+        "lineNumber": 116,
+        "line": "     @param {Object} params Light source configuration."
+      },
+      {
+        "lineNumber": 117,
+        "line": "     @param {String} id Unique ID to assign to the light source."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     @param {[Number, Number, Number]} [params.dir=[0,0,-1]} Direction vector."
+      },
+      {
+        "lineNumber": 119,
+        "line": "     @param {[Number, Number, Number]} [params.color=[0,0,-1]} RGB color."
+      },
+      {
+        "lineNumber": 120,
+        "line": "     @param {Number} [params.intensity=1} Intensity."
+      },
+      {
+        "lineNumber": 121,
+        "line": "     @param {String} [space=\"view\"] \"view\" for head-mounted, \"world\" to position in world-space."
+      },
+      {
+        "lineNumber": 122,
+        "line": "     @returns {xeogl.DirLight} The new light source."
+      },
+      {
+        "lineNumber": 123,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 124,
+        "line": "    createLight(params) {"
+      }
+    ],
+    "codeParams": [
+      "params"
+    ],
+    "docParams": [
+      "params",
+      "id",
+      "space"
+    ]
+  }
+]
