@@ -5,36 +5,39 @@
 import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
 import {Viewer} from "../../../src/viewer/Viewer.js";
 import {BIMServerModelsPlugin} from "../../../src/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js";
+import {StructurePanelPlugin} from "../../../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
+import {PropertiesPanelPlugin} from "../../../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
 
 const bimServerAddress = "http://localhost:8082";
 const username = "admin@bimserver.org";
 const password = "admin";
-const poid = 131073;
+//const poid = 131073;
+//const poid = 393217;
+const poid = 458753;
 
-// Create a Viewer
-const viewer = new Viewer({});
-
-// Create a BIMServer client
-
-const bimServerAPI = new BimServerClient(bimServerAddress);
-
-// Add a BIMServerModelsPlugin that uses the client
-
-const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
-    bimServerAPI: bimServerAPI
+const viewer = new Viewer({
+    canvasId: "myCanvas"
 });
 
-// Initialize the BIMServer client
+const bimServerClient = new BimServerClient(bimServerAddress);
 
-bimServerAPI.init(() => {
+const bimServerModels = new BIMServerModelsPlugin(viewer, {
+    bimServerClient: bimServerClient
+});
 
-    // Login to BIMServer
+const structurePanel = new StructurePanelPlugin(viewer, {
+    domElementId: "structurePanel"
+});
 
-    bimServerAPI.login(username, password, () => {
+const propertiesPanel = new PropertiesPanelPlugin(viewer, {
+    domElementId: "propertiesPanel"
+});
 
-        // Query a project by ID
+bimServerClient.init(() => {
 
-        bimServerAPI.call("ServiceInterface", "getProjectByPoid", {
+    bimServerClient.login(username, password, () => {
+
+        bimServerClient.call("ServiceInterface", "getProjectByPoid", {
             poid: poid
         }, (project) => {
 
@@ -43,13 +46,13 @@ bimServerAPI.init(() => {
             const roid = project.lastRevisionId;
             const schema = project.schema;
 
-            const model = bimServerModelsPlugin.load({
+            const xeoglModel = bimServerModels.load({
                 id: "myModel",
                 poid: poid,
                 roid: roid,
                 schema: schema,
                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
-                rotation: [-90, 0, 0],          // Model has Z+ axis as "up"
+                rotation: [-90, 0, 0],          // xeoglModel has Z+ axis as "up"
                 edges: true,                    // Emphasize edges
                 lambertMaterials: true          // Fast flat shaded rendering
             });
@@ -57,15 +60,34 @@ bimServerAPI.init(() => {
             const scene = viewer.scene;  // xeogl.Scene
             const camera = scene.camera; // xeogl.Camera
 
-            model.on("loaded", () => {
+            xeoglModel.on("loaded", () => {
 
                 camera.orbitPitch(20);
-                viewer.cameraFlight.flyTo(model);
+                viewer.cameraFlight.flyTo(xeoglModel);
 
-                scene.on("tick", () => {
-                    camera.orbitYaw(0.3);
-                })
+                structurePanel.on("selection-changed", function (e) {
+
+                });
+
+                structurePanel.on("click", function (e) {
+
+                    const viewerObjectId = e.viewerObjectId;
+                    const objectId = e.objectId; // TODO: rename "elementId" or something
+
+                    scene.setSelected(scene.selectedEntityIds, false);
+                    scene.setSelected(viewerObjectId, true);
+
+                    const elementData = viewer.metadata.elements[objectId];
+
+                    //---------------------- TODO -------------------------------
+                    // propertiesPanel.setElement(objectId);
+                    //-----------------------------------------------------------
+
+                    console.log(JSON.stringify(elementData, null, "\t"));
+                });
             });
+
+            window.xeoglModel = xeoglModel;
         });
     });
 });

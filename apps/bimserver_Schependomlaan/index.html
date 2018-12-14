@@ -2,16 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minimial Large glTF Viewer Demo</title>
-    <link href="./styles/style.css" type="text/css" rel="stylesheet"/>
+    <title>Loading Schependomlaan from BIMServer</title>
+
+    <link rel="stylesheet" href="css/demo.css"/>
+    <link rel="stylesheet" href="css/panels.css"/>
+
+    <script type="module" src="scripts/index.js"></script>
+
 </head>
-
 <body>
-<div id="viewer">
-    <canvas id="myCanvas"></canvas>
+
+<div id="maincontainer">
+    <div id="topsection">
+        <h1>Loading Schependomlaan from BIMServer</h1>
+        <div id="typeSelector">
+            <div>&nbsp;</div>
+        </div>
+    </div>
+    <div id="contentwrapper">
+        <div id="colmid">
+            <div id="colright">
+                <div id="col1wrap">
+                    <div id="col1pad">
+                        <div id="viewerContainer">
+                            <canvas id="myCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div id="structurePanel" class="structurePanel">
+                </div>
+                <div id="propertiesPanel" class="propertiesPanel">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div id="status"></div>
+
 </body>
-
-<script type="module" src="scripts/index.js"></script>
-
 </html>

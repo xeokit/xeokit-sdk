@@ -1,0 +1,54 @@
+.propertiesPanel h3 {
+    font-weight: bold;
+    margin: 0;
+    padding: 10px 0 0 0;
+    width: 1000px;
+}
+
+.propertiesPanel h3:before {
+    content: "\25b8  ";
+}
+
+.propertiesPanel th,
+.propertiesPanel td {
+    width: 50%;
+    border-bottom: solid 1px #eee;
+    text-align: left;
+}
+
+.structurePanel, .structurePanel * {
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    z-index: 1;
+}
+
+.structurePanel div.item {
+    border-top: solid 1px #eee;
+}
+
+.structurePanel > div.item {
+    border: none;
+}
+
+.structurePanel div.label {
+    margin-left: -100px;
+    padding-left: 100px;
+    width: 1000px;
+    cursor: pointer;
+    color: white;
+}
+
+.structurePanel div.children {
+    padding-left: 10px;
+}
+
+.structurePanel div.selected {
+    background: #6ae;
+    color: white;
+}
+
+.structurePanel div.label:before {
+    content: "\21b3  ";
+}
