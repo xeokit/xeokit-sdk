@@ -69,13 +69,7 @@ class ModelsPlugin extends Plugin {
         });
         if (params.metadataSrc) {
             const metadataSrc = params.metadataSrc;
-            loadJSON(metadataSrc, function (json) {
-                var metadata;
-                try {
-                    metadata = eval(json);
-                } catch (e) {
-                    self.error(`load(): Failed to parse model metadata for model '${id} from  '${metadataSrc}' - ${e}`);
-                }
+            loadJSON(metadataSrc, function (metadata) {
                 self.viewer.createMetadata(id, metadata);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
