@@ -226,7 +226,7 @@ var loadGLTF = (function () {
 
     return function (model, src, options, ok, error) {
 
-        loadJSON(src, function (response) { // OK
+        loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, model, ok, error);
             },
