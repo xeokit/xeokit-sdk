@@ -1,11 +1,9 @@
 /**
- * Metadata for an <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a> within a {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+ * Metadata for a <a href="http://xeogl.org/docs/classes/Object.html">xeogl.Object</a> within a {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
  *
- * This normally represents IFC metadata, but can represent other schemas as well.
- *
- * These are kept within the object map and structure tree in {@link Viewer#metadata}.
- *
- * These only exist for <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>s that were loaded by
+ * * Normally represents IFC metadata, but can represent other schemas as well.
+ * * Kept within the object map and structure tree in {@link Viewer#metadata}.
+ * * Only exist for <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>s that were loaded by
  * {@link ModelsPlugin}s that also loaded metadata.
  *
  * @class ObjectMetadata

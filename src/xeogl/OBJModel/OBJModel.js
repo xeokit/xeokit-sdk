@@ -138,7 +138,7 @@ class OBJModel extends Model {
         model.src = null;
         model.fire("loaded", true, true);
     }
-};
+}
 
 //--------------------------------------------------------------------------------------------
 // Loads OBJ

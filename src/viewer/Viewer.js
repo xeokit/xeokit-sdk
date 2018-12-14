@@ -7,7 +7,7 @@ import {ObjectMetadata} from "./ObjectMetadata.js";
  * * A Viewer wraps a single <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
  * * {@link Viewer#metadata} holds metadata about <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>s in the
- * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>. Load and unload metadata using {@link Viewer#createMetadata}
+ * Viewer's <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>. Load and unload metadata using {@link Viewer#createMetadata}
  * and {@link Viewer#destroyMetadata}.
  * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
  * {@link Plugin} instances will also save and load their state to and from the JSON.
@@ -105,7 +105,7 @@ class Viewer {
      * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer's
      * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
      *
-     * Metadata is kept in Metadata is kept within from {@link Viewer#metadata}.
+     * Metadata is kept within {@link Viewer#metadata}.
      *
      * Fires a "metadata-created" event with the ID of the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
      *
@@ -137,7 +137,7 @@ class Viewer {
      * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within the Viewer's
      * <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
      *
-     * Metadata is kept within from {@link Viewer#metadata}.
+     * Metadata is kept within {@link Viewer#metadata}.
      *
      * Fires a "metadata-destroyed" event with the ID of the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a>.
      *
