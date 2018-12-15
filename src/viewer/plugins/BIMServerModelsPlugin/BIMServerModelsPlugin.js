@@ -3,10 +3,10 @@ import {
     LambertMaterial,
     PhongMaterial,
     Geometry,
-    Object as xeoglObjectClass,
-    Model as xeoglModelClass,
+    Object as xeokitObjectClass,
+    Model as xeokitModelClass,
     Mesh
-} from "./../../../xeogl/xeogl.module.js";
+} from "./../../../xeokit/xeokit.module.js";
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
 
@@ -15,8 +15,8 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *
  * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
  *
- * For each model loaded, BIMServerModelsPlugin creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its
- * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html). You can load multiple models into the same
+ * For each model loaded, BIMServerModelsPlugin creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within its
+ * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html). You can load multiple models into the same
  * Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.
  *
  * A BIMServerModelsPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
@@ -28,8 +28,8 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  * the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
  * version of the API for the BIMServer version.
  *
- * Since xeogl's default World "up" direction is +Y, while the model's "up" is +Z, we'll rotate the
- * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeogl to use +Z as "up".
+ * Since xeokit's default World "up" direction is +Y, while the model's "up" is +Z, we'll rotate the
+ * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeokit to use +Z as "up".
  *
  * Note that BIMServerModelsPlugin works with BIMServer V1.5 or later.
  *
@@ -79,7 +79,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *             const roid = project.lastRevisionId;
  *             const schema = project.schema;
  *
- *             const model = bimServerModelsPlugin.load({ // Returns a xeogl.Model
+ *             const model = bimServerModelsPlugin.load({ // Returns a xeokit.Model
  *                 id: "myModel",
  *                 poid: poid,                      // Project ID
  *                 roid: roid,                      // Revision ID
@@ -90,8 +90,8 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *                 rotation: [-90, 0, 0]            // Rotate model for World +Y "up"
  *             });
  *
- *             const scene = viewer.scene;  // xeogl.Scene
- *             const camera = scene.camera; // xeogl.Camera
+ *             const scene = viewer.scene;  // xeokit.Scene
+ *             const camera = scene.camera; // xeokit.Camera
  *
  *             model.on("loaded", () => { // When loaded, fit camera and start orbiting
  *                 camera.orbitPitch(20);
@@ -160,14 +160,14 @@ class BIMServerModelsPlugin extends Plugin {
     }
 
     /**
-     * Loads a <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> from BIMServer into the {@link Viewer}'s <a href="http://xeogl.org/docs/classes/Scene.html">xeogl.Scene</a>.
+     * Loads a {@link Model} from BIMServer into the {@link Viewer}'s {@link Scene}.
      *
-     * Creates IFC metadata for the <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> within {@link Viewer#metadata}.
+     * Creates IFC metadata for the {@link Model} within {@link Viewer#metadata}.
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),
-     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+     * @param {String} params.id ID to assign to the [xeokit.Model](http://xeokit.org/docs/classes/Model.html),
+     * unique among all components in the Viewer's [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
      *
      * @param {Number} params.poid ID of the model's project within BIMServer.
      *
@@ -175,26 +175,26 @@ class BIMServerModelsPlugin extends Plugin {
      *
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
      *
-     * @param {xeogl.Object} [params.parent] A parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),
-     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.
+     * @param {xeokit.Object} [params.parent] A parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
+     * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
      *
-     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
      *
-     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.position=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
      * local 3D position.
      *
-     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.scale=[1,1,1]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
      * local scale.
      *
-     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local
+     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
-     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
+     * [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
-     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)
-     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````
+     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each [xeokit.Mesh](http://xeokit.org/docs/classes/Mesh.html)
+     * the same [xeokit.LambertMaterial](http://xeokit.org/docs/classes/LambertMaterial.html) and a ````colorize````
      * value set the to the corresponding IFC element color. This is typically used for large models, for a lower
      * memory footprint and smoother performance.
      *
@@ -203,7 +203,7 @@ class BIMServerModelsPlugin extends Plugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded BIMserver model.
+     * @returns {{xeokit.Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded BIMserver model.
      */
     load(params) {
 
@@ -256,9 +256,9 @@ class BIMServerModelsPlugin extends Plugin {
 
         scene.canvas.spinner.processes++;
 
-        const xeoglModel = new xeoglModelClass(scene, params);
+        const xeokitModel = new xeokitModelClass(scene, params);
 
-        const xeoglMaterial = lambertMaterials ? new LambertMaterial(scene, {
+        const xeokitMaterial = lambertMaterials ? new LambertMaterial(scene, {
             backfaces: true
         }) : new PhongMaterial(scene, {
             diffuse: [1.0, 1.0, 1.0]
@@ -268,7 +268,7 @@ class BIMServerModelsPlugin extends Plugin {
 
             this.loadMetadata(modelId, bimServerClientModel).then(function () {
 
-                xeoglModel.once("destroyed", function () {
+                xeokitModel.once("destroyed", function () {
                    viewer.destroyMetadata(modelId);
                 });
 
@@ -340,7 +340,7 @@ class BIMServerModelsPlugin extends Plugin {
 
                     createGeometry: function (geometryDataId, positions, normals, indices, reused) {
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        new Geometry(xeoglModel, {
+                        new Geometry(xeokitModel, {
                             id: geometryId,
                             primitive: "triangles",
                             positions: positions,
@@ -364,7 +364,7 @@ class BIMServerModelsPlugin extends Plugin {
                         ifcType = ifcType || "DEFAULT";
                         //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                         const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
-                        const xeoglObject = new xeoglObjectClass(xeoglModel, {
+                        const xeokitObject = new xeokitObjectClass(xeokitModel, {
                             id: objectId,
                             // guid: guid,
                             entityType: ifcType,
@@ -374,32 +374,32 @@ class BIMServerModelsPlugin extends Plugin {
                             visibility: !self.hiddenTypes[ifcType],
                             edges: edges
                         });
-                        xeoglModel.addChild(xeoglObject, false);
+                        xeokitModel.addChild(xeokitObject, false);
                         for (let i = 0, len = geometryDataIds.length; i < len; i++) {
-                            const xeoglMesh = new Mesh(xeoglModel, {
+                            const xeokitMesh = new Mesh(xeokitModel, {
                                 geometry: `${modelId}.${geometryDataIds[i]}`,
-                                material: xeoglMaterial
+                                material: xeokitMaterial
                             });
-                            xeoglObject.addChild(xeoglMesh, true);
-                            xeoglMesh.colorize = color; // HACK: Overrides state inheritance
-                            xeoglMesh.opacity = color[3]; // A
+                            xeokitObject.addChild(xeokitMesh, true);
+                            xeokitMesh.colorize = color; // HACK: Overrides state inheritance
+                            xeokitMesh.opacity = color[3]; // A
                         }
                     },
 
                     addGeometryToObject(oid, geometryDataId) {
                         const objectId = `${modelId}.${oid}`;
-                        const xeoglObject = xeoglModel.scene.components[objectId];
-                        if (!xeoglObject) {
+                        const xeokitObject = xeokitModel.scene.components[objectId];
+                        if (!xeokitObject) {
                             //self.error(`Can't find object with id ${objectId}`);
                             return;
                         }
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        const xeoglMesh = new Mesh(xeoglModel, {
+                        const xeokitMesh = new Mesh(xeokitModel, {
                             geometry: geometryId,
-                            material: xeoglMaterial
+                            material: xeokitMaterial
                         });
-                        //  xeoglMesh.colorize = color; // HACK: Overrides state inheritance
-                        xeoglObject.addChild(xeoglMesh, true);
+                        //  xeokitMesh.colorize = color; // HACK: Overrides state inheritance
+                        xeokitObject.addChild(xeokitMesh, true);
                     }
                 });
 
@@ -415,10 +415,10 @@ class BIMServerModelsPlugin extends Plugin {
                         viewer.scene.off(onTick);
                         scene.canvas.spinner.processes--;
 
-                        xeoglModel.fire("loaded");
+                        xeokitModel.fire("loaded");
 
-                        viewer.fire("loaded", xeoglModel);
-                        self.fire("loaded", xeoglModel);
+                        viewer.fire("loaded", xeokitModel);
+                        self.fire("loaded", xeokitModel);
                     }
                 });
 
@@ -432,7 +432,7 @@ class BIMServerModelsPlugin extends Plugin {
             });
         });
 
-        return xeoglModel;
+        return xeokitModel;
     }
 
     loadMetadata(modelId, bimServerClientModel) {

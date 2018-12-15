@@ -1,5 +1,5 @@
 import {Plugin} from "./../../Plugin.js";
-import {Clip, math} from "../../../xeogl/xeogl.module.js"
+import {Clip, math} from "../../../xeokit/xeokit.module.js"
 
 /**
  * A viewer plugin that manages user cross-section planes.
@@ -117,7 +117,7 @@ class ClipsPlugin extends Plugin {
      @param {[Number, Number, Number]} [params.dir=[0,0,-1]} Vector indicating the orientation of the clip plane.
      @param {Boolean} [params.active=true] Whether the clip plane is initially active. Only clips while this is true.
      @param {Boolean} [params.shown=true] Whether to show a helper object to indicate the clip plane's position and orientation.
-     @returns {xeogl.Clip}  A <a href="http://xeogl.org/docs/classes/Clip.html">xeogl.Model</a> representing the clipping plane.
+     @returns {xeokit.Clip}  A <a href="http://xeokit.org/docs/classes/Clip.html">xeokit.Model</a> representing the clipping plane.
      */
     createClip(params) {
         if (this.viewer.scene.components[params.id]) {

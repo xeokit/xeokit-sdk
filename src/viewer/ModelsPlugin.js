@@ -1,4 +1,4 @@
-import {_apply} from "../xeogl/xeogl.module.js"
+import {_apply} from "../xeokit/xeokit.module.js"
 import {Plugin} from "./Plugin.js";
 import {loadJSON} from "./utils.js";
 
@@ -27,7 +27,7 @@ class ModelsPlugin extends Plugin {
         this._modelClass = modelClass;
 
         /**
-         * <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Models</a> currently loaded by this Plugin.
+         * <a href="http://xeokit.org/docs/classes/Model.html">xeokit.Models</a> currently loaded by this Plugin.
          * @type {{String:Model}}
          */
         this.models = {};
@@ -44,8 +44,8 @@ class ModelsPlugin extends Plugin {
      *
      * @param {*} params  Loading params.
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's xeogl.Scene.
-     * @returns {{xeogl.Model}} A <a href="http://xeogl.org/docs/classes/Model.html">xeogl.Model</a> representing the loaded model
+     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's xeokit.Scene.
+     * @returns {{xeokit.Model}} A {@link Model} representing the loaded model
      */
     load(params) {
         const self = this;

@@ -9,7 +9,7 @@ import {
     SpecularMaterial,
     _isString,
     math
-} from "../../../xeogl/xeogl.module.js"
+} from "../../../xeokit/xeokit.module.js"
 
 import {zipLib} from "./zipjs/zip.js";
 import {zipExt} from "./zipjs/zip-ext.js";
@@ -415,7 +415,7 @@ var parse3DXML = (function () {
 
             //----------------------------------------------------------------------------------
             // Parse out an intermediate scene DAG representation, that we can then
-            // recursive descend through to build a xeogl Object hierarchy.
+            // recursive descend through to build a xeokit Object hierarchy.
             //----------------------------------------------------------------------------------
 
             var children = productStructureNode.children;
@@ -785,7 +785,7 @@ var parse3DXML = (function () {
                 case "Edges":
 
                     //----------------------------------------------------------------------
-                    // NOTE: Ignoring edges because we auto-generate our own using xeogl
+                    // NOTE: Ignoring edges because we auto-generate our own using xeokit
                     //----------------------------------------------------------------------
 
                     // meshesResult.primitive = "lines";

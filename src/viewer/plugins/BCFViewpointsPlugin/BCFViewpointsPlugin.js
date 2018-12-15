@@ -1,5 +1,5 @@
 import {Plugin} from "./../../../viewer/Plugin.js";
-import {Clip, math} from "../../../xeogl/xeogl.module.js"
+import {Clip, math} from "../../../xeokit/xeokit.module.js"
 
 const tempVec3 = math.vec3();
 
@@ -67,14 +67,14 @@ class BCFViewpointsPlugin extends Plugin {
          * @property originatingSystem
          * @type {string}
          */
-        this.originatingSystem = cfg.originatingSystem || "xeogl";
+        this.originatingSystem = cfg.originatingSystem || "xeokit";
 
         /**
          * Identifies the authoring tool to include in BCF viewpoints saved by this plugin.
          * @property authoringTool
          * @type {string}
          */
-        this.authoringTool = cfg.authoringTool || "xeogl";
+        this.authoringTool = cfg.authoringTool || "xeokit";
     }
 
     /**

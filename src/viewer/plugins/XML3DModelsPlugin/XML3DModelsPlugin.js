@@ -4,8 +4,8 @@ import {XML3DModel} from "./XML3DModel.js";
 /**
  * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * For each model loaded, creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within its
- * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+ * For each model loaded, creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within its
+ * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
  *
  * Note that the name of this plugin is intentionally munged to "XML3D" because a JavaScript
  * class name cannot begin with a numeral.
@@ -17,7 +17,7 @@ import {XML3DModel} from "./XML3DModel.js";
  * the example for how to do that. 
  *
  * See the {@link XML3DModelsPlugin#load} method for parameters that you can configure
- * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.
+ * each [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with as you load it.
  *
  * @example
  * // Create a xeokit Viewer
@@ -35,7 +35,7 @@ import {XML3DModel} from "./XML3DModel.js";
  * plugin = viewer.plugins.XML3DModels;
  *
  * // Load the 3DXML model
- * // These params can include all the xeogl.OBJModel configs
+ * // These params can include all the xeokit.OBJModel configs
  * const model = plugin.load({
  *      id: "myModel",
  *      src: "models/my3DXMLModel.3dxml",
@@ -45,20 +45,20 @@ import {XML3DModel} from "./XML3DModel.js";
  *      edges: true
  * });
  *
- * // Recall that the model is a xeogl.Model
+ * // Recall that the model is a xeokit.Model
  *
  * // When the model has loaded, fit it to view
  * model.on("loaded", function() {
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * // Update properties of the model via the xeogl.Model
+ * // Update properties of the model via the xeokit.Model
  * model.translate = [200,0,0];
  *
  * // You can unload the model via the plugin
  * plugin.unload("myModel");
  *
- * // Or unload it by calling destroy() on the xeogl.Model itself
+ * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
  * @class XML3DModels
@@ -88,37 +88,37 @@ class XML3DModelsPlugin extends ModelsPlugin {
     /**
      * Loads a 3DXML model from a file into this XML3DModelsPlugin's {@link Viewer}.
      *
-     * Creates a [xeogl.Model](http://xeogl.org/docs/classes/Model.html) within the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+     * Creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within the Viewer's [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.id ID to assign to the [xeogl.Model](http://xeogl.org/docs/classes/Model.html),
-     * unique among all components in the Viewer's [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+     * @param {String} params.id ID to assign to the [xeokit.Model](http://xeokit.org/docs/classes/Model.html),
+     * unique among all components in the Viewer's [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
      *
      * @param {String} [params.src] Path to a 3DXML file.
      *
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
-     * @param {xeogl.Object} [params.parent] The parent [xeogl.Object](http://xeogl.org/docs/classes/Object.html),
-     * if we want to graft the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) into a xeogl object hierarchy.
+     * @param {xeokit.Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
+     * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
      *
-     * @param {Boolean} [params.edges=false] Whether or not xeogl renders the [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with edges emphasized.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
      *
-     * @param {Float32Array} [params.position=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.position=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
      * local 3D position.
      *
-     * @param {Float32Array} [params.scale=[1,1,1]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.scale=[1,1,1]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
      * local scale.
      *
-     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local
+     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
-     * [xeogl.Model](http://xeogl.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
+     * [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
-     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeogl.Mesh](http://xeogl.org/docs/classes/Mesh.html)
-     * the same [xeogl.LambertMaterial](http://xeogl.org/docs/classes/LambertMaterial.html) and a ````colorize````
+     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each [xeokit.Mesh](http://xeokit.org/docs/classes/Mesh.html)
+     * the same [xeokit.LambertMaterial](http://xeokit.org/docs/classes/LambertMaterial.html) and a ````colorize````
      * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and
      * will cause loading to ignore textures in the 3DXML.
      *
@@ -128,7 +128,7 @@ class XML3DModelsPlugin extends ModelsPlugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{xeogl.Model}} A [xeogl.Model](http://xeogl.org/docs/classes/Model.html) representing the loaded 3DXML model.
+     * @returns {{xeokit.Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded 3DXML model.
      */
     load(params) {
         params.workerScriptsPath = this._workerScriptsPath;

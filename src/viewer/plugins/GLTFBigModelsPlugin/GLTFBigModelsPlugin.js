@@ -1,16 +1,16 @@
 import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {GLTFBigModel} from "../../../xeogl/GLTFBigModel/GLTFBigModel.js";
+import {GLTFBigModel} from "../../../xeokit/GLTFBigModel/GLTFBigModel.js";
 
 /**
  * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
  *
- * For each model loaded, creates a [xeogl.BigModel](http://xeogl.org/docs/classes/BigModel.html) within its
- * {@link Viewer}'s [xeogl.Scene](http://xeogl.org/docs/classes/Scene.html).
+ * For each model loaded, creates a [xeokit.BigModel](http://xeokit.org/docs/classes/BigModel.html) within its
+ * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
  *
  *
  *
  * See the {@link GLTFBigModelsPlugin#load} method for parameters that you can configure
- * each [xeogl.Model](http://xeogl.org/docs/classes/Model.html) with as you load it.
+ * each [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with as you load it.
  *
  * @example
  * // Create a xeokit Viewer
@@ -27,7 +27,7 @@ import {GLTFBigModel} from "../../../xeogl/GLTFBigModel/GLTFBigModel.js";
  * plugin = viewer.plugins.GLTFBigModels;
  *
  * // Load the glTF model
- * // These params can include all the xeogl.GLTFModel configs
+ * // These params can include all the xeokit.GLTFModel configs
  * const model = plugin.load({
  *      id: "myModel",
  *      src: "models/mygltfmodel.gltf",
@@ -37,20 +37,20 @@ import {GLTFBigModel} from "../../../xeogl/GLTFBigModel/GLTFBigModel.js";
  *      edges: true
  * });
  *
- * // Recall that the model is a xeogl.Model
+ * // Recall that the model is a xeokit.Model
  *
  * // When the model has loaded, fit it to view
  * model.on("loaded", function() {
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * // Update properties of the model via the xeogl.Model
+ * // Update properties of the model via the xeokit.Model
  * model.translate = [200,0,0];
  *
  * // You can unload the model via the plugin
  * plugin.unload("myModel");
  *
- * // Or unload it by calling destroy() on the xeogl.Model itself
+ * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
  * @class GLTFBigModelsPlugin

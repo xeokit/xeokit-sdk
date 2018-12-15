@@ -1,4 +1,4 @@
-import {VectorTextGeometry} from "../../../xeogl/VectorTextGeometry/VectorTextGeometry.js"
+import {VectorTextGeometry} from "../../../xeokit/VectorTextGeometry/VectorTextGeometry.js"
 import {Plugin} from "./../../../viewer/Plugin.js";
 import {
     Scene,
@@ -9,7 +9,7 @@ import {
     SphereGeometry,
     PhongMaterial,
     math
-} from "../../../xeogl/xeogl.module.js"
+} from "../../../xeokit/xeokit.module.js"
 
 
 /**
@@ -40,7 +40,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // Create canvas for this gizmo
 
-        var canvasId = "xeogl-axisHelper-canvas-" + math.createUUID();
+        var canvasId = "xeokit-axisHelper-canvas-" + math.createUUID();
         var body = document.getElementsByTagName("body")[0];
         var div = document.createElement('div');
         var style = div.style;
