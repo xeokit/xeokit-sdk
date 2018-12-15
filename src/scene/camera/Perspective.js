@@ -34,23 +34,20 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Perspective";
 
 class Perspective extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Perspective";
     }
 
     init(cfg) {
@@ -223,7 +220,5 @@ class Perspective extends Component {
         this.scene.canvas.off(this._canvasResized);
     }
 }
-
-componentClasses[type] = Perspective;
 
 export {Perspective};

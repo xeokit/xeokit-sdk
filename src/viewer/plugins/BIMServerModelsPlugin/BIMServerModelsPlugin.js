@@ -1,12 +1,12 @@
 import {Plugin} from "./../../Plugin.js";
-import {
-    LambertMaterial,
-    PhongMaterial,
-    Geometry,
-    Object as xeokitObjectClass,
-    Model as xeokitModelClass,
-    Mesh
-} from "./../../../xeokit/xeokit.module.js";
+import {LambertMaterial} from "../../../scene/materials/LambertMaterial.js";
+import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
+import {Geometry} from "../../../scene/geometry/Geometry.js";
+import {Object as sceneObject} from "../../../scene/objects/Object.js";
+import {Model as SceneModel} from "../../../scene/models/Model.js";
+import {Mesh} from "../../../scene/mesh/Mesh.js";
+
+
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
 
@@ -256,7 +256,7 @@ class BIMServerModelsPlugin extends Plugin {
 
         scene.canvas.spinner.processes++;
 
-        const xeokitModel = new xeokitModelClass(scene, params);
+        const xeokitModel = new SceneModel(scene, params);
 
         const xeokitMaterial = lambertMaterials ? new LambertMaterial(scene, {
             backfaces: true
@@ -364,7 +364,7 @@ class BIMServerModelsPlugin extends Plugin {
                         ifcType = ifcType || "DEFAULT";
                         //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                         const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
-                        const xeokitObject = new xeokitObjectClass(xeokitModel, {
+                        const xeokitObject = new sceneObject(xeokitModel, {
                             id: objectId,
                             // guid: guid,
                             entityType: ifcType,

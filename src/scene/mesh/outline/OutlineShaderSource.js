@@ -2,6 +2,9 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+/**
+ * @private
+ */
 class OutlineShaderSource {
     constructor(mesh) {
         this.vertex = buildVertex(mesh);

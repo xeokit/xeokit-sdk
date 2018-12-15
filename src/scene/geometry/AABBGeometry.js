@@ -74,26 +74,10 @@
  */
 
 import {utils} from '../utils.js';
-import {tasks} from '../tasks.js';
+import {core} from '../core.js';
 import {Geometry} from './Geometry.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.AABBGeometry";
 
 class AABBGeometry extends Geometry {
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
 
@@ -140,7 +124,7 @@ class AABBGeometry extends Geometry {
         const self = this;
         this._attach({
             name: "target",
-            type: "xeokit.Component",
+            type: "Component",
             component: target,
             sceneDefault: false,
             on: {
@@ -149,7 +133,7 @@ class AABBGeometry extends Geometry {
                         return;
                     }
                     geometryDirty = true;
-                    tasks.scheduleTask(function () {
+                    core.scheduleTask(function () {
                         self._setPositionsFromAABB(self._attached.target.aabb);
                         geometryDirty = false;
                     });
@@ -198,7 +182,5 @@ class AABBGeometry extends Geometry {
         ];
     }
 }
-
-componentClasses[type] = AABBGeometry;
 
 export {AABBGeometry};

@@ -37,23 +37,20 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Frustum";
 
 class Frustum extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Frustum";
     }
 
     init(cfg) {
@@ -260,7 +257,5 @@ class Frustum extends Component {
         super.destroy();
     }
 }
-
-componentClasses[type] = Frustum;
 
 export {Frustum};

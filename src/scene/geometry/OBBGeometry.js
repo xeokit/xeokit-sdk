@@ -73,26 +73,10 @@
  @extends Component
  */
 import {utils} from '../utils.js';
-import {tasks} from '../tasks.js';
+import {core} from '../core.js';
 import {Geometry} from './Geometry.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.OBBGeometry";
 
 class OBBGeometry extends Geometry {
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
         super.init(utils.apply(cfg, {
@@ -123,7 +107,7 @@ class OBBGeometry extends Geometry {
         const self = this;
         this._attach({
             name: "target",
-            type: "xeokit.Component",
+            type: "Component",
             component: value,
             sceneDefault: false,
             on: {
@@ -132,7 +116,7 @@ class OBBGeometry extends Geometry {
                         return;
                     }
                     geometryDirty = true;
-                    tasks.scheduleTask(function () {
+                    core.scheduleTask(function () {
                         self._setPositionsFromOBB(self._attached.target.obb);
                         geometryDirty = false;
                     });
@@ -180,7 +164,5 @@ class OBBGeometry extends Geometry {
         ];
     }
 }
-
-componentClasses[type] = OBBGeometry;
 
 export {OBBGeometry};

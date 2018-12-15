@@ -75,23 +75,20 @@
  */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Clip";
 
 class Clip extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Clip";
     }
 
     init(cfg) {
@@ -189,7 +186,5 @@ class Clip extends Component {
         super.destroy();
     }
 }
-
-componentClasses[type] = Clip;
 
 export {Clip};

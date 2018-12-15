@@ -3,12 +3,15 @@
  */
 
 import {Map} from "../../utils/Map.js";
-import {EmphasisEdgesShaderSource} from "./emphasisEdgesShaderSource.js";
+import {EmphasisEdgesShaderSource} from "./EmphasisEdgesShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from './../../stats.js';
 
 const ids = new Map({});
 
+/**
+ * @private
+ */
 const EmphasisEdgesRenderer = function (hash, mesh) {
     this.id = ids.addItem({});
     this._hash = hash;

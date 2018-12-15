@@ -105,9 +105,6 @@ import {stats} from '../stats.js';
 import {Component} from '../Component.js';
 import {Spinner} from './Spinner.js';
 import {WEBGL_INFO} from '../webglInfo.js';
-import {componentClasses} from "../componentClasses.js";
-
-const type = "xeokit.Canvas";
 
 const WEBGL_CONTEXT_NAMES = [
     "webgl",
@@ -122,14 +119,14 @@ class Canvas extends Component {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Canvas";
     }
 
     init(cfg) {
@@ -692,7 +689,5 @@ class Canvas extends Component {
         super.destroy();
     }
 }
-
-componentClasses[type] = Canvas;
 
 export {Canvas};

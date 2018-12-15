@@ -187,7 +187,6 @@
 
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {componentClasses} from "./../componentClasses.js";
 
 const PRESETS = {
     "default": {
@@ -212,10 +211,20 @@ const PRESETS = {
     }
 };
 
-
-const type = "xeokit.EdgeMaterial";
-
 class EdgeMaterial extends Material {
+
+    /**
+     JavaScript class name for this Component.
+
+     For example: "AmbientLight", "MetallicMaterial" etc.
+
+     @property type
+     @type String
+     @final
+     */
+    get type() {
+        return "EdgeMaterial";
+    }
 
     /**
      Available EdgeMaterial presets.
@@ -227,19 +236,6 @@ class EdgeMaterial extends Material {
     static get presets() {
         return PRESETS;
     };
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
 
@@ -384,7 +380,5 @@ class EdgeMaterial extends Material {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = EdgeMaterial;
 
 export {EdgeMaterial};

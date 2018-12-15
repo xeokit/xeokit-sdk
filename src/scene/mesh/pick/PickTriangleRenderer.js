@@ -2,10 +2,13 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
-import {PickTriangleShaderSource} from "./pickTriangleShaderSource.js";
+import {PickTriangleShaderSource} from "./PickTriangleShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
 
+/**
+ * @private
+ */
 const PickTriangleRenderer = function (hash, mesh) {
     this._hash = hash;
     this._scene = mesh.scene;

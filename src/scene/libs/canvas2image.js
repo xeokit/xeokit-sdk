@@ -4,6 +4,9 @@
  * MIT License [http://www.opensource.org/licenses/mit-license.php]
  */
 
+/**
+ * @private
+ */
 const Canvas2Image = (function () {
     // check if we have canvas support
     const oCanvas = document.createElement("canvas"), sc = String.fromCharCode, strDownloadMime = "image/octet-stream", bReplaceDownloadMime = false;
@@ -143,16 +146,12 @@ const Canvas2Image = (function () {
     const scaleCanvas = function (oCanvas, iWidth, iHeight) {
         if (iWidth && iHeight) {
             const oSaveCanvas = document.createElement("canvas");
-
             oSaveCanvas.width = iWidth;
             oSaveCanvas.height = iHeight;
             oSaveCanvas.style.width = iWidth + "px";
             oSaveCanvas.style.height = iHeight + "px";
-
             const oSaveCtx = oSaveCanvas.getContext("2d");
-
-            oSaveCtx.drawImage(oCanvas, 0, 0, oCanvas.width, oCanvas.height, 0, 0, iWidth, iWidth);
-
+            oSaveCtx.drawImage(oCanvas, 0, 0, oCanvas.width, oCanvas.height, 0, 0, iWidth, iHeight);
             return oSaveCanvas;
         }
         return oCanvas;
@@ -161,9 +160,7 @@ const Canvas2Image = (function () {
     return {
         saveAsPNG: function (oCanvas, bReturnImg, iWidth, iHeight) {
             if (!bHasDataURL) return false;
-
             const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/png", strData = oScaledCanvas.toDataURL(strMime);
-
             if (bReturnImg) {
                 return makeImageObject(strData);
             } else {
@@ -174,12 +171,9 @@ const Canvas2Image = (function () {
 
         saveAsJPEG: function (oCanvas, bReturnImg, iWidth, iHeight) {
             if (!bHasDataURL) return false;
-
             const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/jpeg", strData = oScaledCanvas.toDataURL(strMime);
-
             // check if browser actually supports jpeg by looking for the mime type in the data uri. if not, return false
             if (strData.indexOf(strMime) != 5) return false;
-
             if (bReturnImg) {
                 return makeImageObject(strData);
             } else {
@@ -190,9 +184,7 @@ const Canvas2Image = (function () {
 
         saveAsBMP: function (oCanvas, bReturnImg, iWidth, iHeight) {
             if (!(bHasDataURL && bHasImageData && bHasBase64)) return false;
-
             const oScaledCanvas = scaleCanvas(oCanvas, iWidth, iHeight), strMime = "image/bmp", oData = readCanvasData(oScaledCanvas), strImgData = createBMP(oData);
-
             if (bReturnImg) {
                 return makeImageObject(makeDataURI(strImgData, strMime));
             } else {

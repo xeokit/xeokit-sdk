@@ -608,9 +608,7 @@ import {Mesh} from './../mesh/Mesh.js';
 import {AABBGeometry} from '../geometry/AABBGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
 
-const type = "xeokit.Object";
 const angleAxis = new Float32Array(4);
 const q1 = new Float32Array(4);
 const q2 = new Float32Array(4);
@@ -625,18 +623,17 @@ const identityMat = math.identityMat4();
 
 class xeokitObject extends Component {
 
-
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Object";
     }
 
     init(cfg) {
@@ -839,7 +836,7 @@ class xeokitObject extends Component {
                 return;
             }
         } else {
-            if (!object.isType("xeokit.Object")) {
+            if (!object.isType("Object")) {
                 this.error("Not a xeokit.Object: " + object.id);
                 return;
             }
@@ -928,7 +925,7 @@ class xeokitObject extends Component {
      Rotates about the given local axis by the given increment.
 
      @method rotate
-     @paream {Float32Array} axis Local axis about which to rotate.
+     @param {Float32Array} axis Local axis about which to rotate.
      @param {Number} angle Angle increment in degrees.
      */
     rotate(axis, angle) {
@@ -949,7 +946,7 @@ class xeokitObject extends Component {
      Rotates about the given World-space axis by the given increment.
 
      @method rotate
-     @paream {Float32Array} axis Local axis about which to rotate.
+     @param {Float32Array} axis Local axis about which to rotate.
      @param {Number} angle Angle increment in degrees.
      */
     rotateOnWorldAxis(axis, angle) {
@@ -1770,7 +1767,5 @@ class xeokitObject extends Component {
         this.scene._objectDestroyed(this);
     }
 }
-
-componentClasses[type] = xeokitObject;
 
 export {xeokitObject};

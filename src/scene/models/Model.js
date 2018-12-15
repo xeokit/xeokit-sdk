@@ -44,23 +44,20 @@
 import {core} from "../core.js";
 import {utils} from '../utils.js';
 import {Group} from "../objects/Group.js";
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Model";
 
 class Model extends Group {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Model";
     }
 
     init(cfg) {
@@ -86,11 +83,11 @@ class Model extends Group {
          a map to IDs to {{#crossLink "Component"}}{{/crossLink}} instances, eg.
 
          ````
-         "xeokit.Geometry": {
+         "Geometry": {
                 "alpha": <xeokit.Geometry>,
                 "beta": <xeokit.Geometry>
               },
-         "xeokit.Rotate": {
+         "Rotate": {
                 "charlie": <xeokit.Rotate>,
                 "delta": <xeokit.Rotate>,
                 "echo": <xeokit.Rotate>,
@@ -181,7 +178,7 @@ class Model extends Group {
                 return;
             }
         } else if (utils.isObject(component)) { // Component config
-            const type = component.type || "xeokit.Component";
+            const type = component.type || "Component";
             if (!core.isComponentType(type)) {
                 this.error("Not a xeokit component type: " + type);
                 return;
@@ -204,7 +201,7 @@ class Model extends Group {
             types = this.types[component.type] = {};
         }
         types[component.id] = component;
-        if (component.isType("xeokit.Object")) {
+        if (component.isType("Object")) {
             const object = component;
             this.objects[object.id] = object;
             if (object.entityType) {
@@ -222,7 +219,7 @@ class Model extends Group {
                 this.guidObjects[object.id] = object;
                 this._objectGUIDs = null; // To lazy-rebuild
             }
-            if (component.isType("xeokit.Mesh")) {
+            if (component.isType("Mesh")) {
                 this.meshes[component.id] = component;
             }
         }
@@ -328,7 +325,5 @@ class Model extends Group {
         this.scene._modelDestroyed(this);
     }
 }
-
-componentClasses[type] = Model;
 
 export {Model};

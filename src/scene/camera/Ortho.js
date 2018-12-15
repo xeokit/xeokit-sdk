@@ -38,23 +38,20 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Ortho";
 
 class Ortho extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Ortho";
     }
 
     init(cfg) {
@@ -218,7 +215,5 @@ class Ortho extends Component {
         this.scene.canvas.off(this._onCanvasBoundary);
     }
 }
-
-componentClasses[type] = Ortho;
 
 export {Ortho};

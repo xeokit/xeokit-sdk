@@ -48,7 +48,7 @@
  var theMaterial = theScene.components["myMaterial"];
 
  // Find all PhongMaterials in the Scene
- var phongMaterials = theScene.types["xeokit.PhongMaterial"];
+ var phongMaterials = theScene.types["PhongMaterial"];
 
  // Find our Material within the PhongMaterials
  var theMaterial = phongMaterials["myMaterial"];
@@ -64,23 +64,23 @@
  For most components, you can get the name of its class via its {{#crossLink "Component/type:property"}}{{/crossLink}} property:
 
  ````javascript
- var type = theMaterial.type; // "xeokit.PhongMaterial"
+ var type = theMaterial.type; // "PhongMaterial"
  ````
 
  You can also test if a component implements or extends a given component class, like so:
 
  ````javascript
  // Evaluates true:
- var isComponent = theMaterial.isType("xeokit.Component");
+ var isComponent = theMaterial.isType("Component");
 
  // Evaluates true:
- var isMaterial = theMaterial.isType("xeokit.Material");
+ var isMaterial = theMaterial.isType("Material");
 
  // Evaluates true:
- var isPhongMaterial = theMaterial.isType("xeokit.PhongMaterial");
+ var isPhongMaterial = theMaterial.isType("PhongMaterial");
 
  // Evaluates false:
- var isMetallicMaterial = theMaterial.isType("xeokit.MetallicMaterial");
+ var isMetallicMaterial = theMaterial.isType("MetallicMaterial");
  ````
 
  ### Metadata
@@ -216,44 +216,21 @@
 
 import {core} from "./core.js";
 import {utils} from './utils.js';
-import {tasks} from './tasks.js';
 import {Map} from "./utils/Map.js";
-import {componentClasses} from "./componentClasses.js";
-
-const type = "xeokit.Component";
-const role = ["component"];
 
 class Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
-    }
-
-    /**
-     The role(s) that this Component type plays.
-
-     This indicates the contract(s) that this Component type honors, either within xeokit, or within applications on xeokit.
-
-     Examples:
-
-     * ["drawable", "gizmo"] for an axis-helper that shows the World-space coordinate axis
-     * ["drawable", "model"] for a drawable component that's loaded from a model file of some sort
-
-     @property role
-     @type Array(String)
-     @final
-     */
-    get role() {
-        return role;
+        return "Component";
     }
 
     constructor() {
@@ -274,14 +251,14 @@ class Component {
          */
         this.scene = null;
 
-        if (this.type === "xeokit.Scene") {
+        if (this.type === "Scene") {
             this.scene = this;
             if (arg1) {
                 cfg = arg1;
             }
         } else {
             if (arg1) {
-                if (arg1.type === "xeokit.Scene") {
+                if (arg1.type === "Scene") {
                     this.scene = arg1;
                     owner = this.scene;
                     if (arg2) {
@@ -457,25 +434,19 @@ class Component {
      var myRotate = new xeokit.Rotate({ ... });
 
      myRotate.isType(xeokit.Component); // Returns true for all xeokit components
-     myRotate.isType("xeokit.Component"); // Returns true for all xeokit components
+     myRotate.isType("Component"); // Returns true for all xeokit components
      myRotate.isType(xeokit.Rotate); // Returns true
      myRotate.isType(xeokit.Transform); // Returns true
-     myRotate.isType("xeokit.Transform"); // Returns true
+     myRotate.isType("Transform"); // Returns true
      myRotate.isType(xeokit.Mesh); // Returns false, because xeokit.Rotate does not (even indirectly) extend xeokit.Mesh
      ````
 
      @method isType
-     @param  {String|Function} type Component type to compare with, eg "xeokit.PhongMaterial", or a xeokit component constructor.
+     @param  {String|Function} type Component type to compare with, eg "PhongMaterial", or a xeokit component constructor.
      @returns {Boolean} True if this component is of given type or is subclass of the given type.
      */
     isType(type) {
-        if (!utils.isString(type)) {
-            type = type.type;
-            if (!type) {
-                return false;
-            }
-        }
-        return core.isComponentType(this.type, type);
+        return this.type === type;
     }
 
     /**
@@ -736,7 +707,7 @@ class Component {
                 // Component config given
 
                 const componentCfg = component;
-                const componentType = componentCfg.type || type || "xeokit.Component";
+                const componentType = componentCfg.type || type || "Component";
                 const componentClass = componentClasses[componentType];
 
                 if (!componentClass) {
@@ -936,94 +907,14 @@ class Component {
     }
 
     _checkComponent(expectedType, component) {
-        if (utils.isObject(component)) {
-            if (component.type) {
-                if (!core.isComponentType(component.type, expectedType)) {
-                    this.error("Expected a " + expectedType + " type or subtype: " + component.type + " " + utils.inQuotes(component.id));
-                    return;
-                }
-            } else {
-                component.type = expectedType;
-            }
-            component = new componentClasses[component.type](this.scene, component);
-        } else {
-            if (utils.isID(component)) { // Expensive test
-                const id = component;
-                component = this.scene.components[id];
-                if (!component) {
-                    this.error("Component not found: " + utils.inQuotes(component.id));
-                    return;
-                }
-            }
+        if (expectedType !== component.type) {
+            this.error("Expected a " + expectedType + " component type");
+            return;
         }
         if (component.scene.id !== this.scene.id) {
-            this.error("Not in same scene: " + component.type + " " + utils.inQuotes(component.id));
+            this.error("Not in same scene: " + component.type);
             return;
         }
-        if (!component.isType(expectedType)) {
-            this.error("Expected a " + expectedType + " type or subtype: " + component.type + " " + utils.inQuotes(component.id));
-            return;
-        }
-        return component;
-    }
-
-    /**
-     * Convenience method for creating a Component within this Component's {{#crossLink "Scene"}}{{/crossLink}}.
-     *
-     * The method is given a component configuration, like so:
-     *
-     * ````javascript
-     * var material = myComponent.create({
-     *      type: "xeokit.PhongMaterial",
-     *      diffuse: [1,0,0],
-     *      specular: [1,1,0]
-     * }, "myMaterial");
-     * ````
-     *
-     * @method create
-     * @param {*} [cfg] Configuration for the component instance.
-     * @returns {*}
-     */
-    create(cfg) {
-
-        let type;
-        let claz;
-
-        if (utils.isObject(cfg)) {
-            type = cfg.type || "xeokit.Component";
-            claz = componentClasses[type];
-
-        } else if (utils.isString(cfg)) {
-            type = cfg;
-            claz = componentClasses[type];
-
-        } else {
-            claz = cfg;
-            type = cfg.prototype.type;
-            // TODO: catch unknown component class
-        }
-
-        if (!claz) {
-            this.error("Component type not found: " + type);
-            return;
-        }
-
-        if (!core.isComponentType(type, "xeokit.Component")) {
-            this.error("Expected a xeokit.Component type or subtype");
-            return;
-        }
-
-        if (cfg && cfg.id && this.components[cfg.id]) {
-            this.error("Component " + utils.inQuotes(cfg.id) + " already exists in Scene - ignoring ID, will randomly-generate instead");
-            cfg.id = undefined;
-            //return null;
-        }
-
-        const component = new claz(this, cfg);
-        if (component) {
-            this._adopt(component);
-        }
-
         return component;
     }
 
@@ -1050,7 +941,7 @@ class Component {
             if (priority === 0) {
                 this._doUpdate();
             } else {
-                tasks.scheduleTask(this._doUpdate, this);
+                core.scheduleTask(this._doUpdate, this);
             }
         }
     }
@@ -1151,7 +1042,5 @@ class Component {
         this.fire("destroyed", this.destroyed = true);
     }
 }
-
-componentClasses[type] = Component;
 
 export {Component};

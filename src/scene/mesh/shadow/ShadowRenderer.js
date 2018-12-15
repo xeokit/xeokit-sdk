@@ -6,6 +6,9 @@ import {ShadowShaderSource} from "./ShadowShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
 
+/**
+ * @private
+ */
 const ShadowRenderer = function (hash, mesh) {
     this._hash = hash;
     this._shaderSource = new ShadowShaderSource(mesh);

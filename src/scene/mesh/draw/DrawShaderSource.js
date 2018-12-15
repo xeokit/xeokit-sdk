@@ -1,8 +1,6 @@
 /**
- * @author xeolabs / https://github.com/xeolabs
+ * @private
  */
-
-
 const DrawShaderSource = function (mesh) {
     if (mesh._material._state.type === "LambertMaterial") {
         this.vertex = buildVertexLambert(mesh);
@@ -1498,9 +1496,7 @@ function buildFragmentDraw(mesh) {
             src.push("vec3 outgoingLight = (occlusion * (reflectedLight.diffuse)) + (occlusion * reflectedLight.specular) + emissiveColor;");
         }
 
-    }
-
-    else {
+    } else {
 
         //--------------------------------------------------------------------------------
         // NO SHADING - EMISSIVE and AMBIENT ONLY

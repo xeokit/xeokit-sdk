@@ -95,14 +95,11 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {ArrayBuf} from '../webgl/ArrayBuf.js';
-import {getSceneVertexBufs} from './sceneVertexBufs.js';
+import {getSceneVertexBufs} from './SceneVertexBufs.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 import {WEBGL_INFO} from './../webglInfo.js';
-import {componentClasses} from "./../componentClasses.js";
 import {buildEdgeIndices} from '../math/buildEdges.js';
-
-const type = "xeokit.Geometry";
 
 const memoryStats = stats.memory;
 var bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
@@ -115,14 +112,14 @@ class Geometry extends Component {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Geometry";
     }
 
     init(cfg) {
@@ -941,7 +938,5 @@ function dot(array, i, vec3) {
     return array[i] * vec3[0] + array[i + 1] * vec3[1] + array[i + 2] * vec3[2];
 }
 
-
-componentClasses[type] = Geometry;
 
 export {Geometry};

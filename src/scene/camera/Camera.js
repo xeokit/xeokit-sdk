@@ -203,7 +203,6 @@ import {Perspective} from './Perspective.js';
 import {Ortho} from './Ortho.js';
 import {Frustum} from './Frustum.js';
 import {CustomProjection} from './CustomProjection.js';
-import {componentClasses} from "./../componentClasses.js";
 
 const tempVec3 = math.vec3();
 const tempVec3b = math.vec3();
@@ -218,21 +217,19 @@ const eyeLookVecNorm = math.vec3();
 const eyeLookOffset = math.vec3();
 const offsetEye = math.vec3();
 
-const type = "xeokit.Camera";
-
 class Camera extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Camera";
     }
 
     init(cfg) {
@@ -874,7 +871,5 @@ class Camera extends Component {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = Camera;
 
 export {Camera};

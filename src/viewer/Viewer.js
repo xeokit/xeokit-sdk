@@ -1,7 +1,7 @@
 import {math} from "../scene/math/math.js";
-import {Scene} from "../scene/scene/scene.js";
+import {Scene} from "../scene/scene/Scene.js";
 import {CameraFlightAnimation} from "../scene/animation/CameraFlightAnimation.js";
-import {CameraControl} from "../scene/controls/cameraControl.js";
+import {CameraControl} from "../scene/controls/CameraControl.js";
 import {ObjectMetadata} from "./ObjectMetadata.js";
 
 /**

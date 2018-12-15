@@ -55,8 +55,6 @@
 
 import {Component} from '../Component.js';
 
-const type = "xeokit.Spinner";
-
 let spinnerCSSInjected = false; // Ensures lazy-injected CSS only injected once
 
 const spinnerCSS = ".sk-fading-circle {\
@@ -197,14 +195,14 @@ class Spinner extends Component {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Spinner";
     }
 
     init(cfg) {

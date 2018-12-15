@@ -3,12 +3,15 @@
  */
 
 import {Map} from "../../utils/Map.js";
-import {EmphasisFillShaderSource} from "./emphasisFillShaderSource.js";
+import {EmphasisFillShaderSource} from "./EmphasisFillShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from './../../stats.js';
 
 const ids = new Map({});
 
+/**
+ * @private
+ */
 const EmphasisFillRenderer = function (hash, mesh) {
     this.id = ids.addItem({});
     this._hash = hash;

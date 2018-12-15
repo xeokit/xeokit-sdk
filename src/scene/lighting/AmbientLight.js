@@ -58,26 +58,22 @@
  @param [cfg.intensity=[1.0]] {Number} The intensity of this AmbientLight, as a factor in range ````[0..1]````.
  @extends Component
  */
-import {core} from '../core.js';
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.AmbientLight";
 
 class AmbientLight extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "AmbientLight";
     }
 
     init(cfg) {
@@ -128,7 +124,5 @@ class AmbientLight extends Component {
         super.destroy();
     }
 }
-
-componentClasses[type] = AmbientLight;
 
 export {AmbientLight};

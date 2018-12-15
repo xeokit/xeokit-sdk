@@ -62,23 +62,20 @@
  */
 import {Component} from '../Component.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Shadow";
 
 class Shadow extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Shadow";
     }
 
     init(cfg) {
@@ -154,7 +151,5 @@ class Shadow extends Component {
         //this._state.destroy();
     }
 }
-
-componentClasses[type] = Shadow;
 
 export {Shadow};

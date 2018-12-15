@@ -1,16 +1,13 @@
-import {VectorTextGeometry} from "../../../xeokit/VectorTextGeometry/VectorTextGeometry.js"
+import {VectorTextGeometry} from "../../../scene/geometry/VectorTextGeometry.js"
 import {Plugin} from "./../../../viewer/Plugin.js";
-import {
-    Scene,
-    AmbientLight,
-    DirLight,
-    Mesh,
-    CylinderGeometry,
-    SphereGeometry,
-    PhongMaterial,
-    math
-} from "../../../xeokit/xeokit.module.js"
-
+import {Scene} from  "./../../../scene/scene/Scene.js";
+import {AmbientLight} from  "./../../../scene/lighting/AmbientLight.js";
+import {DirLight} from  "./../../../scene/lighting/DirLight.js";
+import {Mesh} from  "./../../../scene/mesh/Mesh.js";
+import {CylinderGeometry} from  "./../../../scene/geometry/CylinderGeometry.js";
+import {SphereGeometry}     from  "./../../../scene/geometry/SphereGeometry.js";
+import {PhongMaterial}     from  "./../../../scene/materials/PhongMaterial.js";
+import {math}     from  "./../../../scene/math/math.js";
 
 /**
  * Viewer plugin that shows the axii of the World-space coordinate system.

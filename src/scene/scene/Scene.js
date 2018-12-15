@@ -95,11 +95,11 @@
  A Scene also has a map of component instances for each {{#crossLink "Component"}}{{/crossLink}} subtype:
 
  ````javascript
- var meshes = scene.types["xeokit.Mesh"];
+ var meshes = scene.types["Mesh"];
  var teapotMesh = meshes["myMesh"];
  teapotMesh.ghosted = true;
 
- var phongMaterials = scene.types["xeokit.PhongMaterial"];
+ var phongMaterials = scene.types["PhongMaterial"];
  var teapotMaterial = phongMaterials["myMaterial"];
  teapotMaterial.diffuse = [0,1,0]; // Change to green
  ````
@@ -395,9 +395,6 @@ import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {OutlineMaterial} from '../materials/OutlineMaterial.js';
-import {componentClasses} from "../componentClasses.js";
-
-const type = "xeokit.Scene";
 
 // Cached vars to avoid garbage collection
 
@@ -439,14 +436,14 @@ class Scene extends Component {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Scene";
     }
 
     init(cfg) {
@@ -999,17 +996,6 @@ class Scene extends Component {
             types = this.types[type] = {};
         }
         types[component.id] = component;
-
-        // Register for roles
-        const componentRoles = component.role;
-        for (var i = 0, len = componentRoles.length; i < len; i++) {
-            let roleName = componentRoles[i];
-            let roleToComponents = this.roles[roleName];
-            if (!roleToComponents) {
-                roleToComponents = this.roles[roleName] = {};
-            }
-            roleToComponents[component.id] = component;
-        }
 
         if (component.compile) {
             this._compilables[component.id] = component;
@@ -2336,7 +2322,5 @@ class Scene extends Component {
         this._camera = null;
     }
 }
-
-componentClasses[type] = Scene;
 
 export {Scene};

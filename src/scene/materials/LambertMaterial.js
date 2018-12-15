@@ -64,27 +64,23 @@
  @param [cfg.frontface="ccw"] {Boolean} The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
  */
 
-import {core} from "./../core.js";
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.LambertMaterial";
 
 class LambertMaterial extends Material {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "LambertMaterial";
     }
 
     init(cfg) {
@@ -319,7 +315,5 @@ class LambertMaterial extends Material {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = LambertMaterial;
 
 export {LambertMaterial};

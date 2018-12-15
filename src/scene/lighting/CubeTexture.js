@@ -22,9 +22,6 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {Texture2D} from '../webgl/Texture2d.js';
 import {stats} from './../stats.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.CubeTexture";
 
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
@@ -57,14 +54,14 @@ class CubeTexture extends Component{
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "CubeTexture";
     }
 
     init(cfg) {
@@ -170,7 +167,5 @@ class CubeTexture extends Component{
         this._state.destroy();
     }
 }
-
-componentClasses[type] = CubeTexture;
 
 export {CubeTexture};

@@ -1,5 +1,5 @@
 import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {STLModel} from "./../../../xeokit/STLModel/STLModel.js";
+import {GLTFModel} from "../../../scene/models/STLModel.js";
 
 /**
  * A viewer plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.

@@ -89,12 +89,11 @@
 
 import {math} from '../math/math.js';
 import {utils} from '../utils.js';
-import {tasks} from '../tasks.js';
+import {core} from '../core.js';
 import {Component} from '../Component.js';
 import {Mesh} from '../mesh/Mesh.js';
 import {AABBGeometry} from '../geometry/AABBGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
-import {componentClasses} from "./../componentClasses.js";
 
 const tempVec3 = math.vec3();
 const newLook = math.vec3();
@@ -104,6 +103,19 @@ const newLookEyeVec = math.vec3();
 const lookEyeVec = math.vec3();
 
 class CameraFlightAnimation extends Component {
+
+    /**
+     JavaScript class name for this Component.
+
+     For example: "AmbientLight", "MetallicMaterial" etc.
+
+     @property type
+     @type String
+     @final
+     */
+    get type() {
+        return "CameraFlightAnimation";
+    }
 
     init(cfg) {
 
@@ -314,7 +326,7 @@ class CameraFlightAnimation extends Component {
 
         this._flying = true; // False as soon as we stop
 
-        tasks.scheduleTask(this._update, this);
+        core.scheduleTask(this._update, this);
     }
 
     /**
@@ -478,7 +490,7 @@ class CameraFlightAnimation extends Component {
             this.stop();
             return;
         }
-        tasks.scheduleTask(this._update, this); // Keep flying
+        core.scheduleTask(this._update, this); // Keep flying
     }
 
     _ease(t, b, c, d) { // Quadratic easing out - decelerating to zero velocity http://gizma.com/easing
@@ -599,7 +611,5 @@ class CameraFlightAnimation extends Component {
         return this._trail;
     }
 }
-
-componentClasses[type] = CameraFlightAnimation;
 
 export {CameraFlightAnimation};

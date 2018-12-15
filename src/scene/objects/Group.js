@@ -43,30 +43,25 @@
  @extends Object
  */
 import {xeokitObject} from "./Object.js";
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Group";
 
 class Group extends xeokitObject {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Group";
     }
 
     init(cfg) {
         super.init(cfg);
     }
 }
-
-componentClasses[type] = Group;
 
 export {Group};

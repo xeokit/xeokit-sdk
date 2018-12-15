@@ -1,5 +1,5 @@
 import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {OBJModel} from "./../../../xeokit/OBJModel/OBJModel.js";
+import {OBJModel} from "../../../scene/models/OBJModel.js";
 
 /**
  * A viewer plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.

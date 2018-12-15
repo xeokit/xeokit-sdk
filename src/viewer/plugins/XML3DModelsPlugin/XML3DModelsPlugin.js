@@ -1,5 +1,5 @@
 import {ModelsPlugin} from "./../../ModelsPlugin.js";
-import {XML3DModel} from "./XML3DModel.js";
+import {XML3DModel} from "../../../scene/models/XML3DModel.js";
 
 /**
  * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.

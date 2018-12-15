@@ -2,10 +2,13 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
-import {PickVertexShaderSource} from "./pickVertexShaderSource.js";
+import {PickVertexShaderSource} from "./PickVertexShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
 
+/**
+ * @private
+ */
 const PickVertexRenderer = function (hash, mesh) {
     const gl = mesh.scene.canvas.gl;
     this._hash = hash;

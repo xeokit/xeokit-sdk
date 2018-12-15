@@ -292,9 +292,7 @@
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
 
-const type = "xeokit.SpecularMaterial";
 const alphaModes = {"opaque": 0, "mask": 1, "blend": 2};
 const alphaModeNames = ["opaque", "mask", "blend"];
 
@@ -303,14 +301,14 @@ class SpecularMaterial extends Material {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "SpecularMaterial";
     }
 
     init(cfg) {
@@ -342,28 +340,28 @@ class SpecularMaterial extends Material {
         this.alpha = cfg.alpha;
 
         if (cfg.diffuseMap) {
-            this._diffuseMap = this._checkComponent("xeokit.Texture", cfg.diffuseMap);
+            this._diffuseMap = this._checkComponent("Texture", cfg.diffuseMap);
         }
         if (cfg.emissiveMap) {
-            this._emissiveMap = this._checkComponent("xeokit.Texture", cfg.emissiveMap);
+            this._emissiveMap = this._checkComponent("Texture", cfg.emissiveMap);
         }
         if (cfg.specularMap) {
-            this._specularMap = this._checkComponent("xeokit.Texture", cfg.specularMap);
+            this._specularMap = this._checkComponent("Texture", cfg.specularMap);
         }
         if (cfg.glossinessMap) {
-            this._glossinessMap = this._checkComponent("xeokit.Texture", cfg.glossinessMap);
+            this._glossinessMap = this._checkComponent("Texture", cfg.glossinessMap);
         }
         if (cfg.specularGlossinessMap) {
-            this._specularGlossinessMap = this._checkComponent("xeokit.Texture", cfg.specularGlossinessMap);
+            this._specularGlossinessMap = this._checkComponent("Texture", cfg.specularGlossinessMap);
         }
         if (cfg.occlusionMap) {
-            this._occlusionMap = this._checkComponent("xeokit.Texture", cfg.occlusionMap);
+            this._occlusionMap = this._checkComponent("Texture", cfg.occlusionMap);
         }
         if (cfg.alphaMap) {
-            this._alphaMap = this._checkComponent("xeokit.Texture", cfg.alphaMap);
+            this._alphaMap = this._checkComponent("Texture", cfg.alphaMap);
         }
         if (cfg.normalMap) {
-            this._normalMap = this._checkComponent("xeokit.Texture", cfg.normalMap);
+            this._normalMap = this._checkComponent("Texture", cfg.normalMap);
         }
 
         this.alphaMode = cfg.alphaMode;
@@ -860,7 +858,5 @@ class SpecularMaterial extends Material {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = SpecularMaterial;
 
 export {SpecularMaterial};

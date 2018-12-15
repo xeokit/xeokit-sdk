@@ -159,9 +159,6 @@
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.PhongMaterial";
 const alphaModes = {"opaque": 0, "mask": 1, "blend": 2};
 const alphaModeNames = ["opaque", "mask", "blend"];
 
@@ -170,14 +167,14 @@ class PhongMaterial extends Material {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "PhongMaterial";
     }
 
     init(cfg) {
@@ -213,43 +210,43 @@ class PhongMaterial extends Material {
         this.pointSize = cfg.pointSize;
 
         if (cfg.ambientMap) {
-            this._ambientMap = this._checkComponent("xeokit.Texture", cfg.ambientMap);
+            this._ambientMap = this._checkComponent("Texture", cfg.ambientMap);
         }
         if (cfg.diffuseMap) {
-            this._diffuseMap = this._checkComponent("xeokit.Texture", cfg.diffuseMap);
+            this._diffuseMap = this._checkComponent("Texture", cfg.diffuseMap);
         }
         if (cfg.specularMap) {
-            this._specularMap = this._checkComponent("xeokit.Texture", cfg.specularMap);
+            this._specularMap = this._checkComponent("Texture", cfg.specularMap);
         }
         if (cfg.emissiveMap) {
-            this._emissiveMap = this._checkComponent("xeokit.Texture", cfg.emissiveMap);
+            this._emissiveMap = this._checkComponent("Texture", cfg.emissiveMap);
         }
         if (cfg.alphaMap) {
-            this._alphaMap = this._checkComponent("xeokit.Texture", cfg.alphaMap);
+            this._alphaMap = this._checkComponent("Texture", cfg.alphaMap);
         }
         if (cfg.reflectivityMap) {
-            this._reflectivityMap = this._checkComponent("xeokit.Texture", cfg.reflectivityMap);
+            this._reflectivityMap = this._checkComponent("Texture", cfg.reflectivityMap);
         }
         if (cfg.normalMap) {
-            this._normalMap = this._checkComponent("xeokit.Texture", cfg.normalMap);
+            this._normalMap = this._checkComponent("Texture", cfg.normalMap);
         }
         if (cfg.occlusionMap) {
-            this._occlusionMap = this._checkComponent("xeokit.Texture", cfg.occlusionMap);
+            this._occlusionMap = this._checkComponent("Texture", cfg.occlusionMap);
         }
         if (cfg.diffuseFresnel) {
-            this._diffuseFresnel = this._checkComponent("xeokit.Fresnel", cfg.diffuseFresnel);
+            this._diffuseFresnel = this._checkComponent("Fresnel", cfg.diffuseFresnel);
         }
         if (cfg.specularFresnel) {
-            this._specularFresnel = this._checkComponent("xeokit.Fresnel", cfg.specularFresnel);
+            this._specularFresnel = this._checkComponent("Fresnel", cfg.specularFresnel);
         }
         if (cfg.emissiveFresnel) {
-            this._emissiveFresnel = this._checkComponent("xeokit.Fresnel", cfg.emissiveFresnel);
+            this._emissiveFresnel = this._checkComponent("Fresnel", cfg.emissiveFresnel);
         }
         if (cfg.alphaFresnel) {
-            this._alphaFresnel = this._checkComponent("xeokit.Fresnel", cfg.alphaFresnel);
+            this._alphaFresnel = this._checkComponent("Fresnel", cfg.alphaFresnel);
         }
         if (cfg.reflectivityFresnel) {
-            this._reflectivityFresnel = this._checkComponent("xeokit.Fresnel", cfg.reflectivityFresnel);
+            this._reflectivityFresnel = this._checkComponent("Fresnel", cfg.reflectivityFresnel);
         }
 
         this.alphaMode = cfg.alphaMode;
@@ -850,7 +847,5 @@ class PhongMaterial extends Material {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = PhongMaterial;
 
 export {PhongMaterial};

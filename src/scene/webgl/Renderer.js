@@ -3,14 +3,17 @@
  */
 
 import {FrameContext} from './FrameContext.js';
-import {RenderFlags} from './renderFlags.js';
-import {RenderBuffer} from '../webgl/Renderbuffer.js';
+import {RenderFlags} from './RenderFlags.js';
+import {RenderBuffer} from './RenderBuffer.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 import {WEBGL_INFO} from './../webglInfo.js';
 import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
 
+/**
+ * @private
+ */
 const Renderer = function (scene, options) {
 
     options = options || {};

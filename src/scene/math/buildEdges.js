@@ -1,5 +1,8 @@
 import {math} from '../math/math.js';
 
+/**
+ * @private
+ */
 var buildEdgeIndices = (function () {
 
     const uniquePositions = [];

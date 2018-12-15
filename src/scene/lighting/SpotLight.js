@@ -84,25 +84,22 @@
 
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {RenderBuffer} from '../webgl/Renderbuffer.js';
+import {RenderBuffer} from '../webgl/RenderBuffer.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.SpotLight";
 
 class SpotLight extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "SpotLight";
     }
 
     init(cfg) {
@@ -326,7 +323,5 @@ class SpotLight extends Component {
 
     }
 }
-
-componentClasses[type] = SpotLight;
 
 export {SpotLight};

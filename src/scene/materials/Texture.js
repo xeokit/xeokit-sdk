@@ -71,15 +71,12 @@
  @param [cfg.encoding="linear"] {String} Encoding format.  See the {{#crossLink "Texture/encoding:property"}}{{/crossLink}} property for more info.
  @extends Component
  */
-import {core} from "./../core.js";
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {Texture2D} from '../webgl/Texture2d.js';
+import {Texture2d} from '../webgl/Texture2d.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
-import {componentClasses} from "./../componentClasses.js";
 
-const type = "xeokit.Texture";
 
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
@@ -112,14 +109,14 @@ class Texture extends Component {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Texture";
     }
 
     init(cfg) {
@@ -127,7 +124,7 @@ class Texture extends Component {
         super.init(cfg);
 
         this._state = new RenderState({
-            texture: new Texture2D(this.scene.canvas.gl),
+            texture: new Texture2d(this.scene.canvas.gl),
             matrix: math.identityMat4(),   // Float32Array
             hasMatrix: (cfg.translate && (cfg.translate[0] !== 0 || cfg.translate[1] !== 0)) || (!!cfg.rotate) || (cfg.scale && (cfg.scale[0] !== 0 || cfg.scale[1] !== 0)),
             minFilter: this._checkMinFilter(cfg.minFilter),
@@ -237,7 +234,7 @@ class Texture extends Component {
     }
 
     _webglContextRestored() {
-        this._state.texture = new Texture2D(this.scene.canvas.gl);
+        this._state.texture = new Texture2d(this.scene.canvas.gl);
         if (this._image) {
             this.image = this._image;
         } else if (this._src) {
@@ -512,7 +509,5 @@ class Texture extends Component {
         stats.memory.textures--;
     }
 }
-
-componentClasses[type] = Texture;
 
 export {Texture};

@@ -3,12 +3,15 @@
  */
 
 import {Map} from "../../utils/Map.js";
-import {OutlineShaderSource} from "./outlineShaderSource.js";
+import {OutlineShaderSource} from "./OutlineShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
 
 const ids = new Map({});
 
+/**
+ * @private
+ */
 const OutlineRenderer = function (hash, mesh) {
     this._init(hash, mesh);
 };

@@ -565,11 +565,8 @@ import {OutlineRenderer} from "./outline/OutlineRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickVertexRenderer} from "./pick/PickVertexRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
-import {componentClasses} from "./../componentClasses.js";
 
 const obb = math.OBB3();
-
-const type = "xeokit.Mesh";
 
 const getPickResult = (function () {
 
@@ -820,14 +817,14 @@ class Mesh extends xeokitObject {
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Mesh";
     }
 
     init(cfg) {
@@ -864,14 +861,14 @@ class Mesh extends xeokitObject {
 
         this._worldPositions = null;
         this._worldPositionsDirty = true;
-        this._geometry = cfg.geometry ? this._checkComponent("xeokit.Geometry", cfg.geometry) : this.scene.geometry;
+        this._geometry = cfg.geometry ? this._checkComponent("Geometry", cfg.geometry) : this.scene.geometry;
         this._vertexBufs = this._geometry._getVertexBufs();
-        this._material = cfg.material ? this._checkComponent("xeokit.Material", cfg.material) : this.scene.material;
-        this._ghostMaterial = cfg.ghostMaterial ? this._checkComponent("xeokit.EmphasisMaterial", cfg.ghostMaterial) : this.scene.ghostMaterial;
-        this._outlineMaterial = cfg.outlineMaterial ? this._checkComponent("xeokit.EmphasisMaterial", cfg.outlineMaterial) : this.scene.outlineMaterial;
-        this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("xeokit.EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
-        this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("xeokit.EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
-        this._edgeMaterial = cfg.edgeMaterial ? this._checkComponent("xeokit.EdgeMaterial", cfg.edgeMaterial) : this.scene.edgeMaterial;
+        this._material = cfg.material ? this._checkComponent("Material", cfg.material) : this.scene.material;
+        this._ghostMaterial = cfg.ghostMaterial ? this._checkComponent("EmphasisMaterial", cfg.ghostMaterial) : this.scene.ghostMaterial;
+        this._outlineMaterial = cfg.outlineMaterial ? this._checkComponent("EmphasisMaterial", cfg.outlineMaterial) : this.scene.outlineMaterial;
+        this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
+        this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
+        this._edgeMaterial = cfg.edgeMaterial ? this._checkComponent("EdgeMaterial", cfg.edgeMaterial) : this.scene.edgeMaterial;
 
         this.compile();
 
@@ -1836,7 +1833,5 @@ class Mesh extends xeokitObject {
         this.glRedraw();
     }
 }
-
-componentClasses[type] = Mesh;
 
 export {Mesh};

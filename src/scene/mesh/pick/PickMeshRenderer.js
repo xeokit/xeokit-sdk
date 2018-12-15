@@ -2,12 +2,15 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
-import {PickMeshShaderSource} from "./pickMeshShaderSource.js";
+import {PickMeshShaderSource} from "./PickMeshShaderSource.js";
 import {Program} from "../../webgl/Program.js";
 import {stats} from "../../stats.js";
 
 // No ID, because there is exactly one PickMeshRenderer per scene
 
+/**
+ * @private
+ */
 const PickMeshRenderer = function (hash, mesh) {
     this._hash = hash;
     this._shaderSource = new PickMeshShaderSource(mesh);

@@ -29,24 +29,21 @@
  @param [cfg.encoding="linear"] {String} Encoding format.  See the {{#crossLink "ReflectionMap/encoding:property"}}{{/crossLink}} property for more info.
  @extends Component
  */
-import {CubeTexture} from './cubeTexture.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.ReflectionMap";
+import {CubeTexture} from './CubeTexture.js';
 
 class ReflectionMap extends CubeTexture {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "ReflectionMap";
     }
 
     init(cfg) {
@@ -60,7 +57,5 @@ class ReflectionMap extends CubeTexture {
         this.scene._reflectionMapDestroyed(this);
     }
 }
-
-componentClasses[type] = ReflectionMap;
 
 export {ReflectionMap};

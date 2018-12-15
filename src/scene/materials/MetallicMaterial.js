@@ -300,25 +300,23 @@
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
 
 const modes = {"opaque": 0, "mask": 1, "blend": 2};
 const modeNames = ["opaque", "mask", "blend"];
-const type = "xeokit.MetallicMaterial";
 
 class MetallicMaterial extends Material {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "MetallicMaterial";
     }
 
     init(cfg) {
@@ -350,29 +348,29 @@ class MetallicMaterial extends Material {
         this.alpha = cfg.alpha;
 
         if (cfg.baseColorMap) {
-            this._baseColorMap = this._checkComponent("xeokit.Texture", cfg.baseColorMap);
+            this._baseColorMap = this._checkComponent("Texture", cfg.baseColorMap);
         }
         if (cfg.metallicMap) {
-            this._metallicMap = this._checkComponent("xeokit.Texture", cfg.metallicMap);
+            this._metallicMap = this._checkComponent("Texture", cfg.metallicMap);
 
         }
         if (cfg.roughnessMap) {
-            this._roughnessMap = this._checkComponent("xeokit.Texture", cfg.roughnessMap);
+            this._roughnessMap = this._checkComponent("Texture", cfg.roughnessMap);
         }
         if (cfg.metallicRoughnessMap) {
-            this._metallicRoughnessMap = this._checkComponent("xeokit.Texture", cfg.metallicRoughnessMap);
+            this._metallicRoughnessMap = this._checkComponent("Texture", cfg.metallicRoughnessMap);
         }
         if (cfg.emissiveMap) {
-            this._emissiveMap = this._checkComponent("xeokit.Texture", cfg.emissiveMap);
+            this._emissiveMap = this._checkComponent("Texture", cfg.emissiveMap);
         }
         if (cfg.occlusionMap) {
-            this._occlusionMap = this._checkComponent("xeokit.Texture", cfg.occlusionMap);
+            this._occlusionMap = this._checkComponent("Texture", cfg.occlusionMap);
         }
         if (cfg.alphaMap) {
-            this._alphaMap = this._checkComponent("xeokit.Texture", cfg.alphaMap);
+            this._alphaMap = this._checkComponent("Texture", cfg.alphaMap);
         }
         if (cfg.normalMap) {
-            this._normalMap = this._checkComponent("xeokit.Texture", cfg.normalMap);
+            this._normalMap = this._checkComponent("Texture", cfg.normalMap);
         }
 
         this.alphaMode = cfg.alphaMode;
@@ -867,7 +865,5 @@ class MetallicMaterial extends Material {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = MetallicMaterial;
 
 export {MetallicMaterial};

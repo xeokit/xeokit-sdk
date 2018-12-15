@@ -30,25 +30,21 @@
  @extends Component
  */
 
-import {core} from "./../core.js";
 import {CubeTexture} from './CubeTexture.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.LightMap";
 
 class LightMap extends CubeTexture {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "LightMap";
     }
 
     init(cfg) {
@@ -61,7 +57,5 @@ class LightMap extends CubeTexture {
         this.scene._lightMapDestroyed(this);
     }
 }
-
-componentClasses[type] = LightMap;
 
 export {LightMap};

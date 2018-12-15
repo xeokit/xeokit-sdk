@@ -2,6 +2,10 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+/**
+ * Human-readable WebGL enumeration mappings.
+ * @type {{rgba: string, dstAlpha: string, linearMipmapLinear: string, notequal: string, luminanceAlpha: string, nearest: string, zero: string, nearestMipmapLinear: string, oneMinusSrcColor: string, ccw: string, funcSubtract: string, unsignedByte: string, nearestMipmapNearest: string, oneMinusDstColor: string, greater: string, always: string, compareRToTexture: string, funcAdd: string, dstColor: string, gequal: string, less: string, funcReverseSubtract: string, linearMipmapNearest: string, never: string, mirroredRepeat: string, textureBinding2D: string, oneMinusDstAlpha: string, oneMinusSrcAlpha: string, srcAlpha: string, luminance: string, frontAndBack: string, lequal: string, back: string, rgb: string, oneMinusConstantAlpha: string, repeat: string, alpha: string, srcColor: string, textureBindingCubeMap: string, linear: string, one: string, contantColor: string, equal: string, oneMinusConstantColor: string, cw: string, constantAlpha: string, srcAlphaSaturate: string, clampToEdge: string, front: string}}
+ */
 const webglEnums = {
     funcAdd: "FUNC_ADD",
     funcSubtract: "FUNC_SUBTRACT",

@@ -316,6 +316,9 @@ class SceneVertexBufs {
     }
 }
 
+/**
+ * @private
+ */
 const getSceneVertexBufs = (scene, geometry) => {
     const hasPositions = !!geometry.positions;
     const quantized = !!geometry.quantized;

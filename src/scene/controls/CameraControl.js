@@ -70,30 +70,26 @@
  @extends Component
  */
 
-import {core} from "./../core.js";
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {Mesh} from '../mesh/Mesh.js';
 import {AABBGeometry} from '../geometry/AABBGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {CameraFlightAnimation} from '../animation/CameraFlightAnimation.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.CameraControl";
 
 class CameraControl extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "CameraControl";
     }
 
     init(cfg) {
@@ -1800,7 +1796,5 @@ class CameraControl extends Component {
         super.destroy();
     }
 }
-
-componentClasses[type] = CameraControl;
 
 export {CameraControl};

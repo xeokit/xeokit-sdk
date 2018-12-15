@@ -28,23 +28,20 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.CustomProjection";
 
 class CustomProjection extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "CustomProjection";
     }
 
     init(cfg) {
@@ -87,7 +84,5 @@ class CustomProjection extends Component {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = CustomProjection;
 
 export {CustomProjection};

@@ -1,6 +1,5 @@
-import {_apply} from "../xeokit/xeokit.module.js"
+import {utils} from "./../scene/utils.js"
 import {Plugin} from "./Plugin.js";
-import {loadJSON} from "./utils.js";
 
 /**
  Base class for {@link Viewer} plugins that load models.
@@ -59,7 +58,7 @@ class ModelsPlugin extends Plugin {
             return;
         }
         var model = new this._modelClass(this.viewer.scene, params);
-        this._modelLoadParams[id] = _apply(params, {});
+        this._modelLoadParams[id] = utils.apply(params, {});
         this.models[id] = model;
         model.once("destroyed", () => {
             delete this.models[id];
@@ -69,7 +68,7 @@ class ModelsPlugin extends Plugin {
         });
         if (params.metadataSrc) {
             const metadataSrc = params.metadataSrc;
-            loadJSON(metadataSrc, function (metadata) {
+            utils.loadJSON(metadataSrc, function (metadata) {
                 self.viewer.createMetadata(id, metadata);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);

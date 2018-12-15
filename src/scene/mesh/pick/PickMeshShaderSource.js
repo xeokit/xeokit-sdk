@@ -2,6 +2,9 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
+/**
+ * @private
+ */
 class PickMeshShaderSource {
     constructor(mesh) {
         this.vertex = buildVertex(mesh);

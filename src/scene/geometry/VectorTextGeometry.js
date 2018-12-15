@@ -1,4 +1,6 @@
-import {Geometry, math, _apply, _isNumeric} from "../xeokit.module.js"
+import {Geometry} from './Geometry.js';
+import {utils} from "../utils.js";
+
 
 var letters;
 
@@ -104,7 +106,7 @@ var letters;
             y -= 35 * mag * size;
         }
 
-        super.init(_apply(cfg, {
+        super.init(utils.apply(cfg, {
             primitive: "lines",
             positions: positions,
             indices: indices

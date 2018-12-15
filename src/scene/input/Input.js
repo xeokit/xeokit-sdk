@@ -92,21 +92,19 @@
 import {Component} from '../Component.js';
 import {math} from '../math/math.js';
 
-const type = "xeokit.Input";
-
 class Input extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Input";
     }
 
     init(cfg) {

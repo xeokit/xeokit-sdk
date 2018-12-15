@@ -55,24 +55,8 @@
 
 import {utils} from '../utils.js';
 import {Geometry} from './Geometry.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.BoxGeometry";
 
 class BoxGeometry extends Geometry {
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
 
@@ -272,7 +256,5 @@ class BoxGeometry extends Geometry {
         this.box = true;
     }
 }
-
-componentClasses[type] = BoxGeometry;
 
 export {BoxGeometry};

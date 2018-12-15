@@ -1,7 +1,5 @@
-import {_apply} from "../../../xeokit/xeokit.module.js"
-import {GLTFModel} from "././../../../xeokit/GLTFModel/GLTFModel.js";
-
-import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
+import {utils} from "../../../scene/utils.js";
+import {GLTFModel} from "../../../scene/models/GLTFModel.js";
 
 /**
  * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -122,14 +120,14 @@ class GLTFModelsPlugin extends ModelsPlugin {
         var modelId = params.id;
         var self = this;
 
-        return super.load(_apply(params, {
+        return super.load(utils.apply(params, {
             handleNode: function (nodeInfo, actions) {
-                return self.defaultHandleNode(modelId, nodeInfo, actions);
+                return GLTFModelsPlugin.defaultHandleNode(modelId, nodeInfo, actions);
             }
         }));
     }
 
-    defaultHandleNode(modelId, nodeInfo, actions) {
+    static defaultHandleNode(modelId, nodeInfo, actions) {
         var name = nodeInfo.name;
         if (!name) {
             return true; // Continue descending this node subtree

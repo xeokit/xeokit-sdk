@@ -1,5 +1,6 @@
 import {Plugin} from "./../../Plugin.js";
-import {Clip, math} from "../../../xeokit/xeokit.module.js"
+import {Clip} from "../../../scene/clipping/Clip.js"
+import {math} from "../../../scene/math/math.js"
 
 /**
  * A viewer plugin that manages user cross-section planes.

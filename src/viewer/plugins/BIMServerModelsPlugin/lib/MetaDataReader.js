@@ -1,6 +1,6 @@
 import {EventHandler} from "./EventHandler.js";
 import {Request} from "./request.js";
-import {utils} from "./utils";
+import {utils} from "./../../../../scene/utils";
 
 /**
  * @private

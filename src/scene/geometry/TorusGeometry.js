@@ -60,28 +60,13 @@
  @param [cfg.arc=Math.PI / 2.0] {Number} The length of the TorusGeometry's arc in radians, where Math.PI*2 is a closed torus.
  @extends Geometry
  */
-import {core} from "./../core.js";
-import {utils} from "./../utils.js";
+import {utils} from "../utils.js";
 import {Geometry} from './Geometry.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
 
-const type = "xeokit.TorusGeometry";
+const type = "TorusGeometry";
 
 class TorusGeometry extends Geometry {
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
 
@@ -204,7 +189,5 @@ class TorusGeometry extends Geometry {
         }));
     }
 }
-
-componentClasses[type] = TorusGeometry;
 
 export {TorusGeometry};

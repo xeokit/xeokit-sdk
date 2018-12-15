@@ -59,24 +59,8 @@
  */
 import {utils} from '../utils.js';
 import {Geometry} from './Geometry.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.PlaneGeometry";
 
 class PlaneGeometry extends Geometry {
-
-    /**
-     JavaScript class name for this Component.
-
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return type;
-    }
 
     init(cfg) {
 
@@ -197,7 +181,5 @@ class PlaneGeometry extends Geometry {
         }));
     }
 }
-
-componentClasses[type] = PlaneGeometry;
 
 export {PlaneGeometry};

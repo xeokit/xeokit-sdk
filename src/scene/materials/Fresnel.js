@@ -59,23 +59,20 @@
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
-import {componentClasses} from "./../componentClasses.js";
-
-const type = "xeokit.Fresnel";
 
 class Fresnel extends Component {
 
     /**
      JavaScript class name for this Component.
 
-     For example: "xeokit.AmbientLight", "xeokit.MetallicMaterial" etc.
+     For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
      @type String
      @final
      */
     get type() {
-        return type;
+        return "Fresnel";
     }
 
     init(cfg) {
@@ -182,7 +179,5 @@ class Fresnel extends Component {
         this._state.destroy();
     }
 }
-
-componentClasses[type] = Fresnel;
 
 export {Fresnel};

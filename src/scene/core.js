@@ -1,14 +1,26 @@
+import {Queue} from './utils/Queue.js';
 import {Map} from './utils/Map.js';
 import {stats} from './stats.js';
 import {utils} from './utils.js';
-import {Scene} from "./scene/scene.js";
-import {componentClasses} from "./componentClasses.js";
+import {Scene} from "./scene/Scene.js";
 
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
-let defaultScene = null;// Default singleton Scene, lazy-initialized in getter
+const taskQueue = new Queue(); // Task queue, which is pumped on each frame; tasks are pushed to it with calls to xeokit.schedule
+const tickEvent = {sceneId: null, time: null, startTime: null, prevTime: null, deltaTime: null};
+const taskBudget = 10; // Millisecs we're allowed to spend on tasks in each frame
+const fpsSamples = [];
+const numFPSSamples = 30;
 
-const core = {
+let defaultScene = null;// Default singleton Scene, lazy-initialized in getter
+let lastTime = 0;
+let elapsedTime;
+let totalFPS = 0;
+
+/**
+ * @private
+ */
+function Core() {
 
     /**
      Semantic version number. The value for this is set by an expression that's concatenated to
@@ -17,17 +29,17 @@ const core = {
      @namespace xeokit
      @type {String}
      */
-    version: null,
+    this.version = "1.0.0";
 
     /**
      Existing {{#crossLink "Scene"}}Scene{{/crossLink}}s , mapped to their IDs
      @property scenes
      @namespace xeokit
-     @type {{String:xeokit.Scene}}
+     @type {{Scene}}
      */
-    scenes: {},
+    this.scenes = {};
 
-    _superTypes: {}, // For each component type, a list of its supertypes, ordered upwards in the hierarchy.
+    this._superTypes = {}; // For each component type, a list of its supertypes, ordered upwards in the hierarchy.
 
     /**
      Returns the current default {{#crossLink "Scene"}}{{/crossLink}}.
@@ -41,12 +53,12 @@ const core = {
      @method getDefaultScene
      @returns {Scene} The current default scene
      */
-    getDefaultScene() {
+    this.getDefaultScene = function () {
         if (!defaultScene) {
             defaultScene = new Scene({id: "default.scene"});
         }
         return defaultScene;
-    },
+    };
 
     /**
      Sets the current default {{#crossLink "Scene"}}{{/crossLink}}.
@@ -59,10 +71,10 @@ const core = {
      @param {Scene} scene The new current default scene
      @returns {Scene} The new current default scene
      */
-    setDefaultScene(scene) {
+    this.setDefaultScene = function (scene) {
         defaultScene = scene;
         return defaultScene;
-    },
+    };
 
     /**
      Registers a scene on xeokit.
@@ -72,7 +84,7 @@ const core = {
      @param {Scene} scene The scene
      @private
      */
-    _addScene(scene) {
+    this._addScene = function (scene) {
         if (scene.id) { // User-supplied ID
             if (core.scenes[scene.id]) {
                 console.error(`[ERROR] Scene ${utils.inQuotes(scene.id)} already exists`);
@@ -94,7 +106,7 @@ const core = {
             delete scenesRenderInfo[scene.id];
             stats.components.scenes--;
         });
-    },
+    };
 
     /**
      Destroys all user-created {{#crossLink "Scene"}}Scenes{{/crossLink}} and
@@ -103,7 +115,7 @@ const core = {
      @method clear
      @demo foo
      */
-    clear() {
+    this.clear = function () {
         let scene;
         for (const id in core.scenes) {
             if (core.scenes.hasOwnProperty(id)) {
@@ -118,35 +130,51 @@ const core = {
                 }
             }
         }
-    },
+    };
 
     //////////////////////////////////////////////////////////////////////////
     /////////// Fix me
     //////////////////////////////////////////////////////////////////////////
 
     /**
-     Tests if the given component type is a subtype of another component supertype.
-     @param {String} type
-     @param {String} [superType="xeokit.Component"]
-     @returns {boolean}
-     @private
+     Schedule a task to run at the next frame.
+
+     Internally, this pushes the task to a FIFO queue. Within each frame interval, xeokit processes the queue
+     for a certain period of time, popping tasks and running them. After each frame interval, tasks that did not
+     get a chance to run during the task are left in the queue to be run next time.
+
+     @method scheduleTask
+     @param {Function} callback Callback that runs the task.
+     @param {Object} [scope] Scope for the callback.
      */
-    isComponentType: function (type, superType = "xeokit.Component") {
-        if (type === superType) {
-            return true;
+    this.scheduleTask = function (callback, scope) {
+        taskQueue.push(callback);
+        taskQueue.push(scope);
+    };
+
+    this.runTasks = function (until) { // Pops and processes tasks in the queue, until the given number of milliseconds has elapsed.
+        let time = (new Date()).getTime();
+        let callback;
+        let scope;
+        let tasksRun = 0;
+        while (taskQueue.length > 0 && time < until) {
+            callback = taskQueue.shift();
+            scope = taskQueue.shift();
+            if (scope) {
+                callback.call(scope);
+            } else {
+                callback();
+            }
+            time = (new Date()).getTime();
+            tasksRun++;
         }
-        var clas = componentClasses[type];
-        if (!clas) {
-            return false;
-        }
-        var superClas = componentClasses[superType];
-        if (!superClas) {
-            return false;
-        }
-        let result = subclasses(clas, superClas);
-        return result;
-    }
-};
+        return tasksRun;
+    };
+
+    this.getNumTasks = function () {
+        return taskQueue.length;
+    };
+}
 
 function subclasses(ChildClass, ParentClass) {
     var c = ChildClass.prototype;
@@ -158,5 +186,92 @@ function subclasses(ChildClass, ParentClass) {
     }
     return false;
 }
+
+/**
+ * @private
+ * @type {Core}
+ */
+const core = new Core();
+
+
+const frame = function () {
+    let time = Date.now();
+    if (lastTime > 0) { // Log FPS stats
+        elapsedTime = time - lastTime;
+        var newFPS = 1000 / elapsedTime; // Moving average of FPS
+        totalFPS += newFPS;
+        fpsSamples.push(newFPS);
+        if (fpsSamples.length >= numFPSSamples) {
+            totalFPS -= fpsSamples.shift();
+        }
+        stats.frame.fps = Math.round(totalFPS / fpsSamples.length);
+    }
+    runTasks(time);
+    fireTickEvents(time);
+    renderScenes();
+    lastTime = time;
+    window.requestAnimationFrame(frame);
+};
+
+function runTasks(time) { // Process as many enqueued tasks as we can within the per-frame task budget
+    const tasksRun = core.runTasks(time + taskBudget);
+    const tasksScheduled = core.getNumTasks();
+    stats.frame.tasksRun = tasksRun;
+    stats.frame.tasksScheduled = tasksScheduled;
+    stats.frame.tasksBudget = taskBudget;
+}
+
+function fireTickEvents(time) { // Fire tick event on each Scene
+    tickEvent.time = time;
+    for (var id in core.scenes) {
+        if (core.scenes.hasOwnProperty(id)) {
+            var scene = core.scenes[id];
+            tickEvent.sceneId = id;
+            tickEvent.startTime = scene.startTime;
+            tickEvent.deltaTime = tickEvent.prevTime != null ? tickEvent.time - tickEvent.prevTime : 0;
+            /**
+             * Fired on each game loop iteration.
+             *
+             * @event tick
+             * @param {String} sceneID The ID of this Scene.
+             * @param {Number} startTime The time in seconds since 1970 that this Scene was instantiated.
+             * @param {Number} time The time in seconds since 1970 of this "tick" event.
+             * @param {Number} prevTime The time of the previous "tick" event from this Scene.
+             * @param {Number} deltaTime The time in seconds since the previous "tick" event from this Scene.
+             */
+            scene.fire("tick", tickEvent, true);
+        }
+    }
+    tickEvent.prevTime = time;
+}
+
+function renderScenes() {
+    const scenes = core.scenes;
+    const forceRender = false;
+    let scene;
+    let renderInfo;
+    let ticksPerRender;
+    let id;
+    for (id in scenes) {
+        if (scenes.hasOwnProperty(id)) {
+            scene = scenes[id];
+            renderInfo = scenesRenderInfo[id];
+            if (!renderInfo) {
+                renderInfo = scenesRenderInfo[id] = {}; // FIXME
+            }
+            ticksPerRender = scene.ticksPerRender;
+            if (renderInfo.ticksPerRender !== ticksPerRender) {
+                renderInfo.ticksPerRender = ticksPerRender;
+                renderInfo.renderCountdown = ticksPerRender;
+            }
+            if (--renderInfo.renderCountdown === 0) {
+                scene.render(forceRender);
+                renderInfo.renderCountdown = ticksPerRender;
+            }
+        }
+    }
+}
+
+window.requestAnimationFrame(frame);
 
 export {core};

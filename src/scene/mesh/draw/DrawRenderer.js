@@ -10,6 +10,9 @@ import {WEBGL_INFO} from './../../webglInfo.js';
 
 const ids = new Map({});
 
+/**
+ * @private
+ */
 const DrawRenderer = function (hash, mesh) {
     this.id = ids.addItem({});
     this._hash = hash;
