@@ -1,6 +1,3 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
 
 /**
 
@@ -23,7 +20,7 @@ class RenderFlags {
         /**
          * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered solid and opaque.
-         * @property
+         * @property normalFillOpaque
          * @type {boolean}
          */
         this.normalFillOpaque = false;

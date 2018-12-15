@@ -891,7 +891,7 @@ class Mesh extends xeokitObject {
     }
 
     /**
-     * Called by xeofg to compile shaders for this Mesh.
+     * Called by xeokit to compile shaders for this Mesh.
      * @public
      */
     compile() {

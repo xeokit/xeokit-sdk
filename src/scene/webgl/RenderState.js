@@ -21,7 +21,7 @@ class RenderState {
 
         /**
          The RenderState's ID, unique within the renderer.
-         @property
+         @property id
          @type Number
          @final
          */
