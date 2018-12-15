@@ -1,5 +1,5 @@
 {
-  "source": "./src/viewer",
+  "source": "./src",
   "destination": "./docs",
   "plugins": [
     {
