@@ -114,22 +114,32 @@ class Viewer {
      *
      * @param {string} modelId ID of the target {@link Model}.
      * @param {object} metadata The metadata - (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {boolean} [globalizeIDs=true] When true, will prefix each {@link ObjectMetadata#id} with the {@link Model} ID..
      */
-    createMetadata(modelId, metadata) {
+    createMetadata(modelId, metadata, globalizeIDs = true) {
         var objects = this.metadata.objects;
         var structures = this.metadata.structures;
         var newObjects = metadata.objects;
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const object = new ObjectMetadata(newObjects[i]);
+            if (globalizeIDs) {
+                object.id = modelId + "#" + object.id;
+                if (object.parent) {
+                    object.parent = modelId + "#" + object.parent;
+                }
+            }
             objects[object.id] = object;
         }
-        for (let i = 0, len = newObjects.length; i < len; i++) {
-            const object = newObjects[i];
-            if (object.parent === undefined || object.parent === null) {
-                structures[modelId] = object;
-            } else {
-                const parent = objects[object.parent];
-                (parent.children || (parent.children = [])).push(object);
+        for (var id in objects) {
+            if (objects.hasOwnProperty(id)) {
+                const object = objects[id];
+                if (object.parent === undefined || object.parent === null) {
+                    structures[modelId] = object;
+                } else {
+                    const parent = objects[object.parent];
+                    parent.children = parent.children || [];
+                    parent.children.push(object);
+                }
             }
         }
         this.fire("metadata-created", modelId);
@@ -152,6 +162,7 @@ class Viewer {
             return;
         }
         var objects = this.metadata.objects;
+
         function visit(object) {
             delete objects[object.id];
             const children = object.children;
@@ -161,6 +172,7 @@ class Viewer {
                 }
             }
         }
+
         visit(root);
         delete this.metadata.structures[modelId];
         this.fire("metadata-destroyed", modelId);
