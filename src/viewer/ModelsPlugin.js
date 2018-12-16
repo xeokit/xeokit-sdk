@@ -1,4 +1,5 @@
 import {utils} from "./../scene/utils.js"
+import {Model} from "./../scene/models/Model.js";
 import {Plugin} from "./Plugin.js";
 
 /**
@@ -13,17 +14,17 @@ class ModelsPlugin extends Plugin {
      *
      * @param {String} [id] ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Viewer} viewer The Viewer.
-     * @param {Class} modelClass The JavaScript class for the type of model this plugin will manage.
+     * @param {Class} loader The JavaScript class that will load {@link Model}s for this plugin.
      * @param {Object} cfg  Plugin configuration.
      */
-    constructor(id, viewer, modelClass, cfg) {
+    constructor(id, viewer, loader, cfg) {
 
         super(id, viewer, cfg);
 
         /**
          * @private
          */
-        this._modelClass = modelClass;
+        this._loader = loader;
 
         /**
          * <a href="http://xeokit.org/docs/classes/Model.html">xeokit.Models</a> currently loaded by this Plugin.
@@ -53,12 +54,28 @@ class ModelsPlugin extends Plugin {
             this.error("load() param expected: id");
             return;
         }
+        const src = params.src;
+        if (!src) {
+            this.error("load() param expected: src");
+            return;
+        }
         if (this.viewer.scene.components[id]) {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
-        var model = new this._modelClass(this.viewer.scene, params);
+        var model = new Model(this.viewer.scene);
         this._modelLoadParams[id] = utils.apply(params, {});
+        if (params.metadataSrc) {
+            const metadataSrc = params.metadataSrc;
+            utils.loadJSON(metadataSrc, function (metadata) {
+                self.viewer.createMetadata(id, metadata);
+                self._loader.load(model, src);
+            }, function (errMsg) {
+                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+            });
+        } else {
+            this._loader.load(model, src);
+        }
         this.models[id] = model;
         model.once("destroyed", () => {
             delete this.models[id];
@@ -66,14 +83,6 @@ class ModelsPlugin extends Plugin {
             this.viewer.destroyMetadata(id);
             this.fire("unloaded", id);
         });
-        if (params.metadataSrc) {
-            const metadataSrc = params.metadataSrc;
-            utils.loadJSON(metadataSrc, function (metadata) {
-                self.viewer.createMetadata(id, metadata);
-            }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
-            });
-        }
         return model;
     }
 
