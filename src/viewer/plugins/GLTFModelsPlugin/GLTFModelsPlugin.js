@@ -1,5 +1,5 @@
 import {utils} from "../../../scene/utils.js";
-import {GLTFModel} from "../../../scene/models/GLTFModel.js";
+import {GLTFLoader} from "./GLTFLoader.js";
 import {ModelsPlugin} from "../../ModelsPlugin.js";
 
 /**
@@ -63,7 +63,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * @param {String} [cfg.id="GLTFModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
-        super("GLTFModels", viewer, GLTFModel, cfg);
+        super("GLTFModels", viewer, new GLTFLoader(), cfg);
     }
 
     /**
@@ -117,10 +117,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * @returns {{Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded glTF model.
      */
     load(params) {
-
         var modelId = params.id;
-        var self = this;
-
         return super.load(utils.apply(params, {
             handleNode: function (nodeInfo, actions) {
                 return GLTFModelsPlugin.defaultHandleNode(modelId, nodeInfo, actions);
