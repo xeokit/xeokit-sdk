@@ -1,5 +1,5 @@
 import {Viewer} from "./../../../src/viewer/Viewer.js";
-import {GLTFModelsPlugin} from "./../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
+import {GLTFLoaderPlugin} from "./../../../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
 import {StructurePanelPlugin} from "./../../../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
 import {PropertiesPanelPlugin} from "./../../../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
 
@@ -21,12 +21,12 @@ const propertiesPanel = new PropertiesPanelPlugin(viewer, {
     domElementId: "propertiesPanel"
 });
 
-const gltfModels = new GLTFModelsPlugin(viewer);
+const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-const model = gltfModels.load({
+const model = gltfLoader.load({
     id: "myModel",
     src: "./../../../models/gltf/duplex/duplex.gltf",
-    metadataSrc: "./../../../models/metadata/duplex/flatStructure.json",
+    metadataSrc: "./../../../models/metadata/duplex/structure.json",
     edges: true,
     handleNode(modelId, nodeInfo, actions) {
         const name = nodeInfo.name;
@@ -42,23 +42,21 @@ const model = gltfModels.load({
         actions.createObject = {
             id: modelId + "#" + name,
             visible: true,
-            colorize: colorize,
-            entityType: ifcType // Registers xeogl.Object in Scene#entities
+            entityType: ifcType, // Registers Object in Scene#entities
+            colorize: colorize
         };
-
 
         switch (ifcType) { // Configure initial state of object depending on its type
 
             case "IfcWindow":
                 actions.createObject.pickable = false;
-                actions.createObject.opacity = 0.2;
+                actions.createObject.opacity = 0.5;
                 break;
 
             case "IfcSpace":
                 actions.createObject.pickable = false;
                 actions.createObject.visible = false;
-                actions.createObject.colorize = [0.86, 0.16, 0.16];
-                actions.createObject.opacity = 0.2;
+
                 break;
 
             case "IfcOpeningElement":
@@ -68,7 +66,7 @@ const model = gltfModels.load({
 
             default: // Unrecognized type
                 actions.createObject.pickable = true;
-                actions.createObject.opacity = 0.2;
+                //actions.createObject.opacity = 0.2;
               //  actions.createObject.visible = false;
         }
 
@@ -82,6 +80,8 @@ const camera = scene.camera;
 camera.orbitPitch(20);
 
 model.on("loaded", () => {
+    //model.ghosted = true;
+    //model.opacity = 0.5;
     viewer.cameraFlight.flyTo(model);
     var modelMetadata = viewer.metadata.structures[model.id];
     if (modelMetadata) {
@@ -99,17 +99,26 @@ input.on("mouseclicked", function (coords) {
     });
 
     if (hit) {
-        hit.mesh.material.emissive = [1, 1, 0];
-
-        var oid = hit.mesh.id;
-        var objectMetadata = viewer.metadata.objects[oid];
-
-        console.log(hit.mesh.id);
-
-        hit.mesh.visible = false;
-
+        var mesh = hit.mesh;
+        var objectMetadata = viewer.metadata.objects[mesh.id];
         if (objectMetadata) {
             console.log(JSON.stringify(objectMetadata, null, "\t"));
+        } else {
+            const parent = mesh.parent;
+            if (parent) {
+                objectMetadata = viewer.metadata.objects[parent.id]
+                if (objectMetadata) {
+                    console.log(JSON.stringify(objectMetadata, null, "\t"));
+                }
+            }
         }
     }
 });
+
+
+
+
+
+
+
+
