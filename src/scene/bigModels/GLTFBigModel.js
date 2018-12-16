@@ -32,7 +32,7 @@ class GLTFBigModel extends BigModel {
                     self.error(msg);
                     /**
                      Fired whenever this BigGLTFModel fails to load the glTF file
-                     specified by {{#crossLink "BigGLTFModel/src:property"}}{{/crossLink}}.
+                     specified by {@link BigGLTFModel/src}.
                      @event error
                      @param msg {String} Description of the error
                      */

@@ -7,6 +7,7 @@ import {SpecularMaterial} from "../materials/SpecularMaterial.js";
 import {LambertMaterial} from "../materials/LambertMaterial.js";
 import {Texture} from "../materials/Texture.js";
 import {Group} from "../objects/Group.js";
+import {math} from "../math/math.js";
 import {utils} from "../utils.js";
 import {core} from "../core.js";
 
@@ -49,14 +50,14 @@ class GLTFModel extends Model {
                     self.error(msg);
                     /**
                      Fired whenever this GLTFModel fails to load the glTF file
-                     specified by {{#crossLink "BigGLTFModel/src:property"}}{{/crossLink}}.
+                     specified by {@link BigGLTFModel/src}.
                      @event error
                      @param msg {String} Description of the error
                      */
                     self.fire("error", msg);
                 });
         } else if (cfg.src) {
-            if (!isString(cfg.src)) {
+            if (!utils.isString(cfg.src)) {
                 this.error("Value for 'src' should be a string");
                 return;
             }
@@ -83,7 +84,7 @@ class GLTFModel extends Model {
 
 
     /**
-     Array of all the root {{#crossLink "Object"}}Objects{{/crossLink}} in this GLTFModel.
+     Array of all the root {@link Object"}}Objects{{/crossLink}} in this GLTFModel.
 
      @property children
      @final
@@ -91,7 +92,7 @@ class GLTFModel extends Model {
      */
 
     /**
-     Map of all the root {{#crossLink "Object"}}Objects{{/crossLink}} in this GLTFModel, mapped to their IDs.
+     Map of all the root {@link Object"}}Objects{{/crossLink}} in this GLTFModel, mapped to their IDs.
 
      @property childMap
      @final
@@ -129,7 +130,7 @@ class GLTFModel extends Model {
      You can set this to a new file path at any time (except while loading), which will cause the GLTFModel to load components from
      the new file (after first destroying any components loaded from a previous file path).
 
-     Fires a {{#crossLink "GLTFModel/loaded:event"}}{{/crossLink}} event when the glTF has loaded.
+     Fires a {@link GLTFModel/loaded:event} event when the glTF has loaded.
 
      @property src
      @type String
@@ -141,7 +142,7 @@ class GLTFModel extends Model {
     }
 
     /**
-     * Loads glTF from a URL into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Loads glTF from a URL into a {@link Model}.
      *
      * @method load
      * @static
@@ -171,7 +172,7 @@ class GLTFModel extends Model {
                 }
                 /**
                  Fired whenever this GLTFModel fails to load the glTF file
-                 specified by {{#crossLink "GLTFModel/src:property"}}{{/crossLink}}.
+                 specified by {@link GLTFModel/src}.
                  @event error
                  @param msg {String} Description of the error
                  */
@@ -180,7 +181,7 @@ class GLTFModel extends Model {
     }
 
     /**
-     * Parses glTF JSON into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Parses glTF JSON into a {@link Model}.
      *
      * @method parse
      * @static
@@ -221,7 +222,7 @@ class GLTFModel extends Model {
 var loadGLTF = (function () {
 
     return function (model, src, options, ok, error) {
-        utils.utils.loadJSON(src, function (json) { // OK
+        utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, model, ok, error);
             },
@@ -635,7 +636,7 @@ var parseGLTF = (function () {
                 var texture;
                 var diffuse = values.diffuse;
                 if (diffuse && (blinn || phong || lambert)) {
-                    if (isString(diffuse)) {
+                    if (utils.isString(diffuse)) {
                         texture = ctx.textures[diffuse];
                         if (texture) {
                             cfg.diffuseMap = texture;
@@ -650,7 +651,7 @@ var parseGLTF = (function () {
 
                 var specular = values.specular;
                 if (specular && (blinn || phong)) {
-                    if (isString(specular)) {
+                    if (utils.isString(specular)) {
                         texture = ctx.textures[specular];
                         if (texture) {
                             cfg.specularMap = texture;
@@ -664,7 +665,7 @@ var parseGLTF = (function () {
 
                 var emission = values.emission;
                 if (emission) {
-                    if (isString(emission)) {
+                    if (utils.isString(emission)) {
                         texture = ctx.textures[emission];
                         if (texture) {
                             cfg.emissiveMap = texture;
@@ -775,7 +776,7 @@ var parseGLTF = (function () {
 
                 var diffuse = values.diffuse;
                 if (diffuse && (blinn || phong || lambert)) {
-                    if (!isString(diffuse)) {
+                    if (!utils.isString(diffuse)) {
                         colorize.set(diffuse);
                     }
                 }

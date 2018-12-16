@@ -6,16 +6,16 @@
  ## Overview
 
  * Used to slice portions off objects, to create cross-section views or reveal interiors.
- * Is contained within a {{#crossLink "Clips"}}{{/crossLink}} belonging to its {{#crossLink "Scene"}}{{/crossLink}}.
- * Has a World-space position in {{#crossLink "Clip/pos:property"}}{{/crossLink}} and orientation in {{#crossLink "Clip/dir:property"}}{{/crossLink}}.
- * Discards elements from the half-space in the direction of {{#crossLink "Clip/dir:property"}}{{/crossLink}}.
- * Can be be enabled or disabled via its {{#crossLink "Clip/active:property"}}{{/crossLink}} property.
+ * Is contained within a {@link Clips} belonging to its {@link Scene}.
+ * Has a World-space position in {@link Clip/pos} and orientation in {@link Clip/dir}.
+ * Discards elements from the half-space in the direction of {@link Clip/dir}.
+ * Can be be enabled or disabled via its {@link Clip/active} property.
 
  ## Usage
 
- In the example below, we have an {{#crossLink "Mesh"}}{{/crossLink}} that's attached by a {{#crossLink "Clips"}}{{/crossLink}}
- that contains two {{#crossLink "Clip"}}{{/crossLink}} components.  The first {{#crossLink "Clip"}}{{/crossLink}} is on the
- positive diagonal, while the second is on the negative diagonal. The {{#crossLink "Mesh"}}Mesh's{{/crossLink}} {{#crossLink "Geometry"}}{{/crossLink}}
+ In the example below, we have an {@link Mesh} that's attached by a {@link Clips}
+ that contains two {@link Clip} components.  The first {@link Clip} is on the
+ positive diagonal, while the second is on the negative diagonal. The {@link Mesh"}}Mesh's{{/crossLink}} {@link Geometry}
  is a box, which will get two of its corners clipped off.
 
  ````javascript
@@ -46,7 +46,7 @@
 
  ### Switching clipping on and off for a Mesh
 
- An {{#crossLink "Mesh"}}{{/crossLink}}'s {{#crossLink "Mesh/clippable:property"}}{{/crossLink}} property indicates
+ An {@link Mesh}'s {@link Mesh/clippable} property indicates
  whether or not it is affected by Clip components.
 
  You can switch it at any time, like this:
@@ -63,10 +63,10 @@
  @module xeokit
  @submodule clipping
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Clip configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Clip by ID within the {{#crossLink "Scene"}}Scene{{/crossLink}}.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ You only need to supply an ID if you need to be able to find the Clip by ID within the {@link Scene"}}Scene{{/crossLink}}.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Clip.
  @param [cfg.active=true] {Boolean} Indicates whether or not this Clip is active.
  @param [cfg.pos=[0,0,0]] {Array of Number} World-space position of the clipping plane.
@@ -119,7 +119,7 @@ class Clip extends Component {
         this._state.active = value !== false;
         this.glRedraw();
         /**
-         Fired whenever this Clip's {{#crossLink "Clip/active:property"}}{{/crossLink}} property changes.
+         Fired whenever this Clip's {@link Clip/active} property changes.
 
          @event active
          @param value {Boolean} The property's new value
@@ -142,7 +142,7 @@ class Clip extends Component {
         this._state.pos.set(value || [0, 0, 0]);
         this.glRedraw();
         /**
-         Fired whenever this Clip's {{#crossLink "Clip/pos:property"}}{{/crossLink}} property changes.
+         Fired whenever this Clip's {@link Clip/pos} property changes.
 
          @event pos
          @param value Float32Array The property's new value
@@ -157,7 +157,7 @@ class Clip extends Component {
     /**
      Vector indicating the orientation of this Clip plane.
 
-     The vector originates at {{#crossLink "Clip/pos:property"}}{{/crossLink}}. Elements on the
+     The vector originates at {@link Clip/pos}. Elements on the
      same side of the vector are clipped.
 
      @property dir
@@ -168,7 +168,7 @@ class Clip extends Component {
         this._state.dir.set(value || [0, 0, -1]);
         this.glRedraw();
         /**
-         Fired whenever this Clip's {{#crossLink "Clip/dir:property"}}{{/crossLink}} property changes.
+         Fired whenever this Clip's {@link Clip/dir} property changes.
 
          @event dir
          @param value {Float32Array} The property's new value

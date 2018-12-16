@@ -1,6 +1,6 @@
 /**
- A **LambertMaterial** is a {{#crossLink "Material"}}{{/crossLink}} that defines the surface appearance of
- attached {{#crossLink "Mesh"}}Meshes{{/crossLink}} using
+ A **LambertMaterial** is a {@link Material} that defines the surface appearance of
+ attached {@link Mesh"}}Meshes{{/crossLink}} using
  the non-physically based <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> model for calculating reflectance.
 
  ## Examples
@@ -10,26 +10,26 @@
  ## Overview
 
  * Used for rendering non-realistic objects such as "helpers", wireframe objects, labels etc.
- * Use  {{#crossLink "PhongMaterial"}}{{/crossLink}} when you need specular highlights.
- * Use the physically based {{#crossLink "MetallicMaterial"}}{{/crossLink}} or {{#crossLink "SpecularMaterial"}}{{/crossLink}} when you need more realism.
+ * Use  {@link PhongMaterial} when you need specular highlights.
+ * Use the physically based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
 
  For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
- interpolated across the face of the triangle. For {{#crossLink "PhongMaterial"}}{{/crossLink}}, {{#crossLink "MetallicMaterial"}}{{/crossLink}} and
- {{#crossLink "SpecularMaterial"}}{{/crossLink}}, vertex normals are interpolated across the surface of the triangle, and
+ interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
+ {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and
  the illumination calculation is performed at each texel.
 
  The following table summarizes LambertMaterial properties:
 
  | Property | Type | Range | Default Value | Space | Description |
  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- |  {{#crossLink "LambertMaterial/ambient:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
- |  {{#crossLink "LambertMaterial/color:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
- |  {{#crossLink "LambertMaterial/emissive:property"}}{{/crossLink}} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
- | {{#crossLink "LambertMaterial/alpha:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
- | {{#crossLink "LambertMaterial/lineWidth:property"}}{{/crossLink}} | Number | [0..100] | 1 |  | Line width in pixels. |
- | {{#crossLink "LambertMaterial/pointSize:property"}}{{/crossLink}} | Number | [0..100] | 1 |  | Point size in pixels. |
- | {{#crossLink "LambertMaterial/backfaces:property"}}{{/crossLink}} | Boolean |  | false |  | Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {{#crossLink "LambertMaterial/backfaces:property"}}{{/crossLink}} | String | "ccw", "cw" | "ccw" |  | The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ |  {@link LambertMaterial/ambient} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
+ |  {@link LambertMaterial/color} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
+ |  {@link LambertMaterial/emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
+ | {@link LambertMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
+ | {@link LambertMaterial/lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
+ | {@link LambertMaterial/pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
+ | {@link LambertMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
+ | {@link LambertMaterial/backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
@@ -49,19 +49,19 @@
  @submodule materials
  @constructor
  @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The LambertMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
  @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
  @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
  @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} LambertMaterial emissive color.
  @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
- @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {{#crossLink "CubeMap"}}CubeMap{{/crossLink}} is reflected.
- @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "lines".
- @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "points".
- @param [cfg.backfaces=false] {Boolean} Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
+ @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
+ @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
  */
 
 import {Material} from './Material.js';
@@ -261,10 +261,10 @@ class LambertMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The backfaces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The backfaces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property backfaces
      @default false
@@ -284,10 +284,10 @@ class LambertMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The faces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The faces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property frontface
      @default "ccw"

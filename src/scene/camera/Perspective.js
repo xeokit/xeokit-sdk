@@ -1,9 +1,9 @@
 /**
- A **Perspective** defines a perspective projection transform for a {{#crossLink "Camera"}}Camera{{/crossLink}}.
+ A **Perspective** defines a perspective projection transform for a {@link Camera}.
 
  ## Overview
 
- * A {{#crossLink "Camera"}}Camera{{/crossLink}} has a Perspective to configure its perspective projection mode.
+ * A {@link Camera} has a Perspective to configure its perspective projection mode.
 
  ## Examples
 
@@ -11,17 +11,17 @@
 
  ## Usage
 
- * See {{#crossLink "Camera"}}{{/crossLink}}
+ * See {@link Camera}
 
  @class Perspective
  @module xeokit
  @submodule camera
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Perspective.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {{#crossLink "Transform"}}{{/crossLink}} within the same {{#crossLink "Scene"}}Scene{{/crossLink}}.
+ @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene"}}Scene{{/crossLink}}.
  @param [cfg.fov=60.0] {Number} Field-of-view angle, in degrees.
  @param [cfg.fovAxis="min"] {String} The field-of-view axis: "x", "y", or "min" to use whichever is currently the minimum.
  @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.
@@ -91,7 +91,7 @@ class Perspective extends Component {
     /**
      The field-of-view angle (FOV).
 
-     Fires a {{#crossLink "Perspective/fov:event"}}{{/crossLink}} event on change.
+     Fires a {@link Perspective/fov:event} event on change.
 
      @property fov
      @default 60.0
@@ -101,7 +101,7 @@ class Perspective extends Component {
         this._fov = (value !== undefined && value !== null) ? value : 60.0;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Perspective's {{#crossLink "Perspective/fov:property"}}{{/crossLink}} property changes.
+         Fired whenever this Perspective's {@link Perspective/fov} property changes.
 
          @event fov
          @param value The property's new value
@@ -118,7 +118,7 @@ class Perspective extends Component {
 
      Options are "x", "y" or "min", to use the minimum axis.
 
-     Fires a {{#crossLink "Perspective/fov:event"}}{{/crossLink}} event on change.
+     Fires a {@link Perspective/fov:event} event on change.
 
      @property fovAxis
      @default "min"
@@ -136,7 +136,7 @@ class Perspective extends Component {
         this._fovAxis = value;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Perspective's {{#crossLink "Perspective/fovAxis:property"}}{{/crossLink}} property changes.
+         Fired whenever this Perspective's {@link Perspective/fovAxis} property changes.
 
          @event fovAxis
          @param value The property's new value
@@ -151,7 +151,7 @@ class Perspective extends Component {
     /**
      Position of this Perspective's near plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Perspective/near:event"}}{{/crossLink}} event on change.
+     Fires a {@link Perspective/near:event} event on change.
 
      @property near
      @default 0.1
@@ -161,7 +161,7 @@ class Perspective extends Component {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Perspective's   {{#crossLink "Perspective/near:property"}}{{/crossLink}} property changes.
+         Fired whenever this Perspective's   {@link Perspective/near} property changes.
          @event near
          @param value The property's new value
          */
@@ -175,7 +175,7 @@ class Perspective extends Component {
     /**
      Position of this Perspective's far plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Perspective/far:event"}}{{/crossLink}} event on change.
+     Fires a {@link Perspective/far:event} event on change.
 
      @property far
      @default 10000.0
@@ -185,7 +185,7 @@ class Perspective extends Component {
         this._far = (value !== undefined && value !== null) ? value : 10000;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Perspective's  {{#crossLink "Perspective/far:property"}}{{/crossLink}} property changes.
+         Fired whenever this Perspective's  {@link Perspective/far} property changes.
 
          @event far
          @param value The property's new value
@@ -200,7 +200,7 @@ class Perspective extends Component {
     /**
      The Perspective's projection transform matrix.
 
-     Fires a {{#crossLink "Perspective/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Perspective/matrix:event} event on change.
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

@@ -3,11 +3,11 @@
 
  ## Overview
 
- * Textures are grouped within {{#crossLink "Material"}}Materials{{/crossLink}}, which are attached to
- {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
- * To create a Texture from an image file, set the Texture's {{#crossLink "Texture/src:property"}}{{/crossLink}}
+ * Textures are grouped within {@link Material"}}Materials{{/crossLink}}, which are attached to
+ {@link Mesh"}}Meshes{{/crossLink}}.
+ * To create a Texture from an image file, set the Texture's {@link Texture/src}
  property to the image file path.
- * To create a Texture from an HTMLImageElement, set the Texture's {{#crossLink "Texture/image:property"}}{{/crossLink}}
+ * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture/image}
  property to the HTMLImageElement.
 
  ## Examples
@@ -21,13 +21,13 @@
 
  In this example we have a Mesh with
 
- * a {{#crossLink "PhongMaterial"}}{{/crossLink}} which applies diffuse and specular {{#crossLink "Texture"}}Textures{{/crossLink}}, and
- * a {{#crossLink "TorusGeometry"}}{{/crossLink}}.
+ * a {@link PhongMaterial} which applies diffuse and specular {@link Texture"}}Textures{{/crossLink}}, and
+ * a {@link TorusGeometry}.
 
- Note that xeokit will ignore the {{#crossLink "PhongMaterial"}}PhongMaterial's{{/crossLink}} {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}}
- and {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}} properties, since we assigned {{#crossLink "Texture"}}Textures{{/crossLink}} to the {{#crossLink "PhongMaterial"}}PhongMaterial's{{/crossLink}} {{#crossLink "PhongMaterial/diffuseMap:property"}}{{/crossLink}} and
- {{#crossLink "PhongMaterial/specularMap:property"}}{{/crossLink}} properties. The {{#crossLink "Texture"}}Textures'{{/crossLink}} pixel
- colors directly provide the diffuse and specular components for each fragment across the {{#crossLink "Geometry"}}{{/crossLink}} surface.
+ Note that xeokit will ignore the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuse}
+ and {@link PhongMaterial/specular} properties, since we assigned {@link Texture"}}Textures{{/crossLink}} to the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuseMap} and
+ {@link PhongMaterial/specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
+ colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
 
  ```` javascript
  var mesh = new xeokit.Mesh({
@@ -54,21 +54,21 @@
  @module xeokit
  @submodule materials
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Texture.
- @param [cfg.src=null] {String} Path to image file to load into this Texture. See the {{#crossLink "Texture/src:property"}}{{/crossLink}} property for more info.
- @param [cfg.image=null] {HTMLImageElement} HTML Image object to load into this Texture. See the {{#crossLink "Texture/image:property"}}{{/crossLink}} property for more info.
- @param [cfg.minFilter="linearMipmapLinear"] {String} How the texture is sampled when a texel covers less than one pixel. See the {{#crossLink "Texture/minFilter:property"}}{{/crossLink}} property for more info.
- @param [cfg.magFilter="linear"] {String} How the texture is sampled when a texel covers more than one pixel. See the {{#crossLink "Texture/magFilter:property"}}{{/crossLink}} property for more info.
- @param [cfg.wrapS="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {{#crossLink "Texture/wrapS:property"}}{{/crossLink}} property for more info.
- @param [cfg.wrapT="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {{#crossLink "Texture/wrapT:property"}}{{/crossLink}} property for more info.
+ @param [cfg.src=null] {String} Path to image file to load into this Texture. See the {@link Texture/src} property for more info.
+ @param [cfg.image=null] {HTMLImageElement} HTML Image object to load into this Texture. See the {@link Texture/image} property for more info.
+ @param [cfg.minFilter="linearMipmapLinear"] {String} How the texture is sampled when a texel covers less than one pixel. See the {@link Texture/minFilter} property for more info.
+ @param [cfg.magFilter="linear"] {String} How the texture is sampled when a texel covers more than one pixel. See the {@link Texture/magFilter} property for more info.
+ @param [cfg.wrapS="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {@link Texture/wrapS} property for more info.
+ @param [cfg.wrapT="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {@link Texture/wrapT} property for more info.
  @param [cfg.flipY=false] {Boolean} Flips this Texture's source data along its vertical axis when true.
  @param [cfg.translate=[0,0]] {Array of Number} 2D translation vector that will be added to texture's *S* and *T* coordinates.
  @param [cfg.scale=[1,1]] {Array of Number} 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
  @param [cfg.rotate=0] {Number} Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
- @param [cfg.encoding="linear"] {String} Encoding format.  See the {{#crossLink "Texture/encoding:property"}}{{/crossLink}} property for more info.
+ @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link Texture/encoding} property for more info.
  @extends Component
  */
 import {Component} from '../Component.js';
@@ -270,7 +270,7 @@ class Texture extends Component {
     /**
      Indicates an HTML DOM Image object to source this Texture from.
 
-     Sets the {{#crossLink "Texture/src:property"}}{{/crossLink}} property to null.
+     Sets the {@link Texture/src} property to null.
 
      @property image
      @default null
@@ -292,7 +292,7 @@ class Texture extends Component {
     /**
      Indicates a path to an image file to source this Texture from.
 
-     Sets the {{#crossLink "Texture/image:property"}}{{/crossLink}} property to null.
+     Sets the {@link Texture/image} property to null.
 
      @property src
      @default null

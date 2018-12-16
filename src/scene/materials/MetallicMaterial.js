@@ -1,6 +1,6 @@
 /**
- A **MetallicMaterial** is a physically-based {{#crossLink "Material"}}{{/crossLink}} that defines the surface appearance of
- {{#crossLink "Mesh"}}Meshes{{/crossLink}} using the *metallic-roughness* workflow.
+ A **MetallicMaterial** is a physically-based {@link Material} that defines the surface appearance of
+ {@link Mesh"}}Meshes{{/crossLink}} using the *metallic-roughness* workflow.
 
  ## Examples
 
@@ -11,8 +11,8 @@
  ## Overview
 
  * MetallicMaterial is usually used for conductive materials, such as metal.
- * {{#crossLink "SpecularMaterial"}}{{/crossLink}} is usually used for insulators, such as wood, ceramics and plastic.
- * {{#crossLink "PhongMaterial"}}{{/crossLink}} is usually used for non-realistic objects.
+ * {@link SpecularMaterial} is usually used for insulators, such as wood, ceramics and plastic.
+ * {@link PhongMaterial} is usually used for non-realistic objects.
 
  For an introduction to PBR concepts, try these articles:
 
@@ -24,39 +24,39 @@
 
  | Property | Type | Range | Default Value | Space | Description |
  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- | {{#crossLink "MetallicMaterial/baseColor:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the base color of the material. |
- | {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The metallic-ness the material (1 for metals, 0 for non-metals). |
- | {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The roughness of the material surface. |
- | {{#crossLink "MetallicMaterial/specularF0:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The specular Fresnel of the material surface. |
- | {{#crossLink "MetallicMaterial/emissive:property"}}{{/crossLink}} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the emissive color of the material. |
- | {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
- | {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | sRGB | Texture RGB components multiplying by {{#crossLink "MetallicMaterial/baseColor:property"}}{{/crossLink}}. If the fourth component (A) is present, it multiplies by {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/metallicMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/roughnessMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/metallicRoughnessMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} and second component multiplying by {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/emissiveMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with RGB components multiplying by {{#crossLink "MetallicMaterial/emissive:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "MetallicMaterial/occlusionMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Ambient occlusion texture multiplying by surface's reflected diffuse and specular light. |
- | {{#crossLink "MetallicMaterial/normalMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Tangent-space normal map. |
- | {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
- | {{#crossLink "MetallicMaterial/alphaCutoff:property"}}{{/crossLink}} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- | {{#crossLink "MetallicMaterial/backfaces:property"}}{{/crossLink}} | Boolean |  | false |  | Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {{#crossLink "MetallicMaterial/frontface:property"}}{{/crossLink}} | String | "ccw", "cw" | "ccw" |  | The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ | {@link MetallicMaterial/baseColor} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the base color of the material. |
+ | {@link MetallicMaterial/metallic} | Number | [0, 1] | 1 | linear | The metallic-ness the material (1 for metals, 0 for non-metals). |
+ | {@link MetallicMaterial/roughness} | Number | [0, 1] | 1 | linear | The roughness of the material surface. |
+ | {@link MetallicMaterial/specularF0} | Number | [0, 1] | 1 | linear | The specular Fresnel of the material surface. |
+ | {@link MetallicMaterial/emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the emissive color of the material. |
+ | {@link MetallicMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
+ | {@link MetallicMaterial/baseColorMap} | {@link Texture} |  | null | sRGB | Texture RGB components multiplying by {@link MetallicMaterial/baseColor}. If the fourth component (A) is present, it multiplies by {@link MetallicMaterial/alpha}. |
+ | {@link MetallicMaterial/metallicMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link MetallicMaterial/metallic}. |
+ | {@link MetallicMaterial/roughnessMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link MetallicMaterial/roughness}. |
+ | {@link MetallicMaterial/metallicRoughnessMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link MetallicMaterial/metallic} and second component multiplying by {@link MetallicMaterial/roughness}. |
+ | {@link MetallicMaterial/emissiveMap} | {@link Texture} |  | null | linear | Texture with RGB components multiplying by {@link MetallicMaterial/emissive}. |
+ | {@link MetallicMaterial/alphaMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link MetallicMaterial/alpha}. |
+ | {@link MetallicMaterial/occlusionMap} | {@link Texture} |  | null | linear | Ambient occlusion texture multiplying by surface's reflected diffuse and specular light. |
+ | {@link MetallicMaterial/normalMap} | {@link Texture} |  | null | linear | Tangent-space normal map. |
+ | {@link MetallicMaterial/alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
+ | {@link MetallicMaterial/alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
+ | {@link MetallicMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
+ | {@link MetallicMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
- In the example below we'll create the [yellow fire hydrant](../../examples/#materials_metallic_fireHydrant) shown in the example screen shots above. Our hydrant {{#crossLink "Mesh"}}{{/crossLink}} has:
+ In the example below we'll create the [yellow fire hydrant](../../examples/#materials_metallic_fireHydrant) shown in the example screen shots above. Our hydrant {@link Mesh} has:
 
- * a {{#crossLink "OBJGeometry"}}{{/crossLink}} which loads the fire hydrant mesh from an .OBJ file,
- * a MetallicMaterial with {{#crossLink "Texture"}}Textures{{/crossLink}} providing diffuse, metallic, roughness, occlusion and normal maps.
+ * a {@link OBJGeometry} which loads the fire hydrant mesh from an .OBJ file,
+ * a MetallicMaterial with {@link Texture"}}Textures{{/crossLink}} providing diffuse, metallic, roughness, occlusion and normal maps.
 
- We'll also provide its {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Lights"}}{{/crossLink}} with
- {{#crossLink "DirLight"}}DirLights{{/crossLink}}, plus {{#crossLink "CubeTexture"}}CubeTextures{{/crossLink}} for light
+ We'll also provide its {@link Scene}'s {@link Lights} with
+ {@link DirLight"}}DirLights{{/crossLink}}, plus {@link CubeTexture"}}CubeTextures{{/crossLink}} for light
  and reflection maps.
 
- Note that in this example we're providing separate {{#crossLink "Texture"}}Textures{{/crossLink}} for the {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} and {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}}
+ Note that in this example we're providing separate {@link Texture"}}Textures{{/crossLink}} for the {@link MetallicMaterial/metallic} and {@link MetallicMaterial/roughness}
  channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
- within the same {{#crossLink "Texture"}}{{/crossLink}} for efficiency.
+ within the same {@link Texture} for efficiency.
 
  ````javascript
  var hydrant = new xeokit.Mesh({
@@ -144,12 +144,12 @@
 
  ### Combining channels within the same textures
 
- In the previous example we provided separate {{#crossLink "Texture"}}Textures{{/crossLink}} for the {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} and
- {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} channels, but we can combine those channels into the same {{#crossLink "Texture"}}{{/crossLink}} to reduce download time, memory footprint and rendering time (and also for glTF compatibility).
+ In the previous example we provided separate {@link Texture"}}Textures{{/crossLink}} for the {@link MetallicMaterial/metallic} and
+ {@link MetallicMaterial/roughness} channels, but we can combine those channels into the same {@link Texture} to reduce download time, memory footprint and rendering time (and also for glTF compatibility).
 
  Here's our MetallicMaterial again with those channels combined in the
- {{#crossLink "MetallicMaterial/metallicRoughnessMap:property"}}{{/crossLink}} {{#crossLink "Texture"}}Texture{{/crossLink}}, where the
- *R* component multiplies by {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} and *G* multiplies by {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}}.
+ {@link MetallicMaterial/metallicRoughnessMap} {@link Texture"}}Texture{{/crossLink}}, where the
+ *R* component multiplies by {@link MetallicMaterial/metallic} and *G* multiplies by {@link MetallicMaterial/roughness}.
 
  ````javascript
  hydrant.material = new xeokit.MetallicMaterial({
@@ -173,8 +173,8 @@
  });
  ````
 
- Although not shown in this example, we can also texture {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} with
- the *A* component of {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}}'s {{#crossLink "Texture"}}{{/crossLink}},
+ Although not shown in this example, we can also texture {@link MetallicMaterial/alpha} with
+ the *A* component of {@link MetallicMaterial/baseColorMap}'s {@link Texture},
  if required.
 
  ## Transparency
@@ -183,8 +183,8 @@
 
  Let's make our hydrant transparent.
 
- We'll update its MetallicMaterial's {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}}
- and {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}}, causing it to blend 50% with the background:
+ We'll update its MetallicMaterial's {@link MetallicMaterial/alpha}
+ and {@link MetallicMaterial/alphaMode}, causing it to blend 50% with the background:
 
  ````javascript
  hydrant.material.alpha = 0.5;
@@ -197,9 +197,9 @@
 
  Let's apply an alpha mask to our hydrant.
 
- We'll give its MetallicMaterial an {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}}
- and configure {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}}, {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}},
- and {{#crossLink "MetallicMaterial/alphaCutoff:property"}}{{/crossLink}} to treat it as an alpha mask:
+ We'll give its MetallicMaterial an {@link MetallicMaterial/alphaMap}
+ and configure {@link MetallicMaterial/alpha}, {@link MetallicMaterial/alphaMode},
+ and {@link MetallicMaterial/alphaCutoff} to treat it as an alpha mask:
 
  ````javascript
  hydrant.material.alphaMap = new xeokit.Texture({
@@ -219,81 +219,81 @@
  @constructor
  @extends Material
 
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
 
  @param [cfg] {*} The MetallicMaterial configuration.
 
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
 
  @param [cfg.meta=null] {String:Object} Metadata to attach to this material.
 
  @param [cfg.baseColor=[1,1,1]] {Float32Array}  RGB diffuse color of this MetallicMaterial. Multiplies by the RGB
- components of {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}}.
+ components of {@link MetallicMaterial/baseColorMap}.
 
  @param [cfg.metallic=1.0] {Number} Factor in the range 0..1 indicating how metallic this MetallicMaterial is.
- 1 is metal, 0 is non-metal. Multiplies by the *R* component of {{#crossLink "MetallicMaterial/metallicMap:property"}}{{/crossLink}} and the *A* component of
- {{#crossLink "MetallicMaterial/metalRoughnessMap:property"}}{{/crossLink}}.
+ 1 is metal, 0 is non-metal. Multiplies by the *R* component of {@link MetallicMaterial/metallicMap} and the *A* component of
+ {@link MetallicMaterial/metalRoughnessMap}.
 
  @param [cfg.roughness=1.0] {Number} Factor in the range 0..1 indicating the roughness of this MetallicMaterial.
- 0 is fully smooth, 1 is fully rough. Multiplies by the *R* component of {{#crossLink "MetallicMaterial/roughnessMap:property"}}{{/crossLink}}.
+ 0 is fully smooth, 1 is fully rough. Multiplies by the *R* component of {@link MetallicMaterial/roughnessMap}.
 
  @param [cfg.specularF0=0.0] {Number} Factor in the range 0..1 indicating specular Fresnel.
 
  @param [cfg.emissive=[0,0,0]] {Float32Array}  RGB emissive color of this MetallicMaterial. Multiplies by the RGB
- components of {{#crossLink "MetallicMaterial/emissiveMap:property"}}{{/crossLink}}.
+ components of {@link MetallicMaterial/emissiveMap}.
 
  @param [cfg.alpha=1.0] {Number} Factor in the range 0..1 indicating the alpha of this MetallicMaterial.
- Multiplies by the *R* component of {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}} and the *A* component,
- if present, of {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}}. The value of
- {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}} indicates how alpha is interpreted when rendering.
+ Multiplies by the *R* component of {@link MetallicMaterial/alphaMap} and the *A* component,
+ if present, of {@link MetallicMaterial/baseColorMap}. The value of
+ {@link MetallicMaterial/alphaMode} indicates how alpha is interpreted when rendering.
 
- @param [cfg.baseColorMap=undefined] {Texture} RGBA {{#crossLink "Texture"}}{{/crossLink}} containing the diffuse color
+ @param [cfg.baseColorMap=undefined] {Texture} RGBA {@link Texture} containing the diffuse color
  of this MetallicMaterial, with optional *A* component for alpha. The RGB components multiply by the
- {{#crossLink "MetallicMaterial/baseColor:property"}}{{/crossLink}} property,
- while the *A* component, if present, multiplies by the {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} property.
+ {@link MetallicMaterial/baseColor} property,
+ while the *A* component, if present, multiplies by the {@link MetallicMaterial/alpha} property.
 
- @param [cfg.alphaMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's
- alpha in its *R* component. The *R* component multiplies by the {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} property. Must
- be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
+ alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial/alpha} property. Must
+ be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
- @param [cfg.metallicMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's
+ @param [cfg.metallicMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  metallic factor in its *R* component. The *R* component multiplies by the
- {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} property. Must be within the same
- {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link MetallicMaterial/metallic} property. Must be within the same
+ {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
- @param [cfg.roughnessMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's
+ @param [cfg.roughnessMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  roughness factor in its *R* component. The *R* component multiplies by the
- {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} property. Must be within the same
- {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link MetallicMaterial/roughness} property. Must be within the same
+ {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
- @param [cfg.metallicRoughnessMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing this
+ @param [cfg.metallicRoughnessMap=undefined] {Texture} RGB {@link Texture} containing this
  MetallicMaterial's metalness in its *R* component and roughness in its *G* component. Its *R* component multiplies by the
- {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} property, while its *G* component multiplies by the
- {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} property. Must be within the same
- {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link MetallicMaterial/metallic} property, while its *G* component multiplies by the
+ {@link MetallicMaterial/roughness} property. Must be within the same
+ {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
- @param [cfg.emissiveMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing the emissive color of this
- MetallicMaterial. Multiplies by the {{#crossLink "MetallicMaterial/emissive:property"}}{{/crossLink}} property.
- Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
+ MetallicMaterial. Multiplies by the {@link MetallicMaterial/emissive} property.
+ Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
- @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {{#crossLink "Texture"}}{{/crossLink}}. Within shaders,
- multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {{#crossLink "Scene"}}{{/crossLink}}
+ @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
+ multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
  as this MetallicMaterial.
 
- @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {{#crossLink "Texture"}}{{/crossLink}}. Must be
- within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
+ within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode, which specifies how alpha is to be interpreted. Accepted
- values are "opaque", "blend" and "mask". See the {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}} property for more info.
+ values are "opaque", "blend" and "mask". See the {@link MetallicMaterial/alphaMode} property for more info.
 
  @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value.
- See the {{#crossLink "MetallicMaterial/alphaCutoff:property"}}{{/crossLink}} property for more info.
+ See the {@link MetallicMaterial/alphaCutoff} property for more info.
 
- @param [cfg.backfaces=false] {Boolean} Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
 
- @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "lines".
- @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "points".
+ @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
+ @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
 
  */
 
@@ -443,7 +443,7 @@ class MetallicMaterial extends Material {
     /**
      RGB diffuse color.
 
-     Multiplies by the RGB components of {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}}.
+     Multiplies by the RGB components of {@link MetallicMaterial/baseColorMap}.
 
      @property baseColor
      @default [1.0, 1.0, 1.0]
@@ -474,10 +474,10 @@ class MetallicMaterial extends Material {
 
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
+     RGB {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
 
-     The RGB components multiply by the {{#crossLink "MetallicMaterial/baseColor:property"}}{{/crossLink}} property,
-     while the *A* component, if present, multiplies by the {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} property.
+     The RGB components multiply by the {@link MetallicMaterial/baseColor} property,
+     while the *A* component, if present, multiplies by the {@link MetallicMaterial/alpha} property.
 
      @property baseColorMap
      @default undefined
@@ -493,8 +493,8 @@ class MetallicMaterial extends Material {
 
      1 is metal, 0 is non-metal.
 
-     Multiplies by the *R* component of {{#crossLink "MetallicMaterial/metallicMap:property"}}{{/crossLink}}
-     and the *A* component of {{#crossLink "MetallicMaterial/metalRoughnessMap:property"}}{{/crossLink}}.
+     Multiplies by the *R* component of {@link MetallicMaterial/metallicMap}
+     and the *A* component of {@link MetallicMaterial/metalRoughnessMap}.
 
      @property metallic
      @default 1.0
@@ -514,9 +514,9 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's metallic factor in its *R* component.
+     RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component.
 
-     The *R* component multiplies by the {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} property.
+     The *R* component multiplies by the {@link MetallicMaterial/metallic} property.
 
      @property metallicMap
      @default undefined
@@ -532,7 +532,7 @@ class MetallicMaterial extends Material {
 
      0 is fully smooth, 1 is fully rough.
 
-     Multiplies by the *R* component of {{#crossLink "MetallicMaterial/roughnessMap:property"}}{{/crossLink}}.
+     Multiplies by the *R* component of {@link MetallicMaterial/roughnessMap}.
 
      @property roughness
      @default 1.0
@@ -552,11 +552,11 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's roughness factor in its *R* component.
+     RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component.
 
-     The *R* component multiplies by the {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} property.
+     The *R* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property roughnessMap
      @default undefined
@@ -568,12 +568,12 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
+     RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
 
-     Its *B* component multiplies by the {{#crossLink "MetallicMaterial/metallic:property"}}{{/crossLink}} property, while
-     its *G* component multiplies by the {{#crossLink "MetallicMaterial/roughness:property"}}{{/crossLink}} property.
+     Its *B* component multiplies by the {@link MetallicMaterial/metallic} property, while
+     its *G* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property metallicRoughnessMap
      @default undefined
@@ -607,7 +607,7 @@ class MetallicMaterial extends Material {
     /**
      RGB emissive color.
 
-     Multiplies by {{#crossLink "MetallicMaterial/emissiveMap:property"}}{{/crossLink}}.
+     Multiplies by {@link MetallicMaterial/emissiveMap}.
 
      @property emissive
      @default [0.0, 0.0, 0.0]
@@ -639,7 +639,7 @@ class MetallicMaterial extends Material {
     /**
      RGB emissive map.
 
-     Multiplies by {{#crossLink "MetallicMaterial/emissive:property"}}{{/crossLink}}.
+     Multiplies by {@link MetallicMaterial/emissive}.
 
      @property emissiveMap
      @default undefined
@@ -667,10 +667,10 @@ class MetallicMaterial extends Material {
     /**
      Factor in the range [0..1] indicating the alpha value.
 
-     Multiplies by the *R* component of {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}} and
-     the *A* component, if present, of {{#crossLink "MetallicMaterial/baseColorMap:property"}}{{/crossLink}}.
+     Multiplies by the *R* component of {@link MetallicMaterial/alphaMap} and
+     the *A* component, if present, of {@link MetallicMaterial/baseColorMap}.
 
-     The value of {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}} indicates how alpha is
+     The value of {@link MetallicMaterial/alphaMode} indicates how alpha is
      interpreted when rendering.
 
      @property alpha
@@ -691,9 +691,9 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing this MetallicMaterial's alpha in its *R* component.
+     RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component.
 
-     The *R* component multiplies by the {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} property.
+     The *R* component multiplies by the {@link MetallicMaterial/alpha} property.
 
      @property alphaMap
      @default undefined
@@ -705,9 +705,9 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     RGB tangent-space normal map {{#crossLink "Texture"}}{{/crossLink}}.
+     RGB tangent-space normal map {@link Texture}.
 
-     Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property normalMap
      @default undefined
@@ -722,11 +722,11 @@ class MetallicMaterial extends Material {
      The alpha rendering mode.
 
      This specifies how alpha is interpreted. Alpha is the combined result of the
-     {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link MetallicMaterial/alpha} and
+     {@link MetallicMaterial/alphaMap} properties.
 
      * "opaque" - The alpha value is ignored and the rendered output is fully opaque.
-     * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha and {{#crossLink "MetallicMaterial/alphaCutoff:property"}}{{/crossLink}}.
+     * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha and {@link MetallicMaterial/alphaCutoff}.
      * "blend" - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
 
      @property alphaMode
@@ -755,14 +755,14 @@ class MetallicMaterial extends Material {
     /**
      The alpha cutoff value.
 
-     Specifies the cutoff threshold when {{#crossLink "MetallicMaterial/alphaMode:property"}}{{/crossLink}}
+     Specifies the cutoff threshold when {@link MetallicMaterial/alphaMode}
      equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
      opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
      material as fully transparent. This value is ignored for other modes.
 
      Alpha is the combined result of the
-     {{#crossLink "MetallicMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "MetallicMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link MetallicMaterial/alpha} and
+     {@link MetallicMaterial/alphaMap} properties.
 
      @property alphaCutoff
      @default 0.5
@@ -783,10 +783,10 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The backfaces will belong to {{#crossLink "Geometry"}}{{/crossLink}} compoents that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The backfaces will belong to {@link Geometry} compoents that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property backfaces
      @default false
@@ -806,10 +806,10 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The faces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The faces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property frontface
      @default "ccw"

@@ -37,8 +37,8 @@
 
  ### Creating and accessing components
 
- As a brief introduction to creating Scene components, we'll create a {{#crossLink "Mesh"}}{{/crossLink}} that has a
- {{#crossLink "TeapotGeometry"}}{{/crossLink}} and a {{#crossLink "PhongMaterial"}}{{/crossLink}}:
+ As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
+ {@link TeapotGeometry} and a {@link PhongMaterial}:
 
  <a href="../../examples/#geometry_primitives_teapot"><img src="../../assets/images/screenshots/Scene/teapot.png"></img></a>
 
@@ -53,7 +53,7 @@
  });
  ````
 
- Creating a {{#crossLink "Mesh"}}{{/crossLink}} within the default Scene (xeokit will automatically create the default Scene if it does not yet exist):
+ Creating a {@link Mesh} within the default Scene (xeokit will automatically create the default Scene if it does not yet exist):
  ````javascript
  var teapotMesh = new xeokit.Mesh({
     id: "myMesh",
@@ -82,7 +82,7 @@
  xeokit.setDefaultScene( scene );
  ````
 
- Find components by ID in their Scene's {{#crossLink "Scene/components:property"}}{{/crossLink}} map:
+ Find components by ID in their Scene's {@link Scene/components} map:
 
  ````javascript
  var teapotMesh = scene.components["myMesh"];
@@ -92,7 +92,7 @@
  teapotMaterial.diffuse = [1,0,0]; // Change to red
  ````
 
- A Scene also has a map of component instances for each {{#crossLink "Component"}}{{/crossLink}} subtype:
+ A Scene also has a map of component instances for each {@link Component} subtype:
 
  ````javascript
  var meshes = scene.types["Mesh"];
@@ -104,12 +104,12 @@
  teapotMaterial.diffuse = [0,1,0]; // Change to green
  ````
 
- See {{#crossLink "Object"}}{{/crossLink}}, {{#crossLink "Group"}}{{/crossLink}} and {{#crossLink "Model"}}{{/crossLink}}
+ See {@link Object}, {@link Group} and {@link Model}
  for how to create and access more sophisticated content.
 
  ### Controlling the camera
 
- Use the Scene's {{#crossLink "Camera"}}{{/crossLink}} to control the current viewpoint and projection:
+ Use the Scene's {@link Camera} to control the current viewpoint and projection:
 
  ````javascript
  var camera = myScene.camera;
@@ -125,7 +125,7 @@
 
  ### Managing the canvas, taking snapshots
 
- The Scene's {{#crossLink "Canvas"}}{{/crossLink}} component provides various conveniences relevant to the WebGL canvas, such
+ The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
  as getting getting snapshots, firing resize events etc:
 
  ````javascript
@@ -144,7 +144,7 @@
 
  ### Lighting
 
- The Scene's {{#crossLink "Lights"}}{{/crossLink}} component manages lighting:
+ The Scene's {@link Lights} component manages lighting:
 
  ````javascript
  var lights = scene.lights;
@@ -154,7 +154,7 @@
 
  ### Clipping
 
- The Scene's {{#crossLink "Clips"}}{{/crossLink}} component manages clipping planes for custom cross-sections:
+ The Scene's {@link Clips} component manages clipping planes for custom cross-sections:
 
  ````javascript
  var clips = scene.clips;
@@ -175,7 +175,7 @@
 
  ### Picking
 
- Use the Scene's {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}} method to pick and raycast meshes.
+ Use the Scene's {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method to pick and raycast meshes.
 
  For example, to pick a point on the surface of the closest mesh at the given canvas coordinates:
 
@@ -203,7 +203,7 @@
 
  #### Pick masking
 
- We can use the {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}} method's ````includeMeshes```` and ````excludeMeshes````
+ We can use the {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method's ````includeMeshes```` and ````excludeMeshes````
  options to mask which Meshes we attempt to pick.
 
  This is useful for picking <em>through</em> things, to pick only the Meshes of interest.
@@ -238,7 +238,7 @@
  }
  ````
 
- See {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}} for more info on picking.
+ See {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} for more info on picking.
 
  ### Querying and tracking boundaries
 
@@ -248,8 +248,8 @@
  var aabb = scene.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
  ````
 
- Subscribing to updates to the AABB, which occur whenever {{#crossLink "Meshes"}}{{/crossLink}} are transformed, their
- {{#crossLink "Geometry"}}Geometries{{/crossLink}} have been updated, or the {{#crossLink "Camera"}}Camera{{/crossLink}} has moved:
+ Subscribing to updates to the AABB, which occur whenever {@link Meshes} are transformed, their
+ {@link Geometry"}}Geometries{{/crossLink}} have been updated, or the {@link Camera} has moved:
 
  ````javascript
  scene.on("boundary", function() {
@@ -257,7 +257,7 @@
  });
  ````
 
- Getting the AABB of the {{#crossLink "Object"}}Objects{{/crossLink}} with the given IDs:
+ Getting the AABB of the {@link Object"}}Objects{{/crossLink}} with the given IDs:
 
  ````JavaScript
  scene.getAABB(); // Gets collective boundary of all Mesh Objects in the scene
@@ -265,11 +265,11 @@
  scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of two Objects
  ````
 
- See {{#crossLink "Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}} and {{#crossLink "Object"}}{{/crossLink}} for more info on querying and tracking boundaries.
+ See {@link Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}} and {@link Object} for more info on querying and tracking boundaries.
 
  ### Managing the viewport
 
- The Scene's {{#crossLink "Viewport"}}{{/crossLink}} component manages the WebGL viewport:
+ The Scene's {@link Viewport} component manages the WebGL viewport:
 
  ````javascript
  var viewport = scene.viewport
@@ -282,7 +282,7 @@
  scene to multiple viewports, such as for stereo effects.
 
  In the example, below, we'll configure the Scene to render twice on each frame, each time to different viewport. We'll do this
- with a callback that intercepts the Scene before each render and sets its {{#crossLink "Viewport"}}{{/crossLink}} to a
+ with a callback that intercepts the Scene before each render and sets its {@link Viewport} to a
  different portion of the canvas. By default, the Scene will clear the canvas only before the first render, allowing the
  two views to be shown on the canvas at the same time.
 
@@ -333,8 +333,8 @@
 
  Within its shaders, xeokit performs shading calculations in linear space.
 
- By default, the Scene expects color textures (eg. {{#crossLink "PhongMaterial/diffuseMap:property"}}PhongMaterial#diffuseMap{{/crossLink}},
- {{#crossLink "MetallicMaterial/baseColorMap:property"}}MetallicMaterial#baseColorMap{{/crossLink}} and {{#crossLink "SpecularMaterial/diffuseMap:property"}}SphericalMaterial#diffuseMap{{/crossLink}}) to
+ By default, the Scene expects color textures (eg. {@link PhongMaterial/diffuseMap:property"}}PhongMaterial#diffuseMap{{/crossLink}},
+ {@link MetallicMaterial/baseColorMap:property"}}MetallicMaterial#baseColorMap{{/crossLink}} and {@link SpecularMaterial/diffuseMap:property"}}SphericalMaterial#diffuseMap{{/crossLink}}) to
  be in pre-multipled gamma space, so will convert those to linear space before they are used in shaders. Other textures are
  always expected to be in linear space.
 
@@ -353,7 +353,7 @@
  scene.gammaOutput = true;
  ````
 
- See {{#crossLink "Texture"}}{{/crossLink}} for more information on texture encoding and gamma.
+ See {@link Texture} for more information on texture encoding and gamma.
 
  @class Scene
  @module xeokit
@@ -365,8 +365,8 @@
  @param [cfg.canvasId] {String} ID of existing HTML5 canvas in the DOM - creates a full-page canvas automatically if this is omitted
  @param [cfg.webgl2=true] {Boolean} Set this false when we **don't** want to use WebGL 2 for our Scene; the Scene will fall
  back on WebGL 1 if not available. This property will be deprecated when WebGL 2 is supported everywhere.
- @param [cfg.components] {Array(Object)} JSON array containing parameters for {{#crossLink "Component"}}Component{{/crossLink}} subtypes to immediately create within the Scene.
- @param [cfg.ticksPerRender=1] {Number} The number of {{#crossLink "Scene/tick:event"}}{{/crossLink}} that happen between each render or this Scene.
+ @param [cfg.components] {Array(Object)} JSON array containing parameters for {@link Component"}}Component{{/crossLink}} subtypes to immediately create within the Scene.
+ @param [cfg.ticksPerRender=1] {Number} The number of {@link Scene/tick:event} that happen between each render or this Scene.
  @param [cfg.passes=1] {Number} The number of times this Scene renders per frame.
  @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies whether to clear the
  canvas before each pass (true) or just before the first pass (false).
@@ -473,7 +473,7 @@ class Scene extends Component {
         this.startTime = (new Date()).getTime();
 
         /**
-         {{#crossLink "Model"}}{{/crossLink}}s in this Scene, mapped to their IDs.
+         {@link Model}s in this Scene, mapped to their IDs.
 
          @property models
          @final
@@ -482,7 +482,7 @@ class Scene extends Component {
         this.models = {};
 
         /**
-         The {{#crossLink "Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
+         The {@link Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
 
          @property objects
          @final
@@ -491,9 +491,9 @@ class Scene extends Component {
         this.objects = {};
 
         /**
-         {{#crossLink "Object"}}Objects{{/crossLink}} in this Scene that have GUIDs, mapped to their GUIDs.
+         {@link Object"}}Objects{{/crossLink}} in this Scene that have GUIDs, mapped to their GUIDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/guid:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/guid} is
          assigned a value.
 
          @property guidObjects
@@ -503,9 +503,9 @@ class Scene extends Component {
         this.guidObjects = {};
 
         /**
-         For each entity type, a map of IDs to {{#crossLink "Object"}}Objects{{/crossLink}} of that entity type.
+         For each entity type, a map of IDs to {@link Object"}}Objects{{/crossLink}} of that entity type.
 
-         Each Object is registered in this map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/entityType} is
          assigned a value.
 
          @property entityTypes
@@ -515,9 +515,9 @@ class Scene extends Component {
         this.entityTypes = {};
 
         /**
-         {{#crossLink "Object"}}Objects{{/crossLink}} in this Scene that have entity types, mapped to their IDs.
+         {@link Object"}}Objects{{/crossLink}} in this Scene that have entity types, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/entityType} is
          assigned a value.
 
          @property entities
@@ -527,10 +527,10 @@ class Scene extends Component {
         this.entities = {};
 
         /**
-         Visible entity {{#crossLink "Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Visible entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/visible:property"}}{{/crossLink}} property is true and its
-         {{#crossLink "Object/entityType:property"}}{{/crossLink}} is assigned a value.
+         Each Object is registered in this map when its {@link Object/visible} property is true and its
+         {@link Object/entityType} is assigned a value.
 
          @property visibleEntities
          @final
@@ -539,10 +539,10 @@ class Scene extends Component {
         this.visibleEntities = {};
 
         /**
-         Ghosted entity {{#crossLink "Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Ghosted entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/ghosted:property"}}{{/crossLink}} property is true and its
-         {{#crossLink "Object/entityType:property"}}{{/crossLink}} is assigned a value.
+         Each Object is registered in this map when its {@link Object/ghosted} property is true and its
+         {@link Object/entityType} is assigned a value.
 
          @property ghostedEntities
          @final
@@ -551,10 +551,10 @@ class Scene extends Component {
         this.ghostedEntities = {};
 
         /**
-         Highlighted entity {{#crossLink "Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Highlighted entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/highlighted:property"}}{{/crossLink}} property is true and its
-         {{#crossLink "Object/entityType:property"}}{{/crossLink}} is assigned a value.
+         Each Object is registered in this map when its {@link Object/highlighted} property is true and its
+         {@link Object/entityType} is assigned a value.
 
          @property highlightedEntities
          @final
@@ -563,10 +563,10 @@ class Scene extends Component {
         this.highlightedEntities = {};
 
         /**
-         Selected entity {{#crossLink "Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Selected entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/selected:property"}}{{/crossLink}} property is true and its
-         {{#crossLink "Object/entityType:property"}}{{/crossLink}} is assigned a value.
+         Each Object is registered in this map when its {@link Object/selected} property is true and its
+         {@link Object/entityType} is assigned a value.
 
          @property selectedEntities
          @final
@@ -587,7 +587,7 @@ class Scene extends Component {
         this._selectedEntityIds = null;
 
         /**
-         The {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene, mapped to their IDs.
+         The {@link Mesh"}}Meshes{{/crossLink}} in this Scene, mapped to their IDs.
 
          @property meshes
          @final
@@ -601,8 +601,8 @@ class Scene extends Component {
         this._needRecompile = false;
 
         /**
-         For each {{#crossLink "Component"}}{{/crossLink}} type, a map of
-         IDs to {{#crossLink "Component"}}Components{{/crossLink}} instances of that type.
+         For each {@link Component} type, a map of
+         IDs to {@link Component"}}Components{{/crossLink}} instances of that type.
 
          @property types
          @final
@@ -611,8 +611,8 @@ class Scene extends Component {
         this.types = {};
 
         /**
-         For each {{#crossLink "Component/role:property"}}Component#role{{/crossLink}}, a map of
-         IDs to {{#crossLink "Component"}}Components{{/crossLink}} instances that fulfill that role.
+         For each {@link Component/role:property"}}Component#role{{/crossLink}}, a map of
+         IDs to {@link Component"}}Components{{/crossLink}} instances that fulfill that role.
 
          Roles can also be thought of as contracts that Component subclasses play within xeokit or the application layer.
 
@@ -625,7 +625,7 @@ class Scene extends Component {
         this.roles = {};
 
         /**
-         The {{#crossLink "Component"}}Component{{/crossLink}} within this Scene, mapped to their IDs.
+         The {@link Component"}}Component{{/crossLink}} within this Scene, mapped to their IDs.
 
          @property components
          @final
@@ -634,7 +634,7 @@ class Scene extends Component {
         this.components = {};
 
         /**
-         The root {{#crossLink "Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
+         The root {@link Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
 
          @property rootObjects
          @final
@@ -643,7 +643,7 @@ class Scene extends Component {
         this.rootObjects = {};
 
         /**
-         The {{#crossLink "Clip"}}Clip{{/crossLink}} components in this Scene, mapped to their IDs.
+         The {@link Clip"}}Clip{{/crossLink}} components in this Scene, mapped to their IDs.
 
          @property clips
          @final
@@ -652,8 +652,8 @@ class Scene extends Component {
         this.clips = {};
 
         /**
-         The {{#crossLink "PointLight"}}{{/crossLink}}, {{#crossLink "DirLight"}}{{/crossLink}},
-         {{#crossLink "SpotLight"}}{{/crossLink}} and {{#crossLink "AmbientLight"}}{{/crossLink}} components in this Scene, mapped to their IDs.
+         The {@link PointLight}, {@link DirLight},
+         {@link SpotLight} and {@link AmbientLight} components in this Scene, mapped to their IDs.
 
          @property lights
          @final
@@ -662,7 +662,7 @@ class Scene extends Component {
         this.lights = {};
 
         /**
-         The {{#crossLink "LightMap"}}{{/crossLink}} components in this Scene, mapped to their IDs.
+         The {@link LightMap} components in this Scene, mapped to their IDs.
 
          @property lightMaps
          @final
@@ -671,7 +671,7 @@ class Scene extends Component {
         this.lightMaps = {};
 
         /**
-         The {{#crossLink "ReflectionMap"}}{{/crossLink}} components in this Scene, mapped to their IDs.
+         The {@link ReflectionMap} components in this Scene, mapped to their IDs.
 
          @property reflectionMaps
          @final
@@ -1018,16 +1018,6 @@ class Scene extends Component {
                 delete this.types[type];
             }
         }
-        // Unregister for roles
-        const componentRoles = component.role;
-        for (var i = 0, len = componentRoles.length; i < len; i++) {
-            let roleName = componentRoles[i];
-            let roleToComponents = this.roles[roleName];
-            delete roleToComponents[id];
-            if (utils.isEmptyObject(roleToComponents)) {
-                delete this.types[roleName];
-            }
-        }
         if (component.compile) {
             delete this._compilables[component.id];
         }
@@ -1271,7 +1261,7 @@ class Scene extends Component {
              *
              * @event rendering
              * @param {String} sceneID The ID of this Scene.
-             * @param {Number} pass Index of the pass we are about to render (see {{#crossLink "Scene/passes:property"}}{{/crossLink}}).
+             * @param {Number} pass Index of the pass we are about to render (see {@link Scene/passes}).
              */
             this.fire("rendering", renderEvent, true);
 
@@ -1284,7 +1274,7 @@ class Scene extends Component {
              *
              * @event rendering
              * @param {String} sceneID The ID of this Scene.
-             * @param {Number} pass Index of the pass we rendered (see {{#crossLink "Scene/passes:property"}}{{/crossLink}}).
+             * @param {Number} pass Index of the pass we rendered (see {@link Scene/passes}).
              */
             this.fire("rendered", renderEvent, true);
         }
@@ -1321,7 +1311,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of entity type IDs in {{#crossLink "Scene/entityTypes:property"}}{{/crossLink}}.
+     Convenience array of entity type IDs in {@link Scene/entityTypes}.
      @property entityTypeIds
      @final
      @type {Array of String}
@@ -1334,7 +1324,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of entity type IDs in {{#crossLink "Scene/entityTypes:property"}}{{/crossLink}}.
+     Convenience array of entity type IDs in {@link Scene/entityTypes}.
      @property entityTypeIds
      @final
      @type {Array of String}
@@ -1347,7 +1337,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Scene/entities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Scene/entities}.
      @property entityIds
      @final
      @type {Array of String}
@@ -1360,7 +1350,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Scene/visibleEntities}.
      @property visibleEntityIds
      @final
      @type {Array of String}
@@ -1373,7 +1363,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Scene/ghostedEntities}.
      @property ghostedEntityIds
      @final
      @type {Array of String}
@@ -1386,7 +1376,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Scene/highlightedEntities}.
      @property highlightedEntityIds
      @final
      @type {Array of String}
@@ -1399,7 +1389,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Scene/selectedEntities}.
      @property selectedEntityIds
      @final
      @type {Array of String}
@@ -1412,7 +1402,7 @@ class Scene extends Component {
     }
 
     /**
-     The number of {{#crossLink "Scene/tick:property"}}{{/crossLink}} that happen between each render or this Scene.
+     The number of {@link Scene/tick} that happen between each render or this Scene.
 
      @property ticksPerRender
      @default 1
@@ -1524,7 +1514,7 @@ class Scene extends Component {
     }
 
     /**
-     The gamma factor to use when {{#crossLink "Scene/property:gammaOutput"}}{{/crossLink}} is set true.
+     The gamma factor to use when {@link Scene/property:gammaOutput} is set true.
 
      @property gammaOutput
      @default 1.0
@@ -1544,12 +1534,12 @@ class Scene extends Component {
     }
 
     /**
-     The default geometry for this Scene, which is a {{#crossLink "BoxGeometry"}}BoxGeometry{{/crossLink}}.
+     The default geometry for this Scene, which is a {@link BoxGeometry"}}BoxGeometry{{/crossLink}}.
 
-     This {{#crossLink "BoxGeometry"}}BoxGeometry{{/crossLink}} has an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.geometry".
+     This {@link BoxGeometry"}}BoxGeometry{{/crossLink}} has an {@link Component/id:property"}}id{{/crossLink}} equal to "default.geometry".
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "Geometry"}}Geometry{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Geometry"}}Geometry{{/crossLink}} by default.
      @property geometry
      @final
      @type BoxGeometry
@@ -1563,14 +1553,14 @@ class Scene extends Component {
     }
 
     /**
-     The default drawing material for this Scene, which is a {{#crossLink "PhongMaterial"}}PhongMaterial{{/crossLink}}.
+     The default drawing material for this Scene, which is a {@link PhongMaterial"}}PhongMaterial{{/crossLink}}.
 
-     This {{#crossLink "PhongMaterial"}}PhongMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.material", with all
+     This {@link PhongMaterial"}}PhongMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.material", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "PhongMaterial"}}PhongMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link PhongMaterial"}}PhongMaterial{{/crossLink}} by default.
      @property material
      @final
      @type PhongMaterial
@@ -1584,14 +1574,14 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {{#crossLink "EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {{#crossLink "Meshes"}}Meshes{{/crossLink}} when they are ghosted.
+     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are ghosted.
 
-     This {{#crossLink "EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.ghostMaterial", with all
+     This {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.ghostMaterial", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} by default.
      @property ghostMaterial
      @final
      @type EmphasisMaterial
@@ -1605,14 +1595,14 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {{#crossLink "EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {{#crossLink "Meshes"}}Meshes{{/crossLink}} when they are highlighted.
+     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are highlighted.
 
-     This {{#crossLink "HighlightMaterial"}}HighlightMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.highlightMaterial", with all
+     This {@link HighlightMaterial"}}HighlightMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.highlightMaterial", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "HighlightMaterial"}}HighlightMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link HighlightMaterial"}}HighlightMaterial{{/crossLink}} by default.
      @property highlightMaterial
      @final
      @type HighlightMaterial
@@ -1626,14 +1616,14 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {{#crossLink "EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {{#crossLink "Meshes"}}Meshes{{/crossLink}} when they are selected.
+     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are selected.
 
-     This {{#crossLink "SelectedMaterial"}}SelectedMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.selectedMaterial", with all
+     This {@link SelectedMaterial"}}SelectedMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.selectedMaterial", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "SelectedMaterial"}}SelectedMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link SelectedMaterial"}}SelectedMaterial{{/crossLink}} by default.
      @property selectedMaterial
      @final
      @type SelectedMaterial
@@ -1647,14 +1637,14 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {{#crossLink "EdgeMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {{#crossLink "Meshes"}}Meshes{{/crossLink}} when edges are emphasized.
+     The Scene's default {@link EdgeMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when edges are emphasized.
 
-     This {{#crossLink "EdgeMaterial"}}EdgeMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.edgeMaterial", with all
+     This {@link EdgeMaterial"}}EdgeMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.edgeMaterial", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "EdgeMaterial"}}EdgeMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link EdgeMaterial"}}EdgeMaterial{{/crossLink}} by default.
      @property edgeMaterial
      @final
      @type EdgeMaterial
@@ -1671,14 +1661,14 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {{#crossLink "OutlineMaterial"}}OutlineMaterial{{/crossLink}} for the appearance of {{#crossLink "Meshes"}}Meshes{{/crossLink}} when they are outlined.
+     The Scene's default {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are outlined.
 
-     This {{#crossLink "OutlineMaterial"}}OutlineMaterial{{/crossLink}} has
-     an {{#crossLink "Component/id:property"}}id{{/crossLink}} equal to "default.outlineMaterial", with all
+     This {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} has
+     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.outlineMaterial", with all
      other properties initialised to their default values.
 
-     {{#crossLink "Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {{#crossLink "OutlineMaterial"}}OutlineMaterial{{/crossLink}} by default.
+     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} by default.
      @property outlineMaterial
      @final
      @type OutlineMaterial
@@ -1691,7 +1681,7 @@ class Scene extends Component {
     }
 
     /**
-     The {{#crossLink "Viewport"}}{{/crossLink}} belonging to this Scene.
+     The {@link Viewport} belonging to this Scene.
 
      @property viewport
      @final
@@ -1702,7 +1692,7 @@ class Scene extends Component {
     }
 
     /**
-     The {{#crossLink "Camera"}}Camera{{/crossLink}} belonging to this Scene.
+     The {@link Camera} belonging to this Scene.
 
      @property camera
      @final
@@ -1802,15 +1792,15 @@ class Scene extends Component {
     }
 
     /**
-     Attempts to pick an {{#crossLink "Mesh"}}Mesh{{/crossLink}} in this Scene.
+     Attempts to pick an {@link Mesh"}}Mesh{{/crossLink}} in this Scene.
 
-     Ignores {{#crossLink "Mesh"}}Meshes{{/crossLink}} with {{#crossLink "Mesh/pickable:property"}}pickable{{/crossLink}}
+     Ignores {@link Mesh"}}Meshes{{/crossLink}} with {@link Mesh/pickable:property"}}pickable{{/crossLink}}
      set *false*.
 
-     When a {{#crossLink "Mesh"}}{{/crossLink}} is picked, fires a "pick" event on the {{#crossLink "Mesh"}}{{/crossLink}}
+     When a {@link Mesh} is picked, fires a "pick" event on the {@link Mesh}
      with the pick result as parameters.
 
-     Picking the {{#crossLink "Mesh"}}{{/crossLink}} at the given canvas coordinates:
+     Picking the {@link Mesh} at the given canvas coordinates:
 
      ````javascript
      var pickResult = scene.pick({
@@ -1824,7 +1814,7 @@ class Scene extends Component {
 
      **Usage:**
 
-     Picking, with a ray cast through the canvas, hits a {{#crossLink "Mesh"}}{{/crossLink}}:
+     Picking, with a ray cast through the canvas, hits a {@link Mesh}:
 
      ````javascript
      var pickResult = scene.pick({
@@ -1850,7 +1840,7 @@ class Scene extends Component {
           }
      ````
 
-     Picking the {{#crossLink "Mesh"}}{{/crossLink}} that intersects an arbitrarily-aligned World-space ray:
+     Picking the {@link Mesh} that intersects an arbitrarily-aligned World-space ray:
 
      ````javascript
      var pickResult = scene.pick({
@@ -1885,10 +1875,10 @@ class Scene extends Component {
      directly along the negative View-space Z-axis.
      @param {Float32Array} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
      @param {Float32Array} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
-     @param {Array} [params.includeMeshes] IDs of {{#crossLink "Mesh"}}Meshes{{/crossLink}} to restrict picking to. When given, ignores {{#crossLink "Mesh"}}Meshes{{/crossLink}} whose IDs are not in this list.
-     @param {Array} [params.excludeMeshes] IDs of {{#crossLink "Mesh"}}Meshes{{/crossLink}} to ignore. When given, will pick *through* these {{#crossLink "Mesh"}}Meshes{{/crossLink}}, as if they were not there.
+     @param {Array} [params.includeMeshes] IDs of {@link Mesh"}}Meshes{{/crossLink}} to restrict picking to. When given, ignores {@link Mesh"}}Meshes{{/crossLink}} whose IDs are not in this list.
+     @param {Array} [params.excludeMeshes] IDs of {@link Mesh"}}Meshes{{/crossLink}} to ignore. When given, will pick *through* these {@link Mesh"}}Meshes{{/crossLink}}, as if they were not there.
      @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
-     @returns {PickResult} Holds results of the pick attempt, returned when an {{#crossLink "Mesh"}}{{/crossLink}} is picked, else null. See method comments for description.
+     @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
      */
     pick(params, pickResult) {
 
@@ -1927,11 +1917,11 @@ class Scene extends Component {
     }
 
     /**
-     Returns the collective axis-aligned bounding box of the {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Returns the collective axis-aligned bounding box of the {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
      When no arguments are given, returns the total boundary of all objects in the scene.
 
-     Only {{#crossLink "Mesh"}}Meshes{{/crossLink}} with {{#crossLink "Mesh/collidable:property"}}collidable{{/crossLink}}
+     Only {@link Mesh"}}Meshes{{/crossLink}} with {@link Mesh/collidable:property"}}collidable{{/crossLink}}
      set ````true```` are included in the boundary.
 
      ## Usage
@@ -1946,7 +1936,7 @@ class Scene extends Component {
      ````
 
      @method getAABB
-     @param {String|String[]} target {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param {String|String[]} target {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
      */
     getAABB(target) {
@@ -2031,8 +2021,8 @@ class Scene extends Component {
     /**
      Convenience method that destroys all light sources.
 
-     Removes all {{#crossLink "AmbientLight"}}AmbientLights{{/crossLink}}, {{#crossLink "PointLight"}}PointLights{{/crossLink}},
-     {{#crossLink "DirLight"}}DirLights{{/crossLink}} and {{#crossLink "SpotLight"}}SpotLights{{/crossLink}}.
+     Removes all {@link AmbientLight"}}AmbientLights{{/crossLink}}, {@link PointLight"}}PointLights{{/crossLink}},
+     {@link DirLight"}}DirLights{{/crossLink}} and {@link SpotLight"}}SpotLights{{/crossLink}}.
 
      @method clearLights
      */
@@ -2044,7 +2034,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience method that destroys all {{#crossLink "Clip"}}Clips{{/crossLink}}.
+     Convenience method that destroys all {@link Clip"}}Clips{{/crossLink}}.
 
      @method clearClips
      */
@@ -2056,18 +2046,18 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its visibility status in its {{#crossLink "Object/visibility:property"}}{{/crossLink}} property.
+     Each Object indicates its visibility status in its {@link Object/visibility} property.
 
-     Each visible Object is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each visible Object is registered in the {@link Scene}'s
+     {@link Scene/visibleEntities} map while its {@link Object/entityType}
      is assigned a value.
 
      @method setVisible
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param visible {Boolean} The new visibility state.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed visibility, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed visibility, else false if all updates were redundant and not applied.
      */
     setVisible(ids, visible) {
         return this.withObjects(ids, object => {
@@ -2078,14 +2068,14 @@ class Scene extends Component {
     }
 
     /**
-     Culls or unculls a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Culls or unculls a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its culled status in its {{#crossLink "Object/visibility:property"}}{{/crossLink}} property.
+     Each Object indicates its culled status in its {@link Object/visibility} property.
 
      @method setVisible
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param culled {Boolean} The new cull state.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed culled state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed culled state, else false if all updates were redundant and not applied.
      */
     setCulled(ids, culled) {
         return this.withObjects(ids, object => {
@@ -2096,18 +2086,18 @@ class Scene extends Component {
     }
 
     /**
-     Selects or de-selects a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Selects or de-selects a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its selected status in its {{#crossLink "Object/selected:property"}}{{/crossLink}} property.
+     Each Object indicates its selected status in its {@link Object/selected} property.
 
-     Each selected Object is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each selected Object is registered in the {@link Scene}'s
+     {@link Scene/selectedEntities} map while its {@link Object/entityType}
      is assigned a value.
 
      @method setSelected
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param selected {Boolean} Whether to select or deselect.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed selection state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed selection state, else false if all updates were redundant and not applied.
      */
     setSelected(ids, selected) {
         return this.withObjects(ids, object => {
@@ -2118,18 +2108,18 @@ class Scene extends Component {
     }
 
     /**
-     Highlights or de-highlights a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Highlights or de-highlights a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its highlight status in its {{#crossLink "Object/highlighted:property"}}{{/crossLink}} property.
+     Each Object indicates its highlight status in its {@link Object/highlighted} property.
 
-     Each highlighted Object is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each highlighted Object is registered in the {@link Scene}'s
+     {@link Scene/highlightedEntities} map while its {@link Object/entityType}
      is assigned a value.
 
      @method setHighlighted
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param highlighted {Boolean} Whether to highlight or un-highlight.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed highlighted state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed highlighted state, else false if all updates were redundant and not applied.
      */
     setHighlighted(ids, highlighted) {
         return this.withObjects(ids, object => {
@@ -2140,18 +2130,18 @@ class Scene extends Component {
     }
 
     /**
-     Ghosts or un-ghosts a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Ghosts or un-ghosts a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its ghosted status in its {{#crossLink "Object/ghosted:property"}}{{/crossLink}} property.
+     Each Object indicates its ghosted status in its {@link Object/ghosted} property.
 
-     Each ghosted Object is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each ghosted Object is registered in the {@link Scene}'s
+     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
      is assigned a value.
 
      @method setGhosted
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param ghosted {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed ghosted state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed ghosted state, else false if all updates were redundant and not applied.
      */
     setGhosted(ids, ghosted) {
         return this.withObjects(ids, object => {
@@ -2162,12 +2152,12 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides wireeframe edges for batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides wireeframe edges for batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
      @method setEdges
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param edges {Float32Array} Whether to show or hide edges.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed edges state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed edges state, else false if all updates were redundant and not applied.
      */
     setEdges(ids, edges) {
         return this.withObjects(ids, object => {
@@ -2178,18 +2168,18 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides an outline around a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides an outline around a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its outlined status in its {{#crossLink "Object/outlined:property"}}{{/crossLink}} property.
+     Each Object indicates its outlined status in its {@link Object/outlined} property.
 
-     Each outlined Object is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/outlinedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each outlined Object is registered in the {@link Scene}'s
+     {@link Scene/outlinedEntities} map when its {@link Object/entityType}
      is assigned a value.
 
      @method setOutlined
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param outlined {Float32Array} Whether to show or hide the outline.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed outlined state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed outlined state, else false if all updates were redundant and not applied.
      */
     setOutlined(ids, outlined) {
         return this.withObjects(ids, object => {
@@ -2200,10 +2190,10 @@ class Scene extends Component {
     }
 
     /**
-     Colorizes a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Colorizes a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
      @method setColorize
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param [colorize=(1,1,1)] Float32Array RGB colorize factors, multiplied by the rendered pixel colors.
      */
     setColorize(ids, colorize) {
@@ -2213,10 +2203,10 @@ class Scene extends Component {
     }
 
     /**
-     Updates opacities of a batch of {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Updates opacities of a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
      @method setOpacity
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param [opacity=1] Number Opacity factor in range ````[0..1]````, multiplies by the rendered pixel alphas.
      */
     setOpacity(ids, opacity) {
@@ -2226,14 +2216,14 @@ class Scene extends Component {
     }
 
     /**
-     Sets a batch of {{#crossLink "Object"}}Objects{{/crossLink}} pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
+     Sets a batch of {@link Object"}}Objects{{/crossLink}} pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
 
-     Picking is done via calls to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
      @method setPickable
-     @param ids {Array} Array of  {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
      @param pickable {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {{#crossLink "Object"}}Objects{{/crossLink}} changed pickable state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed pickable state, else false if all updates were redundant and not applied.
      */
     setPickable(ids, pickable) {
         return this.withObjects(ids, object => {
@@ -2244,10 +2234,10 @@ class Scene extends Component {
     }
 
     /**
-     Iterates with a callback over {{#crossLink "Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Iterates with a callback over {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
 
      @method withObjects
-     @param ids {String|Array} One or more {{#crossLink "Object"}}{{/crossLink}} IDs, GUIDs or entity types.
+     @param ids {String|Array} One or more {@link Object} IDs, GUIDs or entity types.
      @param callback {Function} The callback, which takes each object as its argument.
      */
     withObjects(ids, callback) {

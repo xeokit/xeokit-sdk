@@ -1,5 +1,5 @@
 /**
- * A **PickResult** contains the results of a pick operation attempted with {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+ * A **PickResult** contains the results of a pick operation attempted with {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
  *
  * @class PickResult
  * @module webgl

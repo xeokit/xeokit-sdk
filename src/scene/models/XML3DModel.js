@@ -74,7 +74,7 @@ class XML3DModel extends Model {
      You can set this to a new file path at any time (except while loading), which will cause the XML3D to load components from
      the new file (after first destroying any components loaded from a previous file path).
 
-     Fires a {{#crossLink "XML3D/loaded:event"}}{{/crossLink}} event when the 3DXML has loaded.
+     Fires a {@link XML3D/loaded:event} event when the 3DXML has loaded.
 
      @property src
      @type String
@@ -91,7 +91,7 @@ class XML3DModel extends Model {
 
             /**
              Fired whenever this XML3D has finished loading components from the 3DXML file
-             specified by {{#crossLink "XML3D/src:property"}}{{/crossLink}}.
+             specified by {@link XML3D/src}.
              @event loaded
              */
             this.fire("loaded", true, true);
@@ -234,7 +234,7 @@ class XML3DModel extends Model {
 };
 
 /**
- * Loads 3DXML from a URL into a {{#crossLink "Model"}}{{/crossLink}}.
+ * Loads 3DXML from a URL into a {@link Model}.
  *
  * @method load
  * @static
@@ -264,7 +264,7 @@ XML3DModel.load = function (model, src, options, ok, error) {
             }
             /**
              Fired whenever this XML3D fails to load the 3DXML file
-             specified by {{#crossLink "XML3D/src:property"}}{{/crossLink}}.
+             specified by {@link XML3D/src}.
              @event error
              @param msg {String} Description of the error
              */

@@ -2,12 +2,12 @@ import {RENDER_FLAGS} from './renderFlags.js';
 import {math} from "../xeokit.module.js";
 
 /**
- A **BigModelMesh** represents an instance of a geometry within a {{#crossLink "BigModel"}}{{/crossLink}}.
+ A **BigModelMesh** represents an instance of a geometry within a {@link BigModel}.
 
- * A BigModelMesh is created with {{#crossLink "BigModel/createMesh:method"}}BigModel#createMesh(){{/crossLink}}.
- * Each BigModelMesh is owned by exactly one {{#crossLink "BigModelObject"}}{{/crossLink}}.
+ * A BigModelMesh is created with {@link BigModel/createMesh:method"}}BigModel#createMesh(){{/crossLink}}.
+ * Each BigModelMesh is owned by exactly one {@link BigModelObject}.
  * A BigModelObject can own multiple BigModelMeshes.
- * A BigModelMesh can have its own geometry, or can reused a geometry previously created with {{#crossLink "BigModel/createGeometry:method"}}BigModel#createGeometry(){{/crossLink}}.
+ * A BigModelMesh can have its own geometry, or can reused a geometry previously created with {@link BigModel/createGeometry:method"}}BigModel#createGeometry(){{/crossLink}}.
 
  @class BigModelMesh
  @module xeokit

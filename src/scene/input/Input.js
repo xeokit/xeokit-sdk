@@ -1,12 +1,12 @@
 /**
- Publishes keyboard and mouse events that occur on the parent {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Canvas"}}{{/crossLink}}.
+ Publishes keyboard and mouse events that occur on the parent {@link Scene}'s {@link Canvas}.
 
- * Each {{#crossLink "Scene"}}{{/crossLink}} provides an Input on itself as a read-only property.
+ * Each {@link Scene} provides an Input on itself as a read-only property.
 
  ## Usage
 
  In this example, we're subscribing to some mouse and key events that will occur on
- a {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+ a {@link Scene} {@link Canvas"}}Canvas{{/crossLink}}.
 
  ````javascript
  var myScene = new xeokit.Scene();
@@ -1741,7 +1741,7 @@ class Input extends Component {
          */
         this.enabled = true;
 
-        /** True while mouse is over the parent {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}Canvas{{/crossLink}}
+        /** True while mouse is over the parent {@link Scene} {@link Canvas"}}Canvas{{/crossLink}}
          *
          * @type {boolean}
          */
@@ -1768,9 +1768,9 @@ class Input extends Component {
 
                     /**
                      * Fired whenever a key is pressed while the parent
-                     * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}} has input focus.
+                     * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
                      * @event keydown
-                     * @param value {Number} The key code, for example {{#crossLink "Input/KEY_LEFT_ARROW:property"}}{{/crossLink}},
+                     * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
                      */
                     self.fire("keydown", e.keyCode, true);
                 }
@@ -1801,9 +1801,9 @@ class Input extends Component {
 
                     /**
                      * Fired whenever a key is released while the parent
-                     * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}} has input focus.
+                     * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
                      * @event keyup
-                     * @param value {Number} The key code, for example {{#crossLink "Input/KEY_LEFT_ARROW:property"}}{{/crossLink}},
+                     * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
                      */
                     self.fire("keyup", e.keyCode, true);
                 }
@@ -1822,9 +1822,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is moved into of the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mouseenter
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("mouseenter", coords, true);
         });
@@ -1841,9 +1841,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is moved out of the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mouseleave
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("mouseleave", coords, true);
         });
@@ -1879,9 +1879,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is pressed over the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mousedown
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("mousedown", coords, true);
 
@@ -1918,9 +1918,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is released over the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mouseup
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("mouseup", coords, true);
 
@@ -1959,9 +1959,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is double-clicked over the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event dblclick
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("dblclick", coords, true);
 
@@ -1980,9 +1980,9 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse is moved over the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mousedown
-             * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
              */
             self.fire("mousemove", coords, true);
 
@@ -2001,7 +2001,7 @@ class Input extends Component {
 
             /**
              * Fired whenever the mouse wheel is moved over the parent
-             * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+             * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
              * @event mousewheel
              * @param delta {Number} The mouse wheel delta,
              */
@@ -2032,9 +2032,9 @@ class Input extends Component {
 
                     /**
                      * Fired whenever the mouse is clicked over the parent
-                     * {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Canvas"}}Canvas{{/crossLink}}.
+                     * {@link Scene"}}Scene{{/crossLink}}'s {@link Canvas"}}Canvas{{/crossLink}}.
                      * @event mouseclicked
-                     * @param value {[Number, Number]} The mouse coordinates within the {{#crossLink "Canvas"}}Canvas{{/crossLink}},
+                     * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
                      */
                     self.fire("mouseclicked", params, true);
                 }

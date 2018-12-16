@@ -1,12 +1,12 @@
 /**
- A **Frustum** defines a perspective projection as a frustum-shaped view volume for a {{#crossLink "Camera"}}Camera{{/crossLink}}.
+ A **Frustum** defines a perspective projection as a frustum-shaped view volume for a {@link Camera}.
 
  ## Overview
 
- * A {{#crossLink "Camera"}}Camera{{/crossLink}} has a Frustum to configure its frustum-based perspective projection mode.
+ * A {@link Camera} has a Frustum to configure its frustum-based perspective projection mode.
  * A Frustum lets us explicitly set the positions of the left, right, top, bottom, near and far planes, which is useful
  for asymmetrical view volumes, such as those used for stereo viewing.
- * A Frustum's {{#crossLink "Frustum/near:property"}}{{/crossLink}} and {{#crossLink "Frustum/far:property"}}{{/crossLink}} properties
+ * A Frustum's {@link Frustum#near} and {@link Frustum#far} properties
  specify the distances to the WebGL clipping planes.
 
  ## Examples
@@ -16,13 +16,13 @@
 
  ## Usage
 
- * See {{#crossLink "Camera"}}{{/crossLink}}
+ * See {@link Camera}
 
  @class Frustum
  @module xeokit
  @submodule camera
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Frustum.
@@ -87,7 +87,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's left plane on the View-space X-axis.
 
-     Fires a {{#crossLink "Frustum/left:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/left:event} event on change.
 
      @property left
      @default -1.0
@@ -98,7 +98,7 @@ class Frustum extends Component {
         this._left = (value !== undefined && value !== null) ? value : -1.0;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's {{#crossLink "Frustum/left:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's {@link Frustum/left} property changes.
 
          @event left
          @param value The property's new value
@@ -113,7 +113,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's right plane on the View-space X-axis.
 
-     Fires a {{#crossLink "Frustum/right:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/right:event} event on change.
 
      @property right
      @default 1.0
@@ -123,7 +123,7 @@ class Frustum extends Component {
         this._right = (value !== undefined && value !== null) ? value : 1.0;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's {{#crossLink "Frustum/right:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's {@link Frustum/right} property changes.
 
          @event right
          @param value The property's new value
@@ -138,7 +138,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's top plane on the View-space Y-axis.
 
-     Fires a {{#crossLink "Frustum/top:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/top:event} event on change.
 
      @property top
      @default 1.0
@@ -148,7 +148,7 @@ class Frustum extends Component {
         this._top = (value !== undefined && value !== null) ? value : 1.0;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's   {{#crossLink "Frustum/top:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's   {@link Frustum/top} property changes.
 
          @event top
          @param value The property's new value
@@ -163,7 +163,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's bottom plane on the View-space Y-axis.
 
-     Fires a {{#crossLink "Frustum/bottom:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/bottom:event} event on change.
 
      @property bottom
      @default -1.0
@@ -173,7 +173,7 @@ class Frustum extends Component {
         this._bottom = (value !== undefined && value !== null) ? value : -1.0;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's   {{#crossLink "Frustum/bottom:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's   {@link Frustum/bottom} property changes.
 
          @event bottom
          @param value The property's new value
@@ -188,7 +188,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's near plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Frustum/near:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/near:event} event on change.
 
      @property near
      @default 0.1
@@ -198,7 +198,7 @@ class Frustum extends Component {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's {{#crossLink "Frustum/near:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's {@link Frustum#near} property changes.
 
          @event near
          @param value The property's new value
@@ -213,7 +213,7 @@ class Frustum extends Component {
     /**
      Position of this Frustum's far plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Frustum/far:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/far:event} event on change.
 
      @property far
      @default 10000.0
@@ -223,7 +223,7 @@ class Frustum extends Component {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
         /**
-         Fired whenever this Frustum's  {{#crossLink "Frustum/far:property"}}{{/crossLink}} property changes.
+         Fired whenever this Frustum's  {@link Frustum#far} property changes.
 
          @event far
          @param value The property's new value
@@ -238,7 +238,7 @@ class Frustum extends Component {
     /**
      The Frustum's projection transform matrix.
 
-     Fires a {{#crossLink "Frustum/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Frustum/matrix:event} event on change.
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

@@ -1,13 +1,13 @@
 /**
- An **AABBGeometry** is a {{#crossLink "Geometry"}}{{/crossLink}} that shows the extents of a World-space axis-aligned bounding box (AABB).
+ An **AABBGeometry** is a {@link Geometry} that shows the extents of a World-space axis-aligned bounding box (AABB).
 
  <a href="../../examples/#geometry_primitives_AABBGeometry"><img src="http://i.giphy.com/3o6ZsSVy0NKXZ1vDSo.gif"></img></a>
 
  ## Overview
 
  * A World-space AABB is an axis-aligned box given as a six-element array containing the min/max extents of an axis-aligned volume, ie. ````[xmin,ymin,zmin,xmax,ymax,zmax]````.
- * Set a AABBGeometry's {{#crossLink "AABBGeometry/targetAABB:property"}}{{/crossLink}} property to an AABB to fix the AABBGeometry to those extents, or
- * set a AABBGeometry's {{#crossLink "AABBGeometry/target:property"}}{{/crossLink}} property to any target {{#crossLink "Component"}}{{/crossLink}}
+ * Set a AABBGeometry's {@link AABBGeometry/targetAABB} property to an AABB to fix the AABBGeometry to those extents, or
+ * set a AABBGeometry's {@link AABBGeometry/target} property to any target {@link Component}
  subtype that has an AABB, to make it dynamically fit itself to changes in the target AABB.
 
  ## Examples
@@ -38,10 +38,10 @@
  });
  ````
 
- Now whenever our mesh {{#crossLink "Mesh"}}{{/crossLink}} changes shape or position, our AABBGeometry will automatically
+ Now whenever our mesh {@link Mesh} changes shape or position, our AABBGeometry will automatically
  update to stay fitted to it.
 
- We could also directly configure the AABBGeometry with the {{#crossLink "Mesh"}}{{/crossLink}}'s {{#crossLink "Mesh/aabb:property"}}AABB{{/crossLink}}:
+ We could also directly configure the AABBGeometry with the {@link Mesh}'s {@link Mesh/aabb:property"}}AABB{{/crossLink}}:
 
  ````javascript
  var boundaryHelper2 = new xeokit.Mesh({
@@ -62,12 +62,12 @@
  @module xeokit
  @submodule geometry
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}},
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
  generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this AABBGeometry.
- @param [cfg.target] {Component} ID or instance of a {{#crossLink "Component"}}{{/crossLink}} subtype whose AABB we'll show.
+ @param [cfg.target] {Component} ID or instance of a {@link Component} subtype whose AABB we'll show.
  @param [cfg.targetAABB] {Float32Array} An axis-aligned box (AABB) in a six-element Float32Array
  containing the min/max extents of the axis-aligned volume, ie. ````(xmin,ymin,zmin,xmax,ymax,zmax)````.
  @extends Component
@@ -114,7 +114,7 @@ class AABBGeometry extends Geometry {
     /**
      A component whose AABB we'll dynamically fit this AABBGeometry to.
 
-     This property effectively replaces the {{#crossLink "AABBGeometry/targetAABB:property"}}{{/crossLink}} property.
+     This property effectively replaces the {@link AABBGeometry/targetAABB} property.
 
      @property target
      @type Component
@@ -154,7 +154,7 @@ class AABBGeometry extends Geometry {
      containing the min/max extents of the
      axis-aligned volume, ie. ````[xmin,ymin,zmin,xmax,ymax,zmax]````.
 
-     This property overrides the {{#crossLink "AABBGeometry/target:property"}}{{/crossLink}} property, causing it to become null.
+     This property overrides the {@link AABBGeometry/target} property, causing it to become null.
 
      @property targetAABB
      @type Float32Array

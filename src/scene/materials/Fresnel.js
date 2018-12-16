@@ -1,12 +1,12 @@
 /**
- A **Fresnel** specifies a Fresnel effect for attached {{#crossLink "PhongMaterial"}}PhongMaterials{{/crossLink}}.
+ A **Fresnel** specifies a Fresnel effect for attached {@link PhongMaterial"}}PhongMaterials{{/crossLink}}.
 
  <a href="../../examples/#materials_phong_fresnel"><img src="../../assets/images/screenshots/PhongMaterial/fresnelWide.png"></img></a>
 
  ## Overview
 
- * Fresnels are grouped within {{#crossLink "PhongMaterial"}}{{/crossLink}}s, which are attached to
- {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ * Fresnels are grouped within {@link PhongMaterial}s, which are attached to
+ {@link Mesh"}}Meshes{{/crossLink}}.
 
  ## Examples
 
@@ -44,7 +44,7 @@
  @module xeokit
  @submodule materials
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Fresnel.

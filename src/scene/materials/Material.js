@@ -1,19 +1,19 @@
 /**
- A **Material** defines the surface appearance of attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ A **Material** defines the surface appearance of attached {@link Mesh"}}Meshes{{/crossLink}}.
 
  Material is the base class for:
 
- * {{#crossLink "MetallicMaterial"}}{{/crossLink}} - physically-based material for metallic surfaces. Use this one for things made of metal.
- * {{#crossLink "SpecularMaterial"}}{{/crossLink}} - physically-based material for non-metallic (dielectric)
+ * {@link MetallicMaterial} - physically-based material for metallic surfaces. Use this one for things made of metal.
+ * {@link SpecularMaterial} - physically-based material for non-metallic (dielectric)
  surfaces. Use this one for insulators, such as ceramics, plastics, wood etc.
- * {{#crossLink "PhongMaterial"}}{{/crossLink}} - material for classic Blinn-Phong shading. This is less demanding of graphics hardware than the physically-based materials.
- * {{#crossLink "LambertMaterial"}}{{/crossLink}} - material for fast, flat-shaded CAD rendering without textures. Use
+ * {@link PhongMaterial} - material for classic Blinn-Phong shading. This is less demanding of graphics hardware than the physically-based materials.
+ * {@link LambertMaterial} - material for fast, flat-shaded CAD rendering without textures. Use
  this for navigating huge CAD or BIM models interactively. This material gives the best rendering performance and uses the least memory.
- * {{#crossLink "EmphasisMaterial"}}{{/crossLink}} - defines the appearance of Meshes when "ghosted" or "highlighted".
- * {{#crossLink "EdgeMaterial"}}{{/crossLink}} - defines the appearance of Meshes when edges are emphasized.
- * {{#crossLink "OutlineMaterial"}}{{/crossLink}} - defines the appearance of outlines drawn around Meshes.
+ * {@link EmphasisMaterial} - defines the appearance of Meshes when "ghosted" or "highlighted".
+ * {@link EdgeMaterial} - defines the appearance of Meshes when edges are emphasized.
+ * {@link OutlineMaterial} - defines the appearance of outlines drawn around Meshes.
 
- A {{#crossLink "Scene"}}Scene{{/crossLink}} is allowed to contain a mixture of these material types.
+ A {@link Scene"}}Scene{{/crossLink}} is allowed to contain a mixture of these material types.
 
  @class Material
  @module xeokit

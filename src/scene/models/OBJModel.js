@@ -34,7 +34,7 @@ class OBJModel extends Model {
 
      Also loads materials from any MTL files referenced in the OBJ.
 
-     Fires a {{#crossLink "OBJModel/src:event"}}{{/crossLink}} event on change.
+     Fires a {@link OBJModel/src:event} event on change.
 
      @property src
      @type String
@@ -54,7 +54,7 @@ class OBJModel extends Model {
 
             /**
              Fired whenever this OBJModel has finished loading components from the OBJ file
-             specified by {{#crossLink "OBJModel/src:property"}}{{/crossLink}}.
+             specified by {@link OBJModel/src}.
              @event loaded
              */
             this.fire("loaded", true, true);
@@ -69,7 +69,7 @@ class OBJModel extends Model {
         OBJModel.load(this, this._src);
 
         /**
-         Fired whenever this OBJModel's {{#crossLink "OBJModel/src:property"}}{{/crossLink}} property changes.
+         Fired whenever this OBJModel's {@link OBJModel/src} property changes.
          @event src
          @param value The property's new value
          */
@@ -82,7 +82,7 @@ class OBJModel extends Model {
 
 
     /**
-     * Loads OBJ and MTL from file(s) into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Loads OBJ and MTL from file(s) into a {@link Model}.
      *
      * @method load
      * @static
@@ -114,7 +114,7 @@ class OBJModel extends Model {
     }
 
     /**
-     * Parses OBJ and MTL text strings into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Parses OBJ and MTL text strings into a {@link Model}.
      *
      * @method parse
      * @static

@@ -11,11 +11,11 @@
 
  ### Component IDs
 
- Every Component has an ID that's unique within the parent {{#crossLink "Scene"}}{{/crossLink}}. xeokit generates
+ Every Component has an ID that's unique within the parent {@link Scene}. xeokit generates
  the IDs automatically by default, however you can also specify them yourself. In the example below, we're creating a
- scene comprised of {{#crossLink "Scene"}}{{/crossLink}}, {{#crossLink "Material"}}{{/crossLink}}, {{#crossLink "Geometry"}}{{/crossLink}} and
- {{#crossLink "Mesh"}}{{/crossLink}} components, while letting xeokit generate its own ID for
- the {{#crossLink "Geometry"}}{{/crossLink}}:
+ scene comprised of {@link Scene}, {@link Material}, {@link Geometry} and
+ {@link Mesh} components, while letting xeokit generate its own ID for
+ the {@link Geometry}:
 
  ````javascript
  // The Scene is a Component too
@@ -61,7 +61,7 @@
 
  All xeokit components are (at least indirect) subclasses of the Component base type.
 
- For most components, you can get the name of its class via its {{#crossLink "Component/type:property"}}{{/crossLink}} property:
+ For most components, you can get the name of its class via its {@link Component#type} property:
 
  ````javascript
  var type = theMaterial.type; // "PhongMaterial"
@@ -140,7 +140,7 @@
  });
  ````
 
- Or get notification of destruction of any Component within its {{#crossLink "Scene"}}{{/crossLink}}, indiscriminately:
+ Or get notification of destruction of any Component within its {@link Scene}, indiscriminately:
 
  ````javascript
  scene.on("componentDestroyed", function(component) {
@@ -208,9 +208,9 @@
  @class Component
  @module xeokit
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} DepthBuf configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Component.
  */
 
@@ -243,7 +243,7 @@ class Component {
         var owner = null;
 
         /**
-         The parent {{#crossLink "Scene"}}{{/crossLink}} that contains this Component.
+         The parent {@link Scene} that contains this Component.
 
          @property scene
          @type {Scene}
@@ -301,7 +301,7 @@ class Component {
         this.meta = cfg.meta || {};
 
         /**
-         Unique ID for this Component within its parent {{#crossLink "Scene"}}Scene{{/crossLink}}.
+         Unique ID for this Component within its parent {@link Scene}.
 
          @property id
          @type String
@@ -357,14 +357,14 @@ class Component {
      This is called by certain subclasses after they have made some sort of state update that requires the
      renderer to perform a redraw.
 
-     For example: a {{#crossLink "Mesh"}}{{/crossLink}} calls this on itself whenever you update its
-     {{#crossLink "Mesh/layer:property"}}layer{{/crossLink}} property, which manually controls its render order in
+     For example: a {@link Mesh} calls this on itself whenever you update its
+     {@link Mesh#layer} property, which manually controls its render order in
      relation to other Meshes.
 
      If this component has a ````castShadow```` property that's set ````true````, then this will also indicate
      that the renderer needs to redraw shadow map associated with this component. Components like
-     {{#crossLink "DirLight"}}{{/crossLink}} have that property set when they produce light that creates shadows, while
-     components like {{#crossLink "Mesh"}}layer{{/crossLink}} have that property set when they cast shadows.
+     {@link DirLight} have that property set when they produce light that creates shadows, while
+     components like {@link Mesh"}}layer{{/crossLink}} have that property set when they cast shadows.
 
      @protected
      */
@@ -382,8 +382,8 @@ class Component {
      combined.  This method is called by certain subclasses after they have made some sort of state update that would
      require re-ordering of the drawables list.
 
-     For example: a {{#crossLink "DirLight"}}{{/crossLink}} calls this on itself whenever you update its
-     {{#crossLink "DirLight/dir:property"}}dir{{/crossLink}} property.
+     For example: a {@link DirLight} calls this on itself whenever you update its
+     {@link DirLight/dir:property"}}dir{{/crossLink}} property.
 
      @protected
      */
@@ -392,7 +392,7 @@ class Component {
     }
 
     /**
-     The {{#crossLink "Component"}}{{/crossLink}} that owns the lifecycle of this Component, if any.
+     The {@link Component} that owns the lifecycle of this Component, if any.
 
      When that component is destroyed, this component will be automatically destroyed also.
 
@@ -407,7 +407,7 @@ class Component {
     }
 
     /**
-     The {{#crossLink "Model"}}{{/crossLink}} which contains this Component, if any.
+     The {@link Model} which contains this Component, if any.
 
      Will be null if this Component is not in a Model.
 
@@ -425,7 +425,7 @@ class Component {
      The type may be given as either a string or a component constructor.
 
      This method works by walking up the inheritance type chain, which this component provides in
-     property {{#crossLink "Component/superTypes:property"}}{{/crossLink}}, returning true as soon as one of the type strings in
+     property {@link Component/superTypes}, returning true as soon as one of the type strings in
      the chain matches the given type, of false if none match.
 
      #### Examples:
@@ -531,8 +531,8 @@ class Component {
     }
 
     /**
-     * Cancels an event subscription that was previously made with {{#crossLink "Component/on:method"}}Component#on(){{/crossLink}} or
-     * {{#crossLink "Component/once:method"}}Component#once(){{/crossLink}}.
+     * Cancels an event subscription that was previously made with {@link Component/on:method"}}Component#on(){{/crossLink}} or
+     * {@link Component/once:method"}}Component#once(){{/crossLink}}.
      *
      * @method off
      * @param {String} subId Publication subId
@@ -558,8 +558,8 @@ class Component {
     /**
      * Subscribes to the next occurrence of the given event, then un-subscribes as soon as the event is subIdd.
      *
-     * This is equivalent to calling {{#crossLink "Component/on:method"}}Component#on(){{/crossLink}}, and then calling
-     * {{#crossLink "Component/off:method"}}Component#off(){{/crossLink}} inside the callback function.
+     * This is equivalent to calling {@link Component/on:method"}}Component#on(){{/crossLink}}, and then calling
+     * {@link Component/off:method"}}Component#off(){{/crossLink}} inside the callback function.
      *
      * @method once
      * @param {String} event Data event to listen to
@@ -592,8 +592,8 @@ class Component {
      *
      * The console message will have this format: *````[LOG] [<component type> <component id>: <message>````*
      *
-     * Also fires the message as a {{#crossLink "Scene/log:event"}}{{/crossLink}} event on the
-     * parent {{#crossLink "Scene"}}Scene{{/crossLink}}.
+     * Also fires the message as a {@link Scene/log:event} event on the
+     * parent {@link Scene"}}Scene{{/crossLink}}.
      *
      * @method log
      * @param {String} message The message to log
@@ -613,8 +613,8 @@ class Component {
      *
      * The console message will have this format: *````[WARN] [<component type> =<component id>: <message>````*
      *
-     * Also fires the message as a {{#crossLink "Scene/warn:event"}}{{/crossLink}} event on the
-     * parent {{#crossLink "Scene"}}Scene{{/crossLink}}.
+     * Also fires the message as a {@link Scene/warn:event} event on the
+     * parent {@link Scene"}}Scene{{/crossLink}}.
      *
      * @method warn
      * @param {String} message The message to log
@@ -630,8 +630,8 @@ class Component {
      *
      * The console message will have this format: *````[ERROR] [<component type> =<component id>: <message>````*
      *
-     * Also fires the message as an {{#crossLink "Scene/error:event"}}{{/crossLink}} event on the
-     * parent {{#crossLink "Scene"}}Scene{{/crossLink}}.
+     * Also fires the message as an {@link Scene/error:event} event on the
+     * parent {@link Scene"}}Scene{{/crossLink}}.
      *
      * @method error
      * @param {String} message The message to log
@@ -918,6 +918,20 @@ class Component {
         return component;
     }
 
+    _checkComponent2(expectedTypes, component) {
+        if (component.scene.id !== this.scene.id) {
+            this.error("Not in same scene: " + component.type);
+            return;
+        }
+        for (var i = 0, len = expectedTypes.length; i < len; i++) {
+            if (expectedTypes[i] === component.type) {
+                return component;
+            }
+        }
+        this.error("Expected component types: " + expectedTypes);
+        return null;
+    }
+
     _adopt(component) {
         if (!this._adoptees) {
             this._adoptees = {};
@@ -970,7 +984,7 @@ class Component {
     /**
      * Destroys this component.
      *
-     * Fires a {{#crossLink "Component/destroyed:event"}}{{/crossLink}} event on this Component.
+     * Fires a {@link Component/destroyed:event} event on this Component.
      *
      * Automatically disassociates this component from other components, causing them to fall back on any
      * defaults that this component overrode on them.

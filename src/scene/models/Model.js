@@ -1,23 +1,23 @@
 /**
- A **Model** is a {{#crossLink "Group"}}{{/crossLink}} of {{#crossLink "Component"}}Components{{/crossLink}}.
+ A **Model** is a {@link Group} of {@link Component"}}Components{{/crossLink}}.
 
  Model is an abstract base class that's subclassed by (at least):
 
- * {{#crossLink "GLTFModel"}}{{/crossLink}}, which loads its components from glTF files and supports physically-based materials, if needed for a realistic appearance.
- * {{#crossLink "OBJModel"}}{{/crossLink}}, which loads its components from .OBJ and .MTL files and renders using Phong shading.
- * {{#crossLink "STLModel"}}{{/crossLink}}, which loads its components from .STL files and renders using Phong shading.
- * {{#crossLink "SceneJSModel"}}{{/crossLink}}, which loads its components from SceneJS scene definitions and renders using Phong shading.
- * {{#crossLink "BuildableModel"}}{{/crossLink}}, which extends Model with a fluent API for building its components.
+ * {@link GLTFModel}, which loads its components from glTF files and supports physically-based materials, if needed for a realistic appearance.
+ * {@link OBJModel}, which loads its components from .OBJ and .MTL files and renders using Phong shading.
+ * {@link STLModel}, which loads its components from .STL files and renders using Phong shading.
+ * {@link SceneJSModel}, which loads its components from SceneJS scene definitions and renders using Phong shading.
+ * {@link BuildableModel}, which extends Model with a fluent API for building its components.
 
  @class Model
  @module xeokit
  @submodule models
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink "Object"}}{{/crossLink}} documentation for usage.
+ @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
@@ -60,10 +60,17 @@ class Model extends Group {
         return "Model";
     }
 
+    /**
+     * @private
+     */
+    get isModel() {
+        return true;
+    }
+
     init(cfg) {
 
         /**
-         All contained {{#crossLink "Components"}}{{/crossLink}}, mapped to their IDs.
+         All contained {@link Components}, mapped to their IDs.
 
          @property components
          @type {{String:Component}}
@@ -71,7 +78,7 @@ class Model extends Group {
         this.components = {};
 
         /**
-         Number of contained {{#crossLink "Components"}}{{/crossLink}}.
+         Number of contained {@link Components}.
 
          @property numComponents
          @type Number
@@ -79,8 +86,8 @@ class Model extends Group {
         this.numComponents = 0;
 
         /**
-         A map of maps; for each contained {{#crossLink "Component"}}{{/crossLink}} type,
-         a map to IDs to {{#crossLink "Component"}}{{/crossLink}} instances, eg.
+         A map of maps; for each contained {@link Component} type,
+         a map to IDs to {@link Component} instances, eg.
 
          ````
          "Geometry": {
@@ -101,7 +108,7 @@ class Model extends Group {
         this.types = {};
 
         /**
-         All contained {{#crossLink "Object"}}Objects{{/crossLink}}, mapped to their IDs.
+         All contained {@link Object"}}Objects{{/crossLink}}, mapped to their IDs.
 
          @property objects
          @final
@@ -110,9 +117,9 @@ class Model extends Group {
         this.objects = {};
 
         /**
-         {{#crossLink "Object"}}Objects{{/crossLink}} in this Model that have GUIDs, mapped to their GUIDs.
+         {@link Object"}}Objects{{/crossLink}} in this Model that have GUIDs, mapped to their GUIDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/guid:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/guid} is
          assigned a value.
 
          @property guidObjects
@@ -122,7 +129,7 @@ class Model extends Group {
         this.guidObjects = {};
 
         /**
-         All contained {{#crossLink "Mesh"}}Meshes{{/crossLink}}, mapped to their IDs.
+         All contained {@link Mesh"}}Meshes{{/crossLink}}, mapped to their IDs.
 
          @property meshes
          @final
@@ -131,9 +138,9 @@ class Model extends Group {
         this.meshes = {};
 
         /**
-         {{#crossLink "Object"}}Objects{{/crossLink}} in this Model that have entity types, mapped to their IDs.
+         {@link Object"}}Objects{{/crossLink}} in this Model that have entity types, mapped to their IDs.
 
-         Each Object is registered in this map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/entityType} is
          set to value.
 
          @property entities
@@ -143,9 +150,9 @@ class Model extends Group {
         this.entities = {};
 
         /**
-         For each entity type, a map of IDs to {{#crossLink "Object"}}Objects{{/crossLink}} of that entity type.
+         For each entity type, a map of IDs to {@link Object"}}Objects{{/crossLink}} of that entity type.
 
-         Each Object is registered in this map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}} is
+         Each Object is registered in this map when its {@link Object/entityType} is
          assigned a value.
 
          @property entityTypes
@@ -201,7 +208,7 @@ class Model extends Group {
             types = this.types[component.type] = {};
         }
         types[component.id] = component;
-        if (component.isType("Object")) {
+        if (component.isObject) {
             const object = component;
             this.objects[object.id] = object;
             if (object.entityType) {
@@ -219,7 +226,7 @@ class Model extends Group {
                 this.guidObjects[object.id] = object;
                 this._objectGUIDs = null; // To lazy-rebuild
             }
-            if (component.isType("Mesh")) {
+            if (component.isMesh) {
                 this.meshes[component.id] = component;
             }
         }
@@ -249,7 +256,7 @@ class Model extends Group {
     }
 
     /**
-     Destroys all {{#crossLink "Component"}}Components{{/crossLink}} in this Model.
+     Destroys all {@link Component"}}Components{{/crossLink}} in this Model.
      @method clear
      */
     clear() {
@@ -274,7 +281,7 @@ class Model extends Group {
     }
 
     /**
-     Convenience array of entity type IDs in {{#crossLink "Model/entityTypes:property"}}{{/crossLink}}.
+     Convenience array of entity type IDs in {@link Model/entityTypes}.
      @property entityTypeIds
      @final
      @type {Array of String}
@@ -287,7 +294,7 @@ class Model extends Group {
     }
 
     /**
-     Convenience array of entity type IDs in {{#crossLink "Model/entityTypes:property"}}{{/crossLink}}.
+     Convenience array of entity type IDs in {@link Model/entityTypes}.
      @property entityTypeIds
      @final
      @type {Array of String}
@@ -300,7 +307,7 @@ class Model extends Group {
     }
 
     /**
-     Convenience array of IDs in {{#crossLink "Model/entities:property"}}{{/crossLink}}.
+     Convenience array of IDs in {@link Model/entities}.
      @property entityIds
      @final
      @type {Array of String}

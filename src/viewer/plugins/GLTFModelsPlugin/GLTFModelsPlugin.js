@@ -1,5 +1,6 @@
 import {utils} from "../../../scene/utils.js";
 import {GLTFModel} from "../../../scene/models/GLTFModel.js";
+import {ModelsPlugin} from "../../ModelsPlugin.js";
 
 /**
  * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).

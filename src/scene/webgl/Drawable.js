@@ -2,7 +2,7 @@
  * The **Drawable** interface defines the contract implemented by renderable components in xeokit.
  *
  * * Drawable is a "virtual type" that has no concrete JavaScript implementation.
- * * Within xeokit's core classes, Drawable is only implemented by {{#crossLink "Mesh"}}{{/crossLink}}.
+ * * Within xeokit's core classes, Drawable is only implemented by {@link Mesh}.
  * * Implement Drawable by your own subclasses to plug custom drawable components into xeokit.
  *
  * @class Drawable
@@ -51,14 +51,14 @@ class Drawable {
     /**
      Indicates if the Drawable is currently visible.
 
-     When the Drawable is a {{#crossLink "Mesh"}}{{/crossLink}}, then a value of true indicates that the whole Mesh
+     When the Drawable is a {@link Mesh}, then a value of true indicates that the whole Mesh
      is visible.
 
-     The Drawable is only rendered when {{#crossLink "Drawable/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Drawable/culled:property"}}{{/crossLink}} is false.
+     The Drawable is only rendered when {@link Drawable/visible} is true and
+     {@link Drawable/culled} is false.
 
-     Each visible Drawable is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each visible Drawable is registered in the {@link Scene}'s
+     {@link Scene/visibleEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property visible
@@ -69,10 +69,10 @@ class Drawable {
     /**
      Indicates if the Drawable is currently ghosted.
 
-     The ghosted appearance is configured by {{#crossLink "Drawable/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
+     The ghosted appearance is configured by {@link Drawable/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
 
-     Each ghosted Drawable is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each ghosted Drawable is registered in its {@link Scene}'s
+     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property ghosted
@@ -83,10 +83,10 @@ class Drawable {
     /**
      Indicates if the Drawable is currently highlighted.
 
-     The highlight appearance is configured by {{#crossLink "Drawable/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
+     The highlight appearance is configured by {@link Drawable/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
 
-     Each highlighted Drawable is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each highlighted Drawable is registered in its {@link Scene}'s
+     {@link Scene/highlightedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property highlighted
@@ -97,10 +97,10 @@ class Drawable {
     /**
      Indicates if the Drawable is currently selected.
 
-     The selected appearance is configured by {{#crossLink "Drawable/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
+     The selected appearance is configured by {@link Drawable/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
 
-     Each selected Drawable is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each selected Drawable is registered in its {@link Scene}'s
+     {@link Scene/selectedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property selected
@@ -111,7 +111,7 @@ class Drawable {
     /**
      Indicates if the Drawable's edges are shown.
 
-     The edges appearance is configured by {{#crossLink "Drawable/edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
+     The edges appearance is configured by {@link Drawable/edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
 
      @property edges
      @default false
@@ -121,8 +121,8 @@ class Drawable {
     /**
      Indicates if the Drawable is currently culled from view.
 
-     The Drawable is only rendered when {{#crossLink "Drawable/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Drawable/culled:property"}}{{/crossLink}} is false.
+     The Drawable is only rendered when {@link Drawable/visible} is true and
+     {@link Drawable/culled} is false.
 
      @property culled
      @default false
@@ -132,7 +132,7 @@ class Drawable {
     /**
      Indicates if the Drawable is currently pickable.
 
-     When false, the Drawable will never be picked by calls to the {{#crossLink "Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Drawable, to attempt to pick whatever lies on the other side of it.
+     When false, the Drawable will never be picked by calls to the {@link Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Drawable, to attempt to pick whatever lies on the other side of it.
 
      @property pickable
      @default true
@@ -142,7 +142,7 @@ class Drawable {
     /**
      Indicates if the Drawable is currently clippable.
 
-     When false, the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}} will have no effect on the Drawable.
+     When false, the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Drawable.
 
      @property clippable
      @default true
@@ -178,7 +178,7 @@ class Drawable {
     /**
      Indicates if the Drawable is currently rendered with an outline.
 
-     The outline appearance is configured by {{#crossLink "Drawable/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
+     The outline appearance is configured by {@link Drawable/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
 
      @property outlined
      @default false
@@ -217,7 +217,7 @@ class Drawable {
      When ````true````, indicates that xeokit should render this Drawable in sorted order, relative to other Drawables of the same class.
 
      The sort order is determined by the Drawable subclasses' implementation
-     of {{#crossLink "Drawable/stateSortCompare:method"}}Drawable#stateSortCompare(){{/crossLink}}.
+     of {@link Drawable/stateSortCompare:method"}}Drawable#stateSortCompare(){{/crossLink}}.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same
      rendering state changes to the GPU, ie. can collapse them.
@@ -232,7 +232,7 @@ class Drawable {
      relative to to other subclasses of the same class.
 
      xeokit requires the Drawable implementor to implement this method if the implemntor defines the
-     {{#crossLink "Drawable/isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}} with value ````true````.
+     {@link Drawable/isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}} with value ````true````.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same
      rendering state changes to the GPU, ie. can collapse them.
@@ -253,25 +253,25 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Draws the Drawable's surfaces solid and opaque using its {{#crossLink "Material"}}{{/crossLink}}.
+     * Draws the Drawable's surfaces solid and opaque using its {@link Material}.
      * @method drawNormalFillOpaque
      * @param {FrameContext} frameCtx
      */
 
     /**
-     * Draws the Drawable's edges solid and opaque using its {{#crossLink "Material"}}{{/crossLink}}.
+     * Draws the Drawable's edges solid and opaque using its {@link Material}.
      * @method drawNormalEdgesOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Drawable's edges opaque, using its {{#crossLink "Material"}}{{/crossLink}}.
+     * Draws the Drawable's edges opaque, using its {@link Material}.
      * @method drawGhostedEdgesOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
     
     /**
-     * Draws the Drawable's edges transparent using its {{#crossLink "Material"}}{{/crossLink}}.
+     * Draws the Drawable's edges transparent using its {@link Material}.
      * @method drawNormalEdgesOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
@@ -279,25 +279,25 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Draws the Drawable's surfaces ghosted and opaque, using its {{#crossLink "GhostMaterial"}}{{/crossLink}}.
+     * Draws the Drawable's surfaces ghosted and opaque, using its {@link GhostMaterial}.
      * @method drawGhostedFillOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Drawable's edges ghosted and opaque, using its {{#crossLink "GhostMaterial"}}{{/crossLink}}.
+     * Draws the Drawable's edges ghosted and opaque, using its {@link GhostMaterial}.
      * @method drawGhostedEdgesOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
     
     /**
-     * Draws the Drawable's surfaces ghosted and transparent, using its {{#crossLink "GhostMaterial"}}{{/crossLink}}.
+     * Draws the Drawable's surfaces ghosted and transparent, using its {@link GhostMaterial}.
      * @method drawGhostedFillTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Drawable's edges ghosted and transparent, using its {{#crossLink "GhostMaterial"}}{{/crossLink}}.
+     * Draws the Drawable's edges ghosted and transparent, using its {@link GhostMaterial}.
      * @method drawGhostedEdgesTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
@@ -305,25 +305,25 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Draws the Mesh Drawable's surfaces highlighted and opaque, using its {{#crossLink "HighlightMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's surfaces highlighted and opaque, using its {@link HighlightMaterial}.
      * @method drawHighlightedFillOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's highlighted edges opaque, using its {{#crossLink "HighlightMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's highlighted edges opaque, using its {@link HighlightMaterial}.
      * @method drawHighlightedEdgesTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's surfaces highlighted and transparent, using its {{#crossLink "HighlightMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's surfaces highlighted and transparent, using its {@link HighlightMaterial}.
      * @method drawHighlightedFillTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's highlighted edges transparent, using its {{#crossLink "HighlightMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's highlighted edges transparent, using its {@link HighlightMaterial}.
      * @method drawHighlightedEdgesTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
@@ -331,25 +331,25 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
     
     /**
-     * Draws the Mesh Drawable's surfaces selected and opaque, using its {{#crossLink "SelectedMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's surfaces selected and opaque, using its {@link SelectedMaterial}.
      * @method drawSelectedFillOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's edges selected and opaque, using its {{#crossLink "SelectedMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's edges selected and opaque, using its {@link SelectedMaterial}.
      * @method drawSelectedFillOpaque
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's surfaces selected and transparent, using its {{#crossLink "SelectedMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's surfaces selected and transparent, using its {@link SelectedMaterial}.
      * @method drawSelectedFillTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */
 
     /**
-     * Draws the Mesh Drawable's selected edges transparent, using its {{#crossLink "SelectedMaterial"}}{{/crossLink}}.
+     * Draws the Mesh Drawable's selected edges transparent, using its {@link SelectedMaterial}.
      * @method drawSelectedEdgesTransparent
      * @param {FrameContext} frameCtx Frame rendering context.
      */

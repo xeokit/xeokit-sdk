@@ -1,5 +1,5 @@
 /**
- Rotates, pans and zooms the {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Camera"}}{{/crossLink}} with keyboard, mouse and touch input.
+ Rotates, pans and zooms the {@link Scene}'s {@link Camera} with keyboard, mouse and touch input.
 
  CameraControl fires these events:
 
@@ -50,19 +50,19 @@
  @module xeokit
  @submodule controls
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraControl.
  @param [cfg.firstPerson=false] {Boolean} Whether or not this CameraControl is in "first person" mode.
  @param [cfg.walking=false] {Boolean} Whether or not this CameraControl is in "walking" mode.
  @param [cfg.keyboardLayout="qwerty"] {String} Keyboard layout.
- @param [cfg.doublePickFlyTo=true] {Boolean} Whether to fly the camera to each {{#crossLink "Mesh"}}{{/crossLink}} that's double-clicked.
+ @param [cfg.doublePickFlyTo=true] {Boolean} Whether to fly the camera to each {@link Mesh} that's double-clicked.
  @param [cfg.active=true] {Boolean} Indicates whether or not this CameraControl is active.
- @param [cfg.pivoting=false] {Boolean} When true, clicking on a {{#crossLink "Mesh"}}{{/crossLink}} and dragging will pivot
- the {{#crossLink "Camera"}}{{/crossLink}} about the picked point on the Mesh's surface.
- @param [cfg.panToPointer=false] {Boolean} When true, mouse wheel when mouse is over a {{#crossLink "Mesh"}}{{/crossLink}} will zoom
- the {{#crossLink "Camera"}}{{/crossLink}} towards the hoveredd point on the Mesh's surface.
+ @param [cfg.pivoting=false] {Boolean} When true, clicking on a {@link Mesh} and dragging will pivot
+ the {@link Camera} about the picked point on the Mesh's surface.
+ @param [cfg.panToPointer=false] {Boolean} When true, mouse wheel when mouse is over a {@link Mesh} will zoom
+ the {@link Camera} towards the hoveredd point on the Mesh's surface.
  @param [cfg.panToPivot=false] {Boolean} TODO.
  @param [cfg.inertia=0.5] {Number} A factor in range [0..1] indicating how much the camera keeps moving after you finish panning or rotating it.
  @author xeolabs / http://xeolabs.com
@@ -283,8 +283,8 @@ class CameraControl extends Component {
     }
 
     /**
-     When true, clicking on a {{#crossLink "Mesh"}}{{/crossLink}} and dragging will pivot
-     the {{#crossLink "Camera"}}{{/crossLink}} about the picked point on the Mesh's surface.
+     When true, clicking on a {@link Mesh} and dragging will pivot
+     the {@link Camera} about the picked point on the Mesh's surface.
 
      @property pivoting
      @default false
@@ -299,8 +299,8 @@ class CameraControl extends Component {
     }
 
     /**
-     When true, mouse wheel when mouse is over a {{#crossLink "Mesh"}}{{/crossLink}} will zoom
-     the {{#crossLink "Camera"}}{{/crossLink}} towards the hovered point on the Mesh's surface.
+     When true, mouse wheel when mouse is over a {@link Mesh} will zoom
+     the {@link Camera} towards the hovered point on the Mesh's surface.
 
      @property panToPointer
      @default false
@@ -318,8 +318,8 @@ class CameraControl extends Component {
     }
 
     /**
-     When true, mouse wheel when mouse is over a {{#crossLink "Mesh"}}{{/crossLink}} will zoom
-     the {{#crossLink "Camera"}}{{/crossLink}} towards the pivot point.
+     When true, mouse wheel when mouse is over a {@link Mesh} will zoom
+     the {@link Camera} towards the pivot point.
 
      @property panToPivot
      @default false
@@ -504,7 +504,7 @@ class CameraControl extends Component {
                     if (lastPickedMeshId !== undefined) {
 
                         /**
-                         * Fired whenever the pointer no longer hovers over an {{#crossLink "Mesh"}}{{/crossLink}}.
+                         * Fired whenever the pointer no longer hovers over an {@link Mesh}.
                          * @event hoverOut
                          * @param mesh The Mesh
                          */
@@ -514,38 +514,38 @@ class CameraControl extends Component {
                     }
 
                     /**
-                     * Fired when the pointer is over a new {{#crossLink "Mesh"}}{{/crossLink}}.
+                     * Fired when the pointer is over a new {@link Mesh}.
                      * @event hoverEnter
-                     * @param hit A pick hit result containing the ID of the Mesh - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                     * @param hit A pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
                     self.fire("hoverEnter", hit);
                     lastPickedMeshId = pickedMeshId;
                 }
                 /**
-                 * Fired continuously while the pointer is moving while hovering over an {{#crossLink "Mesh"}}{{/crossLink}}.
+                 * Fired continuously while the pointer is moving while hovering over an {@link Mesh}.
                  * @event hover
-                 * @param hit A pick hit result containing the ID of the Mesh - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                 * @param hit A pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                  */
                 self.fire("hover", hit);
                 if (hit.worldPos) {
                     pickedSurface = true;
 
                     /**
-                     * Fired while the pointer hovers over the surface of an {{#crossLink "Mesh"}}{{/crossLink}}.
+                     * Fired while the pointer hovers over the surface of an {@link Mesh}.
                      *
                      * This event provides 3D information about the point on the surface that the pointer is
                      * hovering over.
                      *
                      * @event hoverSurface
                      * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
-                     * surface position - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                     * surface position - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
                     self.fire("hoverSurface", hit);
                 }
             } else {
                 if (lastPickedMeshId !== undefined) {
                     /**
-                     * Fired whenever the pointer no longer hovers over an {{#crossLink "Mesh"}}{{/crossLink}}.
+                     * Fired whenever the pointer no longer hovers over an {@link Mesh}.
                      * @event hoverOut
                      * @param mesh The Mesh
                      */
@@ -1388,22 +1388,22 @@ class CameraControl extends Component {
                             if (hit) {
 
                                 /**
-                                 * Fired whenever the pointer has picked (ie. clicked or tapped) an {{#crossLink "Mesh"}}{{/crossLink}}.
+                                 * Fired whenever the pointer has picked (ie. clicked or tapped) an {@link Mesh}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
                                 self.fire("picked", hit);
                                 if (pickedSurface) {
 
                                     /**
-                                     * Fired when the pointer has picked (ie. clicked or tapped) the surface of an {{#crossLink "Mesh"}}{{/crossLink}}.
+                                     * Fired when the pointer has picked (ie. clicked or tapped) the surface of an {@link Mesh}.
                                      *
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event pickedSurface
                                      * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
-                                     * surface possition - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                     * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
                                     self.fire("pickedSurface", hit);
                                 }
@@ -1455,21 +1455,21 @@ class CameraControl extends Component {
 
                             if (hit) {
                                 /**
-                                 * Fired whenever the pointer has double-picked (ie. double-clicked or double-tapped) an {{#crossLink "Mesh"}}{{/crossLink}}.
+                                 * Fired whenever the pointer has double-picked (ie. double-clicked or double-tapped) an {@link Mesh}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
                                 self.fire("doublePicked", hit);
                                 if (pickedSurface) {
                                     /**
-                                     * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {{#crossLink "Mesh"}}{{/crossLink}}.
+                                     * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {@link Mesh}.
                                      *
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event doublePickedSurface
                                      * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
-                                     * surface possition - see {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                     * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
                                     self.fire("doublePickedSurface", hit);
                                 }

@@ -1,13 +1,13 @@
 /**
- An **Ortho** defines an orthographic projection transform for a {{#crossLink "Camera"}}Camera{{/crossLink}}.
+ An **Ortho** defines an orthographic projection transform for a {@link Camera}.
 
  ## Overview
 
- * A {{#crossLink "Camera"}}Camera{{/crossLink}} has an Ortho to configure its orthographic projection mode.
+ * A {@link Camera} has an Ortho to configure its orthographic projection mode.
  * An Ortho works like Blender's orthographic projection, where the positions of the left, right, top and bottom planes are
- implicitly specified with a single {{#crossLink "Ortho/scale:property"}}{{/crossLink}} property, which causes the frustum to be symmetrical on X and Y axis, large enough to
- contain the number of units given by {{#crossLink "Ortho/scale:property"}}{{/crossLink}}.
- * An Ortho's {{#crossLink "Ortho/near:property"}}{{/crossLink}} and {{#crossLink "Ortho/far:property"}}{{/crossLink}} properties
+ implicitly specified with a single {@link Ortho/scale} property, which causes the frustum to be symmetrical on X and Y axis, large enough to
+ contain the number of units given by {@link Ortho/scale}.
+ * An Ortho's {@link Ortho/near} and {@link Ortho/far} properties
  specify the distances to the WebGL clipping planes.
 
 
@@ -17,17 +17,17 @@
 
  ## Usage
 
- * See {{#crossLink "Camera"}}{{/crossLink}}
+ * See {@link Camera}
 
  @class Ortho
  @module xeokit
  @submodule camera
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Ortho.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {{#crossLink "Transform"}}{{/crossLink}} within the same {{#crossLink "Scene"}}Scene{{/crossLink}}.
+ @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene"}}Scene{{/crossLink}}.
  @param [cfg.scale=1.0] {Number} Scale factor for this Ortho's extents on X and Y axis.
  @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.
  @param [cfg.far=10000] {Number} Position of the far plane on the positive View-space Z-axis.
@@ -114,7 +114,7 @@ class Ortho extends Component {
 
      Clamps to minimum value of ````0.01```.
 
-     Fires a {{#crossLink "Ortho/scale:event"}}{{/crossLink}} event on change.
+     Fires a {@link Ortho/scale:event} event on change.
 
      @property scale
      @default 1.0
@@ -131,7 +131,7 @@ class Ortho extends Component {
         this._scale = value;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's {{#crossLink "Ortho/scale:property"}}{{/crossLink}} property changes.
+         Fired whenever this Ortho's {@link Ortho/scale} property changes.
 
          @event scale
          @param value The property's new value
@@ -146,7 +146,7 @@ class Ortho extends Component {
     /**
      Position of this Ortho's near plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Ortho/near:event"}}{{/crossLink}} event on change.
+     Fires a {@link Ortho/near:event} event on change.
 
      @property near
      @default 0.1
@@ -156,7 +156,7 @@ class Ortho extends Component {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's  {{#crossLink "Ortho/near:property"}}{{/crossLink}} property changes.
+         Fired whenever this Ortho's  {@link Ortho/near} property changes.
 
          @event near
          @param value The property's new value
@@ -171,7 +171,7 @@ class Ortho extends Component {
     /**
      Position of this Ortho's far plane on the positive View-space Z-axis.
 
-     Fires a {{#crossLink "Ortho/far:event"}}{{/crossLink}} event on change.
+     Fires a {@link Ortho/far:event} event on change.
 
      @property far
      @default 10000.0
@@ -181,7 +181,7 @@ class Ortho extends Component {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's {{#crossLink "Ortho/far:property"}}{{/crossLink}} property changes.
+         Fired whenever this Ortho's {@link Ortho/far} property changes.
 
          @event far
          @param value The property's new value
@@ -196,7 +196,7 @@ class Ortho extends Component {
     /**
      The Ortho's projection transform matrix.
 
-     Fires a {{#crossLink "Ortho/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Ortho/matrix:event} event on change.
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

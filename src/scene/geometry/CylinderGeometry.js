@@ -1,5 +1,5 @@
 /**
- A **CylinderGeometry** is a parameterized {{#crossLink "Geometry"}}{{/crossLink}} that defines a cylinder-shaped mesh for attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ A **CylinderGeometry** is a parameterized {@link Geometry} that defines a cylinder-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
 
  <a href="../../examples/#geometry_primitives_cylinder"><img src="../../assets/images/screenshots/CylinderGeometry.png"></img></a>
 
@@ -9,8 +9,8 @@
 
  ## Usage
 
- An {{#crossLink "Mesh"}}{{/crossLink}} with a CylinderGeometry and a {{#crossLink "PhongMaterial"}}{{/crossLink}} with
- diffuse {{#crossLink "Texture"}}{{/crossLink}}:
+ An {@link Mesh} with a CylinderGeometry and a {@link PhongMaterial} with
+ diffuse {@link Texture}:
 
  ````javascript
  new xeokit.Mesh({
@@ -37,9 +37,9 @@
  @module xeokit
  @submodule geometry
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}},
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
  generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CylinderGeometry.
  @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a CylinderGeometry are 'points', 'lines' and 'triangles'.

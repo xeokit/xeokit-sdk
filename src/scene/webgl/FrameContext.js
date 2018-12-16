@@ -1,5 +1,5 @@
 /**
- A **FrameContext** provides rendering context to {{#crossLink "Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
+ A **FrameContext** provides rendering context to {@link Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
 
  @class FrameContext
  @module xeokit
@@ -18,7 +18,7 @@ class FrameContext {
     reset() {
 
         /**
-         * ID of the last {{#crossLink "webgl.Program"}}{{/crossLink}} that was bound during the current frame.
+         * ID of the last {@link webgl.Program} that was bound during the current frame.
          * @property lastProgramId
          * @type {Number}
          */
@@ -42,7 +42,7 @@ class FrameContext {
         this.frontface = true;
 
         /**
-         * The next available texture unit to bind a {{#crossLink "webgl.Texture"}}{{/crossLink}} to.
+         * The next available texture unit to bind a {@link webgl.Texture} to.
          * @defauilt 0
          * @property textureUnit
          * @type {number}
@@ -95,7 +95,7 @@ class FrameContext {
         /**
          * Indicates which pass the renderer is currently rendering.
          *
-         * See {{#crossLink "Scene/passes:property"}}Scene#passes{{/crossLink}}, which configures how many passes we render
+         * See {@link Scene/passes:property"}}Scene#passes{{/crossLink}}, which configures how many passes we render
          * per frame, which typically set to ````2```` when rendering a stereo view.
          *
          * @property pass
@@ -106,8 +106,8 @@ class FrameContext {
         /**
          * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.
          *
-         * This sets the viewpoint to look from the point of view of each {{#crossLink "DirLight"}}{{/crossLink}}
-         * or {{#crossLink "PointLight"}}{{/crossLink}} that casts a shadow.
+         * This sets the viewpoint to look from the point of view of each {@link DirLight}
+         * or {@link PointLight} that casts a shadow.
          *
          * @property shadowViewMatrix
          * @type {Float32Array}
@@ -125,7 +125,7 @@ class FrameContext {
         /**
          * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.
          *
-         * This sets the viewpoint to look along the ray given to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}
+         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}
          * when picking with a ray.
          *
          * @property pickViewMatrix

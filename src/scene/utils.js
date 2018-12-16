@@ -376,6 +376,7 @@ const utils = {
     apply: apply,
     apply2: apply2,
     applyIf: applyIf,
+    isEmptyObject: isEmptyObject,
     inQuotes: inQuotes,
     concat: concat
 };

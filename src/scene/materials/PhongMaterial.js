@@ -1,6 +1,6 @@
 /**
- A **PhongMaterial** is a {{#crossLink "Material"}}{{/crossLink}} that defines the surface appearance of
- attached {{#crossLink "Mesh"}}Meshes{{/crossLink}} using
+ A **PhongMaterial** is a {@link Material} that defines the surface appearance of
+ attached {@link Mesh"}}Meshes{{/crossLink}} using
  the classic <a href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model">Blinn-Phong</a> lighting model.
 
  ## Examples
@@ -12,44 +12,44 @@
  ## Overview
 
  * Used for rendering non-realistic objects such as "helpers", wireframe objects, labels etc.
- * Use the physically-based {{#crossLink "MetallicMaterial"}}{{/crossLink}} or {{#crossLink "SpecularMaterial"}}{{/crossLink}} when more realism is required.
+ * Use the physically-based {@link MetallicMaterial} or {@link SpecularMaterial} when more realism is required.
 
  The following table summarizes PhongMaterial properties:
 
  | Property | Type | Range | Default Value | Space | Description |
  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- |  {{#crossLink "PhongMaterial/ambient:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
- |  {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
- |  {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the specular light reflected by the material. |
- |  {{#crossLink "PhongMaterial/emissive:property"}}{{/crossLink}} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
- | {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
- | {{#crossLink "PhongMaterial/shininess:property"}}{{/crossLink}} | Number | [0, 128] | 80 | linear | Determines the size and sharpness of specular highlights. |
- | {{#crossLink "PhongMaterial/reflectivity:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | Determines the amount of reflectivity. |
- | {{#crossLink "PhongMaterial/diffuseMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | sRGB | Texture RGB components multiplying by {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}}. If the fourth component (A) is present, it multiplies by {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/specularMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | sRGB | Texture RGB components multiplying by {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}}. If the fourth component (A) is present, it multiplies by {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/emissiveMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with RGB components multiplying by {{#crossLink "PhongMaterial/emissive:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/alphaMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/occlusionMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Ambient occlusion texture multiplying by {{#crossLink "PhongMaterial/ambient:property"}}{{/crossLink}}, {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}} and {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/normalMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Tangent-space normal map. |
- | {{#crossLink "PhongMaterial/diffuseFresnel:property"}}{{/crossLink}} | {{#crossLink "Fresnel"}}{{/crossLink}} |  | null |  | Fresnel term applied to {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/specularFresnel:property"}}{{/crossLink}} | {{#crossLink "Fresnel"}}{{/crossLink}} |  | null |  | Fresnel term applied to {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/emissiveFresnel:property"}}{{/crossLink}} | {{#crossLink "Fresnel"}}{{/crossLink}} |  | null |  | Fresnel term applied to {{#crossLink "PhongMaterial/emissive:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/reflectivityFresnel:property"}}{{/crossLink}} | {{#crossLink "Fresnel"}}{{/crossLink}} |  | null |  | Fresnel term applied to {{#crossLink "PhongMaterial/reflectivity:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/alphaFresnel:property"}}{{/crossLink}} | {{#crossLink "Fresnel"}}{{/crossLink}} |  | null |  | Fresnel term applied to {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "PhongMaterial/lineWidth:property"}}{{/crossLink}} | Number | [0..100] | 1 |  | Line width in pixels. |
- | {{#crossLink "PhongMaterial/pointSize:property"}}{{/crossLink}} | Number | [0..100] | 1 |  | Point size in pixels. |
- | {{#crossLink "PhongMaterial/alphaMode:property"}}{{/crossLink}} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
- | {{#crossLink "PhongMaterial/alphaCutoff:property"}}{{/crossLink}} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- | {{#crossLink "PhongMaterial/backfaces:property"}}{{/crossLink}} | Boolean |  | false |  | Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {{#crossLink "PhongMaterial/frontface:property"}}{{/crossLink}} | String | "ccw", "cw" | "ccw" |  | The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ |  {@link PhongMaterial/ambient} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
+ |  {@link PhongMaterial/diffuse} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
+ |  {@link PhongMaterial/specular} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the specular light reflected by the material. |
+ |  {@link PhongMaterial/emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
+ | {@link PhongMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
+ | {@link PhongMaterial/shininess} | Number | [0, 128] | 80 | linear | Determines the size and sharpness of specular highlights. |
+ | {@link PhongMaterial/reflectivity} | Number | [0, 1] | 1 | linear | Determines the amount of reflectivity. |
+ | {@link PhongMaterial/diffuseMap} | {@link Texture} |  | null | sRGB | Texture RGB components multiplying by {@link PhongMaterial/diffuse}. If the fourth component (A) is present, it multiplies by {@link PhongMaterial/alpha}. |
+ | {@link PhongMaterial/specularMap} | {@link Texture} |  | null | sRGB | Texture RGB components multiplying by {@link PhongMaterial/specular}. If the fourth component (A) is present, it multiplies by {@link PhongMaterial/alpha}. |
+ | {@link PhongMaterial/emissiveMap} | {@link Texture} |  | null | linear | Texture with RGB components multiplying by {@link PhongMaterial/emissive}. |
+ | {@link PhongMaterial/alphaMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link PhongMaterial/alpha}. |
+ | {@link PhongMaterial/occlusionMap} | {@link Texture} |  | null | linear | Ambient occlusion texture multiplying by {@link PhongMaterial/ambient}, {@link PhongMaterial/diffuse} and {@link PhongMaterial/specular}. |
+ | {@link PhongMaterial/normalMap} | {@link Texture} |  | null | linear | Tangent-space normal map. |
+ | {@link PhongMaterial/diffuseFresnel} | {@link Fresnel} |  | null |  | Fresnel term applied to {@link PhongMaterial/diffuse}. |
+ | {@link PhongMaterial/specularFresnel} | {@link Fresnel} |  | null |  | Fresnel term applied to {@link PhongMaterial/specular}. |
+ | {@link PhongMaterial/emissiveFresnel} | {@link Fresnel} |  | null |  | Fresnel term applied to {@link PhongMaterial/emissive}. |
+ | {@link PhongMaterial/reflectivityFresnel} | {@link Fresnel} |  | null |  | Fresnel term applied to {@link PhongMaterial/reflectivity}. |
+ | {@link PhongMaterial/alphaFresnel} | {@link Fresnel} |  | null |  | Fresnel term applied to {@link PhongMaterial/alpha}. |
+ | {@link PhongMaterial/lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
+ | {@link PhongMaterial/pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
+ | {@link PhongMaterial/alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
+ | {@link PhongMaterial/alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
+ | {@link PhongMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
+ | {@link PhongMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
  In this example we have a Mesh with
 
- * a {{#crossLink "Lights"}}{{/crossLink}} containing an {{#crossLink "AmbientLight"}}{{/crossLink}} and a {{#crossLink "DirLight"}}{{/crossLink}},
- * a {{#crossLink "PhongMaterial"}}{{/crossLink}} which applies a {{#crossLink "Texture"}}{{/crossLink}} as a diffuse map and a specular {{#crossLink "Fresnel"}}{{/crossLink}}, and
- * a {{#crossLink "TorusGeometry"}}{{/crossLink}}.
+ * a {@link Lights} containing an {@link AmbientLight} and a {@link DirLight},
+ * a {@link PhongMaterial} which applies a {@link Texture} as a diffuse map and a specular {@link Fresnel}, and
+ * a {@link TorusGeometry}.
 
  ```` javascript
  var torus = new xeokit.Mesh({
@@ -92,8 +92,8 @@
 
  ### Alpha Blending
 
- Let's make our torus transparent. We'll update its PhongMaterial's {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}
- and {{#crossLink "PhongMaterial/alphaMode:property"}}{{/crossLink}}, causing it to blend 50% with the background:
+ Let's make our torus transparent. We'll update its PhongMaterial's {@link PhongMaterial/alpha}
+ and {@link PhongMaterial/alphaMode}, causing it to blend 50% with the background:
 
  ````javascript
  torus.material.alpha = 0.5;
@@ -103,9 +103,9 @@
 
  ### Alpha Masking
 
- Now let's make holes in our torus instead. We'll give its PhongMaterial an {{#crossLink "PhongMaterial/alphaMap:property"}}{{/crossLink}}
- and configure {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}, {{#crossLink "PhongMaterial/alphaMode:property"}}{{/crossLink}},
- and {{#crossLink "PhongMaterial/alphaCutoff:property"}}{{/crossLink}} to treat it as an alpha mask:
+ Now let's make holes in our torus instead. We'll give its PhongMaterial an {@link PhongMaterial/alphaMap}
+ and configure {@link PhongMaterial/alpha}, {@link PhongMaterial/alphaMode},
+ and {@link PhongMaterial/alphaCutoff} to treat it as an alpha mask:
 
  ````javascript
  torus.material.alphaMap = new xeokit.Texture({
@@ -124,9 +124,9 @@
  @submodule materials
  @constructor
  @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The PhongMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this PhongMaterial.
  @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial ambient color.
  @param [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial diffuse color.
@@ -134,27 +134,27 @@
  @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} PhongMaterial emissive color.
  @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
  @param [cfg.shininess=80] {Number} Scalar in range 0-128 that determines the size and sharpness of specular highlights.
- @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {{#crossLink "CubeMap"}}CubeMap{{/crossLink}} is reflected.
- @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "lines".
- @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "points".
- @param [cfg.ambientMap=null] {Texture} A ambient map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will multiply by the diffuse property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.diffuseMap=null] {Texture} A diffuse map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will override the effect of the diffuse property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.specularMap=null] {Texture} A specular map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will override the effect of the specular property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.emissiveMap=undefined] {Texture} An emissive map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will override the effect of the emissive property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.normalMap=undefined] {Texture} A normal map {{#crossLink "Texture"}}Texture{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.alphaMap=undefined] {Texture} An alpha map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will override the effect of the alpha property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.reflectivityMap=undefined] {Texture} A reflectivity control map {{#crossLink "Texture"}}Texture{{/crossLink}}, which will override the effect of the reflectivity property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.occlusionMap=null] {Texture} An occlusion map {{#crossLink "Texture"}}Texture{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.diffuseFresnel=undefined] {Fresnel} A diffuse {{#crossLink "Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.specularFresnel=undefined] {Fresnel} A specular {{#crossLink "Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.emissiveFresnel=undefined] {Fresnel} An emissive {{#crossLink "Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.alphaFresnel=undefined] {Fresnel} An alpha {{#crossLink "Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.reflectivityFresnel=undefined] {Fresnel} A reflectivity {{#crossLink "Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
+ @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
+ @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
+ @param [cfg.ambientMap=null] {Texture} A ambient map {@link Texture"}}Texture{{/crossLink}}, which will multiply by the diffuse property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.diffuseMap=null] {Texture} A diffuse map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the diffuse property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.specularMap=null] {Texture} A specular map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the specular property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.emissiveMap=undefined] {Texture} An emissive map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the emissive property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.normalMap=undefined] {Texture} A normal map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.alphaMap=undefined] {Texture} An alpha map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the alpha property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.reflectivityMap=undefined] {Texture} A reflectivity control map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the reflectivity property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.occlusionMap=null] {Texture} An occlusion map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.diffuseFresnel=undefined] {Fresnel} A diffuse {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.specularFresnel=undefined] {Fresnel} A specular {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.emissiveFresnel=undefined] {Fresnel} An emissive {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.alphaFresnel=undefined] {Fresnel} An alpha {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.reflectivityFresnel=undefined] {Fresnel} A reflectivity {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode - accepted values are "opaque", "blend" and "mask".
- See the {{#crossLink "PhongMaterial/alphaMode:property"}}{{/crossLink}} property for more info.
- @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value. See the {{#crossLink "PhongMaterial/alphaCutoff:property"}}{{/crossLink}} property for more info.
- @param [cfg.backfaces=false] {Boolean} Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ See the {@link PhongMaterial/alphaMode} property for more info.
+ @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value. See the {@link PhongMaterial/alphaCutoff} property for more info.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
  */
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
@@ -363,7 +363,7 @@ class PhongMaterial extends Material {
     /**
      The PhongMaterial's diffuse color.
 
-     Multiplies by {{#crossLink "PhongMaterial/diffuseMap:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/diffuseMap}.
 
      @property diffuse
      @default [1.0, 1.0, 1.0]
@@ -395,7 +395,7 @@ class PhongMaterial extends Material {
     /**
      The material's specular color.
 
-     Multiplies by {{#crossLink "PhongMaterial/specularMap:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/specularMap}.
 
      @property specular
      @default [1.0, 1.0, 1.0]
@@ -427,7 +427,7 @@ class PhongMaterial extends Material {
     /**
      The PhongMaterial's emissive color.
 
-     Multiplies by {{#crossLink "PhongMaterial/emissiveMap:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/emissiveMap}.
 
      @property emissive
      @default [0.0, 0.0, 0.0]
@@ -461,7 +461,7 @@ class PhongMaterial extends Material {
 
      A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
 
-     Multiplies by {{#crossLink "PhongMaterial/alphaMap:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/alphaMap}.
 
      @property alpha
      @default 1.0
@@ -533,11 +533,11 @@ class PhongMaterial extends Material {
     }
 
     /**
-     Scalar in range 0-1 that controls how much {{#crossLink "CubeMap"}}CubeMap{{/crossLink}} is reflected by this PhongMaterial.
+     Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected by this PhongMaterial.
 
      The surface will be non-reflective when this is 0, and completely mirror-like when it is 1.0.
 
-     Multiplies by {{#crossLink "PhongMaterial/reflectivityMap:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/reflectivityMap}.
 
      @property reflectivity
      @default 1.0
@@ -567,7 +567,7 @@ class PhongMaterial extends Material {
     /**
      Ambient map.
 
-     Multiplies by {{#crossLink "PhongMaterial/ambient:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/ambient}.
 
      @property ambientMap
      @default undefined
@@ -581,7 +581,7 @@ class PhongMaterial extends Material {
     /**
      Diffuse map.
 
-     Multiplies by {{#crossLink "PhongMaterial/diffuse:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/diffuse}.
 
      @property diffuseMap
      @default undefined
@@ -595,7 +595,7 @@ class PhongMaterial extends Material {
     /**
      Specular map.
 
-     Multiplies by {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/specular}.
 
      @property specularMap
      @default undefined
@@ -610,7 +610,7 @@ class PhongMaterial extends Material {
     /**
      Emissive map.
 
-     Multiplies by {{#crossLink "PhongMaterial/emissive:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/emissive}.
 
      @property emissiveMap
      @default undefined
@@ -624,7 +624,7 @@ class PhongMaterial extends Material {
     /**
      Alpha map.
 
-     Multiplies by {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/alpha}.
 
      @property alphaMap
      @default undefined
@@ -638,7 +638,7 @@ class PhongMaterial extends Material {
     /**
      Reflectivity map.
 
-     Multiplies by {{#crossLink "PhongMaterial/reflectivity:property"}}{{/crossLink}}.
+     Multiplies by {@link PhongMaterial/reflectivity}.
 
      @property reflectivityMap
      @default undefined
@@ -665,7 +665,7 @@ class PhongMaterial extends Material {
     /**
      Diffuse Fresnel.
 
-     Applies to {{#crossLink "PhongMaterial/diffuseFresnel:property"}}{{/crossLink}}.
+     Applies to {@link PhongMaterial/diffuseFresnel}.
 
      @property diffuseFresnel
      @default undefined
@@ -679,7 +679,7 @@ class PhongMaterial extends Material {
     /**
      Specular Fresnel.
 
-     Applies to {{#crossLink "PhongMaterial/specular:property"}}{{/crossLink}}.
+     Applies to {@link PhongMaterial/specular}.
 
      @property specularFresnel
      @default undefined
@@ -693,7 +693,7 @@ class PhongMaterial extends Material {
     /**
      Emissive Fresnel.
 
-     Applies to {{#crossLink "PhongMaterial/emissive:property"}}{{/crossLink}}.
+     Applies to {@link PhongMaterial/emissive}.
 
      @property emissiveFresnel
      @default undefined
@@ -707,7 +707,7 @@ class PhongMaterial extends Material {
     /**
      Alpha Fresnel.
 
-     Applies to {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}}.
+     Applies to {@link PhongMaterial/alpha}.
 
      @property alphaFresnel
      @default undefined
@@ -721,7 +721,7 @@ class PhongMaterial extends Material {
     /**
      Reflectivity Fresnel.
 
-     Applies to {{#crossLink "PhongMaterial/reflectivity:property"}}{{/crossLink}}.
+     Applies to {@link PhongMaterial/reflectivity}.
 
      @property reflectivityFresnel
      @default undefined
@@ -736,8 +736,8 @@ class PhongMaterial extends Material {
      The alpha rendering mode.
 
      This governs how alpha is treated. Alpha is the combined result of the
-     {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "PhongMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link PhongMaterial/alpha} and
+     {@link PhongMaterial/alphaMap} properties.
 
      * "opaque" - The alpha value is ignored and the rendered output is fully opaque.
      * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.
@@ -769,14 +769,14 @@ class PhongMaterial extends Material {
     /**
      The alpha cutoff value.
 
-     Specifies the cutoff threshold when {{#crossLink "PhongMaterial/alphaMode:property"}}{{/crossLink}}
+     Specifies the cutoff threshold when {@link PhongMaterial/alphaMode}
      equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
      opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
      material as fully transparent. This value is ignored for other modes.
 
      Alpha is the combined result of the
-     {{#crossLink "PhongMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "PhongMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link PhongMaterial/alpha} and
+     {@link PhongMaterial/alphaMap} properties.
 
      @property alphaCutoff
      @default 0.5
@@ -797,10 +797,10 @@ class PhongMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The backfaces will belong to {{#crossLink "Geometry"}}{{/crossLink}} compoents that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The backfaces will belong to {@link Geometry} compoents that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property backfaces
      @default false
@@ -820,10 +820,10 @@ class PhongMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The faces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The faces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property frontface
      @default "ccw"

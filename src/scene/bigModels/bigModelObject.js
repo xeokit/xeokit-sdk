@@ -1,10 +1,10 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
 /**
- A **BigModelObject** represents a 3D object within a {{#crossLink "BigModel"}}{{/crossLink}}.
+ A **BigModelObject** represents a 3D object within a {@link BigModel}.
 
- * Created by the BigModel {{#crossLink "BigModel/createMesh:method"}}createMesh(){{/crossLink}} method.
- * Owns one or more {{#crossLink "BigModelMesh"}}BigModelMesh{{/crossLink}}es.
+ * Created by the BigModel {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}} method.
+ * Owns one or more {@link BigModelMesh"}}BigModelMesh{{/crossLink}}es.
 
  @class BigModelObject
  @module xeokit
@@ -83,11 +83,11 @@ class BigModelObject {
     /**
      * Indicates if visible.
      *
-     * Only rendered when {{#crossLink "BigModelObject/visible:property"}}{{/crossLink}} is true and
-     * {{#crossLink "BigModelObject/culled:property"}}{{/crossLink}} is false.
+     * Only rendered when {@link BigModelObject/visible} is true and
+     * {@link BigModelObject/culled} is false.
      *
-     * Each visible BigModelObject is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     * {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}} map while its {{#crossLink "BigModelObject/entityType:property"}}{{/crossLink}}
+     * Each visible BigModelObject is registered in its {@link Scene}'s
+     * {@link Scene/visibleEntities} map while its {@link BigModelObject/entityType}
      * is set to a value.
      *
      * @property visible
@@ -125,8 +125,8 @@ class BigModelObject {
     /**
      * Indicates if highlighted.
      *
-     * Each highlighted BigModelObject is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     * {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}} map while its {{#crossLink "BigModelObject/entityType:property"}}{{/crossLink}}
+     * Each highlighted BigModelObject is registered in its {@link Scene}'s
+     * {@link Scene/highlightedEntities} map while its {@link BigModelObject/entityType}
      * is set to a value.
      *
      * @property highlighted
@@ -160,8 +160,8 @@ class BigModelObject {
     /**
      * Indicates if ghosted.
      *
-     * Each ghosted BigModelObject is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     * {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}} map while its {{#crossLink "BigModelObject/entityType:property"}}{{/crossLink}}
+     * Each ghosted BigModelObject is registered in its {@link Scene}'s
+     * {@link Scene/ghostedEntities} map while its {@link BigModelObject/entityType}
      * is set to a value.
      *
      * @property ghosted
@@ -195,8 +195,8 @@ class BigModelObject {
     /**
      * Indicates if selected.
      *
-     * Each selected BigModelObject is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     * {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}} map while its {{#crossLink "BigModelObject/entityType:property"}}{{/crossLink}}
+     * Each selected BigModelObject is registered in its {@link Scene}'s
+     * {@link Scene/selectedEntities} map while its {@link BigModelObject/entityType}
      * is set to a value.
      *
      * @property selected
@@ -258,7 +258,7 @@ class BigModelObject {
     /**
      * Indicates if clippable.
      *
-     * Clipping is done by the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}} component.
+     * Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
      *
      * @property clippable
      * @default true
@@ -311,7 +311,7 @@ class BigModelObject {
     /**
      * Whether or not to allow picking.
      *
-     * Picking is done via calls to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     * Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
      *
      * @property pickable
      * @default true

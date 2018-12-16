@@ -17,7 +17,7 @@ class QuadraticBezierCurve extends Curve {
     /**
      Starting point on this QuadraticBezierCurve.
 
-     Fires a {{#crossLink "QuadraticBezierCurve/v0:event"}}{{/crossLink}} event on change.
+     Fires a {@link QuadraticBezierCurve/v0:event} event on change.
 
      @property v0
      @default [0.0, 0.0, 0.0]
@@ -27,7 +27,7 @@ class QuadraticBezierCurve extends Curve {
 
         /**
          * Fired whenever this QuadraticBezierCurve's
-         * {{#crossLink "QuadraticBezierCurve/v0:property"}}{{/crossLink}} property changes.
+         * {@link QuadraticBezierCurve/v0} property changes.
          * @event v0
          * @param value The property's new value
          */
@@ -41,7 +41,7 @@ class QuadraticBezierCurve extends Curve {
     /**
      Middle control point on this QuadraticBezierCurve.
 
-     Fires a {{#crossLink "QuadraticBezierCurve/v1:event"}}{{/crossLink}} event on change.
+     Fires a {@link QuadraticBezierCurve/v1:event} event on change.
 
      @property v1
      @default [0.0, 0.0, 0.0]
@@ -51,7 +51,7 @@ class QuadraticBezierCurve extends Curve {
 
         /**
          * Fired whenever this QuadraticBezierCurve's
-         * {{#crossLink "QuadraticBezierCurve/v1:property"}}{{/crossLink}} property changes.
+         * {@link QuadraticBezierCurve/v1} property changes.
          * @event v1
          * @param value The property's new value
          */
@@ -65,7 +65,7 @@ class QuadraticBezierCurve extends Curve {
     /**
      End point on this QuadraticBezierCurve.
 
-     Fires a {{#crossLink "QuadraticBezierCurve/v2:event"}}{{/crossLink}} event on change.
+     Fires a {@link QuadraticBezierCurve/v2:event} event on change.
 
      @property v2
      @default [0.0, 0.0, 0.0]
@@ -74,7 +74,7 @@ class QuadraticBezierCurve extends Curve {
     set v2(value) {
         /**
          * Fired whenever this QuadraticBezierCurve's
-         * {{#crossLink "QuadraticBezierCurve/v2:property"}}{{/crossLink}} property changes.
+         * {@link QuadraticBezierCurve/v2} property changes.
          * @event v2
          * @param value The property's new value
          */
@@ -90,7 +90,7 @@ class QuadraticBezierCurve extends Curve {
 
      Automatically clamps to range [0..1].
 
-     Fires a {{#crossLink "QuadraticBezierCurve/t:event"}}{{/crossLink}} event on change.
+     Fires a {@link QuadraticBezierCurve/t:event} event on change.
 
      @property t
      @default 0
@@ -101,7 +101,7 @@ class QuadraticBezierCurve extends Curve {
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
         /**
          * Fired whenever this QuadraticBezierCurve's
-         * {{#crossLink "QuadraticBezierCurve/t:property"}}{{/crossLink}} property changes.
+         * {@link QuadraticBezierCurve/t} property changes.
          * @event t
          * @param value The property's new value
          */
@@ -113,7 +113,7 @@ class QuadraticBezierCurve extends Curve {
     }
 
     /**
-     Point on this QuadraticBezierCurve at position {{#crossLink "QuadraticBezierCurve/t:property"}}{{/crossLink}}.
+     Point on this QuadraticBezierCurve at position {@link QuadraticBezierCurve/t}.
 
      @property point
      @type {{Array of Number}}

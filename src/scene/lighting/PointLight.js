@@ -1,6 +1,6 @@
 /**
  A **PointLight** defines a positional light source that originates from a single point and spreads outward in all directions,
- to illuminate {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ to illuminate {@link Mesh"}}Meshes{{/crossLink}}.
 
  <a href="../../examples/#lights_point_world_normalMap"><img src="http://i.giphy.com/3o6ZsZoFGIOJ2nlmN2.gif"></img></a>
 
@@ -8,14 +8,14 @@
 
  * PointLights have a position, but no direction.
  * PointLights may be defined in either **World** or **View** coordinate space. When in World-space, their positions
- are relative to the World coordinate system, and will appear to move as the {{#crossLink "Camera"}}{{/crossLink}} moves.
+ are relative to the World coordinate system, and will appear to move as the {@link Camera} moves.
  When in View-space, their positions are relative to the View coordinate system, and will behave as if fixed to the viewer's
- head as the {{#crossLink "Camera"}}{{/crossLink}} moves.
- * PointLights have {{#crossLink "PointLight/constantAttenuation:property"}}{{/crossLink}}, {{#crossLink "PointLight/linearAttenuation:property"}}{{/crossLink}} and
- {{#crossLink "PointLight/quadraticAttenuation:property"}}{{/crossLink}} factors, which indicate how their intensity attenuates over distance.
- * {{#crossLink "AmbientLight"}}{{/crossLink}}, {{#crossLink "DirLight"}}{{/crossLink}},
- {{#crossLink "SpotLight"}}{{/crossLink}} and {{#crossLink "PointLight"}}{{/crossLink}} instances are registered by ID
- on {{#crossLink "Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
+ head as the {@link Camera} moves.
+ * PointLights have {@link PointLight/constantAttenuation}, {@link PointLight/linearAttenuation} and
+ {@link PointLight/quadraticAttenuation} factors, which indicate how their intensity attenuates over distance.
+ * {@link AmbientLight}, {@link DirLight},
+ {@link SpotLight} and {@link PointLight} instances are registered by ID
+ on {@link Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
 
  ## Examples
 
@@ -70,9 +70,9 @@
  @submodule lighting
  @constructor
  @extends Component
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The PointLight configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this PointLight.
  @param [cfg.pos=[ 1.0, 1.0, 1.0 ]] {Float32Array} Position, in either World or View space, depending on the value of the **space** parameter.
  @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} Color of this PointLight.
@@ -174,7 +174,7 @@ class PointLight extends Component {
     /**
      The position of this PointLight.
 
-     This will be either World- or View-space, depending on the value of {{#crossLink "PointLight/space:property"}}{{/crossLink}}.
+     This will be either World- or View-space, depending on the value of {@link PointLight/space}.
 
      @property pos
      @default [1.0, 1.0, 1.0]

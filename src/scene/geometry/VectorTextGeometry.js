@@ -24,7 +24,7 @@ var letters;
         var positions = [];
         var indices = [];
         var text = cfg.text;
-        if (_isNumeric(text)) {
+        if (utils.isNumeric(text)) {
             text = "" + text;
         }
         var lines = (text || "").split("\n");

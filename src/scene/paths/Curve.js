@@ -27,7 +27,7 @@ class Curve extends Component {
     }
 
     /**
-     Tangent on this Curve at position {{#crossLink "Curve/t:property"}}{{/crossLink}}.
+     Tangent on this Curve at position {@link Curve/t}.
 
      @property tangent
      @type {{Array of Number}}

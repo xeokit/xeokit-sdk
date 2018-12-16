@@ -1,24 +1,24 @@
 /**
- A **Canvas** manages a {{#crossLink "Scene"}}Scene{{/crossLink}}'s HTML canvas and its WebGL context.
+ A **Canvas** manages a {@link Scene"}}Scene{{/crossLink}}'s HTML canvas and its WebGL context.
 
  ## Overview
 
- * Each {{#crossLink "Scene"}}Scene{{/crossLink}} provides a Canvas as a read-only property on itself.
- * When a {{#crossLink "Scene"}}Scene{{/crossLink}} is configured with the ID of
+ * Each {@link Scene"}}Scene{{/crossLink}} provides a Canvas as a read-only property on itself.
+ * When a {@link Scene"}}Scene{{/crossLink}} is configured with the ID of
  an existing <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>, then
  the Canvas will bind to that, otherwise the Canvas will automatically create its own.
- * A Canvas will fire a {{#crossLink "Canvas/boundary:event"}}{{/crossLink}} event whenever
+ * A Canvas will fire a {@link Canvas/boundary:event} event whenever
  the <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a> resizes.
  * A Canvas is responsible for obtaining a WebGL context from
  the <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>.
- * A Canvas also fires a {{#crossLink "Canvas/webglContextLost:event"}}{{/crossLink}} event when the WebGL context is
- lost, and a {{#crossLink "Canvas/webglContextRestored:event"}}{{/crossLink}} when it is restored again.
- * The various components within the parent {{#crossLink "Scene"}}Scene{{/crossLink}} will transparently recover on
- the {{#crossLink "Canvas/webglContextRestored:event"}}{{/crossLink}} event.
+ * A Canvas also fires a {@link Canvas/webglContextLost:event} event when the WebGL context is
+ lost, and a {@link Canvas/webglContextRestored:event} when it is restored again.
+ * The various components within the parent {@link Scene"}}Scene{{/crossLink}} will transparently recover on
+ the {@link Canvas/webglContextRestored:event} event.
 
  A Canvas also has
 
- * a {{#crossLink "Progress"}}{{/crossLink}}, which shows a busy progress when a {{#crossLink "Model"}}{{/crossLink}}
+ * a {@link Progress}, which shows a busy progress when a {@link Model}
  is loading, or when directed by application logic, and
 
  ## Examples
@@ -30,8 +30,8 @@
 
  ## Usage
 
- In the example below, we're creating a {{#crossLink "Scene"}}Scene{{/crossLink}} without specifying an HTML canvas element
- for it. This causes the {{#crossLink "Scene"}}Scene{{/crossLink}}'s Canvas component to create its own default element
+ In the example below, we're creating a {@link Scene"}}Scene{{/crossLink}} without specifying an HTML canvas element
+ for it. This causes the {@link Scene"}}Scene{{/crossLink}}'s Canvas component to create its own default element
  within the page. Then we subscribe to various events fired by that Canvas component.
 
  ```` javascript
@@ -63,7 +63,7 @@
  ````
 
  When we want to bind the Canvas to an existing HTML canvas element, configure the
- {{#crossLink "Scene"}}{{/crossLink}} with the ID of the element, like this:
+ {@link Scene} with the ID of the element, like this:
 
  ```` javascript
  // Create a Scene, this time configuring it with the
@@ -76,7 +76,7 @@
 
  ````
 
- The {{#crossLink "Scene"}}{{/crossLink}} will attempt to get use WebGL 2, or fall back on WebGL 1
+ The {@link Scene} will attempt to get use WebGL 2, or fall back on WebGL 1
  if that's absent. If you just want WebGL 1, disable WebGL 2 like so:
 
  ```` javascript
@@ -134,7 +134,7 @@ class Canvas extends Component {
         super.init(cfg);
 
         /**
-         * The HTML canvas. When the {{#crossLink "Viewer"}}{{/crossLink}} was configured with the ID of an existing canvas within the DOM,
+         * The HTML canvas. When the {@link Viewer} was configured with the ID of an existing canvas within the DOM,
          * then this property will be that element, otherwise it will be a full-page canvas that this Canvas has
          * created by default, with a z-index of -10000.
          *
@@ -340,7 +340,7 @@ class Canvas extends Component {
                     boundary[3] = newHeight;
 
                     /**
-                     * Fired whenever this Canvas's {{#crossLink "Canvas/boundary:property"}}{{/crossLink}} property changes.
+                     * Fired whenever this Canvas's {@link Canvas/boundary} property changes.
                      *
                      * @event boundary
                      * @param value The property's new value
@@ -503,7 +503,7 @@ class Canvas extends Component {
      and return it via the callback.
 
      When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     possible when you have configured the Canvas's {{#crossLink "Scene"}}Scene{{/crossLink}} to preserve the
+     possible when you have configured the Canvas's {@link Scene"}}Scene{{/crossLink}} to preserve the
      WebGL drawing buffer, which has a performance overhead.
 
      #### Usage:
@@ -613,7 +613,7 @@ class Canvas extends Component {
     }
 
     /**
-     A background color for the canvas. This is overridden by {{#crossLink "Canvas/backgroundImage:property"}}{{/crossLink}}.
+     A background color for the canvas. This is overridden by {@link Canvas/backgroundImage}.
 
      You can set this to a new color at any time.
 
@@ -638,7 +638,7 @@ class Canvas extends Component {
     }
 
     /**
-     URL of a background image for the canvas. This is overrided by {{#crossLink "Canvas/backgroundColor/property"}}{{/crossLink}}.
+     URL of a background image for the canvas. This is overrided by {@link Canvas/backgroundColor/property}.
 
      You can set this to a new file path at any time.
 
@@ -669,7 +669,7 @@ class Canvas extends Component {
     }
 
     /**
-     The busy {{#crossLink "Spinner"}}{{/crossLink}} for this Canvas.
+     The busy {@link Spinner} for this Canvas.
 
      @property spinner
      @type Spinner

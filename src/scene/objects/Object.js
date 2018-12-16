@@ -1,19 +1,19 @@
 /**
- An **Object** is a 3D element within a xeokit {{#crossLink "Scene"}}Scene{{/crossLink}}.
+ An **Object** is a 3D element within a xeokit {@link Scene"}}Scene{{/crossLink}}.
 
  ## Overview
 
  Object is an abstract base class that's subclassed by:
 
- * {{#crossLink "Mesh"}}{{/crossLink}}, which represents a drawable 3D primitive.
- * {{#crossLink "Group"}}{{/crossLink}}, which is a composite Object that represents a group of child Objects.
- * {{#crossLink "Model"}}{{/crossLink}}, which is a Group and is subclassed by {{#crossLink "GLTFModel"}}{{/crossLink}},
- {{#crossLink "STLModel"}}{{/crossLink}}, {{#crossLink "OBJModel"}}{{/crossLink}} etc. A Model can contain child Groups
- and {{#crossLink "Mesh"}}Meshes{{/crossLink}} that represent its component parts.
+ * {@link Mesh}, which represents a drawable 3D primitive.
+ * {@link Group}, which is a composite Object that represents a group of child Objects.
+ * {@link Model}, which is a Group and is subclassed by {@link GLTFModel},
+ {@link STLModel}, {@link OBJModel} etc. A Model can contain child Groups
+ and {@link Mesh"}}Meshes{{/crossLink}} that represent its component parts.
 
  As shown in the examples below, these component types can be connected into flexible scene hierarchies that contain
- content loaded from multiple sources and file formats. Since a {{#crossLink "Group"}}{{/crossLink}} implements the *[Composite](https://en.wikipedia.org/wiki/Composite_pattern)* pattern,
- property updates on a {{#crossLink "Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it.
+ content loaded from multiple sources and file formats. Since a {@link Group} implements the *[Composite](https://en.wikipedia.org/wiki/Composite_pattern)* pattern,
+ property updates on a {@link Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it.
 
  This page mostly covers the base functionality provided by Object, while the pages for the subclasses document the
  functionality specific to those subclasses.
@@ -31,7 +31,7 @@
 
  ### Creating an Object hierarchy
 
- Let's create a {{#crossLink "Group"}}Group{{/crossLink}} that represents a table, with five child {{#crossLink "Mesh"}}{{/crossLink}}es for its top and legs:
+ Let's create a {@link Group"}}Group{{/crossLink}} that represents a table, with five child {@link Mesh}es for its top and legs:
 
  <a href="../../examples/#objects_hierarchy"><img src="../../assets/images/screenshots/objectHierarchy.png"></img></a>
 
@@ -109,42 +109,42 @@
 
  ### Accessing Objects
 
- We can then get those {{#crossLink "Mesh"}}Mesh{{/crossLink}} Objects by index from the {{#crossLink "Group"}}Group{{/crossLink}}'s children property:
+ We can then get those {@link Mesh"}}Mesh{{/crossLink}} Objects by index from the {@link Group"}}Group{{/crossLink}}'s children property:
 
  ````javascript
  var blueLeg = table.children[2];
  blueLeg.highlighted = true;
  ````
 
- We can also get them by ID from the {{#crossLink "Group"}}Group{{/crossLink}}'s childMap property:
+ We can also get them by ID from the {@link Group"}}Group{{/crossLink}}'s childMap property:
 
  ````javascript
  var blueLeg = table.childMap["blueLeg"];
  blueLeg.highlighted = true;
  ````
 
- or by ID from the {{#crossLink "Scene"}}{{/crossLink}}'s components map:
+ or by ID from the {@link Scene}'s components map:
 
  ````javascript
  var blueLeg = table.scene.components["blueLeg"];
  blueLeg.highlighted = true;
  ````
 
- or from the {{#crossLink "Scene"}}{{/crossLink}}'s objects map (only Objects are in this map, and {{#crossLink "Mesh"}}Meshes{{/crossLink}} are Objects):
+ or from the {@link Scene}'s objects map (only Objects are in this map, and {@link Mesh"}}Meshes{{/crossLink}} are Objects):
 
  ````javascript
  var blueLeg = table.scene.objects["blueLeg"];
  blueLeg.highlighted = true;
  ````
 
- or from the {{#crossLink "Scene"}}{{/crossLink}}'s meshes map (only {{#crossLink "Mesh"}}Meshes{{/crossLink}} are in that map):
+ or from the {@link Scene}'s meshes map (only {@link Mesh"}}Meshes{{/crossLink}} are in that map):
 
  ````javascript
  var blueLeg = table.scene.meshes["blueLeg"];
  blueLeg.highlighted = true;
  ````
- For convenience, the {{#crossLink "Scene"}}{{/crossLink}}'s objects map explicitly registers what Objects exist within the {{#crossLink "Scene"}}{{/crossLink}}, while its meshes map
- explicitly registers what {{#crossLink "Mesh"}}Meshes{{/crossLink}} exist.
+ For convenience, the {@link Scene}'s objects map explicitly registers what Objects exist within the {@link Scene}, while its meshes map
+ explicitly registers what {@link Mesh"}}Meshes{{/crossLink}} exist.
 
  #### GUIDs
 
@@ -159,24 +159,24 @@
 
  ### Updating Objects
 
- As mentioned earlier, property updates on a {{#crossLink "Group"}}Group{{/crossLink}} {{#crossLink "Object"}}{{/crossLink}} will apply recursively to all
- sub-Objects within it, eventually updating the {{#crossLink "Mesh"}}{{/crossLink}} {{#crossLink "Object"}}Objects{{/crossLink}} at the leaves.
+ As mentioned earlier, property updates on a {@link Group"}}Group{{/crossLink}} {@link Object} will apply recursively to all
+ sub-Objects within it, eventually updating the {@link Mesh} {@link Object"}}Objects{{/crossLink}} at the leaves.
 
  These properties, defined in Object, are:
 
- * {{#crossLink "Object/visible:property"}}visible{{/crossLink}}
- * {{#crossLink "Object/highlighted:property"}}highlighted{{/crossLink}}
- * {{#crossLink "Object/ghosted:property"}}ghosted{{/crossLink}}
- * {{#crossLink "Object/selected:property"}}selected{{/crossLink}}
- * {{#crossLink "Object/edges:property"}}edges{{/crossLink}}
- * {{#crossLink "Object/colorize:property"}}colorize{{/crossLink}}
- * {{#crossLink "Object/opacity:property"}}opacity{{/crossLink}}
- * {{#crossLink "Object/clippable:property"}}clippable{{/crossLink}}
- * {{#crossLink "Object/collidable:property"}}collidable{{/crossLink}}
- * {{#crossLink "Object/pickable:property"}}pickable{{/crossLink}}
- * {{#crossLink "Object/castShadow:property"}}castShadow{{/crossLink}}
- * {{#crossLink "Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
- * {{#crossLink "Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
+ * {@link Object/visible:property"}}visible{{/crossLink}}
+ * {@link Object/highlighted:property"}}highlighted{{/crossLink}}
+ * {@link Object/ghosted:property"}}ghosted{{/crossLink}}
+ * {@link Object/selected:property"}}selected{{/crossLink}}
+ * {@link Object/edges:property"}}edges{{/crossLink}}
+ * {@link Object/colorize:property"}}colorize{{/crossLink}}
+ * {@link Object/opacity:property"}}opacity{{/crossLink}}
+ * {@link Object/clippable:property"}}clippable{{/crossLink}}
+ * {@link Object/collidable:property"}}collidable{{/crossLink}}
+ * {@link Object/pickable:property"}}pickable{{/crossLink}}
+ * {@link Object/castShadow:property"}}castShadow{{/crossLink}}
+ * {@link Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
+ * {@link Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
 
  Let's highlight the whole table in one shot:
 
@@ -226,7 +226,7 @@
  cameraFlight.flyTo(tableTopMesh.aabb);
  ````
 
- Those boundaries will automatically update whenever we add or remove child {{#crossLink "Object"}}Objects{{/crossLink}} or {{#crossLink "Mesh"}}Meshes{{/crossLink}}, or update child {{#crossLink "Mesh"}}Meshes{{/crossLink}}' {{#crossLink "Geometry"}}Geometries{{/crossLink}}
+ Those boundaries will automatically update whenever we add or remove child {@link Object"}}Objects{{/crossLink}} or {@link Mesh"}}Meshes{{/crossLink}}, or update child {@link Mesh"}}Meshes{{/crossLink}}' {@link Geometry"}}Geometries{{/crossLink}}
  or modeling transforms.
 
  Let's follow the table top wherever it goes:
@@ -249,7 +249,7 @@
 
  ### Adding and removing Objects
 
- Let's add another {{#crossLink "Mesh"}}Mesh{{/crossLink}} to our table {{#crossLink "Group"}}Group{{/crossLink}}, a sort of spherical ornament sitting on the table top:
+ Let's add another {@link Mesh"}}Mesh{{/crossLink}} to our table {@link Group"}}Group{{/crossLink}}, a sort of spherical ornament sitting on the table top:
 
  ````javascript
  table.addChild(new xeokit.Mesh({
@@ -263,7 +263,7 @@
  });
  ````
 
- That's going to update the {{#crossLink "Group"}}Group{{/crossLink}}'s boundary, as mentioned earlier.
+ That's going to update the {@link Group"}}Group{{/crossLink}}'s boundary, as mentioned earlier.
 
  To remove it, just destroy it:
 
@@ -273,7 +273,7 @@
 
  ### Models within Groups
 
- Now let's create a {{#crossLink "Group"}}Group{{/crossLink}} that contains three Models. Recall that Models are {{#crossLink "Group"}}Group{{/crossLink}}s, which are Objects.
+ Now let's create a {@link Group"}}Group{{/crossLink}} that contains three Models. Recall that Models are {@link Group"}}Group{{/crossLink}}s, which are Objects.
 
  <a href="../../examples/#objects_hierarchy_models"><img src="../../assets/images/screenshots/modelHierarchy.png"></img></a>
 
@@ -314,52 +314,52 @@
  });
  ````
 
- Like with the {{#crossLink "Mesh"}}{{/crossLink}} Objects in the previous example, we can then get those Models by index from the {{#crossLink "Group"}}Group{{/crossLink}}'s children property:
+ Like with the {@link Mesh} Objects in the previous example, we can then get those Models by index from the {@link Group"}}Group{{/crossLink}}'s children property:
 
  ````javascript
  var hoverBike = myModels.children[1];
  hoverBike.scale = [0.5, 0.5, 0.5];
  ````
 
- or by ID from the {{#crossLink "Group"}}Group{{/crossLink}}'s childMap property:
+ or by ID from the {@link Group"}}Group{{/crossLink}}'s childMap property:
 
  ````javascript
  var hoverBike = myModels.childMap["hoverBike"];
  hoverBike.scale = [0.5, 0.5, 0.5];
  ````
 
- or by ID from the {{#crossLink "Scene"}}{{/crossLink}}'s components map:
+ or by ID from the {@link Scene}'s components map:
 
  ````javascript
  var hoverBike = myModels.scene.components["hoverBike"];
  hoverBike.scale = [0.75, 0.75, 0.75];
  ````
 
- or from the {{#crossLink "Scene"}}{{/crossLink}}'s objects map (only Objects are in this map, and Models are Objects):
+ or from the {@link Scene}'s objects map (only Objects are in this map, and Models are Objects):
 
  ````javascript
  var hoverBike = myModels.scene.objects["hoverBike"];
  hoverBike.scale = [0.75, 0.75, 0.75];
  ````
 
- or from the {{#crossLink "Scene"}}{{/crossLink}}'s models map (which only contains Models):
+ or from the {@link Scene}'s models map (which only contains Models):
 
  ````javascript
  var hoverBike = myModels.scene.models["hoverBike"];
  hoverBike.scale = [0.5, 0.5, 0.5];
  ````
 
- For convenience, the {{#crossLink "Scene"}}{{/crossLink}}'s objects map explicitly registers what Objects exist within the {{#crossLink "Scene"}}{{/crossLink}}, while its models map
+ For convenience, the {@link Scene}'s objects map explicitly registers what Objects exist within the {@link Scene}, while its models map
  explicitly registers what Models exist.
 
- As mentioned earlier, property updates on a {{#crossLink "Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it. Let's highlight
- all the Models in the {{#crossLink "Group"}}Group{{/crossLink}}, in one shot:
+ As mentioned earlier, property updates on a {@link Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it. Let's highlight
+ all the Models in the {@link Group"}}Group{{/crossLink}}, in one shot:
 
  ````javascript
  myModels.highlighted = true;
  ````
 
- and just for fun, let's scale the {{#crossLink "Group"}}Group{{/crossLink}} down, then rotate one of the Models, relative to the {{#crossLink "Group"}}Group{{/crossLink}}:
+ and just for fun, let's scale the {@link Group"}}Group{{/crossLink}} down, then rotate one of the Models, relative to the {@link Group"}}Group{{/crossLink}}:
 
  ````javascript
  myModels.scale = [0.5, 0.5, 0.5]; // (X,Y,Z)
@@ -368,11 +368,11 @@
 
  ### Objects within Models
 
- Models are Objects that plug into the scene graph, containing child Objects of their own.  The {{#crossLink "GLTFModel"}}{{/crossLink}}
+ Models are Objects that plug into the scene graph, containing child Objects of their own.  The {@link GLTFModel}
  in the previous example loads its child Objects from the glTF scene node graph.
 
- The root Objects within the GLTFModel will be available in the GLTFModel's {{#crossLink "GLTFModel/children:property"}}{{/crossLink}} and {{#crossLink "GLTFModel/childMap:property"}}{{/crossLink}}
- properties, while all its Objects and Meshes (at the leaves) will be available in the GLTFModel's {{#crossLink "GLTFModel/objects:property"}}{{/crossLink}} property.
+ The root Objects within the GLTFModel will be available in the GLTFModel's {@link GLTFModel/children} and {@link GLTFModel/childMap}
+ properties, while all its Objects and Meshes (at the leaves) will be available in the GLTFModel's {@link GLTFModel/objects} property.
 
 
  ````javascript
@@ -395,7 +395,7 @@
 
  #### entityType
 
- In xeokit, we classify an Object as an entity by setting its {{#crossLink "Object/entityType:property"}}{{/crossLink}} to an arbitrary string
+ In xeokit, we classify an Object as an entity by setting its {@link Object/entityType} to an arbitrary string
  value that represents its class. Once we've done that, we regard the Object as being an "entity" within our semantic data model, in
  addition to being a regular Object within our scene graph. Note that entities in xeokit are not to be confused with *entity-component systems*,
  which are a completely different concept.
@@ -411,12 +411,12 @@
 
  Objects that are not part of any semantic model, such as helpers and gizmos, would not get an ````entityType````, and so would
  be effectively invisible to maps and methods that deal with specifically with entities. Use component IDs and "lower-level" maps
- like  {{#crossLink "Scene/components:property"}}Scene#components{{/crossLink}},
- {{#crossLink "Scene/objects:property"}}Scene#objects{{/crossLink}},
- {{#crossLink "Scene/meshes:property"}}Scene#meshes{{/crossLink}} and
- {{#crossLink "Scene/models:property"}}Scene#models{{/crossLink}} to work with such Objects as non-semantic scene elements,
- and "higher-level" maps like {{#crossLink "Scene/entities:property"}}Scene#entities{{/crossLink}} and
- {{#crossLink "Scene/entityTypes:property"}}Scene#entityTypes{{/crossLink}} to work with Objects that are entities.
+ like  {@link Scene/components:property"}}Scene#components{{/crossLink}},
+ {@link Scene/objects:property"}}Scene#objects{{/crossLink}},
+ {@link Scene/meshes:property"}}Scene#meshes{{/crossLink}} and
+ {@link Scene/models:property"}}Scene#models{{/crossLink}} to work with such Objects as non-semantic scene elements,
+ and "higher-level" maps like {@link Scene/entities:property"}}Scene#entities{{/crossLink}} and
+ {@link Scene/entityTypes:property"}}Scene#entityTypes{{/crossLink}} to work with Objects that are entities.
 
  To show how to use a semantic model with xeokit, let's redefine the Object hierarchy we created earlier, this
  time assigning some imaginary domain-specific entity classes to our table Mesh Objects:
@@ -496,14 +496,14 @@
  });
  ````
 
- This time, we've set the {{#crossLink "Object/entityType:property"}}{{/crossLink}} property on our Mesh Objects, to
+ This time, we've set the {@link Object/entityType} property on our Mesh Objects, to
  assign our entity classes to them. Our arbitrary semantic model is very simple, with just two classes:
 
  * "supporting" for entities that support things (eg. table legs), and
  * "surface" for entities that provide a surface that you can put things on (eg. table tops).
 
- Note that we can assign entity classes to any component type that extends Object, including {{#crossLink "Group"}}{{/crossLink}},
- {{#crossLink "Mesh"}}{{/crossLink}}, {{#crossLink "Model"}}{{/crossLink}}, {{#crossLink "GLTFModel"}}{{/crossLink}} etc.
+ Note that we can assign entity classes to any component type that extends Object, including {@link Group},
+ {@link Mesh}, {@link Model}, {@link GLTFModel} etc.
 
  We can now conveniently work with our Mesh Objects as entities, in addition working with them as ordinary Objects.
 
@@ -528,7 +528,7 @@
  scene.setHighlighted(["supporting", "surface"], true); // Highlight the legs and the table top
  ````
 
- The {{#crossLink "Scene"}}{{/crossLink}} also has convenience maps dedicated to tracking the visibility, ghosted, highlighted
+ The {@link Scene} also has convenience maps dedicated to tracking the visibility, ghosted, highlighted
  and selected states of entity Objects:
 
  ````javascript
@@ -556,7 +556,7 @@
 
  ### Destroying Objects
 
- Call an Object's {{#crossLink "Component/destroy:method"}}Object#destroy(){{/crossLink}} method to destroy it:
+ Call an Object's {@link Component/destroy:method"}}Object#destroy(){{/crossLink}} method to destroy it:
 
  ````JavaScript
  myObject.destroy();
@@ -568,10 +568,10 @@
  @module xeokit
  @submodule objects
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.guid] {String} Optional globally unique identifier. This is unique not only within the {{#crossLink "Scene"}}{{/crossLink}}, but throughout the entire universe.
+ @param [cfg.guid] {String} Optional globally unique identifier. This is unique not only within the {@link Scene}, but throughout the entire universe.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
  @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model.
  @param [cfg.parent] {Object} The parent.
@@ -594,11 +594,11 @@
  @param [cfg.aabbVisible=false] {Boolean}   Indicates if axis-aligned World-space bounding box is visible.
  @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
  @param [cfg.opacity=1.0] {Number}          Opacity factor, multiplies by the rendered fragment alpha.
- @param [cfg.children] {Array(Object)}      Children to add. Children must be in the same {{#crossLink "Scene"}}{{/crossLink}} and will be removed from whatever parents they may already have.
- @param [cfg.inheritStates=true] {Boolean}  Indicates if children given to this constructor should inherit state from this parent as they are added. RenderState includes {{#crossLink "Object/visible:property"}}{{/crossLink}}, {{#crossLink "Object/culled:property"}}{{/crossLink}}, {{#crossLink "Object/pickable:property"}}{{/crossLink}},
- {{#crossLink "Object/clippable:property"}}{{/crossLink}}, {{#crossLink "Object/castShadow:property"}}{{/crossLink}}, {{#crossLink "Object/receiveShadow:property"}}{{/crossLink}},
- {{#crossLink "Object/outlined:property"}}{{/crossLink}}, {{#crossLink "Object/ghosted:property"}}{{/crossLink}}, {{#crossLink "Object/highlighted:property"}}{{/crossLink}},
- {{#crossLink "Object/selected:property"}}{{/crossLink}}, {{#crossLink "Object/colorize:property"}}{{/crossLink}} and {{#crossLink "Object/opacity:property"}}{{/crossLink}}.
+ @param [cfg.children] {Array(Object)}      Children to add. Children must be in the same {@link Scene} and will be removed from whatever parents they may already have.
+ @param [cfg.inheritStates=true] {Boolean}  Indicates if children given to this constructor should inherit state from this parent as they are added. RenderState includes {@link Object/visible}, {@link Object/culled}, {@link Object/pickable},
+ {@link Object/clippable}, {@link Object/castShadow}, {@link Object/receiveShadow},
+ {@link Object/outlined}, {@link Object/ghosted}, {@link Object/highlighted},
+ {@link Object/selected}, {@link Object/colorize} and {@link Object/opacity}.
  @extends Component
  */
 
@@ -634,6 +634,13 @@ class xeokitObject extends Component {
      */
     get type() {
         return "Object";
+    }
+
+    /**
+     * @private
+     */
+    get isObject() {
+       return true;
     }
 
     init(cfg) {
@@ -806,7 +813,7 @@ class xeokitObject extends Component {
     /**
      Adds a child.
 
-     The child must be in the same {{#crossLink "Scene"}}{{/crossLink}}.
+     The child must be in the same {@link Scene}.
 
      If the child already has a parent, will be removed from that parent first.
 
@@ -814,10 +821,10 @@ class xeokitObject extends Component {
 
      @param {Object|String} object Instance or ID of the child to add.
      @param [inheritStates=false] Indicates if the child should inherit state from this parent as it is added. RenderState includes
-     {{#crossLink "Object/visible:property"}}{{/crossLink}}, {{#crossLink "Object/culled:property"}}{{/crossLink}}, {{#crossLink "Object/pickable:property"}}{{/crossLink}},
-     {{#crossLink "Object/clippable:property"}}{{/crossLink}}, {{#crossLink "Object/castShadow:property"}}{{/crossLink}}, {{#crossLink "Object/receiveShadow:property"}}{{/crossLink}},
-     {{#crossLink "Object/outlined:property"}}{{/crossLink}}, {{#crossLink "Object/ghosted:property"}}{{/crossLink}}, {{#crossLink "Object/highlighted:property"}}{{/crossLink}},
-     {{#crossLink "Object/selected:property"}}{{/crossLink}}, {{#crossLink "Object/edges:property"}}{{/crossLink}}, {{#crossLink "Object/colorize:property"}}{{/crossLink}} and {{#crossLink "Object/opacity:property"}}{{/crossLink}}.
+     {@link Object/visible}, {@link Object/culled}, {@link Object/pickable},
+     {@link Object/clippable}, {@link Object/castShadow}, {@link Object/receiveShadow},
+     {@link Object/outlined}, {@link Object/ghosted}, {@link Object/highlighted},
+     {@link Object/selected}, {@link Object/edges}, {@link Object/colorize} and {@link Object/opacity}.
      @returns {Object} The child object.
      */
     addChild(object, inheritStates) {
@@ -836,7 +843,7 @@ class xeokitObject extends Component {
                 return;
             }
         } else {
-            if (!object.isType("Object")) {
+            if (!object.isObject) {
                 this.error("Not a xeokit.Object: " + object.id);
                 return;
             }
@@ -1040,7 +1047,7 @@ class xeokitObject extends Component {
     /**
      Globally unique identifier.
 
-     This is unique not only within the {{#crossLink "Scene"}}{{/crossLink}}, but throughout the entire universe.
+     This is unique not only within the {@link Scene}, but throughout the entire universe.
 
      Only defined when given to the constructor.
 
@@ -1071,7 +1078,7 @@ class xeokitObject extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     Number of child {{#crossLink "Object"}}Objects{{/crossLink}}.
+     Number of child {@link Object"}}Objects{{/crossLink}}.
 
      @property numChildren
      @final
@@ -1082,7 +1089,7 @@ class xeokitObject extends Component {
     }
 
     /**
-     Array of child {{#crossLink "Object"}}Objects{{/crossLink}}.
+     Array of child {@link Object"}}Objects{{/crossLink}}.
 
      @property children
      @final
@@ -1093,7 +1100,7 @@ class xeokitObject extends Component {
     }
 
     /**
-     Child {{#crossLink "Object"}}Objects{{/crossLink}} mapped to their IDs.
+     Child {@link Object"}}Objects{{/crossLink}} mapped to their IDs.
 
      @property childMap
      @final
@@ -1104,7 +1111,7 @@ class xeokitObject extends Component {
     }
 
     /**
-     IDs of child {{#crossLink "Object"}}Objects{{/crossLink}}.
+     IDs of child {@link Object"}}Objects{{/crossLink}}.
 
      @property childIDs
      @final
@@ -1121,7 +1128,7 @@ class xeokitObject extends Component {
      The parent.
 
      The parent Group may also be set by passing the Object to the
-     Group/Model's {{#crossLink "Group/addChild:method"}}addChild(){{/crossLink}} method.
+     Group/Model's {@link Group/addChild:method"}}addChild(){{/crossLink}} method.
 
      @property parent
      @type Group
@@ -1378,11 +1385,11 @@ class xeokitObject extends Component {
     /**
      Indicates if visible.
 
-     Only rendered when {{#crossLink "Object/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Object/culled:property"}}{{/crossLink}} is false.
+     Only rendered when {@link Object/visible} is true and
+     {@link Object/culled} is false.
 
-     Each visible Object is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each visible Object is registered in its {@link Scene}'s
+     {@link Scene/visibleEntities} map while its {@link Object/entityType}
      is set to a value.
 
      @property visible
@@ -1407,8 +1414,8 @@ class xeokitObject extends Component {
     /**
      Indicates if highlighted.
 
-     Each highlighted Object is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each highlighted Object is registered in its {@link Scene}'s
+     {@link Scene/highlightedEntities} map while its {@link Object/entityType}
      is set to a value.
 
      @property highlighted
@@ -1433,8 +1440,8 @@ class xeokitObject extends Component {
     /**
      Indicates if ghosted.
 
-     Each ghosted Object is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each ghosted Object is registered in its {@link Scene}'s
+     {@link Scene/ghostedEntities} map while its {@link Object/entityType}
      is set to a value.
 
      @property ghosted
@@ -1459,8 +1466,8 @@ class xeokitObject extends Component {
     /**
      Indicates if selected.
 
-     Each selected Object is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}} map while its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each selected Object is registered in its {@link Scene}'s
+     {@link Scene/selectedEntities} map while its {@link Object/entityType}
      is set to a value.
 
      @property selected
@@ -1504,8 +1511,8 @@ class xeokitObject extends Component {
     /**
      Indicates if culled from view.
 
-     Only rendered when {{#crossLink "Object/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Object/culled:property"}}{{/crossLink}} is false.
+     Only rendered when {@link Object/visible} is true and
+     {@link Object/culled} is false.
 
      @property culled
      @default false
@@ -1526,7 +1533,7 @@ class xeokitObject extends Component {
     /**
      Indicates if clippable.
 
-     Clipping is done by the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}} component.
+     Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
 
      @property clippable
      @default true
@@ -1566,7 +1573,7 @@ class xeokitObject extends Component {
     /**
      Whether or not to allow picking.
 
-     Picking is done via calls to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
      @property pickable
      @default true

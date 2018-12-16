@@ -15,7 +15,7 @@ class SplineCurve extends Curve {
     /**
      Control points on this SplineCurve.
 
-     Fires a {{#crossLink "SplineCurve/points:event"}}{{/crossLink}} event on change.
+     Fires a {@link SplineCurve/points:event} event on change.
 
      @property points
      @default []
@@ -25,7 +25,7 @@ class SplineCurve extends Curve {
         this._points = value || [];
         /**
          * Fired whenever this SplineCurve's
-         * {{#crossLink "SplineCurve/points:property"}}{{/crossLink}} property changes.
+         * {@link SplineCurve/points} property changes.
          * @event points
          * @param value The property's new value
          */
@@ -41,7 +41,7 @@ class SplineCurve extends Curve {
 
      Automatically clamps to range [0..1].
 
-     Fires a {{#crossLink "SplineCurve/t:event"}}{{/crossLink}} event on change.
+     Fires a {@link SplineCurve/t:event} event on change.
 
      @property t
      @default 0
@@ -52,7 +52,7 @@ class SplineCurve extends Curve {
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
         /**
          * Fired whenever this SplineCurve's
-         * {{#crossLink "SplineCurve/t:property"}}{{/crossLink}} property changes.
+         * {@link SplineCurve/t} property changes.
          * @event t
          * @param value The property's new value
          */
@@ -64,7 +64,7 @@ class SplineCurve extends Curve {
     }
 
     /**
-     Point on this SplineCurve at position {{#crossLink "SplineCurve/t:property"}}{{/crossLink}}.
+     Point on this SplineCurve at position {@link SplineCurve/t}.
 
      @property point
      @type {{Array of Number}}

@@ -32,7 +32,7 @@ function Core() {
     this.version = "1.0.0";
 
     /**
-     Existing {{#crossLink "Scene"}}Scene{{/crossLink}}s , mapped to their IDs
+     Existing {@link Scene"}}Scene{{/crossLink}}s , mapped to their IDs
      @property scenes
      @namespace xeokit
      @type {{Scene}}
@@ -42,10 +42,10 @@ function Core() {
     this._superTypes = {}; // For each component type, a list of its supertypes, ordered upwards in the hierarchy.
 
     /**
-     Returns the current default {{#crossLink "Scene"}}{{/crossLink}}.
+     Returns the current default {@link Scene}.
 
      If no Scenes exist yet, or no Scene has been made default yet with a previous call to
-     {{#crossLink "xeokit/setDefaultScene:function"}}{{/crossLink}}, then this method will create the default
+     {@link xeokit/setDefaultScene:function}, then this method will create the default
      Scene on-the-fly.
 
      Components created without specifying their Scene will be created within this Scene.
@@ -61,9 +61,9 @@ function Core() {
     };
 
     /**
-     Sets the current default {{#crossLink "Scene"}}{{/crossLink}}.
+     Sets the current default {@link Scene}.
 
-     A subsequent call to {{#crossLink "xeokit/getDefaultScene:function"}}{{/crossLink}} will return this Scene.
+     A subsequent call to {@link xeokit/getDefaultScene:function} will return this Scene.
 
      Components created without specifying their Scene will be created within this Scene.
 
@@ -109,8 +109,8 @@ function Core() {
     };
 
     /**
-     Destroys all user-created {{#crossLink "Scene"}}Scenes{{/crossLink}} and
-     clears the default {{#crossLink "Scene"}}Scene{{/crossLink}}.
+     Destroys all user-created {@link Scene"}}Scenes{{/crossLink}} and
+     clears the default {@link Scene"}}Scene{{/crossLink}}.
 
      @method clear
      @demo foo

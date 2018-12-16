@@ -124,11 +124,11 @@ const Renderer = function (scene, options) {
     };
 
     /**
-     * Gets a unique pick ID for the given mesh. A mesh can be a {{#crossLink "Mesh"}}{{/crossLink}}, or
-     * anything that represents a WebGL draw call within a custom {{#crossLink "Drawable"}}{{/crossLink}}
+     * Gets a unique pick ID for the given mesh. A mesh can be a {@link Mesh}, or
+     * anything that represents a WebGL draw call within a custom {@link Drawable}
      * instance.
-     * @param {Mesh|*} mesh A {{#crossLink "Mesh"}}{{/crossLink}}, or anything that represents a WebGL
-     * draw call within a custom {{#crossLink "Drawable"}}{{/crossLink}} instance.
+     * @param {Mesh|*} mesh A {@link Mesh}, or anything that represents a WebGL
+     * draw call within a custom {@link Drawable} instance.
      * @returns {Number} New pick ID.
      */
     this.getPickID = function (mesh) {

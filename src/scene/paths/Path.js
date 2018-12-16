@@ -16,9 +16,9 @@ class Path extends Curve {
     }
 
     /**
-     * Adds a {{#crossLink "Curve"}}{{/crossLink}} to this Path.
+     * Adds a {@link Curve} to this Path.
      *
-     * @param {Curve} curve The {{#crossLink "Curve"}}{{/crossLink}} to add.
+     * @param {Curve} curve The {@link Curve} to add.
      */
     addCurve(curve) {
         this._curves.push(curve);
@@ -26,7 +26,7 @@ class Path extends Curve {
     }
 
     /**
-     The {{#crossLink "Curve"}}Curves{{/crossLink}} in this Path.
+     The {@link Curve"}}Curves{{/crossLink}} in this Path.
 
      @property curves
      @default []
@@ -114,7 +114,7 @@ class Path extends Curve {
 
      Automatically clamps to range [0..1].
 
-     Fires a {{#crossLink "Path/t:event"}}{{/crossLink}} event on change.
+     Fires a {@link Path/t:event} event on change.
 
      @property t
      @default 0
@@ -125,7 +125,7 @@ class Path extends Curve {
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
         /**
          * Fired whenever this Path's
-         * {{#crossLink "Path/t:property"}}{{/crossLink}} property changes.
+         * {@link Path/t} property changes.
          * @event t
          * @param value The property's new value
          */
@@ -137,7 +137,7 @@ class Path extends Curve {
     }
 
     /**
-     Point on this Path corresponding to the current value of {{#crossLink "Path/t:property"}}{{/crossLink}}.
+     Point on this Path corresponding to the current value of {@link Path/t}.
 
      @property point
      @type {{Array of Number}}
@@ -147,8 +147,8 @@ class Path extends Curve {
     }
 
     /**
-     Length of this Path, which is the cumulative length of all {{#crossLink "Curve/t:property"}}Curves{{/crossLink}}
-     currently in {{#crossLink "Path/curves:property"}}{{/crossLink}}.
+     Length of this Path, which is the cumulative length of all {@link Curve/t:property"}}Curves{{/crossLink}}
+     currently in {@link Path/curves}.
 
      @property length
      @type {Number}

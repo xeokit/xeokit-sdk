@@ -1,13 +1,13 @@
 /**
- An **OBBGeometry** is a {{#crossLink "Geometry"}}{{/crossLink}} that shows the extents of an oriented bounding box (OBB).
+ An **OBBGeometry** is a {@link Geometry} that shows the extents of an oriented bounding box (OBB).
 
  <a href="../../examples/#geometry_primitives_OBBGeometry"><img src="http://i.giphy.com/3o6ZsSVy0NKXZ1vDSo.gif"></img></a>
 
  ## Overview
 
  * A World-space OBB a bounding box that's oriented to its contents, given as a 32-element array containing the homogeneous coordinates for the eight corner vertices, ie. each having elements [x,y,z,w].
- * Set an OBBGeometry's {{#crossLink "OBBGeometry/targetOBB:property"}}{{/crossLink}} property to an OBB to fix it to those extents, or
- * Set an OBBGeometry's {{#crossLink "OBBGeometry/target:property"}}{{/crossLink}} property to any {{#crossLink "Component"}}{{/crossLink}} subtype that has an OBB.
+ * Set an OBBGeometry's {@link OBBGeometry/targetOBB} property to an OBB to fix it to those extents, or
+ * Set an OBBGeometry's {@link OBBGeometry/target} property to any {@link Component} subtype that has an OBB.
 
  ## Examples
 
@@ -38,10 +38,10 @@
  });
  ````
 
- Now whenever our mesh {{#crossLink "Mesh"}}{{/crossLink}} changes shape or position, our OBBGeometry will automatically
+ Now whenever our mesh {@link Mesh} changes shape or position, our OBBGeometry will automatically
  update to stay fitted to it.
 
- We could also directly configure the OBBGeometry with the {{#crossLink "Mesh"}}{{/crossLink}}'s {{#crossLink "Mesh/obb:property"}}OBB{{/crossLink}}:
+ We could also directly configure the OBBGeometry with the {@link Mesh}'s {@link Mesh/obb:property"}}OBB{{/crossLink}}:
 
  ````javascript
  var boundaryHelper2 = new xeokit.Mesh({
@@ -62,12 +62,12 @@
  @module xeokit
  @submodule geometry
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}},
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
  generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this OBBGeometry.
- @param [cfg.target] {Component} ID or instance of a {{#crossLink "Component"}}{{/crossLink}} whose OBB we'll show.
+ @param [cfg.target] {Component} ID or instance of a {@link Component} whose OBB we'll show.
  @param [cfg.targetOBB] {Float32Array} An mesh-oriented box (OBB) in a 32-element Float32Array
  containing homogeneous coordinates for the eight corner vertices, ie. each having elements (x,y,z,w).
  @extends Component
@@ -97,7 +97,7 @@ class OBBGeometry extends Geometry {
     /**
      A component whose OBB we'll dynamically fit this AABBGeometry to.
 
-     This property effectively replaces the {{#crossLink "OBBGeometry/targetOBB:property"}}{{/crossLink}} property.
+     This property effectively replaces the {@link OBBGeometry/targetOBB} property.
 
      @property target
      @type Component
@@ -136,7 +136,7 @@ class OBBGeometry extends Geometry {
      Sets this OBBGeometry to an mesh-oriented bounding box (OBB), given as a 32-element Float32Array
      containing homogeneous coordinates for the eight corner vertices, ie. each having elements [x,y,z,w].
 
-     This property effectively replaces the {{#crossLink "OBBGeometry/boundary:property"}}{{/crossLink}} property, causing it to become null.
+     This property effectively replaces the {@link OBBGeometry/boundary} property, causing it to become null.
 
      @property targetOBB
      @type Float32Array

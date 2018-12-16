@@ -1,6 +1,6 @@
 /**
- A **SpecularMaterial** is a physically-based {{#crossLink "Material"}}{{/crossLink}} that defines the surface appearance of
- {{#crossLink "Mesh"}}Meshes{{/crossLink}} using the *specular-glossiness* workflow.
+ A **SpecularMaterial** is a physically-based {@link Material} that defines the surface appearance of
+ {@link Mesh"}}Meshes{{/crossLink}} using the *specular-glossiness* workflow.
 
  ## Examples
 
@@ -11,8 +11,8 @@
  ## Overview
 
  * SpecularMaterial is usually used for insulators, such as ceramic, wood and plastic.
- * {{#crossLink "MetallicMaterial"}}{{/crossLink}} is usually used for conductive materials, such as metal.
- * {{#crossLink "PhongMaterial"}}{{/crossLink}} is usually used for non-realistic objects.
+ * {@link MetallicMaterial} is usually used for conductive materials, such as metal.
+ * {@link PhongMaterial} is usually used for non-realistic objects.
 
  For an introduction to PBR concepts, try these articles:
 
@@ -24,24 +24,24 @@
 
  | Property | Type | Range | Default Value | Space | Description |
  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- | {{#crossLink "SpecularMaterial/diffuse:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse color of the material. |
- | {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the specular color of the material. |
- | {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The glossiness the material. |
- | {{#crossLink "SpecularMaterial/specularF0:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The specularF0 of the material surface. |
- | {{#crossLink "SpecularMaterial/emissive:property"}}{{/crossLink}} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the emissive color of the material. |
- | {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
- | {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | sRGB | Texture RGB components multiplying by {{#crossLink "SpecularMaterial/diffuse:property"}}{{/crossLink}}. If the fourth component (A) is present, it multiplies by {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/specularMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | sRGB | Texture RGB components multiplying by {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}}. If the fourth component (A) is present, it multiplies by {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/glossinessMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first three components multiplying by {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} and fourth component multiplying by {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/emissiveMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with RGB components multiplying by {{#crossLink "SpecularMaterial/emissive:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Texture with first component multiplying by {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}}. |
- | {{#crossLink "SpecularMaterial/occlusionMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Ambient occlusion texture multiplying by surface's reflected diffuse and specular light. |
- | {{#crossLink "SpecularMaterial/normalMap:property"}}{{/crossLink}} | {{#crossLink "Texture"}}{{/crossLink}} |  | null | linear | Tangent-space normal map. |
- | {{#crossLink "SpecularMaterial/alphaMode:property"}}{{/crossLink}} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
- | {{#crossLink "SpecularMaterial/alphaCutoff:property"}}{{/crossLink}} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- | {{#crossLink "SpecularMaterial/backfaces:property"}}{{/crossLink}} | Boolean |  | false |  | Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {{#crossLink "SpecularMaterial/frontface:property"}}{{/crossLink}} | String | "ccw", "cw" | "ccw" |  | The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ | {@link SpecularMaterial/diffuse} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse color of the material. |
+ | {@link SpecularMaterial/specular} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the specular color of the material. |
+ | {@link SpecularMaterial/glossiness} | Number | [0, 1] | 1 | linear | The glossiness the material. |
+ | {@link SpecularMaterial/specularF0} | Number | [0, 1] | 1 | linear | The specularF0 of the material surface. |
+ | {@link SpecularMaterial/emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the emissive color of the material. |
+ | {@link SpecularMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
+ | {@link SpecularMaterial/diffuseMap} | {@link Texture} |  | null | sRGB | Texture RGB components multiplying by {@link SpecularMaterial/diffuse}. If the fourth component (A) is present, it multiplies by {@link SpecularMaterial/alpha}. |
+ | {@link SpecularMaterial/specularMap} | {@link Texture} |  | null | sRGB | Texture RGB components multiplying by {@link SpecularMaterial/specular}. If the fourth component (A) is present, it multiplies by {@link SpecularMaterial/alpha}. |
+ | {@link SpecularMaterial/glossinessMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link SpecularMaterial/glossiness}. |
+ | {@link SpecularMaterial/specularGlossinessMap} | {@link Texture} |  | null | linear | Texture with first three components multiplying by {@link SpecularMaterial/specular} and fourth component multiplying by {@link SpecularMaterial/glossiness}. |
+ | {@link SpecularMaterial/emissiveMap} | {@link Texture} |  | null | linear | Texture with RGB components multiplying by {@link SpecularMaterial/emissive}. |
+ | {@link SpecularMaterial/alphaMap} | {@link Texture} |  | null | linear | Texture with first component multiplying by {@link SpecularMaterial/alpha}. |
+ | {@link SpecularMaterial/occlusionMap} | {@link Texture} |  | null | linear | Ambient occlusion texture multiplying by surface's reflected diffuse and specular light. |
+ | {@link SpecularMaterial/normalMap} | {@link Texture} |  | null | linear | Tangent-space normal map. |
+ | {@link SpecularMaterial/alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
+ | {@link SpecularMaterial/alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
+ | {@link SpecularMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
+ | {@link SpecularMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
@@ -51,18 +51,18 @@
 
  <a href="../../examples/#materials_specular_samples"><img src="../../assets/images/screenshots/SpecularMaterial/plaster.png"></img></a>
 
- Our plastered sphere {{#crossLink "Mesh"}}{{/crossLink}} has:
+ Our plastered sphere {@link Mesh} has:
 
- * a {{#crossLink "SphereGeometry"}}{{/crossLink}},
- * a SpecularMaterial with {{#crossLink "Texture"}}Textures{{/crossLink}} providing diffuse, glossiness, specular and normal maps.
+ * a {@link SphereGeometry},
+ * a SpecularMaterial with {@link Texture"}}Textures{{/crossLink}} providing diffuse, glossiness, specular and normal maps.
 
- We'll also provide its {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Lights"}}{{/crossLink}} with
- {{#crossLink "DirLight"}}DirLights{{/crossLink}}, plus {{#crossLink "CubeTexture"}}CubeTextures{{/crossLink}} for light
+ We'll also provide its {@link Scene}'s {@link Lights} with
+ {@link DirLight"}}DirLights{{/crossLink}}, plus {@link CubeTexture"}}CubeTextures{{/crossLink}} for light
  and reflection maps.
 
- Note that in this example we're providing separate {{#crossLink "Texture"}}Textures{{/crossLink}} for the {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} and {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}}
+ Note that in this example we're providing separate {@link Texture"}}Textures{{/crossLink}} for the {@link SpecularMaterial/specular} and {@link SpecularMaterial/glossiness}
  channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
- within the same {{#crossLink "Texture"}}{{/crossLink}} for efficiency.
+ within the same {@link Texture} for efficiency.
 
  ````javascript
  var plasteredSphere = new xeokit.Mesh({
@@ -146,12 +146,12 @@
 
  ### Combining channels within the same textures
 
- In the previous example we provided separate {{#crossLink "Texture"}}Textures{{/crossLink}} for the {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} and
- {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}} channels, but we can combine those channels into the same {{#crossLink "Texture"}}{{/crossLink}} to reduce download time, memory footprint and rendering time (and also for glTF compatibility).
+ In the previous example we provided separate {@link Texture"}}Textures{{/crossLink}} for the {@link SpecularMaterial/specular} and
+ {@link SpecularMaterial/glossiness} channels, but we can combine those channels into the same {@link Texture} to reduce download time, memory footprint and rendering time (and also for glTF compatibility).
 
  Here's our SpecularMaterial again with those channels combined in the
- {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}} {{#crossLink "Texture"}}Texture{{/crossLink}}, where the
- *RGB* component multiplies by {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} and *A* multiplies by {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}}.
+ {@link SpecularMaterial/specularGlossinessMap} {@link Texture"}}Texture{{/crossLink}}, where the
+ *RGB* component multiplies by {@link SpecularMaterial/specular} and *A* multiplies by {@link SpecularMaterial/glossiness}.
 
  ````javascript
  plasteredSphere.material = new xeokit.SpecularMaterial({
@@ -175,16 +175,16 @@
  });
  ````
 
- Although not shown in this example, we can also texture {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} with
- the *A* component of {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}}'s {{#crossLink "Texture"}}{{/crossLink}},
+ Although not shown in this example, we can also texture {@link SpecularMaterial/alpha} with
+ the *A* component of {@link SpecularMaterial/diffuseMap}'s {@link Texture},
  if required.
 
  ## Transparency
 
  ### Alpha Blending
 
- Let's make our plastered sphere transparent. We'll update its SpecularMaterial's {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}}
- and {{#crossLink "SpecularMaterial/alphaMode:property"}}{{/crossLink}}, causing it to blend 50% with the background:
+ Let's make our plastered sphere transparent. We'll update its SpecularMaterial's {@link SpecularMaterial/alpha}
+ and {@link SpecularMaterial/alphaMode}, causing it to blend 50% with the background:
 
  ````javascript
  plasteredSphere.material.alpha = 0.5;
@@ -195,9 +195,9 @@
 
  ### Alpha Masking
 
- Now let's make holes in our plastered sphere. We'll give its SpecularMaterial an {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}}
- and configure {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}}, {{#crossLink "SpecularMaterial/alphaMode:property"}}{{/crossLink}},
- and {{#crossLink "SpecularMaterial/alphaCutoff:property"}}{{/crossLink}} to treat it as an alpha mask:
+ Now let's make holes in our plastered sphere. We'll give its SpecularMaterial an {@link SpecularMaterial/alphaMap}
+ and configure {@link SpecularMaterial/alpha}, {@link SpecularMaterial/alphaMode},
+ and {@link SpecularMaterial/alphaCutoff} to treat it as an alpha mask:
 
  ````javascript
  plasteredSphere.material.alphaMap = new xeokit.Texture({
@@ -217,76 +217,76 @@
  @constructor
  @extends Material
 
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
 
  @param [cfg] {*} The SpecularMaterial configuration
 
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
 
  @param [cfg.meta=null] {String:Object} Metadata to attach to this SpecularMaterial.
 
  @param [cfg.diffuse=[1,1,1]] {Float32Array}  RGB diffuse color of this SpecularMaterial. Multiplies by the RGB
- components of {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}}.
+ components of {@link SpecularMaterial/diffuseMap}.
 
- @param [cfg.diffuseMap=undefined] {Texture} RGBA {{#crossLink "Texture"}}{{/crossLink}} containing the diffuse color
+ @param [cfg.diffuseMap=undefined] {Texture} RGBA {@link Texture} containing the diffuse color
  of this SpecularMaterial, with optional *A* component for alpha. The RGB components multiply by the
- {{#crossLink "SpecularMaterial/diffuse:property"}}{{/crossLink}} property,
- while the *A* component, if present, multiplies by the {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} property.
+ {@link SpecularMaterial/diffuse} property,
+ while the *A* component, if present, multiplies by the {@link SpecularMaterial/alpha} property.
 
  @param [cfg.specular=[1,1,1]] {Number} RGB specular color of this SpecularMaterial. Multiplies by the
- {{#crossLink "SpecularMaterial/specularMap:property"}}{{/crossLink}} and the *RGB* components of
- {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}}.
+ {@link SpecularMaterial/specularMap} and the *RGB* components of
+ {@link SpecularMaterial/specularGlossinessMap}.
 
  @param [cfg.specularMap=undefined] {Texture} RGB texture containing the specular color of this SpecularMaterial. Multiplies
- by the {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} property. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+ by the {@link SpecularMaterial/specular} property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
  @param [cfg.glossiness=1.0] {Number} Factor in the range [0..1] indicating how glossy this SpecularMaterial is. 0 is
- no glossiness, 1 is full glossiness. Multiplies by the *R* component of {{#crossLink "SpecularMaterial/glossinessMap:property"}}{{/crossLink}}
- and the *A* component of {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}}.
+ no glossiness, 1 is full glossiness. Multiplies by the *R* component of {@link SpecularMaterial/glossinessMap}
+ and the *A* component of {@link SpecularMaterial/specularGlossinessMap}.
 
- @param [cfg.specularGlossinessMap=undefined] {Texture} RGBA {{#crossLink "Texture"}}{{/crossLink}} containing this
+ @param [cfg.specularGlossinessMap=undefined] {Texture} RGBA {@link Texture} containing this
  SpecularMaterial's specular color in its *RGB* component and glossiness in its *A* component. Its *RGB* components multiply by the
- {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} property, while its *A* component multiplies by the
- {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}} property. Must be within the same
- {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+ {@link SpecularMaterial/specular} property, while its *A* component multiplies by the
+ {@link SpecularMaterial/glossiness} property. Must be within the same
+ {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
  @param [cfg.specularF0=0.0] {Number} Factor in the range 0..1 indicating how reflective this SpecularMaterial is.
 
  @param [cfg.emissive=[0,0,0]] {Float32Array}  RGB emissive color of this SpecularMaterial. Multiplies by the RGB
- components of {{#crossLink "SpecularMaterial/emissiveMap:property"}}{{/crossLink}}.
+ components of {@link SpecularMaterial/emissiveMap}.
 
- @param [cfg.emissiveMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing the emissive color of this
- SpecularMaterial. Multiplies by the {{#crossLink "SpecularMaterial/emissive:property"}}{{/crossLink}} property.
- Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+ @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
+ SpecularMaterial. Multiplies by the {@link SpecularMaterial/emissive} property.
+ Must be within the same {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
- @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {{#crossLink "Texture"}}{{/crossLink}}. Within shaders,
- multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {{#crossLink "Scene"}}{{/crossLink}}
+ @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
+ multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
  as this SpecularMaterial.
 
- @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {{#crossLink "Texture"}}{{/crossLink}}. Must be
- within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+ @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
+ within the same {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
  @param [cfg.alpha=1.0] {Number} Factor in the range 0..1 indicating how transparent this SpecularMaterial is.
  A value of 0.0 indicates fully transparent, 1.0 is fully opaque. Multiplies by the *R* component of
- {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}} and the *A* component, if present, of
- {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}}.
+ {@link SpecularMaterial/alphaMap} and the *A* component, if present, of
+ {@link SpecularMaterial/diffuseMap}.
 
- @param [cfg.alphaMap=undefined] {Texture} RGB {{#crossLink "Texture"}}{{/crossLink}} containing this SpecularMaterial's
- alpha in its *R* component. The *R* component multiplies by the {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} property. Must
- be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+ @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this SpecularMaterial's
+ alpha in its *R* component. The *R* component multiplies by the {@link SpecularMaterial/alpha} property. Must
+ be within the same {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode - accepted values are "opaque", "blend" and "mask".
- See the {{#crossLink "SpecularMaterial/alphaMode:property"}}{{/crossLink}} property for more info.
+ See the {@link SpecularMaterial/alphaMode} property for more info.
 
  @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value.
- See the {{#crossLink "SpecularMaterial/alphaCutoff:property"}}{{/crossLink}} property for more info.
+ See the {@link SpecularMaterial/alphaCutoff} property for more info.
 
- @param [cfg.backfaces=false] {Boolean} Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
 
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {{#crossLink "Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
 
- @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "lines".
- @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {{#crossLink "Geometry"}}{{/crossLink}} with {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} set to "points".
+ @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
+ @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
 
  */
 import {Material} from './Material.js';
@@ -434,7 +434,7 @@ class SpecularMaterial extends Material {
     /**
      RGB diffuse color of this SpecularMaterial.
 
-     Multiplies by the *RGB* components of {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}}.
+     Multiplies by the *RGB* components of {@link SpecularMaterial/diffuseMap}.
 
      @property diffuse
      @default [1.0, 1.0, 1.0]
@@ -464,10 +464,10 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} containing the diffuse color of this SpecularMaterial, with optional *A* component for alpha.
+     RGB {@link Texture} containing the diffuse color of this SpecularMaterial, with optional *A* component for alpha.
 
-     The *RGB* components multiply by the {{#crossLink "SpecularMaterial/diffuse:property"}}{{/crossLink}} property,
-     while the *A* component, if present, multiplies by the {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} property.
+     The *RGB* components multiply by the {@link SpecularMaterial/diffuse} property,
+     while the *A* component, if present, multiplies by the {@link SpecularMaterial/alpha} property.
 
      @property diffuseMap
      @default undefined
@@ -481,8 +481,8 @@ class SpecularMaterial extends Material {
     /**
      RGB specular color of this SpecularMaterial.
 
-     Multiplies by the {{#crossLink "SpecularMaterial/specularMap:property"}}{{/crossLink}}
-     and the *A* component of {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}}.
+     Multiplies by the {@link SpecularMaterial/specularMap}
+     and the *A* component of {@link SpecularMaterial/specularGlossinessMap}.
 
      @property specular
      @default [1.0, 1.0, 1.0]
@@ -514,7 +514,7 @@ class SpecularMaterial extends Material {
     /**
      RGB texture containing the specular color of this SpecularMaterial.
 
-     Multiplies by the {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} property.
+     Multiplies by the {@link SpecularMaterial/specular} property.
 
      @property specularMap
      @default undefined
@@ -528,8 +528,8 @@ class SpecularMaterial extends Material {
     /**
      RGBA texture containing this SpecularMaterial's specular color in its *RGB* components and glossiness in its *A* component.
 
-     The *RGB* components multiply by the {{#crossLink "SpecularMaterial/specular:property"}}{{/crossLink}} property, while
-     the *A* component multiplies by the {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}} property.
+     The *RGB* components multiply by the {@link SpecularMaterial/specular} property, while
+     the *A* component multiplies by the {@link SpecularMaterial/glossiness} property.
 
      @property specularGlossinessMap
      @default undefined
@@ -545,8 +545,8 @@ class SpecularMaterial extends Material {
 
      0 is no glossiness, 1 is full glossiness.
 
-     Multiplies by the *R* component of {{#crossLink "SpecularMaterial/glossinessMap:property"}}{{/crossLink}}
-     and the *A* component of {{#crossLink "SpecularMaterial/specularGlossinessMap:property"}}{{/crossLink}}.
+     Multiplies by the *R* component of {@link SpecularMaterial/glossinessMap}
+     and the *A* component of {@link SpecularMaterial/specularGlossinessMap}.
 
      @property glossiness
      @default 1.0
@@ -568,9 +568,9 @@ class SpecularMaterial extends Material {
     /**
      RGB texture containing this SpecularMaterial's glossiness in its *R* component.
 
-     The *R* component multiplies by the {{#crossLink "SpecularMaterial/glossiness:property"}}{{/crossLink}} property.
+     The *R* component multiplies by the {@link SpecularMaterial/glossiness} property.
 
-     Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
+     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this SpecularMaterial.
 
      @property glossinessMap
      @default undefined
@@ -604,7 +604,7 @@ class SpecularMaterial extends Material {
     /**
      RGB emissive color of this SpecularMaterial.
 
-     Multiplies by {{#crossLink "SpecularMaterial/emissiveMap:property"}}{{/crossLink}}.
+     Multiplies by {@link SpecularMaterial/emissiveMap}.
 
      @property emissive
      @default [0.0, 0.0, 0.0]
@@ -636,7 +636,7 @@ class SpecularMaterial extends Material {
     /**
      RGB texture containing the emissive color of this SpecularMaterial.
 
-     Multiplies by the {{#crossLink "SpecularMaterial/emissive:property"}}{{/crossLink}} property.
+     Multiplies by the {@link SpecularMaterial/emissive} property.
 
      @property emissiveMap
      @default undefined
@@ -652,8 +652,8 @@ class SpecularMaterial extends Material {
 
      A value of 0.0 is fully transparent, while 1.0 is fully opaque.
 
-     Multiplies by the *R* component of {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}} and
-     the *A* component, if present, of {{#crossLink "SpecularMaterial/diffuseMap:property"}}{{/crossLink}}.
+     Multiplies by the *R* component of {@link SpecularMaterial/alphaMap} and
+     the *A* component, if present, of {@link SpecularMaterial/diffuseMap}.
 
      @property alpha
      @default 1.0
@@ -673,9 +673,9 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     RGB {{#crossLink "Texture"}}{{/crossLink}} with alpha in its *R* component.
+     RGB {@link Texture} with alpha in its *R* component.
 
-     The *R* component multiplies by the {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} property.
+     The *R* component multiplies by the {@link SpecularMaterial/alpha} property.
 
      @property alphaMap
      @default undefined
@@ -687,7 +687,7 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     RGB tangent-space normal {{#crossLink "Texture"}}{{/crossLink}} attached to this SpecularMaterial.
+     RGB tangent-space normal {@link Texture} attached to this SpecularMaterial.
 
      @property normalMap
      @default undefined
@@ -699,7 +699,7 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     RGB ambient occlusion {{#crossLink "Texture"}}{{/crossLink}} attached to this SpecularMaterial.
+     RGB ambient occlusion {@link Texture} attached to this SpecularMaterial.
 
      Within objectRenderers, multiplies by the specular and diffuse light reflected by surfaces.
 
@@ -716,8 +716,8 @@ class SpecularMaterial extends Material {
      The alpha rendering mode.
 
      This governs how alpha is treated. Alpha is the combined result of the
-     {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link SpecularMaterial/alpha} and
+     {@link SpecularMaterial/alphaMap} properties.
 
      * "opaque" - The alpha value is ignored and the rendered output is fully opaque.
      * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.
@@ -748,14 +748,14 @@ class SpecularMaterial extends Material {
     /**
      The alpha cutoff value.
 
-     Specifies the cutoff threshold when {{#crossLink "SpecularMaterial/alphaMode:property"}}{{/crossLink}}
+     Specifies the cutoff threshold when {@link SpecularMaterial/alphaMode}
      equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
      opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
      material as fully transparent. This value is ignored for other modes.
 
      Alpha is the combined result of the
-     {{#crossLink "SpecularMaterial/alpha:property"}}{{/crossLink}} and
-     {{#crossLink "SpecularMaterial/alphaMap:property"}}{{/crossLink}} properties.
+     {@link SpecularMaterial/alpha} and
+     {@link SpecularMaterial/alphaMap} properties.
 
      @property alphaCutoff
      @default 0.5
@@ -776,10 +776,10 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The backfaces will belong to {{#crossLink "Geometry"}}{{/crossLink}} compoents that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The backfaces will belong to {@link Geometry} compoents that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property backfaces
      @default false
@@ -799,10 +799,10 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The faces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The faces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property frontface
      @default "ccw"

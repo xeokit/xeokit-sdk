@@ -1,5 +1,5 @@
 /**
- A **Shader** represents a vertex or fragment stage within a {{#crossLink "Program"}}{{/crossLink}}.
+ A **Shader** represents a vertex or fragment stage within a {@link Program}.
 
  @class Shader
  @module xeokit

@@ -22,7 +22,7 @@ class CameraPath extends Component {
     }
 
     /**
-     The frames set on the constructor and added with {{#crossLink "CameraPath/addFrame:method"}}{{/crossLink}}.
+     The frames set on the constructor and added with {@link CameraPath/addFrame:method}.
 
      @property frames
      @type {[]}
@@ -33,8 +33,8 @@ class CameraPath extends Component {
     }
 
     /**
-     The {{#crossLink "SplineCurve"}}{{/crossLink}} which defines the path along which a
-     {{#crossLink "Camera/property:eye"}}Camera's eye position{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which a
+     {@link Camera/property:eye"}}Camera's eye position{{/crossLink}} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -47,8 +47,8 @@ class CameraPath extends Component {
     }
 
     /**
-     The {{#crossLink "SplineCurve"}}{{/crossLink}} which defines the path along which a
-     {{#crossLink "Camera/property:eye"}}Camera's look position{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which a
+     {@link Camera/property:eye"}}Camera's look position{{/crossLink}} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -61,8 +61,8 @@ class CameraPath extends Component {
     }
 
     /**
-     The {{#crossLink "SplineCurve"}}{{/crossLink}} which defines the path along which a
-     {{#crossLink "Camera/property:up"}}Camera's up vector{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which a
+     {@link Camera/property:up"}}Camera's up vector{{/crossLink}} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -75,7 +75,7 @@ class CameraPath extends Component {
     }
 
     /**
-     Adds a frame to this CameraPath, given as the current position of a {{#crossLink "Camera"}}{{/crossLink}}.
+     Adds a frame to this CameraPath, given as the current position of a {@link Camera}.
 
      @param {Number} t Time instant for the new frame.
      */
@@ -120,7 +120,7 @@ class CameraPath extends Component {
     }
 
     /**
-     Sets the position of the {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Camera"}}{{/crossLink}} to a position interpolated within this CameraPath
+     Sets the position of the {@link Scene}'s {@link Camera} to a position interpolated within this CameraPath
      at the given time instant.
 
      @param {Number} t Time instant.

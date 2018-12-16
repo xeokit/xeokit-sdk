@@ -32,7 +32,7 @@ class STLModel extends Model {
      You can set this to a new file path at any time (except while loading), which will cause the STLModel to load components from
      the new file (after first destroying any components loaded from a previous file path).
 
-     Fires a {{#crossLink "STLModel/loaded:event"}}{{/crossLink}} event when the STL has loaded.
+     Fires a {@link STLModel/loaded:event} event when the STL has loaded.
 
      @property src
      @type String
@@ -49,7 +49,7 @@ class STLModel extends Model {
 
             /**
              Fired whenever this STLModel has finished loading components from the STL file
-             specified by {{#crossLink "STLModel/src:property"}}{{/crossLink}}.
+             specified by {@link STLModel/src}.
              @event loaded
              */
             this.fire("loaded", true, true);
@@ -72,7 +72,7 @@ class STLModel extends Model {
 
 
     /**
-     * Loads STL from a URL into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Loads STL from a URL into a {@link Model}.
      *
      * @method load
      * @static
@@ -102,7 +102,7 @@ class STLModel extends Model {
                 }
                 /**
                  Fired whenever this STLModel fails to load the STL file
-                 specified by {{#crossLink "STLModel/src:property"}}{{/crossLink}}.
+                 specified by {@link STLModel/src}.
                  @event error
                  @param msg {String} Description of the error
                  */
@@ -111,7 +111,7 @@ class STLModel extends Model {
     }
 
     /**
-     * Parses STL into a {{#crossLink "Model"}}{{/crossLink}}.
+     * Parses STL into a {@link Model}.
      *
      * @method parse
      * @static

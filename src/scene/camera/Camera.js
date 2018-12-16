@@ -1,5 +1,5 @@
 /**
- A **Camera** defines viewing and projection transforms for its {{#crossLink "Scene"}}{{/crossLink}}.
+ A **Camera** defines viewing and projection transforms for its {@link Scene}.
 
  ## Overview
 
@@ -9,9 +9,9 @@
  * Dynamically configurable World-space "up" direction
  * Switchable between perspective, frustum and orthographic projections
  * Switchable gimbal lock
- * Can be "flown" to look at targets using a {{#crossLink "CameraFlightAnimation"}}{{/crossLink}}
- * Can be animated along a path using a {{#crossLink "CameraPathAnimation"}}{{/crossLink}}
- * Can follow a target using a {{#crossLink "CameraFollowAnimation"}}{{/crossLink}}
+ * Can be "flown" to look at targets using a {@link CameraFlightAnimation}
+ * Can be animated along a path using a {@link CameraPathAnimation}
+ * Can follow a target using a {@link CameraFollowAnimation}
 
  ## Examples
 
@@ -43,8 +43,8 @@
 
  ### Moving around
 
- Get and set the Camera's absolute position at any time via its {{#crossLink "Camera/eye:property"}}{{/crossLink}},
- {{#crossLink "Camera/look:property"}}{{/crossLink}} and {{#crossLink "Camera/up:property"}}{{/crossLink}} properties:
+ Get and set the Camera's absolute position at any time via its {@link Camera/eye},
+ {@link Camera/look} and {@link Camera/up} properties:
 
  ````javascript
  camera.eye = [-10,0,0];
@@ -65,15 +65,15 @@
  camera.on("matrix", function(matrix) { ... });
  ````
 
- Orbiting the {{#crossLink "Camera/look:property"}}{{/crossLink}} position:
+ Orbiting the {@link Camera/look} position:
 
  ````javascript
  camera.orbitYaw(20.0);
  camera.orbitPitch(10.0);
  ````
 
- First-person rotation, rotates {{#crossLink "Camera/look:property"}}{{/crossLink}}
- and {{#crossLink "Camera/up:property"}}{{/crossLink}} about {{#crossLink "Camera/eye:property"}}{{/crossLink}}:
+ First-person rotation, rotates {@link Camera/look}
+ and {@link Camera/up} about {@link Camera/eye}:
 
  ````javascript
  camera.yaw(5.0);
@@ -86,13 +86,13 @@
  camera.pan([-20, 0, 10]);
  ````
 
- Zoom to vary distance between {{#crossLink "Camera/eye:property"}}{{/crossLink}} and {{#crossLink "Camera/look:property"}}{{/crossLink}}:
+ Zoom to vary distance between {@link Camera/eye} and {@link Camera/look}:
 
  ````javascript
  camera.zoom(-5); // Move five units closer
  ````
 
- Get the current distance between {{#crossLink "Camera/eye:property"}}{{/crossLink}} and {{#crossLink "Camera/look:property"}}{{/crossLink}}:
+ Get the current distance between {@link Camera/eye} and {@link Camera/look}:
 
  ````javascript
  var distance = camera.eyeLookDist;
@@ -189,10 +189,10 @@
  @module xeokit
  @submodule camera
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Camera by ID within its parent {{#crossLink "Scene"}}Scene{{/crossLink}} later.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ You only need to supply an ID if you need to be able to find the Camera by ID within its parent {@link Scene"}}Scene{{/crossLink}} later.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Camera.
  @extends Component
  */
@@ -320,7 +320,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {{#crossLink "Camera/eye:property"}}{{/crossLink}} about {{#crossLink "Camera/look:property"}}{{/crossLink}}, around the {{#crossLink "Camera/up:property"}}{{/crossLink}} vector
+     Rotates {@link Camera/eye} about {@link Camera/look}, around the {@link Camera/up} vector
 
      @method orbitYaw
      @param {Number} angle Angle of rotation in degrees
@@ -334,7 +334,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {{#crossLink "Camera/eye:property"}}{{/crossLink}} about {{#crossLink "Camera/look:property"}}{{/crossLink}} around the right axis (orthogonal to {{#crossLink "Camera/up:property"}}{{/crossLink}} and "look").
+     Rotates {@link Camera/eye} about {@link Camera/look} around the right axis (orthogonal to {@link Camera/up} and "look").
 
      @method orbitPitch
      @param {Number} angle Angle of rotation in degrees
@@ -356,7 +356,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {{#crossLink "Camera/look:property"}}{{/crossLink}} about {{#crossLink "Camera/eye:property"}}{{/crossLink}}, around the {{#crossLink "Camera/up:property"}}{{/crossLink}} vector.
+     Rotates {@link Camera/look} about {@link Camera/eye}, around the {@link Camera/up} vector.
 
      @method yaw
      @param {Number} angle Angle of rotation in degrees
@@ -372,7 +372,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {{#crossLink "Camera/look:property"}}{{/crossLink}} about {{#crossLink "Camera/eye:property"}}{{/crossLink}}, around the right axis (orthogonal to {{#crossLink "Camera/up:property"}}{{/crossLink}} and "look").
+     Rotates {@link Camera/look} about {@link Camera/eye}, around the right axis (orthogonal to {@link Camera/up} and "look").
 
      @method pitch
      @param {Number} angle Angle of rotation in degrees
@@ -427,8 +427,8 @@ class Camera extends Component {
     }
 
     /**
-     Increments/decrements zoom factor, ie. distance between {{#crossLink "Camera/eye:property"}}{{/crossLink}}
-     and {{#crossLink "Camera/look:property"}}{{/crossLink}}.
+     Increments/decrements zoom factor, ie. distance between {@link Camera/eye}
+     and {@link Camera/look}.
 
      @method zoom
      @param delta
@@ -448,7 +448,7 @@ class Camera extends Component {
     /**
      Position of this Camera's eye.
 
-     Fires an {{#crossLink "Camera/eye:event"}}{{/crossLink}} event on change.
+     Fires an {@link Camera/eye:event} event on change.
 
      @property eye
      @default [0,0,10]
@@ -458,7 +458,7 @@ class Camera extends Component {
         this._eye.set(value || [0, 0, 10]);
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Camera's {{#crossLink "Camera/eye:property"}}{{/crossLink}} property changes.
+         Fired whenever this Camera's {@link Camera/eye} property changes.
 
          @event eye
          @param value The property's new value
@@ -473,7 +473,7 @@ class Camera extends Component {
     /**
      Position of this Camera's point-of-interest.
 
-     Fires a {{#crossLink "Camera/look:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/look:event} event on change.
 
      @property look
      @default [0,0,0]
@@ -483,7 +483,7 @@ class Camera extends Component {
         this._look.set(value || [0, 0, 0]);
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Camera's {{#crossLink "Camera/look:property"}}{{/crossLink}} property changes.
+         Fired whenever this Camera's {@link Camera/look} property changes.
 
          @event look
          @param value The property's new value
@@ -496,9 +496,9 @@ class Camera extends Component {
     }
 
     /**
-     Direction of this Camera's {{#crossLink "Camera/up:property"}}{{/crossLink}} vector.
+     Direction of this Camera's {@link Camera/up} vector.
 
-     Fires an {{#crossLink "Camera/up:event"}}{{/crossLink}} event on change.
+     Fires an {@link Camera/up:event} event on change.
 
      @property up
      @default [0,1,0]
@@ -508,7 +508,7 @@ class Camera extends Component {
         this._up.set(value || [0, 1, 0]);
         this._needUpdate(0);
         /**
-         Fired whenever this Camera's {{#crossLink "Camera/up:property"}}{{/crossLink}} property changes.
+         Fired whenever this Camera's {@link Camera/up} property changes.
 
          @event up
          @param value The property's new value
@@ -521,7 +521,7 @@ class Camera extends Component {
     }
 
     /**
-     Sets an optional matrix to premultiply into this Camera's {{#crossLink "Camera/matrix:property"}}{{/crossLink}} matrix.
+     Sets an optional matrix to premultiply into this Camera's {@link Camera/matrix} matrix.
 
      This is intended to be used for stereo rendering with WebVR etc.
 
@@ -533,7 +533,7 @@ class Camera extends Component {
         this._state.hasDeviceMatrix = !!matrix;
         this._needUpdate(0);
         /**
-         Fired whenever this CustomProjection's {{#crossLink "CustomProjection/matrix:property"}}{{/crossLink}} property changes.
+         Fired whenever this CustomProjection's {@link CustomProjection/matrix} property changes.
 
          @event deviceMatrix
          @param value The property's new value
@@ -571,7 +571,7 @@ class Camera extends Component {
         this._worldForward[1] = this._worldAxis[7];
         this._worldForward[2] = this._worldAxis[8];
         /**
-         * Fired whenever this Camera's {{#crossLink "Camera/worldAxis:property"}}{{/crossLink}} property changes.
+         * Fired whenever this Camera's {@link Camera/worldAxis} property changes.
          *
          * @event worldAxis
          * @param value The property's new value
@@ -622,7 +622,7 @@ class Camera extends Component {
     /**
      Whether to lock yaw rotation to pivot about the World-space "up" axis.
 
-     Fires a {{#crossLink "Camera/gimbalLock:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/gimbalLock:event} event on change.
 
      @property gimbalLock
      @default true
@@ -631,7 +631,7 @@ class Camera extends Component {
     set gimbalLock(value) {
         this._gimbalLock = value !== false;
         /**
-         Fired whenever this Camera's  {{#crossLink "Camera/gimbalLock:property"}}{{/crossLink}} property changes.
+         Fired whenever this Camera's  {@link Camera/gimbalLock} property changes.
 
          @event gimbalLock
          @param value The property's new value
@@ -647,9 +647,9 @@ class Camera extends Component {
      Whether to prevent camera from being pitched upside down.
 
      The camera is upside down when the angle
-     between {{#crossLink "Camera/up:property"}}{{/crossLink}} and {{#crossLink "Camera/worldUp:property"}}{{/crossLink}} is less than one degree.
+     between {@link Camera/up} and {@link Camera/worldUp} is less than one degree.
 
-     Fires a {{#crossLink "Camera/constrainPitch:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/constrainPitch:event} event on change.
 
      @property constrainPitch
      @default false
@@ -658,7 +658,7 @@ class Camera extends Component {
     set constrainPitch(value) {
         this._constrainPitch = !!value;
         /**
-         Fired whenever this Camera's  {{#crossLink "Camera/constrainPitch:property"}}{{/crossLink}} property changes.
+         Fired whenever this Camera's  {@link Camera/constrainPitch} property changes.
 
          @event constrainPitch
          @param value The property's new value
@@ -683,7 +683,7 @@ class Camera extends Component {
     /**
      The Camera's viewing transformation matrix.
 
-     Fires a {{#crossLink "Camera/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/matrix:event} event on change.
 
      @property matrix
      @type {Float32Array}
@@ -700,7 +700,7 @@ class Camera extends Component {
     /**
      The Camera's viewing transformation matrix.
 
-     Fires a {{#crossLink "Camera/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/matrix:event} event on change.
 
      @property viewMatrix
      @final
@@ -717,7 +717,7 @@ class Camera extends Component {
     /**
      The Camera's viewing normal transformation matrix.
 
-     Fires a {{#crossLink "Camera/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/matrix:event} event on change.
 
      @property normalMatrix
      @type {Float32Array}
@@ -734,7 +734,7 @@ class Camera extends Component {
     /**
      The Camera's viewing normal transformation matrix.
 
-     Fires a {{#crossLink "Camera/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/matrix:event} event on change.
 
      @property viewNormalMatrix
      @final
@@ -750,7 +750,7 @@ class Camera extends Component {
     /**
      Camera's projection transformation projMatrix.
 
-     Fires a {{#crossLink "Camera/projMatrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link Camera/projMatrix:event} event on change.
 
      @property projMatrix
      @final
@@ -764,7 +764,7 @@ class Camera extends Component {
     /**
      The perspective projection transform for this Camera.
 
-     This is used while {{#crossLink "Camera/projection:property"}}{{/crossLink}} equals "perspective".
+     This is used while {@link Camera/projection} equals "perspective".
 
      @property perspective
      @type Perspective
@@ -777,7 +777,7 @@ class Camera extends Component {
     /**
      The orthographic projection transform for this Camera.
 
-     This is used while {{#crossLink "Camera/projection:property"}}{{/crossLink}} equals "ortho".
+     This is used while {@link Camera/projection} equals "ortho".
 
      @property ortho
      @type Ortho
@@ -791,7 +791,7 @@ class Camera extends Component {
     /**
      The frustum projection transform for this Camera.
 
-     This is used while {{#crossLink "Camera/projection:property"}}{{/crossLink}} equals "frustum".
+     This is used while {@link Camera/projection} equals "frustum".
 
      @property frustum
      @type Frustum
@@ -804,7 +804,7 @@ class Camera extends Component {
     /**
      A custom projection transform, given as a 4x4 matrix.
 
-     This is used while {{#crossLink "Camera/projection:property"}}{{/crossLink}} equals "customProjection".
+     This is used while {@link Camera/projection} equals "customProjection".
 
      @property customProjection
      @type CustomProjection

@@ -1,5 +1,5 @@
 /**
- A **Viewport** controls the canvas viewport for a {{#crossLink "Scene"}}{{/crossLink}}.
+ A **Viewport** controls the canvas viewport for a {@link Scene}.
 
  <a href="../../examples/#effects_stereo_custom"><img src="../../../assets/images/screenshots/StereoEffect.png"></img></a>
 
@@ -7,8 +7,8 @@
 
  * One Viewport per scene.
  * You can configure a Scene to render multiple times per frame, while setting the Viewport to different extents on each render.
- * Make a Viewport automatically size to its {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}{{/crossLink}}
- by setting its {{#crossLink "Viewport/autoBoundary:property"}}{{/crossLink}} property ````true```` (default is ````false````).
+ * Make a Viewport automatically size to its {@link Scene} {@link Canvas}
+ by setting its {@link Viewport/autoBoundary} property ````true```` (default is ````false````).
 
  ## Examples
 
@@ -53,16 +53,16 @@
  @module xeokit
  @submodule rendering
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Viewport configuration
  @param [cfg.id] {String} Optional ID, unique among all components in the parent
- {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Viewport.
  @param [cfg.boundary] {Array of Number} Canvas-space Viewport boundary, given as
  (min, max, width, height). Defaults to the size of the parent
- {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}{{/crossLink}}.
- @param [cfg.autoBoundary=false] {Boolean} Indicates whether this Viewport's {{#crossLink "Viewport/boundary:property"}}{{/crossLink}}
- automatically synchronizes with the size of the parent {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}{{/crossLink}}.
+ {@link Scene} {@link Canvas}.
+ @param [cfg.autoBoundary=false] {Boolean} Indicates whether this Viewport's {@link Viewport/boundary}
+ automatically synchronizes with the size of the parent {@link Scene} {@link Canvas}.
 
  @extends Component
  */
@@ -101,11 +101,11 @@ class Viewport extends Component {
      The canvas-space boundary of this Viewport, indicated as [min, max, width, height].
 
      Defaults to the size of the parent
-     {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}{{/crossLink}}.
+     {@link Scene} {@link Canvas}.
 
-     Ignores attempts to set value when {{#crossLink "Viewport/autoBoundary:property"}}{{/crossLink}} is ````true````.
+     Ignores attempts to set value when {@link Viewport/autoBoundary} is ````true````.
 
-     Fires a {{#crossLink "Viewport/boundary:event"}}{{/crossLink}} event on change.
+     Fires a {@link Viewport/boundary:event} event on change.
 
      @property boundary
      @default [size of Scene Canvas]
@@ -132,7 +132,7 @@ class Viewport extends Component {
         this.glRedraw();
 
         /**
-         Fired whenever this Viewport's {{#crossLink "Viewport/boundary:property"}}{{/crossLink}} property changes.
+         Fired whenever this Viewport's {@link Viewport/boundary} property changes.
 
          @event boundary
          @param value {Boolean} The property's new value
@@ -145,14 +145,14 @@ class Viewport extends Component {
     }
 
     /**
-     Indicates whether this Viewport's {{#crossLink "Viewport/boundary:property"}}{{/crossLink}} automatically
-     synchronizes with the size of the parent {{#crossLink "Scene"}}Scene's{{/crossLink}} {{#crossLink "Canvas"}}{{/crossLink}}.
+     Indicates whether this Viewport's {@link Viewport/boundary} automatically
+     synchronizes with the size of the parent {@link Scene} {@link Canvas}.
 
-     When set true, then this Viewport will fire a {{#crossLink "Viewport/boundary/event"}}{{/crossLink}} whenever
-     the {{#crossLink "Canvas"}}{{/crossLink}} resizes. Also fires that event as soon as this ````autoBoundary````
+     When set true, then this Viewport will fire a {@link Viewport/boundary/event} whenever
+     the {@link Canvas} resizes. Also fires that event as soon as this ````autoBoundary````
      property is changed.
 
-     Fires a {{#crossLink "Viewport/autoBoundary:event"}}{{/crossLink}} event on change.
+     Fires a {@link Viewport/autoBoundary:event} event on change.
 
      @property autoBoundary
      @default false
@@ -180,7 +180,7 @@ class Viewport extends Component {
                     this.glRedraw();
 
                     /**
-                     Fired whenever this Viewport's {{#crossLink "Viewport/boundary:property"}}{{/crossLink}} property changes.
+                     Fired whenever this Viewport's {@link Viewport/boundary} property changes.
 
                      @event boundary
                      @param value {Boolean} The property's new value
@@ -195,7 +195,7 @@ class Viewport extends Component {
         }
 
         /**
-         Fired whenever this Viewport's {{#crossLink "autoBoundary/autoBoundary:property"}}{{/crossLink}} property changes.
+         Fired whenever this Viewport's {@link autoBoundary/autoBoundary} property changes.
 
          @event autoBoundary
          @param value The property's new value

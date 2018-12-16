@@ -1,16 +1,16 @@
 /**
- A Progress displays a progress animation at the center of its {{#crossLink "Canvas"}}{{/crossLink}} while things are loading or otherwise busy.
+ A Progress displays a progress animation at the center of its {@link Canvas} while things are loading or otherwise busy.
 
  ## Overview
 
- * Spinners are normally shown by {{#crossLink "Model"}}Models{{/crossLink}} while they are loading, however they may also
+ * Spinners are normally shown by {@link Model"}}Models{{/crossLink}} while they are loading, however they may also
  be shown by any application code that wants to indicate busyness.
- * By default, they are also shown by components that load assets, such as {{#crossLink "Texture"}}{{/crossLink}}. You
- can disable that by flipping the Spinner's {{#crossLink "Spinner/textures:property"}}{{/crossLink}} property.
- * A Spinner component has a {{#crossLink "Spinner/processes:property"}}{{/crossLink}} count that indicates how many
- active processes it currently represents. As a process starts, a process would increment {{#crossLink "Spinner/processes:property"}}{{/crossLink}}, then as it
+ * By default, they are also shown by components that load assets, such as {@link Texture}. You
+ can disable that by flipping the Spinner's {@link Spinner/textures} property.
+ * A Spinner component has a {@link Spinner/processes} count that indicates how many
+ active processes it currently represents. As a process starts, a process would increment {@link Spinner/processes}, then as it
  completes (or fails), would decrement it again.
- * A Spinner is only visible while {{#crossLink "Spinner/processes:property"}}{{/crossLink}} is greater than zero.
+ * A Spinner is only visible while {@link Spinner/processes} is greater than zero.
 
  ## Examples
 
@@ -40,7 +40,7 @@
  ````
 
  By default, a Spinner shows while resources are loading for components like
- {{#crossLink "Texture"}}{{/crossLink}}. We can disable that like this:
+ {@link Texture}. We can disable that like this:
 
  ````javascript
  // Don't show while resources are loading for Textures etc.
@@ -243,7 +243,7 @@ class Spinner extends Component {
 
      Clamps to zero if you attempt to set to to a negative value.
 
-     Fires a {{#crossLink "Spinner/processes:event"}}{{/crossLink}} event on change.
+     Fires a {@link Spinner/processes:event} event on change.
 
      @property processes
      @default 0
@@ -261,7 +261,7 @@ class Spinner extends Component {
         this._processes = value;
         this._element.style["visibility"] = (this._processes > 0) ? "visible" : "hidden";
         /**
-         Fired whenever this Spinner's {{#crossLink "Spinner/visible:property"}}{{/crossLink}} property changes.
+         Fired whenever this Spinner's {@link Spinner/visible} property changes.
 
          @event processes
          @param value The property's new value
@@ -269,7 +269,7 @@ class Spinner extends Component {
         this.fire("processes", this._processes);
         if (this._processes === 0 && this._processes !== prevValue) {
             /**
-             Fired whenever this Spinner's {{#crossLink "Spinner/visible:property"}}{{/crossLink}} property becomes zero.
+             Fired whenever this Spinner's {@link Spinner/visible} property becomes zero.
 
              @event zeroProcesses
              */

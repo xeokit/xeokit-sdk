@@ -1,23 +1,23 @@
 /**
- A **Mesh** is an {{#crossLink "Object"}}{{/crossLink}} that implements the {{#crossLink "Drawable "}}{{/crossLink}}
+ A **Mesh** is an {@link Object} that implements the {@link Drawable }
  interface, to represent a visible element within the 3D scene.
 
  ## Overview
 
  * A Mesh represents a WebGL draw call.
- * Each Mesh has six components: {{#crossLink "Geometry"}}{{/crossLink}} for shape, {{#crossLink "Material"}}{{/crossLink}}
- for normal rendered appearance, three {{#crossLink "EmphasisMaterial"}}EmphasisMaterials{{/crossLink}} for ghosted, highlighted and selected effects,
- and {{#crossLink "EdgeMaterial"}}{{/crossLink}} for rendering emphasised edges.
+ * Each Mesh has six components: {@link Geometry} for shape, {@link Material}
+ for normal rendered appearance, three {@link EmphasisMaterial"}}EmphasisMaterials{{/crossLink}} for ghosted, highlighted and selected effects,
+ and {@link EdgeMaterial} for rendering emphasised edges.
  * By default, Meshes in the same Scene share the same global scene flyweight instances of those components among themselves. The default
- component instances are provided by the {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Scene/geometry:property"}}{{/crossLink}},
- {{#crossLink "Scene/material:property"}}{{/crossLink}}, {{#crossLink "Scene/ghostMaterial:property"}}{{/crossLink}}, {{#crossLink "Scene/highlightMaterial:property"}}{{/crossLink}},
- {{#crossLink "Scene/selectedMaterial:property"}}{{/crossLink}} and {{#crossLink "Scene/edgeMaterial:property"}}{{/crossLink}} properties.
+ component instances are provided by the {@link Scene}'s {@link Scene/geometry},
+ {@link Scene/material}, {@link Scene/ghostMaterial}, {@link Scene/highlightMaterial},
+ {@link Scene/selectedMaterial} and {@link Scene/edgeMaterial} properties.
  * A Mesh with all defaults is a white unit-sized box centered at the World-space origin.
  * Customize your Meshes by attaching your own instances of those component types, to override the defaults as needed.
  * For best performance, reuse as many of the same component instances among your Meshes as possible.
- * Use {{#crossLink "Group"}}Group{{/crossLink}} components to organize Meshes into hierarchies, if required.
+ * Use {@link Group"}}Group{{/crossLink}} components to organize Meshes into hierarchies, if required.
 
- This page covers functionality specific to the Mesh component, while {{#crossLink "Object"}}{{/crossLink}} covers generic
+ This page covers functionality specific to the Mesh component, while {@link Object} covers generic
  functionality inherited from the base class.
 
  ## Usage
@@ -71,29 +71,29 @@
 
  ### Creating hierarchies
 
- In xeokit we represent an object hierarchy as a tree of {{#crossLink "Object"}}Objects{{/crossLink}} in which
+ In xeokit we represent an object hierarchy as a tree of {@link Object"}}Objects{{/crossLink}} in which
  the leaf Objects are Meshes. In an Object tree, an operation on an Object is recursively applied to sub-Objects, down
  to the Meshes at the leaves.
 
- See {{#crossLink "Object"}}{{/crossLink}} for information on organizing Meshes hierarchically.
+ See {@link Object} for information on organizing Meshes hierarchically.
 
  ### Controlling visibility
 
- Show or hide a Mesh by setting its {{#crossLink "Mesh/visible:property"}}{{/crossLink}} property:
+ Show or hide a Mesh by setting its {@link Mesh/visible} property:
 
  ````javascript
  mesh.visible = false; // Hide
  mesh.visible = true; // Show (default)
  ````
 
- This property is inherited from {{#crossLink "Object/visible:property"}}Object{{/crossLink}}.
+ This property is inherited from {@link Object/visible:property"}}Object{{/crossLink}}.
 
  ### Controlling clipping
 
  By default, a Mesh will be clipped by the
- Scene's {{#crossLink "Scene/clips:property"}}clipping planes{{/crossLink}}.
+ Scene's {@link Scene/clips:property"}}clipping planes{{/crossLink}}.
 
- Make a Mesh unclippable by setting its {{#crossLink "Mesh/clippable:property"}}{{/crossLink}} property false:
+ Make a Mesh unclippable by setting its {@link Mesh/clippable} property false:
 
  ````javascript
  mesh.clippable = false; // Default is true
@@ -101,7 +101,7 @@
 
  ### Controlling rendering order
 
- Control the order in which a Mesh is rendered relative to others by setting its {{#crossLink "Mesh/layer:property"}}{{/crossLink}}
+ Control the order in which a Mesh is rendered relative to others by setting its {@link Mesh/layer}
  property. You would normally do this when you need to ensure that transparent Meshes are rendered in back-to-front order for correct alpha blending.
 
  Assigning our Mesh to layer 0 (all Meshes are in layer 0 by default):
@@ -121,8 +121,8 @@
 
  ### Geometry
 
- A Mesh has a {{#crossLink "Geometry"}}{{/crossLink}} which describes its shape. When we don't provide a Geometry,
- a Mesh will automatically get its {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Scene/geometry:property"}}{{/crossLink}} by default.
+ A Mesh has a {@link Geometry} which describes its shape. When we don't provide a Geometry,
+ a Mesh will automatically get its {@link Scene}'s {@link Scene/geometry} by default.
 
  Creating a Mesh with its own Geometry:
 
@@ -145,7 +145,7 @@
  ````
 
  The Mesh also has a convenience property which provides the vertex positions in World-space, ie. after they have been
- transformed by the Mesh's {{#crossLink "Object/worldMatrix:property"}}{{/crossLink}}:
+ transformed by the Mesh's {@link Object/worldMatrix}:
 
  ````javascript
  // These are internally generated on-demand and cached. To free the cached
@@ -155,10 +155,10 @@
 
  ### Material
 
- A Mesh has a {{#crossLink "Material"}}{{/crossLink}}, which describes its appearance. When we don't provide it with
- a Material, it will automatically get its {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Scene/material:property"}}{{/crossLink}} by default.
+ A Mesh has a {@link Material}, which describes its appearance. When we don't provide it with
+ a Material, it will automatically get its {@link Scene}'s {@link Scene/material} by default.
 
- Creating a Mesh with its own custom {{#crossLink "Geometry"}}{{/crossLink}} and {{#crossLink "MetallicMaterial"}}{{/crossLink}}:
+ Creating a Mesh with its own custom {@link Geometry} and {@link MetallicMaterial}:
 
  ````javascript
  var mesh = new xeokit.Mesh({
@@ -173,7 +173,7 @@
  });
  ````
 
- Animating the {{#crossLink "MetallicMaterial"}}{{/crossLink}}'s diffuse color - making the Mesh rapidly pulse red:
+ Animating the {@link MetallicMaterial}'s diffuse color - making the Mesh rapidly pulse red:
 
  ````javascript
  mesh.scene.on("tick", function(e) {
@@ -186,15 +186,15 @@
 
  A Mesh can be positioned within the World-space coordinate system.
 
- See {{#crossLink "Object"}}{{/crossLink}}.
+ See {@link Object}.
 
  ### Ghosting
 
- Ghost a Mesh by setting its {{#crossLink "Mesh/ghosted:property"}}{{/crossLink}} property true. The Mesh's
- {{#crossLink "Mesh/ghostMaterial:property"}}{{/crossLink}} property holds the {{#crossLink "EmphasisMaterial"}}{{/crossLink}}
+ Ghost a Mesh by setting its {@link Mesh/ghosted} property true. The Mesh's
+ {@link Mesh/ghostMaterial} property holds the {@link EmphasisMaterial}
  that controls its appearance while ghosted.
 
- When we don't provide it with a EmphasisMaterial, the Mesh will automatically get its Scene's {{#crossLink "Scene/ghostMaterial:property"}}{{/crossLink}}
+ When we don't provide it with a EmphasisMaterial, the Mesh will automatically get its Scene's {@link Scene/ghostMaterial}
  by default.
 
  In the example below, we'll create a ghosted Mesh with its own EmphasisMaterial for ghosted appearance:
@@ -226,11 +226,11 @@
 
  ### Highlighting
 
- Highlight a Mesh by setting its {{#crossLink "Mesh/highlighted:property"}}{{/crossLink}} property true. The Mesh's
- {{#crossLink "Mesh/highlightMaterial:property"}}{{/crossLink}} property holds the {{#crossLink "EmphasisMaterial"}}{{/crossLink}}
+ Highlight a Mesh by setting its {@link Mesh/highlighted} property true. The Mesh's
+ {@link Mesh/highlightMaterial} property holds the {@link EmphasisMaterial}
  that controls its appearance while highlighted.
 
- When we don't provide it with a EmphasisMaterial for highlighting, it will automatically get its Scene's {{#crossLink "Scene/highlightMaterial:property"}}{{/crossLink}}
+ When we don't provide it with a EmphasisMaterial for highlighting, it will automatically get its Scene's {@link Scene/highlightMaterial}
  by default.
 
  In the example below, we'll create a highlighted Mesh with its own EmphasisMaterial for highlighted appearance:
@@ -257,11 +257,11 @@
 
  ### Selecting
 
- Make a Mesh appear selected by setting its {{#crossLink "Mesh/selected:property"}}{{/crossLink}} property true. The Mesh's
- {{#crossLink "Mesh/selectedMaterial:property"}}{{/crossLink}} property holds the {{#crossLink "EmphasisMaterial"}}{{/crossLink}}
+ Make a Mesh appear selected by setting its {@link Mesh/selected} property true. The Mesh's
+ {@link Mesh/selectedMaterial} property holds the {@link EmphasisMaterial}
  that controls its appearance while selected.
 
- When we don't provide it with a EmphasisMaterial for selecting, it will automatically get its Scene's {{#crossLink "Scene/selectMaterial:property"}}{{/crossLink}}
+ When we don't provide it with a EmphasisMaterial for selecting, it will automatically get its Scene's {@link Scene/selectMaterial}
  by default.
 
  In the example below, we'll create a selected Mesh with its own EmphasisMaterial for selection appearance:
@@ -289,11 +289,11 @@
 
  ### Edges
 
- Emphasise a Mesh's edges by setting its {{#crossLink "Mesh/edges:property"}}{{/crossLink}} property true. The Mesh's
- {{#crossLink "Mesh/edgeMaterial:property"}}{{/crossLink}} property holds the {{#crossLink "EdgeMaterial"}}{{/crossLink}}
+ Emphasise a Mesh's edges by setting its {@link Mesh/edges} property true. The Mesh's
+ {@link Mesh/edgeMaterial} property holds the {@link EdgeMaterial}
  that controls the appearance of the edges while they are emphasized.
 
- When we don't provide it with an EdgeMaterial, the Mesh will automatically get its Scene's {{#crossLink "Scene/edgeMaterial:property"}}{{/crossLink}}
+ When we don't provide it with an EdgeMaterial, the Mesh will automatically get its Scene's {@link Scene/edgeMaterial}
  by default.
 
  In the example below, we'll create a edges Mesh with its own EdgeMaterial for edges appearance:
@@ -317,14 +317,14 @@
 
  ### Outlining
 
- Outline a Mesh by setting its {{#crossLink "Mesh/outlined:property"}}{{/crossLink}} property true. The Mesh's
- {{#crossLink "Mesh/outlineMaterial:property"}}{{/crossLink}} property holds the {{#crossLink "OutlineMaterial"}}{{/crossLink}}
+ Outline a Mesh by setting its {@link Mesh/outlined} property true. The Mesh's
+ {@link Mesh/outlineMaterial} property holds the {@link OutlineMaterial}
  that controls its appearance while outlined.
 
- When we don't provide it with an {{#crossLink "OutlineMaterial"}}{{/crossLink}}, it will automatically get its Scene's
- {{#crossLink "Scene/outlineMaterial:property"}}{{/crossLink}} by default.
+ When we don't provide it with an {@link OutlineMaterial}, it will automatically get its Scene's
+ {@link Scene/outlineMaterial} by default.
 
- In the example below, we'll create a outlined Mesh with its own {{#crossLink "OutlineMaterial"}}{{/crossLink}}:
+ In the example below, we'll create a outlined Mesh with its own {@link OutlineMaterial}:
 
  <a href="../../examples/#effects_outline"><img src="../../assets/images/screenshots/OutlineMaterial/teapot.png"></img></a>
 
@@ -348,7 +348,7 @@
  We can query a Mesh's Local-space boundary at any time, getting it as either an axis-aligned bounding box (AABB) or
  an object-aligned bounding box (OBB).
 
- The Local-space AABB and OBB belong to the Mesh's {{#crossLink "Geometry"}}{{/crossLink}}.
+ The Local-space AABB and OBB belong to the Mesh's {@link Geometry}.
 
  Getting the Local-space AABB:
 
@@ -371,9 +371,9 @@
 
  We can query a Mesh's World-space boundary at any time, getting it as an axis-aligned bounding box (AABB).
 
- The World-space AABB is the boundary of the Mesh's {{#crossLink "Geometry"}}{{/crossLink}} after transformation by the
- Mesh's {{#crossLink "Object/worldMatrix:property"}}{{/crossLink}} and the {{#crossLink "Camera"}}{{/crossLink}}'s
- {{#crossLink "Camera/matrix:property"}}{{/crossLink}}.
+ The World-space AABB is the boundary of the Mesh's {@link Geometry} after transformation by the
+ Mesh's {@link Object/worldMatrix} and the {@link Camera}'s
+ {@link Camera/matrix}.
 
  Getting the World-space boundary AABB:
 
@@ -382,7 +382,7 @@
  ````
 
  Subscribing to updates of the World-space boundary, which occur after each update to the
- Mesh's {{#crossLink "Object/worldMatrix:property"}}{{/crossLink}} or the {{#crossLink "Camera"}}{{/crossLink}}:
+ Mesh's {@link Object/worldMatrix} or the {@link Camera}:
 
  ````javascript
  mesh.on("boundary", function() {
@@ -391,8 +391,8 @@
  });
  ````
 
- The {{#crossLink "Scene"}}{{/crossLink}} also has a {{#crossLink "Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}}, which returns
- the collective World-space AABBs of the {{#crossLink "Object"}}Objects{{/crossLink}} with the given IDs:
+ The {@link Scene} also has a {@link Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}}, which returns
+ the collective World-space AABBs of the {@link Object"}}Objects{{/crossLink}} with the given IDs:
 
  ````JavaScript
  var scene = mesh.scene;
@@ -406,10 +406,10 @@
 
  #### Excluding from boundary calculations
 
- The {{#crossLink "Scene/aabb:property"}}Scene aabb{{/crossLink}}
- and parent {{#crossLink "Object/aabb:property"}}Object{{/crossLink}}'s {{#crossLink "Object/aabb:property"}}aabb{{/crossLink}}
+ The {@link Scene/aabb:property"}}Scene aabb{{/crossLink}}
+ and parent {@link Object/aabb:property"}}Object{{/crossLink}}'s {@link Object/aabb:property"}}aabb{{/crossLink}}
  properties provide AABBs that dynamically include the AABB of all contained Meshes, except those Meshes that have
- their {{#crossLink "Mesh/collidable:property"}}collidable{{/crossLink}} properties set ````false````.
+ their {@link Mesh/collidable:property"}}collidable{{/crossLink}} properties set ````false````.
 
  Toggle that inclusion like so:
 
@@ -418,9 +418,9 @@
  mesh.collidable = true; // Include mesh in calculation of its Scene/Model boundary
  ````
  Setting this false is useful when a Mesh represents some element, such as a control gizmo, that you don't want to
- contribute to the  {{#crossLink "Scene"}}Scene{{/crossLink}} or parent {{#crossLink "Object"}}{{/crossLink}}'s AABB. It
+ contribute to the  {@link Scene"}}Scene{{/crossLink}} or parent {@link Object}'s AABB. It
  also helps performance, since boundaries will not need dynamically re-calculated whenever the Mesh's boundary changes after
- a {{#crossLink "Object/worldMatrix:property"}}{{/crossLink}} or {{#crossLink "Camera"}}{{/crossLink}} update.
+ a {@link Object/worldMatrix} or {@link Camera} update.
 
  #### Examples
 
@@ -429,7 +429,7 @@
 
  ### Skyboxing
 
- A Mesh has a {{#crossLink "Mesh/stationary:property"}}{{/crossLink}} property
+ A Mesh has a {@link Mesh/stationary} property
  that will cause it to never translate with respect to the viewpoint.
 
  This is useful for using Meshes as skyboxes, like this:
@@ -460,13 +460,13 @@
 
  ### Billboarding
 
- A Mesh has a {{#crossLink "Mesh/billboard:property"}}{{/crossLink}} property
+ A Mesh has a {@link Mesh/billboard} property
  that can make it behave as a billboard.
 
  Two billboard types are supported:
 
- * **Spherical** billboards are free to rotate their Meshes in any direction and always face the {{#crossLink "Camera"}}{{/crossLink}} perfectly.
- * **Cylindrical** billboards rotate their Meshes towards the {{#crossLink "Camera"}}{{/crossLink}}, but only about the Y-axis.
+ * **Spherical** billboards are free to rotate their Meshes in any direction and always face the {@link Camera} perfectly.
+ * **Cylindrical** billboards rotate their Meshes towards the {@link Camera}, but only about the Y-axis.
 
  Note that scaling transformations to have no effect on billboarded Meshes.
 
@@ -502,38 +502,38 @@
  @module xeokit
  @submodule objects
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Mesh.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink "Object"}}{{/crossLink}} documentation for usage.
+ @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} The Mesh's local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} The Mesh's local scale.
  @param [cfg.rotation=[0,0,0]] {Float32Array} The Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
  @param [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} The Mesh's local modelling transform matrix. Overrides the position, scale and rotation parameters.
- @param [cfg.geometry] {Geometry} Defines shape. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/geometry:property"}}geometry{{/crossLink}}, which is a 2x2x2 box.
- @param [cfg.material] {Material} Defines normal rendered appearance. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/material:property"}}material{{/crossLink}}.
- @param [cfg.outlineMaterial] {OutlineMaterial} Defines appearance when outlined. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
- @param [cfg.ghostMaterial] Defines appearance when ghosted. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
- @param [cfg.highlightMaterial] Defines appearance when highlighted. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
- @param [cfg.selectedMaterial] Defines appearance when selected. Must be within the same {{#crossLink "Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {{#crossLink "Scene"}}Scene{{/crossLink}}'s default instance, {{#crossLink "Scene/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
+ @param [cfg.geometry] {Geometry} Defines shape. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/geometry:property"}}geometry{{/crossLink}}, which is a 2x2x2 box.
+ @param [cfg.material] {Material} Defines normal rendered appearance. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/material:property"}}material{{/crossLink}}.
+ @param [cfg.outlineMaterial] {OutlineMaterial} Defines appearance when outlined. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
+ @param [cfg.ghostMaterial] Defines appearance when ghosted. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
+ @param [cfg.highlightMaterial] Defines appearance when highlighted. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
+ @param [cfg.selectedMaterial] Defines appearance when selected. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
  @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array} RGB colorize color, multiplies by the rendered fragment colors.
  @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
  @param [cfg.layer=0] {Number} Indicates this Mesh's rendering priority, relative to other Meshes. Typically used for transparency sorting,
- @param [cfg.stationary=false] {Boolean} Disables the effect of {{#crossLink "Camera"}}{{/crossLink}} translations for this Mesh. This is useful for making skyboxes.
+ @param [cfg.stationary=false] {Boolean} Disables the effect of {@link Camera} translations for this Mesh. This is useful for making skyboxes.
  @param [cfg.billboard="none"] {String} Specifies the billboarding behaviour for this Mesh. Options are "none", "spherical" and "cylindrical".
  @param [cfg.visible=true] {Boolean}        Indicates if this Mesh is visible. Mesh is only rendered when visible and not culled.
  @param [cfg.culled=false] {Boolean}        Indicates if this Mesh is culled from view. Mesh is only rendered when visible and not culled.
- @param [cfg.pickable=true] {Boolean}       Indicates if this Mesh is pickable. When false, the Mesh will never be picked by calls to the {{#crossLink "Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
- @param [cfg.clippable=true] {Boolean}      Indicates if this Mesh is clippable by {{#crossLink "Clips"}}{{/crossLink}}. When false, Mesh will not be affected by the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}}.
- @param [cfg.collidable=true] {Boolean}     Whether this Mesh is included in boundary calculations. When false, the bounding boxes of the containing {{#crossLink "Scene"}}{{/crossLink}} and parent {{#crossLink "Object"}}{{/crossLink}}, {{#crossLink "Group"}}{{/crossLink}} or {{#crossLink "Model"}}{{/crossLink}} will not be calculated to enclose this Mesh.
+ @param [cfg.pickable=true] {Boolean}       Indicates if this Mesh is pickable. When false, the Mesh will never be picked by calls to the {@link Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
+ @param [cfg.clippable=true] {Boolean}      Indicates if this Mesh is clippable by {@link Clips}. When false, Mesh will not be affected by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips}.
+ @param [cfg.collidable=true] {Boolean}     Whether this Mesh is included in boundary calculations. When false, the bounding boxes of the containing {@link Scene} and parent {@link Object}, {@link Group} or {@link Model} will not be calculated to enclose this Mesh.
  @param [cfg.castShadow=true] {Boolean}     Whether this Mesh casts shadows.
  @param [cfg.receiveShadow=true] {Boolean}  Whether this Mesh receives shadows.
  @param [cfg.outlined=false] {Boolean}      Whether an outline is rendered around this mesh.
@@ -549,9 +549,9 @@
  */
 
 /**
- Fired when this Mesh is picked via a call to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+ Fired when this Mesh is picked via a call to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
- The event parameters will be the hit result returned by the {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}} method.
+ The event parameters will be the hit result returned by the {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method.
  @event picked
  */
 import {math} from '../math/math.js';
@@ -815,16 +815,24 @@ const getPickResult = (function () {
 class Mesh extends xeokitObject {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
+     * @private
      */
     get type() {
         return "Mesh";
+    }
+
+    /**
+     @private
+     */
+    get isMesh() {
+        return true;
+    }
+
+    /**
+     @private
+     */
+    get isDrawable() {
+        return true;
     }
 
     init(cfg) {
@@ -863,7 +871,7 @@ class Mesh extends xeokitObject {
         this._worldPositionsDirty = true;
         this._geometry = cfg.geometry ? this._checkComponent("Geometry", cfg.geometry) : this.scene.geometry;
         this._vertexBufs = this._geometry._getVertexBufs();
-        this._material = cfg.material ? this._checkComponent("Material", cfg.material) : this.scene.material;
+        this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
         this._ghostMaterial = cfg.ghostMaterial ? this._checkComponent("EmphasisMaterial", cfg.ghostMaterial) : this.scene.ghostMaterial;
         this._outlineMaterial = cfg.outlineMaterial ? this._checkComponent("EmphasisMaterial", cfg.outlineMaterial) : this.scene.outlineMaterial;
         this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
@@ -897,7 +905,7 @@ class Mesh extends xeokitObject {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
             this._drawRenderer = DrawRenderer.get(this);
-           // this._shadowRenderer = ShadowRenderer.get(this);
+            // this._shadowRenderer = ShadowRenderer.get(this);
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
@@ -1087,11 +1095,11 @@ class Mesh extends xeokitObject {
     /**
      Indicates if visible.
 
-     The Mesh is only rendered when {{#crossLink "Mesh/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Mesh/culled:property"}}{{/crossLink}} is false.
+     The Mesh is only rendered when {@link Mesh/visible} is true and
+     {@link Mesh/culled} is false.
 
-     Each visible Mesh is registered in the {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/visibleEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each visible Mesh is registered in the {@link Scene}'s
+     {@link Scene/visibleEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property visible
@@ -1114,10 +1122,10 @@ class Mesh extends xeokitObject {
     /**
      Indicates if ghosted.
 
-     The ghosted appearance is configured by {{#crossLink "Mesh/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
+     The ghosted appearance is configured by {@link Mesh/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
 
-     Each ghosted Mesh is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/ghostedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each ghosted Mesh is registered in its {@link Scene}'s
+     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property ghosted
@@ -1143,10 +1151,10 @@ class Mesh extends xeokitObject {
     /**
      Indicates if highlighted.
 
-     The highlight appearance is configured by {{#crossLink "Mesh/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
+     The highlight appearance is configured by {@link Mesh/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
 
-     Each highlighted Mesh is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/highlightedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each highlighted Mesh is registered in its {@link Scene}'s
+     {@link Scene/highlightedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property highlighted
@@ -1172,10 +1180,10 @@ class Mesh extends xeokitObject {
     /**
      Indicates if selected.
 
-     The selected appearance is configured by {{#crossLink "Mesh/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
+     The selected appearance is configured by {@link Mesh/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
 
-     Each selected Mesh is registered in its {{#crossLink "Scene"}}{{/crossLink}}'s
-     {{#crossLink "Scene/selectedEntities:property"}}{{/crossLink}} map when its {{#crossLink "Object/entityType:property"}}{{/crossLink}}
+     Each selected Mesh is registered in its {@link Scene}'s
+     {@link Scene/selectedEntities} map when its {@link Object/entityType}
      is set to a value.
 
      @property selected
@@ -1201,7 +1209,7 @@ class Mesh extends xeokitObject {
     /**
      Indicates if edges are shown.
 
-     The edges appearance is configured by {{#crossLink "Mesh/edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
+     The edges appearance is configured by {@link Mesh/edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
 
      @property edges
      @default false
@@ -1223,8 +1231,8 @@ class Mesh extends xeokitObject {
     /**
      Indicates if culled from view.
 
-     The Mesh is only rendered when {{#crossLink "Mesh/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "Mesh/culled:property"}}{{/crossLink}} is false.
+     The Mesh is only rendered when {@link Mesh/visible} is true and
+     {@link Mesh/culled} is false.
 
      @property culled
      @default false
@@ -1242,7 +1250,7 @@ class Mesh extends xeokitObject {
     /**
      Indicates if pickable.
 
-     When false, the Mesh will never be picked by calls to the {{#crossLink "Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
+     When false, the Mesh will never be picked by calls to the {@link Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
 
      @property pickable
      @default true
@@ -1265,7 +1273,7 @@ class Mesh extends xeokitObject {
     /**
      Indicates if clippable.
 
-     When false, the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}} will have no effect on the Mesh.
+     When false, the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Mesh.
 
      @property clippable
      @default true
@@ -1353,7 +1361,7 @@ class Mesh extends xeokitObject {
     /**
      Indicates if rendered with an outline.
 
-     The outline appearance is configured by {{#crossLink "Mesh/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
+     The outline appearance is configured by {@link Mesh/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
 
      @property outlined
      @default false
@@ -1462,7 +1470,7 @@ class Mesh extends xeokitObject {
     /**
      Indicates if the position is stationary.
 
-     When true, will disable the effect of {{#crossLink "Lookat"}}view transform{{/crossLink}}
+     When true, will disable the effect of {@link Lookat"}}view transform{{/crossLink}}
      translations for this Mesh, while still allowing it to rotate. This is useful for skybox Meshes.
 
      @property stationary
@@ -1494,36 +1502,10 @@ class Mesh extends xeokitObject {
     }
 
     /**
-     Property with final value ````true```` to indicate that this component is a {{#crossLink "Mesh"}}{{/crossLink}}.
-
-     @property isMesh
-     @returns {boolean}
-     */
-    get isMesh() {
-        return true;
-    }
-
-    /**
-     Property with final value ````true```` to indicate that this component is a Drawable.
-
-     This component will then be rendered, and therefore has the various methods that the renderer
-     needs in order to draw it.
-
-     It will also contribute to the {{#crossLink "Scene/aabb:property"}}Scene#aabb{{/crossLink}} whenever
-     its {{#crossLink "Mesh/collidable:property"}}Mesh/collidable:property {{/crossLink}} is true.
-
-     @property isDrawable
-     @returns {boolean}
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    /**
      Property with final value ````true```` to indicate that xeokit should render this Mesh Drawable in sorted order, relative to
      other Mesh Drawables of the same class.
 
-     The sort order is determined by the Mesh's {{#crossLink "Mesh/stateSortCompare:methd"}}Mesh#stateSortCompare(){{/crossLink}} method.
+     The sort order is determined by the Mesh's {@link Mesh/stateSortCompare:methd"}}Mesh#stateSortCompare(){{/crossLink}} method.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes
      to the GPU, ie. can collapse them.
@@ -1540,7 +1522,7 @@ class Mesh extends xeokitObject {
      relative to to other Meshes.
 
      The renderer requires this because Mesh defines
-     {{#crossLink "Mesh/isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}}, which returns true.
+     {@link Mesh/isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}}, which returns true.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same
      rendering state changes to the GPU, ie. can collapse them.
@@ -1637,7 +1619,7 @@ class Mesh extends xeokitObject {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
@@ -1663,7 +1645,7 @@ class Mesh extends xeokitObject {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
     drawGhostedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1689,7 +1671,7 @@ class Mesh extends xeokitObject {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1715,7 +1697,7 @@ class Mesh extends xeokitObject {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1741,7 +1723,7 @@ class Mesh extends xeokitObject {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
         if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
@@ -1762,11 +1744,11 @@ class Mesh extends xeokitObject {
     }
 
     /**
-     Given a {{#crossLink "PickResult"}}{{/crossLink}} that contains a
-     {{#crossLink "PickResult/primIndex:property"}}{{/crossLink}}, which indicates that a primitive was picked
+     Given a {@link PickResult} that contains a
+     {@link PickResult/primIndex}, which indicates that a primitive was picked
      on the Mesh, then add more information to the PickResult about the picked position on the surface of the Mesh.
 
-     This method is part of the {{#crossLink "Drawable"}}{{/crossLink}} contract, and is documented here for reference
+     This method is part of the {@link Drawable} contract, and is documented here for reference
      in case you're plugging your own Drawable components into xeokit.
 
      Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to

@@ -15,7 +15,7 @@ class CubicBezierCurve extends Curve {
     /**
      Starting point on this CubicBezierCurve.
 
-     Fires a {{#crossLink "CubicBezierCurve/v0:event"}}{{/crossLink}} event on change.
+     Fires a {@link CubicBezierCurve/v0:event} event on change.
 
      @property v0
      @default [0.0, 0.0, 0.0]
@@ -25,7 +25,7 @@ class CubicBezierCurve extends Curve {
 
         /**
          * Fired whenever this CubicBezierCurve's
-         * {{#crossLink "CubicBezierCurve/v0:property"}}{{/crossLink}} property changes.
+         * {@link CubicBezierCurve/v0} property changes.
          * @event v0
          * @param value The property's new value
          */
@@ -39,7 +39,7 @@ class CubicBezierCurve extends Curve {
     /**
      First control point on this CubicBezierCurve.
 
-     Fires a {{#crossLink "CubicBezierCurve/v1:event"}}{{/crossLink}} event on change.
+     Fires a {@link CubicBezierCurve/v1:event} event on change.
 
      @property v1
      @default [0.0, 0.0, 0.0]
@@ -49,7 +49,7 @@ class CubicBezierCurve extends Curve {
 
         /**
          * Fired whenever this CubicBezierCurve's
-         * {{#crossLink "CubicBezierCurve/v1:property"}}{{/crossLink}} property changes.
+         * {@link CubicBezierCurve/v1} property changes.
          * @event v1
          * @param value The property's new value
          */
@@ -63,7 +63,7 @@ class CubicBezierCurve extends Curve {
     /**
      Second control point on this CubicBezierCurve.
 
-     Fires a {{#crossLink "CubicBezierCurve/v2:event"}}{{/crossLink}} event on change.
+     Fires a {@link CubicBezierCurve/v2:event} event on change.
 
      @property v2
      @default [0.0, 0.0, 0.0]
@@ -73,7 +73,7 @@ class CubicBezierCurve extends Curve {
 
         /**
          * Fired whenever this CubicBezierCurve's
-         * {{#crossLink "CubicBezierCurve/v2:property"}}{{/crossLink}} property changes.
+         * {@link CubicBezierCurve/v2} property changes.
          * @event v2
          * @param value The property's new value
          */
@@ -87,7 +87,7 @@ class CubicBezierCurve extends Curve {
     /**
      End point on this CubicBezierCurve.
 
-     Fires a {{#crossLink "CubicBezierCurve/v3:event"}}{{/crossLink}} event on change.
+     Fires a {@link CubicBezierCurve/v3:event} event on change.
 
      @property v3
      @default [0.0, 0.0, 0.0]
@@ -97,7 +97,7 @@ class CubicBezierCurve extends Curve {
 
         /**
          * Fired whenever this CubicBezierCurve's
-         * {{#crossLink "CubicBezierCurve/v3:property"}}{{/crossLink}} property changes.
+         * {@link CubicBezierCurve/v3} property changes.
          * @event v3
          * @param value The property's new value
          */
@@ -113,7 +113,7 @@ class CubicBezierCurve extends Curve {
 
      Automatically clamps to range [0..1].
 
-     Fires a {{#crossLink "CubicBezierCurve/t:event"}}{{/crossLink}} event on change.
+     Fires a {@link CubicBezierCurve/t:event} event on change.
 
      @property t
      @default 0
@@ -128,7 +128,7 @@ class CubicBezierCurve extends Curve {
 
         /**
          * Fired whenever this CubicBezierCurve's
-         * {{#crossLink "CubicBezierCurve/t:property"}}{{/crossLink}} property changes.
+         * {@link CubicBezierCurve/t} property changes.
          * @event t
          * @param value The property's new value
          */
@@ -140,7 +140,7 @@ class CubicBezierCurve extends Curve {
     }
 
     /**
-     Point on this CubicBezierCurve at position {{#crossLink "CubicBezierCurve/t:property"}}{{/crossLink}}.
+     Point on this CubicBezierCurve at position {@link CubicBezierCurve/t}.
 
      @property point
      @type {{Array of Number}}

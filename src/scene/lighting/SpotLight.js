@@ -1,20 +1,20 @@
 /**
  A **SpotLight** defines a positional light source that originates from a single point and eminates in a given direction,
- to illuminate {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ to illuminate {@link Mesh"}}Meshes{{/crossLink}}.
 
  ## Overview
 
  * SpotLights have a position and direction.
  * SpotLights may be defined in either **World** or **View** coordinate space. When in World-space, their positions
- are relative to the World coordinate system, and will appear to move as the {{#crossLink "Camera"}}{{/crossLink}} moves.
+ are relative to the World coordinate system, and will appear to move as the {@link Camera} moves.
  When in View-space, their positions are relative to the View coordinate system, and will behave as if fixed to the viewer's
- head as the {{#crossLink "Camera"}}{{/crossLink}} moves.
- * SpotLights have {{#crossLink "SpotLight/constantAttenuation:property"}}{{/crossLink}}, {{#crossLink "SpotLight/linearAttenuation:property"}}{{/crossLink}} and
- {{#crossLink "SpotLight/quadraticAttenuation:property"}}{{/crossLink}} factors, which indicate how their intensity attenuates over distance.
- * A SpotLight can also have a {{#crossLink "Shadow"}}{{/crossLink}} component, to configure it to cast a shadow.
- * {{#crossLink "AmbientLight"}}{{/crossLink}}, {{#crossLink "DirLight"}}{{/crossLink}},
- {{#crossLink "SpotLight"}}{{/crossLink}} and {{#crossLink "PointLight"}}{{/crossLink}} instances are registered by ID
- on {{#crossLink "Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
+ head as the {@link Camera} moves.
+ * SpotLights have {@link SpotLight/constantAttenuation}, {@link SpotLight/linearAttenuation} and
+ {@link SpotLight/quadraticAttenuation} factors, which indicate how their intensity attenuates over distance.
+ * A SpotLight can also have a {@link Shadow} component, to configure it to cast a shadow.
+ * {@link AmbientLight}, {@link DirLight},
+ {@link SpotLight} and {@link PointLight} instances are registered by ID
+ on {@link Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
  ## Examples
 
  TODO
@@ -67,9 +67,9 @@
  @submodule lighting
  @constructor
  @extends Component
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The SpotLight configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this SpotLight.
  @param [cfg.pos=[ 1.0, 1.0, 1.0 ]] {Float32Array} Position, in either World or View space, depending on the value of the **space** parameter.
  @param [cfg.dir=[ 0.0, -1.0, 0.0 ]] {Float32Array} Direction in which this Spotlight is shining, in either World or View space, depending on the value of the **space** parameter.
@@ -175,7 +175,7 @@ class SpotLight extends Component {
     /**
      The position of this SpotLight.
 
-     This will be either World- or View-space, depending on the value of {{#crossLink "SpotLight/space:property"}}{{/crossLink}}.
+     This will be either World- or View-space, depending on the value of {@link SpotLight/space}.
 
      @property pos
      @default [1.0, 1.0, 1.0]
@@ -227,7 +227,7 @@ class SpotLight extends Component {
     /**
      The intensity of this SpotLight.
 
-     Fires a {{#crossLink "SpotLight/intensity:event"}}{{/crossLink}} event on change.
+     Fires a {@link SpotLight/intensity:event} event on change.
 
      @property intensity
      @default 1.0

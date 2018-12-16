@@ -84,9 +84,9 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     The {{#crossLink "CameraPath"}}{{/crossLink}} for this CameraPathAnimation.
+     The {@link CameraPath} for this CameraPathAnimation.
 
-     Fires a {{#crossLink "CameraPathAnimation/cameraPath:event"}}{{/crossLink}} event on change.
+     Fires a {@link CameraPathAnimation/cameraPath:event} event on change.
 
      @property cameraPath
      @type CameraPath
@@ -162,7 +162,7 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Flies this CameraPathAnimation's {{#crossLink "Camera"}}{{/crossLink}} to the time at the given frame.
+     * Flies this CameraPathAnimation's {@link Camera} to the time at the given frame.
      *
      * @method flyToFrame
      * @param {Number} frameIdx Index of the frame to play to.

@@ -1,9 +1,9 @@
 /**
- A **CustomProjection** defines a projection for a {{#crossLink "Camera"}}Camera{{/crossLink}} as a custom 4x4 matrix..
+ A **CustomProjection** defines a projection for a {@link Camera} as a custom 4x4 matrix..
 
  ## Overview
 
- * A {{#crossLink "Camera"}}Camera{{/crossLink}} has a CustomProjection to configure its custom projection mode.
+ * A {@link Camera} has a CustomProjection to configure its custom projection mode.
  * A CustomProjection lets us explicitly set the elements of its 4x4 transformation matrix.
 
  ## Examples
@@ -12,13 +12,13 @@
 
  ## Usage
 
- * See {{#crossLink "Camera"}}{{/crossLink}}
+ * See {@link Camera}
 
  @class CustomProjection
  @module xeokit
  @submodule camera
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CustomProjection.
@@ -56,7 +56,7 @@ class CustomProjection extends Component {
     /**
      The CustomProjection's projection transform matrix.
 
-     Fires a {{#crossLink "CustomProjection/matrix:event"}}{{/crossLink}} event on change.
+     Fires a {@link CustomProjection/matrix:event} event on change.
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
@@ -67,7 +67,7 @@ class CustomProjection extends Component {
         this._state.matrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 
         /**
-         Fired whenever this CustomProjection's {{#crossLink "CustomProjection/matrix:property"}}{{/crossLink}} property changes.
+         Fired whenever this CustomProjection's {@link CustomProjection/matrix} property changes.
 
          @event matrix
          @param value The property's new value

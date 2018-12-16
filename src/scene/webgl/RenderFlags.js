@@ -1,7 +1,7 @@
 
 /**
 
- Passed to each {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} method as
+ Passed to each {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} method as
  xeokit is about to render it, to query what effects the renderer should apply to it.
 
  @class RenderFlags
@@ -18,7 +18,7 @@ class RenderFlags {
     reset() {
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered solid and opaque.
          * @property normalFillOpaque
          * @type {boolean}
@@ -26,7 +26,7 @@ class RenderFlags {
         this.normalFillOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered solid and opaque.
          * @property normalEdgesOpaque
          * @type {boolean}
@@ -34,7 +34,7 @@ class RenderFlags {
         this.normalEdgesOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs its surfaces rendered solid and transparent.
          * @property normalFillTransparent
          * @type {boolean}
@@ -42,7 +42,7 @@ class RenderFlags {
         this.normalFillTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered opaque.
          * @property normalEdgesTransparent
          * @type {boolean}
@@ -50,7 +50,7 @@ class RenderFlags {
         this.normalEdgesTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and ghosted.
          * @property ghostedFillOpaque
          * @type {boolean}
@@ -58,7 +58,7 @@ class RenderFlags {
         this.ghostedFillOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered opaque and ghosted.
          * @property ghostedEdgesOpaque
          * @type {boolean}
@@ -66,7 +66,7 @@ class RenderFlags {
         this.ghostedEdgesOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and transparently ghosted.
          * @property ghostedFillTransparent
          * @type {boolean}
@@ -74,7 +74,7 @@ class RenderFlags {
         this.ghostedFillTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered transparent and ghosted.
          * @property ghostedEdgesTransparent
          * @type {boolean}
@@ -82,7 +82,7 @@ class RenderFlags {
         this.ghostedEdgesTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and highlighted.
          * @property highlightedFillOpaque
          * @type {boolean}
@@ -90,7 +90,7 @@ class RenderFlags {
         this.highlightedFillOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered opaque and highlighted.
          * @property highlightedEdgesOpaque
          * @type {boolean}
@@ -98,7 +98,7 @@ class RenderFlags {
         this.highlightedEdgesOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and transparently highlighted.
          * @property highlightedFillTransparent
          * @type {boolean}
@@ -106,7 +106,7 @@ class RenderFlags {
         this.highlightedFillTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered transparent.
          * @property highlightedEdgesTransparent
          * @type {boolean}
@@ -115,7 +115,7 @@ class RenderFlags {
 
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and selected.
          * @property selectedFillOpaque
          * @type {boolean}
@@ -123,7 +123,7 @@ class RenderFlags {
         this.selectedFillOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered opaque and selected.
          * @property selectedEdgesOpaque
          * @type {boolean}
@@ -131,7 +131,7 @@ class RenderFlags {
         this.selectedEdgesOpaque = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs surfaces rendered filled and transparently selected.
          * @property selectedFillTransparent
          * @type {boolean}
@@ -139,7 +139,7 @@ class RenderFlags {
         this.selectedFillTransparent = false;
 
         /**
-         * Set by {{#crossLink "Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
+         * Set by {@link Drawable/getRenderFlags:method"}}Drawable#getRenderFlags(){{/crossLink}} to indicate
          * the Drawable needs edges rendered transparent.
          * @property selectedEdgesTransparent
          * @type {boolean}

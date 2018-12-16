@@ -1,20 +1,20 @@
 /**
- An **AmbientLight** defines an ambient light source of fixed intensity and color that affects all {{#crossLink "Mesh"}}Meshes{{/crossLink}}
+ An **AmbientLight** defines an ambient light source of fixed intensity and color that affects all {@link Mesh"}}Meshes{{/crossLink}}
  equally.
 
  <a href="../../examples/#lights_ambient"><img src="http://i.giphy.com/l0HlGTxXQWMRVOPwk.gif"></img></a>
 
  ## Overview
 
- * When {{#crossLink "Mesh"}}Meshes{{/crossLink}} have {{#crossLink "PhongMaterial"}}PhongMaterials{{/crossLink}},
- AmbientLight {{#crossLink "AmbientLight/color:property"}}color{{/crossLink}} is multiplied by
- PhongMaterial {{#crossLink "PhongMaterial/ambient:property"}}{{/crossLink}} at each rendered fragment of the {{#crossLink "Geometry"}}{{/crossLink}} surface.
- * When the Meshes have {{#crossLink "LambertMaterial"}}LambertMaterials{{/crossLink}},
- AmbientLight {{#crossLink "AmbientLight/color:property"}}color{{/crossLink}} is multiplied by
- LambertMaterial {{#crossLink "LambertMaterial/ambient:property"}}{{/crossLink}} for each rendered triangle of the Geometry surface (ie. flat shaded).
- * {{#crossLink "AmbientLight"}}{{/crossLink}}, {{#crossLink "DirLight"}}{{/crossLink}},
- {{#crossLink "SpotLight"}}{{/crossLink}} and {{#crossLink "PointLight"}}{{/crossLink}} instances are registered by ID
- on {{#crossLink "Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
+ * When {@link Mesh"}}Meshes{{/crossLink}} have {@link PhongMaterial"}}PhongMaterials{{/crossLink}},
+ AmbientLight {@link AmbientLight/color:property"}}color{{/crossLink}} is multiplied by
+ PhongMaterial {@link PhongMaterial/ambient} at each rendered fragment of the {@link Geometry} surface.
+ * When the Meshes have {@link LambertMaterial"}}LambertMaterials{{/crossLink}},
+ AmbientLight {@link AmbientLight/color:property"}}color{{/crossLink}} is multiplied by
+ LambertMaterial {@link LambertMaterial/ambient} for each rendered triangle of the Geometry surface (ie. flat shaded).
+ * {@link AmbientLight}, {@link DirLight},
+ {@link SpotLight} and {@link PointLight} instances are registered by ID
+ on {@link Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
 
  ## Examples
 
@@ -50,9 +50,9 @@
  @module xeokit
  @submodule lighting
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} AmbientLight configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this AmbientLight.
  @param [cfg.color=[0.7, 0.7, 0.8]] {Array(Number)} The color of this AmbientLight.
  @param [cfg.intensity=[1.0]] {Number} The intensity of this AmbientLight, as a factor in range ````[0..1]````.

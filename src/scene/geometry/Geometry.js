@@ -1,5 +1,5 @@
 /**
- A **Geometry** defines a mesh for attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ A **Geometry** defines a mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
 
  ## Usage
 
@@ -70,9 +70,9 @@
  @module xeokit
  @submodule geometry
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}},
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
  generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Geometry.
  @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
@@ -87,7 +87,7 @@
  for reduced memory footprint and GPU bus usage.
  @param [cfg.combined=false] {Boolean} Combines positions, colors, normals and UVs into the same WebGL vertex buffers
  with other Geometries, in order to reduce the number of buffer binds performed per frame.
- @param [cfg.edgeThreshold=2] {Number} When a {{#crossLink "Mesh"}}{{/crossLink}} renders this Geometry as wireframe,
+ @param [cfg.edgeThreshold=2] {Number} When a {@link Mesh} renders this Geometry as wireframe,
  this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
  @extends Component
  */
@@ -717,8 +717,8 @@ class Geometry extends Component {
         /**
          Fired whenever this Geometry's boundary changes.
 
-         Get the latest boundary from the Geometry's {{#crossLink "Geometry/aabb:property"}}{{/crossLink}}
-         and {{#crossLink "Geometry/obb:property"}}{{/crossLink}} properties.
+         Get the latest boundary from the Geometry's {@link Geometry/aabb}
+         and {@link Geometry/obb} properties.
 
          @event boundary
 

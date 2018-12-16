@@ -1,13 +1,13 @@
 /**
- A **BoxGeometry** is a parameterized {{#crossLink "Geometry"}}{{/crossLink}} that defines a box-shaped mesh for attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+ A **BoxGeometry** is a parameterized {@link Geometry} that defines a box-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
 
  <a href="../../examples/#geometry_primitives_box"><img src="../../assets/images/screenshots/BoxGeometry.png"></img></a>
 
  ## Overview
 
- * Dynamically modify a BoxGeometry's dimensions at any time by updating its {{#crossLink "BoxGeometry/center:property"}}{{/crossLink}}, {{#crossLink "BoxGeometry/xSize:property"}}{{/crossLink}}, {{#crossLink "BoxGeometry/ySize:property"}}{{/crossLink}} and {{#crossLink "BoxGeometry/zSize:property"}}{{/crossLink}} properties.
+ * Dynamically modify a BoxGeometry's dimensions at any time by updating its {@link BoxGeometry/center}, {@link BoxGeometry/xSize}, {@link BoxGeometry/ySize} and {@link BoxGeometry/zSize} properties.
  * Dynamically switch its primitive type between ````"points"````, ````"lines"```` and ````"triangles"```` at any time by
- updating its {{#crossLink "Geometry/primitive:property"}}{{/crossLink}} property.
+ updating its {@link Geometry/primitive} property.
 
  ## Examples
 
@@ -15,8 +15,8 @@
 
  ## Usage
 
- An {{#crossLink "Mesh"}}{{/crossLink}} with a BoxGeometry and a {{#crossLink "PhongMaterial"}}{{/crossLink}} with
- diffuse {{#crossLink "Texture"}}{{/crossLink}}:
+ An {@link Mesh} with a BoxGeometry and a {@link PhongMaterial} with
+ diffuse {@link Texture}:
 
  ````javascript
  new xeokit.Mesh({
@@ -40,9 +40,9 @@
  @module xeokit
  @submodule geometry
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}},
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
  generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this BoxGeometry.
  @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a BoxGeometry are 'points', 'lines' and 'triangles'.

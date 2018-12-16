@@ -22,14 +22,14 @@ var tempColor = new Uint8Array(3);
 
  * Like the rest of xeokit, is compatible with WebGL version 1.
  * Used for high-detail engineering visualizations containing millions of objects.
- * Represents each of its objects with a {{#crossLink "BigModelMesh"}}{{/crossLink}}, which is a lightweight alternative to {{#crossLink "Object"}}{{/crossLink}}.
+ * Represents each of its objects with a {@link BigModelMesh}, which is a lightweight alternative to {@link Object}.
  * Renders flat-shaded, without textures. Each object has simply a color and an opacity to describe its surface appearance.
  * Objects can be individually visible, clippable, collidable, ghosted, highlighted, selected, edge-enhanced etc.
  * The transforms of a BigModel and its BigModelObjects are static, ie. they cannot be dynamically translated, rotated and scaled.
  * For a low memory footprint, does not retain geometry data in CPU memory. Keeps geometry only in GPU memory (which cannot be read).
  * Rendered using a combination of WebGL instancing and geometry batching. Instances objects that share geometries, while batching objects that have unique geometries.
- * Uses the {{#crossLink "Scene"}}{{/crossLink}}'s {{#crossLink "Scene/ghostMaterial:property"}}{{/crossLink}}, {{#crossLink "Scene/highlightMaterial:property"}}{{/crossLink}},
- {{#crossLink "Scene/selectedMaterial:property"}}{{/crossLink}} and {{#crossLink "Scene/edgeMaterial:property"}}{{/crossLink}} to define appearance when emphasised.
+ * Uses the {@link Scene}'s {@link Scene/ghostMaterial}, {@link Scene/highlightMaterial},
+ {@link Scene/selectedMaterial} and {@link Scene/edgeMaterial} to define appearance when emphasised.
 
  ## Examples
 
@@ -133,11 +133,11 @@ var tempColor = new Uint8Array(3);
  @module xeokit
  @submodule models
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {{#crossLink "Object"}}{{/crossLink}} documentation for usage.
+ @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
@@ -177,14 +177,17 @@ class BigModel extends Component {
     }
 
     /**
-     The role(s) that this Component type plays.
-
-     @property role
-     @type Array(String)
-     @final
+     * @private
      */
-    get role() {
-        return ["model", "drawable"];
+    get isModel() {
+        return true;
+    }
+
+    /**
+     * @private
+     */
+    get isDrawable() {
+        return true;
     }
 
     init(cfg) {
@@ -200,7 +203,7 @@ class BigModel extends Component {
 
 
         /**
-         All contained {{#crossLink "BigModelMesh"}}BigModelMesh{{/crossLink}} instances, mapped to their IDs.
+         All contained {@link BigModelMesh"}}BigModelMesh{{/crossLink}} instances, mapped to their IDs.
 
          @property meshes
          @final
@@ -209,7 +212,7 @@ class BigModel extends Component {
         this.meshes = {};
 
         /**
-         All contained {{#crossLink "BigModelObject"}}BigModelObject{{/crossLink}} instances, mapped to their IDs.
+         All contained {@link BigModelObject"}}BigModelObject{{/crossLink}} instances, mapped to their IDs.
 
          @property objects
          @final
@@ -363,12 +366,12 @@ class BigModel extends Component {
     /**
      Creates a reusable geometry within this BigModel.
 
-     We can then call {{#crossLink "BigModel/createMesh:method"}}createMesh(){{/crossLink}} with the
-     ID of the geometry to create a {{#crossLink "BigModelMesh"}}{{/crossLink}} within this BigModel that instances it.
+     We can then call {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}} with the
+     ID of the geometry to create a {@link BigModelMesh} within this BigModel that instances it.
 
      @method createGeometry
      @param {*} cfg Geometry properties.
-     @param {String|Number} cfg.id ID for the geometry, to refer to with {{#crossLink "BigModel/createMesh:method"}}createMesh(){{/crossLink}}
+     @param {String|Number} cfg.id ID for the geometry, to refer to with {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}}
      @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      @param {Array} cfg.positions Flat array of positions.
      @param {Array} cfg.normals Flat array of normal vectors.
@@ -396,10 +399,10 @@ class BigModel extends Component {
     }
 
     /**
-     Creates a {{#crossLink "BigModelMesh"}}{{/crossLink}} within this BigModel.
+     Creates a {@link BigModelMesh} within this BigModel.
 
      You can provide either geometry data arrays or the ID of a geometry that was previously created
-     with {{#crossLink "BigModel/createGeometry:method"}}createGeometry(){{/crossLink}}.
+     with {@link BigModel/createGeometry:method"}}createGeometry(){{/crossLink}}.
 
      When you provide arrays, then that geometry will be used solely by the BigModelObject, which will be rendered
      using geometry batching.
@@ -409,9 +412,9 @@ class BigModel extends Component {
 
      @method createMesh
      @param {*} cfg Object properties.
-     @param {String} cfg.id ID for the new object. Must not clash with any existing components within the {{#crossLink "Scene"}}{{/crossLink}}.
-     @param {String} [cfg.parentId] ID if the parent object, if any. Must resolve to a {{#crossLink "BigModelMesh"}}{{/crossLink}} that has already been created within this BigModel.
-     @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {{#crossLink "BigModel/createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+     @param {String} cfg.id ID for the new object. Must not clash with any existing components within the {@link Scene}.
+     @param {String} [cfg.parentId] ID if the parent object, if any. Must resolve to a {@link BigModelMesh} that has already been created within this BigModel.
+     @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link BigModel/createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      @param [cfg.primitive="triangles"] {String} Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      @param {Array} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
      @param {Array} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
@@ -547,8 +550,8 @@ class BigModel extends Component {
     }
 
     /**
-     Creates a {{#crossLink "BigModelObject"}}{{/crossLink}} within this BigModel, giving it one or
-     more meshes previously created with {{#crossLink "BigModel/createMesh"}}createMesh(){{/crossLink}}.
+     Creates a {@link BigModelObject} within this BigModel, giving it one or
+     more meshes previously created with {@link BigModel/createMesh"}}createMesh(){{/crossLink}}.
 
      A mesh can only belong to one BigModelObject, so you'll get an error if you try to reuse a mesh among
      multiple BigModelObjects.
@@ -708,8 +711,8 @@ class BigModel extends Component {
     /**
      Indicates if objects in this BigModel are visible.
 
-     Only rendered when {{#crossLink "BigModel/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "BigModel/culled:property"}}{{/crossLink}} is false.
+     Only rendered when {@link BigModel/visible} is true and
+     {@link BigModel/culled} is false.
 
      @property visible
      @default true
@@ -731,7 +734,7 @@ class BigModel extends Component {
     /**
      Indicates if objects in this BigModel are highlighted.
 
-     Highlighted appearance for the entire BigModel is configured by the {{#crossLink "Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
+     Highlighted appearance for the entire BigModel is configured by the {@link Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
 
      @property highlighted
      @default false
@@ -753,7 +756,7 @@ class BigModel extends Component {
     /**
      Indicates if objects in this BigModel are selected.
 
-     Selected appearance for the entire BigModel is configured by the {{#crossLink "Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
+     Selected appearance for the entire BigModel is configured by the {@link Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
 
      @property selected
      @default false
@@ -775,7 +778,7 @@ class BigModel extends Component {
     /**
      Indicates if objects in this BigModel are ghosted.
 
-     Ghosted appearance for the entire BigModel is configured by the {{#crossLink "Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
+     Ghosted appearance for the entire BigModel is configured by the {@link Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
 
      @property ghosted
      @default false
@@ -797,7 +800,7 @@ class BigModel extends Component {
     /**
      Indicates if objects in BigModel are shown with emphasized edges.
 
-     Edges appearance for the entire BigModel is configured by the {{#crossLink "Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
+     Edges appearance for the entire BigModel is configured by the {@link Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
 
      @property edges
      @default false
@@ -819,8 +822,8 @@ class BigModel extends Component {
     /**
      Indicates if this BigModel is culled from view.
 
-     The BigModel is only rendered when {{#crossLink "BigModel/visible:property"}}{{/crossLink}} is true and
-     {{#crossLink "BigModel/culled:property"}}{{/crossLink}} is false.
+     The BigModel is only rendered when {@link BigModel/visible} is true and
+     {@link BigModel/culled} is false.
 
      @property culled
      @default false
@@ -839,7 +842,7 @@ class BigModel extends Component {
     /**
      Indicates if this BigModel is clippable.
 
-     Clipping is done by the {{#crossLink "Scene"}}Scene{{/crossLink}}'s {{#crossLink "Clips"}}{{/crossLink}} component.
+     Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
 
      @property clippable
      @default true
@@ -859,7 +862,7 @@ class BigModel extends Component {
     }
 
     /**
-     Indicates if this BigModel is included in the {{#crossLink "Scene/aabb:property"}}Scene aabb{{/crossLink}}.
+     Indicates if this BigModel is included in the {@link Scene/aabb:property"}}Scene aabb{{/crossLink}}.
 
      @property collidable
      @default true
@@ -880,7 +883,7 @@ class BigModel extends Component {
     /**
      Whether or not to allow picking on this BigModel.
 
-     Picking is done via calls to {{#crossLink "Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
      @property pickable
      @default true
@@ -901,7 +904,7 @@ class BigModel extends Component {
     /**
      Defines the appearance of edges of objects within this BigModel.
 
-     This is the {{#crossLink "Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
+     This is the {@link Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
 
      @property edgeMaterial
      @type EdgeMaterial
@@ -913,7 +916,7 @@ class BigModel extends Component {
     /**
      Defines the appearance of ghosted objects within this BigModel.
 
-     This is the {{#crossLink "Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
+     This is the {@link Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
 
      @property ghostMaterial
      @type EmphasisMaterial
@@ -925,7 +928,7 @@ class BigModel extends Component {
     /**
      Defines the appearance of highlighted objects within this BigModel.
 
-     This is the {{#crossLink "Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
+     This is the {@link Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
 
      @property highlightMaterial
      @type EmphasisMaterial
@@ -937,7 +940,7 @@ class BigModel extends Component {
     /**
      Defines the appearance of selected objects within this BigModel.
 
-     This is the {{#crossLink "Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
+     This is the {@link Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
 
      @property selectedMaterial
      @type EmphasisMaterial
@@ -951,20 +954,6 @@ class BigModel extends Component {
             this._layers[i].compileShaders();
         }
         this.glRedraw();
-    }
-
-    /**
-     * Indicates that this component is drawable.
-     *
-     * If this returns true, then this component will rendered, and must have the various methods that the renderer
-     * needs in order to draw it, and will also contribute to
-     * the {{#crossLink "Scene/aabb:property"}}Scene#aabb{{/crossLink}} whenever
-     * its {{#crossLink "Model/collidable:property"}}Model/collidable:property {{/crossLink}} is true.
-     *
-     * @returns {boolean}
-     */
-    get isDrawable() {
-        return true;
     }
 
     /**

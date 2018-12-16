@@ -20,13 +20,13 @@
  @module xeokit
  @submodule lighting
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID for this ReflectionMap, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this ReflectionMap.
  @param [cfg.src=null] {Array of String} Paths to six image files to load into this ReflectionMap.
  @param [cfg.flipY=false] {Boolean} Flips this ReflectionMap's source data along its vertical axis when true.
- @param [cfg.encoding="linear"] {String} Encoding format.  See the {{#crossLink "ReflectionMap/encoding:property"}}{{/crossLink}} property for more info.
+ @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link ReflectionMap/encoding} property for more info.
  @extends Component
  */
 import {CubeTexture} from './CubeTexture.js';

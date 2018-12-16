@@ -3,19 +3,19 @@
 
  ## Overview
 
- See {{#crossLink "Lights"}}{{/crossLink}} for an example of how to use CubeTextures for light and reflection mapping.
+ See {@link Lights} for an example of how to use CubeTextures for light and reflection mapping.
 
  @class CubeTexture
  @module xeokit
  @submodule lighting
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CubeTexture.
  @param [cfg.src=null] {Array of String} Paths to six image files to load into this CubeTexture.
  @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
- @param [cfg.encoding="linear"] {String} Encoding format.  See the {{#crossLink "CubeTexture/encoding:property"}}{{/crossLink}} property for more info.
+ @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
  @extends Component
  */
 import {Component} from '../Component.js';
@@ -143,9 +143,9 @@ class CubeTexture extends Component{
                         texture.setProps(self._state);
                         /**
                          * Fired whenever this CubeTexture has loaded the
-                         * image files that its {{#crossLink "CubeTexture/src:property"}}{{/crossLink}} property currently points to.
+                         * image files that its {@link CubeTexture/src} property currently points to.
                          * @event loaded
-                         * @param value {HTML Image} The value of the {{#crossLink "CubeTexture/src:property"}}{{/crossLink}} property
+                         * @param value {HTML Image} The value of the {@link CubeTexture/src} property
                          */
                         self.fire("loaded", self._src);
                     }

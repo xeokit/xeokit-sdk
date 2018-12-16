@@ -1,6 +1,6 @@
 /**
- An **EmphasisMaterial** is a {{#crossLink "Material"}}{{/crossLink}} that defines the appearance of attached
- {{#crossLink "Mesh"}}Meshes{{/crossLink}} when they are highlighted, selected or ghosted.
+ An **EmphasisMaterial** is a {@link Material} that defines the appearance of attached
+ {@link Mesh"}}Meshes{{/crossLink}} when they are highlighted, selected or ghosted.
 
  ## Examples
 
@@ -10,11 +10,11 @@
 
  ## Overview
 
- * Ghost an {{#crossLink "Mesh"}}{{/crossLink}} by setting its {{#crossLink "Mesh/ghost:property"}}{{/crossLink}} property ````true````.
+ * Ghost an {@link Mesh} by setting its {@link Mesh/ghost} property ````true````.
  * When ghosted, a Mesh's appearance is controlled by its EmphasisMaterial.
- * An EmphasisMaterial provides several preset configurations that you can set it to. Select a preset by setting {{#crossLink "EmphasisMaterial/preset:property"}}{{/crossLink}} to the preset's ID. A map of available presets is provided in {{#crossLink "EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}.
- * By default, a Mesh uses the {{#crossLink "Scene"}}{{/crossLink}}'s global EmphasisMaterials, but you can give each Mesh its own EmphasisMaterial when you want to customize the effect per-Mesh.
- * Ghost all Meshes in a {{#crossLink "Model"}}{{/crossLink}} by setting the Model's {{#crossLink "Model/ghost:property"}}{{/crossLink}} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
+ * An EmphasisMaterial provides several preset configurations that you can set it to. Select a preset by setting {@link EmphasisMaterial/preset} to the preset's ID. A map of available presets is provided in {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}.
+ * By default, a Mesh uses the {@link Scene}'s global EmphasisMaterials, but you can give each Mesh its own EmphasisMaterial when you want to customize the effect per-Mesh.
+ * Ghost all Meshes in a {@link Model} by setting the Model's {@link Model/ghost} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
  * Modify the Scene's global EmphasisMaterial to customize it.
 
  ## Usage
@@ -25,7 +25,7 @@
  ### Ghosting
 
  In the usage example below, we'll create a Mesh with a ghost effect applied to it. The Mesh gets its own EmphasisMaterial for ghosting, and
- has its {{#crossLink "Mesh/ghost:property"}}{{/crossLink}} property set ````true```` to activate the effect.
+ has its {@link Mesh/ghost} property set ````true```` to activate the effect.
 
  <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/HighlightMaterial/teapot.png"></img></a>
 
@@ -50,7 +50,7 @@
  });
  ````
 
- Note the **edgeThreshold** configuration on the {{#crossLink "Geometry"}}{{/crossLink}} we've created for our
+ Note the **edgeThreshold** configuration on the {@link Geometry} we've created for our
  Mesh. Our EmphasisMaterial is configured to draw a wireframe representation of the Geometry, which will have inner edges (ie. edges between
  adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` configuration indicates
  that, for this particular Geometry, an inner edge is one where the angle between the surface normals of adjacent triangles is not
@@ -84,7 +84,7 @@
  ### Highlighting
 
  In the next example, we'll use a ghosting in conjunction with highlighting, to emphasise a couple of objects within
- a gearbox {{#crossLink "Model"}}{{/crossLink}}. We'll load the Model from glTF, then ghost all of its Meshes except for two gears, which we'll highlight instead. The ghosted
+ a gearbox {@link Model}. We'll load the Model from glTF, then ghost all of its Meshes except for two gears, which we'll highlight instead. The ghosted
  Meshes have the Scene's global ghosting EmphasisMaterial, which we'll modify. The  highlighted Meshes also have the Scene's global highlighting EmphasisMaterial, which we'll modify as well.
 
  <a href="../../examples/#effects_demo_gearbox"><img src="../../assets/images/screenshots/HighlightMaterial/gearbox.png"></img></a>
@@ -125,7 +125,7 @@
  ## Presets
 
  For convenience, an EmphasisMaterial provides several preset configurations that you can set it to, which are provided in
- {{#crossLink "EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}:
+ {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}:
 
  ````javascript
  var presets = xeokit.EmphasisMaterial.presets;
@@ -189,9 +189,9 @@
  @submodule materials
  @constructor
  @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {{#crossLink "Scene"}}{{/crossLink}} when omitted.
+ @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The EmphasisMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {{#crossLink "Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this EmphasisMaterial.
  @param [cfg.fill=true] {Boolean} Indicates whether or not ghost surfaces are filled with color.
  @param [cfg.fillColor=[0.4,0.4,0.4]] {Array of Number} EmphasisMaterial fill color.
@@ -200,8 +200,8 @@
  @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
  @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
  @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
- @param [cfg.backfaces=false] {Boolean} Whether to render {{#crossLink "Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {{#crossLink "EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
  */
 
 import {Material} from './Material.js';
@@ -339,7 +339,7 @@ class EmphasisMaterial extends Material {
      @type {Object}
      @static
      */
-    static get presets() {
+    get presets() {
         return PRESETS;
     };
 
@@ -560,10 +560,10 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
 
-     The backfaces will belong to {{#crossLink "Geometry"}}{{/crossLink}} components that are also attached to
-     the {{#crossLink "Mesh"}}Meshes{{/crossLink}}.
+     The backfaces will belong to {@link Geometry} components that are also attached to
+     the {@link Mesh"}}Meshes{{/crossLink}}.
 
      @property backfaces
      @default false
