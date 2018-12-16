@@ -422,7 +422,7 @@ class BigModel extends Component {
      @param {Array} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
      @param {Array} [cfg.matrix] Modeling matrix.
 
-     @returns {xeokit.BigModelMesh}
+     @returns {BigModelMesh}
      */
     createMesh(cfg) {
 

@@ -1,5 +1,5 @@
 import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {GLTFBigModel} from "../../../xeokit/GLTFBigModel/GLTFBigModel.js";
+import {GLTFBigModel} from "../../../scene/bigModels/GLTFBigModel.js";
 
 /**
  * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).

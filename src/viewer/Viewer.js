@@ -51,7 +51,7 @@ class Viewer {
         /**
          * The Viewer's {@link Scene}.
          * @property scene
-         * @type {xeokit.Scene}
+         * @type {Scene}
          */
         this.scene = new Scene({
             canvas: cfg.canvasId,
@@ -74,7 +74,7 @@ class Viewer {
          * The Viewer's {@link CameraFlightAnimation}, which
          * is used to fly the {@link Scene}'s {@link Camera} to given targets.
          * @property cameraFlight
-         * @type {xeokit.CameraFlightAnimation}
+         * @type {CameraFlightAnimation}
          */
         this.cameraFlight = new CameraFlightAnimation(this.scene, {
             fitFOV: 45,
@@ -85,7 +85,7 @@ class Viewer {
          * The Viewer's {@link CameraControl}, which
          * controls the {@link Scene}'s {@link Camera} with mouse,  touch and keyboard input.
          * @property cameraControl
-         * @type {xeokit.CameraControl}
+         * @type {CameraControl}
          */
         this.cameraControl = new CameraControl(this.scene, {});
 
@@ -147,12 +147,11 @@ class Viewer {
      * @param {string} modelId ID of the target {@link Model}.
      */
     destroyMetadata(modelId) {
-        var root = this.structures[modelId];
+        var root = this.metadata.structures[modelId];
         if (!root) {
             return;
         }
-        var objects = this.objects;
-
+        var objects = this.metadata.objects;
         function visit(object) {
             delete objects[object.id];
             const children = object.children;
@@ -162,9 +161,8 @@ class Viewer {
                 }
             }
         }
-
         visit(root);
-        delete this.structures[modelId];
+        delete this.metadata.structures[modelId];
         this.fire("metadata-destroyed", modelId);
     }
 

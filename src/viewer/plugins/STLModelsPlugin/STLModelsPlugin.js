@@ -104,7 +104,7 @@ class STLModelsPlugin extends ModelsPlugin {
      *
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
-     * @param {xeokit.Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
+     * @param {Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
      * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
      *
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
@@ -138,7 +138,7 @@ class STLModelsPlugin extends ModelsPlugin {
      * separate [xeokit.Mesh](http://xeokit.org/docs/classes/Mesh.html) for each group of faces that share the same vertex
      * colors. Only works with binary STL.
      *
-     * @returns {{xeokit.Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded STL model.
+     * @returns {{Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded STL model.
      */
     load(params) {
         return super.load(params);

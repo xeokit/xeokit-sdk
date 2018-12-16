@@ -1,9 +1,9 @@
+import {Map} from "../../../utils/Map.js";
 import {stats} from "../../../stats.js"
-import {utils} from "../../../utils.js";
 import {Program} from "../../../webgl/Program.js";
 import {InstancingPickShaderSource} from "./instancingPickShaderSource.js";
 
-const ids = new utils.Map({});
+const ids = new Map({});
 
 /**
  * @private

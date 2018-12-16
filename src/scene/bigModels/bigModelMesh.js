@@ -1,5 +1,5 @@
 import {RENDER_FLAGS} from './renderFlags.js';
-import {math} from "../xeokit.module.js";
+import {math} from "../math/math.js";
 
 /**
  A **BigModelMesh** represents an instance of a geometry within a {@link BigModel}.

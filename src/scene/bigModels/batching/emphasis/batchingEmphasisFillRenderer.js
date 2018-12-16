@@ -1,10 +1,10 @@
+import {Map} from "../../../utils/Map.js";
 import {stats} from "../../../stats.js"
-import {utils} from "../../../utils.js";
 import {Program} from "../../../webgl/Program.js";
 import {BatchingEmphasisFillShaderSource} from "./batchingEmphasisFillShaderSource.js";
 import {RENDER_PASSES} from '../../renderPasses.js';
 
-const ids = new utils.Map({});
+const ids = new Map({});
 
 /**
  * @private

@@ -99,7 +99,7 @@ class XML3DModelsPlugin extends ModelsPlugin {
      *
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
-     * @param {xeokit.Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
+     * @param {Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
      * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
      *
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
@@ -128,7 +128,7 @@ class XML3DModelsPlugin extends ModelsPlugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{xeokit.Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded 3DXML model.
+     * @returns {{Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded 3DXML model.
      */
     load(params) {
         params.workerScriptsPath = this._workerScriptsPath;

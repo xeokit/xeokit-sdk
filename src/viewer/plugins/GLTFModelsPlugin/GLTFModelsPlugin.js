@@ -80,7 +80,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      *
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
-     * @param {xeokit.Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
+     * @param {Object} [params.parent] The parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
      * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
      *
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
@@ -114,7 +114,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * [xeokit.Meshes](http://xeokit.org/docs/classes/Meshes.html) are created as the glTF node hierarchy is
      * parsed. See usage examples.
      *
-     * @returns {{xeokit.Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded glTF model.
+     * @returns {{Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded glTF model.
      */
     load(params) {
 

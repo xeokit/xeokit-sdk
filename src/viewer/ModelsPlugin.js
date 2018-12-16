@@ -44,7 +44,7 @@ class ModelsPlugin extends Plugin {
      * @param {*} params  Loading params.
      * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's xeokit.Scene.
-     * @returns {{xeokit.Model}} A {@link Model} representing the loaded model
+     * @returns {{Model}} A {@link Model} representing the loaded model
      */
     load(params) {
         const self = this;

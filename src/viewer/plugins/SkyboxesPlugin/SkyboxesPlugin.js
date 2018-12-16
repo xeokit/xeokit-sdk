@@ -116,7 +116,7 @@ class SkyboxesPlugin extends Plugin {
      @param {String} id Unique ID to assign to the skybox.
      @param {Object} params Skybox configuration.
      @param {Boolean} [params.active=true] Whether the skybox plane is initially active. Only skyboxes while this is true.
-     @returns {xeokit.Skybox} The new skybox.
+     @returns {Skybox} The new skybox.
      */
     createSkybox(id, params) {
         if (this.viewer.scene.components[id]) {
