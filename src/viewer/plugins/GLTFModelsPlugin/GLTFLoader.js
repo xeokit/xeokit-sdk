@@ -770,7 +770,7 @@ var parseGLTF = (function () {
 
         if (ctx.handleNode) {
             var actions = {};
-            if (!ctx.handleNode(nodeInfo, actions)) {
+            if (!ctx.handleNode(ctx.model.id, nodeInfo, actions)) {
                 return;
             }
             if (actions.createObject) {
