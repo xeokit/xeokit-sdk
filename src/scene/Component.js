@@ -233,6 +233,13 @@ class Component {
         return "Component";
     }
 
+    /**
+     * @private
+     */
+    get isComponent() {
+        return true;
+    }
+
     constructor() {
 
         var cfg = {};
@@ -907,8 +914,21 @@ class Component {
     }
 
     _checkComponent(expectedType, component) {
+        if (!component.isComponent) {
+            if (utils.isID(component)) {
+                const id = component;
+                component = this.scene.components[id];
+                if (!component) {
+                    this.error("Component not found: " + id);
+                    return;
+                }
+            } else {
+                this.error("Expected a Component or ID");
+                return;
+            }
+        }
         if (expectedType !== component.type) {
-            this.error("Expected a " + expectedType + " component type");
+            this.error("Expected a " + expectedType + " Component");
             return;
         }
         if (component.scene.id !== this.scene.id) {
@@ -919,6 +939,19 @@ class Component {
     }
 
     _checkComponent2(expectedTypes, component) {
+        if (!component.isComponent) {
+            if (utils.isID(component)) {
+                const id = component;
+                component = this.scene.components[id];
+                if (!component) {
+                    this.error("Component not found: " + id);
+                    return;
+                }
+            } else {
+                this.error("Expected a Component or ID");
+                return;
+            }
+        }
         if (component.scene.id !== this.scene.id) {
             this.error("Not in same scene: " + component.type);
             return;

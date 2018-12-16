@@ -2,7 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {LambertMaterial} from "../../../scene/materials/LambertMaterial.js";
 import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
 import {Geometry} from "../../../scene/geometry/Geometry.js";
-import {Object as sceneObject} from "../../../scene/objects/Object.js";
+import {xeokitObject as sceneObject} from "../../../scene/objects/Object.js";
 import {Model as SceneModel} from "../../../scene/models/Model.js";
 import {Mesh} from "../../../scene/mesh/Mesh.js";
 
