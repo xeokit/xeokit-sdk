@@ -63,18 +63,18 @@ class ModelsPlugin extends Plugin {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
-        var model = new Model(this.viewer.scene);
+        var model = new Model(this.viewer.scene, params);
         this._modelLoadParams[id] = utils.apply(params, {});
         if (params.metadataSrc) {
             const metadataSrc = params.metadataSrc;
             utils.loadJSON(metadataSrc, function (metadata) {
                 self.viewer.createMetadata(id, metadata);
-                self._loader.load(model, src);
+                self._loader.load(model, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
             });
         } else {
-            this._loader.load(model, src);
+            this._loader.load(model, src, params);
         }
         this.models[id] = model;
         model.once("destroyed", () => {
