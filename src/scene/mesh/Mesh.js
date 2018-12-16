@@ -1570,7 +1570,7 @@ class Mesh extends xeokitObject {
             }
         } else {
             const normalMaterial = this._material._state;
-            if (normalMaterial.alpha < 1.0) {
+            if (normalMaterial.alpha < 1.0 || state.colorize[3] < 1.0) {
                 renderFlags.normalFillTransparent = true;
             } else {
                 renderFlags.normalFillOpaque = true;
