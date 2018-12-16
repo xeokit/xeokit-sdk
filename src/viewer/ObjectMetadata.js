@@ -44,6 +44,19 @@ class ObjectMetadata {
          */
         this.guid = cfg.guid;
 
+        if (cfg.extid !== undefined && cfg.extid !== null) {
+
+            /**
+             * External ID.
+             *
+             * Undefined when there is no external ID.
+             *
+             * @property extid
+             * @type {Number|String}
+             */
+            this.extid = cfg.extid;
+        }
+
         if (cfg.properties) {
 
             /**
