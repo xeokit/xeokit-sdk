@@ -1,5 +1,5 @@
 import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {OBJModel} from "../../../scene/models/OBJModel.js";
+import {OBJLoader} from "./OBJLoader.js";
 
 /**
  * A viewer plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
@@ -7,7 +7,7 @@ import {OBJModel} from "../../../scene/models/OBJModel.js";
  * For each model loaded, creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within its
  * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
  *
- * See the {@link OBJModelsPlugin#load} method for parameters that you can configure
+ * See the {@link OBJLoaderPlugin#load} method for parameters that you can configure
  * each [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with as you load it.
  *
  * @example
@@ -51,9 +51,9 @@ import {OBJModel} from "../../../scene/models/OBJModel.js";
  * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
- * @class OBJModelsPlugin
+ * @class OBJLoaderPlugin
  */
-class OBJModelsPlugin extends ModelsPlugin {
+class OBJLoaderPlugin extends ModelsPlugin {
 
     /**
      * @constructor
@@ -62,7 +62,7 @@ class OBJModelsPlugin extends ModelsPlugin {
      * @param {String} [cfg.id="OBJModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
-        super("OBJModels", viewer, OBJModel, cfg);
+        super("OBJModels", viewer, new OBJLoader(cfg), cfg);
     }
 
     /**
@@ -107,4 +107,4 @@ class OBJModelsPlugin extends ModelsPlugin {
     }
 }
 
-export {OBJModelsPlugin}
+export {OBJLoaderPlugin}
