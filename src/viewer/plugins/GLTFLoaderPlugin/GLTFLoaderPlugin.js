@@ -1,6 +1,7 @@
 import {utils} from "../../../scene/utils.js";
 import {GLTFLoader} from "./GLTFLoader.js";
 import {ModelsPlugin} from "../../ModelsPlugin.js";
+import {ifcDefaultStates} from "../../utils/ifcDefaultStates.js";
 
 /**
  * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -8,7 +9,7 @@ import {ModelsPlugin} from "../../ModelsPlugin.js";
  * For each model loaded, creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within its
  * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
  *
- * See the {@link GLTFModelsPlugin#load} method for parameters that you can configure
+ * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure
  * each [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with as you load it.
  *
  * @example
@@ -52,9 +53,9 @@ import {ModelsPlugin} from "../../ModelsPlugin.js";
  * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
- * @class GLTFModelsPlugin
+ * @class GLTFLoaderPlugin
  */
-class GLTFModelsPlugin extends ModelsPlugin {
+class GLTFLoaderPlugin extends ModelsPlugin {
 
     /**
      * @constructor
@@ -63,7 +64,7 @@ class GLTFModelsPlugin extends ModelsPlugin {
      * @param {String} [cfg.id="GLTFModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
-        super("GLTFModels", viewer, new GLTFLoader(), cfg);
+        super("GLTFModels", viewer, new GLTFLoader(cfg), cfg);
     }
 
     /**
@@ -120,10 +121,55 @@ class GLTFModelsPlugin extends ModelsPlugin {
         var modelId = params.id;
         return super.load(utils.apply(params, {
             handleNode: function (nodeInfo, actions) {
-                return GLTFModelsPlugin.defaultHandleNode(modelId, nodeInfo, actions);
+                return GLTFLoaderPlugin.defaultHandleNode(modelId, nodeInfo, actions);
             }
         }));
     }
+
+    // static handleNode(modelId, nodeInfo, actions) {
+    //     const name = nodeInfo.name;
+    //     if (!name) {
+    //         return true; // Continue descending this node subtree
+    //     }
+    //     const objectId = modelId + "#" + name;
+    //     const objectMetadata = viewer.metadata.objects[objectId];
+    //
+    //     const ifcType = (objectMetadata ? objectMetadata.type : "DEFAULT") || "DEFAULT";
+    //     var colorize = ifcDefaultMaterials[ifcType];
+    //
+    //     actions.createObject = {
+    //         id: modelId + "#" + name,
+    //         visible: true,
+    //         entityType: ifcType, // Registers Object in Scene#entities
+    //         colorize: colorize
+    //     };
+    //
+    //     switch (ifcType) { // Configure initial state of object depending on its type
+    //
+    //         case "IfcWindow":
+    //             actions.createObject.pickable = false;
+    //             actions.createObject.opacity = 0.5;
+    //             break;
+    //
+    //         case "IfcSpace":
+    //             actions.createObject.pickable = false;
+    //             actions.createObject.visible = false;
+    //
+    //             break;
+    //
+    //         case "IfcOpeningElement":
+    //             actions.createObject.pickable = false;
+    //             actions.createObject.visible = false;
+    //             break;
+    //
+    //         default: // Unrecognized type
+    //             actions.createObject.pickable = true;
+    //         //actions.createObject.opacity = 0.2;
+    //         //  actions.createObject.visible = false;
+    //     }
+    //
+    //     return true; // Continue descending this glTF node subtree
+    // }
 
     static defaultHandleNode(modelId, nodeInfo, actions) {
         var name = nodeInfo.name;
@@ -139,4 +185,4 @@ class GLTFModelsPlugin extends ModelsPlugin {
     }
 }
 
-export {GLTFModelsPlugin}
+export {GLTFLoaderPlugin}
