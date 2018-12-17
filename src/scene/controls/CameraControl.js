@@ -509,7 +509,7 @@ class CameraControl extends Component {
                          * @param mesh The Mesh
                          */
                         self.fire("hoverOut", {
-                            mesh: scene.meshes[lastPickedMeshId]
+                            mesh: scene.components[lastPickedMeshId]
                         });
                     }
 
@@ -550,7 +550,7 @@ class CameraControl extends Component {
                      * @param mesh The Mesh
                      */
                     self.fire("hoverOut", {
-                        mesh: scene.meshes[lastPickedMeshId]
+                        mesh: scene.components[lastPickedMeshId]
                     });
                     lastPickedMeshId = undefined;
                 }

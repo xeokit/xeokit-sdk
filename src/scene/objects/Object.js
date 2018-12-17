@@ -721,8 +721,6 @@ class xeokitObject extends Component {
         if (cfg.parent) {
             cfg.parent.addChild(this);
         }
-
-        this.scene._objectCreated(this);
     }
 
     _setLocalMatrixDirty() {
@@ -830,9 +828,13 @@ class xeokitObject extends Component {
     addChild(object, inheritStates) {
         if (utils.isNumeric(object) || utils.isString(object)) {
             const objectId = object;
-            object = this.scene.objects[objectId];
+            object = this.scene.component[objectId];
             if (!object) {
-                this.warn("Object not found: " + utils.inQuotes(objectId));
+                this.warn("Component not found: " + utils.inQuotes(objectId));
+                return;
+            }
+            if (!object.isObject) {
+                this.error("Not a xeokit Object: " + objectId);
                 return;
             }
         } else if (utils.isObject(object)) {
@@ -844,7 +846,7 @@ class xeokitObject extends Component {
             }
         } else {
             if (!object.isObject) {
-                this.error("Not a xeokit.Object: " + object.id);
+                this.error("Not an Object: " + object.id);
                 return;
             }
             if (object._parent) {
@@ -860,7 +862,6 @@ class xeokitObject extends Component {
             this.error("Object not in same Scene: " + object.id);
             return;
         }
-        delete this.scene.rootObjects[object.id];
         this._childList.push(object);
         this._childMap[object.id] = object;
         this._childIDs = null;
@@ -899,7 +900,6 @@ class xeokitObject extends Component {
                 this._childList = this._childList.splice(i, 1);
                 delete this._childMap[object.id];
                 this._childIDs = null;
-                this.scene.rootObjects[object.id] = object;
                 object._setWorldMatrixDirty();
                 object._setAABBDirty();
                 this._setAABBDirty();
@@ -918,7 +918,6 @@ class xeokitObject extends Component {
         for (let i = 0, len = this._childList.length; i < len; i++) {
             object = this._childList[i];
             object._parent = null;
-            this.scene.rootObjects[object.id] = object;
             object._setWorldMatrixDirty();
             object._setAABBDirty();
         }
@@ -1136,9 +1135,13 @@ class xeokitObject extends Component {
     set parent(object) {
         if (utils.isNumeric(object) || utils.isString(object)) {
             const objectId = object;
-            object = this.scene.objects[objectId];
+            object = this.scene.components[objectId];
             if (!object) {
                 this.warn("Group not found: " + utils.inQuotes(objectId));
+                return;
+            }
+            if (!object.isObject) {
+                this.error("Not an Object: " + object.id);
                 return;
             }
         }
@@ -1771,7 +1774,6 @@ class xeokitObject extends Component {
         this._childIDs = null;
         this._setAABBDirty();
         this.scene._aabbDirty = true;
-        this.scene._objectDestroyed(this);
     }
 }
 

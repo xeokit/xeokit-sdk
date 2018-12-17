@@ -881,8 +881,6 @@ class Mesh extends xeokitObject {
         this.compile();
 
         super.init(cfg); // Call xeokit.Object._init()
-
-        this.scene._meshCreated(this);
     }
 
     _checkBillboard(value) {
@@ -1810,7 +1808,6 @@ class Mesh extends xeokitObject {
         super.destroy(); // xeokit.Object
         this._putDrawRenderers();
         this._putPickRenderers();
-        this.scene._meshDestroyed(this);
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeokit framework?
         this.glRedraw();
     }

@@ -482,15 +482,6 @@ class Scene extends Component {
         this.models = {};
 
         /**
-         The {@link Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
-
-         @property objects
-         @final
-         @type {{String:Object}}
-         */
-        this.objects = {};
-
-        /**
          {@link Object"}}Objects{{/crossLink}} in this Scene that have GUIDs, mapped to their GUIDs.
 
          Each Object is registered in this map when its {@link Object/guid} is
@@ -586,15 +577,6 @@ class Scene extends Component {
         this._highlightedEntityIds = null;
         this._selectedEntityIds = null;
 
-        /**
-         The {@link Mesh"}}Meshes{{/crossLink}} in this Scene, mapped to their IDs.
-
-         @property meshes
-         @final
-         @type {String:xeokit.Mesh}
-         */
-        this.meshes = {};
-
         this._collidables = {}; // Components that contribute to the Scene AABB
         this._compilables = {}; // Components that require shader compilation
 
@@ -610,19 +592,6 @@ class Scene extends Component {
          */
         this.types = {};
 
-        /**
-         For each {@link Component/role:property"}}Component#role{{/crossLink}}, a map of
-         IDs to {@link Component"}}Components{{/crossLink}} instances that fulfill that role.
-
-         Roles can also be thought of as contracts that Component subclasses play within xeokit or the application layer.
-
-         This mechanism provides a convenient way to register Components based on their roles.
-
-         @property role
-         @final
-         @type {String:{String:xeokit.Component}}
-         */
-        this.roles = {};
 
         /**
          The {@link Component"}}Component{{/crossLink}} within this Scene, mapped to their IDs.
@@ -632,15 +601,6 @@ class Scene extends Component {
          @type {String:xeokit.Component}
          */
         this.components = {};
-
-        /**
-         The root {@link Object"}}Objects{{/crossLink}} in this Scene, mapped to their IDs.
-
-         @property rootObjects
-         @final
-         @type {{String:Object}}
-         */
-        this.rootObjects = {};
 
         /**
          The {@link Clip"}}Clip{{/crossLink}} components in this Scene, mapped to their IDs.
@@ -880,28 +840,6 @@ class Scene extends Component {
         // Do this BEFORE we add components below
         core._addScene(this);
 
-        // Add components specified as JSON
-
-        const componentJSONs = cfg.components;
-
-        if (componentJSONs) {
-            let componentJSON;
-            let type;
-            let constr;
-            for (let i = 0, len = componentJSONs.length; i < len; i++) {
-                componentJSON = componentJSONs[i];
-                type = componentJSON.type;
-                if (type) {
-                    constr = window[type];
-                    if (constr) {
-                        new constr(this, componentJSON);
-                    }
-                }
-            }
-        }
-
-        // Init default components
-
         this._initDefaults();
 
         // Global components
@@ -1055,23 +993,6 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _objectCreated(object) {
-        this.objects[object.id] = object;
-        if (object.guid) {
-            this.guidObjects[object.id] = object;
-            this._objectGUIDs = null; // To lazy-rebuild
-        }
-        if (!object.parent) {
-            this.rootObjects[object.id] = object; // TODO: What about when a root Object is added as child to another?
-        }
-        stats.components.objects++;
-    }
-
-    _meshCreated(mesh) {
-        this.meshes[mesh.id] = mesh;
-        stats.components.meshes++;
-    }
-
     _modelCreated(model) {
         this.models[model.id] = model;
         stats.components.models++;
@@ -1101,82 +1022,60 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _objectDestroyed(object) {
-        delete this.objects[object.id];
-        if (object.guid) {
-            delete this.guidObjects[object.guid];
-            this._objectGUIDs = null; // To lazy-rebuild
+    _entityTypeAssigned(component, newEntityType) {
+        this.entities[component.id] = component;
+        let componentsOfType = this.entityTypes[newEntityType];
+        if (!componentsOfType) {
+            componentsOfType = {};
+            this.entityTypes[newEntityType] = componentsOfType;
         }
-        if (!object.parent) {
-            delete this.rootObjects[object.id];
-        }
-        stats.components.objects--;
-    }
-
-    _meshDestroyed(mesh) {
-        delete this.meshes[mesh.id];
-        stats.components.meshes--;
-    }
-
-    _modelDestroyed(model) {
-        this.models[model.id] = model;
-        stats.components.models--;
-    }
-
-    _entityTypeAssigned(object, newEntityType) {
-        this.entities[object.id] = object;
-        let objectsOfType = this.entityTypes[newEntityType];
-        if (!objectsOfType) {
-            objectsOfType = {};
-            this.entityTypes[newEntityType] = objectsOfType;
-        }
-        objectsOfType[object.id] = object;
+        componentsOfType[component.id] = component;
         this._entityIds = null; // Lazy regenerate
         this._entityTypeIds = null; // Lazy regenerate
     }
 
-    _entityTypeRemoved(object, oldEntityType) {
-        delete this.entities[object.id];
-        const objectsOfType = this.entityTypes[oldEntityType];
-        if (objectsOfType) {
-            delete objectsOfType[object.id];
+    _entityTypeRemoved(component, oldEntityType) {
+        delete this.entities[component.id];
+        const componentsOfType = this.entityTypes[oldEntityType];
+        if (componentsOfType) {
+            delete componentsOfType[component.id];
         }
         this._entityIds = null; // Lazy regenerate
         this._entityTypeIds = null; // Lazy regenerate
     }
 
-    _entityVisibilityUpdated(object, visible) {
+    _entityVisibilityUpdated(component, visible) {
         if (visible) {
-            this.visibleEntities[object.id] = object;
+            this.visibleEntities[component.id] = component;
         } else {
-            delete this.visibleEntities[object.id];
+            delete this.visibleEntities[component.id];
         }
         this._visibleEntityIds = null; // Lazy regenerate
     }
 
-    _entityGhostedUpdated(object, ghosted) {
+    _entityGhostedUpdated(component, ghosted) {
         if (ghosted) {
-            this.ghostedEntities[object.id] = object;
+            this.ghostedEntities[component.id] = component;
         } else {
-            delete this.ghostedEntities[object.id];
+            delete this.ghostedEntities[component.id];
         }
         this._ghostedEntityIds = null; // Lazy regenerate
     }
 
-    _entityHighlightedUpdated(object, highlighted) {
+    _entityHighlightedUpdated(component, highlighted) {
         if (highlighted) {
-            this.highlightedEntities[object.id] = object;
+            this.highlightedEntities[component.id] = component;
         } else {
-            delete this.highlightedEntities[object.id];
+            delete this.highlightedEntities[component.id];
         }
         this._highlightedEntityIds = null; // Lazy regenerate
     }
 
-    _entitySelectedUpdated(object, selected) {
+    _entitySelectedUpdated(component, selected) {
         if (selected) {
-            this.selectedEntities[object.id] = object;
+            this.selectedEntities[component.id] = component;
         } else {
-            delete this.selectedEntities[object.id];
+            delete this.selectedEntities[component.id];
         }
         this._selectedEntityIds = null; // Lazy regenerate
     }
@@ -1944,9 +1843,9 @@ class Scene extends Component {
             return this.aabb;
         }
         if (utils.isString(target)) {
-            const object = this.objects[target];
-            if (object) {
-                return object.aabb;
+            const component = this.components[target];
+            if (component && component.aabb) { // A Component subclass with an AABB
+                return component.aabb;
             }
             target = [target]; // Must be an entity type
         }
@@ -1960,7 +1859,7 @@ class Scene extends Component {
         let ymax = -100000;
         let zmax = -100000;
         let valid;
-        this.withObjects(target, object => {
+        this.withComponents(target, object => {
                 const aabb = object.aabb;
                 if (aabb[0] < xmin) {
                     xmin = aabb[0];
@@ -2060,7 +1959,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed visibility, else false if all updates were redundant and not applied.
      */
     setVisible(ids, visible) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.visible !== visible);
             object.visible = visible;
             return changed;
@@ -2078,7 +1977,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed culled state, else false if all updates were redundant and not applied.
      */
     setCulled(ids, culled) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.culled !== culled);
             object.culled = culled;
             return changed;
@@ -2100,7 +1999,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed selection state, else false if all updates were redundant and not applied.
      */
     setSelected(ids, selected) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.selected !== selected);
             object.selected = selected;
             return changed;
@@ -2122,7 +2021,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed highlighted state, else false if all updates were redundant and not applied.
      */
     setHighlighted(ids, highlighted) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.highlighted !== highlighted);
             object.highlighted = highlighted;
             return changed;
@@ -2144,7 +2043,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed ghosted state, else false if all updates were redundant and not applied.
      */
     setGhosted(ids, ghosted) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.ghosted !== ghosted);
             object.ghosted = ghosted;
             return changed;
@@ -2160,7 +2059,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed edges state, else false if all updates were redundant and not applied.
      */
     setEdges(ids, edges) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.edges !== edges);
             object.edges = edges;
             return changed;
@@ -2182,7 +2081,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed outlined state, else false if all updates were redundant and not applied.
      */
     setOutlined(ids, outlined) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.outlined !== outlined);
             object.outlined = outlined;
             return changed;
@@ -2197,7 +2096,7 @@ class Scene extends Component {
      @param [colorize=(1,1,1)] Float32Array RGB colorize factors, multiplied by the rendered pixel colors.
      */
     setColorize(ids, colorize) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             object.colorize = colorize;
         });
     }
@@ -2210,7 +2109,7 @@ class Scene extends Component {
      @param [opacity=1] Number Opacity factor in range ````[0..1]````, multiplies by the rendered pixel alphas.
      */
     setOpacity(ids, opacity) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             object.opacity = opacity;
         });
     }
@@ -2226,7 +2125,7 @@ class Scene extends Component {
      @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed pickable state, else false if all updates were redundant and not applied.
      */
     setPickable(ids, pickable) {
-        return this.withObjects(ids, object => {
+        return this.withComponents(ids, object => {
             const changed = (object.pickable !== pickable);
             object.pickable = pickable;
             return changed;
@@ -2234,32 +2133,32 @@ class Scene extends Component {
     }
 
     /**
-     Iterates with a callback over {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Iterates with a callback over {@link Component}s, specified by their IDs, GUIDs and/or entity types.
 
-     @method withObjects
-     @param ids {String|Array} One or more {@link Object} IDs, GUIDs or entity types.
+     @method withComponents
+     @param ids {String|Array} One or more {@link Component} IDs, GUIDs or entity types.
      @param callback {Function} The callback, which takes each object as its argument.
      */
-    withObjects(ids, callback) {
+    withComponents(ids, callback) {
         if (utils.isString(ids)) {
             ids = [ids];
         }
         let changed = false;
         for (let i = 0, len = ids.length; i < len; i++) {
             const id = ids[i];
-            let object = this.objects[id];
-            if (object) {
-                changed = callback(object) || changed;
+            let component = this.components[id];
+            if (component) {
+                changed = callback(component) || changed;
             } else {
-                object = this.guidObjects[id];
-                if (object) {
-                    changed = callback(object) || changed;
+                component = this.guidObjects[id];
+                if (component) {
+                    changed = callback(component) || changed;
                 } else {
-                    const objects = this.entityTypes[id];
-                    if (objects) {
-                        for (const objectId in objects) {
-                            if (objects.hasOwnProperty(objectId)) {
-                                changed = callback(objects[objectId]) || changed;
+                    const components = this.entityTypes[id];
+                    if (components) {
+                        for (const componentId in components) {
+                            if (components.hasOwnProperty(componentId)) {
+                                changed = callback(components[componentId]) || changed;
                             }
                         }
                     }
@@ -2283,7 +2182,7 @@ class Scene extends Component {
 
         // Memory leak prevention
         this.models = null;
-        this.objects = null;
+        this.components = null;
         this.guidObjects = null;
         this.entityTypes = null;
         this.entities = null;
@@ -2301,10 +2200,8 @@ class Scene extends Component {
         this._ghostedEntityIds = null;
         this._highlightedEntityIds = null;
         this._selectedEntityIds = null;
-        this.meshes = null;
         this.types = null;
         this.components = null;
-        this.rootObjects = null;
         this.canvas = null;
         this._renderer = null;
         this.input = null;
