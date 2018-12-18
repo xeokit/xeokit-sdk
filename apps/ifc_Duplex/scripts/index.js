@@ -6,12 +6,22 @@ import {PropertiesPanelPlugin} from "./../../../src/viewer/plugins/PropertiesPan
 import {ifcDefaultMaterials} from "./ifcDefaults.js";
 
 const viewer = new Viewer({
-    canvasId: "myCanvas"
+    canvasId: "myCanvas",
+    transparent: true
 });
 
-var cameraControl = viewer.cameraControl;
+const cameraControl = viewer.cameraControl;
+const scene = viewer.scene;
+const camera = scene.camera;
+const cameraFlight = viewer.cameraFlight;
+
 cameraControl.panToPointer = true;
 cameraControl.doublePickFlyTo = true;
+cameraFlight.duration = 1.0;
+cameraFlight.fitFOV = 25;
+
+camera.orbitPitch(20);
+
 
 const structurePanel = new StructurePanelPlugin(viewer, {
     domElementId: "structurePanel"
@@ -35,60 +45,72 @@ const model = gltfLoader.load({
         }
         const objectId = modelId + "#" + name;
         const objectMetadata = viewer.metadata.objects[objectId];
-
         const ifcType = (objectMetadata ? objectMetadata.type : "DEFAULT") || "DEFAULT";
         var colorize = ifcDefaultMaterials[ifcType];
-
         actions.createObject = {
             id: modelId + "#" + name,
             visible: true,
             entityType: ifcType, // Registers Object in Scene#entities
             colorize: colorize
         };
-
         switch (ifcType) { // Configure initial state of object depending on its type
-
             case "IfcWindow":
                 actions.createObject.pickable = false;
                 actions.createObject.opacity = 0.5;
                 break;
-
             case "IfcSpace":
                 actions.createObject.pickable = false;
                 actions.createObject.visible = false;
-
                 break;
-
             case "IfcOpeningElement":
                 actions.createObject.pickable = false;
                 actions.createObject.visible = false;
                 break;
-
             default: // Unrecognized type
                 actions.createObject.pickable = true;
-                //actions.createObject.opacity = 0.2;
-              //  actions.createObject.visible = false;
         }
-
         return true; // Continue descending this glTF node subtree
     }
 });
 
-const scene = viewer.scene;
-const camera = scene.camera;
-
-camera.orbitPitch(20);
-
 model.on("loaded", () => {
-    //model.ghosted = true;
-    //model.opacity = 0.5;
-    viewer.cameraFlight.flyTo(model);
-    var modelMetadata = viewer.metadata.structures[model.id];
-    if (modelMetadata) {
 
-    }
+    viewer.cameraFlight.flyTo(model);
+
+    structurePanel.on("clicked", e => {
+
+        const objectId = e.objectId;
+        const objectIds = getSubSobjects(objectId);
+        const aabb = scene.getAABB(objectIds);
+
+        viewer.scene.setSelected(viewer.scene.selectedEntityIds, false);
+        viewer.scene.setSelected(objectIds, true);
+
+        viewer.cameraFlight.flyTo(aabb);
+    });
 });
 
+
+function getSubSobjects(rootId) {
+    const list = [];
+
+    function visit(objectId) {
+        const object = viewer.metadata.objects[objectId];
+        if (!object) {
+            return;
+        }
+        list.push(objectId);
+        const children = object.children;
+        if (children) {
+            for (var i = 0, len = children; i < len; i++) {
+                visit(children[i]);
+            }
+        }
+    }
+
+    visit(rootId);
+    return list;
+}
 
 var input = scene.input;
 
@@ -106,7 +128,7 @@ input.on("mouseclicked", function (coords) {
         } else {
             const parent = mesh.parent;
             if (parent) {
-                objectMetadata = viewer.metadata.objects[parent.id]
+                objectMetadata = viewer.metadata.objects[parent.id];
                 if (objectMetadata) {
                     console.log(JSON.stringify(objectMetadata, null, "\t"));
                 }

@@ -2,6 +2,8 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
 }
 
 b {
@@ -21,13 +23,15 @@ em {
 }
 
 #topsection {
-    background: #EAEAEA;
-    height: 90px; /*Height of top section*/
+    background: #000000;
+    color:white;
+    height: 70px; /*Height of top section*/
 }
 
 #topsection h1 {
     margin: 0;
     padding-top: 15px;
+    padding-left: 10px;
 }
 
 #contentwrapper {
@@ -37,21 +41,24 @@ em {
 }
 
 #contentcolumn {
-    margin: 0 200px 0 230px; /*Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth*/
+    margin: 0 200px 0 300px; /*Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth*/
     height: 100%;
 }
 
 #myCanvas {
     width:100%;
     height: 100%;
+    background: lightBlue;
 }
 
 #leftcolumn {
     float: left;
-    width: 230px; /*Width of left column*/
+    width: 300px; /*Width of left column*/
     height: 100%;
     margin-left: -100%;
-    background: #C8FC98;
+    background: #464646;
+    color: white;
+    overflow-y: scroll;
 }
 
 #rightcolumn {
