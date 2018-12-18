@@ -10,7 +10,7 @@ import {core} from "../../../scene/core.js";
 class OBJLoader  {
 
     /**
-     * Loads OBJ and MTL from file(s) into a {@link GroupModel}.
+     * Loads OBJ and MTL from file(s) into a {@link Model}.
      *
      * @method load
      * @static
@@ -38,7 +38,7 @@ class OBJLoader  {
     }
 
     /**
-     * Parses OBJ and MTL text strings into a {@link GroupModel}.
+     * Parses OBJ and MTL text strings into a {@link Model}.
      *
      * @method parse
      * @static
