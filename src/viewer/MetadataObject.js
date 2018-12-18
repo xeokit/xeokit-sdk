@@ -1,14 +1,14 @@
 /**
- * Metadata for a {@link Object} within a {@link Viewer}'s {@link Scene}.
+ * Metadata for a {@link Model} element.
  *
  * * Normally represents IFC metadata, but can represent other schemas as well.
  * * Kept within the object map and structure tree in {@link Viewer#metadata}.
- * * Only exist for {@link Model}s that were loaded by
- * {@link ModelsPlugin}s that also loaded metadata.
+ * * Only exist for {@link Model}s that were loaded by {@link LoaderPlugin}s that also loaded metadata.
+ * * Within structure trees, each leaf ObjectMetaData would usually each correspond to an {@link Entity}.
  *
- * @class ObjectMetadata
+ * @class MetadataObject
  */
-class ObjectMetadata {
+class MetadataObject {
 
     constructor(cfg) {
 
@@ -78,7 +78,7 @@ class ObjectMetadata {
              * Undefined when this is a root.
              *
              * @property parent
-             * @type {ObjectMetadata}
+             * @type {MetadataObject}
              */
             this.parent = cfg.parent;
         }
@@ -111,4 +111,4 @@ class ObjectMetadata {
     }
 }
 
-export {ObjectMetadata};
+export {MetadataObject};
