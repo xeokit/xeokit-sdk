@@ -2,8 +2,8 @@ import {Plugin} from "./../../Plugin.js";
 import {LambertMaterial} from "../../../scene/materials/LambertMaterial.js";
 import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
 import {Geometry} from "../../../scene/geometry/Geometry.js";
-import {xeokitObject as sceneObject} from "../../../scene/objects/Object.js";
-import {Model as SceneModel} from "../../../scene/models/Model.js";
+import {Object3D} from "../../../scene/objects/Object3D.js";
+import {GroupModel} from "../../../scene/models/GroupModel.js";
 import {Mesh} from "../../../scene/mesh/Mesh.js";
 
 
@@ -15,8 +15,8 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *
  * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
  *
- * For each model loaded, BIMServerModelsPlugin creates a [xeokit.Model](http://xeokit.org/docs/classes/Model.html) within its
- * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html). You can load multiple models into the same
+ * For each model loaded, BIMServerModelsPlugin creates a {@link Model} within its
+ * {@link Viewer}'s {@link Scene}. You can load multiple models into the same
  * Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.
  *
  * A BIMServerModelsPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
@@ -104,20 +104,20 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *     });
  * });
  *
- * @class BIMServerModelsPlugin
+ * @class BIMServerLoaderPlugin
  */
-class BIMServerModelsPlugin extends Plugin {
+class BIMServerLoaderPlugin extends Plugin {
 
     /**
      * @constructor
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="BIMServerModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="BIMServerLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {BimServerClient} cfg.bimServerClient A BIMServer client API instance.
      */
     constructor(viewer, cfg) {
 
-        super("BIMServerModels", viewer, cfg);
+        super("BIMServerLoader", viewer, cfg);
 
         if (!cfg.bimServerClient) {
             this.error("Config expected: bimServerClient");
@@ -166,8 +166,8 @@ class BIMServerModelsPlugin extends Plugin {
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.id ID to assign to the [xeokit.Model](http://xeokit.org/docs/classes/Model.html),
-     * unique among all components in the Viewer's [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
+     * @param {String} params.id ID to assign to the {@link Model},
+     * unique among all components in the Viewer's {@link Scene}.
      *
      * @param {Number} params.poid ID of the model's project within BIMServer.
      *
@@ -175,26 +175,26 @@ class BIMServerModelsPlugin extends Plugin {
      *
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
      *
-     * @param {Object} [params.parent] A parent [xeokit.Object](http://xeokit.org/docs/classes/Object.html),
-     * if we want to graft the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) into a xeokit object hierarchy.
+     * @param {Object} [params.parent] A parent {@link Object3D},
+     * if we want to graft the {@link Model} into a xeokit object hierarchy.
      *
-     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with edges emphasized.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
      *
-     * @param {Float32Array} [params.position=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s
      * local 3D position.
      *
-     * @param {Float32Array} [params.scale=[1,1,1]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s
+     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Model}'s
      * local scale.
      *
-     * @param {Float32Array} [params.rotation=[0,0,0]] The [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local
+     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Model}'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
-     * [xeokit.Model](http://xeokit.org/docs/classes/Model.html)'s local modelling transform matrix. Overrides
+     * {@link Model}'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
-     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each [xeokit.Mesh](http://xeokit.org/docs/classes/Mesh.html)
-     * the same [xeokit.LambertMaterial](http://xeokit.org/docs/classes/LambertMaterial.html) and a ````colorize````
+     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each {@link Mesh}
+     * the same {@link LambertMaterial} and a ````colorize````
      * value set the to the corresponding IFC element color. This is typically used for large models, for a lower
      * memory footprint and smoother performance.
      *
@@ -203,7 +203,7 @@ class BIMServerModelsPlugin extends Plugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{Model}} A [xeokit.Model](http://xeokit.org/docs/classes/Model.html) representing the loaded BIMserver model.
+     * @returns {{Model}} A {@link Model} representing the loaded BIMserver model.
      */
     load(params) {
 
@@ -256,11 +256,11 @@ class BIMServerModelsPlugin extends Plugin {
 
         scene.canvas.spinner.processes++;
 
-        const xeokitModel = new SceneModel(scene, params);
+        const groupModel = new GroupModel(scene, params);
 
-        const xeokitMaterial = lambertMaterials ? new LambertMaterial(scene, {
+        const xeokitMaterial = lambertMaterials ? new LambertMaterial(groupModel, {
             backfaces: true
-        }) : new PhongMaterial(scene, {
+        }) : new PhongMaterial(groupModel, {
             diffuse: [1.0, 1.0, 1.0]
         });
 
@@ -268,7 +268,7 @@ class BIMServerModelsPlugin extends Plugin {
 
             this.loadMetadata(modelId, bimServerClientModel).then(function () {
 
-                xeokitModel.once("destroyed", function () {
+                groupModel.once("destroyed", function () {
                    viewer.destroyMetadata(modelId);
                 });
 
@@ -340,7 +340,7 @@ class BIMServerModelsPlugin extends Plugin {
 
                     createGeometry: function (geometryDataId, positions, normals, indices, reused) {
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        new Geometry(xeokitModel, {
+                        new Geometry(groupModel, {
                             id: geometryId,
                             primitive: "triangles",
                             positions: positions,
@@ -364,7 +364,7 @@ class BIMServerModelsPlugin extends Plugin {
                         ifcType = ifcType || "DEFAULT";
                         //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                         const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
-                        const xeokitObject = new sceneObject(xeokitModel, {
+                        const xeokitObject = new Object3D(groupModel, {
                             id: objectId,
                             // guid: guid,
                             entityType: ifcType,
@@ -374,9 +374,9 @@ class BIMServerModelsPlugin extends Plugin {
                             visibility: !self.hiddenTypes[ifcType],
                             edges: edges
                         });
-                        xeokitModel.addChild(xeokitObject, false);
+                        groupModel.addChild(xeokitObject, false);
                         for (let i = 0, len = geometryDataIds.length; i < len; i++) {
-                            const xeokitMesh = new Mesh(xeokitModel, {
+                            const xeokitMesh = new Mesh(groupModel, {
                                 geometry: `${modelId}.${geometryDataIds[i]}`,
                                 material: xeokitMaterial
                             });
@@ -388,13 +388,13 @@ class BIMServerModelsPlugin extends Plugin {
 
                     addGeometryToObject(oid, geometryDataId) {
                         const objectId = `${modelId}.${oid}`;
-                        const xeokitObject = xeokitModel.scene.components[objectId];
+                        const xeokitObject = groupModel.scene.components[objectId];
                         if (!xeokitObject) {
                             //self.error(`Can't find object with id ${objectId}`);
                             return;
                         }
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        const xeokitMesh = new Mesh(xeokitModel, {
+                        const xeokitMesh = new Mesh(groupModel, {
                             geometry: geometryId,
                             material: xeokitMaterial
                         });
@@ -415,10 +415,10 @@ class BIMServerModelsPlugin extends Plugin {
                         viewer.scene.off(onTick);
                         scene.canvas.spinner.processes--;
 
-                        xeokitModel.fire("loaded");
+                        groupModel.fire("loaded");
 
-                        viewer.fire("loaded", xeokitModel);
-                        self.fire("loaded", xeokitModel);
+                        viewer.fire("loaded", groupModel);
+                        self.fire("loaded", groupModel);
                     }
                 });
 
@@ -432,7 +432,7 @@ class BIMServerModelsPlugin extends Plugin {
             });
         });
 
-        return xeokitModel;
+        return groupModel;
     }
 
     loadMetadata(modelId, bimServerClientModel) {
@@ -487,8 +487,7 @@ class BIMServerModelsPlugin extends Plugin {
                 ]
             };
 
-            bimServerClientModel.query(query, function () {
-            }).done(function () {
+            bimServerClientModel.query(query, function () { }).done(function () {
 
                 const entityCardinalities = { // Parent-child cardinalities for entities
                     'IfcRelDecomposes': 1,
@@ -566,7 +565,7 @@ class BIMServerModelsPlugin extends Plugin {
                     return object;
                 });
 
-                console.log(JSON.stringify({objects: newObjects}, null, "\t"));
+            //    console.log(JSON.stringify({objects: newObjects}, null, "\t"));
 
                 self.viewer.createMetadata(modelId, { objects: newObjects });
 
@@ -605,4 +604,4 @@ class BIMServerModelsPlugin extends Plugin {
     }
 }
 
-export {BIMServerModelsPlugin}
+export {BIMServerLoaderPlugin}
