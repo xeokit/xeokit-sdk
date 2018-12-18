@@ -64,8 +64,8 @@ class Row {
 }
 
 /**
- * A {@link Viewer} plugin that renders an HTML panel showing the values of {@link ObjectMetadata#properties} of
- * an {@link ObjectMetadata} within {@link Viewer#metadata}.
+ * A {@link Viewer} plugin that renders an HTML panel showing the values of {@link MetadataObject#properties} of
+ * an {@link MetadataObject} within {@link Viewer#metadata}.
  *
  * @example
  *

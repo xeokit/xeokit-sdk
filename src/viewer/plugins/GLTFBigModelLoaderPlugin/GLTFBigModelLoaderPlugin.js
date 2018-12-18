@@ -1,16 +1,18 @@
-import {ModelsPlugin} from "./../../../viewer/ModelsPlugin.js";
-import {GLTFBigModel} from "../../../scene/bigModels/GLTFBigModel.js";
+import {Plugin} from "./../../../viewer/Plugin.js";
+import {BigModel} from "../../../scene/bigModels/BigModel.js";
+import {GLTFBigModelLoader} from "./GLTFBigModelLoader.js";
+import {utils} from "../../../scene/utils.js";
 
 /**
  * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
  *
  * For each model loaded, creates a [xeokit.BigModel](http://xeokit.org/docs/classes/BigModel.html) within its
- * {@link Viewer}'s [xeokit.Scene](http://xeokit.org/docs/classes/Scene.html).
+ * {@link Viewer}'s {@link Scene}.
  *
  *
  *
- * See the {@link GLTFBigModelsPlugin#load} method for parameters that you can configure
- * each [xeokit.Model](http://xeokit.org/docs/classes/Model.html) with as you load it.
+ * See the {@link GLTFBigModelLoaderPlugin#load} method for parameters that you can configure
+ * each {@link Model} with as you load it.
  *
  * @example
  * // Create a xeokit Viewer
@@ -53,18 +55,37 @@ import {GLTFBigModel} from "../../../scene/bigModels/GLTFBigModel.js";
  * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
- * @class GLTFBigModelsPlugin
+ * @class GLTFBigModelLoaderPlugin
  */
-class GLTFBigModelsPlugin extends ModelsPlugin {
+class GLTFBigModelLoaderPlugin extends Plugin {
 
     /**
      * @constructor
+     *
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="GLTFBigModels"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="GLTFBigModelLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
-        super("GLTFBigModels", viewer, GLTFBigModel, cfg);
+
+        super("GLTFBigModelLoader", viewer, cfg);
+
+        /**
+         * @private
+         */
+        this._loader = new GLTFBigModelLoader(cfg);
+
+        /**
+         * {@link Model}s currently loaded by this Plugin.
+         * @type {{String:GroupModel}}
+         */
+        this.models = {};
+
+        /**
+         * Saves load params for bookmarks.
+         * @private
+         */
+        this._modelLoadParams = {};
     }
 
     /**
@@ -101,17 +122,122 @@ class GLTFBigModelsPlugin extends ModelsPlugin {
      @param [params.handleNode] {Function} Optional callback to mask which {@link Object"}}Objects{{/crossLink}} are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.
      */
     load(params) {
-        if (!params.id) {
+        const self = this;
+        const id = params.id;
+        if (!id) {
             this.error("load() param expected: id");
             return;
         }
-        if (this.viewer.scene.components[params.id]) {
-            this.error("Component with this ID already exists in viewer: " + id);
+        const src = params.src;
+        if (!src) {
+            this.error("load() param expected: src");
             return;
         }
-        var model = new GLTFBigModel(this.viewer.scene, params);
-        return model; // TODO: register loading params within this plugin for inclusion in bookmarks
+        if (this.viewer.scene.components[id]) {
+            this.error(`Component with this ID already exists in viewer: ${id}`);
+            return;
+        }
+        var bigModel = new BigModel(this.viewer.scene, params);
+        this._modelLoadParams[id] = utils.apply(params, {});
+        if (params.metadataSrc) {
+            const metadataSrc = params.metadataSrc;
+            utils.loadJSON(metadataSrc, function (metadata) {
+                self.viewer.createMetadata(id, metadata);
+                self._loader.load(bigModel, src, params);
+            }, function (errMsg) {
+                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+            });
+        } else {
+            this._loader.load(bigModel, src, params);
+        }
+        this.models[id] = bigModel;
+        bigModel.once("destroyed", () => {
+            delete this.models[id];
+            delete this._modelLoadParams[id];
+            this.viewer.destroyMetadata(id);
+            this.fire("unloaded", id);
+        });
+        return bigModel;
+    }
+
+
+    /**
+     * Unloads a {@link Model} that was previously loaded by this Plugin.
+     *
+     * @param {String} id  ID of model to unload.
+     */
+    unload(id) {
+        const model = this.models;
+        if (!model) {
+            this.error(`unload() model with this ID not found: ${id}`);
+            return;
+        }
+        model.destroy();
+    }
+
+    /**
+     * @private
+     */
+    send(name, value) {
+        switch (name) {
+            case "clear":
+                this.clear();
+                break;
+        }
+    }
+
+    /**
+     * @private
+     */
+    writeBookmark(bookmark) {
+        bookmark[this.id] = this._modelLoadParams;
+    }
+
+    /**
+     * @private
+     */
+    readBookmarkAsynch(bookmark, ok) {
+        this.clear();
+        var modelLoadParams = bookmark[this.id];
+        if (modelLoadParams) {
+            var modelParamsList = [];
+            for (const id in modelLoadParams) {
+                modelParamsList.push(modelLoadParams[id]);
+            }
+            if (modelParamsList.length === 0) {
+                ok();
+                return;
+            }
+            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);
+        }
+    }
+
+    _loadModel(modelLoadParams, i, ok) {
+        this.load(modelLoadParams[i], () =>{
+            if (i === 0) {
+                ok();
+            } else {
+                this._loadModel(modelLoadParams, i - 1, ok);
+            }
+        });
+    }
+
+    /**
+     * Unloads models loaded by this plugin.
+     */
+    clear() {
+        for (const id in this.models) {
+            this.models[id].destroy();
+        }
+    }
+
+    /**
+     * Destroys this plugin, after first destroying any models it has loaded.
+     */
+    destroy() {
+        this.clear();
+        super.destroy();
     }
 }
 
-export {GLTFBigModelsPlugin}
+export {GLTFBigModelLoaderPlugin}

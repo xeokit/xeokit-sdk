@@ -1,78 +1,59 @@
-import {BigModel} from "./BigModel.js";
-import {utils} from "../utils.js";
-import {core} from "../core.js";
-import {math} from "./../math/math.js";
+import {math} from "./../../../scene/math/math.js";
+import {utils} from "./../../../scene/utils.js";
+import {core} from "./../../../scene/core.js";
 
 /**
  * @private
  */
-class GLTFBigModel extends BigModel {
+class GLTFBigModelLoader {
 
-    init(cfg) {
-        var self = this;
-        super.init(cfg);
-        this._options = {};
-        this.loaded = cfg.loaded;
-        var spinner = this.scene.canvas.spinner;
-        if (cfg.gltf) {
-            spinner.processes++;
-            var options = utils.apply(this._options, {
-                basePath: cfg.basePath || ""
-            });
-            parseGLTF(cfg.gltf, null, options, this,
-                function () {
-                    spinner.processes--;
-                    core.scheduleTask(function () {
-                        self.loaded = true;
-                        self.fire("loaded", true, true);
-                    });
-                },
-                function (msg) {
-                    spinner.processes--;
-                    self.error(msg);
-                    /**
-                     Fired whenever this BigGLTFModel fails to load the glTF file
-                     specified by {@link BigGLTFModel/src}.
-                     @event error
-                     @param msg {String} Description of the error
-                     */
-                    self.fire("error", msg);
-                });
-        } else if (cfg.src) {
-            if (!utils.isString(cfg.src)) {
-                this.error("Value for 'src' should be a string");
-                return;
-            }
-            this._src = cfg.src;
-            spinner.processes++;
-            loadGLTF(this, this._src, this._options,
-                function () {
-                    spinner.processes--;
-                    core.scheduleTask(function () {
-                        self.loaded = true;
-                        self.fire("loaded", true, true);
-                    });
-                },
-                function (msg) {
-                    spinner.processes--;
-                    self.error(msg);
-                    self.fire("error", msg);
-                });
-        } else {
-            this.error("Config missing: gltf or src");
-            return;
-        }
+    constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleNode etc
+        cfg = cfg || {};
+        this._handleNode = cfg.handleNode;
     }
 
-    /**
-     Path to the glTF file from which this BigGLTFModel was loaded.
+    load(bigModel, src, options, ok, error) {
+        options = options || {};
+        var spinner = bigModel.scene.canvas.spinner;
+        spinner.processes++;
+        loadGLTF(bigModel, src, options, function () {
+                spinner.processes--;
+                core.scheduleTask(function () {
+                    bigModel.fire("loaded", true, true);
+                });
+                if (ok) {
+                    ok();
+                }
+            },
+            function (msg) {
+                spinner.processes--;
+                bigModel.error(msg);
+                if (error) {
+                    error(msg);
+                }
+                bigModel.fire("error", msg);
+            });
+    }
 
-     @property src
-     @type String
-     @final
-     */
-    get src() {
-        return this._src;
+    parse(bigModel, gltf, options, ok, error) {
+        options = options || {};
+        var spinner = bigModel.scene.canvas.spinner;
+        spinner.processes++;
+        parseGLTF(gltf, "", options, bigModel, function () {
+                spinner.processes--;
+                bigModel.fire("loaded", true, true);
+                if (ok) {
+                    ok();
+                }
+            },
+            function (msg) {
+                spinner.processes--;
+                bigModel.error(msg);
+                bigModel.fire("error", msg);
+                if (error) {
+                    error(msg);
+                }
+            });
     }
 }
 
@@ -80,10 +61,10 @@ const INSTANCE_THRESHOLD = 1;
 
 var loadGLTF = (function () {
 
-    return function (model, src, options, ok, error) {
+    return function (bigModel, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, model, ok, error);
+                parseGLTF(json, src, options, bigModel, ok, error);
             },
             error);
     };
@@ -115,27 +96,27 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, model, ok) {
+    return function (json, src, options, bigModel, ok) {
 
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
             json: json,
-            scene: model.scene,
-            model: model,
+            scene: bigModel.scene,
+            bigModel: bigModel,
             numObjects: 0
         };
 
-        model.scene.loading++; // Disables (re)compilation
+        bigModel.scene.loading++; // Disables (re)compilation
 
         loadBuffers(ctx, function () {
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
             loadMaterials(ctx);
             loadDefaultScene(ctx);
-            model.scene.loading--; // Re-enables (re)compilation
-            model.finalize();
+            bigModel.scene.loading--; // Re-enables (re)compilation
+            bigModel.finalize();
             ok();
         });
     };
@@ -150,7 +131,7 @@ var parseGLTF = (function () {
                         ok();
                     }
                 }, function (msg) {
-                    ctx.model.error(msg);
+                    ctx.bigModel.error(msg);
                     if (--numToLoad === 0) {
                         ok();
                     }
@@ -367,7 +348,7 @@ var parseGLTF = (function () {
 
     function loadNode(ctx, nodeIdx, nodeInfo, matrix, parent, parentCfg) {
 
-        parent = parent || ctx.model;
+        parent = parent || ctx.bigModel;
 
         var createObject;
 
@@ -382,7 +363,7 @@ var parseGLTF = (function () {
         }
 
         var json = ctx.json;
-        var model = ctx.model;
+        var bigModel = ctx.bigModel;
         var localMatrix;
 
         if (nodeInfo.matrix) {
@@ -437,7 +418,7 @@ var parseGLTF = (function () {
 
                     for (var i = 0; i < numPrimitives; i++) {
                         const meshCfg = {
-                            id: model.id + "." + ctx.numObjects, // TODO: object ID
+                            id: bigModel.id + "." + ctx.numObjects, // TODO: object ID
                             matrix: matrix
                         };
                         var primitiveInfo = meshInfo.primitives[i];
@@ -460,7 +441,7 @@ var parseGLTF = (function () {
                             // Instancing
                             //------------------------------------------------------------------
 
-                            const geometryId = model.id + "." + nodeInfo.mesh;
+                            const geometryId = bigModel.id + "." + nodeInfo.mesh;
 
                             if (!meshInfo.geometryId) {
                                 meshInfo.geometryId = geometryId;
@@ -468,12 +449,12 @@ var parseGLTF = (function () {
                                     id: geometryId
                                 };
                                 loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
-                                model.createGeometry(geometryCfg);
+                                bigModel.createGeometry(geometryCfg);
                             }
 
                             meshCfg.geometryId = geometryId;
 
-                            const mesh = model.createMesh(meshCfg);
+                            const mesh = bigModel.createMesh(meshCfg);
                             meshIds.push(mesh.id);
 
                         } else {
@@ -484,12 +465,12 @@ var parseGLTF = (function () {
 
                             loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
 
-                            const mesh = model.createMesh(meshCfg);
+                            const mesh = bigModel.createMesh(meshCfg);
                             meshIds.push(mesh.id);
                         }
                     }
 
-                    model.createObject({
+                    bigModel.createObject({
                         meshIds: meshIds
                     });
 
@@ -561,8 +542,8 @@ var parseGLTF = (function () {
     }
 
     function error(ctx, msg) {
-        ctx.model.error(msg);
+        ctx.bigModel.error(msg);
     }
 })();
 
-export {GLTFBigModel}
+export {GLTFBigModelLoader}
