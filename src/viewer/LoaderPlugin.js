@@ -1,13 +1,13 @@
 import {utils} from "./../scene/utils.js"
-import {Model} from "./../scene/models/Model.js";
+import {GroupModel} from "./../scene/models/GroupModel.js";
 import {Plugin} from "./Plugin.js";
 
 /**
  Base class for {@link Viewer} plugins that load models.
 
- @class ModelsPlugin
+ @class LoaderPlugin
  */
-class ModelsPlugin extends Plugin {
+class LoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -28,7 +28,7 @@ class ModelsPlugin extends Plugin {
 
         /**
          * <a href="http://xeokit.org/docs/classes/Model.html">xeokit.Models</a> currently loaded by this Plugin.
-         * @type {{String:Model}}
+         * @type {{String:GroupModel}}
          */
         this.models = {};
 
@@ -63,27 +63,27 @@ class ModelsPlugin extends Plugin {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
-        var model = new Model(this.viewer.scene, params);
+        var groupModel = new GroupModel(this.viewer.scene, params);
         this._modelLoadParams[id] = utils.apply(params, {});
         if (params.metadataSrc) {
             const metadataSrc = params.metadataSrc;
             utils.loadJSON(metadataSrc, function (metadata) {
                 self.viewer.createMetadata(id, metadata);
-                self._loader.load(model, src, params);
+                self._loader.load(groupModel, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
             });
         } else {
-            this._loader.load(model, src, params);
+            this._loader.load(groupModel, src, params);
         }
-        this.models[id] = model;
-        model.once("destroyed", () => {
+        this.models[id] = groupModel;
+        groupModel.once("destroyed", () => {
             delete this.models[id];
             delete this._modelLoadParams[id];
             this.viewer.destroyMetadata(id);
             this.fire("unloaded", id);
         });
-        return model;
+        return groupModel;
     }
 
     /**
@@ -165,4 +165,4 @@ class ModelsPlugin extends Plugin {
     }
 }
 
-export {ModelsPlugin}
+export {LoaderPlugin}
