@@ -6,13 +6,11 @@ import {utils} from "../../../scene/utils.js";
 /**
  * A viewer plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
  *
- * For each model loaded, creates a [xeokit.BigModel](http://xeokit.org/docs/classes/BigModel.html) within its
- * {@link Viewer}'s {@link Scene}.
- *
- *
- *
- * See the {@link GLTFBigModelLoaderPlugin#load} method for parameters that you can configure
- * each {@link Model} with as you load it.
+ * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
+ * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
+ * * Can also load metadata for each {@link Model} into {@link Viewer#metadata} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
+ * * Can configure each {@link Model} with a local transformation.
+ * * Can attach each {@link Model} as a child of a given {@link Object3D}.
  *
  * @example
  * // Create a xeokit Viewer
@@ -20,13 +18,13 @@ import {utils} from "../../../scene/utils.js";
  *      canvasId: "myCanvas"
  * });
  *
- * // Add a GLTFBigModelsPlugin to the Viewer
- * var plugin = new GLTFBigModelsPlugin(viewer, {
- *      id: "GLTFBigModels"  // Default value
+ * // Add a GLTFBigModelsLoader to the Viewer
+ * var plugin = new GLTFBigModelsLoader(viewer, {
+ *      id: "GLTFBigModelsLoader"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the Viewer
- * plugin = viewer.plugins.GLTFBigModels;
+ * plugin = viewer.plugins.GLTFBigModelsLoader;
  *
  * // Load the glTF model
  * // These params can include all the xeokit.GLTFModel configs
@@ -55,9 +53,9 @@ import {utils} from "../../../scene/utils.js";
  * // Or unload it by calling destroy() on the xeokit.Model itself
  * model.destroy();
  *
- * @class GLTFBigModelLoaderPlugin
+ * @class GLTFBigModelLoader
  */
-class GLTFBigModelLoaderPlugin extends Plugin {
+class GLTFBigModelLoader extends Plugin {
 
     /**
      * @constructor
@@ -240,4 +238,4 @@ class GLTFBigModelLoaderPlugin extends Plugin {
     }
 }
 
-export {GLTFBigModelLoaderPlugin}
+export {GLTFBigModelLoader}
