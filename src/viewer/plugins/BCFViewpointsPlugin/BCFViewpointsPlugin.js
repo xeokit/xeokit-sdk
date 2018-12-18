@@ -10,7 +10,7 @@ const tempVec3 = math.vec3();
  * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
  * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
  *
- * In the example below, we'll use a {@link GLTFModelsPlugin} to load a model from a glTF file, then once that model
+ * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model from a glTF file, then once that model
  * has loaded, we'll arrange the camera
  *
  * @example
