@@ -3,7 +3,7 @@
  */
 
 import {Viewer} from "../../../src/viewer/Viewer.js";
-import {GLTFModelsPlugin} from "../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
+import {GLTFLoaderPlugin} from "../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
 import {ClipsPlugin} from "../../../src/viewer/plugins/ClipsPlugin/ClipsPlugin.js";
 import {BCFViewpointsPlugin} from "../../../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
 
@@ -13,7 +13,7 @@ const viewer = new Viewer({
 });
 
 // Add a GLTFModelsPlugin
-const glTFModels = new GLTFModelsPlugin(viewer);
+const glTFModels = new GLTFLoaderPlugin(viewer);
 
 // Add a ClipsPlugin
 const clips = new ClipsPlugin(viewer);
