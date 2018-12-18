@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Minimial glTF Viewer Demo</title>
-    <link href="style.css" type="text/css" rel="stylesheet"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -11,37 +11,6 @@
     <canvas id="myCanvas"></canvas>
 </div>
 </body>
-
-<script type="module">
-    import {Viewer} from "../../src/viewer/Viewer.js";
-    import {GLTFModelsPlugin} from "../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
-    import {AxisGizmoPlugin} from "../../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
-
-    const viewer = new Viewer({
-        canvasId: "myCanvas"
-    });
-
-    const gltfModels = new GLTFModelsPlugin(viewer);
-
-    new AxisGizmoPlugin(viewer, {size: [250, 250]});
-
-    const model = gltfModels.load({
-        id: "myModel",
-        src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
-        edges: true
-    });
-
-    const scene = viewer.scene;
-    const camera = scene.camera;
-
-    camera.orbitPitch(20);
-
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
-        scene.on("tick", () => {
-            camera.orbitYaw(0.4);
-        })
-    });
-</script>
+<script type="module" src="scripts/index.js"></script>
 
 </html>
