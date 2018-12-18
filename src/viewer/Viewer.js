@@ -2,7 +2,7 @@ import {math} from "../scene/math/math.js";
 import {Scene} from "../scene/scene/Scene.js";
 import {CameraFlightAnimation} from "../scene/animation/CameraFlightAnimation.js";
 import {CameraControl} from "../scene/controls/CameraControl.js";
-import {ObjectMetadata} from "./ObjectMetadata.js";
+import {MetadataObject} from "./MetadataObject.js";
 
 /**
  * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
@@ -30,16 +30,10 @@ class Viewer {
 
         /**
          * Metadata about this Viewer and the content within it.
-         *
          * @property {object} metadata Metadata for this Viewer and the content within its {@link Scene}.
-         *
          * @property {string} metadata.systemId Identifies this Viewer.
-         *
-         * @property {object} metadata.objects {@link ObjectMetadata}s corresponding to
-         * {@link Object}s within the {@link Viewer}'s {@link Scene}.
-         *
-         * @property {object} metadata.structures For each {@link Model} within the Viewer's
-         * {@link Scene} that has metadata, a tree of {@link ObjectMetadata}s describing its structure.
+         * @property {object} metadata.objects {@link MetadataObject}s, some of which may have keys corresponding to {@link Entity}s within {@link Scene#entities}.
+         * @property {object} metadata.structures For each {@link Model} within the Viewer's {@link Scene} that has metadata, a tree of {@link MetadataObject}s describing its structure.
          */
         this.metadata = {
             systemId: "xeokit.io",
@@ -54,9 +48,10 @@ class Viewer {
          * @type {Scene}
          */
         this.scene = new Scene({
+            viewer: this,
             canvas: cfg.canvasId,
             webgl2: false,
-            contextAttr: {preserveDrawingBuffer: true},
+            contextAttr: {preserveDrawingBuffer: false},
             transparent: !!cfg.transparent,
             gammaInput: true,
             gammaOutput: true
@@ -114,14 +109,14 @@ class Viewer {
      *
      * @param {string} modelId ID of the target {@link Model}.
      * @param {object} metadata The metadata - (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {boolean} [globalizeIDs=true] When true, will prefix each {@link ObjectMetadata#id} with the {@link Model} ID..
+     * @param {boolean} [globalizeIDs=true] When true, will prefix each {@link MetadataObject#id} with the {@link Model} ID..
      */
     createMetadata(modelId, metadata, globalizeIDs = true) {
         var objects = this.metadata.objects;
         var structures = this.metadata.structures;
         var newObjects = metadata.objects;
         for (let i = 0, len = newObjects.length; i < len; i++) {
-            const object = new ObjectMetadata(newObjects[i]);
+            const object = new MetadataObject(newObjects[i]);
             if (globalizeIDs) {
                 object.id = modelId + "#" + object.id;
                 if (object.parent) {
