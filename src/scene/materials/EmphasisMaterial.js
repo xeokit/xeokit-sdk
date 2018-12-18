@@ -14,7 +14,7 @@
  * When ghosted, a Mesh's appearance is controlled by its EmphasisMaterial.
  * An EmphasisMaterial provides several preset configurations that you can set it to. Select a preset by setting {@link EmphasisMaterial/preset} to the preset's ID. A map of available presets is provided in {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}.
  * By default, a Mesh uses the {@link Scene}'s global EmphasisMaterials, but you can give each Mesh its own EmphasisMaterial when you want to customize the effect per-Mesh.
- * Ghost all Meshes in a {@link Model} by setting the Model's {@link Model/ghost} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
+ * Ghost all Meshes in a {@link Model} by setting the Model's {@link GroupModel/ghost} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
  * Modify the Scene's global EmphasisMaterial to customize it.
 
  ## Usage

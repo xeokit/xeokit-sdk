@@ -621,7 +621,7 @@ const vecb = new Float32Array(3);
 
 const identityMat = math.identityMat4();
 
-class xeokitObject extends Component {
+class Object3D extends Component {
 
     /**
      JavaScript class name for this Component.
@@ -1777,4 +1777,4 @@ class xeokitObject extends Component {
     }
 }
 
-export {xeokitObject};
+export {Object3D};

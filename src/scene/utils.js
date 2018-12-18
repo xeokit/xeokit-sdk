@@ -353,6 +353,30 @@ function concat(a, b) {
     return c;
 }
 
+function flattenParentChildHierarchy(root) {
+    var list = [];
+
+    function visit(node) {
+        node.id = node.uuid;
+        delete node.oid;
+        list.push(node);
+        var children = node.children;
+
+        if (children) {
+            for (var i = 0, len = children.length; i < len; i++) {
+                const child = children[i];
+                child.parent = node.id;
+                visit(children[i]);
+            }
+        }
+         node.children = [];
+    }
+
+    visit(root);
+    console.log(JSON.stringify(list, null, "\t"));
+    return list;
+}
+
 /**
  * @private
  */
@@ -378,7 +402,8 @@ const utils = {
     applyIf: applyIf,
     isEmptyObject: isEmptyObject,
     inQuotes: inQuotes,
-    concat: concat
+    concat: concat,
+    flattenParentChildHierarchy: flattenParentChildHierarchy
 };
 
 export {utils};

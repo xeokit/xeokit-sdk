@@ -260,6 +260,12 @@ class Component {
 
         if (this.type === "Scene") {
             this.scene = this;
+
+            /**
+             * @property {Viewer} viewer The viewer that contains this Scene.
+             */
+            this.viewer = cfg.viewer;
+
             if (arg1) {
                 cfg = arg1;
             }
@@ -420,7 +426,7 @@ class Component {
 
      @property model
      @final
-     @type Model
+     @type GroupModel
      */
     get model() {
         return this._model;
@@ -1012,6 +1018,23 @@ class Component {
      * @protected
      */
     _update() {
+    }
+
+    /**
+     Destroys all {@link Component}s that are owned by this. These are Components that were instantiated with
+     this Component as their first constructor argument.
+     @method clear
+     */
+    clear() {
+        if (this._adoptees) {
+            for (var id in this._adoptees) {
+                if (this._adoptees.hasOwnProperty(id)) {
+                    const component = this._adoptees[id];
+                    component.destroy();
+                    delete this._adoptees[id];
+                }
+            }
+        }
     }
 
     /**

@@ -584,7 +584,7 @@ class Scene extends Component {
 
         /**
          For each {@link Component} type, a map of
-         IDs to {@link Component"}}Components{{/crossLink}} instances of that type.
+         IDs to {@link Component} instances of that type.
 
          @property types
          @final
@@ -942,6 +942,9 @@ class Scene extends Component {
             this._renderer.addDrawable(component.id, component);
             this._collidables[component.id] = component;
         }
+        if (component.isModel) {
+            this.models[component.id] = component;
+        }
     }
 
     _removeComponent(component) {
@@ -962,6 +965,9 @@ class Scene extends Component {
         if (component.isDrawable) {
             this._renderer.removeDrawable(component.id);
             delete this._collidables[component.id];
+        }
+        if (component.isModel) {
+            delete this.models[component.id];
         }
     }
 

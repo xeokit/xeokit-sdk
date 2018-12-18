@@ -76,8 +76,6 @@ class BigModelObject {
         if (guid) {
             this.guid = guid;
         }
-
-        model.scene._objectCreated(this);
     }
 
     /**
@@ -456,7 +454,6 @@ class BigModelObject {
             this.meshes[i]._destroy();
         }
         scene._aabbDirty = true;
-        scene._objectDestroyed(this);
     }
 }
 

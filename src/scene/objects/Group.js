@@ -42,9 +42,9 @@
  {@link Object/selected}, {@link Object/colorize} and {@link Object/opacity}.
  @extends Object
  */
-import {xeokitObject} from "./Object.js";
+import {Object3D} from "./Object3D.js";
 
-class Group extends xeokitObject {
+class Group extends Object3D {
 
     /**
      JavaScript class name for this Component.

@@ -555,7 +555,7 @@
  @event picked
  */
 import {math} from '../math/math.js';
-import {xeokitObject} from './../objects/Object.js';
+import {Object3D} from './../objects/Object3D.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
 import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
@@ -812,7 +812,7 @@ const getPickResult = (function () {
     }
 })();
 
-class Mesh extends xeokitObject {
+class Mesh extends Object3D {
 
     /**
      * @private
