@@ -3,7 +3,7 @@ import {Plugin} from "./../../Plugin.js";
 /**
  * A {@link Viewer} plugin that renders an HTML explorer tree for navigating the structure metadata within {@link Viewer#metadata}.
  *
- * Each node in the tree corresponds to an {@link ObjectMetadata} in the structure metadata.
+ * Each node in the tree corresponds to an {@link MetadataObject} in the structure metadata.
  *
  * Refreshes itself whenever it gets "metadata-created" and "metadata-destroyed" events from the {@link Viewer}.
  *
@@ -76,33 +76,31 @@ class StructurePanelPlugin extends Plugin {
     /**
      * @private
      */
-    _build2(modelId, div, ifcElement) {
-        const viewerObjectId = modelId + "." + ifcElement.id;
+    _build2(modelId, div, metadataObject) {
         const label = document.createElement("div");
         const children = document.createElement("div");
 
         label.className = "label";
-        label.appendChild(document.createTextNode(ifcElement.name || ifcElement.guid));
+        label.appendChild(document.createTextNode(metadataObject.name || metadataObject.guid));
         div.appendChild(label);
         children.className = "children";
         div.appendChild(children);
-        this._domElements[viewerObjectId] = label;
+        this._domElements[metadataObject.id] = label;
 
         const self = this;
 
         label.onclick = function (e) {
             e.stopPropagation();
             e.preventDefault();
-            self.setSelected([viewerObjectId], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
-            self.fire("click", {
-                objectId: ifcElement.id,
-                viewerObjectId: viewerObjectId
+            self.setSelected([metadataObject.id], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
+            self.fire("clicked", {
+                objectId: metadataObject.id
             });
             return false;
         };
 
-        for (var i = 0; i < (ifcElement.children || []).length; ++i) {
-            const child = ifcElement.children[i];
+        for (var i = 0; i < (metadataObject.children || []).length; ++i) {
+            const child = metadataObject.children[i];
             const childDiv = document.createElement("div");
             childDiv.className = "item";
             children.appendChild(childDiv);
