@@ -20,11 +20,11 @@ class GLTFLoader {
         this._handleNode = cfg.handleNode;
     }
 
-    load(groupModel, src, options, ok, error) {
+    load(plugin, groupModel, src, options, ok, error) {
         options = options || {};
         var spinner = groupModel.scene.canvas.spinner;
         spinner.processes++;
-        loadGLTF(groupModel, src, options, function () {
+        loadGLTF(plugin, groupModel, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
                     groupModel.fire("loaded", true, true);
@@ -43,11 +43,11 @@ class GLTFLoader {
             });
     }
 
-    parse(groupModel, gltf, options, ok, error) {
+    parse(plugin, groupModel, gltf, options, ok, error) {
         options = options || {};
         var spinner = groupModel.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(gltf, "", options, groupModel, function () {
+        parseGLTF(plugin, gltf, "", options, groupModel, function () {
                 spinner.processes--;
                 groupModel.fire("loaded", true, true);
                 if (ok) {
@@ -65,11 +65,12 @@ class GLTFLoader {
     }
 }
 
+
 var loadGLTF = (function () {
-    return function (groupModel, src, options, ok, error) {
+    return function (plugin, groupModel, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, groupModel, ok, error);
+                parseGLTF(json, src, options, plugin, groupModel, ok, error);
             },
             error);
     };
@@ -100,7 +101,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, groupModel, ok) {
+    return function (json, src, options, plugin, groupModel, ok) {
         groupModel.clear();
         var ctx = {
             src: src,
@@ -114,6 +115,7 @@ var parseGLTF = (function () {
             lambertMaterials: !!options.lambertMaterials,
             json: json,
             scene: groupModel.scene,
+            plugin: plugin,
             groupModel: groupModel,
             modelProps: {
                 visible: groupModel.visible,
@@ -165,7 +167,7 @@ var parseGLTF = (function () {
                         ok();
                     }
                 }, function (msg) {
-                    ctx.groupModel.error(msg);
+                    ctx.plugin.error(msg);
                     if (--numToLoad === 0) {
                         ok();
                     }
@@ -1037,7 +1039,7 @@ var parseGLTF = (function () {
     }
 
     function error(ctx, msg) {
-        ctx.groupModel.error(msg);
+        ctx.plugin.error(msg);
     }
 })();
 

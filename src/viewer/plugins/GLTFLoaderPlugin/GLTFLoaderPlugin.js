@@ -8,7 +8,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  *
  * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
  * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
- * * Can also load metadata for each {@link Model} into {@link Viewer#metadata} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
+ * * Can also load metadata for each {@link Model} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
  * * Can configure each {@link Model} with a local transformation.
  * * Can attach each {@link Model} as a child of a given {@link Object3D}.
  *
@@ -69,7 +69,7 @@ class GLTFLoaderPlugin extends Plugin{
         /**
          * @private
          */
-        this._loader = new GLTFLoader(cfg);
+        this._loader = new GLTFLoader(this, cfg);
 
         /**
          * {@link Model}s currently loaded by this Plugin.
@@ -92,7 +92,8 @@ class GLTFLoaderPlugin extends Plugin{
      * @param {*} params  Loading parameters.
      * @param {String} params.id ID to assign to the {@link Model}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to a glTF file.
-     * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} [params.metadataSrc] Path to an optional metadata file
+     * (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {Object} [params.parent] The parent {@link Object3D}, if we want to graft the {@link Model} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
      * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s local 3D position.
@@ -126,20 +127,22 @@ class GLTFLoaderPlugin extends Plugin{
         this._modelLoadParams[id] = utils.apply(params, {});
         if (params.metadataSrc) {
             const metadataSrc = params.metadataSrc;
-            utils.loadJSON(metadataSrc, function (metadata) {
-                self.viewer.createMetadata(id, metadata);
-                self._loader.load(groupModel, src, params);
+            utils.loadJSON(metadataSrc, (modelMetadata) => {
+                // self.viewer.metaScene.transform(modelMetadata);
+                // console.log(JSON.stringify(modelMetadata), null, "\t");
+                self.viewer.metaScene.createMetaModel(id, modelMetadata);
+                self._loader.load(this, groupModel, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
             });
         } else {
-            this._loader.load(groupModel, src, params);
+            this._loader.load(this, groupModel, src, params);
         }
         this.models[id] = groupModel;
         groupModel.once("destroyed", () => {
             delete this.models[id];
             delete this._modelLoadParams[id];
-            this.viewer.destroyMetadata(id);
+            this.viewer.metaScene.destroyMetaModel(id);
             this.fire("unloaded", id);
         });
         return groupModel;
@@ -223,5 +226,6 @@ class GLTFLoaderPlugin extends Plugin{
         super.destroy();
     }
 }
+
 
 export {GLTFLoaderPlugin}
