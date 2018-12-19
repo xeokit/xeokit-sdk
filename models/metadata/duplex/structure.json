@@ -5,7 +5,7 @@
   "objects": [
     {
       "extid": "4d17bb41e71e3cf5e23e102752fc0ee0",
-      "name": "",
+      "name": "Duplex Building",
       "type": "IfcBuilding",
       "uuid": "1xS3BCk291UvhgP2a6eflK",
       "id": "1xS3BCk291UvhgP2a6eflK"
@@ -3804,7 +3804,8 @@
     },
     {
       "extid": "be79210775b1cd878cb57d7a7527b8a7",
-      "name": "Escalier:Residential - 200mm Max Riser 250mm Tread:151086:1",
+      "name": "Staircase",
+      "name2": "Escalier:Residential - 200mm Max Riser 250mm Tread:151086:1",
       "type": "IfcStair",
       "uuid": "1kHrnJ8X9C0A30wVBdNGCJ",
       "parent": "0wkEuT1wr1kOyafLY4v_O1",
@@ -3812,7 +3813,8 @@
     },
     {
       "extid": "0ef612e3c2314149f13857cf9d877dbd",
-      "name": "Escalier:Residential - 200mm Max Riser 250mm Tread:151086:2",
+      "name": "Staircase",
+      "name2": "Escalier:Residential - 200mm Max Riser 250mm Tread:151086:2",
       "type": "IfcStair",
       "uuid": "11qjIxMfj1hAr1gt_WJL91",
       "parent": "0wkEuT1wr1kOyafLY4v_O1",
@@ -3820,7 +3822,8 @@
     },
     {
       "extid": "169db1733cf013ea9bbf7e8d6d75f3e5",
-      "name": "Garde-corps:900mm Handrail Only:151162",
+      "name": "Hand rail",
+      "name2": "Garde-corps:900mm Handrail Only:151162",
       "type": "IfcStair",
       "uuid": "0wkEuT1wr1kOyafLY4v_PL",
       "parent": "0wkEuT1wr1kOyafLY4v_O1",
@@ -3828,224 +3831,225 @@
     },
     {
       "extid": "aebc139d94f03be7e52e641863bdac59",
-      "name": "Garde-corps:1100mm Guard Rail:151166",
+      "name": "Stair Guard Rail",
+      "name2": "Garde-corps:1100mm Guard Rail:151166",
       "type": "IfcStair",
       "uuid": "0wkEuT1wr1kOyafLY4v_PH",
       "parent": "0wkEuT1wr1kOyafLY4v_O1",
       "id": "0wkEuT1wr1kOyafLY4v_PH"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlRBU"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS4Q"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS1M"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS1M"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS1M"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS2V"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlRGQ"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1s1jVhK8z0pgKYcq5jt7AB"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4aS"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4pU"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlRLx"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4kJ"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4gQ"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4hv"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlR72"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlSXO"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1s1jVhK8z0pgKYcq5jt781"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlSga"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlSp1"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlSnC"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlRH8"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4ZZ"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4$e"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlRRL"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4qs"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4oq"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmLVOH4u1"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7Gd7WlS_W"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7GcBWlS4Q"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7GcBWlS2V"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7GcBWlRGQ"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmKJOH4pU"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1hOSvn6df7F8_7GcBWlRH8"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcSpace",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "1l0GAJtRTFv8$zmKJOH4$e"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "0wnMFFsVjAyQPKagrMQ89X"
     },
     {
-      "name": "A window",
+      "name": "Window",
       "type": "IfcWindow",
       "parent": "1xS3BCk291UvhgP2a6eflK",
       "id": "0kXnsxtNf0PQuBaZcX8yTE"
