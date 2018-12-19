@@ -2,14 +2,14 @@ import {math} from "../scene/math/math.js";
 import {Scene} from "../scene/scene/Scene.js";
 import {CameraFlightAnimation} from "../scene/animation/CameraFlightAnimation.js";
 import {CameraControl} from "../scene/controls/CameraControl.js";
-import {MetadataObject} from "./MetadataObject.js";
+import {MetaScene} from "./metadata/MetaScene.js";
 
 /**
  * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
  *
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
- * * {@link Viewer#metadata} holds metadata about {@link Model}s in the
+ * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
  * Viewer's {@link Scene}. Load and unload metadata using {@link Viewer#createMetadata}
  * and {@link Viewer#destroyMetadata}.
  * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
@@ -29,20 +29,6 @@ class Viewer {
     constructor(cfg) {
 
         /**
-         * Metadata about this Viewer and the content within it.
-         * @property {object} metadata Metadata for this Viewer and the content within its {@link Scene}.
-         * @property {string} metadata.systemId Identifies this Viewer.
-         * @property {object} metadata.objects {@link MetadataObject}s, some of which may have keys corresponding to {@link Entity}s within {@link Scene#entities}.
-         * @property {object} metadata.structures For each {@link Model} within the Viewer's {@link Scene} that has metadata, a tree of {@link MetadataObject}s describing its structure.
-         */
-        this.metadata = {
-            systemId: "xeokit.io",
-            authoring_tool: "xeokit.io",
-            objects: {},
-            structures: {}
-        };
-
-        /**
          * The Viewer's {@link Scene}.
          * @property scene
          * @type {Scene}
@@ -56,6 +42,14 @@ class Viewer {
             gammaInput: true,
             gammaOutput: true
         });
+
+        /**
+         * Metadata about the {@link Scene} and the {@link Model}s and {@link Entity}s within it.
+         * @property metaScene
+         * @type {MetaScene}
+         * @readonly
+         */
+        this.metaScene = new MetaScene(this, this.scene);
 
         /**
          * The Viewer's ID.
@@ -96,81 +90,6 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
-    }
-
-    /**
-     * Loads metadata corresponding to a
-     * {@link Model} within the Viewer's
-     * {@link Scene}.
-     *
-     * Metadata is kept within {@link Viewer#metadata}.
-     *
-     * Fires a "metadata-created" event with the ID of the {@link Model}.
-     *
-     * @param {string} modelId ID of the target {@link Model}.
-     * @param {object} metadata The metadata - (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {boolean} [globalizeIDs=true] When true, will prefix each {@link MetadataObject#id} with the {@link Model} ID..
-     */
-    createMetadata(modelId, metadata, globalizeIDs = true) {
-        var objects = this.metadata.objects;
-        var structures = this.metadata.structures;
-        var newObjects = metadata.objects;
-        for (let i = 0, len = newObjects.length; i < len; i++) {
-            const object = new MetadataObject(newObjects[i]);
-            if (globalizeIDs) {
-                object.id = modelId + "#" + object.id;
-                if (object.parent) {
-                    object.parent = modelId + "#" + object.parent;
-                }
-            }
-            objects[object.id] = object;
-        }
-        for (var id in objects) {
-            if (objects.hasOwnProperty(id)) {
-                const object = objects[id];
-                if (object.parent === undefined || object.parent === null) {
-                    structures[modelId] = object;
-                } else {
-                    const parent = objects[object.parent];
-                    parent.children = parent.children || [];
-                    parent.children.push(object);
-                }
-            }
-        }
-        this.fire("metadata-created", modelId);
-    }
-
-    /**
-     * Removes metadata corresponding to a
-     * {@link Model} within the Viewer's
-     * {@link Scene}.
-     *
-     * Metadata is kept within {@link Viewer#metadata}.
-     *
-     * Fires a "metadata-destroyed" event with the ID of the {@link Model}.
-     *
-     * @param {string} modelId ID of the target {@link Model}.
-     */
-    destroyMetadata(modelId) {
-        var root = this.metadata.structures[modelId];
-        if (!root) {
-            return;
-        }
-        var objects = this.metadata.objects;
-
-        function visit(object) {
-            delete objects[object.id];
-            const children = object.children;
-            if (children) {
-                for (let i = 0, len = children.length; i < len; i++) {
-                    visit(children[i]);
-                }
-            }
-        }
-
-        visit(root);
-        delete this.metadata.structures[modelId];
-        this.fire("metadata-destroyed", modelId);
     }
 
     /**
