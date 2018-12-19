@@ -43,12 +43,15 @@ const model = gltfLoader.load({
         if (!name) {
             return true; // Continue descending this node subtree
         }
-        const objectId = modelId + "#" + name;
-        const objectMetadata = viewer.metadata.objects[objectId];
-        const ifcType = (objectMetadata ? objectMetadata.type : "DEFAULT") || "DEFAULT";
+
+        const objectId = name;
+        const metaScene = viewer.metaScene;
+        const metaObject = metaScene.metaObjects[objectId];
+        const ifcType = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
         var colorize = ifcDefaultMaterials[ifcType];
         actions.createObject = {
-            id: modelId + "#" + name,
+            id: objectId,
             visible: true,
             entityType: ifcType, // Registers Object in Scene#entities
             colorize: colorize
@@ -78,9 +81,8 @@ model.on("loaded", () => {
     viewer.cameraFlight.flyTo(model);
 
     structurePanel.on("clicked", e => {
-
         const objectId = e.objectId;
-        const objectIds = getSubSobjects(objectId);
+        const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
         const aabb = scene.getAABB(objectIds);
 
         viewer.scene.setSelected(viewer.scene.selectedEntityIds, false);
@@ -122,15 +124,15 @@ input.on("mouseclicked", function (coords) {
 
     if (hit) {
         var mesh = hit.mesh;
-        var objectMetadata = viewer.metadata.objects[mesh.id];
-        if (objectMetadata) {
-            console.log(JSON.stringify(objectMetadata, null, "\t"));
+        var metaObject = viewer.metaScene.metaObjects[mesh.id];
+        if (metaObject) {
+            console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
         } else {
             const parent = mesh.parent;
             if (parent) {
-                objectMetadata = viewer.metadata.objects[parent.id];
-                if (objectMetadata) {
-                    console.log(JSON.stringify(objectMetadata, null, "\t"));
+                metaObject = viewer.metaScene.metaObjects[parent.id];
+                if (metaObject) {
+                    console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
                 }
             }
         }

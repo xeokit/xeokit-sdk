@@ -1,9 +1,9 @@
 import {Plugin} from "./../../Plugin.js";
 
 /**
- * A {@link Viewer} plugin that renders an HTML explorer tree for navigating the structure metadata within {@link Viewer#metadata}.
+ * A {@link Viewer} plugin that renders an HTML explorer tree for navigating the structure metadata within {@link Viewer#metaScene}.
  *
- * Each node in the tree corresponds to an {@link MetadataObject} in the structure metadata.
+ * Each node in the tree corresponds to an {@link MetaObject} in the structure metadata.
  *
  * Refreshes itself whenever it gets "metadata-created" and "metadata-destroyed" events from the {@link Viewer}.
  *
@@ -44,13 +44,13 @@ class StructurePanelPlugin extends Plugin {
         this._domElements = {};
         this.selectionState = {};
 
-        this._onLoaded = this.viewer.on("metadata-created", modelId => {
-            if (this.viewer.metadata.structures[modelId]) {
+        this._onLoaded = this.viewer.metaScene.on("metaModelCreated", modelId => {
+            if (this.viewer.metaScene.metaModels[modelId]) {
                 this._build();
             }
         });
 
-        this._onUnloaded = this.viewer.on("metadata-destroyed", modelId => { // TODO: How to only rebuild when structure deleted?
+        this._onUnloaded = this.viewer.metaScene.on("metaModelDestroyed", modelId => { // TODO: How to only rebuild when structure deleted?
             this._build();
         });
     }
@@ -59,14 +59,15 @@ class StructurePanelPlugin extends Plugin {
      * @private
      */
     _build() {
-        var structures = this.viewer.metadata.structures;
-        for (var modelId in structures) { // TODO: Blow away old HTMl elements
-            if (structures.hasOwnProperty(modelId)) {
-                const structure = structures[modelId];
+        var metaModels = this.viewer.metaScene.metaModels;
+        for (var modelId in metaModels) { // TODO: Blow away old HTMl elements
+            if (metaModels.hasOwnProperty(modelId)) {
+                const metaModel = metaModels[modelId];
                 var div = document.createElement("div");
                 div.className = "item";
-                if (structure) {
-                    this._build2(modelId, div, structure);
+                if (metaModel) {
+                    const rootMetaObject = metaModel.rootMetaObject;
+                    this._build2(modelId, div, rootMetaObject);
                 }
                 this._domElement.appendChild(div);
             }
@@ -81,7 +82,7 @@ class StructurePanelPlugin extends Plugin {
         const children = document.createElement("div");
 
         label.className = "label";
-        label.appendChild(document.createTextNode(metadataObject.name || metadataObject.guid));
+        label.appendChild(document.createTextNode(metadataObject.name || metadataObject.id));
         div.appendChild(label);
         children.className = "children";
         div.appendChild(children);
