@@ -1,3 +1,14 @@
+ -------------------------------------------------------------------
+xeokit is licensed under the GPL3 license, described below, but
+also contains the following MIT-licensed components:
+
+Canvas2Image v0.1
+Copyright (c) 2008 Jacob Seidelin, cupboy@gmail.com
+MIT License [http://www.opensource.org/licenses/mit-license.php]
+-------------------------------------------------------------------
+
+
+
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

@@ -162,7 +162,7 @@ class MetaScene {
      * @param metaObjectId {string} ID of the root {@link MetaObject} in the given subtree.
      * @returns {Array}
      */
-    getSubObjectsIDs(metaObjectId) {
+    getSubObjectIDs(metaObjectId) {
         const self = this;
         const list = [];
         const metaObject = this.metaObjects[metaObjectId];
