@@ -3,9 +3,9 @@
  */
 
 import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
-import {Viewer} from            "./../../../src/viewer/Viewer.js";
+import {Viewer} from "./../../../src/viewer/Viewer.js";
 import {BIMServerLoaderPlugin} from "./../../../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
-import {StructurePanelPlugin}  from  "./../../../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
+import {StructurePanelPlugin} from "./../../../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
 import {PropertiesPanelPlugin} from "./../../../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
 
 const bimServerAddress = "http://localhost:8082";
@@ -25,13 +25,49 @@ const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
     bimServerClient: bimServerClient
 });
 
-// const structurePanel = new StructurePanelPlugin(viewer, {
-//     domElementId: "structurePanel"
-// });
-//
-// const propertiesPanel = new PropertiesPanelPlugin(viewer, {
-//     domElementId: "propertiesPanel"
-// });
+const structurePanel = new StructurePanelPlugin(viewer, {
+    domElementId: "structurePanel"
+});
+
+const propertiesPanel = new PropertiesPanelPlugin(viewer, {
+    domElementId: "propertiesPanel"
+});
+
+structurePanel.on("clicked", e => {
+
+    const objectId = e.objectId;
+    const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
+    const aabb = viewer.scene.getAABB(objectIds);
+
+    // viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
+    // viewer.scene.setSelected(objectIds, true);
+
+    viewer.cameraFlight.flyTo(aabb);
+});
+
+viewer.scene.input.on("mouseclicked", function (coords) {
+
+    var hit = viewer.scene.pick({
+        canvasPos: coords
+    });
+
+    if (hit) {
+        var mesh = hit.mesh;
+        var metaObject = viewer.metaScene.metaObjects[mesh.id];
+        if (metaObject) {
+            console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+        } else {
+            const parent = mesh.parent;
+            if (parent) {
+                metaObject = viewer.metaScene.metaObjects[parent.id];
+                if (metaObject) {
+                    console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+                }
+            }
+        }
+    }
+});
+
 
 bimServerClient.init(() => {
 
@@ -42,11 +78,12 @@ bimServerClient.init(() => {
         }, (project) => {
 
             // Load the latest revision of the project
+            // Use whatever IFC schema that's for
 
             const roid = project.lastRevisionId;
             const schema = project.schema;
 
-            const xeoglModel = bimServerLoader.load({
+            const xeokitlModel = bimServerLoader.load({
                 id: "myModel",
                 poid: poid,
                 roid: roid,
@@ -57,37 +94,21 @@ bimServerClient.init(() => {
                 lambertMaterials: true          // Fast flat shaded rendering
             });
 
-            const scene = viewer.scene;  // xeogl.Scene
-            const camera = scene.camera; // xeogl.Camera
+            xeokitlModel.on("loaded", () => {
 
-            xeoglModel.on("loaded", () => {
+                viewer.cameraFlight.flyTo(xeokitlModel);
 
-                camera.orbitPitch(20);
-                viewer.cameraFlight.flyTo(xeoglModel);
+                structurePanel.on("clicked", e => {
+                    const objectId = e.objectId;
+                    const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
+                    const aabb = viewer.scene.getAABB(objectIds);
 
-                // structurePanel.on("selection-changed", function (e) {
-                //
-                // });
-                //
-                // structurePanel.on("click", function (e) {
-                //
-                //     const viewerObjectId = e.viewerObjectId;
-                //     const objectId = e.objectId; // TODO: rename "elementId" or something
-                //
-                //     scene.setSelected(scene.selectedEntityIds, false);
-                //     scene.setSelected(viewerObjectId, true);
-                //
-                //     const elementData = viewer.metadata.elements[objectId];
-                //
-                //     //---------------------- TODO -------------------------------
-                //     // propertiesPanel.setElement(objectId);
-                //     //-----------------------------------------------------------
-                //
-                //     console.log(JSON.stringify(elementData, null, "\t"));
-                // });
+                    viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
+                    viewer.scene.setSelected(objectIds, true);
+
+                    viewer.cameraFlight.flyTo(aabb);
+                });
             });
-
-            window.xeoglModel = xeoglModel;
         });
     });
 });
