@@ -36,7 +36,7 @@ class MetaScene {
         this.metaModels = {};
 
         /**
-         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
+         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#objectId}.
          *
          * @type {{String:MetaObject}}
          */
@@ -96,24 +96,30 @@ class MetaScene {
      * @param {object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      */
     createMetaModel(metaModelId, metaModelData) {
-        var newObjects = metaModelData.objects;
-        const metaModel = new MetaModel(this, metaModelId, null);
+
+        // TODO: validate metadata
+
+        var projectId = metaModelData.projectId || "none";
+        var revisionId = metaModelData.revisionId || "none";
+        var newObjects = metaModelData.metaObjects;
+        const metaModel = new MetaModel(this, metaModelId, projectId, revisionId, null);
         this.metaModels[metaModelId] = metaModel;
         for (let i = 0, len = newObjects.length; i < len; i++) {
             let newObject = newObjects[i];
-            let id = newObject.id;
+            let objectId = newObject.objectId;
+            let extId = newObject.extId || newObject.objectId;
             let name = newObject.name;
             let type = newObject.type;
             let gid = newObject.gid;
             let properties = newObject.properties;
             let parent = null;
             let children = null;
-            this.metaObjects[newObject.id] = new MetaObject(metaModel, id, name, type, gid, properties, parent, children);
+            this.metaObjects[newObject.objectId] = new MetaObject(metaModel, objectId, extId,  name, type, gid, properties, parent, children);
         }
         for (let i = 0, len = newObjects.length; i < len; i++) {
             let newObject = newObjects[i];
-            let id = newObject.id;
-            let metaObject = this.metaObjects[id];
+            let objectId = newObject.objectId;
+            let metaObject = this.metaObjects[objectId];
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
             } else {
@@ -124,6 +130,16 @@ class MetaScene {
             }
         }
         this.fire("metaModelCreated", metaModelId);
+    }
+
+    /**
+     * Loads a {@link MetaModel} from a URL.
+     *
+     * @param src
+     * @param ok
+     */
+    loadMetaModelJSON(metaModelId, src, ok) {
+
     }
 
     /**
@@ -141,7 +157,7 @@ class MetaScene {
         var metaObjects = this.metaObjects;
 
         function visit(metaObject) {
-            delete metaObjects[metaObject.id];
+            delete metaObjects[metaObject.objectId];
             const children = metaObject.children;
             if (children) {
                 for (let i = 0, len = children.length; i < len; i++) {
@@ -171,7 +187,7 @@ class MetaScene {
             if (!metaObject) {
                 return;
             }
-            list.push(metaObject.id);
+            list.push(metaObject.objectId);
             const children = metaObject.children;
             if (children) {
                 for (var i = 0, len = children.length; i < len; i++) {
@@ -189,12 +205,12 @@ class MetaScene {
         var map = {};
         for (var i = 0, len = objects.length; i < len; i++) {
             const object = objects[i];
-            map[object.id] = object;
+            map[object.objectId] = object;
         }
         for (var i = 0, len = objects.length; i < len; i++) {
             const object = objects[i];
-            object.oid = object.id;
-            object.id = object.guid;
+            object.oid = object.objectId;
+            object.objectId = object.guid;
             if (object.parent !== undefined) {
                 object.parent = map[object.parent].guid;
             }

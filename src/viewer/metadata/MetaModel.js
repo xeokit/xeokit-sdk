@@ -1,3 +1,5 @@
+import {MetaObject} from "./MetaObject.js";
+
 /**
  * Metadata for a {@link Model} within a {@link Viewer}'s {@link Scene}.
  *
@@ -12,7 +14,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, rootMetaObject) {
 
         /**
          * Unique ID.
@@ -25,12 +27,28 @@ class MetaModel {
         this.id = id;
 
         /**
+         * The project ID
+         * @property projectId
+         * @type {String|Number}
+         */
+        this.projectId = projectId;
+
+        /**
+         * The revision ID
+         * @property revisionId
+         * @type {String|Number}
+         */
+        this.revisionId = revisionId;
+
+        /**
          * Metadata on the {@link Scene}.
          *
          * @property metaScene
          * @type {MetaScene}
          */
         this.metaScene = metaScene;
+
+        this.metaObjects = {};
 
         /**
          * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
@@ -40,6 +58,41 @@ class MetaModel {
          */
         this.rootMetaObject = rootMetaObject;
     }
+
+    getJSON() {
+
+        var metaObjects = [];
+
+        function visit(metaObject) {
+            var metaObjectCfg = {
+                objectId: metaObject.objectId,
+                extId: metaObject.extId,
+                type: metaObject.type,
+                name: metaObject.name
+            };
+            if (metaObject.parent) {
+                metaObjectCfg.parent = metaObject.parent.objectId;
+            }
+            metaObjects.push(metaObjectCfg);
+            var children = metaObject.children;
+            if (children) {
+                for (var i = 0, len = children.length; i < len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+
+        visit(this.rootMetaObject);
+
+        var json = {
+            id: this.id,
+            projectId: this.projectId,
+            revisionId: this.revisionId,
+            metaObjects: metaObjects
+        };
+        return json;
+    }
 }
+
 
 export {MetaModel};

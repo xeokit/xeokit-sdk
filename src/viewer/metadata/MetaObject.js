@@ -10,17 +10,27 @@
  */
 class MetaObject {
 
-    constructor(metaModel, id, name, type, gid, properties, parent, children) {
+    constructor(metaModel, objectId, extId, name, type, gid, properties, parent, children) {
 
         /**
-         * Unique ID.
+         * Globally-unique ID.
          *
-         * MetaObject instances are registered by ID in {@link MetaScene#metaObjects}.
+         * MetaObject instances are registered by this ID in {@link MetaScene#metaObjects}.
          *
-         * @property id
+         * @property objectId
          * @type {String|Number}
          */
-        this.id = id;
+        this.objectId = objectId;
+
+        /**
+         * External ID.
+         *
+         * This ID ties the MetaObject to systems external to xeokit, such as BIMServer.
+         *
+         * @property extId
+         * @type {String|Number}
+         */
+        this.extId = extId;
 
         /**
          * Model metadata.
@@ -97,6 +107,33 @@ class MetaObject {
              */
             this.children = children;
         }
+    }
+
+    getJSON() {
+
+        function visit(metaObject) {
+            metaObjects.push(metaObjects);
+            for (var metaObjectId in metaObjects) {
+                if (this.metaObjects.hasOwnProperty(metaObjectId)) {
+                    var metaObject = this.metaObjects[metaObjectId];
+                    metaObjects.push(metaObject.toJSON());
+                }
+            }
+        }
+
+        var json = {
+            objectId: this.objectId,
+            extId: this.extId,
+            type: this.type,
+            name: this.name
+        };
+        if (this.gid) {
+            json.gid = this.gid;
+        }
+        if (this.parent) {
+            json.parent = this.parent.objectId
+        }
+        return json;
     }
 }
 
