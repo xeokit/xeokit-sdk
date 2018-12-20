@@ -913,8 +913,7 @@ var parseGLTF = (function () {
                             meshCfg.material = meshesInfoMesh.material;
                         }
                         utils.apply(createObject, meshCfg);
-                        meshCfg.id = createObject.id + "." + i;
-                        meshCfg.entityType = null;
+                        meshCfg.objectId = null;
                         mesh = new Mesh(groupModel, meshCfg);
                         childGroup.addChild(mesh, false);
                     }
@@ -937,7 +936,7 @@ var parseGLTF = (function () {
                             geometry: meshesInfoMesh.geometry
                         };
                         utils.apply(groupCfg, meshCfg);
-                        meshCfg.entityType = null;
+                        meshCfg.objectId = null;
                         meshCfg.matrix = null; // Group has matrix
                         if (ctx.lambertMaterials) {
                             if (!groupModel.material) {
@@ -1009,9 +1008,8 @@ var parseGLTF = (function () {
                         }
                         if (createObject) {
                             utils.apply(createObject, meshCfg);
-                            meshCfg.id = createObject.id + "." + i;
                         }
-                        meshCfg.entityType = null;
+                        meshCfg.objectId = null;
                         mesh = new Mesh(groupModel, meshCfg);
                         childGroup.addChild(mesh, false); // Don't automatically inherit properties
                     }

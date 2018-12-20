@@ -30,7 +30,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  * const model = plugin.load({
  *      id: "myModel",
  *      src: "models/mygltfModel.gltf",
- *      metadataSrc: "models/mygltfModelMetadata.json", // Optional metadata JSON
+ *      metaModelSrc: "models/mygltfModelMetadata.json", // Optional metadata JSON
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
@@ -92,7 +92,7 @@ class GLTFLoaderPlugin extends Plugin{
      * @param {*} params  Loading parameters.
      * @param {String} params.id ID to assign to the {@link Model}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to a glTF file.
-     * @param {String} [params.metadataSrc] Path to an optional metadata file
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file
      * (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {Object} [params.parent] The parent {@link Object3D}, if we want to graft the {@link Model} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
@@ -125,15 +125,15 @@ class GLTFLoaderPlugin extends Plugin{
         }
         var groupModel = new GroupModel(this.viewer.scene, params);
         this._modelLoadParams[id] = utils.apply(params, {});
-        if (params.metadataSrc) {
-            const metadataSrc = params.metadataSrc;
-            utils.loadJSON(metadataSrc, (modelMetadata) => {
+        if (params.metaModelSrc) {
+            const metaModelSrc = params.metaModelSrc;
+            utils.loadJSON(metaModelSrc, (modelMetadata) => {
                 // self.viewer.metaScene.transform(modelMetadata);
                 // console.log(JSON.stringify(modelMetadata), null, "\t");
                 self.viewer.metaScene.createMetaModel(id, modelMetadata);
                 self._loader.load(this, groupModel, src, params);
             }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+                self.error(`load(): Failed to load model metadata for model '${id} from  '${metaModelSrc}' - ${errMsg}`);
             });
         } else {
             this._loader.load(this, groupModel, src, params);
