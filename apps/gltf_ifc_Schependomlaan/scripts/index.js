@@ -39,7 +39,7 @@ const gltfLoader = new GLTFLoaderPlugin(viewer);
 
 const model = gltfLoader.load({
     id: "myModel",
-    src: "./../../../models/gltf/schependomlaan/scene2.gltf",
+    src: "./../../../models/gltf/schependomlaan/scene.gltf",
     metaModelSrc: "./../../../metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
     edges: true,
     handleNode(modelId, nodeInfo, actions) {

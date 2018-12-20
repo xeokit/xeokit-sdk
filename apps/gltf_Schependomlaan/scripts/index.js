@@ -13,6 +13,7 @@ new AxisGizmoPlugin(viewer, {size: [250, 250]});
 const model = gltfModels.load({
     id: "myModel",
     src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
+    metaModelSrc: "./../../metaModels/schependomlaan/structure.json",
     edges: true
 });
 
