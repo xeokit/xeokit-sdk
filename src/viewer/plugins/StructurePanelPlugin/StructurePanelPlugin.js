@@ -77,31 +77,31 @@ class StructurePanelPlugin extends Plugin {
     /**
      * @private
      */
-    _build2(modelId, div, metadataObject) {
+    _build2(modelId, div, metaObject) {
         const label = document.createElement("div");
         const children = document.createElement("div");
 
         label.className = "label";
-        label.appendChild(document.createTextNode(metadataObject.name || metadataObject.id));
+        label.appendChild(document.createTextNode(metaObject.name || metaObject.objectId));
         div.appendChild(label);
         children.className = "children";
         div.appendChild(children);
-        this._domElements[metadataObject.id] = label;
+        this._domElements[metaObject.objectId] = label;
 
         const self = this;
 
         label.onclick = function (e) {
             e.stopPropagation();
             e.preventDefault();
-            self.setSelected([metadataObject.id], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
+            self.setSelected([metaObject.objectId], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
             self.fire("clicked", {
-                objectId: metadataObject.id
+                objectId: metaObject.objectId
             });
             return false;
         };
 
-        for (var i = 0; i < (metadataObject.children || []).length; ++i) {
-            const child = metadataObject.children[i];
+        for (var i = 0; i < (metaObject.children || []).length; ++i) {
+            const child = metaObject.children[i];
             const childDiv = document.createElement("div");
             childDiv.className = "item";
             children.appendChild(childDiv);
