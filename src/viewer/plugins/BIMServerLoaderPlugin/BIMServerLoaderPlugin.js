@@ -162,7 +162,7 @@ class BIMServerLoaderPlugin extends Plugin {
     /**
      * Loads a {@link Model} from BIMServer into the {@link Viewer}'s {@link Scene}.
      *
-     * Creates IFC metadata for the {@link Model} within {@link Viewer#metadata}.
+     * Creates IFC metadata for the {@link Model} within {@link Viewer#metaScene}.
      *
      * @param {*} params  Loading parameters.
      *
@@ -266,28 +266,29 @@ class BIMServerLoaderPlugin extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {
 
-            this.loadMetadata(modelId, bimServerClientModel).then(function () {
+            this.loadMetadata(modelId, poid, roid, bimServerClientModel).then(function () {
 
                 groupModel.once("destroyed", function () {
-                   viewer.destroyMetadata(modelId);
+                    viewer.metaScene.destroyMetaModel(modelId);
                 });
 
                 const oids = [];
                 const oidToGuid = {};
                 const guidToOid = {};
 
-                const visit = n => {
-                    oids[n.gid] = n.id;
-                    oidToGuid[n.id] = n.guid;
-                    guidToOid[n.guid] = n.id;
-                    for (let i = 0; i < (n.children || []).length; ++i) {
-                        visit(n.children[i]);
+                const visit = metaObject => {
+                    oids[metaObject.gid] = metaObject.extId;
+                    oidToGuid[metaObject.extId] = metaObject.objectId;
+                    guidToOid[metaObject.objectId] = metaObject.extId;
+                    for (let i = 0; i < (metaObject.children || []).length; ++i) {
+                        visit(metaObject.children[i]);
                     }
                 };
 
-                const structure = viewer.metadata.structures[modelId];
+                const metaModel = viewer.metaScene.metaModels[modelId];
+                const rootMetaObject = metaModel.rootMetaObject;
 
-                visit(structure);
+                visit(rootMetaObject);
 
                 idMapping.toGuid.push(oidToGuid);
                 idMapping.toId.push(guidToOid);
@@ -309,8 +310,6 @@ class BIMServerLoaderPlugin extends Plugin {
                     },
 
                     gotModelBoundary: function (boundary) {
-
-                        //console.log("boundary = " + boundary);
 
                         const xmin = boundary[0];
                         const ymin = boundary[1];
@@ -352,8 +351,8 @@ class BIMServerLoaderPlugin extends Plugin {
                     },
 
                     createObject(oid, geometryDataIds, ifcType, matrix) {
-                        const objectId = `${modelId}.${oid}`;
-                        if (scene.entities[objectId]) {
+                        const objectId = oidToGuid[oid];
+                        if (scene.objects[objectId]) {
                             self.error(`Can't create object - object with id ${objectId} already exists`);
                             return;
                         }
@@ -366,8 +365,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
                         const xeokitObject = new Object3D(groupModel, {
                             id: objectId,
-                            // guid: guid,
-                            entityType: ifcType,
+                            objectId: objectId,
                             matrix: matrix,
                             colorize: color, // RGB
                             opacity: color[3], // A
@@ -387,7 +385,7 @@ class BIMServerLoaderPlugin extends Plugin {
                     },
 
                     addGeometryToObject(oid, geometryDataId) {
-                        const objectId = `${modelId}.${oid}`;
+                        const objectId = oidToGuid[oid];
                         const xeokitObject = groupModel.scene.components[objectId];
                         if (!xeokitObject) {
                             //self.error(`Can't find object with id ${objectId}`);
@@ -435,7 +433,7 @@ class BIMServerLoaderPlugin extends Plugin {
         return groupModel;
     }
 
-    loadMetadata(modelId, bimServerClientModel) {
+    loadMetadata(modelId, poid, roid, bimServerClientModel) {
 
         function isArray(value) {
             return Object.prototype.toString.call(value) === "[object Array]";
@@ -487,9 +485,10 @@ class BIMServerLoaderPlugin extends Plugin {
                 ]
             };
 
-            bimServerClientModel.query(query, function () { }).done(function () {
+            bimServerClientModel.query(query, function () {
+            }).done(function () {
 
-                const entityCardinalities = { // Parent-child cardinalities for entities
+                const entityCardinalities = { // Parent-child cardinalities for objects
                     'IfcRelDecomposes': 1,
                     'IfcRelAggregates': 1,
                     'IfcRelContainedInSpatialStructure': 1,
@@ -507,7 +506,7 @@ class BIMServerLoaderPlugin extends Plugin {
                     clientObjectList.push(clientObject);
                 }
 
-                const relationships = clientObjectList.filter(function (clientObject) { // Filter all instances based on relationship entities
+                const relationships = clientObjectList.filter(function (clientObject) { // Filter all instances based on relationship objects
                     return entityCardinalities[clientObject._t];
                 });
 
@@ -530,44 +529,53 @@ class BIMServerLoaderPlugin extends Plugin {
                     const cs = isArray(a[1]) ? a[1] : [a[1]];
                     for (let i = 0; i < ps.length; ++i) {
                         for (let j = 0; j < cs.length; ++j) {
-                            const parent = clientObjectMap[ps[i]._i]; // Look up the instance ids in the mapping
+                            const parentClientObject = clientObjectMap[ps[i]._i]; // Look up the instance ids in the mapping
                             const child = clientObjectMap[cs[j]._i];
-                            child.parent = parent.id = parent._i; // parent, id, hasChildren are significant attributes in a dojo store
+                            child.parent = parentClientObject.id = parentClientObject._i; // parent, id, hasChildren are significant attributes in a dojo store
                             child.id = child._i;
-                            parent.hasChildren = true;
+                            parentClientObject.hasChildren = true;
                             if (!visited[child.id]) { // Make sure to only add instances once
                                 data.push(child);
                             }
-                            if (!visited[parent.id]) {
-                                data.push(parent);
+                            if (!visited[parentClientObject.id]) {
+                                data.push(parentClientObject);
                             }
-                            visited[parent.id] = visited[child.id] = true;
+                            visited[parentClientObject.id] = visited[child.id] = true;
                         }
                     }
                 });
 
-                const newObjects = data.map(function (clientObject) {
-                    var object = {
-                        id: clientObject.id,
+                const metaObjects = data.map(function (clientObject) {
+                    var metaObjectCfg = {
+                        objectId: clientObject.GlobalId,
+                        extId: clientObject.id,
                         name: clientObject.Name,
-                        type: clientObject._t,
-                        guid: clientObject.GlobalId
+                        type: clientObject._t
                     };
                     if (clientObject.parent !== undefined && clientObject.parent !== null) {
-                        object.parent = clientObject.parent;
+                        let clientObjectParent = clientObjectMap[clientObject.parent];
+                        if (clientObjectParent) {
+                            metaObjectCfg.parent = clientObjectParent.GlobalId;
+                        }
                     }
                     if (clientObject._rgeometry !== null && clientObject._rgeometry !== undefined) {
-                        object.gid = clientObject._rgeometry._i
+                        metaObjectCfg.gid = clientObject._rgeometry._i
                     }
                     if (clientObject.hasChildren) {
-                        object.children = [];
+                        metaObjectCfg.children = [];
                     }
-                    return object;
+                    return metaObjectCfg;
                 });
 
-            //    console.log(JSON.stringify({objects: newObjects}, null, "\t"));
+                const modelMetadata = {
+                    modelId: modelId,
+                    revisionId: roid,
+                    projectId: poid,
+                    metaObjects: metaObjects};
 
-                self.viewer.createMetadata(modelId, { objects: newObjects });
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+
+                //    console.log(JSON.stringify(modelMetadata, null, "\t"));
 
                 resolve();
             });
