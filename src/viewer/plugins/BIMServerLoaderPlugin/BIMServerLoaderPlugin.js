@@ -6,8 +6,8 @@ import {Object3D} from "../../../scene/objects/Object3D.js";
 import {GroupModel} from "../../../scene/models/GroupModel.js";
 import {Mesh} from "../../../scene/mesh/Mesh.js";
 
-
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
+import {loadMetaModel} from "./lib/loadMetaModel.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
 
 /**
@@ -15,13 +15,13 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *
  * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
  *
- * For each model loaded, BIMServerModelsPlugin creates a {@link Model} within its
+ * For each model loaded, BIMServerLoaderPlugin creates a {@link Model} within its
  * {@link Viewer}'s {@link Scene}. You can load multiple models into the same
  * Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.
  *
- * A BIMServerModelsPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
+ * A BIMServerLoaderPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
  * API that provides a client interface through which you can query BIMServer and download models. We use that class to
- * query BIMServer's database, while BIMServerModelsPlugin uses it to download models.
+ * query BIMServer's database, while BIMServerLoaderPlugin uses it to download models.
  *
  * In the example below, we'll load the latest revision of a project's model. We'll assume that we have a BIMServer
  * instance running and serving requests on port 8082, with a model loaded for project ID ````131073````. We'll get
@@ -31,7 +31,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  * Since xeokit's default World "up" direction is +Y, while the model's "up" is +Z, we'll rotate the
  * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeokit to use +Z as "up".
  *
- * Note that BIMServerModelsPlugin works with BIMServer V1.5 or later.
+ * Note that BIMServerLoaderPlugin works with BIMServer V1.5 or later.
  *
  * Read more about this example, as well as how to set up the BIMServer instance and load a model, in the
  * [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial
@@ -40,7 +40,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  * @example
  * import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
  * import {Viewer} from "../../../src/viewer/Viewer.js";
- * import {BIMServerModelsPlugin} from "../../../src/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js";
+ * import {BIMServerLoaderPlugin} from "../../../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
  *
  * const bimServerAddress = "http://localhost:8082";
  * const username = "admin@bimserver.org";
@@ -55,8 +55,8 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  * // Create a BimServerClient
  * const bimServerClient = new BimServerClient(bimServerAddress);
  *
- * // Add a BIMServerModelsPlugin to the Viewer, configured with the BIMServerClient
- * const bimServerModelsPlugin = new BIMServerModelsPlugin(viewer, {
+ * // Add a BIMServerLoaderPlugin to the Viewer, configured with the BIMServerClient
+ * const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
  *     bimServerClient: bimServerClient
  * });
  *
@@ -79,7 +79,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *             const roid = project.lastRevisionId;
  *             const schema = project.schema;
  *
- *             const model = bimServerModelsPlugin.load({ // Returns a xeokit.Model
+ *             const model = bimServerLoader.load({ // Returns a xeokit.Model
  *                 id: "myModel",
  *                 poid: poid,                      // Project ID
  *                 roid: roid,                      // Revision ID
@@ -149,14 +149,6 @@ class BIMServerLoaderPlugin extends Plugin {
             "IfcOpeningElement": true,
             "IfcSpace": true
         };
-
-        /**
-         * IFCModels loaded by this BIMServerModelsPlugin.
-         *
-         * @property ifcModels
-         * @type {{String: IFCModel}}
-         */
-        this.ifcModels = {};
     }
 
     /**
@@ -266,7 +258,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {
 
-            this.loadMetadata(modelId, poid, roid, bimServerClientModel).then(function () {
+            loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
 
                 groupModel.once("destroyed", function () {
                     viewer.metaScene.destroyMetaModel(modelId);
@@ -431,155 +423,6 @@ class BIMServerLoaderPlugin extends Plugin {
         });
 
         return groupModel;
-    }
-
-    loadMetadata(modelId, poid, roid, bimServerClientModel) {
-
-        function isArray(value) {
-            return Object.prototype.toString.call(value) === "[object Array]";
-        }
-
-        const self = this;
-
-        return new Promise(function (resolve, reject) {
-
-            const query = {
-                defines: {
-                    Representation: {type: "IfcProduct", field: "Representation"},
-                    ContainsElementsDefine: {
-                        type: "IfcSpatialStructureElement",
-                        field: "ContainsElements",
-                        include: {
-                            type: "IfcRelContainedInSpatialStructure",
-                            field: "RelatedElements",
-                            includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
-                        }
-                    },
-                    IsDecomposedByDefine: {
-                        type: "IfcObjectDefinition",
-                        field: "IsDecomposedBy",
-                        include: {
-                            type: "IfcRelDecomposes",
-                            field: "RelatedObjects",
-                            includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
-                        }
-                    },
-                },
-                queries: [
-                    {type: "IfcProject", includes: ["IsDecomposedByDefine", "ContainsElementsDefine"]},
-                    {type: "IfcRepresentation", includeAllSubtypes: true},
-                    {type: "IfcProductRepresentation"},
-                    {type: "IfcPresentationLayerWithStyle"},
-                    {type: "IfcProduct", includeAllSubtypes: true},
-                    {type: "IfcProductDefinitionShape"},
-                    {type: "IfcPresentationLayerAssignment"},
-                    {
-                        type: "IfcRelAssociatesClassification",
-                        includes: [
-                            {type: "IfcRelAssociatesClassification", field: "RelatedObjects"},
-                            {type: "IfcRelAssociatesClassification", field: "RelatingClassification"}
-                        ]
-                    },
-                    {type: "IfcSIUnit"},
-                    {type: "IfcPresentationLayerAssignment"}
-                ]
-            };
-
-            bimServerClientModel.query(query, function () {
-            }).done(function () {
-
-                const entityCardinalities = { // Parent-child cardinalities for objects
-                    'IfcRelDecomposes': 1,
-                    'IfcRelAggregates': 1,
-                    'IfcRelContainedInSpatialStructure': 1,
-                    'IfcRelFillsElement': 1,
-                    'IfcRelVoidsElement': 1
-                };
-
-                const clientObjectMap = {}; // Create a mapping from id->instance
-                const clientObjectList = [];
-
-                for (let clientObjectId in bimServerClientModel.objects) { // The root node in a dojo store should have its parent set to null, not just something that evaluates to false
-                    const clientObject = bimServerClientModel.objects[clientObjectId].object;
-                    clientObject.parent = null;
-                    clientObjectMap[clientObject._i] = clientObject;
-                    clientObjectList.push(clientObject);
-                }
-
-                const relationships = clientObjectList.filter(function (clientObject) { // Filter all instances based on relationship objects
-                    return entityCardinalities[clientObject._t];
-                });
-
-                const parents = relationships.map(function (clientObject) { // Construct a tuple of {parent, child} ids
-                    const keys = Object.keys(clientObject);
-                    const related = keys.filter(function (key) {
-                        return key.indexOf("Related") !== -1;
-                    });
-                    const relating = keys.filter(function (key) {
-                        return key.indexOf("Relating") !== -1;
-                    });
-                    return [clientObject[relating[0]], clientObject[related[0]]];
-                });
-
-                const data = [];
-                const visited = {};
-
-                parents.forEach(function (a) {
-                    const ps = isArray(a[0]) ? a[0] : [a[0]]; // Relationships in IFC can be one to one/many
-                    const cs = isArray(a[1]) ? a[1] : [a[1]];
-                    for (let i = 0; i < ps.length; ++i) {
-                        for (let j = 0; j < cs.length; ++j) {
-                            const parentClientObject = clientObjectMap[ps[i]._i]; // Look up the instance ids in the mapping
-                            const child = clientObjectMap[cs[j]._i];
-                            child.parent = parentClientObject.id = parentClientObject._i; // parent, id, hasChildren are significant attributes in a dojo store
-                            child.id = child._i;
-                            parentClientObject.hasChildren = true;
-                            if (!visited[child.id]) { // Make sure to only add instances once
-                                data.push(child);
-                            }
-                            if (!visited[parentClientObject.id]) {
-                                data.push(parentClientObject);
-                            }
-                            visited[parentClientObject.id] = visited[child.id] = true;
-                        }
-                    }
-                });
-
-                const metaObjects = data.map(function (clientObject) {
-                    var metaObjectCfg = {
-                        objectId: clientObject.GlobalId,
-                        extId: clientObject.id,
-                        name: clientObject.Name,
-                        type: clientObject._t
-                    };
-                    if (clientObject.parent !== undefined && clientObject.parent !== null) {
-                        let clientObjectParent = clientObjectMap[clientObject.parent];
-                        if (clientObjectParent) {
-                            metaObjectCfg.parent = clientObjectParent.GlobalId;
-                        }
-                    }
-                    if (clientObject._rgeometry !== null && clientObject._rgeometry !== undefined) {
-                        metaObjectCfg.gid = clientObject._rgeometry._i
-                    }
-                    if (clientObject.hasChildren) {
-                        metaObjectCfg.children = [];
-                    }
-                    return metaObjectCfg;
-                });
-
-                const modelMetadata = {
-                    modelId: modelId,
-                    revisionId: roid,
-                    projectId: poid,
-                    metaObjects: metaObjects};
-
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
-
-                //    console.log(JSON.stringify(modelMetadata, null, "\t"));
-
-                resolve();
-            });
-        });
     }
 
     /**

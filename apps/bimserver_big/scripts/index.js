@@ -19,6 +19,8 @@ const viewer = new Viewer({
     canvasId: "myCanvas"
 });
 
+viewer.scene.camera.perspective.far = 100000;
+
 const bimServerClient = new BimServerClient(bimServerAddress);
 
 const bimServerBigLoader = new BIMServerBigLoaderPlugin(viewer, {
@@ -44,6 +46,9 @@ structurePanel.on("clicked", e => {
 
     viewer.cameraFlight.flyTo(aabb);
 });
+
+
+window.viewer = viewer;
 
 viewer.scene.input.on("mouseclicked", function (coords) {
 
@@ -83,20 +88,21 @@ bimServerClient.init(() => {
             const roid = project.lastRevisionId;
             const schema = project.schema;
 
-            const xeokitlModel = bimServerBigLoader.load({
+            const xeokitModel = bimServerBigLoader.load({
                 id: "myModel",
                 poid: poid,
                 roid: roid,
                 schema: schema,
                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
                 rotation: [-90, 0, 0],          // xeoglModel has Z+ axis as "up"
-                edges: true,                    // Emphasize edges
-                lambertMaterials: true          // Fast flat shaded rendering
+                edges: true
             });
 
-            xeokitlModel.on("loaded", () => {
+            xeokitModel.on("loaded", () => {
 
-                viewer.cameraFlight.flyTo(xeokitlModel);
+                xeokitModel.edges = true;
+                
+                viewer.cameraFlight.flyTo(xeokitModel);
 
                 structurePanel.on("clicked", e => {
                     const objectId = e.objectId;

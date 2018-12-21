@@ -398,6 +398,8 @@ class BatchingLayer {
     setMatrix(portionId, matrix) { // TODO
     }
 
+    //-- NORMAL --------------------------------------------------------------------------------------------------------
+
     drawNormalFillOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numTransparentObjects === this.numObjects || this.numGhostedObjects === this.numObjects) {
             return;
@@ -434,7 +436,9 @@ class BatchingLayer {
         }
     }
 
-    drawGhostedFill(frameCtx) {
+    //-- GHOSTED--------------------------------------------------------------------------------------------------------
+
+    drawGhostedFillOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
             return;
         }
@@ -443,7 +447,7 @@ class BatchingLayer {
         }
     }
 
-    drawGhostedEdges(frameCtx) {
+    drawGhostedEdgesOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
             return;
         }
@@ -452,7 +456,27 @@ class BatchingLayer {
         }
     }
 
-    drawHighlightedFill(frameCtx) {
+    drawGhostedFillTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+            return;
+        }
+        if (this._fillRenderer) {
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+        }
+    }
+
+    drawGhostedEdgesTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+            return;
+        }
+        if (this._edgesRenderer) {
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+        }
+    }
+
+    //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
+
+    drawHighlightedFillOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
             return;
         }
@@ -461,7 +485,7 @@ class BatchingLayer {
         }
     }
 
-    drawHighlightedEdges(frameCtx) {
+    drawHighlightedEdgesOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
             return;
         }
@@ -470,7 +494,27 @@ class BatchingLayer {
         }
     }
 
-    drawSelectedFill(frameCtx) {
+    drawHighlightedFillTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+            return;
+        }
+        if (this._fillRenderer) {
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
+        }
+    }
+
+    drawHighlightedEdgesTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+            return;
+        }
+        if (this._edgesRenderer) {
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.HIGHLIGHTED);
+        }
+    }
+
+    //-- SELECTED ------------------------------------------------------------------------------------------------------
+
+    drawSelectedFillOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
             return;
         }
@@ -479,7 +523,7 @@ class BatchingLayer {
         }
     }
 
-    drawSelectedEdges(frameCtx) {
+    drawSelectedEdgesOpaque(frameCtx) {
         if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
             return;
         }
@@ -487,6 +531,26 @@ class BatchingLayer {
             this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
         }
     }
+
+    drawSelectedFillTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+            return;
+        }
+        if (this._fillRenderer) {
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
+        }
+    }
+
+    drawSelectedEdgesTransparent(frameCtx) {
+        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+            return;
+        }
+        if (this._edgesRenderer) {
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SELECTED);
+        }
+    }
+
+    //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
         if (this.numVisibleObjects === 0) {

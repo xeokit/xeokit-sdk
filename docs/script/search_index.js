@@ -1,1694 +1,674 @@
 window.esdocSearchIndex = [
   [
-    "xeokit-sdk/viewer/plugins/annotationsplugin/annotation.js~annotation",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html",
-    "<span>Annotation</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AnnotationsPlugin/annotation.js</span>",
+    "xeokit-sdk/scene/scene.js~scene",
+    "class/scene/Scene.js~Scene.html",
+    "<span>Scene</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/Scene.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html",
-    "<span>AnnotationsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/axisgizmoplugin/axisgizmoplugin.js~axisgizmoplugin",
-    "class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html",
-    "<span>AxisGizmoPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html",
-    "<span>BCFViewpointsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html",
-    "<span>BIMServerBigModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html",
-    "<span>BIMServerBigModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html",
-    "<span>BIMServerModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html",
-    "<span>ClipsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/ClipsPlugin/ClipsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js~gltfbigmodelsplugin",
-    "class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html",
-    "<span>GLTFBigModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js~gltfmodelsplugin",
-    "class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html",
-    "<span>GLTFModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html",
-    "<span>LightsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/LightsPlugin/LightsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/modelsplugin.js~modelsplugin",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html",
-    "<span>ModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/ModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/objmodelsplugin/objmodelsplugin.js~objmodelsplugin",
-    "class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html",
-    "<span>OBJModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/objectmetadata.js~objectmetadata",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html",
-    "<span>ObjectMetadata</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/ObjectMetadata.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugin.js~plugin",
-    "class/viewer/Plugin.js~Plugin.html",
-    "<span>Plugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/Plugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin",
-    "class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html",
-    "<span>PropertiesPanelPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/stlmodelsplugin/stlmodelsplugin.js~stlmodelsplugin",
-    "class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html",
-    "<span>STLModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html",
-    "<span>SkyboxesPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html",
-    "<span>StructurePanelPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/viewer.js~viewer",
-    "class/viewer/Viewer.js~Viewer.html",
-    "<span>Viewer</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/Viewer.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/webvrplugin/webvrplugin.js~webvrplugin",
-    "class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html",
-    "<span>WebVRPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/WebVRPlugin/WebVRPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/viewer/plugins/xml3dmodelsplugin/xml3dmodelsplugin.js~xml3dmodelsplugin",
-    "class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html",
-    "<span>XML3DModelsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js</span>",
-    "class"
-  ],
-  [
-    "viewer/.external-ecmascript.js~array",
+    "scene/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
-    "viewer/.external-ecmascript.js~Array",
+    "scene/.external-ecmascript.js~Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~arraybuffer",
+    "scene/.external-ecmascript.js~arraybuffer",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
-    "viewer/.external-ecmascript.js~ArrayBuffer",
+    "scene/.external-ecmascript.js~ArrayBuffer",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~boolean",
+    "scene/.external-ecmascript.js~boolean",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-    "viewer/.external-ecmascript.js~Boolean",
+    "scene/.external-ecmascript.js~Boolean",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~dataview",
+    "scene/.external-ecmascript.js~dataview",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
-    "viewer/.external-ecmascript.js~DataView",
+    "scene/.external-ecmascript.js~DataView",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~date",
+    "scene/.external-ecmascript.js~date",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
-    "viewer/.external-ecmascript.js~Date",
+    "scene/.external-ecmascript.js~Date",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~error",
+    "scene/.external-ecmascript.js~error",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
-    "viewer/.external-ecmascript.js~Error",
+    "scene/.external-ecmascript.js~Error",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~evalerror",
+    "scene/.external-ecmascript.js~evalerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
-    "viewer/.external-ecmascript.js~EvalError",
+    "scene/.external-ecmascript.js~EvalError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~float32array",
+    "scene/.external-ecmascript.js~float32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
-    "viewer/.external-ecmascript.js~Float32Array",
+    "scene/.external-ecmascript.js~Float32Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~float64array",
+    "scene/.external-ecmascript.js~float64array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
-    "viewer/.external-ecmascript.js~Float64Array",
+    "scene/.external-ecmascript.js~Float64Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~function",
+    "scene/.external-ecmascript.js~function",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-    "viewer/.external-ecmascript.js~Function",
+    "scene/.external-ecmascript.js~Function",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~generator",
+    "scene/.external-ecmascript.js~generator",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
-    "viewer/.external-ecmascript.js~Generator",
+    "scene/.external-ecmascript.js~Generator",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~generatorfunction",
+    "scene/.external-ecmascript.js~generatorfunction",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
-    "viewer/.external-ecmascript.js~GeneratorFunction",
+    "scene/.external-ecmascript.js~GeneratorFunction",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~infinity",
+    "scene/.external-ecmascript.js~infinity",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
-    "viewer/.external-ecmascript.js~Infinity",
+    "scene/.external-ecmascript.js~Infinity",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~int16array",
+    "scene/.external-ecmascript.js~int16array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
-    "viewer/.external-ecmascript.js~Int16Array",
+    "scene/.external-ecmascript.js~Int16Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~int32array",
+    "scene/.external-ecmascript.js~int32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
-    "viewer/.external-ecmascript.js~Int32Array",
+    "scene/.external-ecmascript.js~Int32Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~int8array",
+    "scene/.external-ecmascript.js~int8array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
-    "viewer/.external-ecmascript.js~Int8Array",
+    "scene/.external-ecmascript.js~Int8Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~internalerror",
+    "scene/.external-ecmascript.js~internalerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
-    "viewer/.external-ecmascript.js~InternalError",
+    "scene/.external-ecmascript.js~InternalError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~json",
+    "scene/.external-ecmascript.js~json",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
-    "viewer/.external-ecmascript.js~JSON",
+    "scene/.external-ecmascript.js~JSON",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~map",
+    "scene/.external-ecmascript.js~map",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
-    "viewer/.external-ecmascript.js~Map",
+    "scene/.external-ecmascript.js~Map",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~nan",
+    "scene/.external-ecmascript.js~nan",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
-    "viewer/.external-ecmascript.js~NaN",
+    "scene/.external-ecmascript.js~NaN",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~number",
+    "scene/.external-ecmascript.js~number",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-    "viewer/.external-ecmascript.js~Number",
+    "scene/.external-ecmascript.js~Number",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~object",
+    "scene/.external-ecmascript.js~object",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-    "viewer/.external-ecmascript.js~Object",
+    "scene/.external-ecmascript.js~Object",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~promise",
+    "scene/.external-ecmascript.js~promise",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
-    "viewer/.external-ecmascript.js~Promise",
+    "scene/.external-ecmascript.js~Promise",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~proxy",
+    "scene/.external-ecmascript.js~proxy",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
-    "viewer/.external-ecmascript.js~Proxy",
+    "scene/.external-ecmascript.js~Proxy",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~rangeerror",
+    "scene/.external-ecmascript.js~rangeerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
-    "viewer/.external-ecmascript.js~RangeError",
+    "scene/.external-ecmascript.js~RangeError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~referenceerror",
+    "scene/.external-ecmascript.js~referenceerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
-    "viewer/.external-ecmascript.js~ReferenceError",
+    "scene/.external-ecmascript.js~ReferenceError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~reflect",
+    "scene/.external-ecmascript.js~reflect",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
-    "viewer/.external-ecmascript.js~Reflect",
+    "scene/.external-ecmascript.js~Reflect",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~regexp",
+    "scene/.external-ecmascript.js~regexp",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
-    "viewer/.external-ecmascript.js~RegExp",
+    "scene/.external-ecmascript.js~RegExp",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~set",
+    "scene/.external-ecmascript.js~set",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
-    "viewer/.external-ecmascript.js~Set",
+    "scene/.external-ecmascript.js~Set",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~string",
+    "scene/.external-ecmascript.js~string",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-    "viewer/.external-ecmascript.js~String",
+    "scene/.external-ecmascript.js~String",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~symbol",
+    "scene/.external-ecmascript.js~symbol",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
-    "viewer/.external-ecmascript.js~Symbol",
+    "scene/.external-ecmascript.js~Symbol",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~syntaxerror",
+    "scene/.external-ecmascript.js~syntaxerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
-    "viewer/.external-ecmascript.js~SyntaxError",
+    "scene/.external-ecmascript.js~SyntaxError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~typeerror",
+    "scene/.external-ecmascript.js~typeerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
-    "viewer/.external-ecmascript.js~TypeError",
+    "scene/.external-ecmascript.js~TypeError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~urierror",
+    "scene/.external-ecmascript.js~urierror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
-    "viewer/.external-ecmascript.js~URIError",
+    "scene/.external-ecmascript.js~URIError",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~uint16array",
+    "scene/.external-ecmascript.js~uint16array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
-    "viewer/.external-ecmascript.js~Uint16Array",
+    "scene/.external-ecmascript.js~Uint16Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~uint32array",
+    "scene/.external-ecmascript.js~uint32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
-    "viewer/.external-ecmascript.js~Uint32Array",
+    "scene/.external-ecmascript.js~Uint32Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~uint8array",
+    "scene/.external-ecmascript.js~uint8array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
-    "viewer/.external-ecmascript.js~Uint8Array",
+    "scene/.external-ecmascript.js~Uint8Array",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~uint8clampedarray",
+    "scene/.external-ecmascript.js~uint8clampedarray",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
-    "viewer/.external-ecmascript.js~Uint8ClampedArray",
+    "scene/.external-ecmascript.js~Uint8ClampedArray",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~weakmap",
+    "scene/.external-ecmascript.js~weakmap",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
-    "viewer/.external-ecmascript.js~WeakMap",
+    "scene/.external-ecmascript.js~WeakMap",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~weakset",
+    "scene/.external-ecmascript.js~weakset",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
-    "viewer/.external-ecmascript.js~WeakSet",
+    "scene/.external-ecmascript.js~WeakSet",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~boolean",
+    "scene/.external-ecmascript.js~boolean",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-    "viewer/.external-ecmascript.js~boolean",
+    "scene/.external-ecmascript.js~boolean",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~function",
+    "scene/.external-ecmascript.js~function",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-    "viewer/.external-ecmascript.js~function",
+    "scene/.external-ecmascript.js~function",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~null",
+    "scene/.external-ecmascript.js~null",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
-    "viewer/.external-ecmascript.js~null",
+    "scene/.external-ecmascript.js~null",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~number",
+    "scene/.external-ecmascript.js~number",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-    "viewer/.external-ecmascript.js~number",
+    "scene/.external-ecmascript.js~number",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~object",
+    "scene/.external-ecmascript.js~object",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-    "viewer/.external-ecmascript.js~object",
+    "scene/.external-ecmascript.js~object",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~string",
+    "scene/.external-ecmascript.js~string",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-    "viewer/.external-ecmascript.js~string",
+    "scene/.external-ecmascript.js~string",
     "external"
   ],
   [
-    "viewer/.external-ecmascript.js~undefined",
+    "scene/.external-ecmascript.js~undefined",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
-    "viewer/.external-ecmascript.js~undefined",
+    "scene/.external-ecmascript.js~undefined",
     "external"
   ],
   [
-    "viewer/modelsplugin.js",
-    "file/viewer/ModelsPlugin.js.html",
-    "viewer/ModelsPlugin.js",
+    "scene/scene.js",
+    "file/scene/Scene.js.html",
+    "scene/Scene.js",
     "file"
   ],
   [
-    "viewer/modelsplugin.js~modelsplugin#clear",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-clear",
-    "viewer/ModelsPlugin.js~ModelsPlugin#clear",
-    "method"
-  ],
-  [
-    "viewer/modelsplugin.js~modelsplugin#constructor",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-constructor-constructor",
-    "viewer/ModelsPlugin.js~ModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/modelsplugin.js~modelsplugin#destroy",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-destroy",
-    "viewer/ModelsPlugin.js~ModelsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/modelsplugin.js~modelsplugin#load",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-load",
-    "viewer/ModelsPlugin.js~ModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/modelsplugin.js~modelsplugin#models",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-member-models",
-    "viewer/ModelsPlugin.js~ModelsPlugin#models",
+    "scene/scene.js~scene#aabb",
+    "class/scene/Scene.js~Scene.html#instance-get-aabb",
+    "scene/Scene.js~Scene#aabb",
     "member"
   ],
   [
-    "viewer/modelsplugin.js~modelsplugin#unload",
-    "class/viewer/ModelsPlugin.js~ModelsPlugin.html#instance-method-unload",
-    "viewer/ModelsPlugin.js~ModelsPlugin#unload",
-    "method"
-  ],
-  [
-    "viewer/objectmetadata.js",
-    "file/viewer/ObjectMetadata.js.html",
-    "viewer/ObjectMetadata.js",
-    "file"
-  ],
-  [
-    "viewer/objectmetadata.js~objectmetadata#children",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-children",
-    "viewer/ObjectMetadata.js~ObjectMetadata#children",
+    "scene/scene.js~scene#camera",
+    "class/scene/Scene.js~Scene.html#instance-get-camera",
+    "scene/Scene.js~Scene#camera",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#constructor",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-constructor-constructor",
-    "viewer/ObjectMetadata.js~ObjectMetadata#constructor",
-    "method"
-  ],
-  [
-    "viewer/objectmetadata.js~objectmetadata#gid",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-gid",
-    "viewer/ObjectMetadata.js~ObjectMetadata#gid",
+    "scene/scene.js~scene#canvas",
+    "class/scene/Scene.js~Scene.html#instance-member-canvas",
+    "scene/Scene.js~Scene#canvas",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#guid",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-guid",
-    "viewer/ObjectMetadata.js~ObjectMetadata#guid",
+    "scene/scene.js~scene#center",
+    "class/scene/Scene.js~Scene.html#instance-get-center",
+    "scene/Scene.js~Scene#center",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#id",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-id",
-    "viewer/ObjectMetadata.js~ObjectMetadata#id",
+    "scene/scene.js~scene#clear",
+    "class/scene/Scene.js~Scene.html#instance-method-clear",
+    "scene/Scene.js~Scene#clear",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#clearclips",
+    "class/scene/Scene.js~Scene.html#instance-method-clearClips",
+    "scene/Scene.js~Scene#clearClips",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#cleareachpass",
+    "class/scene/Scene.js~Scene.html#instance-set-clearEachPass",
+    "scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#name",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-name",
-    "viewer/ObjectMetadata.js~ObjectMetadata#name",
+    "scene/scene.js~scene#cleareachpass",
+    "class/scene/Scene.js~Scene.html#instance-get-clearEachPass",
+    "scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#parent",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-parent",
-    "viewer/ObjectMetadata.js~ObjectMetadata#parent",
+    "scene/scene.js~scene#clearlights",
+    "class/scene/Scene.js~Scene.html#instance-method-clearLights",
+    "scene/Scene.js~Scene#clearLights",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#clips",
+    "class/scene/Scene.js~Scene.html#instance-member-clips",
+    "scene/Scene.js~Scene#clips",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#properties",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-properties",
-    "viewer/ObjectMetadata.js~ObjectMetadata#properties",
+    "scene/scene.js~scene#components",
+    "class/scene/Scene.js~Scene.html#instance-member-components",
+    "scene/Scene.js~Scene#components",
     "member"
   ],
   [
-    "viewer/objectmetadata.js~objectmetadata#type",
-    "class/viewer/ObjectMetadata.js~ObjectMetadata.html#instance-member-type",
-    "viewer/ObjectMetadata.js~ObjectMetadata#type",
+    "scene/scene.js~scene#destroy",
+    "class/scene/Scene.js~Scene.html#instance-method-destroy",
+    "scene/Scene.js~Scene#destroy",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#edgematerial",
+    "class/scene/Scene.js~Scene.html#instance-get-edgeMaterial",
+    "scene/Scene.js~Scene#edgeMaterial",
     "member"
   ],
   [
-    "viewer/plugin.js",
-    "file/viewer/Plugin.js.html",
-    "viewer/Plugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugin.js~plugin#constructor",
-    "class/viewer/Plugin.js~Plugin.html#instance-constructor-constructor",
-    "viewer/Plugin.js~Plugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#destroy",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-destroy",
-    "viewer/Plugin.js~Plugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#error",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-error",
-    "viewer/Plugin.js~Plugin#error",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#fire",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-fire",
-    "viewer/Plugin.js~Plugin#fire",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#id",
-    "class/viewer/Plugin.js~Plugin.html#instance-member-id",
-    "viewer/Plugin.js~Plugin#id",
+    "scene/scene.js~scene#gammafactor",
+    "class/scene/Scene.js~Scene.html#instance-get-gammaFactor",
+    "scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
-    "viewer/plugin.js~plugin#log",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-log",
-    "viewer/Plugin.js~Plugin#log",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#on",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-on",
-    "viewer/Plugin.js~Plugin#on",
-    "method"
-  ],
-  [
-    "viewer/plugin.js~plugin#viewer",
-    "class/viewer/Plugin.js~Plugin.html#instance-member-viewer",
-    "viewer/Plugin.js~Plugin#viewer",
+    "scene/scene.js~scene#gammafactor",
+    "class/scene/Scene.js~Scene.html#instance-set-gammaFactor",
+    "scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
-    "viewer/plugin.js~plugin#warn",
-    "class/viewer/Plugin.js~Plugin.html#instance-method-warn",
-    "viewer/Plugin.js~Plugin#warn",
-    "method"
-  ],
-  [
-    "viewer/viewer.js",
-    "file/viewer/Viewer.js.html",
-    "viewer/Viewer.js",
-    "file"
-  ],
-  [
-    "viewer/viewer.js~viewer#cameracontrol",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-cameraControl",
-    "viewer/Viewer.js~Viewer#cameraControl",
+    "scene/scene.js~scene#gammainput",
+    "class/scene/Scene.js~Scene.html#instance-set-gammaInput",
+    "scene/Scene.js~Scene#gammaInput",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#cameraflight",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight",
-    "viewer/Viewer.js~Viewer#cameraFlight",
+    "scene/scene.js~scene#gammainput",
+    "class/scene/Scene.js~Scene.html#instance-get-gammaInput",
+    "scene/Scene.js~Scene#gammaInput",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#clear",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-clear",
-    "viewer/Viewer.js~Viewer#clear",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#constructor",
-    "class/viewer/Viewer.js~Viewer.html#instance-constructor-constructor",
-    "viewer/Viewer.js~Viewer#constructor",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#createmetadata",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-createMetadata",
-    "viewer/Viewer.js~Viewer#createMetadata",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#destroy",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-destroy",
-    "viewer/Viewer.js~Viewer#destroy",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#destroymetadata",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-destroyMetadata",
-    "viewer/Viewer.js~Viewer#destroyMetadata",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#error",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-error",
-    "viewer/Viewer.js~Viewer#error",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#fire",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-fire",
-    "viewer/Viewer.js~Viewer#fire",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#getbookmark",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-getBookmark",
-    "viewer/Viewer.js~Viewer#getBookmark",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#getsnapshot",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot",
-    "viewer/Viewer.js~Viewer#getSnapshot",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#id",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-id",
-    "viewer/Viewer.js~Viewer#id",
+    "scene/scene.js~scene#gammaoutput",
+    "class/scene/Scene.js~Scene.html#instance-set-gammaOutput",
+    "scene/Scene.js~Scene#gammaOutput",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#log",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-log",
-    "viewer/Viewer.js~Viewer#log",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#metadata",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-metadata",
-    "viewer/Viewer.js~Viewer#metadata",
+    "scene/scene.js~scene#gammaoutput",
+    "class/scene/Scene.js~Scene.html#instance-get-gammaOutput",
+    "scene/Scene.js~Scene#gammaOutput",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#off",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-off",
-    "viewer/Viewer.js~Viewer#off",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#on",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-on",
-    "viewer/Viewer.js~Viewer#on",
-    "method"
-  ],
-  [
-    "viewer/viewer.js~viewer#plugins",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-plugins",
-    "viewer/Viewer.js~Viewer#plugins",
+    "scene/scene.js~scene#geometry",
+    "class/scene/Scene.js~Scene.html#instance-get-geometry",
+    "scene/Scene.js~Scene#geometry",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#resetview",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-resetView",
-    "viewer/Viewer.js~Viewer#resetView",
+    "scene/scene.js~scene#getaabb",
+    "class/scene/Scene.js~Scene.html#instance-method-getAABB",
+    "scene/Scene.js~Scene#getAABB",
     "method"
   ],
   [
-    "viewer/viewer.js~viewer#scene",
-    "class/viewer/Viewer.js~Viewer.html#instance-member-scene",
-    "viewer/Viewer.js~Viewer#scene",
+    "scene/scene.js~scene#ghostmaterial",
+    "class/scene/Scene.js~Scene.html#instance-get-ghostMaterial",
+    "scene/Scene.js~Scene#ghostMaterial",
     "member"
   ],
   [
-    "viewer/viewer.js~viewer#setbookmark",
-    "class/viewer/Viewer.js~Viewer.html#instance-method-setBookmark",
-    "viewer/Viewer.js~Viewer#setBookmark",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotation.js",
-    "file/viewer/plugins/AnnotationsPlugin/annotation.js.html",
-    "viewer/plugins/AnnotationsPlugin/annotation.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#desc",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-desc",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#desc",
+    "scene/scene.js~scene#ghostedobjectids",
+    "class/scene/Scene.js~Scene.html#instance-get-ghostedObjectIds",
+    "scene/Scene.js~Scene#ghostedObjectIds",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#desc",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-desc",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#desc",
+    "scene/scene.js~scene#ghostedobjects",
+    "class/scene/Scene.js~Scene.html#instance-member-ghostedObjects",
+    "scene/Scene.js~Scene#ghostedObjects",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#destroy",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-destroy",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#eye",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-eye",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#eye",
+    "scene/scene.js~scene#highlightmaterial",
+    "class/scene/Scene.js~Scene.html#instance-get-highlightMaterial",
+    "scene/Scene.js~Scene#highlightMaterial",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#eye",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-eye",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#eye",
+    "scene/scene.js~scene#highlightedobjectids",
+    "class/scene/Scene.js~Scene.html#instance-get-highlightedObjectIds",
+    "scene/Scene.js~Scene#highlightedObjectIds",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#getjson",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-getJSON",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#getJSON",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#glyph",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-glyph",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#glyph",
+    "scene/scene.js~scene#highlightedobjects",
+    "class/scene/Scene.js~Scene.html#instance-member-highlightedObjects",
+    "scene/Scene.js~Scene#highlightedObjects",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#glyph",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-glyph",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#glyph",
+    "scene/scene.js~scene#input",
+    "class/scene/Scene.js~Scene.html#instance-member-input",
+    "scene/Scene.js~Scene#input",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#init",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-method-init",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#init",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#labelshown",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-labelShown",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#labelShown",
+    "scene/scene.js~scene#lightmaps",
+    "class/scene/Scene.js~Scene.html#instance-member-lightMaps",
+    "scene/Scene.js~Scene#lightMaps",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#labelshown",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-labelShown",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#labelShown",
+    "scene/scene.js~scene#lights",
+    "class/scene/Scene.js~Scene.html#instance-member-lights",
+    "scene/Scene.js~Scene#lights",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#look",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-look",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#look",
+    "scene/scene.js~scene#loading",
+    "class/scene/Scene.js~Scene.html#instance-member-loading",
+    "scene/Scene.js~Scene#loading",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#look",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-look",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#look",
+    "scene/scene.js~scene#material",
+    "class/scene/Scene.js~Scene.html#instance-get-material",
+    "scene/Scene.js~Scene#material",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#pinshown",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-pinShown",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#pinShown",
+    "scene/scene.js~scene#models",
+    "class/scene/Scene.js~Scene.html#instance-member-models",
+    "scene/Scene.js~Scene#models",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#pinshown",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-pinShown",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#pinShown",
+    "scene/scene.js~scene#objectids",
+    "class/scene/Scene.js~Scene.html#instance-get-objectIds",
+    "scene/Scene.js~Scene#objectIds",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#title",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-title",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#title",
+    "scene/scene.js~scene#objects",
+    "class/scene/Scene.js~Scene.html#instance-member-objects",
+    "scene/Scene.js~Scene#objects",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#title",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-title",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#title",
+    "scene/scene.js~scene#outlinematerial",
+    "class/scene/Scene.js~Scene.html#instance-get-outlineMaterial",
+    "scene/Scene.js~Scene#outlineMaterial",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#type",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-type",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#type",
+    "scene/scene.js~scene#passes",
+    "class/scene/Scene.js~Scene.html#instance-set-passes",
+    "scene/Scene.js~Scene#passes",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#up",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-set-up",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#up",
+    "scene/scene.js~scene#passes",
+    "class/scene/Scene.js~Scene.html#instance-get-passes",
+    "scene/Scene.js~Scene#passes",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotation.js~annotation#up",
-    "class/viewer/plugins/AnnotationsPlugin/annotation.js~Annotation.html#instance-get-up",
-    "viewer/plugins/AnnotationsPlugin/annotation.js~Annotation#up",
+    "scene/scene.js~scene#pick",
+    "class/scene/Scene.js~Scene.html#instance-method-pick",
+    "scene/Scene.js~Scene#pick",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#reflectionmaps",
+    "class/scene/Scene.js~Scene.html#instance-member-reflectionMaps",
+    "scene/Scene.js~Scene#reflectionMaps",
     "member"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js",
-    "file/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js.html",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#constructor",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#constructor",
+    "scene/scene.js~scene#render",
+    "class/scene/Scene.js~Scene.html#instance-method-render",
+    "scene/Scene.js~Scene#render",
     "method"
   ],
   [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#destroy",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-destroy",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#readbookmark",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-readBookmark",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#readBookmark",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#send",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-send",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#send",
-    "method"
-  ],
-  [
-    "viewer/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#writebookmark",
-    "class/viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin.html#instance-method-writeBookmark",
-    "viewer/plugins/AnnotationsPlugin/annotationsPlugin.js~AnnotationsPlugin#writeBookmark",
-    "method"
-  ],
-  [
-    "viewer/plugins/axisgizmoplugin/axisgizmoplugin.js",
-    "file/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html",
-    "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/axisgizmoplugin/axisgizmoplugin.js~axisgizmoplugin#constructor",
-    "class/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js",
-    "file/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#authoringtool",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-authoringTool",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#authoringTool",
+    "scene/scene.js~scene#selectedmaterial",
+    "class/scene/Scene.js~Scene.html#instance-get-selectedMaterial",
+    "scene/Scene.js~Scene#selectedMaterial",
     "member"
   ],
   [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#constructor",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#destroy",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-destroy",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#getviewpoint",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#getViewpoint",
-    "method"
-  ],
-  [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#originatingsystem",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-originatingSystem",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#originatingSystem",
+    "scene/scene.js~scene#selectedobjectids",
+    "class/scene/Scene.js~Scene.html#instance-get-selectedObjectIds",
+    "scene/Scene.js~Scene#selectedObjectIds",
     "member"
   ],
   [
-    "viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#setviewpoint",
-    "class/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint",
-    "viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/bimservergeometryloader.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerGeometryLoader.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerGeometryLoader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/bimservermodel.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerModel.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/BIMServerModel.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/datainputstreamreader.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/DataInputStreamReader.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/DataInputStreamReader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/stringview.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/StringView.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/StringView.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/defaultmaterials.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/defaultMaterials.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/defaultMaterials.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/preloadquery.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/preloadQuery.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/preloadQuery.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverbigmodelsplugin/lib/utils.js",
-    "file/viewer/plugins/BIMServerBigModelsPlugin/lib/utils.js.html",
-    "viewer/plugins/BIMServerBigModelsPlugin/lib/utils.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#bimserver_version",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-BIMSERVER_VERSION",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#BIMSERVER_VERSION",
+    "scene/scene.js~scene#selectedobjects",
+    "class/scene/Scene.js~Scene.html#instance-member-selectedObjects",
+    "scene/Scene.js~Scene#selectedObjects",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#bimserverclient",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-bimServerClient",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#bimServerClient",
+    "scene/scene.js~scene#setcolorize",
+    "class/scene/Scene.js~Scene.html#instance-method-setColorize",
+    "scene/Scene.js~Scene#setColorize",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setculled",
+    "class/scene/Scene.js~Scene.html#instance-method-setCulled",
+    "scene/Scene.js~Scene#setCulled",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setedges",
+    "class/scene/Scene.js~Scene.html#instance-method-setEdges",
+    "scene/Scene.js~Scene#setEdges",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setghosted",
+    "class/scene/Scene.js~Scene.html#instance-method-setGhosted",
+    "scene/Scene.js~Scene#setGhosted",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#sethighlighted",
+    "class/scene/Scene.js~Scene.html#instance-method-setHighlighted",
+    "scene/Scene.js~Scene#setHighlighted",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setopacity",
+    "class/scene/Scene.js~Scene.html#instance-method-setOpacity",
+    "scene/Scene.js~Scene#setOpacity",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setoutlined",
+    "class/scene/Scene.js~Scene.html#instance-method-setOutlined",
+    "scene/Scene.js~Scene#setOutlined",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setpickable",
+    "class/scene/Scene.js~Scene.html#instance-method-setPickable",
+    "scene/Scene.js~Scene#setPickable",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setselected",
+    "class/scene/Scene.js~Scene.html#instance-method-setSelected",
+    "scene/Scene.js~Scene#setSelected",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#setvisible",
+    "class/scene/Scene.js~Scene.html#instance-method-setVisible",
+    "scene/Scene.js~Scene#setVisible",
+    "method"
+  ],
+  [
+    "scene/scene.js~scene#starttime",
+    "class/scene/Scene.js~Scene.html#instance-member-startTime",
+    "scene/Scene.js~Scene#startTime",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#constructor",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#destroy",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-destroy",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#hiddentypes",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-hiddenTypes",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#hiddenTypes",
+    "scene/scene.js~scene#ticksperrender",
+    "class/scene/Scene.js~Scene.html#instance-get-ticksPerRender",
+    "scene/Scene.js~Scene#ticksPerRender",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#ifcmodels",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-member-ifcModels",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#ifcModels",
+    "scene/scene.js~scene#ticksperrender",
+    "class/scene/Scene.js~Scene.html#instance-set-ticksPerRender",
+    "scene/Scene.js~Scene#ticksPerRender",
     "member"
   ],
   [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#load",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-load",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/bimservermodelsplugin.js~bimservermodelsplugin#loadmetadata",
-    "class/viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin.html#instance-method-loadMetadata",
-    "viewer/plugins/BIMServerModelsPlugin/BIMServerModelsPlugin.js~BIMServerModelsPlugin#loadMetadata",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/bimserverbiggeometryloader.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/BIMServerBigGeometryLoader.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerBigGeometryLoader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/bimservergeometryloader.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoader.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/BIMServerGeometryLoader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/datainputstreamreader.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/DataInputStreamReader.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/DataInputStreamReader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/eventhandler.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/EventHandler.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/metadatareader.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/MetaDataReader.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/notifier.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/Notifier.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/statictreerenderer.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/StaticTreeRenderer.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/stringview.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/StringView.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/StringView.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/defaultmaterials.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/defaultMaterials.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/defaultMaterials.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/preloadquery.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/preloadQuery.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimservermodelsplugin/lib/request.js",
-    "file/viewer/plugins/BIMServerModelsPlugin/lib/request.js.html",
-    "viewer/plugins/BIMServerModelsPlugin/lib/request.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js",
-    "file/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js.html",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#bimserver_version",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-BIMSERVER_VERSION",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#BIMSERVER_VERSION",
+    "scene/scene.js~scene#type",
+    "class/scene/Scene.js~Scene.html#instance-get-type",
+    "scene/Scene.js~Scene#type",
     "member"
   ],
   [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#bimserverclient",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-bimServerClient",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#bimServerClient",
+    "scene/scene.js~scene#types",
+    "class/scene/Scene.js~Scene.html#instance-member-types",
+    "scene/Scene.js~Scene#types",
     "member"
   ],
   [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#constructor",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#destroy",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-method-destroy",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#hiddentypes",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-member-hiddenTypes",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#hiddenTypes",
+    "scene/scene.js~scene#viewport",
+    "class/scene/Scene.js~Scene.html#instance-get-viewport",
+    "scene/Scene.js~Scene#viewport",
     "member"
   ],
   [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelsplugin.js~bimserverbigmodelsplugin#load",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin.html#instance-method-load",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPlugin.js~BIMServerBigModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js",
-    "file/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js.html",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#bimserver_version",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-member-BIMSERVER_VERSION",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#BIMSERVER_VERSION",
+    "scene/scene.js~scene#visibleobjectids",
+    "class/scene/Scene.js~Scene.html#instance-get-visibleObjectIds",
+    "scene/Scene.js~Scene#visibleObjectIds",
     "member"
   ],
   [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#bimserverclient",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-member-bimServerClient",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#bimServerClient",
+    "scene/scene.js~scene#visibleobjects",
+    "class/scene/Scene.js~Scene.html#instance-member-visibleObjects",
+    "scene/Scene.js~Scene#visibleObjects",
     "member"
   ],
   [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#constructor",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#constructor",
+    "scene/scene.js~scene#withcomponents",
+    "class/scene/Scene.js~Scene.html#instance-method-withComponents",
+    "scene/Scene.js~Scene#withComponents",
     "method"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#destroy",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-method-destroy",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#hiddentypes",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-member-hiddenTypes",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#hiddenTypes",
-    "member"
-  ],
-  [
-    "viewer/plugins/bimserverplugins/bimserverbigmodelspluginbackup.js~bimserverbigmodelsplugin#load",
-    "class/viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin.html#instance-method-load",
-    "viewer/plugins/BIMServerPlugins/BIMServerBigModelsPluginBACKUP.js~BIMServerBigModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js",
-    "file/viewer/plugins/ClipsPlugin/ClipsPlugin.js.html",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clear",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-clear",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clear",
-    "method"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clips",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-member-clips",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clips",
-    "member"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#constructor",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#createclip",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-createClip",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#createClip",
-    "method"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroy",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroy",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroyclip",
-    "class/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroyClip",
-    "viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroyClip",
-    "method"
-  ],
-  [
-    "viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js",
-    "file/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js.html",
-    "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js~gltfbigmodelsplugin#constructor",
-    "class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/gltfbigmodelsplugin/gltfbigmodelsplugin.js~gltfbigmodelsplugin#load",
-    "class/viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin.html#instance-method-load",
-    "viewer/plugins/GLTFBigModelsPlugin/GLTFBigModelsPlugin.js~GLTFBigModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js",
-    "file/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js.html",
-    "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js~gltfmodelsplugin#constructor",
-    "class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js~gltfmodelsplugin#defaulthandlenode",
-    "class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-method-defaultHandleNode",
-    "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#defaultHandleNode",
-    "method"
-  ],
-  [
-    "viewer/plugins/gltfmodelsplugin/gltfmodelsplugin.js~gltfmodelsplugin#load",
-    "class/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin.html#instance-method-load",
-    "viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js~GLTFModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js",
-    "file/viewer/plugins/LightsPlugin/LightsPlugin.js.html",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#clear",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-clear",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#clear",
-    "method"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#constructor",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#createlight",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-createLight",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#createLight",
-    "method"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#destroy",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-destroy",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#lights",
-    "class/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-member-lights",
-    "viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#lights",
-    "member"
-  ],
-  [
-    "viewer/plugins/objmodelsplugin/objmodelsplugin.js",
-    "file/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js.html",
-    "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/objmodelsplugin/objmodelsplugin.js~objmodelsplugin#constructor",
-    "class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/objmodelsplugin/objmodelsplugin.js~objmodelsplugin#load",
-    "class/viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin.html#instance-method-load",
-    "viewer/plugins/OBJModelsPlugin/OBJModelsPlugin.js~OBJModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/propertiespanelplugin/propertiespanelplugin.js",
-    "file/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js.html",
-    "viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#addmodel",
-    "class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-method-addModel",
-    "viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#addModel",
-    "method"
-  ],
-  [
-    "viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#constructor",
-    "class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#domelement",
-    "class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-member-domElement",
-    "viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#domElement",
-    "member"
-  ],
-  [
-    "viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#setselected",
-    "class/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-method-setSelected",
-    "viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#setSelected",
-    "method"
-  ],
-  [
-    "viewer/plugins/stlmodelsplugin/stlmodelsplugin.js",
-    "file/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js.html",
-    "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/stlmodelsplugin/stlmodelsplugin.js~stlmodelsplugin#constructor",
-    "class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/stlmodelsplugin/stlmodelsplugin.js~stlmodelsplugin#load",
-    "class/viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin.html#instance-method-load",
-    "viewer/plugins/STLModelsPlugin/STLModelsPlugin.js~STLModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js",
-    "file/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js.html",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#clear",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-clear",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#clear",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#constructor",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#createskybox",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-createSkybox",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#createSkybox",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroy",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroy",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroyskybox",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroySkybox",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroySkybox",
-    "method"
-  ],
-  [
-    "viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#skyboxes",
-    "class/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-member-skyboxes",
-    "viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#skyboxes",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js",
-    "file/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js.html",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#deselect",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-DESELECT",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#DESELECT",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#select",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-SELECT",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#SELECT",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#select_exclusive",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-SELECT_EXCLUSIVE",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#SELECT_EXCLUSIVE",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#toggle",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-TOGGLE",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#TOGGLE",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#constructor",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#destroy",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-destroy",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#destroy",
-    "method"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#getselected",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-getSelected",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#getSelected",
-    "method"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#selectionstate",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-selectionState",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#selectionState",
-    "member"
-  ],
-  [
-    "viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#setselected",
-    "class/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-setSelected",
-    "viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#setSelected",
-    "method"
-  ],
-  [
-    "viewer/plugins/webvrplugin/webvrplugin.js",
-    "file/viewer/plugins/WebVRPlugin/WebVRPlugin.js.html",
-    "viewer/plugins/WebVRPlugin/WebVRPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/webvrplugin/webvrplugin.js~webvrplugin#constructor",
-    "class/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/xml3dmodel.js",
-    "file/viewer/plugins/XML3DModelsPlugin/XML3DModel.js.html",
-    "viewer/plugins/XML3DModelsPlugin/XML3DModel.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/xml3dmodelsplugin.js",
-    "file/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js.html",
-    "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/xml3dmodelsplugin.js~xml3dmodelsplugin#constructor",
-    "class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html#instance-constructor-constructor",
-    "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#constructor",
-    "method"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/xml3dmodelsplugin.js~xml3dmodelsplugin#load",
-    "class/viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin.html#instance-method-load",
-    "viewer/plugins/XML3DModelsPlugin/XML3DModelsPlugin.js~XML3DModelsPlugin#load",
-    "method"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/deflate.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/deflate.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/deflate.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/inflate.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/inflate.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/inflate.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/mime-types.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/mime-types.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/mime-types.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/pako/codecs.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/pako/codecs.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/pako/codecs.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/arraybuffer.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/arraybuffer.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/arraybuffer.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/base64.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/base64.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/base64.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/config.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/config.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/config.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/dataview.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/dataview.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/dataview.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test1.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test1.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test1.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test10.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test10.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test10.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test11.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test11.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test11.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test12.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test12.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test12.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test13.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test13.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test13.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test14.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test14.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test14.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test15.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test15.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test15.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test16.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test16.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test16.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test17.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test17.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test17.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test18.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test18.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test18.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test2.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test2.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test2.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test20.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test20.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test20.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test3.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test3.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test3.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test4.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test4.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test4.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test5.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test5.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test5.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test6.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test6.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test6.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test7.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test7.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test7.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test8.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test8.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test8.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/test9.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/test9.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/test9.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/tests/util.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/tests/util.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/tests/util.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/z-worker.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/z-worker.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/z-worker.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/zip-ext.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/zip-ext.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/zip-ext.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/zip-fs.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/zip-fs.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/zip-fs.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/zip.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/zip.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/zip.js",
-    "file"
-  ],
-  [
-    "viewer/plugins/xml3dmodelsplugin/zipjs/zlib-asm/codecs.js",
-    "file/viewer/plugins/XML3DModelsPlugin/zipjs/zlib-asm/codecs.js.html",
-    "viewer/plugins/XML3DModelsPlugin/zipjs/zlib-asm/codecs.js",
-    "file"
-  ],
-  [
-    "viewer/utils.js",
-    "file/viewer/utils.js.html",
-    "viewer/utils.js",
-    "file"
   ]
 ]

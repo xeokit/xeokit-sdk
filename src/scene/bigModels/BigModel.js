@@ -15,6 +15,7 @@ import {RENDER_FLAGS} from './renderFlags.js';
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
 var tempColor = new Uint8Array(3);
+var tempMat4 = math.mat4();
 
 /**
  A **BigModel** is a lightweight representation used for huge engineering models, in which the quantity of objects
@@ -137,7 +138,7 @@ var tempColor = new Uint8Array(3);
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
+ @param [cfg.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
@@ -448,7 +449,7 @@ class BigModel extends Component {
         }
 
         var flags = 0;
-        var matrix = cfg.matrix || math.identityMat4();
+        var matrix = cfg.matrix ? math.mulMat4(this._worldMatrix, cfg.matrix, tempMat4) : this._worldMatrix;
         var layer;
         var portionId;
         var aabb = math.collapseAABB3();
@@ -644,7 +645,7 @@ class BigModel extends Component {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-        var object = new BigModelObject(this, cfg.entityType, id, cfg.guid, meshes, flags, color, aabb); // Internally sets BigModelMesh#object to this BigModelObject
+        var object = new BigModelObject(this, cfg.objectId, id, meshes, flags, color, aabb); // Internally sets BigModelMesh#object to this BigModelObject
         this.objects[id] = object;
         this._objectIds.push(id);
         this.numObjects++;
@@ -842,7 +843,7 @@ class BigModel extends Component {
     /**
      Indicates if this BigModel is clippable.
 
-     Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
+     Clipping is done by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} component.
 
      @property clippable
      @default true

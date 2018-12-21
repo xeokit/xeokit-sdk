@@ -1,5 +1,5 @@
 {
-  "source": "./src",
+  "source": "./src/scene/scene",
   "destination": "./docs",
   "plugins": [
     {
@@ -12,7 +12,7 @@
         "undocumentIdentifier": {"enable": true},
         "unexportedIdentifier": {"enable": false},
         "typeInference": {"enable": true},
-        "includeSource": false,
+
         "brand": {
           "logo": "./images/logo.gif",
           "title": "xeokit-sdk",

@@ -13,7 +13,7 @@ import {RENDER_FLAGS} from './renderFlags.js';
  */
 class BigModelObject {
 
-    constructor(model, entityType, id, guid, meshes, flags, color, aabb) {
+    constructor(model, objectId, id, meshes, flags, color, aabb) {
 
         /**
          * The BigModel that contains this BigModelObject.
@@ -58,23 +58,19 @@ class BigModelObject {
          */
         this.aabb = aabb;
 
-        if (entityType) {
+        if (objectId) {
 
             /**
              * The entity type of this BigModelObject.
              *
-             * @property entityType
+             * @property objectId
              * @type {String}
              * @final
              */
-            this.entityType = entityType;
-            model.scene._entityTypeAssigned(this, entityType);
+            this.objectId = objectId;
+            model.scene._registerObject(this, objectId);
         } else {
-            this.entityType = null;
-        }
-
-        if (guid) {
-            this.guid = guid;
+            this.objectId = null;
         }
     }
 
@@ -85,7 +81,7 @@ class BigModelObject {
      * {@link BigModelObject/culled} is false.
      *
      * Each visible BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/visibleEntities} map while its {@link BigModelObject/entityType}
+     * {@link Scene/visibleObjects} map while its {@link BigModelObject/objectId}
      * is set to a value.
      *
      * @property visible
@@ -106,8 +102,8 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setVisible(this._flags);
         }
-        if (this._entityType) {
-            this.model.scene._entityVisibilityUpdated(this, visible);
+        if (this._objectId) {
+            this.model.scene._objectVisibilityUpdated(this, visible);
         }
         this.model.glRedraw();
     }
@@ -124,7 +120,7 @@ class BigModelObject {
      * Indicates if highlighted.
      *
      * Each highlighted BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/highlightedEntities} map while its {@link BigModelObject/entityType}
+     * {@link Scene/highlightedObjects} map while its {@link BigModelObject/objectId}
      * is set to a value.
      *
      * @property highlighted
@@ -145,8 +141,8 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setHighlighted(this._flags);
         }
-        if (this._entityType) {
-            this.model.scene._entityHighlightedUpdated(this, highlighted);
+        if (this._objectId) {
+            this.model.scene._objectHighlightedUpdated(this, highlighted);
         }
         this.model.glRedraw();
     }
@@ -159,7 +155,7 @@ class BigModelObject {
      * Indicates if ghosted.
      *
      * Each ghosted BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/ghostedEntities} map while its {@link BigModelObject/entityType}
+     * {@link Scene/ghostedObjects} map while its {@link BigModelObject/objectId}
      * is set to a value.
      *
      * @property ghosted
@@ -180,8 +176,8 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setGhosted(this._flags);
         }
-        if (this._entityType) {
-            this.model.scene._entityGhostedUpdated(this, ghosted);
+        if (this._objectId) {
+            this.model.scene._objectGhostedUpdated(this, ghosted);
         }
         this.model.glRedraw();
     }
@@ -194,7 +190,7 @@ class BigModelObject {
      * Indicates if selected.
      *
      * Each selected BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/selectedEntities} map while its {@link BigModelObject/entityType}
+     * {@link Scene/selectedObjects} map while its {@link BigModelObject/objectId}
      * is set to a value.
      *
      * @property selected
@@ -215,8 +211,8 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setSelected(this._flags);
         }
-        if (this._entityType) {
-            this.model.scene._entitySelectedUpdated(this, selected);
+        if (this._objectId) {
+            this.model.scene._objectSelectedUpdated(this, selected);
         }
         this.model.glRedraw();
     }
@@ -256,7 +252,7 @@ class BigModelObject {
     /**
      * Indicates if clippable.
      *
-     * Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
+     * Clipping is done by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} component.
      *
      * @property clippable
      * @default true
@@ -435,19 +431,19 @@ class BigModelObject {
 
     _destroy() { // Called by BigModel
         const scene = this.model.scene;
-        if (this._entityType) {
-            scene._entityTypeRemoved(this, this._entityType);
+        if (this._objectId) {
+            scene._deregisterObject(this);
             if (this.visible) {
-                scene._entityVisibilityUpdated(this, false);
+                scene._objectVisibilityUpdated(this, false);
             }
             if (this.ghosted) {
-                scene._entityGhostedUpdated(this, false);
+                scene._objectGhostedUpdated(this, false);
             }
             if (this.selected) {
-                scene._entitySelectedUpdated(this, false);
+                scene._objectSelectedUpdated(this, false);
             }
             if (this.highlighted) {
-                scene._entityHighlightedUpdated(this, false);
+                scene._objectHighlightedUpdated(this, false);
             }
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
