@@ -48,8 +48,6 @@ class MetaModel {
          */
         this.metaScene = metaScene;
 
-        this.metaObjects = {};
-
         /**
          * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
          *

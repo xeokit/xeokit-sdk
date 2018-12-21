@@ -94,6 +94,7 @@ class MetaScene {
      *
      * @param {string} metaModelId ID for the new {@link MetaModel}.
      * @param {object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @returns {MetaModel} The new MetaModel.
      */
     createMetaModel(metaModelId, metaModelData) {
 
@@ -130,6 +131,7 @@ class MetaScene {
             }
         }
         this.fire("metaModelCreated", metaModelId);
+        return metaModel;
     }
 
     /**
