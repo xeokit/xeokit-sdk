@@ -34,11 +34,22 @@ class BigModelMesh {
          *
          * A BigModelMesh always belongs to exactly one BigModelObject.
          *
-         * @property model
-         * @type {BigModel}
+         * @property object
+         * @type {BigModelObject}
          * @final
          */
         this.object = null;
+
+        /**
+         * The BigModelObject that contains this BigModelMesh.
+         *
+         * A BigModelMesh always belongs to exactly one BigModelObject.
+         *
+         * @property object
+         * @type {BigModelObject}
+         * @final
+         */
+        this.parent = null;
 
         /**
          * ID of this BigModelMesh, unique within the xeokit.Scene.

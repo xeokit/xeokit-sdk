@@ -13,7 +13,7 @@ import {RENDER_FLAGS} from './renderFlags.js';
  */
 class BigModelObject {
 
-    constructor(model, objectId, id, meshes, flags, color, aabb) {
+    constructor(model, objectId, id, meshes, flags, aabb) {
 
         /**
          * The BigModel that contains this BigModelObject.
@@ -32,7 +32,9 @@ class BigModelObject {
         this.meshes = meshes;
 
         for (var i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
-            this.meshes[i].object = this;
+            const mesh = this.meshes[i];
+            mesh.object = this;
+            mesh.parent = this;
         }
 
 
@@ -45,7 +47,7 @@ class BigModelObject {
         this.id = id;
 
         this._flags = flags;
-        this._colorize = color;
+        this._colorize = new Uint8Array([255,255,255,255]);
 
         /**
          * World-space 3D axis-aligned bounding box (AABB) enclosing the objects within this BigModel.

@@ -459,7 +459,7 @@ class BigModel extends Component {
             color ? Math.floor(color[0] * 255) : 255,
             color ? Math.floor(color[1] * 255) : 255,
             color ? Math.floor(color[2] * 255) : 255,
-            cfg.opacity !== undefined ? Math.floor(cfg.opacity * 255) : 255
+            (cfg.opacity !== undefined) ? (cfg.opacity * 255) : (color ? Math.floor(color[3] * 255) : 255)
         ]);
         if (color[3] < 255) {
             this.numTransparentObjects++;
@@ -593,17 +593,6 @@ class BigModel extends Component {
             }
             meshes.push(mesh);
         }
-        // Create BigModelObject color
-        var color = cfg.color;
-        color = new Uint8Array([ // Quantize color
-            color ? Math.floor(color[0] * 255) : 255,
-            color ? Math.floor(color[1] * 255) : 255,
-            color ? Math.floor(color[2] * 255) : 255,
-            cfg.opacity !== undefined ? Math.floor(cfg.opacity * 255) : 255
-        ]);
-        if (color[3] < 255) {
-            this.numTransparentObjects++;
-        }
         // Create BigModelObject flags
         var flags = 0;
         if (this._visible && cfg.visible !== false) { // Apply flags fom xeokit.Object base class
@@ -645,7 +634,7 @@ class BigModel extends Component {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-        var object = new BigModelObject(this, cfg.objectId, id, meshes, flags, color, aabb); // Internally sets BigModelMesh#object to this BigModelObject
+        var object = new BigModelObject(this, cfg.objectId, id, meshes, flags, aabb); // Internally sets BigModelMesh#object to this BigModelObject
         this.objects[id] = object;
         this._objectIds.push(id);
         this.numObjects++;
@@ -1005,6 +994,15 @@ class BigModel extends Component {
             }
         }
 
+        if (this.numEdgesObjects > 0) {
+            const edgeMaterial = this.scene.edgeMaterial._state;
+            if (edgeMaterial.alpha < 1.0) {
+                renderFlags.normalEdgesTransparent = true;
+            } else {
+                renderFlags.normalEdgesOpaque = true;
+            }
+        }
+
         // if (this.numGhostedObjects < this.numVisibleObjects) {
         //     renderFlags.normalFillOpaque = true;
         // }
@@ -1013,7 +1011,7 @@ class BigModel extends Component {
             renderFlags.normalFillTransparent = true;
         }
 
-        renderFlags.normalFillOpaque = true;
+       renderFlags.normalFillOpaque = true;
 
         // if (this.numVisibleObjects > this.numGhostedObjects && this.numVisibleObjects > this.numHighlightedObjects && this.numVisibleObjects > this.numSelectedObjects) {
         //     if (this.numTransparentObjects < this.numVisibleObjects) {
