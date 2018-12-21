@@ -344,7 +344,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                             let ifcColor = defaultMaterials[waitingObjectData.ifcType];
 
                             bigModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createObject(objectId, geometryId);
+                            bigModelBuilder.createObject(objectId, geometryId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -373,7 +373,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                             let ifcColor = defaultMaterials[waitingObjectData.ifcType];
 
                             bigModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createObject(objectId, geometryId);
+                            bigModelBuilder.createObject(objectId, geometryId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -433,8 +433,6 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 // SINGLE USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
 
-             //   ifcColor = [0, 1, 0, 1];
-
                 var waitingGeometryData = singleUseGeometriesWaitingForObjects[geometryId];
                 var positions = waitingGeometryData.positions;
                 var normals = waitingGeometryData.normals;
@@ -450,8 +448,6 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 //------------------------------------------------------------------------------------------------------
                 // MULTI-USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
-
-              //  ifcColor = [1, 0, 0, 1];
 
                 bigModelBuilder.createMeshInstancingGeometry(geometryId, matrix, ifcColor);
                 bigModelBuilder.createObject(oid, geometryId, ifcType);

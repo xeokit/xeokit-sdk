@@ -290,7 +290,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createObject(objectId, geometryDataId, ifcType) {
+                    createObject(objectId, geometryDataId, ifcType) { // Pass in color to set transparency
                         objectId = oidToGuid[objectId];
                         const meshId = `${modelId}.${geometryDataId}.mesh`;
                         if (scene.objects[objectId]) {
@@ -301,9 +301,11 @@ class BIMServerBigLoaderPlugin extends Plugin {
                             self.error(`Can't create object - scene component with this ID already exists: ${objectId}`);
                             return;
                         }
+                        const visible = !self.hiddenTypes[ifcType];
                         xeokitBigModel.createObject({
                             objectId: objectId,
-                            meshIds: [meshId]
+                            meshIds: [meshId],
+                            visible: visible
                         });
                     }
                 });
