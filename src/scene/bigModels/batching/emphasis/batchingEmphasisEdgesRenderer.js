@@ -76,19 +76,21 @@ BatchingEmphasisEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, r
     }
     if (renderPass === RENDER_PASSES.GHOSTED) {
         const material = scene.ghostMaterial._state;
-        const fillColor = material.fillColor;
-        const fillAlpha = material.fillAlpha;
-        gl.uniform4f(this._uColorize, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
     } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
         const material = scene.highlightMaterial._state;
-        const fillColor = material.fillColor;
-        const fillAlpha = material.fillAlpha;
-        gl.uniform4f(this._uColorize, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
     } else {
-        gl.uniform4fv(this._uColorize, defaultColorize);
+        const material = scene.edgeMaterial._state;
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
     }
     gl.uniform1i(this._uRenderPass, renderPass);
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
     if (this._aFlags) {
@@ -111,7 +113,7 @@ BatchingEmphasisEdgesRenderer.prototype._allocate = function (layer) {
         return;
     }
     const program = this._program;
-    this._uColorize = program.getLocation("colorize");
+    this._uColor = program.getLocation("color");
     this._uRenderPass = program.getLocation("renderPass");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
@@ -138,7 +140,6 @@ BatchingEmphasisEdgesRenderer.prototype._bindProgram = function (frameCtx, layer
     frameCtx.useProgram++;
     const camera = scene.camera;
     const cameraState = camera._state;
-    this._uModelMatrix = program.getLocation("modelMatrix");
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);

@@ -20,7 +20,6 @@ function buildVertex(layer) {
     src.push("uniform int renderPass;");
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
-    src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
@@ -40,13 +39,14 @@ function buildVertex(layer) {
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool ghosted      = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
+
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
     src.push(`if (!visible || (renderPass == ${RENDER_PASSES.OPAQUE} && (transparent || ghosted)) || (renderPass == ${RENDER_PASSES.TRANSPARENT} && (!transparent || ghosted)) || (renderPass == ${RENDER_PASSES.GHOSTED} && !ghosted) || (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
 
-    src.push("  vec4 worldPosition = modelMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+    src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
     src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");

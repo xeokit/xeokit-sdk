@@ -350,6 +350,7 @@ class InstancingLayer {
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
+
         if (this.numVisibleObjects === 0 || this.numTransparentObjects === this.numObjects || this.numGhostedObjects === this.numObjects) {
             return;
         }
@@ -369,7 +370,7 @@ class InstancingLayer {
     }
 
     drawNormalFillTransparent(frameCtx) {
-        return;
+
         if (this.numVisibleObjects === 0 || this.numTransparentObjects === 0 || this.numGhostedObjects === this.numObjects) {
             return;
         }
