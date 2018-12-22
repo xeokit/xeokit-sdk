@@ -24,13 +24,13 @@ const tempVec3 = math.vec3();
  * });
  *
  * // Add a GLTFModelsPlugin
- * const glTFModels = new GLTFModelsPlugin(viewer);
+ * const gltfLoader = new GLTFModelsPlugin(viewer);
  *
  * // Add a BCFViewpointsPlugin
  * const bcfViewpoints = new BCFViewpointsPlugin(viewer);
  *
  * // Load a glTF model
- * const model = glTFModels.load({
+ * const model = gltfLoader.load({
  *    id: "myModel",
  *    src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
  *    edges: true
@@ -198,21 +198,21 @@ class BCFViewpointsPlugin extends Plugin {
             }
         };
 
-        const entityIds = scene.entityIds;
-        const visibleEntities = scene.visibleEntities;
-        const visibleEntityIds = scene.visibleEntityIds;
-        const invisibleEntityIds = entityIds.filter(id => !visibleEntities[id]);
-        const selectedEntityIds = scene.selectedEntityIds;
+        const objectIds = scene.objectIds;
+        const visibleObjects = scene.visibleObjects;
+        const visibleObjectIds = scene.visibleObjectIds;
+        const invisibleObjectIds = objectIds.filter(id => !visibleObjects[id]);
+        const selectedObjectIds = scene.selectedObjectIds;
 
-        if (visibleEntityIds.length < invisibleEntityIds.length) {
-            bcfViewpoint.components.visibility.exceptions = visibleEntityIds.map(el => this._objectIdToComponent(el));
+        if (visibleObjectIds.length < invisibleObjectIds.length) {
+            bcfViewpoint.components.visibility.exceptions = visibleObjectIds.map(el => this._objectIdToComponent(el));
             bcfViewpoint.components.visibility.default_visibility = false;
         } else {
-            bcfViewpoint.components.visibility.exceptions = invisibleEntityIds.map(el => this._objectIdToComponent(el));
+            bcfViewpoint.components.visibility.exceptions = invisibleObjectIds.map(el => this._objectIdToComponent(el));
             bcfViewpoint.components.visibility.default_visibility = true;
         }
 
-        bcfViewpoint.components.selection = selectedEntityIds.map(el => this._objectIdToComponent(el));
+        bcfViewpoint.components.selection = selectedObjectIds.map(el => this._objectIdToComponent(el));
 
         bcfViewpoint.snapshot = {
             snapshot_type: "png",
@@ -222,9 +222,9 @@ class BCFViewpointsPlugin extends Plugin {
         return bcfViewpoint;
     }
 
-    _objectIdToComponent(o) {
+    _objectIdToComponent(objectId) {
         return {
-            ifc_guid: o.split('#')[1],
+            ifc_guid: objectId,
             originating_system: this.originatingSystem || "xeokit.io",
             authoring_tool_id: this.authoringTool || "xeokit.io"
         };
@@ -280,23 +280,19 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.components) {
             if (!bcfViewpoint.components.visibility.default_visibility) {
-                scene.setVisible(scene.visibleEntities, false);
-                Object.keys(scene.models).forEach(modelId => {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(modelId + '#' + x.ifc_guid, true));
-                });
+                scene.setVisible(scene.objectIds, false);
+                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(x.ifc_guid, true));
             } else {
-                scene.setVisible(scene.visibleEntities, true);
+                scene.setVisible(scene.objectIds, true);
                 scene.setVisible("space", false);
-                Object.keys(scene.models).forEach(modelId => {
-                    bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(modelId + '#' + x.ifc_guid, false));
-                });
+                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(x.ifc_guid, false));
             }
         }
 
         if (bcfViewpoint.components.selection) {
-            scene.setSelected(scene.selectedEntities, false);
+            scene.setSelected(scene.selectedObjects, false);
             Object.keys(scene.models).forEach(modelId => {
-                bcfViewpoint.components.selection.forEach(x => scene.setSelected(modelId + '#' + x.ifc_guid, true));
+                bcfViewpoint.components.selection.forEach(x => scene.setSelected(x.ifc_guid, true));
             });
         }
     }
