@@ -56,7 +56,7 @@
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Viewport configuration
  @param [cfg.id] {String} Optional ID, unique among all components in the parent
- {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Viewport.
  @param [cfg.boundary] {Array of Number} Canvas-space Viewport boundary, given as
  (min, max, width, height). Defaults to the size of the parent

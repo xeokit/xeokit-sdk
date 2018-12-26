@@ -8,9 +8,9 @@ import {utils} from "../../../scene/utils.js";
  *
  * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
  * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
- * * Can also load metadata for each {@link Model} into {@link Viewer#metadata} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
+ * * Can also load metadata for each {@link Model} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
  * * Can configure each {@link Model} with a local transformation.
- * * Can attach each {@link Model} as a child of a given {@link Object3D}.
+ * * Can attach each {@link Model} as a child of a given {@link Node}.
  *
  * @example
  * // Create a xeokit Viewer
@@ -75,7 +75,7 @@ class GLTFBigModelLoader extends Plugin {
 
         /**
          * {@link Model}s currently loaded by this Plugin.
-         * @type {{String:GroupModel}}
+         * @type {{String:Model}}
          */
         this.models = {};
 
@@ -90,9 +90,9 @@ class GLTFBigModelLoader extends Plugin {
      Loads a large-scale glTF model from the file system into the viewer.
 
      @param params {*} Configs
-     @param [params.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}},
+     @param [params.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
      generated automatically when omitted.
-     @param [params.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
+     @param [params.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
      @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.
      @param [params.parent] The parent Object.
      @param [params.visible=true] {Boolean}  Indicates if this GLTFModel is visible.
@@ -111,13 +111,13 @@ class GLTFBigModelLoader extends Plugin {
      @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
      @param [params.src] {String} Path to a glTF file.
-     @param  [params.metadataSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     @param  [params.metaModelSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      @param [params.lambertMaterials=false] {Boolean} When true, gives each {@link Mesh} the same {@link LambertMaterial} and a {@link Mesh/colorize} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
      @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.
      @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.
      @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      @param [params.edgeThreshold=20] {Number} When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     @param [params.handleNode] {Function} Optional callback to mask which {@link Object"}}Objects{{/crossLink}} are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.
+     @param [params.handleNode] {Function} Optional callback to mask which {@link Node}s are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.
      */
     load(params) {
         const self = this;
@@ -135,15 +135,18 @@ class GLTFBigModelLoader extends Plugin {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
+        params = utils.apply(params, {
+            modelId: id // Registers the Node on viewer.scene.models
+        });
         var bigModel = new BigModel(this.viewer.scene, params);
-        this._modelLoadParams[id] = utils.apply(params, {});
-        if (params.metadataSrc) {
-            const metadataSrc = params.metadataSrc;
-            utils.loadJSON(metadataSrc, function (metadata) {
+        this._modelLoadParams[id] = params;
+        if (params.metaModelSrc) {
+            const metaModelSrc = params.metaModelSrc;
+            utils.loadJSON(metaModelSrc, function (metadata) {
                 self.viewer.createMetadata(id, metadata);
                 self._loader.load(bigModel, src, params);
             }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+                self.error(`load(): Failed to load model metadata for model '${id} from  '${metaModelSrc}' - ${errMsg}`);
             });
         } else {
             this._loader.load(bigModel, src, params);

@@ -191,8 +191,8 @@
  @constructor
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Camera by ID within its parent {@link Scene"}}Scene{{/crossLink}} later.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ You only need to supply an ID if you need to be able to find the Camera by ID within its parent {@link Scene}}Scene{{/crossLink}} later.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Camera.
  @extends Component
  */

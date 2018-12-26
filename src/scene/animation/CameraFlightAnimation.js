@@ -94,7 +94,7 @@ class CameraFlightAnimation extends Component {
     /**
      @constructor
      @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+     @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
      @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraFlightAnimation.
      @param [cfg.fit=true] {Boolean} When true, will ensure that when this CameraFlightAnimation has flown or jumped to a boundary
      it will adjust the distance between the {@link Camera}'s {@link Lookat/eye:property"}}eye{{/crossLink}}
@@ -165,7 +165,7 @@ class CameraFlightAnimation extends Component {
      * @param [params.look] {Float32Array} Position to fly the look position to.
      * @param [params.up] {Float32Array} Position to fly the up vector to.
      * @param [params.fit=true] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation/fit}.
-     * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Object} or its AABB should
+     * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation/fitFOV}.
      * @param [params.duration] {Number} Flight duration in seconds.  Overrides {@link CameraFlightAnimation/duration}.
      * @param [params.orthoScale] {Number} TODO: document this
@@ -334,7 +334,7 @@ class CameraFlightAnimation extends Component {
      * @param [params.eye] {Float32Array} Position to fly the eye position to.
      * @param [params.look] {Float32Array} Position to fly the look position to.
      * @param [params.up] {Float32Array} Position to fly the up vector to.
-     * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Object} or its AABB should
+     * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
      * @param [params.fit] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation/fit}.
      */
@@ -567,7 +567,7 @@ class CameraFlightAnimation extends Component {
 
 
     /**
-     * How much of the perspective field-of-view, in degrees, that a target {@link Object} or its AABB should
+     * How much of the perspective field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas when calling {@link CameraFlightAnimation/flyTo:method"}}CameraFlightAnimation#jumpTo(){{/crossLink}} or {@link CameraFlightAnimation/jumpTo:method}.
      *
      * @property fitFOV

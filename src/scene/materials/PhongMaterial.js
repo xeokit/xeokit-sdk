@@ -40,8 +40,8 @@
  | {@link PhongMaterial/pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
  | {@link PhongMaterial/alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
  | {@link PhongMaterial/alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- | {@link PhongMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {@link PhongMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ | {@link PhongMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces. |
+ | {@link PhongMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
@@ -126,7 +126,7 @@
  @extends Material
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The PhongMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this PhongMaterial.
  @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial ambient color.
  @param [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial diffuse color.
@@ -137,24 +137,24 @@
  @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
  @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
  @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
- @param [cfg.ambientMap=null] {Texture} A ambient map {@link Texture"}}Texture{{/crossLink}}, which will multiply by the diffuse property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.diffuseMap=null] {Texture} A diffuse map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the diffuse property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.specularMap=null] {Texture} A specular map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the specular property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.emissiveMap=undefined] {Texture} An emissive map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the emissive property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.normalMap=undefined] {Texture} A normal map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.alphaMap=undefined] {Texture} An alpha map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the alpha property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.reflectivityMap=undefined] {Texture} A reflectivity control map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the reflectivity property. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.occlusionMap=null] {Texture} An occlusion map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.diffuseFresnel=undefined] {Fresnel} A diffuse {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.specularFresnel=undefined] {Fresnel} A specular {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.emissiveFresnel=undefined] {Fresnel} An emissive {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.alphaFresnel=undefined] {Fresnel} An alpha {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
- @param [cfg.reflectivityFresnel=undefined] {Fresnel} A reflectivity {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.ambientMap=null] {Texture} A ambient map {@link Texture"}}Texture{{/crossLink}}, which will multiply by the diffuse property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.diffuseMap=null] {Texture} A diffuse map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the diffuse property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.specularMap=null] {Texture} A specular map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the specular property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.emissiveMap=undefined] {Texture} An emissive map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the emissive property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.normalMap=undefined] {Texture} A normal map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.alphaMap=undefined] {Texture} An alpha map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the alpha property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.reflectivityMap=undefined] {Texture} A reflectivity control map {@link Texture"}}Texture{{/crossLink}}, which will override the effect of the reflectivity property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.occlusionMap=null] {Texture} An occlusion map {@link Texture"}}Texture{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.diffuseFresnel=undefined] {Fresnel} A diffuse {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.specularFresnel=undefined] {Fresnel} A specular {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.emissiveFresnel=undefined] {Fresnel} An emissive {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.alphaFresnel=undefined] {Fresnel} An alpha {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
+ @param [cfg.reflectivityFresnel=undefined] {Fresnel} A reflectivity {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene}}Scene{{/crossLink}} as this PhongMaterial.
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode - accepted values are "opaque", "blend" and "mask".
  See the {@link PhongMaterial/alphaMode} property for more info.
  @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value. See the {@link PhongMaterial/alphaCutoff} property for more info.
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
  */
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';

@@ -32,7 +32,7 @@ function Core() {
     this.version = "1.0.0";
 
     /**
-     Existing {@link Scene"}}Scene{{/crossLink}}s , mapped to their IDs
+     Existing {@link Scene}}Scene{{/crossLink}}s , mapped to their IDs
      @property scenes
      @namespace xeokit
      @type {{Scene}}
@@ -109,8 +109,8 @@ function Core() {
     };
 
     /**
-     Destroys all user-created {@link Scene"}}Scenes{{/crossLink}} and
-     clears the default {@link Scene"}}Scene{{/crossLink}}.
+     Destroys all user-created {@link Scene}}Scenes{{/crossLink}} and
+     clears the default {@link Scene}}Scene{{/crossLink}}.
 
      @method clear
      @demo foo

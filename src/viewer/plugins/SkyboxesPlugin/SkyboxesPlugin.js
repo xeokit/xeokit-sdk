@@ -12,7 +12,7 @@ import {Skybox} from "../../../xeokit/skybox/skybox.js"
  * });
  *
  * // Add a GLTFModelsPlugin
- * var gltfModelsPlugin = new GLTFModelsPlugin(viewer, {
+ * var gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
  *     id: "GLTFModels"  // Default value
  * });
  *
@@ -22,7 +22,7 @@ import {Skybox} from "../../../xeokit/skybox/skybox.js"
  * });
  *
  * // Load a glTF model
- * const model = gltfModelsPlugin.load({
+ * const model = gltfLoaderPlugin.load({
  *     id: "myModel",
  *     src: "./models/gltf/mygltfmodel.gltf"
  * });

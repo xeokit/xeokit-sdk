@@ -1,5 +1,5 @@
 import {utils} from "./../../../scene/utils.js"
-import {GroupModel} from "./../../../scene/models/GroupModel.js";
+import {Node} from "./../../../scene/nodes/Node.js";
 import {Plugin} from "./../../Plugin.js";
 import {GLTFLoader} from "./GLTFLoader.js";
 
@@ -10,7 +10,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
  * * Can also load metadata for each {@link Model} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
  * * Can configure each {@link Model} with a local transformation.
- * * Can attach each {@link Model} as a child of a given {@link Object3D}.
+ * * Can attach each {@link Model} as a child of a given {@link Node}.
  *
  * @example
  * // Create a xeokit Viewer
@@ -53,7 +53,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  *
  * @class GLTFLoaderPlugin
  */
-class GLTFLoaderPlugin extends Plugin{
+class GLTFLoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -73,7 +73,7 @@ class GLTFLoaderPlugin extends Plugin{
 
         /**
          * {@link Model}s currently loaded by this Plugin.
-         * @type {{String:GroupModel}}
+         * @type {{String:Node}}
          */
         this.models = {};
 
@@ -94,7 +94,7 @@ class GLTFLoaderPlugin extends Plugin{
      * @param {String} params.src Path to a glTF file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file
      * (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {Object} [params.parent] The parent {@link Object3D}, if we want to graft the {@link Model} into a xeokit object hierarchy.
+     * @param {Object} [params.parent] The parent {@link Node}, if we want to graft the {@link Model} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
      * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s local 3D position.
      * @param {Float32Array} [params.scale=[1,1,1]] The {@link Model}'s local scale.
@@ -104,48 +104,74 @@ class GLTFLoaderPlugin extends Plugin{
      * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @param {Function} [params.handleNode] Optional callback to control how {@link Object3D}s and {@link Mesh}s are created as the glTF node hierarchy is parsed. See usage examples.
+     * @param {Function} [params.handleNode] Optional callback to control how {@link Node}s and {@link Mesh}s are created as the glTF node hierarchy is parsed. See usage examples.
      * @returns {Model} A {@link Model} representing the loaded glTF model.
      */
     load(params) {
+
         const self = this;
         const id = params.id;
+
         if (!id) {
             this.error("load() param expected: id");
             return;
         }
+
         const src = params.src;
+
         if (!src) {
             this.error("load() param expected: src");
             return;
         }
+
         if (this.viewer.scene.components[id]) {
             this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
-        var groupModel = new GroupModel(this.viewer.scene, params);
-        this._modelLoadParams[id] = utils.apply(params, {});
+
+        params = utils.apply(params, {
+            modelId: id // Registers the Node on viewer.scene.models
+        });
+
+        var node = new Node(this.viewer.scene, params);
+        this._modelLoadParams[id] = params;
+
+        params.handleNode = params.handleNode || function(modelId, nodeInfo, actions) {
+            const name = nodeInfo.name;
+            if (!name) {
+                return true; // Continue descending this node subtree
+            }
+            const objectId = name;
+            actions.createObject = {
+                objectId: objectId
+            };
+            return true;
+        };
+
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
                 // self.viewer.metaScene.transform(modelMetadata);
                 // console.log(JSON.stringify(modelMetadata), null, "\t");
                 self.viewer.metaScene.createMetaModel(id, modelMetadata);
-                self._loader.load(this, groupModel, src, params);
+                self._loader.load(this, node, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${id} from  '${metaModelSrc}' - ${errMsg}`);
             });
         } else {
-            this._loader.load(this, groupModel, src, params);
+            this._loader.load(this, node, src, params);
         }
-        this.models[id] = groupModel;
-        groupModel.once("destroyed", () => {
+
+        this.models[id] = node;
+
+        node.once("destroyed", () => {
             delete this.models[id];
             delete this._modelLoadParams[id];
             this.viewer.metaScene.destroyMetaModel(id);
             this.fire("unloaded", id);
         });
-        return groupModel;
+
+        return node;
     }
 
     /**
@@ -200,7 +226,7 @@ class GLTFLoaderPlugin extends Plugin{
     }
 
     _loadModel(modelLoadParams, i, ok) {
-        this.load(modelLoadParams[i], () =>{
+        this.load(modelLoadParams[i], () => {
             if (i === 0) {
                 ok();
             } else {

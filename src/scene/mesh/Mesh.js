@@ -1,5 +1,5 @@
 /**
- A **Mesh** is an {@link Object} that implements the {@link Drawable }
+ A **Mesh** is an {@link Node} that implements the {@link Drawable }
  interface, to represent a visible element within the 3D scene.
 
  ## Overview
@@ -15,9 +15,9 @@
  * A Mesh with all defaults is a white unit-sized box centered at the World-space origin.
  * Customize your Meshes by attaching your own instances of those component types, to override the defaults as needed.
  * For best performance, reuse as many of the same component instances among your Meshes as possible.
- * Use {@link Group"}}Group{{/crossLink}} components to organize Meshes into hierarchies, if required.
+ * Use {@link Node"}}Node{{/crossLink}} components to organize Meshes into hierarchies, if required.
 
- This page covers functionality specific to the Mesh component, while {@link Object} covers generic
+ This page covers functionality specific to the Mesh component, while {@link Node} covers generic
  functionality inherited from the base class.
 
  ## Usage
@@ -71,11 +71,11 @@
 
  ### Creating hierarchies
 
- In xeokit we represent an object hierarchy as a tree of {@link Object"}}Objects{{/crossLink}} in which
+ In xeokit we represent an object hierarchy as a tree of {@link Node}s in which
  the leaf Objects are Meshes. In an Object tree, an operation on an Object is recursively applied to sub-Objects, down
  to the Meshes at the leaves.
 
- See {@link Object} for information on organizing Meshes hierarchically.
+ See {@link Node} for information on organizing Meshes hierarchically.
 
  ### Controlling visibility
 
@@ -86,7 +86,7 @@
  mesh.visible = true; // Show (default)
  ````
 
- This property is inherited from {@link Object/visible:property"}}Object{{/crossLink}}.
+ This property is inherited from {@link Node/visible:property"}}Object{{/crossLink}}.
 
  ### Controlling clipping
 
@@ -145,7 +145,7 @@
  ````
 
  The Mesh also has a convenience property which provides the vertex positions in World-space, ie. after they have been
- transformed by the Mesh's {@link Object/worldMatrix}:
+ transformed by the Mesh's {@link Node/worldMatrix}:
 
  ````javascript
  // These are internally generated on-demand and cached. To free the cached
@@ -186,7 +186,7 @@
 
  A Mesh can be positioned within the World-space coordinate system.
 
- See {@link Object}.
+ See {@link Node}.
 
  ### Ghosting
 
@@ -372,7 +372,7 @@
  We can query a Mesh's World-space boundary at any time, getting it as an axis-aligned bounding box (AABB).
 
  The World-space AABB is the boundary of the Mesh's {@link Geometry} after transformation by the
- Mesh's {@link Object/worldMatrix} and the {@link Camera}'s
+ Mesh's {@link Node/worldMatrix} and the {@link Camera}'s
  {@link Camera/matrix}.
 
  Getting the World-space boundary AABB:
@@ -382,7 +382,7 @@
  ````
 
  Subscribing to updates of the World-space boundary, which occur after each update to the
- Mesh's {@link Object/worldMatrix} or the {@link Camera}:
+ Mesh's {@link Node/worldMatrix} or the {@link Camera}:
 
  ````javascript
  mesh.on("boundary", function() {
@@ -392,7 +392,7 @@
  ````
 
  The {@link Scene} also has a {@link Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}}, which returns
- the collective World-space AABBs of the {@link Object"}}Objects{{/crossLink}} with the given IDs:
+ the collective World-space AABBs of the {@link Node}s with the given IDs:
 
  ````JavaScript
  var scene = mesh.scene;
@@ -407,7 +407,7 @@
  #### Excluding from boundary calculations
 
  The {@link Scene/aabb:property"}}Scene aabb{{/crossLink}}
- and parent {@link Object/aabb:property"}}Object{{/crossLink}}'s {@link Object/aabb:property"}}aabb{{/crossLink}}
+ and parent {@link Node/aabb:property"}}Object{{/crossLink}}'s {@link Node/aabb:property"}}aabb{{/crossLink}}
  properties provide AABBs that dynamically include the AABB of all contained Meshes, except those Meshes that have
  their {@link Mesh/collidable:property"}}collidable{{/crossLink}} properties set ````false````.
 
@@ -418,9 +418,9 @@
  mesh.collidable = true; // Include mesh in calculation of its Scene/Model boundary
  ````
  Setting this false is useful when a Mesh represents some element, such as a control gizmo, that you don't want to
- contribute to the  {@link Scene"}}Scene{{/crossLink}} or parent {@link Object}'s AABB. It
+ contribute to the  {@link Scene}}Scene{{/crossLink}} or parent {@link Node}'s AABB. It
  also helps performance, since boundaries will not need dynamically re-calculated whenever the Mesh's boundary changes after
- a {@link Object/worldMatrix} or {@link Camera} update.
+ a {@link Node/worldMatrix} or {@link Camera} update.
 
  #### Examples
 
@@ -504,26 +504,26 @@
  @constructor
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Mesh.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
+ @param [cfg.objectId] {String} Optional object ID. See the {@link Node} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} The Mesh's local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} The Mesh's local scale.
  @param [cfg.rotation=[0,0,0]] {Float32Array} The Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
  @param [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} The Mesh's local modelling transform matrix. Overrides the position, scale and rotation parameters.
- @param [cfg.geometry] {Geometry} Defines shape. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/geometry:property"}}geometry{{/crossLink}}, which is a 2x2x2 box.
- @param [cfg.material] {Material} Defines normal rendered appearance. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/material:property"}}material{{/crossLink}}.
- @param [cfg.outlineMaterial] {OutlineMaterial} Defines appearance when outlined. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
- @param [cfg.ghostMaterial] Defines appearance when ghosted. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
- @param [cfg.highlightMaterial] Defines appearance when highlighted. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
- @param [cfg.selectedMaterial] Defines appearance when selected. Must be within the same {@link Scene"}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene"}}Scene{{/crossLink}}'s default instance, {@link Scene/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
+ @param [cfg.geometry] {Geometry} Defines shape. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/geometry:property"}}geometry{{/crossLink}}, which is a 2x2x2 box.
+ @param [cfg.material] {Material} Defines normal rendered appearance. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/material:property"}}material{{/crossLink}}.
+ @param [cfg.outlineMaterial] {OutlineMaterial} Defines appearance when outlined. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
+ @param [cfg.ghostMaterial] Defines appearance when ghosted. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
+ @param [cfg.highlightMaterial] Defines appearance when highlighted. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
+ @param [cfg.selectedMaterial] Defines appearance when selected. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
+ parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
  @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array} RGB colorize color, multiplies by the rendered fragment colors.
  @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
  @param [cfg.layer=0] {Number} Indicates this Mesh's rendering priority, relative to other Meshes. Typically used for transparency sorting,
@@ -532,8 +532,8 @@
  @param [cfg.visible=true] {Boolean}        Indicates if this Mesh is visible. Mesh is only rendered when visible and not culled.
  @param [cfg.culled=false] {Boolean}        Indicates if this Mesh is culled from view. Mesh is only rendered when visible and not culled.
  @param [cfg.pickable=true] {Boolean}       Indicates if this Mesh is pickable. When false, the Mesh will never be picked by calls to the {@link Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
- @param [cfg.clippable=true] {Boolean}      Indicates if this Mesh is clippable by {@link Clips}. When false, Mesh will not be affected by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips}.
- @param [cfg.collidable=true] {Boolean}     Whether this Mesh is included in boundary calculations. When false, the bounding boxes of the containing {@link Scene} and parent {@link Object}, {@link Group} or {@link Model} will not be calculated to enclose this Mesh.
+ @param [cfg.clippable=true] {Boolean}      Indicates if this Mesh is clippable by {@link Clips}. When false, Mesh will not be affected by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips}.
+ @param [cfg.collidable=true] {Boolean}     Whether this Mesh is included in boundary calculations. When false, the bounding boxes of the containing {@link Scene} and parent {@link Node}, {@link Node} or {@link Model} will not be calculated to enclose this Mesh.
  @param [cfg.castShadow=true] {Boolean}     Whether this Mesh casts shadows.
  @param [cfg.receiveShadow=true] {Boolean}  Whether this Mesh receives shadows.
  @param [cfg.outlined=false] {Boolean}      Whether an outline is rendered around this mesh.
@@ -555,7 +555,7 @@
  @event picked
  */
 import {math} from '../math/math.js';
-import {Object3D} from './../objects/Object3D.js';
+import {Node} from './../nodes/Node.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
 import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
@@ -812,7 +812,7 @@ const getPickResult = (function () {
     }
 })();
 
-class Mesh extends Object3D {
+class Mesh extends Node {
 
     /**
      * @private
@@ -1097,7 +1097,7 @@ class Mesh extends Object3D {
      {@link Mesh/culled} is false.
 
      Each visible Mesh is registered in the {@link Scene}'s
-     {@link Scene/visibleEntities} map when its {@link Object/entityType}
+     {@link Scene/visibleObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property visible
@@ -1107,8 +1107,8 @@ class Mesh extends Object3D {
     set visible(visible) {
         visible = visible !== false;
         this._state.visible = visible;
-        if (this._entityType) {
-            this.scene._entityVisibilityUpdated(this, visible);
+        if (this._objectId) {
+            this.scene._objectVisibilityUpdated(this, visible);
         }
         this.glRedraw();
     }
@@ -1123,7 +1123,7 @@ class Mesh extends Object3D {
      The ghosted appearance is configured by {@link Mesh/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
 
      Each ghosted Mesh is registered in its {@link Scene}'s
-     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
+     {@link Scene/ghostedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property ghosted
@@ -1136,8 +1136,8 @@ class Mesh extends Object3D {
             return;
         }
         this._state.ghosted = ghosted;
-        if (this._entityType) {
-            this.scene._entityGhostedUpdated(this, ghosted);
+        if (this._objectId) {
+            this.scene._objectGhostedUpdated(this, ghosted);
         }
         this.glRedraw();
     }
@@ -1152,7 +1152,7 @@ class Mesh extends Object3D {
      The highlight appearance is configured by {@link Mesh/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
 
      Each highlighted Mesh is registered in its {@link Scene}'s
-     {@link Scene/highlightedEntities} map when its {@link Object/entityType}
+     {@link Scene/highlightedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property highlighted
@@ -1165,8 +1165,8 @@ class Mesh extends Object3D {
             return;
         }
         this._state.highlighted = highlighted;
-        if (this._entityType) {
-            this.scene._entityHighlightedUpdated(this, highlighted);
+        if (this._objectId) {
+            this.scene._objectHighlightedUpdated(this, highlighted);
         }
         this.glRedraw();
     }
@@ -1181,7 +1181,7 @@ class Mesh extends Object3D {
      The selected appearance is configured by {@link Mesh/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
 
      Each selected Mesh is registered in its {@link Scene}'s
-     {@link Scene/selectedEntities} map when its {@link Object/entityType}
+     {@link Scene/selectedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property selected
@@ -1194,8 +1194,8 @@ class Mesh extends Object3D {
             return;
         }
         this._state.selected = selected;
-        if (this._entityType) {
-            this.scene._entitySelectedUpdated(this, selected);
+        if (this._objectId) {
+            this.scene._objectSelectedUpdated(this, selected);
         }
         this.glRedraw();
     }
@@ -1271,7 +1271,7 @@ class Mesh extends Object3D {
     /**
      Indicates if clippable.
 
-     When false, the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Mesh.
+     When false, the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Mesh.
 
      @property clippable
      @default true
@@ -1574,8 +1574,8 @@ class Mesh extends Object3D {
                 renderFlags.normalFillOpaque = true;
             }
             if (state.edges) {
-                const egdesMaterial = this._edgeMaterial._state;
-                if (egdesMaterial.alpha < 1.0) {
+                const edgeMaterial = this._edgeMaterial._state;
+                if (edgeMaterial.alpha < 1.0) {
                     renderFlags.normalEdgesTransparent = true;
                 } else {
                     renderFlags.normalEdgesOpaque = true;
@@ -1617,7 +1617,7 @@ class Mesh extends Object3D {
         }
     }
 
-//------------------------------------------------------------------------------------------------------------------
+    //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
         if (this._drawRenderer || (this._drawRenderer = DrawRenderer.get(this))) {
@@ -1643,7 +1643,7 @@ class Mesh extends Object3D {
         }
     }
 
-//------------------------------------------------------------------------------------------------------------------
+    //-- GHOSTED--------------------------------------------------------------------------------------------------------
 
     drawGhostedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1669,7 +1669,7 @@ class Mesh extends Object3D {
         }
     }
 
-//------------------------------------------------------------------------------------------------------------------
+    //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1695,7 +1695,7 @@ class Mesh extends Object3D {
         }
     }
 
-//------------------------------------------------------------------------------------------------------------------
+    //-- SELECTED ------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
@@ -1721,7 +1721,7 @@ class Mesh extends Object3D {
         }
     }
 
-//------------------------------------------------------------------------------------------------------------------
+    //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
         if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {

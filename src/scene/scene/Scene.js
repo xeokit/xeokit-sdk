@@ -1,383 +1,3 @@
-/**
- The container for all 3D graphical objects and state in a xeokit scene.
-
- ## Usage
-
- * [Creating a Scene](#creating-a-scene)
- * [Creating and accessing components](#creating-and-accessing-components)
- * [Controlling the camera](#controlling-the-camera)
- * [Taking snapshots](#taking-snapshots)
- * [Lighting](#lighting)
- * [Clipping](#clipping)
- * [Picking](#picking)
- * [Querying and tracking boundaries](#querying-and-tracking-boundaries)
- * [Controlling the viewport](#controlling-the-viewport)
- * [Controlling rendering](#controlling-rendering)
- * [Gamma correction](#gamma-correction)
-
- ### Creating a Scene
-
- Creating a Scene with its own default canvas:
-
- ````javascript
- var scene = new xeokit.Scene();
- ````
-
- Creating a Scene with an existing canvas.
-
- ````javascript
- var scene2 = new xeokit.Scene({
-    canvas: "myCanvas"
- });
-
- var scene3 = new xeokit.Scene({
-    canvas: document.getElementById("myCanvas");
- });
- ````
-
- ### Creating and accessing components
-
- As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
- {@link TeapotGeometry} and a {@link PhongMaterial}:
-
- <a href="../../examples/#geometry_primitives_teapot"><img src="../../assets/images/screenshots/Scene/teapot.png"></img></a>
-
- ````javascript
- var teapotMesh = new xeokit.Mesh(scene, {
-    id: "myMesh",                               // <<---------- ID automatically generated if not provided
-    geometry: new xeokit.TeapotGeometry(scene),
-    material: new xeokit.PhongMaterial(scene, {
-        id: "myMaterial",
-        diffuse: [0.2, 0.2, 1.0]
-    })
- });
- ````
-
- Creating a {@link Mesh} within the default Scene (xeokit will automatically create the default Scene if it does not yet exist):
- ````javascript
- var teapotMesh = new xeokit.Mesh({
-    id: "myMesh",
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        id: "myMaterial",
-        diffuse: [0.2, 0.2, 1.0]
-    })
- });
-
- teapotMesh.scene.camera.eye = [45, 45, 45];
- ````
-
- The default Scene can be got from either the Mesh or the xeokit namespace:
-
- ````javascript
- scene = teapotMesh.scene;
- scene = xeokit.getDefaultScene();
- ````
-
- You can also make any Scene instance the default scene, so that components will belong to that Scene when you don't explicitly
- specify a Scene for them:
-
- ````javascript
- var scene = new xeokit.Scene({ ... };
- xeokit.setDefaultScene( scene );
- ````
-
- Find components by ID in their Scene's {@link Scene/components} map:
-
- ````javascript
- var teapotMesh = scene.components["myMesh"];
- teapotMesh.visible = false;
-
- var teapotMaterial = scene.components["myMaterial"];
- teapotMaterial.diffuse = [1,0,0]; // Change to red
- ````
-
- A Scene also has a map of component instances for each {@link Component} subtype:
-
- ````javascript
- var meshes = scene.types["Mesh"];
- var teapotMesh = meshes["myMesh"];
- teapotMesh.ghosted = true;
-
- var phongMaterials = scene.types["PhongMaterial"];
- var teapotMaterial = phongMaterials["myMaterial"];
- teapotMaterial.diffuse = [0,1,0]; // Change to green
- ````
-
- See {@link Object}, {@link Group} and {@link Model}
- for how to create and access more sophisticated content.
-
- ### Controlling the camera
-
- Use the Scene's {@link Camera} to control the current viewpoint and projection:
-
- ````javascript
- var camera = myScene.camera;
-
- camera.eye = [-10,0,0];
- camera.look = [-10,0,0];
- camera.up = [0,1,0];
-
- camera.projection = "perspective";
- camera.perspective.fov = 45;
- //...
- ````
-
- ### Managing the canvas, taking snapshots
-
- The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
- as getting getting snapshots, firing resize events etc:
-
- ````javascript
- var canvas = scene.canvas;
-
- canvas.on("boundary", function(boundary) {
-    //...
- });
-
- var imageData = canvas.getSnapshot({
-    width: 500,
-    height: 500,
-    format: "png"
- });
- ````
-
- ### Lighting
-
- The Scene's {@link Lights} component manages lighting:
-
- ````javascript
- var lights = scene.lights;
- lights[1].color = [0.9, 0.9, 0.9];
- //...
- ````
-
- ### Clipping
-
- The Scene's {@link Clips} component manages clipping planes for custom cross-sections:
-
- ````javascript
- var clips = scene.clips;
- clips.clips = [
- new xeokit.Clip({  // Clip plane on negative diagonal
-        pos: [1.0, 1.0, 1.0],
-        dir: [-1.0, -1.0, -1.0],
-        active: true
-    }),
- new xeokit.Clip({ // Clip plane on positive diagonal
-        pos: [-1.0, -1.0, -1.0],
-        dir: [1.0, 1.0, 1.0],
-        active: true
-    }),
- //...
- ];
- ````
-
- ### Picking
-
- Use the Scene's {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method to pick and raycast meshes.
-
- For example, to pick a point on the surface of the closest mesh at the given canvas coordinates:
-
- ````javascript
- var hit = scene.pick({
-     pickSurface: true,
-     canvasPos: [23, 131]
- });
-
- if (hit) { // Picked a Mesh
-
-      var mesh = hit.mesh;
-
-      var primitive = hit.primitive; // Type of primitive that was picked, usually "triangles"
-      var primIndex = hit.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
-      var indices = hit.indices; // UInt32Array containing the triangle's vertex indices
-      var localPos = hit.localPos; // Float32Array containing the picked Local-space position on the triangle
-      var worldPos = hit.worldPos; // Float32Array containing the picked World-space position on the triangle
-      var viewPos = hit.viewPos; // Float32Array containing the picked View-space position on the triangle
-      var bary = hit.bary; // Float32Array containing the picked barycentric position within the triangle
-      var normal = hit.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
-      var uv = hit.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
- }
- ````
-
- #### Pick masking
-
- We can use the {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method's ````includeMeshes```` and ````excludeMeshes````
- options to mask which Meshes we attempt to pick.
-
- This is useful for picking <em>through</em> things, to pick only the Meshes of interest.
-
- To pick only Meshes ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through any other Meshes that are
- in the way, as if they weren't there:
-
- ````javascript
- var hit = scene.pick({
-     canvasPos: [23, 131],
-     includeMeshes: ["gearbox#77.0", "gearbox#79.0"]
- });
-
- if (hit) {
-      // Mesh will always be either "gearbox#77.0" or "gearbox#79.0"
-      var mesh = hit.mesh;
- }
- ````
-
- To pick any pickable Mesh, except for ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through those
- Meshes if they happen to be in the way:
-
- ````javascript
- var hit = scene.pick({
-     canvasPos: [23, 131],
-     excludeMeshes: ["gearbox#77.0", "gearbox#79.0"]
- });
-
- if (hit) {
-      // Mesh will never be "gearbox#77.0" or "gearbox#79.0"
-      var mesh = hit.mesh;
- }
- ````
-
- See {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} for more info on picking.
-
- ### Querying and tracking boundaries
-
- Getting a Scene's World-space axis-aligned boundary (AABB):
-
- ````javascript
- var aabb = scene.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
- ````
-
- Subscribing to updates to the AABB, which occur whenever {@link Meshes} are transformed, their
- {@link Geometry"}}Geometries{{/crossLink}} have been updated, or the {@link Camera} has moved:
-
- ````javascript
- scene.on("boundary", function() {
-     var aabb = scene.aabb;
- });
- ````
-
- Getting the AABB of the {@link Object"}}Objects{{/crossLink}} with the given IDs:
-
- ````JavaScript
- scene.getAABB(); // Gets collective boundary of all Mesh Objects in the scene
- scene.getAABB("saw"); // Gets boundary of an Object
- scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of two Objects
- ````
-
- See {@link Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}} and {@link Object} for more info on querying and tracking boundaries.
-
- ### Managing the viewport
-
- The Scene's {@link Viewport} component manages the WebGL viewport:
-
- ````javascript
- var viewport = scene.viewport
- viewport.boundary = [0, 0, 500, 400];;
- ````
-
- ### Controlling rendering
-
- You can configure a Scene to perform multiple "passes" (renders) per frame. This is useful when we want to render the
- scene to multiple viewports, such as for stereo effects.
-
- In the example, below, we'll configure the Scene to render twice on each frame, each time to different viewport. We'll do this
- with a callback that intercepts the Scene before each render and sets its {@link Viewport} to a
- different portion of the canvas. By default, the Scene will clear the canvas only before the first render, allowing the
- two views to be shown on the canvas at the same time.
-
- ````Javascript
- // Load a glTF model
- var model = new xeokit.GLTFModel({
-    src: "models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf"
- });
-
- var scene = model.scene;
- var viewport = scene.viewport;
-
- // Configure Scene to render twice for each frame
- scene.passes = 2; // Default is 1
- scene.clearEachPass = false; // Default is false
-
- // Render to a separate viewport on each render
-
- var viewport = scene.viewport;
- viewport.autoBoundary = false;
-
- scene.on("rendering", function (e) {
-     switch (e.pass) {
-         case 0:
-             viewport.boundary = [0, 0, 200, 200]; // xmin, ymin, width, height
-             break;
-
-         case 1:
-             viewport.boundary = [200, 0, 200, 200];
-             break;
-     }
- });
-
- // We can also intercept the Scene after each render,
- // (though we're not using this for anything here)
- scene.on("rendered", function (e) {
-     switch (e.pass) {
-         case 0:
-             break;
-
-         case 1:
-             break;
-     }
- });
- ````
-
- ### Gamma correction
-
- Within its shaders, xeokit performs shading calculations in linear space.
-
- By default, the Scene expects color textures (eg. {@link PhongMaterial/diffuseMap:property"}}PhongMaterial#diffuseMap{{/crossLink}},
- {@link MetallicMaterial/baseColorMap:property"}}MetallicMaterial#baseColorMap{{/crossLink}} and {@link SpecularMaterial/diffuseMap:property"}}SphericalMaterial#diffuseMap{{/crossLink}}) to
- be in pre-multipled gamma space, so will convert those to linear space before they are used in shaders. Other textures are
- always expected to be in linear space.
-
- By default, the Scene will also gamma-correct its rendered output.
-
- You can configure the Scene to expect all those color textures to be linear space, so that it does not gamma-correct them:
-
- ````javascript
- scene.gammaInput = false;
- ````
-
- You would still need to gamma-correct the output, though, if it's going straight to the canvas, so normally we would
- leave that enabled:
-
- ````javascript
- scene.gammaOutput = true;
- ````
-
- See {@link Texture} for more information on texture encoding and gamma.
-
- @class Scene
- @module xeokit
- @submodule scene
- @constructor
- @param [cfg] Scene parameters
- @param [cfg.id] {String} Optional ID, unique among all Scenes in xeokit, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Scene.
- @param [cfg.canvasId] {String} ID of existing HTML5 canvas in the DOM - creates a full-page canvas automatically if this is omitted
- @param [cfg.webgl2=true] {Boolean} Set this false when we **don't** want to use WebGL 2 for our Scene; the Scene will fall
- back on WebGL 1 if not available. This property will be deprecated when WebGL 2 is supported everywhere.
- @param [cfg.components] {Array(Object)} JSON array containing parameters for {@link Component"}}Component{{/crossLink}} subtypes to immediately create within the Scene.
- @param [cfg.ticksPerRender=1] {Number} The number of {@link Scene/tick:event} that happen between each render or this Scene.
- @param [cfg.passes=1] {Number} The number of times this Scene renders per frame.
- @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies whether to clear the
- canvas before each pass (true) or just before the first pass (false).
- @param [cfg.transparent=false] {Boolean} Whether or not the canvas is transparent.
- @param [cfg.backgroundColor] {Float32Array} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
- @param [cfg.backgroundImage] {String} URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
- @param [cfg.gammaInput=false] {Boolean} When true, expects that all textures and colors are premultiplied gamma.
- @param [cfg.gammaOutput=true] {Boolean} Whether or not to render with pre-multiplied gama.
- @param [cfg.gammaFactor=2.2] {Number} The gamma factor to use when rendering with pre-multiplied gamma.
- @extends Component
- */
 
 import {core} from '../core.js';
 import {utils} from '../utils.js';
@@ -431,6 +51,278 @@ function getMeshIDMap(scene, meshIds) {
  * @event warn
  * @param {String} value The warning message
  */
+
+/**
+ * @desc The container for all 3D scene objects and state.
+ *
+ * * A {@link Viewer} has a single Scene.
+ *
+ * # Getting the {@link Viewer}'s Scene:
+ *
+ * ````javascript
+ * var scene = myViewer.scene;
+ * ````
+ *
+ * # Creating and accessing components
+ *
+ * As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
+ * {@link TorusGeometry} and a {@link PhongMaterial}:
+ *
+ * ````javascript
+ * var teapotMesh = new Mesh(scene, {
+ *     id: "myMesh",                               // <<---------- ID automatically generated if not provided
+ *     geometry: new TorusGeometry(scene),
+ *     material: new PhongMaterial(scene, {
+ *         id: "myMaterial",
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     })
+ * });
+ *
+ * teapotMesh.scene.camera.eye = [45, 45, 45];
+ * ````
+ *
+ * Find components by ID in their Scene's {@link Scene/components} map:
+ *
+ * ````javascript
+ * var teapotMesh = scene.components["myMesh"];
+ * teapotMesh.visible = false;
+ *
+ * var teapotMaterial = scene.components["myMaterial"];
+ * teapotMaterial.diffuse = [1,0,0]; // Change to red
+ * ````
+ *
+ * A Scene also has a map of component instances for each {@link Component} subtype:
+ *
+ * ````javascript
+ * var meshes = scene.types["Mesh"];
+ * var teapotMesh = meshes["myMesh"];
+ * teapotMesh.ghosted = true;
+ *
+ * var phongMaterials = scene.types["PhongMaterial"];
+ * var teapotMaterial = phongMaterials["myMaterial"];
+ * teapotMaterial.diffuse = [0,1,0]; // Change to green
+ * ````
+ *
+ * See {@link Node}, {@link Node} and {@link Model} for how to create and access more sophisticated content.
+ *
+ * # Controlling the camera
+ *
+ * Use the Scene's {@link Camera} to control the current viewpoint and projection:
+ *
+ * ````javascript
+ * var camera = myScene.camera;
+ *
+ * camera.eye = [-10,0,0];
+ * camera.look = [-10,0,0];
+ * camera.up = [0,1,0];
+ *
+ * camera.projection = "perspective";
+ * camera.perspective.fov = 45;
+ * //...
+ * ````
+ *
+ * # Managing the canvas, taking snapshots
+ *
+ * The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
+ * as getting getting snapshots, firing resize events etc:
+ *
+ * ````javascript
+ * var canvas = scene.canvas;
+ *
+ * canvas.on("boundary", function(boundary) {
+ *     //...
+ * });
+ *
+ * var imageData = canvas.getSnapshot({
+ *     width: 500,
+ *     height: 500,
+ *     format: "png"
+ * });
+ * ````
+ *
+ * # Picking
+ *
+ * Use {@link Scene#pick} to pick and raycast meshes.
+ *
+ * For example, to pick a point on the surface of the closest mesh at the given canvas coordinates:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      pickSurface: true,
+ *      canvasPos: [23, 131]
+ * });
+ *
+ * if (hit) { // Picked a Mesh
+ *
+ *     var mesh = hit.mesh;
+ *
+ *     var primitive = hit.primitive; // Type of primitive that was picked, usually "triangles"
+ *     var primIndex = hit.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+ *     var indices = hit.indices; // UInt32Array containing the triangle's vertex indices
+ *     var localPos = hit.localPos; // Float32Array containing the picked Local-space position on the triangle
+ *     var worldPos = hit.worldPos; // Float32Array containing the picked World-space position on the triangle
+ *     var viewPos = hit.viewPos; // Float32Array containing the picked View-space position on the triangle
+ *     var bary = hit.bary; // Float32Array containing the picked barycentric position within the triangle
+ *     var normal = hit.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+ *     var uv = hit.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+ * }
+ * ````
+ *
+ * # Pick masking
+ *
+ * We can use {@link Scene#pick}'s ````includeMeshes```` and ````excludeMeshes````  options to mask which {@link Mesh}es we attempt to pick.
+ *
+ * This is useful for picking <em>through</em> things, to pick only the Meshes of interest.
+ *
+ * To pick only Meshes ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through any other Meshes that are
+ * in the way, as if they weren't there:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      canvasPos: [23, 131],
+ *      includeMeshes: ["gearbox#77.0", "gearbox#79.0"]
+ * });
+ *
+ * if (hit) {
+ *       // Mesh will always be either "gearbox#77.0" or "gearbox#79.0"
+ *       var mesh = hit.mesh;
+ * }
+ * ````
+ *
+ * To pick any pickable Mesh, except for ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through those
+ * Meshes if they happen to be in the way:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      canvasPos: [23, 131],
+ *      excludeMeshes: ["gearbox#77.0", "gearbox#79.0"]
+ * });
+ *
+ * if (hit) {
+ *       // Mesh will never be "gearbox#77.0" or "gearbox#79.0"
+ *       var mesh = hit.mesh;
+ * }
+ * ````
+ *
+ * See {@link Scene#pick} for more info on picking.
+ *
+ * # Querying and tracking boundaries
+ *
+ * Getting a Scene's World-space axis-aligned boundary (AABB):
+ *
+ * ````javascript
+ * var aabb = scene.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
+ * ````
+ *
+ * Subscribing to updates to the AABB, which occur whenever {@link Mesh}es are transformed, their
+ * {@link Geometry}s have been updated, or the {@link Camera} has moved:
+ *
+ * ````javascript
+ * scene.on("boundary", function() {
+ *      var aabb = scene.aabb;
+ * });
+ * ````
+ *
+ * Getting the AABB of the {@link Node}s with the given IDs:
+ *
+ * ````JavaScript
+ * scene.getAABB(); // Gets collective boundary of all Mesh Objects in the scene
+ * scene.getAABB("saw"); // Gets boundary of an Object
+ * scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of two Objects
+ * ````
+ *
+ * See {@link Scene#getAABB"} and {@link Node} for more info on querying and tracking boundaries.
+ *
+ * # Managing the viewport
+ *
+ * The Scene's {@link Viewport} component manages the WebGL viewport:
+ *
+ * ````javascript
+ * var viewport = scene.viewport
+ * viewport.boundary = [0, 0, 500, 400];;
+ * ````
+ *
+ * # Controlling rendering
+ *
+ * You can configure a Scene to perform multiple "passes" (renders) per frame. This is useful when we want to render the
+ * scene to multiple viewports, such as for stereo effects.
+ *
+ * In the example, below, we'll configure the Scene to render twice on each frame, each time to different viewport. We'll do this
+ * with a callback that intercepts the Scene before each render and sets its {@link Viewport} to a
+ * different portion of the canvas. By default, the Scene will clear the canvas only before the first render, allowing the
+ * two views to be shown on the canvas at the same time.
+ *
+ * ````Javascript
+ * // Load a glTF model
+ * var model = new GLTFModel({
+ *     src: "models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf"
+ * });
+ *
+ * var scene = model.scene;
+ * var viewport = scene.viewport;
+ *
+ * // Configure Scene to render twice for each frame
+ * scene.passes = 2; // Default is 1
+ * scene.clearEachPass = false; // Default is false
+ *
+ * // Render to a separate viewport on each render
+ *
+ * var viewport = scene.viewport;
+ * viewport.autoBoundary = false;
+ *
+ * scene.on("rendering", function (e) {
+ *      switch (e.pass) {
+ *          case 0:
+ *              viewport.boundary = [0, 0, 200, 200]; // xmin, ymin, width, height
+ *              break;
+ *
+ *          case 1:
+ *              viewport.boundary = [200, 0, 200, 200];
+ *              break;
+ *      }
+ * });
+ *
+ * // We can also intercept the Scene after each render,
+ * // (though we're not using this for anything here)
+ * scene.on("rendered", function (e) {
+ *      switch (e.pass) {
+ *          case 0:
+ *              break;
+ *
+ *          case 1:
+ *              break;
+ *      }
+ * });
+ * ````
+ *
+ * # Gamma correction
+ *
+ * Within its shaders, xeokit performs shading calculations in linear space.
+ *
+ * By default, the Scene expects color textures (eg. {@link PhongMaterial#diffuseMap},
+ * {@link MetallicMaterial#baseColorMap} and {@link SpecularMaterial#diffuseMap}) to
+ * be in pre-multipled gamma space, so will convert those to linear space before they are used in shaders. Other textures are
+ * always expected to be in linear space.
+ *
+ * By default, the Scene will also gamma-correct its rendered output.
+ *
+ * You can configure the Scene to expect all those color textures to be linear space, so that it does not gamma-correct them:
+ *
+ * ````javascript
+ * scene.gammaInput = false;
+ * ````
+ *
+ * You would still need to gamma-correct the output, though, if it's going straight to the canvas, so normally we would
+ * leave that enabled:
+ *
+ * ````javascript
+ * scene.gammaOutput = true;
+ * ````
+ *
+ * See {@link Texture} for more information on texture encoding and gamma.
+ *
+ * @class Scene
+ */
 class Scene extends Component {
 
     /**
@@ -446,6 +338,9 @@ class Scene extends Component {
         return "Scene";
     }
 
+    /**
+     * @private
+     */
     init(cfg) {
 
         super.init(cfg);
@@ -477,105 +372,80 @@ class Scene extends Component {
 
          @property models
          @final
-         @type {String:xeokit.Model}
+         @type {{String:Model}}
          */
         this.models = {};
 
         /**
-         {@link Object"}}Objects{{/crossLink}} in this Scene that have GUIDs, mapped to their GUIDs.
+         {@link Node}s in this Scene that have {@link Node#objectId} properties, mapped to those IDs.
 
-         Each Object is registered in this map when its {@link Object/guid} is
-         assigned a value.
+         Each Object is registered in this map when its {@link Node#objectId} is assigned a value.
 
-         @property guidObjects
+         @property objects
          @final
          @type {{String:Object}}
          */
-        this.guidObjects = {};
+        this.objects = {};
 
         /**
-         For each entity type, a map of IDs to {@link Object"}}Objects{{/crossLink}} of that entity type.
+         Visible entity {@link Node}s within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {@link Object/entityType} is
-         assigned a value.
+         Each Object is registered in this map when its {@link Node/visible} property is true and its
+         {@link Node/objectId} is assigned a value.
 
-         @property entityTypes
-         @final
-         @type {String:{String:xeokit.Component}}
-         */
-        this.entityTypes = {};
-
-        /**
-         {@link Object"}}Objects{{/crossLink}} in this Scene that have entity types, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Object/entityType} is
-         assigned a value.
-
-         @property entities
+         @property visibleObjects
          @final
          @type {{String:Object}}
          */
-        this.entities = {};
+        this.visibleObjects = {};
 
         /**
-         Visible entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Ghosted entity {@link Node}s within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {@link Object/visible} property is true and its
-         {@link Object/entityType} is assigned a value.
+         Each Object is registered in this map when its {@link Node/ghosted} property is true and its
+         {@link Node/objectId} is assigned a value.
 
-         @property visibleEntities
+         @property ghostedObjects
          @final
          @type {{String:Object}}
          */
-        this.visibleEntities = {};
+        this.ghostedObjects = {};
 
         /**
-         Ghosted entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Highlighted entity {@link Node}s within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {@link Object/ghosted} property is true and its
-         {@link Object/entityType} is assigned a value.
+         Each Object is registered in this map when its {@link Node/highlighted} property is true and its
+         {@link Node/objectId} is assigned a value.
 
-         @property ghostedEntities
+         @property highlightedObjects
          @final
          @type {{String:Object}}
          */
-        this.ghostedEntities = {};
+        this.highlightedObjects = {};
 
         /**
-         Highlighted entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
+         Selected entity {@link Node}s within this Scene, mapped to their IDs.
 
-         Each Object is registered in this map when its {@link Object/highlighted} property is true and its
-         {@link Object/entityType} is assigned a value.
+         Each Object is registered in this map when its {@link Node/selected} property is true and its
+         {@link Node/objectId} is assigned a value.
 
-         @property highlightedEntities
+         @property selectedObjects
          @final
          @type {{String:Object}}
          */
-        this.highlightedEntities = {};
-
-        /**
-         Selected entity {@link Object"}}Objects{{/crossLink}} within this Scene, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Object/selected} property is true and its
-         {@link Object/entityType} is assigned a value.
-
-         @property selectedEntities
-         @final
-         @type {{String:Object}}
-         */
-        this.selectedEntities = {};
+        this.selectedObjects = {};
 
         // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
 
         /**
          Lazy-regenerated ID lists.
          */
-        this._objectGUIDs = null;
-        this._entityIds = null;
-        this._visibleEntityIds = null;
-        this._ghostedEntityIds = null;
-        this._highlightedEntityIds = null;
-        this._selectedEntityIds = null;
+        this._modelIds = null;
+        this._objectIds = null;
+        this._visibleObjectIds = null;
+        this._ghostedObjectIds = null;
+        this._highlightedObjectIds = null;
+        this._selectedObjectIds = null;
 
         this._collidables = {}; // Components that contribute to the Scene AABB
         this._compilables = {}; // Components that require shader compilation
@@ -588,7 +458,7 @@ class Scene extends Component {
 
          @property types
          @final
-         @type {String:{String:xeokit.Component}}
+         @type {String:{String:Component}}
          */
         this.types = {};
 
@@ -598,7 +468,7 @@ class Scene extends Component {
 
          @property components
          @final
-         @type {String:xeokit.Component}
+         @type {String:Component}
          */
         this.components = {};
 
@@ -966,9 +836,6 @@ class Scene extends Component {
             this._renderer.removeDrawable(component.id);
             delete this._collidables[component.id];
         }
-        if (component.isModel) {
-            delete this.models[component.id];
-        }
     }
 
     // Methods below are called by various component types to register themselves on their
@@ -999,11 +866,6 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _modelCreated(model) {
-        this.models[model.id] = model;
-        stats.components.models++;
-    }
-
     _clipDestroyed(clip) {
         delete this.clips[clip.id];
         this.scene._clipsState.removeClip(clip._state);
@@ -1028,62 +890,60 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _entityTypeAssigned(component, newEntityType) {
-        this.entities[component.id] = component;
-        let componentsOfType = this.entityTypes[newEntityType];
-        if (!componentsOfType) {
-            componentsOfType = {};
-            this.entityTypes[newEntityType] = componentsOfType;
-        }
-        componentsOfType[component.id] = component;
-        this._entityIds = null; // Lazy regenerate
-        this._entityTypeIds = null; // Lazy regenerate
+    _registerModel(component) {
+        this.models[component.modelId] = component;
+        this._modelIds = null; // Lazy regenerate
     }
 
-    _entityTypeRemoved(component, oldEntityType) {
-        delete this.entities[component.id];
-        const componentsOfType = this.entityTypes[oldEntityType];
-        if (componentsOfType) {
-            delete componentsOfType[component.id];
-        }
-        this._entityIds = null; // Lazy regenerate
-        this._entityTypeIds = null; // Lazy regenerate
+    _deregisterModel(component) {
+        delete this.models[component.modelId];
+        this._modelIds = null; // Lazy regenerate
+    }
+    
+    _registerObject(component) {
+        this.objects[component.objectId] = component;
+        this._objectIds = null; // Lazy regenerate
     }
 
-    _entityVisibilityUpdated(component, visible) {
+    _deregisterObject(component) {
+        delete this.objects[component.objectId];
+        this._objectIds = null; // Lazy regenerate
+    }
+
+    _objectVisibilityUpdated(component, visible) {
         if (visible) {
-            this.visibleEntities[component.id] = component;
+            this.visibleObjects[component.objectId] = component;
         } else {
-            delete this.visibleEntities[component.id];
+            delete this.visibleObjects[component.objectId];
         }
-        this._visibleEntityIds = null; // Lazy regenerate
+        this._visibleObjectIds = null; // Lazy regenerate
     }
 
-    _entityGhostedUpdated(component, ghosted) {
+    _objectGhostedUpdated(component, ghosted) {
         if (ghosted) {
-            this.ghostedEntities[component.id] = component;
+            this.ghostedObjects[component.objectId] = component;
         } else {
-            delete this.ghostedEntities[component.id];
+            delete this.ghostedObjects[component.objectId];
         }
-        this._ghostedEntityIds = null; // Lazy regenerate
+        this._ghostedObjectIds = null; // Lazy regenerate
     }
 
-    _entityHighlightedUpdated(component, highlighted) {
+    _objectHighlightedUpdated(component, highlighted) {
         if (highlighted) {
-            this.highlightedEntities[component.id] = component;
+            this.highlightedObjects[component.objectId] = component;
         } else {
-            delete this.highlightedEntities[component.id];
+            delete this.highlightedObjects[component.objectId];
         }
-        this._highlightedEntityIds = null; // Lazy regenerate
+        this._highlightedObjectIds = null; // Lazy regenerate
     }
 
-    _entitySelectedUpdated(component, selected) {
+    _objectSelectedUpdated(component, selected) {
         if (selected) {
-            this.selectedEntities[component.id] = component;
+            this.selectedObjects[component.objectId] = component;
         } else {
-            delete this.selectedEntities[component.id];
+            delete this.selectedObjects[component.objectId];
         }
-        this._selectedEntityIds = null; // Lazy regenerate
+        this._selectedObjectIds = null; // Lazy regenerate
     }
 
     _webglContextLost() {
@@ -1216,94 +1076,81 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of entity type IDs in {@link Scene/entityTypes}.
-     @property entityTypeIds
+     Convenience array of IDs in {@link Scene/models}.
+     @property modelIds
      @final
      @type {Array of String}
      */
-    get objectGUIDs() {
-        if (!this._objectGUIDs) {
-            this._objectGUIDs = Object.keys(this.guidObjects);
+    get modelIds() {
+        if (!this._modelIds) {
+            this._modelIds = Object.keys(this.models);
         }
-        return this._objectGUIDs;
+        return this._modelIds;
     }
 
     /**
-     Convenience array of entity type IDs in {@link Scene/entityTypes}.
-     @property entityTypeIds
+     Convenience array of IDs in {@link Scene/objects}.
+     @property objectIds
      @final
      @type {Array of String}
      */
-    get entityTypeIds() {
-        if (!this._entityTypeIds) {
-            this._entityTypeIds = Object.keys(this.entityTypes);
+    get objectIds() {
+        if (!this._objectIds) {
+            this._objectIds = Object.keys(this.objects);
         }
-        return this._entityTypeIds;
+        return this._objectIds;
     }
 
     /**
-     Convenience array of IDs in {@link Scene/entities}.
-     @property entityIds
+     Convenience array of IDs in {@link Scene/visibleObjects}.
+     @property visibleObjectIds
      @final
      @type {Array of String}
      */
-    get entityIds() {
-        if (!this._entityIds) {
-            this._entityIds = Object.keys(this.entities);
+    get visibleObjectIds() {
+        if (!this._visibleObjectIds) {
+            this._visibleObjectIds = Object.keys(this.visibleObjects);
         }
-        return this._entityIds;
+        return this._visibleObjectIds;
     }
 
     /**
-     Convenience array of IDs in {@link Scene/visibleEntities}.
-     @property visibleEntityIds
+     Convenience array of IDs in {@link Scene/ghostedObjects}.
+     @property ghostedObjectIds
      @final
      @type {Array of String}
      */
-    get visibleEntityIds() {
-        if (!this._visibleEntityIds) {
-            this._visibleEntityIds = Object.keys(this.visibleEntities);
+    get ghostedObjectIds() {
+        if (!this._ghostedObjectIds) {
+            this._ghostedObjectIds = Object.keys(this.ghostedObjects);
         }
-        return this._visibleEntityIds;
+        return this._ghostedObjectIds;
     }
 
     /**
-     Convenience array of IDs in {@link Scene/ghostedEntities}.
-     @property ghostedEntityIds
+     Convenience array of IDs in {@link Scene/highlightedObjects}.
+     @property highlightedObjectIds
      @final
      @type {Array of String}
      */
-    get ghostedEntityIds() {
-        if (!this._ghostedEntityIds) {
-            this._ghostedEntityIds = Object.keys(this.ghostedEntities);
+    get highlightedObjectIds() {
+        if (!this._highlightedObjectIds) {
+            this._highlightedObjectIds = Object.keys(this.highlightedObjects);
         }
-        return this._ghostedEntityIds;
+        return this._highlightedObjectIds;
     }
 
     /**
-     Convenience array of IDs in {@link Scene/highlightedEntities}.
-     @property highlightedEntityIds
+     Convenience array of IDs in {@link Scene/selectedObjects}.
+     @property selectedObjectIds
      @final
      @type {Array of String}
      */
-    get highlightedEntityIds() {
-        if (!this._highlightedEntityIds) {
-            this._highlightedEntityIds = Object.keys(this.highlightedEntities);
+    get selectedObjectIds() {
+        if (!this._selectedObjectIds) {
+            this._selectedObjectIds = Object.keys(this.selectedObjects);
         }
-        return this._highlightedEntityIds;
-    }
-
-    /**
-     Convenience array of IDs in {@link Scene/selectedEntities}.
-     @property selectedEntityIds
-     @final
-     @type {Array of String}
-     */
-    get selectedEntityIds() {
-        if (!this._selectedEntityIds) {
-            this._selectedEntityIds = Object.keys(this.selectedEntities);
-        }
-        return this._selectedEntityIds;
+        return this._selectedObjectIds;
     }
 
     /**
@@ -1363,7 +1210,7 @@ class Scene extends Component {
 
      @property clearEachPass
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set clearEachPass(value) {
         value = !!value;
@@ -1383,7 +1230,7 @@ class Scene extends Component {
 
      @property gammaInput
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set gammaInput(value) {
         value = value !== false;
@@ -1444,7 +1291,7 @@ class Scene extends Component {
      This {@link BoxGeometry"}}BoxGeometry{{/crossLink}} has an {@link Component/id:property"}}id{{/crossLink}} equal to "default.geometry".
 
      {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {@link Geometry"}}Geometry{{/crossLink}} by default.
+     {@link Geometry}}Geometry{{/crossLink}} by default.
      @property geometry
      @final
      @type BoxGeometry
@@ -1822,14 +1669,14 @@ class Scene extends Component {
     }
 
     /**
-     Returns the collective axis-aligned bounding box of the {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Returns the collective axis-aligned bounding box of the {@link Node}s, specified by their IDs or objectIds.
 
      When no arguments are given, returns the total boundary of all objects in the scene.
 
      Only {@link Mesh"}}Meshes{{/crossLink}} with {@link Mesh/collidable:property"}}collidable{{/crossLink}}
      set ````true```` are included in the boundary.
 
-     ## Usage
+     # Usage
 
      ````JavaScript
      scene.getAABB(); // Gets collective boundary of all objects in the scene
@@ -1841,7 +1688,7 @@ class Scene extends Component {
      ````
 
      @method getAABB
-     @param {String|String[]} target {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param {String|String[]} target {Array} Array of  {@link Node} IDs of objectIds.
      @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
      */
     getAABB(target) {
@@ -1916,7 +1763,7 @@ class Scene extends Component {
                 // Each component fires "destroyed" as it is destroyed,
                 // which this Scene handles by removing the component
                 component = this.components[id];
-                if (!component._dontClear) { // Don't destroy components like xeokit.Camera, xeokit.Input, xeokit.Viewport etc.
+                if (!component._dontClear) { // Don't destroy components like Camera, Input, Viewport etc.
                     component.destroy();
                 }
             }
@@ -1951,18 +1798,18 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its visibility status in its {@link Object/visibility} property.
+     Each Object indicates its visibility status in its {@link Node/visibility} property.
 
      Each visible Object is registered in the {@link Scene}'s
-     {@link Scene/visibleEntities} map while its {@link Object/entityType}
+     {@link Scene/visibleObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setVisible
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param visible {Boolean} The new visibility state.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed visibility, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed visibility, else false if all updates were redundant and not applied.
      */
     setVisible(ids, visible) {
         return this.withComponents(ids, object => {
@@ -1973,14 +1820,14 @@ class Scene extends Component {
     }
 
     /**
-     Culls or unculls a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Culls or unculls a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its culled status in its {@link Object/visibility} property.
+     Each Object indicates its culled status in its {@link Node/visibility} property.
 
      @method setVisible
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param culled {Boolean} The new cull state.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed culled state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed culled state, else false if all updates were redundant and not applied.
      */
     setCulled(ids, culled) {
         return this.withComponents(ids, object => {
@@ -1991,18 +1838,18 @@ class Scene extends Component {
     }
 
     /**
-     Selects or de-selects a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Selects or de-selects a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its selected status in its {@link Object/selected} property.
+     Each Object indicates its selected status in its {@link Node/selected} property.
 
      Each selected Object is registered in the {@link Scene}'s
-     {@link Scene/selectedEntities} map while its {@link Object/entityType}
+     {@link Scene/selectedObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setSelected
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param selected {Boolean} Whether to select or deselect.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed selection state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed selection state, else false if all updates were redundant and not applied.
      */
     setSelected(ids, selected) {
         return this.withComponents(ids, object => {
@@ -2013,18 +1860,18 @@ class Scene extends Component {
     }
 
     /**
-     Highlights or de-highlights a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Highlights or de-highlights a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its highlight status in its {@link Object/highlighted} property.
+     Each Object indicates its highlight status in its {@link Node/highlighted} property.
 
      Each highlighted Object is registered in the {@link Scene}'s
-     {@link Scene/highlightedEntities} map while its {@link Object/entityType}
+     {@link Scene/highlightedObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setHighlighted
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param highlighted {Boolean} Whether to highlight or un-highlight.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed highlighted state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed highlighted state, else false if all updates were redundant and not applied.
      */
     setHighlighted(ids, highlighted) {
         return this.withComponents(ids, object => {
@@ -2035,18 +1882,18 @@ class Scene extends Component {
     }
 
     /**
-     Ghosts or un-ghosts a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Ghosts or un-ghosts a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its ghosted status in its {@link Object/ghosted} property.
+     Each Object indicates its ghosted status in its {@link Node/ghosted} property.
 
      Each ghosted Object is registered in the {@link Scene}'s
-     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
+     {@link Scene/ghostedObjects} map when its {@link Node/objectId}
      is assigned a value.
 
      @method setGhosted
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param ghosted {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed ghosted state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed ghosted state, else false if all updates were redundant and not applied.
      */
     setGhosted(ids, ghosted) {
         return this.withComponents(ids, object => {
@@ -2057,12 +1904,12 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides wireeframe edges for batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides wireeframe edges for batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
      @method setEdges
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param edges {Float32Array} Whether to show or hide edges.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed edges state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed edges state, else false if all updates were redundant and not applied.
      */
     setEdges(ids, edges) {
         return this.withComponents(ids, object => {
@@ -2073,18 +1920,18 @@ class Scene extends Component {
     }
 
     /**
-     Shows or hides an outline around a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Shows or hides an outline around a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its outlined status in its {@link Object/outlined} property.
+     Each Object indicates its outlined status in its {@link Node/outlined} property.
 
      Each outlined Object is registered in the {@link Scene}'s
-     {@link Scene/outlinedEntities} map when its {@link Object/entityType}
+     {@link Scene/outlinedObjects} map when its {@link Node/entityType}
      is assigned a value.
 
      @method setOutlined
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param outlined {Float32Array} Whether to show or hide the outline.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed outlined state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed outlined state, else false if all updates were redundant and not applied.
      */
     setOutlined(ids, outlined) {
         return this.withComponents(ids, object => {
@@ -2095,10 +1942,10 @@ class Scene extends Component {
     }
 
     /**
-     Colorizes a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Colorizes a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
      @method setColorize
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param [colorize=(1,1,1)] Float32Array RGB colorize factors, multiplied by the rendered pixel colors.
      */
     setColorize(ids, colorize) {
@@ -2108,10 +1955,10 @@ class Scene extends Component {
     }
 
     /**
-     Updates opacities of a batch of {@link Object"}}Objects{{/crossLink}}, specified by their IDs, GUIDs and/or entity types.
+     Updates opacities of a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
      @method setOpacity
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param [opacity=1] Number Opacity factor in range ````[0..1]````, multiplies by the rendered pixel alphas.
      */
     setOpacity(ids, opacity) {
@@ -2121,14 +1968,14 @@ class Scene extends Component {
     }
 
     /**
-     Sets a batch of {@link Object"}}Objects{{/crossLink}} pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
+     Sets a batch of {@link Node}s pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
 
      Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
      @method setPickable
-     @param ids {Array} Array of  {@link Object} IDs, GUIDs or entity types.
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
      @param pickable {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {@link Object"}}Objects{{/crossLink}} changed pickable state, else false if all updates were redundant and not applied.
+     @returns {Boolean} True if any {@link Node}s changed pickable state, else false if all updates were redundant and not applied.
      */
     setPickable(ids, pickable) {
         return this.withComponents(ids, object => {
@@ -2139,10 +1986,10 @@ class Scene extends Component {
     }
 
     /**
-     Iterates with a callback over {@link Component}s, specified by their IDs, GUIDs and/or entity types.
+     Iterates with a callback over {@link Component}s, specified by their IDs or objectIds.
 
      @method withComponents
-     @param ids {String|Array} One or more {@link Component} IDs, GUIDs or entity types.
+     @param ids {String|Array} One or more {@link Component} IDs or objectIds.
      @param callback {Function} The callback, which takes each object as its argument.
      */
     withComponents(ids, callback) {
@@ -2156,18 +2003,11 @@ class Scene extends Component {
             if (component) {
                 changed = callback(component) || changed;
             } else {
-                component = this.guidObjects[id];
+                component = this.objects[id];
                 if (component) {
                     changed = callback(component) || changed;
                 } else {
-                    const components = this.entityTypes[id];
-                    if (components) {
-                        for (const componentId in components) {
-                            if (components.hasOwnProperty(componentId)) {
-                                changed = callback(components[componentId]) || changed;
-                            }
-                        }
-                    }
+                    this.warn("Component not found: '" + id + "'");
                 }
             }
         }
@@ -2189,23 +2029,21 @@ class Scene extends Component {
         // Memory leak prevention
         this.models = null;
         this.components = null;
-        this.guidObjects = null;
-        this.entityTypes = null;
-        this.entities = null;
-        this.visibleEntities = null;
-        this.ghostedEntities = null;
-        this.highlightedEntities = null;
-        this.selectedEntities = null;
+        this.objects = null;
+        this.visibleObjects = null;
+        this.ghostedObjects = null;
+        this.highlightedObjects = null;
+        this.selectedObjects = null;
         this.clips = null;
         this.lights = null;
         this.lightMaps = null;
         this.reflectionMaps = null;
         this._objectGUIDs = null;
-        this._entityIds = null;
-        this._visibleEntityIds = null;
-        this._ghostedEntityIds = null;
-        this._highlightedEntityIds = null;
-        this._selectedEntityIds = null;
+        this._objectIds = null;
+        this._visibleObjectIds = null;
+        this._ghostedObjectIds = null;
+        this._highlightedObjectIds = null;
+        this._selectedObjectIds = null;
         this.types = null;
         this.components = null;
         this.canvas = null;

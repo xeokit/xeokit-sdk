@@ -65,7 +65,7 @@ function nextHighestPowerOfTwo(x) {
  @constructor
  @param gl {WebGLRenderingContext} The WebGL rendering context.
  */
-class Texture2d {
+class Texture2D {
 
     constructor(gl, target) {
         this.gl = gl;
@@ -218,4 +218,4 @@ class Texture2d {
     }
 }
 
-export {Texture2d};
+export {Texture2D};

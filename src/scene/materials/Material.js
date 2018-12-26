@@ -13,7 +13,7 @@
  * {@link EdgeMaterial} - defines the appearance of Meshes when edges are emphasized.
  * {@link OutlineMaterial} - defines the appearance of outlines drawn around Meshes.
 
- A {@link Scene"}}Scene{{/crossLink}} is allowed to contain a mixture of these material types.
+ A {@link Scene}}Scene{{/crossLink}} is allowed to contain a mixture of these material types.
 
  @class Material
  @module xeokit

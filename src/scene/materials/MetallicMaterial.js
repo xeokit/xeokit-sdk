@@ -40,8 +40,8 @@
  | {@link MetallicMaterial/normalMap} | {@link Texture} |  | null | linear | Tangent-space normal map. |
  | {@link MetallicMaterial/alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
  | {@link MetallicMaterial/alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- | {@link MetallicMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {@link MetallicMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ | {@link MetallicMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces. |
+ | {@link MetallicMaterial/frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
@@ -223,7 +223,7 @@
 
  @param [cfg] {*} The MetallicMaterial configuration.
 
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
 
  @param [cfg.meta=null] {String:Object} Metadata to attach to this material.
 
@@ -254,34 +254,34 @@
 
  @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial/alpha} property. Must
- be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.metallicMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  metallic factor in its *R* component. The *R* component multiplies by the
  {@link MetallicMaterial/metallic} property. Must be within the same
- {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.roughnessMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  roughness factor in its *R* component. The *R* component multiplies by the
  {@link MetallicMaterial/roughness} property. Must be within the same
- {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.metallicRoughnessMap=undefined] {Texture} RGB {@link Texture} containing this
  MetallicMaterial's metalness in its *R* component and roughness in its *G* component. Its *R* component multiplies by the
  {@link MetallicMaterial/metallic} property, while its *G* component multiplies by the
  {@link MetallicMaterial/roughness} property. Must be within the same
- {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
  MetallicMaterial. Multiplies by the {@link MetallicMaterial/emissive} property.
- Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
  multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
  as this MetallicMaterial.
 
  @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
- within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+ within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode, which specifies how alpha is to be interpreted. Accepted
  values are "opaque", "blend" and "mask". See the {@link MetallicMaterial/alphaMode} property for more info.
@@ -289,8 +289,8 @@
  @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value.
  See the {@link MetallicMaterial/alphaCutoff} property for more info.
 
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
 
  @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
  @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
@@ -556,7 +556,7 @@ class MetallicMaterial extends Material {
 
      The *R* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property roughnessMap
      @default undefined
@@ -573,7 +573,7 @@ class MetallicMaterial extends Material {
      Its *B* component multiplies by the {@link MetallicMaterial/metallic} property, while
      its *G* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property metallicRoughnessMap
      @default undefined
@@ -707,7 +707,7 @@ class MetallicMaterial extends Material {
     /**
      RGB tangent-space normal map {@link Texture}.
 
-     Must be within the same {@link Scene"}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
 
      @property normalMap
      @default undefined

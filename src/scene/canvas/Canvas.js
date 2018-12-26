@@ -1,10 +1,10 @@
 /**
- A **Canvas** manages a {@link Scene"}}Scene{{/crossLink}}'s HTML canvas and its WebGL context.
+ A **Canvas** manages a {@link Scene}}Scene{{/crossLink}}'s HTML canvas and its WebGL context.
 
  ## Overview
 
- * Each {@link Scene"}}Scene{{/crossLink}} provides a Canvas as a read-only property on itself.
- * When a {@link Scene"}}Scene{{/crossLink}} is configured with the ID of
+ * Each {@link Scene}}Scene{{/crossLink}} provides a Canvas as a read-only property on itself.
+ * When a {@link Scene}}Scene{{/crossLink}} is configured with the ID of
  an existing <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>, then
  the Canvas will bind to that, otherwise the Canvas will automatically create its own.
  * A Canvas will fire a {@link Canvas/boundary:event} event whenever
@@ -13,7 +13,7 @@
  the <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>.
  * A Canvas also fires a {@link Canvas/webglContextLost:event} event when the WebGL context is
  lost, and a {@link Canvas/webglContextRestored:event} when it is restored again.
- * The various components within the parent {@link Scene"}}Scene{{/crossLink}} will transparently recover on
+ * The various components within the parent {@link Scene}}Scene{{/crossLink}} will transparently recover on
  the {@link Canvas/webglContextRestored:event} event.
 
  A Canvas also has
@@ -30,8 +30,8 @@
 
  ## Usage
 
- In the example below, we're creating a {@link Scene"}}Scene{{/crossLink}} without specifying an HTML canvas element
- for it. This causes the {@link Scene"}}Scene{{/crossLink}}'s Canvas component to create its own default element
+ In the example below, we're creating a {@link Scene}}Scene{{/crossLink}} without specifying an HTML canvas element
+ for it. This causes the {@link Scene}}Scene{{/crossLink}}'s Canvas component to create its own default element
  within the page. Then we subscribe to various events fired by that Canvas component.
 
  ```` javascript
@@ -503,7 +503,7 @@ class Canvas extends Component {
      and return it via the callback.
 
      When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     possible when you have configured the Canvas's {@link Scene"}}Scene{{/crossLink}} to preserve the
+     possible when you have configured the Canvas's {@link Scene}}Scene{{/crossLink}} to preserve the
      WebGL drawing buffer, which has a performance overhead.
 
      #### Usage:

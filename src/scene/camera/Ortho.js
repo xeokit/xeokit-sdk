@@ -27,7 +27,7 @@
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Ortho.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene"}}Scene{{/crossLink}}.
+ @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene}}Scene{{/crossLink}}.
  @param [cfg.scale=1.0] {Number} Scale factor for this Ortho's extents on X and Y axis.
  @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.
  @param [cfg.far=10000] {Number} Position of the far plane on the positive View-space Z-axis.

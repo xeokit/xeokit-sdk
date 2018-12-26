@@ -23,7 +23,7 @@ var tempMat4 = math.mat4();
 
  * Like the rest of xeokit, is compatible with WebGL version 1.
  * Used for high-detail engineering visualizations containing millions of objects.
- * Represents each of its objects with a {@link BigModelMesh}, which is a lightweight alternative to {@link Object}.
+ * Represents each of its objects with a {@link BigModelMesh}, which is a lightweight alternative to {@link Node}.
  * Renders flat-shaded, without textures. Each object has simply a color and an opacity to describe its surface appearance.
  * Objects can be individually visible, clippable, collidable, ghosted, highlighted, selected, edge-enhanced etc.
  * The transforms of a BigModel and its BigModelObjects are static, ie. they cannot be dynamically translated, rotated and scaled.
@@ -138,7 +138,7 @@ var tempMat4 = math.mat4();
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
- @param [cfg.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Object} documentation for usage.
+ @param [cfg.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.

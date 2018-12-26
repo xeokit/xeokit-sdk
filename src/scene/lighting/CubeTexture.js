@@ -20,7 +20,7 @@
  */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
-import {Texture2D} from '../webgl/Texture2d.js';
+import {Texture2D} from '../webgl/Texture2D.js';
 import {stats} from './../stats.js';
 
 function ensureImageSizePowerOfTwo(image) {

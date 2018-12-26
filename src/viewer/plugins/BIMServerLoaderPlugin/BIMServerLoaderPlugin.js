@@ -2,8 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {LambertMaterial} from "../../../scene/materials/LambertMaterial.js";
 import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
 import {Geometry} from "../../../scene/geometry/Geometry.js";
-import {Object3D} from "../../../scene/objects/Object3D.js";
-import {GroupModel} from "../../../scene/models/GroupModel.js";
+import {Node} from "../../../scene/nodes/Node.js";
 import {Mesh} from "../../../scene/mesh/Mesh.js";
 
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
@@ -167,7 +166,7 @@ class BIMServerLoaderPlugin extends Plugin {
      *
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
      *
-     * @param {Object} [params.parent] A parent {@link Object3D},
+     * @param {Object} [params.parent] A parent {@link Node},
      * if we want to graft the {@link Model} into a xeokit object hierarchy.
      *
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
@@ -248,11 +247,11 @@ class BIMServerLoaderPlugin extends Plugin {
 
         scene.canvas.spinner.processes++;
 
-        const groupModel = new GroupModel(scene, params);
+        const modelNode = new Node(scene, params);
 
-        const xeokitMaterial = lambertMaterials ? new LambertMaterial(groupModel, {
+        const xeokitMaterial = lambertMaterials ? new LambertMaterial(modelNode, {
             backfaces: true
-        }) : new PhongMaterial(groupModel, {
+        }) : new PhongMaterial(modelNode, {
             diffuse: [1.0, 1.0, 1.0]
         });
 
@@ -260,7 +259,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
             loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
 
-                groupModel.once("destroyed", function () {
+                modelNode.once("destroyed", function () {
                     viewer.metaScene.destroyMetaModel(modelId);
                 });
 
@@ -331,7 +330,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
                     createGeometry: function (geometryDataId, positions, normals, indices, reused) {
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        new Geometry(groupModel, {
+                        new Geometry(modelNode, {
                             id: geometryId,
                             primitive: "triangles",
                             positions: positions,
@@ -355,7 +354,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         ifcType = ifcType || "DEFAULT";
                         //  const guid = (objectId.includes("#")) ? utils.CompressGuid(objectId.split("#")[1].substr(8, 36).replace(/-/g, "")) : null; // TODO: Computing GUID looks like a performance bottleneck
                         const color = defaultMaterials[ifcType] || defaultMaterials["DEFAULT"];
-                        const xeokitObject = new Object3D(groupModel, {
+                        const xeokitObject = new Node(modelNode, {
                             id: objectId,
                             objectId: objectId,
                             matrix: matrix,
@@ -364,9 +363,9 @@ class BIMServerLoaderPlugin extends Plugin {
                             visibility: !self.hiddenTypes[ifcType],
                             edges: edges
                         });
-                        groupModel.addChild(xeokitObject, false);
+                        modelNode.addChild(xeokitObject, false);
                         for (let i = 0, len = geometryDataIds.length; i < len; i++) {
-                            const xeokitMesh = new Mesh(groupModel, {
+                            const xeokitMesh = new Mesh(modelNode, {
                                 geometry: `${modelId}.${geometryDataIds[i]}`,
                                 material: xeokitMaterial
                             });
@@ -378,13 +377,13 @@ class BIMServerLoaderPlugin extends Plugin {
 
                     addGeometryToObject(oid, geometryDataId) {
                         const objectId = oidToGuid[oid];
-                        const xeokitObject = groupModel.scene.components[objectId];
+                        const xeokitObject = modelNode.scene.components[objectId];
                         if (!xeokitObject) {
                             //self.error(`Can't find object with id ${objectId}`);
                             return;
                         }
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        const xeokitMesh = new Mesh(groupModel, {
+                        const xeokitMesh = new Mesh(modelNode, {
                             geometry: geometryId,
                             material: xeokitMaterial
                         });
@@ -405,10 +404,10 @@ class BIMServerLoaderPlugin extends Plugin {
                         viewer.scene.off(onTick);
                         scene.canvas.spinner.processes--;
 
-                        groupModel.fire("loaded");
+                        modelNode.fire("loaded");
 
-                        viewer.fire("loaded", groupModel);
-                        self.fire("loaded", groupModel);
+                        viewer.fire("loaded", modelNode);
+                        self.fire("loaded", modelNode);
                     }
                 });
 
@@ -422,7 +421,7 @@ class BIMServerLoaderPlugin extends Plugin {
             });
         });
 
-        return groupModel;
+        return modelNode;
     }
 
     /**

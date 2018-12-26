@@ -5,7 +5,7 @@ import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
 import {SpecularMaterial} from "./../../../scene/materials/SpecularMaterial.js";
 import {LambertMaterial} from "./../../../scene/materials/LambertMaterial.js";
 import {Texture} from "./../../../scene/materials/Texture.js";
-import {Group} from "./../../../scene/objects/Group.js";
+import {Node} from "./../../../scene/nodes/Node.js";
 import {math} from "./../../../scene/math/math.js";
 import {utils} from "./../../../scene/utils.js";
 import {core} from "./../../../scene/core.js";
@@ -20,14 +20,14 @@ class GLTFLoader {
         this._handleNode = cfg.handleNode;
     }
 
-    load(plugin, groupModel, src, options, ok, error) {
+    load(plugin, modelNode, src, options, ok, error) {
         options = options || {};
-        var spinner = groupModel.scene.canvas.spinner;
+        var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        loadGLTF(plugin, groupModel, src, options, function () {
+        loadGLTF(plugin, modelNode, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
-                    groupModel.fire("loaded", true, true);
+                    modelNode.fire("loaded", true, true);
                 });
                 if (ok) {
                     ok();
@@ -35,29 +35,29 @@ class GLTFLoader {
             },
             function (msg) {
                 spinner.processes--;
-                groupModel.error(msg);
+                modelNode.error(msg);
                 if (error) {
                     error(msg);
                 }
-                groupModel.fire("error", msg);
+                modelNode.fire("error", msg);
             });
     }
 
-    parse(plugin, groupModel, gltf, options, ok, error) {
+    parse(plugin, modelNode, gltf, options, ok, error) {
         options = options || {};
-        var spinner = groupModel.scene.canvas.spinner;
+        var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, "", options, groupModel, function () {
+        parseGLTF(plugin, gltf, "", options, modelNode, function () {
                 spinner.processes--;
-                groupModel.fire("loaded", true, true);
+                modelNode.fire("loaded", true, true);
                 if (ok) {
                     ok();
                 }
             },
             function (msg) {
                 spinner.processes--;
-                groupModel.error(msg);
-                groupModel.fire("error", msg);
+                modelNode.error(msg);
+                modelNode.fire("error", msg);
                 if (error) {
                     error(msg);
                 }
@@ -67,10 +67,10 @@ class GLTFLoader {
 
 
 var loadGLTF = (function () {
-    return function (plugin, groupModel, src, options, ok, error) {
+    return function (plugin, modelNode, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, groupModel, ok, error);
+                parseGLTF(json, src, options, plugin, modelNode, ok, error);
             },
             error);
     };
@@ -101,8 +101,8 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, groupModel, ok) {
-        groupModel.clear();
+    return function (json, src, options, plugin, modelNode, ok) {
+        modelNode.clear();
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
@@ -114,29 +114,29 @@ var parseGLTF = (function () {
             edgeThreshold: options.edgeThreshold,
             lambertMaterials: !!options.lambertMaterials,
             json: json,
-            scene: groupModel.scene,
+            scene: modelNode.scene,
             plugin: plugin,
-            groupModel: groupModel,
+            modelNode: modelNode,
             modelProps: {
-                visible: groupModel.visible,
-                culled: groupModel.culled,
-                ghosted: groupModel.ghosted,
-                highlighted: groupModel.highlighted,
-                selected: groupModel.selected,
-                outlined: groupModel.outlined,
-                clippable: groupModel.clippable,
-                pickable: groupModel.pickable,
-                collidable: groupModel.collidable,
-                castShadow: groupModel.castShadow,
-                receiveShadow: groupModel.receiveShadow,
-                colorize: groupModel.colorize,
-                opacity: groupModel.opacity,
-                edges: groupModel.edges
+                visible: modelNode.visible,
+                culled: modelNode.culled,
+                ghosted: modelNode.ghosted,
+                highlighted: modelNode.highlighted,
+                selected: modelNode.selected,
+                outlined: modelNode.outlined,
+                clippable: modelNode.clippable,
+                pickable: modelNode.pickable,
+                collidable: modelNode.collidable,
+                castShadow: modelNode.castShadow,
+                receiveShadow: modelNode.receiveShadow,
+                colorize: modelNode.colorize,
+                opacity: modelNode.opacity,
+                edges: modelNode.edges
             },
             numObjects: 0
         };
 
-        groupModel.scene.loading++; // Disables (re)compilation
+        modelNode.scene.loading++; // Disables (re)compilation
 
         loadBuffers(ctx, function () {
 
@@ -151,7 +151,7 @@ var parseGLTF = (function () {
             loadMeshes(ctx);
             loadDefaultScene(ctx);
 
-            groupModel.scene.loading--; // Re-enables (re)compilation
+            modelNode.scene.loading--; // Re-enables (re)compilation
 
             ok();
         });
@@ -311,7 +311,7 @@ var parseGLTF = (function () {
     }
 
     function loadTexture(ctx, textureInfo) {
-        textureInfo._texture = new Texture(ctx.groupModel, {
+        textureInfo._texture = new Texture(ctx.modelNode, {
             src: ctx.json.images[textureInfo.source].uri ? ctx.basePath + ctx.json.images[textureInfo.source].uri : undefined,
             flipY: !!textureInfo.flipY,
             encoding: "sRGB"
@@ -438,7 +438,7 @@ var parseGLTF = (function () {
                     }
                 }
 
-                return new SpecularMaterial(ctx.groupModel, cfg);
+                return new SpecularMaterial(ctx.modelNode, cfg);
             }
 
             // Common Phong, Blinn, Lambert or Constant materials
@@ -707,7 +707,7 @@ var parseGLTF = (function () {
 
                 meshCfg = {};
 
-                geometry = new Geometry(ctx.groupModel, geometryCfg);
+                geometry = new Geometry(ctx.modelNode, geometryCfg);
 
                 meshCfg.geometry = geometry;
 
@@ -755,12 +755,12 @@ var parseGLTF = (function () {
 
     function loadNode(ctx, nodeIdx, nodeInfo, matrix, parent, parentCfg) {
 
-        parent = parent || ctx.groupModel;
+        parent = parent || ctx.modelNode;
         var createObject;
 
         if (ctx.handleNode) {
             var actions = {};
-            if (!ctx.handleNode(ctx.groupModel.id, nodeInfo, actions)) {
+            if (!ctx.handleNode(ctx.modelNode.id, nodeInfo, actions)) {
                 return;
             }
             if (actions.createObject) {
@@ -772,10 +772,10 @@ var parseGLTF = (function () {
         }
 
         var json = ctx.json;
-        var groupModel = ctx.groupModel;
+        var modelNode = ctx.modelNode;
         var localMatrix;
         var hasChildNodes = nodeInfo.children && nodeInfo.children.length > 0;
-        var childGroup;
+        var childNode;
 
         if (nodeInfo.matrix) {
             localMatrix = nodeInfo.matrix;
@@ -838,18 +838,18 @@ var parseGLTF = (function () {
                         };
                         utils.apply(ctx.modelProps, meshCfg);
                         if (ctx.lambertMaterials) {
-                            if (!groupModel.material) {
-                                groupModel.material = new LambertMaterial(ctx.scene, {
+                            if (!modelNode.material) {
+                                modelNode.material = new LambertMaterial(ctx.scene, {
                                     backfaces: true
                                 });
                             }
-                            meshCfg.material = groupModel.material;
+                            meshCfg.material = modelNode.material;
                             meshCfg.colorize = meshesInfoMesh.material;
                             meshCfg.opacity = meshesInfoMesh.material[3];
                         } else {
                             meshCfg.material = meshesInfoMesh.material;
                         }
-                        mesh = new Mesh(groupModel, meshCfg);
+                        mesh = new Mesh(modelNode, meshCfg);
                         parent.addChild(mesh, false); // Don't automatically inherit properties
                     }
                     return;
@@ -866,19 +866,19 @@ var parseGLTF = (function () {
                     };
                     utils.apply(ctx.modelProps, meshCfg);
                     if (ctx.lambertMaterials) {
-                        if (!groupModel.material) {
-                            groupModel.material = new LambertMaterial(ctx.scene, {
+                        if (!modelNode.material) {
+                            modelNode.material = new LambertMaterial(ctx.scene, {
                                 backfaces: true
                             });
                         }
-                        meshCfg.material = groupModel.material;
+                        meshCfg.material = modelNode.material;
                         meshCfg.colorize = meshesInfoMesh.material; // [R,G,B,A]
                         meshCfg.opacity = meshesInfoMesh.material[3];
                     } else {
                         meshCfg.material = meshesInfoMesh.material;
                     }
                     utils.apply(createObject, meshCfg);
-                    mesh = new Mesh(groupModel, meshCfg);
+                    mesh = new Mesh(modelNode, meshCfg);
                     parent.addChild(mesh, false); // Don't automatically inherit properties
                     return;
                 }
@@ -887,13 +887,13 @@ var parseGLTF = (function () {
 
                     // Case 3: Creating object, node has meshes, node has no child nodes
 
-                    var groupCfg = {
+                    var nodeCfg = {
                         matrix: matrix
                     };
-                    utils.apply(ctx.modelProps, groupCfg);
-                    utils.apply(createObject, groupCfg);
-                    var childGroup = new Group(groupModel, groupCfg);
-                    parent.addChild(childGroup, false);
+                    utils.apply(ctx.modelProps, nodeCfg);
+                    utils.apply(createObject, nodeCfg);
+                    var childNode = new Node(modelNode, nodeCfg);
+                    parent.addChild(childNode, false);
                     for (var i = 0, len = numMeshes; i < len; i++) {
                         meshesInfoMesh = meshesInfo[i];
                         var meshCfg = {
@@ -901,12 +901,12 @@ var parseGLTF = (function () {
                         };
                         utils.apply(ctx.modelProps, meshCfg);
                         if (ctx.lambertMaterials) {
-                            if (!groupModel.material) {
-                                groupModel.material = new LambertMaterial(ctx.scene, {
+                            if (!modelNode.material) {
+                                modelNode.material = new LambertMaterial(ctx.scene, {
                                     backfaces: true
                                 });
                             }
-                            meshCfg.material = groupModel.material;
+                            meshCfg.material = modelNode.material;
                             meshCfg.colorize = meshesInfoMesh.material;
                             meshCfg.opacity = meshesInfoMesh.material[3];
                         } else {
@@ -914,8 +914,8 @@ var parseGLTF = (function () {
                         }
                         utils.apply(createObject, meshCfg);
                         meshCfg.objectId = null;
-                        mesh = new Mesh(groupModel, meshCfg);
-                        childGroup.addChild(mesh, false);
+                        mesh = new Mesh(modelNode, meshCfg);
+                        childNode.addChild(mesh, false);
                     }
                     return;
                 }
@@ -924,70 +924,70 @@ var parseGLTF = (function () {
 
                     // Case 4: Not creating object, node has meshes, node has child nodes
 
-                    var groupCfg = {
+                    var nodeCfg = {
                         matrix: matrix
                     };
-                    utils.apply(ctx.modelProps, groupCfg);
-                    var childGroup = new Group(groupModel, groupCfg);
-                    parent.addChild(childGroup, false);
+                    utils.apply(ctx.modelProps, nodeCfg);
+                    var childNode = new Node(modelNode, nodeCfg);
+                    parent.addChild(childNode, false);
                     for (var i = 0, len = numMeshes; i < len; i++) {
                         meshesInfoMesh = meshesInfo[i];
                         var meshCfg = {
                             geometry: meshesInfoMesh.geometry
                         };
-                        utils.apply(groupCfg, meshCfg);
+                        utils.apply(nodeCfg, meshCfg);
                         meshCfg.objectId = null;
-                        meshCfg.matrix = null; // Group has matrix
+                        meshCfg.matrix = null; // Node has matrix
                         if (ctx.lambertMaterials) {
-                            if (!groupModel.material) {
-                                groupModel.material = new LambertMaterial(ctx.scene, {
+                            if (!modelNode.material) {
+                                modelNode.material = new LambertMaterial(ctx.scene, {
                                     backfaces: true
                                 });
                             }
-                            meshCfg.material = groupModel.material;
+                            meshCfg.material = modelNode.material;
                             meshCfg.colorize = meshesInfoMesh.material;
                             meshCfg.opacity = meshesInfoMesh.material[3];
                         } else {
                             meshCfg.material = meshesInfoMesh.material;
                         }
-                        mesh = new Mesh(groupModel, meshCfg);
-                        childGroup.addChild(mesh, false);
+                        mesh = new Mesh(modelNode, meshCfg);
+                        childNode.addChild(mesh, false);
                     }
                     matrix = null;
-                    parent = childGroup;
-                    parentCfg = groupCfg;
+                    parent = childNode;
+                    parentCfg = nodeCfg;
                 }
 
                 if (createObject && numMeshes === 0 && hasChildNodes) {
 
                     // Case 5: Creating explicit object, node has meshes OR node has child nodes
 
-                    var groupCfg = {
+                    var nodeCfg = {
                         matrix: matrix
                     };
-                    utils.apply(ctx.modelProps, groupCfg);
-                    utils.apply(createObject, groupCfg);
+                    utils.apply(ctx.modelProps, nodeCfg);
+                    utils.apply(createObject, nodeCfg);
                     createObject.matrix = matrix;
-                    var childGroup = new Group(groupModel, groupCfg);
-                    parent.addChild(childGroup, false); // Don't automatically inherit properties
+                    var childNode = new Node(modelNode, nodeCfg);
+                    parent.addChild(childNode, false); // Don't automatically inherit properties
                     matrix = null;
-                    parent = childGroup;
-                    parentCfg = groupCfg;
+                    parent = childNode;
+                    parentCfg = nodeCfg;
                 }
 
                 if (createObject && numMeshes > 0 || hasChildNodes) {
 
                     // Case 6: Creating explicit object, node has meshes OR node has child nodes
 
-                    var groupCfg = {
+                    var nodeCfg = {
                         matrix: matrix
                     };
-                    utils.apply(ctx.modelProps, groupCfg);
+                    utils.apply(ctx.modelProps, nodeCfg);
                     if (createObject) {
-                        utils.apply(createObject, groupCfg);
+                        utils.apply(createObject, nodeCfg);
                     }
-                    var childGroup = new Group(groupModel, groupCfg);
-                    parent.addChild(childGroup, false); // Don't automatically inherit properties
+                    var childNode = new Node(modelNode, nodeCfg);
+                    parent.addChild(childNode, false); // Don't automatically inherit properties
                     for (var i = 0, len = numMeshes; i < len; i++) {
                         meshesInfoMesh = meshesInfo[i];
                         var meshCfg = {
@@ -995,12 +995,12 @@ var parseGLTF = (function () {
                         };
                         utils.apply(ctx.modelProps, meshCfg);
                         if (ctx.lambertMaterials) {
-                            if (!groupModel.material) {
-                                groupModel.material = new LambertMaterial(ctx.scene, {
+                            if (!modelNode.material) {
+                                modelNode.material = new LambertMaterial(ctx.scene, {
                                     backfaces: true
                                 });
                             }
-                            meshCfg.material = groupModel.material;
+                            meshCfg.material = modelNode.material;
                             meshCfg.colorize = meshesInfoMesh.material; // [R,G,B,A]
                             meshCfg.opacity = meshesInfoMesh.material[3];
                         } else {
@@ -1010,12 +1010,12 @@ var parseGLTF = (function () {
                             utils.apply(createObject, meshCfg);
                         }
                         meshCfg.objectId = null;
-                        mesh = new Mesh(groupModel, meshCfg);
-                        childGroup.addChild(mesh, false); // Don't automatically inherit properties
+                        mesh = new Mesh(modelNode, meshCfg);
+                        childNode.addChild(mesh, false); // Don't automatically inherit properties
                     }
                     matrix = null;
-                    parent = childGroup;
-                    parentCfg = groupCfg;
+                    parent = childNode;
+                    parentCfg = nodeCfg;
                 }
             }
         }

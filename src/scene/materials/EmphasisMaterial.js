@@ -10,11 +10,11 @@
 
  ## Overview
 
- * Ghost an {@link Mesh} by setting its {@link Mesh/ghost} property ````true````.
+ * Ghost an {@link Mesh} by setting its {@link Mesh/ghosted} property ````true````.
  * When ghosted, a Mesh's appearance is controlled by its EmphasisMaterial.
  * An EmphasisMaterial provides several preset configurations that you can set it to. Select a preset by setting {@link EmphasisMaterial/preset} to the preset's ID. A map of available presets is provided in {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}.
  * By default, a Mesh uses the {@link Scene}'s global EmphasisMaterials, but you can give each Mesh its own EmphasisMaterial when you want to customize the effect per-Mesh.
- * Ghost all Meshes in a {@link Model} by setting the Model's {@link GroupModel/ghost} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
+ * Ghost all Meshes in a {@link Model} by setting the Model's {@link Node/ghosted} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
  * Modify the Scene's global EmphasisMaterial to customize it.
 
  ## Usage
@@ -191,7 +191,7 @@
  @extends Material
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The EmphasisMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this EmphasisMaterial.
  @param [cfg.fill=true] {Boolean} Indicates whether or not ghost surfaces are filled with color.
  @param [cfg.fillColor=[0.4,0.4,0.4]] {Array of Number} EmphasisMaterial fill color.
@@ -200,7 +200,7 @@
  @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
  @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
  @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
  @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
  */
 

@@ -1,26 +1,26 @@
 /**
- An **Object** is a 3D element within a xeokit {@link Scene"}}Scene{{/crossLink}}.
+ An **Node** is a 3D element within a xeokit {@link Scene}}Scene{{/crossLink}}.
 
  ## Overview
 
- Object is an abstract base class that's subclassed by:
+ Node is an abstract base class that's subclassed by:
 
  * {@link Mesh}, which represents a drawable 3D primitive.
- * {@link Group}, which is a composite Object that represents a group of child Objects.
- * {@link Model}, which is a Group and is subclassed by {@link GLTFModel},
+ * {@link Node}, which is a composite Node that represents a group of child Objects.
+ * {@link Model}, which is a Node and is subclassed by {@link GLTFModel},
  {@link STLModel}, {@link OBJModel} etc. A Model can contain child Groups
  and {@link Mesh"}}Meshes{{/crossLink}} that represent its component parts.
 
  As shown in the examples below, these component types can be connected into flexible scene hierarchies that contain
- content loaded from multiple sources and file formats. Since a {@link Group} implements the *[Composite](https://en.wikipedia.org/wiki/Composite_pattern)* pattern,
- property updates on a {@link Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it.
+ content loaded from multiple sources and file formats. Since a {@link Node} implements the *[Composite](https://en.wikipedia.org/wiki/Composite_pattern)* pattern,
+ property updates on a {@link Node"}}Node{{/crossLink}} will apply recursively to all the Objects within it.
 
- This page mostly covers the base functionality provided by Object, while the pages for the subclasses document the
+ This page mostly covers the base functionality provided by Node, while the pages for the subclasses document the
  functionality specific to those subclasses.
 
  ## Usage
 
- * [Creating an Object hierarchy](#creating-an-object-hierarchy)
+ * [Creating a Node hierarchy](#creating-an-object-hierarchy)
  * [Accessing Objects](#accessing-objects)
  * [Updating Objects](#updating-objects)
  * [Adding and removing Objects](#updating-objects)
@@ -29,16 +29,16 @@
  * [Applying a semantic data model](#applying-a-semantic-data-model)
  * [Destroying Objects](#destroying-objects)
 
- ### Creating an Object hierarchy
+ ### Creating an Node hierarchy
 
- Let's create a {@link Group"}}Group{{/crossLink}} that represents a table, with five child {@link Mesh}es for its top and legs:
+ Let's create a {@link Node"}}Node{{/crossLink}} that represents a table, with five child {@link Mesh}es for its top and legs:
 
  <a href="../../examples/#objects_hierarchy"><img src="../../assets/images/screenshots/objectHierarchy.png"></img></a>
 
  ````javascript
  var boxGeometry = new xeokit.BoxGeometry(); // We'll reuse the same geometry for all our Meshes
 
- var table = new xeokit.Group({
+ var table = new xeokit.Node({
 
      id: "table",
      rotation: [0, 50, 0],
@@ -109,14 +109,14 @@
 
  ### Accessing Objects
 
- We can then get those {@link Mesh"}}Mesh{{/crossLink}} Objects by index from the {@link Group"}}Group{{/crossLink}}'s children property:
+ We can then get those {@link Mesh"}}Mesh{{/crossLink}} Objects by index from the {@link Node"}}Node{{/crossLink}}'s children property:
 
  ````javascript
  var blueLeg = table.children[2];
  blueLeg.highlighted = true;
  ````
 
- We can also get them by ID from the {@link Group"}}Group{{/crossLink}}'s childMap property:
+ We can also get them by ID from the {@link Node"}}Node{{/crossLink}}'s childMap property:
 
  ````javascript
  var blueLeg = table.childMap["blueLeg"];
@@ -159,24 +159,24 @@
 
  ### Updating Objects
 
- As mentioned earlier, property updates on a {@link Group"}}Group{{/crossLink}} {@link Object} will apply recursively to all
- sub-Objects within it, eventually updating the {@link Mesh} {@link Object"}}Objects{{/crossLink}} at the leaves.
+ As mentioned earlier, property updates on a {@link Node"}}Node{{/crossLink}} {@link Node} will apply recursively to all
+ sub-Objects within it, eventually updating the {@link Mesh} {@link Node}s at the leaves.
 
- These properties, defined in Object, are:
+ These properties, defined in Node, are:
 
- * {@link Object/visible:property"}}visible{{/crossLink}}
- * {@link Object/highlighted:property"}}highlighted{{/crossLink}}
- * {@link Object/ghosted:property"}}ghosted{{/crossLink}}
- * {@link Object/selected:property"}}selected{{/crossLink}}
- * {@link Object/edges:property"}}edges{{/crossLink}}
- * {@link Object/colorize:property"}}colorize{{/crossLink}}
- * {@link Object/opacity:property"}}opacity{{/crossLink}}
- * {@link Object/clippable:property"}}clippable{{/crossLink}}
- * {@link Object/collidable:property"}}collidable{{/crossLink}}
- * {@link Object/pickable:property"}}pickable{{/crossLink}}
- * {@link Object/castShadow:property"}}castShadow{{/crossLink}}
- * {@link Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
- * {@link Object/receiveShadow:property"}}receiveShadow{{/crossLink}}
+ * {@link Node/visible:property"}}visible{{/crossLink}}
+ * {@link Node/highlighted:property"}}highlighted{{/crossLink}}
+ * {@link Node/ghosted:property"}}ghosted{{/crossLink}}
+ * {@link Node/selected:property"}}selected{{/crossLink}}
+ * {@link Node/edges:property"}}edges{{/crossLink}}
+ * {@link Node/colorize:property"}}colorize{{/crossLink}}
+ * {@link Node/opacity:property"}}opacity{{/crossLink}}
+ * {@link Node/clippable:property"}}clippable{{/crossLink}}
+ * {@link Node/collidable:property"}}collidable{{/crossLink}}
+ * {@link Node/pickable:property"}}pickable{{/crossLink}}
+ * {@link Node/castShadow:property"}}castShadow{{/crossLink}}
+ * {@link Node/receiveShadow:property"}}receiveShadow{{/crossLink}}
+ * {@link Node/receiveShadow:property"}}receiveShadow{{/crossLink}}
 
  Let's highlight the whole table in one shot:
 
@@ -186,7 +186,7 @@
 
  That property value will then recursively propagate down our five Meshes.
 
- Each Object has a local transformation that's applied within the coordinate space set up the
+ Each Node has a local transformation that's applied within the coordinate space set up the
  transform of its parent, if it has one.
 
  Let's rotate the table:
@@ -205,7 +205,7 @@
  ````
 
  As we translated table top Mesh, we updated the extents its World-space boundary. That update, in addition to rotating
- the table Group, has updated the collective boundary of the whole table.
+ the table Node, has updated the collective boundary of the whole table.
 
  We can get the boundary of the table top like this:
 
@@ -226,7 +226,7 @@
  cameraFlight.flyTo(tableTopMesh.aabb);
  ````
 
- Those boundaries will automatically update whenever we add or remove child {@link Object"}}Objects{{/crossLink}} or {@link Mesh"}}Meshes{{/crossLink}}, or update child {@link Mesh"}}Meshes{{/crossLink}}' {@link Geometry"}}Geometries{{/crossLink}}
+ Those boundaries will automatically update whenever we add or remove child {@link Node}s or {@link Mesh"}}Meshes{{/crossLink}}, or update child {@link Mesh"}}Meshes{{/crossLink}}' {@link Geometry}}Geometries{{/crossLink}}
  or modeling transforms.
 
  Let's follow the table top wherever it goes:
@@ -242,14 +242,14 @@
 
  ````javascript
  table.on("boundary", function() {
-     var aabb = this.aabb; // "this" is the table Group
+     var aabb = this.aabb; // "this" is the table Node
      cameraFlight.flyTo(aabb);
  });
  ````
 
  ### Adding and removing Objects
 
- Let's add another {@link Mesh"}}Mesh{{/crossLink}} to our table {@link Group"}}Group{{/crossLink}}, a sort of spherical ornament sitting on the table top:
+ Let's add another {@link Mesh"}}Mesh{{/crossLink}} to our table {@link Node"}}Node{{/crossLink}}, a sort of spherical ornament sitting on the table top:
 
  ````javascript
  table.addChild(new xeokit.Mesh({
@@ -263,7 +263,7 @@
  });
  ````
 
- That's going to update the {@link Group"}}Group{{/crossLink}}'s boundary, as mentioned earlier.
+ That's going to update the {@link Node"}}Node{{/crossLink}}'s boundary, as mentioned earlier.
 
  To remove it, just destroy it:
 
@@ -273,12 +273,12 @@
 
  ### Models within Groups
 
- Now let's create a {@link Group"}}Group{{/crossLink}} that contains three Models. Recall that Models are {@link Group"}}Group{{/crossLink}}s, which are Objects.
+ Now let's create a {@link Node"}}Node{{/crossLink}} that contains three Models. Recall that Models are {@link Node"}}Node{{/crossLink}}s, which are Objects.
 
  <a href="../../examples/#objects_hierarchy_models"><img src="../../assets/images/screenshots/modelHierarchy.png"></img></a>
 
  ````javascript
- var myModels = new xeokit.Group({
+ var myModels = new xeokit.Node({
 
      rotation: [0, 0, 0],
      position: [0, 0, 0],
@@ -314,14 +314,14 @@
  });
  ````
 
- Like with the {@link Mesh} Objects in the previous example, we can then get those Models by index from the {@link Group"}}Group{{/crossLink}}'s children property:
+ Like with the {@link Mesh} Objects in the previous example, we can then get those Models by index from the {@link Node"}}Node{{/crossLink}}'s children property:
 
  ````javascript
  var hoverBike = myModels.children[1];
  hoverBike.scale = [0.5, 0.5, 0.5];
  ````
 
- or by ID from the {@link Group"}}Group{{/crossLink}}'s childMap property:
+ or by ID from the {@link Node"}}Node{{/crossLink}}'s childMap property:
 
  ````javascript
  var hoverBike = myModels.childMap["hoverBike"];
@@ -352,14 +352,14 @@
  For convenience, the {@link Scene}'s objects map explicitly registers what Objects exist within the {@link Scene}, while its models map
  explicitly registers what Models exist.
 
- As mentioned earlier, property updates on a {@link Group"}}Group{{/crossLink}} will apply recursively to all the Objects within it. Let's highlight
- all the Models in the {@link Group"}}Group{{/crossLink}}, in one shot:
+ As mentioned earlier, property updates on a {@link Node"}}Node{{/crossLink}} will apply recursively to all the Objects within it. Let's highlight
+ all the Models in the {@link Node"}}Node{{/crossLink}}, in one shot:
 
  ````javascript
  myModels.highlighted = true;
  ````
 
- and just for fun, let's scale the {@link Group"}}Group{{/crossLink}} down, then rotate one of the Models, relative to the {@link Group"}}Group{{/crossLink}}:
+ and just for fun, let's scale the {@link Node"}}Node{{/crossLink}} down, then rotate one of the Models, relative to the {@link Node"}}Node{{/crossLink}}:
 
  ````javascript
  myModels.scale = [0.5, 0.5, 0.5]; // (X,Y,Z)
@@ -393,11 +393,11 @@
  domain. We do this by assigning "entity classes" to those Objects that we consider to be *entities* within our domain, and then we're
  able to reference those Objects according to their entity classes.
 
- #### entityType
+ #### objectId
 
- In xeokit, we classify an Object as an entity by setting its {@link Object/entityType} to an arbitrary string
- value that represents its class. Once we've done that, we regard the Object as being an "entity" within our semantic data model, in
- addition to being a regular Object within our scene graph. Note that entities in xeokit are not to be confused with *entity-component systems*,
+ In xeokit, we classify an Node as an entity by setting its {@link Node/objectId} to an arbitrary string
+ value that represents its class. Once we've done that, we regard the Node as being an "entity" within our semantic data model, in
+ addition to being a regular Node within our scene graph. Note that entities in xeokit are not to be confused with *entity-component systems*,
  which are a completely different concept.
 
  This classification mechanism is useful for building IFC viewers on xeokit, in which case our entity classes would be the IFC
@@ -409,22 +409,22 @@
  we would need to additionally use some sort of entity-relationship data structure, externally to xeokit, such as an IFC structure model
  in which the relation elements would reference our classes.
 
- Objects that are not part of any semantic model, such as helpers and gizmos, would not get an ````entityType````, and so would
+ Objects that are not part of any semantic model, such as helpers and gizmos, would not get an ````objectId````, and so would
  be effectively invisible to maps and methods that deal with specifically with entities. Use component IDs and "lower-level" maps
  like  {@link Scene/components:property"}}Scene#components{{/crossLink}},
  {@link Scene/objects:property"}}Scene#objects{{/crossLink}},
  {@link Scene/meshes:property"}}Scene#meshes{{/crossLink}} and
  {@link Scene/models:property"}}Scene#models{{/crossLink}} to work with such Objects as non-semantic scene elements,
  and "higher-level" maps like {@link Scene/entities:property"}}Scene#entities{{/crossLink}} and
- {@link Scene/entityTypes:property"}}Scene#entityTypes{{/crossLink}} to work with Objects that are entities.
+ {@link Scene/objectIds:property"}}Scene#objectIds{{/crossLink}} to work with Objects that are entities.
 
- To show how to use a semantic model with xeokit, let's redefine the Object hierarchy we created earlier, this
+ To show how to use a semantic model with xeokit, let's redefine the Node hierarchy we created earlier, this
  time assigning some imaginary domain-specific entity classes to our table Mesh Objects:
 
  ````javascript
  var boxGeometry = new xeokit.BoxGeometry(); // We'll reuse the same geometry for all our Meshes
 
- var table = new xeokit.Group({
+ var table = new xeokit.Node({
 
      id: "table",
      rotation: [0, 50, 0],
@@ -435,7 +435,7 @@
 
          new xeokit.Mesh({ // Red table leg
              id: "redLeg",
-             entityType: "supporting",  // <<------------ Entity class
+             objectId: "supporting",  // <<------------ Entity class
              position: [-4, -6, -4],
              scale: [1, 3, 1],
              rotation: [0, 0, 0],
@@ -447,7 +447,7 @@
 
          new xeokit.Mesh({ // Green table leg
              id: "greenLeg",
-             entityType: "supporting",  // <<------------ Entity class
+             objectId: "supporting",  // <<------------ Entity class
              position: [4, -6, -4],
              scale: [1, 3, 1],
              rotation: [0, 0, 0],
@@ -459,7 +459,7 @@
 
          new xeokit.Mesh({// Blue table leg
              id: "blueLeg",
-             entityType: "supporting",  // <<------------ Entity class
+             objectId: "supporting",  // <<------------ Entity class
              position: [4, -6, 4],
              scale: [1, 3, 1],
              rotation: [0, 0, 0],
@@ -471,7 +471,7 @@
 
          new xeokit.Mesh({  // Yellow table leg
              id: "yellowLeg",
-             entityType: "supporting",  // <<------------ Entity class
+             objectId: "supporting",  // <<------------ Entity class
              position: [-4, -6, 4],
              scale: [1, 3, 1],
              rotation: [0, 0, 0],
@@ -483,7 +483,7 @@
 
          new xeokit.Mesh({ // Purple table top
              id: "tableTop",
-             entityType: "surface",     // <<------------ Entity class
+             objectId: "surface",     // <<------------ Entity class
              position: [0, -3, 0],
              scale: [6, 0.5, 6],
              rotation: [0, 0, 0],
@@ -496,18 +496,18 @@
  });
  ````
 
- This time, we've set the {@link Object/entityType} property on our Mesh Objects, to
+ This time, we've set the {@link Node/objectId} property on our Mesh Objects, to
  assign our entity classes to them. Our arbitrary semantic model is very simple, with just two classes:
 
  * "supporting" for entities that support things (eg. table legs), and
  * "surface" for entities that provide a surface that you can put things on (eg. table tops).
 
- Note that we can assign entity classes to any component type that extends Object, including {@link Group},
+ Note that we can assign entity classes to any component type that extends Node, including {@link Node},
  {@link Mesh}, {@link Model}, {@link GLTFModel} etc.
 
  We can now conveniently work with our Mesh Objects as entities, in addition working with them as ordinary Objects.
 
- We can find our entities in a dedicated map, that contains only the Objects that have the "entityType" property set:
+ We can find our entities in a dedicated map, that contains only the Objects that have the "objectId" property set:
 
  ````javascript
  var yellowLegMesh = scene.entities["yellowLeg"];
@@ -516,7 +516,7 @@
  We can get a map of all Objects of a given entity class:
 
  ````javascript
- var supportingEntities = scene.entityTypes["supporting"];
+ var supportingEntities = scene.objectIds["supporting"];
  var yellowLegMesh = supportingEntities["yellowLeg"];
  ````
 
@@ -532,18 +532,18 @@
  and selected states of entity Objects:
 
  ````javascript
- var yellowLegMesh = scene.visibleEntities["yellowLeg"];
+ var yellowLegMesh = scene.visibleObjects["yellowLeg"];
  var isYellowLegVisible = yellowLegMesh !== undefined;
 
  yellowLegMesh.highlighted = false;
- var isYellowLegHighlighted = scene.highlightedEntities["yellowLeg"];
+ var isYellowLegHighlighted = scene.highlightedObjects["yellowLeg"];
  ````
 
  * [Example](../../examples/#objects_entities)
 
  #### Limitations with state inheritance
 
- Note that you can't currently nest entity Objects within a hierarchy. If we were to set an entityType on our Group,
+ Note that you can't currently nest entity Objects within a hierarchy. If we were to set an objectId on our Node,
  say "furniture", and then do this:
 
  ````javascript
@@ -551,12 +551,12 @@
  ````
 
  Then all our entity Meshes would be hidden, even though they are not "furniture" entities. The entity classification
- system does not currently work alongside the way xeokit does state inheritance within Object hierarchies, so keep your
+ system does not currently work alongside the way xeokit does state inheritance within Node hierarchies, so keep your
  entities non-hierarchical.
 
  ### Destroying Objects
 
- Call an Object's {@link Component/destroy:method"}}Object#destroy(){{/crossLink}} method to destroy it:
+ Call an Node's {@link Component/destroy:method"}}Node#destroy(){{/crossLink}} method to destroy it:
 
  ````JavaScript
  myObject.destroy();
@@ -564,7 +564,7 @@
 
  That will also destroy all Objects in its subtree.
 
- @class Object
+ @class Node
  @module xeokit
  @submodule objects
  @constructor
@@ -573,8 +573,8 @@
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.guid] {String} Optional globally unique identifier. This is unique not only within the {@link Scene}, but throughout the entire universe.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
- @param [cfg.entityType] {String} Optional entity classification when using within a semantic data model.
- @param [cfg.parent] {Object} The parent.
+ @param [cfg.objectId] {String} Optional object ID.
+ @param [cfg.parent] {Node} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
  @param [cfg.rotation=[0,0,0]] {Float32Array} Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
@@ -594,11 +594,11 @@
  @param [cfg.aabbVisible=false] {Boolean}   Indicates if axis-aligned World-space bounding box is visible.
  @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
  @param [cfg.opacity=1.0] {Number}          Opacity factor, multiplies by the rendered fragment alpha.
- @param [cfg.children] {Array(Object)}      Children to add. Children must be in the same {@link Scene} and will be removed from whatever parents they may already have.
- @param [cfg.inheritStates=true] {Boolean}  Indicates if children given to this constructor should inherit state from this parent as they are added. RenderState includes {@link Object/visible}, {@link Object/culled}, {@link Object/pickable},
- {@link Object/clippable}, {@link Object/castShadow}, {@link Object/receiveShadow},
- {@link Object/outlined}, {@link Object/ghosted}, {@link Object/highlighted},
- {@link Object/selected}, {@link Object/colorize} and {@link Object/opacity}.
+ @param [cfg.children] {Array(Node)}      Children to add. Children must be in the same {@link Scene} and will be removed from whatever parents they may already have.
+ @param [cfg.inheritStates=true] {Boolean}  Indicates if children given to this constructor should inherit state from this parent as they are added. RenderState includes {@link Node/visible}, {@link Node/culled}, {@link Node/pickable},
+ {@link Node/clippable}, {@link Node/castShadow}, {@link Node/receiveShadow},
+ {@link Node/outlined}, {@link Node/ghosted}, {@link Node/highlighted},
+ {@link Node/selected}, {@link Node/colorize} and {@link Node/opacity}.
  @extends Component
  */
 
@@ -621,7 +621,7 @@ const vecb = new Float32Array(3);
 
 const identityMat = math.identityMat4();
 
-class Object3D extends Component {
+class Node extends Component {
 
     /**
      JavaScript class name for this Component.
@@ -633,7 +633,7 @@ class Object3D extends Component {
      @final
      */
     get type() {
-        return "Object";
+        return "Node";
     }
 
     /**
@@ -646,8 +646,6 @@ class Object3D extends Component {
     init(cfg) {
 
         super.init(cfg);
-
-        this._guid = cfg.guid;
 
         this._parent = null;
         this._childList = [];
@@ -681,14 +679,17 @@ class Object3D extends Component {
             }
         }
 
-        if (cfg.entityType) {
-            this._entityType = cfg.entityType;
-            this.scene._entityTypeAssigned(this, this._entityType); // Must assign type before setting properties
+        if (cfg.objectId) {
+            this._objectId = cfg.objectId;
+            this.scene._registerObject(this); // Must assign type before setting properties
         }
 
-        // Properties
+        if (cfg.modelId) {
+            this._modelId = cfg.modelId;
+            this.scene._registerModel(this);
+        }
 
-        // If this component instance is a subclass of xeokit.Object that redefines these properties,
+        // If this component instance is a subclass of Node that redefines these properties,
         // then it's the subclass's properties that are being set here
         // (eg. as redefined on xeokit.Mesh, xeokit.Model etc)
 
@@ -709,7 +710,7 @@ class Object3D extends Component {
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
 
-        // Add children, which inherit state from this Object
+        // Add children, which inherit state from this Node
 
         if (cfg.children) {
             const children = cfg.children;
@@ -790,7 +791,7 @@ class Object3D extends Component {
         }
         if (this._buildAABB) {
             this._buildAABB(this.worldMatrix, this._aabb); // Mesh or BigModel
-        } else { // Object | Group | Model
+        } else { // Node | Node | Model
             math.collapseAABB3(this._aabb);
             let object;
             for (let i = 0, len = this._childList.length; i < len; i++) {
@@ -817,13 +818,13 @@ class Object3D extends Component {
 
      Does nothing if already a child.
 
-     @param {Object|String} object Instance or ID of the child to add.
+     @param {Node|String} object Instance or ID of the child to add.
      @param [inheritStates=false] Indicates if the child should inherit state from this parent as it is added. RenderState includes
-     {@link Object/visible}, {@link Object/culled}, {@link Object/pickable},
-     {@link Object/clippable}, {@link Object/castShadow}, {@link Object/receiveShadow},
-     {@link Object/outlined}, {@link Object/ghosted}, {@link Object/highlighted},
-     {@link Object/selected}, {@link Object/edges}, {@link Object/colorize} and {@link Object/opacity}.
-     @returns {Object} The child object.
+     {@link Node/visible}, {@link Node/culled}, {@link Node/pickable},
+     {@link Node/clippable}, {@link Node/castShadow}, {@link Node/receiveShadow},
+     {@link Node/outlined}, {@link Node/ghosted}, {@link Node/highlighted},
+     {@link Node/selected}, {@link Node/edges}, {@link Node/colorize} and {@link Node/opacity}.
+     @returns {Node} The child object.
      */
     addChild(object, inheritStates) {
         if (utils.isNumeric(object) || utils.isString(object)) {
@@ -834,19 +835,19 @@ class Object3D extends Component {
                 return;
             }
             if (!object.isObject) {
-                this.error("Not a xeokit Object: " + objectId);
+                this.error("Not a xeokit Node: " + objectId);
                 return;
             }
         } else if (utils.isObject(object)) {
             throw "addChild( * ) not implemented";
             const cfg = object;
-            // object = new xeokit.Group(this.scene, cfg);
+            // object = new xeokit.Node(this.scene, cfg);
             if (!object) {
                 return;
             }
         } else {
             if (!object.isObject) {
-                this.error("Not an Object: " + object.id);
+                this.error("Not an Node: " + object.id);
                 return;
             }
             if (object._parent) {
@@ -859,7 +860,7 @@ class Object3D extends Component {
         }
         const id = object.id;
         if (object.scene.id !== this.scene.id) {
-            this.error("Object not in same Scene: " + object.id);
+            this.error("Node not in same Scene: " + object.id);
             return;
         }
         this._childList.push(object);
@@ -891,7 +892,7 @@ class Object3D extends Component {
      Removes the given child.
 
      @method removeChild
-     @param {Object} object Child to remove.
+     @param {Node} object Child to remove.
      */
     removeChild(object) {
         for (let i = 0, len = this._childList.length; i < len; i++) {
@@ -1044,32 +1045,27 @@ class Object3D extends Component {
     }
 
     /**
-     Globally unique identifier.
+     Optional ID to identify this Node as an {@link Object}.
 
-     This is unique not only within the {@link Scene}, but throughout the entire universe.
-
-     Only defined when given to the constructor.
-
-     @property guid
-     @type String
-     @final
-     */
-    get guid() {
-        return this._guid;
-    }
-
-    /**
-     Optional entity classification when using within a semantic data model.
-
-     See the Object documentation on "Applying a semantic data model" for usage.
-
-     @property entityType
+     @property objectId
      @default null
      @type String
      @final
      */
-    get entityType() {
-        return this._entityType;
+    get objectId() {
+        return this._objectId;
+    }
+
+    /**
+     Optional ID to identify this Node as a {@link Model}.
+
+     @property modelId
+     @default null
+     @type String
+     @final
+     */
+    get modelId() {
+        return this._modelId;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1077,7 +1073,7 @@ class Object3D extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     Number of child {@link Object"}}Objects{{/crossLink}}.
+     Number of child {@link Node}s.
 
      @property numChildren
      @final
@@ -1088,7 +1084,7 @@ class Object3D extends Component {
     }
 
     /**
-     Array of child {@link Object"}}Objects{{/crossLink}}.
+     Array of child {@link Node}s.
 
      @property children
      @final
@@ -1099,7 +1095,7 @@ class Object3D extends Component {
     }
 
     /**
-     Child {@link Object"}}Objects{{/crossLink}} mapped to their IDs.
+     Child {@link Node}s mapped to their IDs.
 
      @property childMap
      @final
@@ -1110,7 +1106,7 @@ class Object3D extends Component {
     }
 
     /**
-     IDs of child {@link Object"}}Objects{{/crossLink}}.
+     IDs of child {@link Node}s.
 
      @property childIDs
      @final
@@ -1126,31 +1122,31 @@ class Object3D extends Component {
     /**
      The parent.
 
-     The parent Group may also be set by passing the Object to the
-     Group/Model's {@link Group/addChild:method"}}addChild(){{/crossLink}} method.
+     The parent Node may also be set by passing the Node to the
+     Node/Model's {@link Node/addChild:method"}}addChild(){{/crossLink}} method.
 
      @property parent
-     @type Group
+     @type Node
      */
     set parent(object) {
         if (utils.isNumeric(object) || utils.isString(object)) {
             const objectId = object;
             object = this.scene.components[objectId];
             if (!object) {
-                this.warn("Group not found: " + utils.inQuotes(objectId));
+                this.warn("Node not found: " + utils.inQuotes(objectId));
                 return;
             }
             if (!object.isObject) {
-                this.error("Not an Object: " + object.id);
+                this.error("Not an Node: " + object.id);
                 return;
             }
         }
         if (object.scene.id !== this.scene.id) {
-            this.error("Group not in same Scene: " + object.id);
+            this.error("Node not in same Scene: " + object.id);
             return;
         }
         if (this._parent && this._parent.id === object.id) {
-            this.warn("Already a child of Group: " + object.id);
+            this.warn("Already a child of Node: " + object.id);
             return;
         }
         object.addChild(this);
@@ -1388,11 +1384,11 @@ class Object3D extends Component {
     /**
      Indicates if visible.
 
-     Only rendered when {@link Object/visible} is true and
-     {@link Object/culled} is false.
+     Only rendered when {@link Node/visible} is true and
+     {@link Node/culled} is false.
 
-     Each visible Object is registered in its {@link Scene}'s
-     {@link Scene/visibleEntities} map while its {@link Object/entityType}
+     Each visible Node is registered in its {@link Scene}'s
+     {@link Scene/visibleObjects} map while its {@link Node/objectId}
      is set to a value.
 
      @property visible
@@ -1405,8 +1401,8 @@ class Object3D extends Component {
         for (let i = 0, len = this._childList.length; i < len; i++) {
             this._childList[i].visible = visible;
         }
-        if (this._entityType) {
-            this.scene._entityVisibilityUpdated(this, visible);
+        if (this._objectId) {
+            this.scene._objectVisibilityUpdated(this, visible);
         }
     }
 
@@ -1417,8 +1413,8 @@ class Object3D extends Component {
     /**
      Indicates if highlighted.
 
-     Each highlighted Object is registered in its {@link Scene}'s
-     {@link Scene/highlightedEntities} map while its {@link Object/entityType}
+     Each highlighted Node is registered in its {@link Scene}'s
+     {@link Scene/highlightedObjects} map while its {@link Node/objectId}
      is set to a value.
 
      @property highlighted
@@ -1431,8 +1427,8 @@ class Object3D extends Component {
         for (let i = 0, len = this._childList.length; i < len; i++) {
             this._childList[i].highlighted = highlighted;
         }
-        if (this._entityType) {
-            this.scene._entityHighlightedUpdated(this, highlighted);
+        if (this._objectId) {
+            this.scene._objectHighlightedUpdated(this, highlighted);
         }
     }
 
@@ -1443,8 +1439,8 @@ class Object3D extends Component {
     /**
      Indicates if ghosted.
 
-     Each ghosted Object is registered in its {@link Scene}'s
-     {@link Scene/ghostedEntities} map while its {@link Object/entityType}
+     Each ghosted Node is registered in its {@link Scene}'s
+     {@link Scene/ghostedObjects} map while its {@link Node/objectId}
      is set to a value.
 
      @property ghosted
@@ -1457,8 +1453,8 @@ class Object3D extends Component {
         for (let i = 0, len = this._childList.length; i < len; i++) {
             this._childList[i].ghosted = ghosted;
         }
-        if (this._entityType) {
-            this.scene._entityGhostedUpdated(this, ghosted);
+        if (this._objectId) {
+            this.scene._objectGhostedUpdated(this, ghosted);
         }
     }
 
@@ -1469,8 +1465,8 @@ class Object3D extends Component {
     /**
      Indicates if selected.
 
-     Each selected Object is registered in its {@link Scene}'s
-     {@link Scene/selectedEntities} map while its {@link Object/entityType}
+     Each selected Node is registered in its {@link Scene}'s
+     {@link Scene/selectedObjects} map while its {@link Node/objectId}
      is set to a value.
 
      @property selected
@@ -1483,8 +1479,8 @@ class Object3D extends Component {
         for (let i = 0, len = this._childList.length; i < len; i++) {
             this._childList[i].selected = selected;
         }
-        if (this._entityType) {
-            this.scene._entitySelectedUpdated(this, selected);
+        if (this._objectId) {
+            this.scene._objectSelectedUpdated(this, selected);
         }
     }
 
@@ -1514,8 +1510,8 @@ class Object3D extends Component {
     /**
      Indicates if culled from view.
 
-     Only rendered when {@link Object/visible} is true and
-     {@link Object/culled} is false.
+     Only rendered when {@link Node/visible} is true and
+     {@link Node/culled} is false.
 
      @property culled
      @default false
@@ -1536,7 +1532,7 @@ class Object3D extends Component {
     /**
      Indicates if clippable.
 
-     Clipping is done by the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} component.
+     Clipping is done by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} component.
 
      @property clippable
      @default true
@@ -1744,21 +1740,25 @@ class Object3D extends Component {
         if (this._parent) {
             this._parent.removeChild(this);
         }
-        if (this._entityType) {
+        if (this._objectId) {
             const scene = this.scene;
-            scene._entityTypeRemoved(this, this._entityType);
+            scene._deregisterObject(this);
             if (this._visible) {
-                scene._entityVisibilityUpdated(this, false);
+                scene._objectVisibilityUpdated(this, false);
             }
             if (this._ghosted) {
-                scene._entityGhostedUpdated(this, false);
+                scene._objectGhostedUpdated(this, false);
             }
             if (this._selected) {
-                scene._entitySelectedUpdated(this, false);
+                scene._objectSelectedUpdated(this, false);
             }
             if (this._highlighted) {
-                scene._entityHighlightedUpdated(this, false);
+                scene._objectHighlightedUpdated(this, false);
             }
+        }
+        if (this._modelId) {
+            const scene = this.scene;
+            scene._deregisterModel(this);
         }
         if (this._childList.length) {
             // Clone the _childList before iterating it, so our children don't mess us up when calling removeChild().
@@ -1777,4 +1777,4 @@ class Object3D extends Component {
     }
 }
 
-export {Object3D};
+export {Node};

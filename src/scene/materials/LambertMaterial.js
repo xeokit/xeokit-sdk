@@ -28,8 +28,8 @@
  | {@link LambertMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
  | {@link LambertMaterial/lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
  | {@link LambertMaterial/pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
- | {@link LambertMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces. |
- | {@link LambertMaterial/backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry"}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ | {@link LambertMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces. |
+ | {@link LambertMaterial/backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
 
  ## Usage
 
@@ -51,7 +51,7 @@
  @extends Material
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} The LambertMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
  @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
  @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
@@ -60,8 +60,8 @@
  @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
  @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
  @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry"}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry"}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+ @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
+ @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
  */
 
 import {Material} from './Material.js';

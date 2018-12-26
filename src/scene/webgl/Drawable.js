@@ -58,7 +58,7 @@ class Drawable {
      {@link Drawable/culled} is false.
 
      Each visible Drawable is registered in the {@link Scene}'s
-     {@link Scene/visibleEntities} map when its {@link Object/entityType}
+     {@link Scene/visibleObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property visible
@@ -72,7 +72,7 @@ class Drawable {
      The ghosted appearance is configured by {@link Drawable/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
 
      Each ghosted Drawable is registered in its {@link Scene}'s
-     {@link Scene/ghostedEntities} map when its {@link Object/entityType}
+     {@link Scene/ghostedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property ghosted
@@ -86,7 +86,7 @@ class Drawable {
      The highlight appearance is configured by {@link Drawable/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
 
      Each highlighted Drawable is registered in its {@link Scene}'s
-     {@link Scene/highlightedEntities} map when its {@link Object/entityType}
+     {@link Scene/highlightedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property highlighted
@@ -100,7 +100,7 @@ class Drawable {
      The selected appearance is configured by {@link Drawable/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
 
      Each selected Drawable is registered in its {@link Scene}'s
-     {@link Scene/selectedEntities} map when its {@link Object/entityType}
+     {@link Scene/selectedObjects} map when its {@link Node/objectId}
      is set to a value.
 
      @property selected
@@ -142,7 +142,7 @@ class Drawable {
     /**
      Indicates if the Drawable is currently clippable.
 
-     When false, the {@link Scene"}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Drawable.
+     When false, the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Drawable.
 
      @property clippable
      @default true

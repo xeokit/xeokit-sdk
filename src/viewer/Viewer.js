@@ -15,7 +15,7 @@ import {MetaScene} from "./metadata/MetaScene.js";
  * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
  * {@link Plugin} instances will also save and load their state to and from the JSON.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
- * {@link Camera} to target positions, boundaries or {@link Object}s.
+ * {@link Camera} to target positions, boundaries or {@link Node}s.
  *
  * @public
  */
@@ -24,7 +24,17 @@ class Viewer {
     /**
      * @constructor
      * @param {Object} cfg  Viewer configuration.
-     * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of its {@link Scene}, which xeokit automatically generates.
+     * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
+     * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
+     * @param [cfg.passes=1] {Number} The number of times the {@link Viewer#scene} renders per frame.
+     * @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies whether to clear the
+     * canvas before each pass (true) or just before the first pass (false).
+     * @param [cfg.transparent=false] {Boolean} Whether or not the canvas is transparent.
+     * @param [cfg.backgroundColor] {Float32Array} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
+     * @param [cfg.backgroundImage] {String} URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
+     * @param [cfg.gammaInput=false] {Boolean} When true, expects that all textures and colors are premultiplied gamma.
+     * @param [cfg.gammaOutput=true] {Boolean} Whether or not to render with pre-multiplied gama.
+     * @param [cfg.gammaFactor=2.2] {Number} The gamma factor to use when rendering with pre-multiplied gamma.
      */
     constructor(cfg) {
 
@@ -66,8 +76,8 @@ class Viewer {
          * @type {CameraFlightAnimation}
          */
         this.cameraFlight = new CameraFlightAnimation(this.scene, {
-            fitFOV: 45,
-            duration: 0.1
+            fitFOV: 35,
+            duration: 0.5
         });
 
         /**
@@ -76,8 +86,11 @@ class Viewer {
          * @property cameraControl
          * @type {CameraControl}
          */
-        this.cameraControl = new CameraControl(this.scene, {});
-
+        this.cameraControl = new CameraControl(this.scene, {
+            panToPointer: true,
+            doublePickFlyTo: true
+        });
+        
         /**
          * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.
          * @property plugins

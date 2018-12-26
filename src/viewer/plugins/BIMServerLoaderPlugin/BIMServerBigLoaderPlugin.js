@@ -132,7 +132,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
      * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] When true, will emphasise edges when rendering the model.
      * @param {Boolean} [params.logging=false] Set this true to log some info to the console while loading.
-     * @returns {GroupModel} A {@link Model} representing the loaded model.
+     * @returns {Node} A {@link Model} representing the loaded model.
      */
     load(params) {
 

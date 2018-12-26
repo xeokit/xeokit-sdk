@@ -512,6 +512,12 @@ const Renderer = function (scene, options) {
                         drawable.drawNormalFillTransparent(frameCtx);
                     }
                 }
+                if (normalEdgesTransparentBinLen > 0) {
+                    for (i = 0; i < normalEdgesTransparentBinLen; i++) {
+                        drawable = normalEdgesTransparentBin[i];
+                        drawable.drawNormalEdgesTransparent(frameCtx);
+                    }
+                }
                 gl.disable(gl.BLEND);
             }
 

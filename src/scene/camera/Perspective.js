@@ -21,7 +21,7 @@
  @param [cfg] {*} Configs
  @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Perspective.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene"}}Scene{{/crossLink}}.
+ @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene}}Scene{{/crossLink}}.
  @param [cfg.fov=60.0] {Number} Field-of-view angle, in degrees.
  @param [cfg.fovAxis="min"] {String} The field-of-view axis: "x", "y", or "min" to use whichever is currently the minimum.
  @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.

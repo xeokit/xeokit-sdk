@@ -65,8 +65,8 @@
  @constructor
  @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
  @param [cfg] {*} Clip configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene"}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Clip by ID within the {@link Scene"}}Scene{{/crossLink}}.
+ @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ You only need to supply an ID if you need to be able to find the Clip by ID within the {@link Scene}}Scene{{/crossLink}}.
  @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Clip.
  @param [cfg.active=true] {Boolean} Indicates whether or not this Clip is active.
  @param [cfg.pos=[0,0,0]] {Array of Number} World-space position of the clipping plane.

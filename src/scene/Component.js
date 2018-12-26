@@ -302,7 +302,6 @@ class Component {
 
         this._dontClear = !!cfg.dontClear; // Prevent Scene#clear from destroying this component
 
-        this._model = null;
         this._renderer = this.scene._renderer;
 
         /**
@@ -354,14 +353,6 @@ class Component {
 
     init() { // No-op
 
-    }
-
-    _addedToModel(model) { // Called by xeokit.Model.add()
-        this._model = model;
-    }
-
-    _removedFromModel(model) { // Called by xeokit.Model.remove()
-        this._model = null;
     }
 
     /**
@@ -417,19 +408,6 @@ class Component {
      */
     get owner() {
         return this._owner;
-    }
-
-    /**
-     The {@link Model} which contains this Component, if any.
-
-     Will be null if this Component is not in a Model.
-
-     @property model
-     @final
-     @type GroupModel
-     */
-    get model() {
-        return this._model;
     }
 
     /**
@@ -606,7 +584,7 @@ class Component {
      * The console message will have this format: *````[LOG] [<component type> <component id>: <message>````*
      *
      * Also fires the message as a {@link Scene/log:event} event on the
-     * parent {@link Scene"}}Scene{{/crossLink}}.
+     * parent {@link Scene}}Scene{{/crossLink}}.
      *
      * @method log
      * @param {String} message The message to log
@@ -627,7 +605,7 @@ class Component {
      * The console message will have this format: *````[WARN] [<component type> =<component id>: <message>````*
      *
      * Also fires the message as a {@link Scene/warn:event} event on the
-     * parent {@link Scene"}}Scene{{/crossLink}}.
+     * parent {@link Scene}}Scene{{/crossLink}}.
      *
      * @method warn
      * @param {String} message The message to log
@@ -644,7 +622,7 @@ class Component {
      * The console message will have this format: *````[ERROR] [<component type> =<component id>: <message>````*
      *
      * Also fires the message as an {@link Scene/error:event} event on the
-     * parent {@link Scene"}}Scene{{/crossLink}}.
+     * parent {@link Scene}}Scene{{/crossLink}}.
      *
      * @method error
      * @param {String} message The message to log
