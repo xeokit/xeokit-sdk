@@ -8,6 +8,7 @@ import {Mesh} from "../../../scene/mesh/Mesh.js";
 import {BIMServerGeometryLoader} from "./lib/BIMServerGeometryLoader.js";
 import {loadMetaModel} from "./lib/loadMetaModel.js";
 import {defaultMaterials} from "./lib/defaultMaterials.js";
+import {utils} from "../../../scene/utils.js";
 
 /**
  * A viewer plugin that loads models from a [BIMServer](http://bimserver.org).
@@ -246,6 +247,10 @@ class BIMServerLoaderPlugin extends Plugin {
         const logging = !!params.logging;
 
         scene.canvas.spinner.processes++;
+
+        params = utils.apply(params, {
+            modelId: modelId // Registers the Node on viewer.scene.models
+        });
 
         const modelNode = new Node(scene, params);
 
