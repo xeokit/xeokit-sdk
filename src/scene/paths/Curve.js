@@ -3,8 +3,8 @@ import {math} from "../math/math.js";
 
 class Curve extends Component {
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this.t = cfg.t;
     }
 

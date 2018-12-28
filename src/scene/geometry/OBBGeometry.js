@@ -1,87 +1,71 @@
-/**
- An **OBBGeometry** is a {@link Geometry} that shows the extents of an oriented bounding box (OBB).
 
- <a href="../../examples/#geometry_primitives_OBBGeometry"><img src="http://i.giphy.com/3o6ZsSVy0NKXZ1vDSo.gif"></img></a>
-
- ## Overview
-
- * A World-space OBB a bounding box that's oriented to its contents, given as a 32-element array containing the homogeneous coordinates for the eight corner vertices, ie. each having elements [x,y,z,w].
- * Set an OBBGeometry's {@link OBBGeometry/targetOBB} property to an OBB to fix it to those extents, or
- * Set an OBBGeometry's {@link OBBGeometry/target} property to any {@link Component} subtype that has an OBB.
-
- ## Examples
-
- * [Rendering an OBBGeometry](../../examples/#geometry_primitives_OBBGeometry)
-
- ## Usage
-
- ````javascript
- // First Mesh with a TorusGeometry
- var mesh = new xeokit.Mesh({
-     geometry: new xeokit.TorusGeometry()
- });
-
- // Second Mesh with an OBBGeometry that shows a wireframe box
- // for the World-space boundary of the first Mesh
-
- var boundaryHelper = new xeokit.Mesh({
-
-     geometry: new xeokit.OBBGeometry({
-         target: mesh
-     }),
-
-     material: new xeokit.PhongMaterial({
-         diffuse: [0.5, 1.0, 0.5],
-         emissive: [0.5, 1.0, 0.5],
-         lineWidth:2
-     })
- });
- ````
-
- Now whenever our mesh {@link Mesh} changes shape or position, our OBBGeometry will automatically
- update to stay fitted to it.
-
- We could also directly configure the OBBGeometry with the {@link Mesh}'s {@link Mesh/obb:property"}}OBB{{/crossLink}}:
-
- ````javascript
- var boundaryHelper2 = new xeokit.Mesh({
-
-     geometry: new xeokit.OBBGeometry({
-         targetOBB: mesh.obb
-     }),
-
-     material: new xeokit.PhongMaterial({
-         diffuse: [0.5, 1.0, 0.5],
-         emissive: [0.5, 1.0, 0.5],
-         lineWidth:2
-     })
- });
- ````
-
- @class OBBGeometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this OBBGeometry.
- @param [cfg.target] {Component} ID or instance of a {@link Component} whose OBB we'll show.
- @param [cfg.targetOBB] {Float32Array} An mesh-oriented box (OBB) in a 32-element Float32Array
- containing homogeneous coordinates for the eight corner vertices, ie. each having elements (x,y,z,w).
- @extends Component
- */
 import {utils} from '../utils.js';
 import {core} from '../core.js';
 import {Geometry} from './Geometry.js';
 
+/**
+ * @desc Defines the shape of one of more {@link #Mesh}es to visualize the extents of an object-aligned bounding box (OBB).
+ *
+ *
+ * * A xeokit OBB is given as a 32-element array containing the homogeneous coordinates for the eight corner vertices, ie. each having elements [x,y,z,w].
+ * * Set {@link OBBGeometry#targetOBB} to an OBB or set {@link OBBGeometry#target} to a {@link Geometry}.
+ *
+ * ## Usage
+ *
+ * ````javascript
+ * // Create a Mesh with a TorusGeometry
+ * var mesh = new Mesh(myViewer.scene, {
+ *      geometry: new TorusGeometry(myViewer.scene, )
+ * });
+ *
+ * // Create a second Mesh with an OBBGeometry that shows a wireframe box for the OBB of the first Mesh's TorusGeometry
+ * var boundaryHelper = new Mesh(myViewer.scene, {
+ *      geometry: new OBBGeometry(myViewer.scene, {
+ *          target: mesh.geometry
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.5, 1.0, 0.5],
+ *          emissive: [0.5, 1.0, 0.5],
+ *          lineWidth:2
+ *      })
+ * });
+ * ````
+ *
+ * We can also directly configure the OBBGeometry with the {@link Geometry#obb}:
+ *
+ * ````javascript
+ * var boundaryHelper2 = new Mesh(myViewer.scene, {
+ *
+ *      geometry: new OBBGeometry(myViewer.scene, {
+ *          targetOBB: mesh.obb
+ *      }),
+ *
+ *      material: new xeokit.PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.5, 1.0, 0.5],
+ *          emissive: [0.5, 1.0, 0.5],
+ *          lineWidth:2
+ *      })
+ * });
+ * ````
+*/
 class OBBGeometry extends Geometry {
 
-    init(cfg) {
-        super.init(utils.apply(cfg, {
-            combined: true,
-            quantized: false, // Quantized geometry is immutable
+    /**
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
+     generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this OBBGeometry.
+     @param [cfg.target] {Component} ID or instance of a {@link Component} whose OBB we'll show.
+     @param [cfg.targetOBB] {Float32Array} An mesh-oriented box (OBB) in a 32-element Float32Array
+     containing homogeneous coordinates for the eight corner vertices, ie. each having elements (x,y,z,w).
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg={}) {
+        super(owner, utils.apply(cfg, {
+            combineGeometry: true,
+            compressGeometry: false, // Quantized geometry is immutable
             primitive: cfg.primitive || "lines",
             positions: cfg.positions || [1.0, 1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0,
                 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0],
@@ -97,7 +81,7 @@ class OBBGeometry extends Geometry {
     /**
      A component whose OBB we'll dynamically fit this AABBGeometry to.
 
-     This property effectively replaces the {@link OBBGeometry/targetOBB} property.
+     This property effectively replaces the {@link OBBGeometry#targetOBB} property.
 
      @property target
      @type Component
@@ -136,7 +120,7 @@ class OBBGeometry extends Geometry {
      Sets this OBBGeometry to an mesh-oriented bounding box (OBB), given as a 32-element Float32Array
      containing homogeneous coordinates for the eight corner vertices, ie. each having elements [x,y,z,w].
 
-     This property effectively replaces the {@link OBBGeometry/boundary} property, causing it to become null.
+     This property effectively replaces the {@link OBBGeometry#boundary} property, causing it to become null.
 
      @property targetOBB
      @type Float32Array

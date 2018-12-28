@@ -3,8 +3,8 @@ import {Curve} from "./curve.js"
 
 class Path extends Curve {
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this._cachedLengths = [];
         this._dirty = true;
         this._curves = []; // Array of child Curve components
@@ -97,7 +97,7 @@ class Path extends Curve {
 
             this._curves.push(curve);
             this._dirtySubs.push(curve.on("dirty", curveDirty));
-            this._destroyedSubs.push(curve.on("destroyed", curveDestroyed));
+            this._destroyedSubs.push(curve.once("destroyed", curveDestroyed));
         }
 
         this._dirty = true;

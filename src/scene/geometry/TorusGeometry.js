@@ -1,91 +1,68 @@
-/**
- A **TorusGeometry** is a parameterized {@link Geometry} that defines a torus-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
-
- <a href="../../examples/#geometry_primitives_torus"><img src="../../assets/images/screenshots/TorusGeometry.png"></img></a>
-
- ## Overview
-
- * Dynamically modify a TorusGeometry's shape at any time by updating its {@link TorusGeometry/center}, {@link TorusGeometry/radius}, {@link TorusGeometry/tube},
- {@link TorusGeometry/radialSegments}, {@link TorusGeometry/tubeSegments},  and
- {@link TorusGeometry/arc} properties.
- * Dynamically switch its primitive type between ````"points"````, ````"lines"```` and ````"triangles"```` at any time by
- updating its {@link Geometry/primitive} property.
-
- ## Examples
-
-
- * [Textured TorusGeometry](../../examples/#geometry_primitives_torus)
-
-
- ## Usage
-
- An {@link Mesh} with a TorusGeometry and a {@link PhongMaterial} with
- diffuse {@link Texture}:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.TorusGeometry({
-         center: [0,0,0],
-         radius: 1.0,
-         tube: 0.5,
-         radialSegments: 32,
-         tubeSegments: 24,
-         arc: Math.PI * 2.0
-     }),
-
-     material: new xeokit.PhongMaterial({
-        diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-        })
-     })
- });
- ````
-
- @class TorusGeometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this TorusGeometry.
- @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a TorusGeometry are 'points', 'lines' and 'triangles'.
- @param [cfg.center] {Float32Array} 3D point indicating the center position of the TorusGeometry.
- @param [cfg.radius=1] {Number} The overall radius of the TorusGeometry.
- @param [cfg.tube=0.3] {Number} The tube radius of the TorusGeometry.
- @param [cfg.radialSegments=32] {Number} The number of radial segments that make up the TorusGeometry.
- @param [cfg.tubeSegments=24] {Number} The number of tubular segments that make up the TorusGeometry.
- @param [cfg.arc=Math.PI / 2.0] {Number} The length of the TorusGeometry's arc in radians, where Math.PI*2 is a closed torus.
- @extends Geometry
- */
 import {utils} from "../utils.js";
 import {Geometry} from './Geometry.js';
 import {math} from '../math/math.js';
 
-const type = "TorusGeometry";
-
+/**
+ * @desc Defines a toroidal shape for one or more {@link Mesh}es.
+ *
+ * ## Usage
+ * Creating a {@link Mesh} with a TorusGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new TorusGeometry(myViewer.scene, {
+ *          center: [0,0,0],
+ *          radius: 1.0,
+ *          tube: 0.5,
+ *          radialSegments: 32,
+ *          tubeSegments: 24,
+ *          arc: Math.PI * 2.0
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ *  });
+ ````
+ */
 class TorusGeometry extends Geometry {
 
-    init(cfg) {
+    /**
+     @constructor
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
+     generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this TorusGeometry.
+     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a TorusGeometry are 'points', 'lines' and 'triangles'.
+     @param [cfg.center] {Float32Array} 3D point indicating the center position of the TorusGeometry.
+     @param [cfg.radius=1] {Number} The overall radius of the TorusGeometry.
+     @param [cfg.tube=0.3] {Number} The tube radius of the TorusGeometry.
+     @param [cfg.radialSegments=32] {Number} The number of radial segments that make up the TorusGeometry.
+     @param [cfg.tubeSegments=24] {Number} The number of tubular segments that make up the TorusGeometry.
+     @param [cfg.arc=Math.PI / 2.0] {Number} The length of the TorusGeometry's arc in radians, where Math.PI*2 is a closed torus.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
         let radius = cfg.radius || 1;
         if (radius < 0) {
-            this.error("negative radius not allowed - will invert");
+            console.error("negative radius not allowed - will invert");
             radius *= -1;
         }
         radius *= 0.5;
 
         let tube = cfg.tube || 0.3;
         if (tube < 0) {
-            this.error("negative tube not allowed - will invert");
+            console.error("negative tube not allowed - will invert");
             tube *= -1;
         }
 
         let radialSegments = cfg.radialSegments || 32;
         if (radialSegments < 0) {
-            this.error("negative radialSegments not allowed - will invert");
+            console.error("negative radialSegments not allowed - will invert");
             radialSegments *= -1;
         }
         if (radialSegments < 4) {
@@ -94,7 +71,7 @@ class TorusGeometry extends Geometry {
 
         let tubeSegments = cfg.tubeSegments || 24;
         if (tubeSegments < 0) {
-            this.error("negative tubeSegments not allowed - will invert");
+            console.error("negative tubeSegments not allowed - will invert");
             tubeSegments *= -1;
         }
         if (tubeSegments < 4) {
@@ -103,7 +80,7 @@ class TorusGeometry extends Geometry {
 
         let arc = cfg.arc || Math.PI * 2;
         if (arc < 0) {
-            this.warn("negative arc not allowed - will invert");
+            console.warn("negative arc not allowed - will invert");
             arc *= -1;
         }
         if (arc > 360) {
@@ -139,8 +116,8 @@ class TorusGeometry extends Geometry {
                 centerX = radius * Math.cos(u);
                 centerY = radius * Math.sin(u);
 
-                x = (radius + tube * Math.cos(v) ) * Math.cos(u);
-                y = (radius + tube * Math.cos(v) ) * Math.sin(u);
+                x = (radius + tube * Math.cos(v)) * Math.cos(u);
+                y = (radius + tube * Math.cos(v)) * Math.sin(u);
                 z = tube * Math.sin(v);
 
                 positions.push(x + centerX);
@@ -166,10 +143,10 @@ class TorusGeometry extends Geometry {
         for (j = 1; j <= tubeSegments; j++) {
             for (i = 1; i <= radialSegments; i++) {
 
-                a = ( radialSegments + 1 ) * j + i - 1;
-                b = ( radialSegments + 1 ) * ( j - 1 ) + i - 1;
-                c = ( radialSegments + 1 ) * ( j - 1 ) + i;
-                d = ( radialSegments + 1 ) * j + i;
+                a = (radialSegments + 1) * j + i - 1;
+                b = (radialSegments + 1) * (j - 1) + i - 1;
+                c = (radialSegments + 1) * (j - 1) + i;
+                d = (radialSegments + 1) * j + i;
 
                 indices.push(a);
                 indices.push(b);
@@ -181,7 +158,7 @@ class TorusGeometry extends Geometry {
             }
         }
 
-        super.init(utils.apply(cfg, {
+        super(owner, utils.apply(cfg, {
             positions: positions,
             normals: normals,
             uv: uvs,

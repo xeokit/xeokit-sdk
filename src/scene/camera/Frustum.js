@@ -1,43 +1,14 @@
-/**
- A **Frustum** defines a perspective projection as a frustum-shaped view volume for a {@link Camera}.
-
- ## Overview
-
- * A {@link Camera} has a Frustum to configure its frustum-based perspective projection mode.
- * A Frustum lets us explicitly set the positions of the left, right, top, bottom, near and far planes, which is useful
- for asymmetrical view volumes, such as those used for stereo viewing.
- * A Frustum's {@link Frustum#near} and {@link Frustum#far} properties
- specify the distances to the WebGL clipping planes.
-
- ## Examples
-
- * [Camera with frustum projection](../../examples/#camera_frustum)
- * [Stereo viewing with frustum projection](../../examples/#effects_stereo)
-
- ## Usage
-
- * See {@link Camera}
-
- @class Frustum
- @module xeokit
- @submodule camera
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Frustum.
- @param [cfg.left=-1] {Number} Position of the Frustum's left plane on the View-space X-axis.
- @param [cfg.right=1] {Number} Position of the Frustum's right plane on the View-space X-axis.
- @param [cfg.bottom=-1] {Number} Position of the Frustum's bottom plane on the View-space Y-axis.
- @param [cfg.top=1] {Number} Position of the Frustum's top plane on the View-space Y-axis.
- @param [cfg.near=0.1] {Number} Position of the Frustum's near plane on the View-space Z-axis.
- @param [cfg.far=1000] {Number} Position of the Frustum's far plane on the positive View-space Z-axis.
- @extends Component
- */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
 
+/**
+ * @desc Defines its {@link Camera}'s perspective projection as a frustum-shaped view volume.
+ *
+ * * Located at {@link Camera#frustum}.
+ * * Allows to explicitly set the positions of the left, right, top, bottom, near and far planes, which is useful for asymmetrical view volumes, such as for stereo viewing.
+ * * {@link Frustum#near} and {@link Frustum#far} specify the distances to the WebGL clipping planes.
+ */
 class Frustum extends Component {
 
     /**
@@ -53,9 +24,13 @@ class Frustum extends Component {
         return "Frustum";
     }
 
-    init(cfg) {
+    /**
+     * @constructor
+     * @private
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             matrix: math.mat4()

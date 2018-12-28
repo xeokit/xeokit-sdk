@@ -20,10 +20,10 @@
  @module xeokit
  @submodule lighting
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID for this LightMap, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this LightMap.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] Configs
+ @param {String} [cfg.id] Optional ID for this LightMap, unique among all components in the parent scene, generated automatically when omitted.
+ @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this LightMap.
  @param [cfg.src=null] {Array of String} Paths to six image files to load into this LightMap.
  @param [cfg.flipY=false] {Boolean} Flips this LightMap's source data along its vertical axis when true.
  @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link LightMap/encoding} property for more info.
@@ -47,8 +47,8 @@ class LightMap extends CubeTexture {
         return "LightMap";
     }
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this.scene._lightMapCreated(this);
     }
 

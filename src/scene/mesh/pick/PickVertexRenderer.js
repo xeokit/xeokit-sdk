@@ -45,7 +45,7 @@ PickVertexRenderer.get = function (scene, mesh) {
     const hash = [
         mesh.scene.canvas.canvas.id,
         mesh.scene._clipsState.getHash(),
-        mesh._geometry._state.quantized ? "cp" : "",
+        mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ].join(";");
     let renderer = renderers[hash];
@@ -131,7 +131,7 @@ PickVertexRenderer.prototype.drawMesh = function (frame, mesh) {
         const pickPositionsBuf = geometryState.getVertexPickPositions();
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-            this._aPosition.bindArrayBuffer(pickPositionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+            this._aPosition.bindArrayBuffer(pickPositionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
         } else {
             this._aPosition.bindArrayBuffer(pickPositionsBuf);
         }

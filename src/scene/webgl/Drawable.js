@@ -142,7 +142,7 @@ class Drawable {
     /**
      Indicates if the Drawable is currently clippable.
 
-     When false, the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Drawable.
+     When false, the {@link Scene}'s {@link Clips} will have no effect on the Drawable.
 
      @property clippable
      @default true
@@ -544,7 +544,7 @@ var getPickResult = (function () {
                 positionC[1] = positions[ic3 + 1];
                 positionC[2] = positions[ic3 + 2];
 
-                if (geometry.quantized) {
+                if (geometry.compressGeometry) {
 
                     // Decompress vertex positions
 
@@ -617,7 +617,7 @@ var getPickResult = (function () {
 
                 if (normals) {
 
-                    if (geometry.quantized) {
+                    if (geometry.compressGeometry) {
 
                         // Decompress vertex normals
 
@@ -667,7 +667,7 @@ var getPickResult = (function () {
                     uvc[0] = uvs[(ic * 2)];
                     uvc[1] = uvs[(ic * 2) + 1];
 
-                    if (geometry.quantized) {
+                    if (geometry.compressGeometry) {
 
                         // Decompress vertex UVs
 

@@ -1,209 +1,3 @@
-/**
- An **EmphasisMaterial** is a {@link Material} that defines the appearance of attached
- {@link Mesh"}}Meshes{{/crossLink}} when they are highlighted, selected or ghosted.
-
- ## Examples
-
- | <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/HighlightMaterial/teapot.png"></img></a> | <a href="../../examples/#effects_demo_housePlan"><img src="../../assets/images/screenshots/HighlightMaterial/house.png"></img></a> | <a href="../../examples/#effects_demo_gearbox"><img src="../../assets/images/screenshots/HighlightMaterial/gearbox.png"></img></a> | <a href="../../examples/#effects_demo_adam"><img src="../../assets/images/screenshots/HighlightMaterial/adam.png"></img></a>|
- |:------:|:------:|:----:|:-----:|:-----:|
- |[Example 1: Ghost effect](../../examples/#effects_ghost)|[Example 2: Ghost and highlight effects for architecture](../../examples/#effects_demo_housePlan)|[Example 3: Ghost and highlight effects for CAD](../../examples/#effects_demo_gearbox)| [Example 4: Ghost effect for CAD ](../../examples//#effects_demo_adam)|
-
- ## Overview
-
- * Ghost an {@link Mesh} by setting its {@link Mesh/ghosted} property ````true````.
- * When ghosted, a Mesh's appearance is controlled by its EmphasisMaterial.
- * An EmphasisMaterial provides several preset configurations that you can set it to. Select a preset by setting {@link EmphasisMaterial/preset} to the preset's ID. A map of available presets is provided in {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}.
- * By default, a Mesh uses the {@link Scene}'s global EmphasisMaterials, but you can give each Mesh its own EmphasisMaterial when you want to customize the effect per-Mesh.
- * Ghost all Meshes in a {@link Model} by setting the Model's {@link Node/ghosted} property ````true````. Note that all Meshes in a Model have the Scene's global EmphasisMaterial by default.
- * Modify the Scene's global EmphasisMaterial to customize it.
-
- ## Usage
-
- * [Ghosting](#ghosting)
- * [Highlighting](#highlighting)
-
- ### Ghosting
-
- In the usage example below, we'll create a Mesh with a ghost effect applied to it. The Mesh gets its own EmphasisMaterial for ghosting, and
- has its {@link Mesh/ghost} property set ````true```` to activate the effect.
-
- <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/HighlightMaterial/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 1
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    ghostMaterial: new xeokit.EmphasisMaterial({
-        fill: true,
-        fillColor: [0, 0, 0],
-        fillAlpha: 0.7,
-        edges: true,
-        edgeColor: [0.2, 1.0, 0.2],
-        edgeAlpha: 1.0,
-        edgeWidth: 2
-    }),
-    ghost: true
- });
- ````
-
- Note the **edgeThreshold** configuration on the {@link Geometry} we've created for our
- Mesh. Our EmphasisMaterial is configured to draw a wireframe representation of the Geometry, which will have inner edges (ie. edges between
- adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` configuration indicates
- that, for this particular Geometry, an inner edge is one where the angle between the surface normals of adjacent triangles is not
- greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect as needed for particular Geometries.
-
- Here's the example again, this time using the Scene's global EmphasisMaterial by default. We'll also modify that EmphasisMaterial
- to customize the effect.
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 5
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    ghost: true
- });
-
- var ghostMaterial = mesh.scene.ghostMaterial;
-
- ghostMaterial.fill = true;
- ghostMaterial.fillColor = [0, 0, 0];
- ghostMaterial.fillAlpha = 0.7;
- ghostMaterial.edges = true;
- ghostMaterial.edgeColor = [0.2, 1.0, 0.2];
- ghostMaterial.edgeAlpha = 1.0;
- ghostMaterial.edgeWidth = 2;
- ````
-
- ### Highlighting
-
- In the next example, we'll use a ghosting in conjunction with highlighting, to emphasise a couple of objects within
- a gearbox {@link Model}. We'll load the Model from glTF, then ghost all of its Meshes except for two gears, which we'll highlight instead. The ghosted
- Meshes have the Scene's global ghosting EmphasisMaterial, which we'll modify. The  highlighted Meshes also have the Scene's global highlighting EmphasisMaterial, which we'll modify as well.
-
- <a href="../../examples/#effects_demo_gearbox"><img src="../../assets/images/screenshots/HighlightMaterial/gearbox.png"></img></a>
-
- ````javascript
- var model = new xeokit.GLTFModel({
-     src: "models/gltf/gearbox_conical/scene.gltf",
-     edgeThreshold: 10
- });
-
- model.on("loaded", function() {
-
-    model.ghost = true;
-
-    model.meshes["gearbox#77.0"].ghost = false;
-    model.meshes["gearbox#79.0"].ghost = false;
-
-    model.meshes["gearbox#77.0"].highlight = true;
-    model.meshes["gearbox#79.0"].highlight = true;
-
-    var ghostMaterial = model.scene.ghostMaterial;
-
-    ghostMaterial.fill = true;
-    ghostMaterial.fillColor = [0.2, 0.2, 0.7];
-    ghostMaterial.fillAlpha = 0.9;
-    ghostMaterial.edges = true;
-    ghostMaterial.edgeColor = [0.4, 0.4, 1.6];
-    ghostMaterial.edgeAlpha = 0.8;
-    ghostMaterial.edgeWidth = 3;
-
-    var highlightMaterial = model.scene.highlightMaterial;
-
-    highlightMaterial.color = [1.0, 1.0, 1.0];
-    highlightMaterial.alpha = 1.0;
- });
- ````
-
- ## Presets
-
- For convenience, an EmphasisMaterial provides several preset configurations that you can set it to, which are provided in
- {@link EmphasisMaterial/presets:property"}}xeokit.EmphasisMaterial.presets{{/crossLink}}:
-
- ````javascript
- var presets = xeokit.EmphasisMaterial.presets;
- ````
-
- The presets look something like this:
-
- ````json
- {
-        "default": {
-            fill: true,
-            fillColor: [0.4, 0.4, 0.4],
-            fillAlpha: 0.2,
-            edges: true,
-            edgeColor: [0.2, 0.2, 0.2],
-            edgeAlpha: 0.5,
-            edgeWidth: 1
-        },
-
-         "sepia": {
-            fill: true,
-            fillColor: [0.97, 0.79, 0.66],
-            fillAlpha: 0.4,
-            edges: true,
-            edgeColor: [0.52, 0.45, 0.41],
-            edgeAlpha: 1.0,
-            edgeWidth: 1
-        },
-
-        //...
- }
- ````
-
- Let's switch the Scene's global default  EmphasisMaterial over to the "sepia" preset used in <a href="/examples/#effects_demo_adam">Example 4: Ghost effect for CAD</a>.
-
- ````javascript
- scene.ghostMaterial.preset = "sepia";
- ````
-
- You can also just create an EmphasisMaterial from a preset:
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 5
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    ghostMaterial: new xeokit.EmphasisMaterial({
-        preset: "sepia"
-    });
-    ghost: true
- });
- ````
-
- Note that applying a preset just sets the EmphasisMaterial's property values, which you are then free to modify afterwards.
-
- @class EmphasisMaterial
- @module xeokit
- @submodule materials
- @constructor
- @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The EmphasisMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta=null] {String:Object} Metadata to attach to this EmphasisMaterial.
- @param [cfg.fill=true] {Boolean} Indicates whether or not ghost surfaces are filled with color.
- @param [cfg.fillColor=[0.4,0.4,0.4]] {Array of Number} EmphasisMaterial fill color.
- @param [cfg.fillAlpha=0.2] {Number}  Transparency of filled ghost faces. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
- @param [cfg.edges=true] {Boolean} Indicates whether or not ghost edges are visible.
- @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
- @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
- @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
- @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
- */
-
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 
@@ -317,6 +111,87 @@ const PRESETS = {
     }
 };
 
+/**
+ * Defines the appearance of {@link Mesh}es when ghosted, highlighted or selected.
+ *
+ * * Ghost a {@link Mesh} by setting {@link Mesh#ghosted} ````true````.
+ * * Highlight a {@link Mesh} by setting {@link Mesh#highlighted} ````true````.
+ * * Select a {@link Mesh} by setting {@link Mesh#selected} ````true````.
+ * * When {@link Mesh}es are within the subtree of a {@link Node}, then setting {@link Node#ghosted}, {@link Node#highlighted} or {@link Node#selected}
+ * will collectively set {@link Mesh#ghosted}, {@link Mesh#highlighted} or {@link Mesh#selected} on all those {@link Mesh}es.
+ * * EmphasisMaterial provides several presets. Select a preset by setting {@link EmphasisMaterial#preset} to the ID of a preset in {@link EmphasisMaterial#presets}.
+ * * By default, a {@link Mesh} uses the default EmphasisMaterials in {@link Scene#ghostMaterial}, {@link Scene#highlightMaterial} and {@link Scene#selectedMaterial}
+ * but you can assign each {@link Mesh#ghostMaterial}, {@link Mesh#highlightMaterial} or {@link Mesh#selectedMaterial} to a custom EmphasisMaterial, if required.
+ *
+ * ## Usage
+ *
+ * In the example below, we'll create a {@link Mesh} with its own GhostMaterial and set {@link Mesh#ghosted} ````true```` to ghost it.
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new BoxGeometry(myViewer.scene, {
+ *         edgeThreshold: 1
+ *     }),
+ *     material: new PhongMaterial(myViewer.scene, {
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     }),
+ *     ghostMaterial: new EdgeMaterial(myViewer.scene, {
+ *         fill: true,
+ *         fillColor: [0, 0, 0],
+ *         fillAlpha: 0.7,
+ *         edges: true,
+ *         edgeColor: [0.2, 1.0, 0.2],
+ *         edgeAlpha: 1.0,
+ *         edgeWidth: 2
+ *     }),
+ *     ghosted: true
+ * });
+ * ````
+ *
+ * Note the ````edgeThreshold```` configuration for the {@link Geometry} on our {@link Mesh}.  EmphasisMaterial configures
+ * a wireframe representation of the {@link Geometry} for the selected emphasis mode, which will have inner edges (those edges between
+ * adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` indicates that, for
+ * this particular {@link Geometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
+ * is not greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect
+ * as needed for particular Geometries.
+ *
+ * Here's the example again, this time implicitly defaulting to the {@link Scene#edgeMaterial}. We'll also modify that EdgeMaterial
+ * to customize the effect.
+ *
+ * ````javascript
+ * new Mesh({
+ *     geometry: new TeapotGeometry(myViewer.scene, {
+ *         edgeThreshold: 5
+ *     }),
+ *     material: new PhongMaterial(myViewer.scene, {
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     }),
+ *     ghosted: true
+ * });
+ *
+ * var ghostMaterial = myViewer.scene.ghostMaterial;
+ *
+ * ghostMaterial.fillColor = [0.2, 1.0, 0.2];
+ * ghostMaterial.fillAlpha = 1.0;
+ * ````
+ *
+ * ## Presets
+ *
+ * Let's switch the {@link Scene#ghostMaterial} to one of the presets in {@link EmphasisMaterial#presets}:
+ *
+ * ````javascript
+ * myViewer.ghostMaterial.preset = EmphasisMaterial.presets["sepia"];
+ * ````
+ *
+ * We can also create an EmphasisMaterial from a preset, while overriding properties of the preset as required:
+ *
+ * ````javascript
+ * var myEmphasisMaterial = new EMphasisMaterial(myViewer.scene, {
+ *      preset: "sepia",
+ *      fillColor = [1.0, 0.5, 0.5]
+ * });
+ * ````
+ */
 class EmphasisMaterial extends Material {
 
     /**
@@ -343,9 +218,28 @@ class EmphasisMaterial extends Material {
         return PRESETS;
     };
 
-    init(cfg) {
+    /**
+     @constructor
+     @extends Material
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] The EmphasisMaterial configuration
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     @param [cfg.meta=null] {String:Object} Metadata to attach to this EmphasisMaterial.
+     @param [cfg.fill=true] {Boolean} Indicates whether or not ghost surfaces are filled with color.
+     @param [cfg.fillColor=[0.4,0.4,0.4]] {Array of Number} EmphasisMaterial fill color.
+     @param [cfg.fillAlpha=0.2] {Number}  Transparency of filled ghost faces. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
+     @param [cfg.edges=true] {Boolean} Indicates whether or not ghost edges are visible.
+     @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
+     @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
+     @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
+     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
+     @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "EmphasisMaterial",
@@ -375,7 +269,7 @@ class EmphasisMaterial extends Material {
             if (cfg.edges !== undefined) {
                 this.edges = cfg.edges;
             }
-            if (cfg.edgeColor)  {
+            if (cfg.edgeColor) {
                 this.edgeColor = cfg.edgeColor;
             }
             if (cfg.edgeAlpha !== undefined) {
@@ -560,10 +454,10 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh}es.
 
      The backfaces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property backfaces
      @default false

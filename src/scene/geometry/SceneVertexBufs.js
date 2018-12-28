@@ -11,7 +11,7 @@ const nullVertexBufs = new RenderState({});
 
 class SceneVertexBufs {
 
-    constructor(scene, hasPositions, hasNormals, hasColors, hasUVs, quantized) {
+    constructor(scene, hasPositions, hasNormals, hasColors, hasUVs, compressGeometry) {
 
         this.scene = scene;
         this.gl = scene.canvas.gl;
@@ -26,7 +26,7 @@ class SceneVertexBufs {
         this.normals = hasNormals ? [] : null;
         this.colors = hasColors ? [] : null;
         this.uv = hasUVs ? [] : null;
-        this.quantized = quantized;
+        this.compressGeometry = compressGeometry;
         this.vertexBufs = null;
     }
 
@@ -183,16 +183,16 @@ class SceneVertexBufs {
         }
 
         // if (this.positions) {
-        //     positions = this.quantized ? new Uint16Array(lenPositions) : new Float32Array(lenPositions);
+        //     positions = this.compressGeometry ? new Uint16Array(lenPositions) : new Float32Array(lenPositions);
         // }
         // if (this.normals) {
-        //     normals = this.quantized ? new Uint16Array(lenNormals) : new Float32Array(lenNormals);
+        //     normals = this.compressGeometry ? new Uint16Array(lenNormals) : new Float32Array(lenNormals);
         // }
         // if (this.uv) {
-        //     uv = this.quantized ? new Uint16Array(lenUVs) : new Float32Array(lenUVs);
+        //     uv = this.compressGeometry ? new Uint16Array(lenUVs) : new Float32Array(lenUVs);
         // }
         // if (this.colors) {
-        //     colors = this.quantized ? new Uint16Array(lenColors) : new Float32Array(lenColors);
+        //     colors = this.compressGeometry ? new Uint16Array(lenColors) : new Float32Array(lenColors);
         // }
 
         for (id in this.geometries) {
@@ -211,7 +211,7 @@ class SceneVertexBufs {
                         normalsBuf: null,
                         uvBuf: null,
                         colorsBuf: null,
-                        quantized: this.quantized
+                        compressGeometry: this.compressGeometry
                     });
                     indicesOffset = 0;
                 }
@@ -284,13 +284,13 @@ class SceneVertexBufs {
         const gl = this.scene.canvas.gl;
         let array;
         if (this.positions) {
-            array = this.quantized ? new Uint16Array(this.positions) : new Float32Array(this.positions);
+            array = this.compressGeometry ? new Uint16Array(this.positions) : new Float32Array(this.positions);
             vertexBufs.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, array, array.length, 3, gl.STATIC_DRAW);
             memoryStats.positions += vertexBufs.positionsBuf.numItems;
             this.positions = [];
         }
         if (this.normals) {
-            if (this.quantized) {
+            if (this.compressGeometry) {
                 array = new Int8Array(this.normals);
                 let normalized = true;
                 vertexBufs.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, array, array.length, 3, gl.STATIC_DRAW, normalized);
@@ -308,7 +308,7 @@ class SceneVertexBufs {
             this.colors = [];
         }
         if (this.uv) {
-            array = this.quantized ? new Uint16Array(this.uv) : new Float32Array(this.uv);
+            array = this.compressGeometry ? new Uint16Array(this.uv) : new Float32Array(this.uv);
             vertexBufs.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, array, array.length, 2, gl.STATIC_DRAW);
             memoryStats.uvs += vertexBufs.uvBuf.numItems;
             this.uv = [];
@@ -321,17 +321,17 @@ class SceneVertexBufs {
  */
 const getSceneVertexBufs = (scene, geometry) => {
     const hasPositions = !!geometry.positions;
-    const quantized = !!geometry.quantized;
+    const compressGeometry = !!geometry.compressGeometry;
     const hasNormals = !!geometry.normals;
     const hasColors = !!geometry.colors;
     const hasUVs = !!geometry.uv;
-    const hash = ([scene.id, hasPositions ? "p" : "", quantized ? "c" : "", hasNormals ? "n" : "", hasColors ? "c" : "", hasUVs ? "u" : ""]).join(";");
+    const hash = ([scene.id, hasPositions ? "p" : "", compressGeometry ? "c" : "", hasNormals ? "n" : "", hasColors ? "c" : "", hasUVs ? "u" : ""]).join(";");
     if (!scene._sceneVertexBufs) {
         scene._sceneVertexBufs = {};
     }
     let sceneVertexBufs = scene._sceneVertexBufs[hash];
     if (!sceneVertexBufs) {
-        sceneVertexBufs = new SceneVertexBufs(scene, hasPositions, hasNormals, hasColors, hasUVs, quantized);
+        sceneVertexBufs = new SceneVertexBufs(scene, hasPositions, hasNormals, hasColors, hasUVs, compressGeometry);
         scene._sceneVertexBufs[hash] = sceneVertexBufs;
     }
     return sceneVertexBufs;

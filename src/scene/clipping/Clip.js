@@ -1,81 +1,53 @@
-/**
- A **Clip** is an arbitrarily-aligned World-space clipping plane.
-
- <a href="../../examples/#effects_clipping"><img src="../../../assets/images/screenshots/Clips.png"></img></a>
-
- ## Overview
-
- * Used to slice portions off objects, to create cross-section views or reveal interiors.
- * Is contained within a {@link Clips} belonging to its {@link Scene}.
- * Has a World-space position in {@link Clip/pos} and orientation in {@link Clip/dir}.
- * Discards elements from the half-space in the direction of {@link Clip/dir}.
- * Can be be enabled or disabled via its {@link Clip/active} property.
-
- ## Usage
-
- In the example below, we have an {@link Mesh} that's attached by a {@link Clips}
- that contains two {@link Clip} components.  The first {@link Clip} is on the
- positive diagonal, while the second is on the negative diagonal. The {@link Mesh"}}Mesh's{{/crossLink}} {@link Geometry}
- is a box, which will get two of its corners clipped off.
-
- ````javascript
- // Create a set of Clip planes in the default Scene
- scene.clips.clips = [
-
- // Clip plane on negative diagonal
- new xeokit.Clip({
-         pos: [1.0, 1.0, 1.0],
-         dir: [-1.0, -1.0, -1.0],
-         active: true
-     }),
-
- // Clip plane on positive diagonal
- new xeokit.Clip({
-         pos: [-1.0, -1.0, -1.0],
-         dir: [1.0, 1.0, 1.0],
-         active: true
-     })
- ];
-
- // Create a Mesh in the default Scene, that will be clipped by our Clip planes
- var mesh = new xeokit.Mesh({
-     geometry: new xeokit.SphereGeometry(),
-     clippable: true // Enable clipping (default)
- });
- ````
-
- ### Switching clipping on and off for a Mesh
-
- An {@link Mesh}'s {@link Mesh/clippable} property indicates
- whether or not it is affected by Clip components.
-
- You can switch it at any time, like this:
-
- ```` javascript
- // Disable clipping for the Mesh
- mesh.clippable = false;
-
- // Enable clipping for the Mesh
- mesh.clippable = true;
- ````
-
- @class Clip
- @module xeokit
- @submodule clipping
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Clip configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Clip by ID within the {@link Scene}}Scene{{/crossLink}}.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Clip.
- @param [cfg.active=true] {Boolean} Indicates whether or not this Clip is active.
- @param [cfg.pos=[0,0,0]] {Array of Number} World-space position of the clipping plane.
- @param [cfg.dir=[0,0 -1]] {Array of Number} Vector perpendicular to the plane surface, indicating its orientation.
- @extends Component
- */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 
+/**
+ *  @desc An arbitrarily-aligned World-space clipping plane.
+ *
+ * * Slices portions off objects to create cross-section views or reveal interiors.
+ * * Registered by {@link Clip#id} in {@link Scene#clips}.
+ * * Indicates World-space position in {@link Clip#pos} and orientation in {@link Clip#dir}.
+ * * Discards elements from the half-space in the direction of {@link Clip#dir}.
+ * * Can be be enabled or disabled via {@link Clip#active}.
+ *
+ * ## Usage
+ *
+ * ````javascript
+ * // Create a clip plane on negative diagonal
+ * new Clip(myViewer.scene, {
+ *     pos: [1.0, 1.0, 1.0],
+ *     dir: [-1.0, -1.0, -1.0],
+ *     active: true
+ * }),
+ *
+ * // Create a clip plane on positive diagonal
+ * new Clip(myViewer.scene, {
+ *     pos: [-1.0, -1.0, -1.0],
+ *     dir: [1.0, 1.0, 1.0],
+ *     active: true
+ * });
+ *
+ * // Create a Mesh that clipped by our Clips
+ * var mesh = new Mesh(myViewer.scene, {
+ *      geometry: new SphereGeometry(),
+ *      clippable: true // Enable clipping (default)
+ * });
+ * ````
+ *
+ * ## Selectively enabling or disabling clipping
+ *
+ * {@link Node#clippable} and {@link Mesh#clippable} indicate whether or not the Node or Mesh is affected by Clip components.
+ *
+ * You can switch it at any time, like this:
+ *
+ * ```` javascript
+ * // Disable clipping for the Mesh
+ * mesh.clippable = false;
+ *
+ * // Enable clipping for the Mesh
+ * mesh.clippable = true;
+ * ````
+ */
 class Clip extends Component {
 
     /**
@@ -91,9 +63,15 @@ class Clip extends Component {
         return "Clip";
     }
 
-    init(cfg) {
+    /**
+     * @constructor
+     *
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             active: true,
@@ -119,7 +97,7 @@ class Clip extends Component {
         this._state.active = value !== false;
         this.glRedraw();
         /**
-         Fired whenever this Clip's {@link Clip/active} property changes.
+         Fired whenever this Clip's {@link Clip#active} property changes.
 
          @event active
          @param value {Boolean} The property's new value
@@ -142,7 +120,7 @@ class Clip extends Component {
         this._state.pos.set(value || [0, 0, 0]);
         this.glRedraw();
         /**
-         Fired whenever this Clip's {@link Clip/pos} property changes.
+         Fired whenever this Clip's {@link Clip#pos} property changes.
 
          @event pos
          @param value Float32Array The property's new value
@@ -157,7 +135,7 @@ class Clip extends Component {
     /**
      Vector indicating the orientation of this Clip plane.
 
-     The vector originates at {@link Clip/pos}. Elements on the
+     The vector originates at {@link Clip#pos}. Elements on the
      same side of the vector are clipped.
 
      @property dir
@@ -168,7 +146,7 @@ class Clip extends Component {
         this._state.dir.set(value || [0, 0, -1]);
         this.glRedraw();
         /**
-         Fired whenever this Clip's {@link Clip/dir} property changes.
+         Fired whenever this Clip's {@link Clip#dir} property changes.
 
          @event dir
          @param value {Float32Array} The property's new value

@@ -6,8 +6,8 @@ import {math} from "../math/math.js";
  */
 class SplineCurve extends Curve {
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this.points = cfg.points;
         this.t = cfg.t;
     }

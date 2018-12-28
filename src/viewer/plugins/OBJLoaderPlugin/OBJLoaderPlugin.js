@@ -1,5 +1,5 @@
-import {LoaderPlugin} from "././../../../viewer/LoaderPlugin.js";
-import {GroupModel} from "./../../../scene/models/GroupModel.js";
+import {Plugin} from "././../../../viewer/Plugin.js";
+import {Node} from "./../../../scene/nodes/Node.js";
 import {utils} from "./../../../scene/utils.js";
 import {OBJLoader} from "./OBJLoader.js";
 
@@ -8,9 +8,9 @@ import {OBJLoader} from "./OBJLoader.js";
  *
  * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
  * * See the {@link OBJLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
- * * Can also load metadata for each {@link Model} into {@link Viewer#metadata} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
+ * * Can also load metadata for each {@link Model} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
  * * Can configure each {@link Model} with a local transformation.
- * * Can attach each {@link Model} as a child of a given {@link Object3D}.
+ * * Can attach each {@link Model} as a child of a given {@link Node}.
  *
  * @example
  * // Create a xeokit Viewer
@@ -19,15 +19,15 @@ import {OBJLoader} from "./OBJLoader.js";
  * });
  *
  * // Add an OBJLoader to the Viewer
- * var plugin = new GLTFModelsPlugin(viewer, {
+ * var objLoader = new OBJLoaderPlugin(viewer, {
  *      id: "OBJModels"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the Viewer
- * plugin = viewer.plugins.OBJModels;
+ * objLoader = viewer.plugins.OBJModels;
  *
  * // Load the OBJ
- * const model = plugin.load({
+ * const model = objLoader.load({
  *      id: "myModel",
  *      src: "models/myObjModel.obj",
  *      src: "models/myObjModelMetadata.json",
@@ -46,14 +46,14 @@ import {OBJLoader} from "./OBJLoader.js";
  * model.highlighted = true;
  *
  * // You can unload the Model via the plugin
- * plugin.unload("myModel");
+ * objLoader.unload("myModel");
  *
  * // Or unload it by calling destroy() on the Model itself
  * model.destroy();
  *
  * @class OBJLoaderPlugin
  */
-class OBJLoaderPlugin extends LoaderPlugin {
+class OBJLoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -73,15 +73,9 @@ class OBJLoaderPlugin extends LoaderPlugin {
 
         /**
          * {@link Model}s currently loaded by this Plugin.
-         * @type {{String:GroupModel}}
+         * @type {{String:Node}}
          */
         this.models = {};
-
-        /**
-         * Saves load params for bookmarks.
-         * @private
-         */
-        this._modelLoadParams = {};
     }
 
     /**
@@ -92,8 +86,8 @@ class OBJLoaderPlugin extends LoaderPlugin {
      * @param {*} params  Loading parameters.
      * @param {String} params.id ID to assign to the {@link Model} unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to an OBJ file.
-     * @param {String} [params.metadataSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {Object} [params.parent] The parent {@link Object3D}, if we want to graft the {@link Model} into a xeokit object hierarchy.
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {Object} [params.parent] The parent {@link Node}, if we want to graft the {@link Model} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
      * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s local 3D position.
      * @param {Float32Array} [params.scale=[1,1,1]] The {@link Model}'s local scale.
@@ -102,57 +96,62 @@ class OBJLoaderPlugin extends LoaderPlugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @returns {{Model}} A {@link Model} representing the loaded OBJ model.
      */
-    load(params) {
-        const self = this;
-        const id = params.id;
-        if (!id) {
-            this.error("load() param expected: id");
-            return;
+    load(params = {}) {
+
+        var node = new Node(this.viewer.scene, params);
+
+        const modelId = params.modelId;
+        if (!modelId) {
+            this.error("load() param expected: modelId");
+            return node;
         }
+
         const src = params.src;
         if (!src) {
             this.error("load() param expected: src");
-            return;
+            return node;
         }
-        if (this.viewer.scene.components[id]) {
-            this.error(`Component with this ID already exists in viewer: ${id}`);
-            return;
+
+        if (this.viewer.scene.components[modelId]) {
+            this.error(`Component with this modelId already exists in viewer: ${modelId}`);
+            return node;
         }
-        var groupModel = new GroupModel(this.viewer.scene, params);
-        this._modelLoadParams[id] = utils.apply(params, {});
-        if (params.metadataSrc) {
-            const metadataSrc = params.metadataSrc;
-            utils.loadJSON(metadataSrc, function (metadata) {
-                self.viewer.createMetadata(id, metadata);
-                self._loader.load(groupModel, src, params);
+
+        if (params.metaModelSrc) {
+            const metaModelSrc = params.metaModelSrc;
+            utils.loadJSON(metaModelSrc, function (modelMetadata) {
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                self._loader.load(node, src, params);
             }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metadataSrc}' - ${errMsg}`);
+                self.error(`load(): Failed to load model modelMetadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
             });
         } else {
-            this._loader.load(groupModel, src, params);
+            this._loader.load(node, src, params);
         }
-        this.models[id] = groupModel;
-        groupModel.once("destroyed", () => {
-            delete this.models[id];
-            delete this._modelLoadParams[id];
-            this.viewer.destroyMetadata(id);
-            this.fire("unloaded", id);
+
+        this.models[modelId] = node;
+
+        node.once("destroyed", () => {
+            delete this.models[modelId];
+            this.viewer.metaScene.destroyMetaModel(modelId);
+            this.fire("unloaded", modelId);
         });
-        return groupModel;
+
+        return node;
     }
 
     /**
      * Unloads a {@link Model} that was previously loaded by this Plugin.
      *
-     * @param {String} id  ID of model to unload.
+     * @param {String} modelId  ID of model to unload.
      */
-    unload(id) {
-        const model = this.models;
-        if (!model) {
-            this.error(`unload() model with this ID not found: ${id}`);
+    unload(modelId) {
+        const node = this.models;
+        if (!node) {
+            this.error(`unload() model with this ID not found: ${modelId}`);
             return;
         }
-        model.destroy();
+        node.destroy();
     }
 
     /**
@@ -167,47 +166,11 @@ class OBJLoaderPlugin extends LoaderPlugin {
     }
 
     /**
-     * @private
-     */
-    writeBookmark(bookmark) {
-        bookmark[this.id] = this._modelLoadParams;
-    }
-
-    /**
-     * @private
-     */
-    readBookmarkAsynch(bookmark, ok) {
-        this.clear();
-        var modelLoadParams = bookmark[this.id];
-        if (modelLoadParams) {
-            var modelParamsList = [];
-            for (const id in modelLoadParams) {
-                modelParamsList.push(modelLoadParams[id]);
-            }
-            if (modelParamsList.length === 0) {
-                ok();
-                return;
-            }
-            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);
-        }
-    }
-
-    _loadModel(modelLoadParams, i, ok) {
-        this.load(modelLoadParams[i], () =>{
-            if (i === 0) {
-                ok();
-            } else {
-                this._loadModel(modelLoadParams, i - 1, ok);
-            }
-        });
-    }
-
-    /**
      * Unloads models loaded by this plugin.
      */
     clear() {
-        for (const id in this.models) {
-            this.models[id].destroy();
+        for (const modelId in this.models) {
+            this.models[modelId].destroy();
         }
     }
 

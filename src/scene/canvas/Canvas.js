@@ -1,102 +1,3 @@
-/**
- A **Canvas** manages a {@link Scene}}Scene{{/crossLink}}'s HTML canvas and its WebGL context.
-
- ## Overview
-
- * Each {@link Scene}}Scene{{/crossLink}} provides a Canvas as a read-only property on itself.
- * When a {@link Scene}}Scene{{/crossLink}} is configured with the ID of
- an existing <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>, then
- the Canvas will bind to that, otherwise the Canvas will automatically create its own.
- * A Canvas will fire a {@link Canvas/boundary:event} event whenever
- the <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a> resizes.
- * A Canvas is responsible for obtaining a WebGL context from
- the <a href="http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">HTMLCanvasElement</a>.
- * A Canvas also fires a {@link Canvas/webglContextLost:event} event when the WebGL context is
- lost, and a {@link Canvas/webglContextRestored:event} when it is restored again.
- * The various components within the parent {@link Scene}}Scene{{/crossLink}} will transparently recover on
- the {@link Canvas/webglContextRestored:event} event.
-
- A Canvas also has
-
- * a {@link Progress}, which shows a busy progress when a {@link Model}
- is loading, or when directed by application logic, and
-
- ## Examples
-
- * [Multiple canvases/scenes in a page](../../examples/#scenes_multipleScenes)
- * [Taking canvas snapshots](../../examples/#canvas_snapshot)
- * [Transparent canvas with background image](../../examples/#canvas_transparent)
- * [Canvas with multiple viewports](../../examples/#canvas_multipleViewports)
-
- ## Usage
-
- In the example below, we're creating a {@link Scene}}Scene{{/crossLink}} without specifying an HTML canvas element
- for it. This causes the {@link Scene}}Scene{{/crossLink}}'s Canvas component to create its own default element
- within the page. Then we subscribe to various events fired by that Canvas component.
-
- ```` javascript
- var scene = new xeokit.Scene();
-
- // Get the Canvas off the Scene
- // Since we did not configure the Scene with the ID of a DOM canvas element,
- // the Canvas will create its own canvas element in the DOM
- var canvas = scene.canvas;
-
- // Get the WebGL context off the Canvas
- var gl = canvas.gl;
-
- // Subscribe to Canvas size updates
- canvas.on("boundary", function(boundary) {
-    //...
- });
-
- // Subscribe to WebGL context loss events on the Canvas
- canvas.on("webglContextLost", function() {
-        //...
-     });
-
- // Subscribe to WebGL context restored events on the Canvas
- canvas.on("webglContextRestored", function(gl) {
-        var newContext = gl;
-        //...
-     });
- ````
-
- When we want to bind the Canvas to an existing HTML canvas element, configure the
- {@link Scene} with the ID of the element, like this:
-
- ```` javascript
- // Create a Scene, this time configuring it with the
- // ID of an existing DOM canvas element
- var scene = new xeokit.Scene({
-          canvasId: "myCanvas"
-     });
-
- // ..and the rest of this example can be the same as the previous example.
-
- ````
-
- The {@link Scene} will attempt to get use WebGL 2, or fall back on WebGL 1
- if that's absent. If you just want WebGL 1, disable WebGL 2 like so:
-
- ```` javascript
- var scene = new xeokit.Scene({
-          canvasId: "myCanvas",
-          webgl2 : true
-     });
-
- // ..and the rest of this example can be the same as the previous examples.
-
- ````
-
-
- @class Canvas
- @module xeokit
- @submodule canvas
- @static
- @param {Scene} scene Parent scene
- @extends Component
- */
 import {Canvas2Image} from "../libs/canvas2image.js";
 import {core} from "../core.js";
 import {utils} from '../utils.js';
@@ -114,6 +15,12 @@ const WEBGL_CONTEXT_NAMES = [
     "moz-glweb20"
 ];
 
+/**
+ * @desc Manages its {@link Scene}'s HTML canvas.
+ *
+ * * Provides the HTML canvas element in {@link Canvas#canvas}.
+ * * Has a {@link Spinner}, provided at {@link Canvas#spinner}, which manages the loading progress indicator.
+ */
 class Canvas extends Component {
 
     /**
@@ -129,20 +36,22 @@ class Canvas extends Component {
         return "Canvas";
     }
 
-    init(cfg) {
+    /**
+     * @constructor
+     * @private
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         /**
-         * The HTML canvas. When the {@link Viewer} was configured with the ID of an existing canvas within the DOM,
-         * then this property will be that element, otherwise it will be a full-page canvas that this Canvas has
-         * created by default, with a z-index of -10000.
+         * The HTML canvas.
          *
          * @property canvas
          * @type {HTMLCanvasElement}
          * @final
          */
-        this.canvas = null;
+        this.canvas = cfg.canvas;
 
         /**
          * The WebGL rendering context.
@@ -188,25 +97,6 @@ class Canvas extends Component {
         this.contextAttr.antialias = true;
         this.contextAttr.premultipliedAlpha = this.contextAttr.premultipliedAlpha !== false;
         this.contextAttr.antialias = this.contextAttr.antialias !== false;
-
-        if (!cfg.canvas) { // Canvas not supplied, create one automatically
-            this._createCanvas();
-        } else { // Canvas supplied
-            if (utils.isString(cfg.canvas)) { // Canvas ID supplied - find the canvas
-                this.canvas = document.getElementById(cfg.canvas);
-                if (!this.canvas) { // Canvas not found - create one automatically
-                    this.error("Canvas element not found: " + utils.inQuotes(cfg.canvas) + " - creating default canvas instead.");
-                    this._createCanvas();
-                }
-            } else {
-                this.canvas = cfg.canvas;
-            }
-        }
-
-        if (!this.canvas) {
-            this.error("Faied to create canvas");
-            return;
-        }
 
         // If the canvas uses css styles to specify the sizes make sure the basic
         // width and height attributes match or the WebGL context will use 300 x 150
@@ -503,7 +393,7 @@ class Canvas extends Component {
      and return it via the callback.
 
      When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     possible when you have configured the Canvas's {@link Scene}}Scene{{/crossLink}} to preserve the
+     possible when you have configured the Canvas's {@link Scene} to preserve the
      WebGL drawing buffer, which has a performance overhead.
 
      #### Usage:

@@ -6,9 +6,9 @@ import {Texture} from "../materials/Texture.js";
 
 class Skybox extends Component {
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._skyboxMesh = new Mesh(this, {
 

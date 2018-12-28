@@ -3,8 +3,8 @@ import {math} from "../math/math.js";
 
 class CubicBezierCurve extends Curve {
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this.v0 = cfg.v0;
         this.v1 = cfg.v1;
         this.v2 = cfg.v2;

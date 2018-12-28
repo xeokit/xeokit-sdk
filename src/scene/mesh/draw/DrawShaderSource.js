@@ -82,7 +82,7 @@ function buildVertexLambert(mesh) {
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
     const clipping = clipsState.clips.length > 0;
-    const quantizedGeometry = !!geometryState.quantized;
+    const quantizedGeometry = !!geometryState.compressGeometry;
     let i;
     let len;
     let light;
@@ -318,7 +318,7 @@ function buildVertexDraw(mesh) {
     const normals = hasNormals(mesh);
     const clipping = clipsState.clips.length > 0;
     const receiveShadow = receivesShadow(mesh);
-    const quantizedGeometry = !!geometryState.quantized;
+    const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
     if (normals && material._normalMap) {
         src.push("#extension GL_OES_standard_derivatives : enable");

@@ -1,97 +1,3 @@
-/**
- A **Geometry** defines a mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
-
- ## Usage
-
- * [Geometry compression](#geometry-compression)
- * [Geometry batching](#geometry-batching)
-
- ### Geometry compression
-
- Geometries may be automatically quantized to reduce memory and GPU bus usage. Usually, geometry attributes such as positions
- and normals are stored as 32-bit floating-point numbers. Quantization compresses those attributes to 16-bit integers
- represented on a scale between the minimum and maximum values. Decompression is then done on the GPU, via a simple
- matrix multiplication in the vertex shader.
-
- #### Disabling
-
- Since each normal vector is oct-encoded into two 8-bit unsigned integers, this can cause them to lose precision, which
- may affect the accuracy of any operations that rely on them being perfectly perpendicular to their surfaces. In such
- cases, you may need to disable compression for your geometries and models:
-
- ````javascript
- // Disable geometry compression when loading a Model
- var model = new xeokit.GLTFModel({
-    src: "models/gltf/modern_office/scene.gltf",
-    quantizeGeometry: false // Default is true
-});
-
- // Disable compression when creating a Geometry
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        quantized: false // Default is false
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    })
- });
- ````
-
- ### Geometry batching
-
- Geometries are automatically combined into the same vertex buffer objects (VBOs) so that we reduce the number of VBO
- binds done by WebGL on each frame. VBO binds are expensive, so this really makes a difference when we have large numbers
- of Meshes that share similar Materials (as is often the case in CAD rendering).
-
- #### Disabling
-
- Since combined VBOs need to be rebuilt whenever we destroy a Geometry, we can disable this optimization for individual
- Models and Geometries when we know that we'll be continually creating and destroying them.
-
- ````javascript
- // Disable VBO combination for a GLTFModel
- var model = new xeokit.GLTFModel({
-    src: "models/gltf/modern_office/scene.gltf",
-    combinedGeometry: false // Default is true
-});
-
- // Disable VBO combination for an individual Geometry
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        combined: false // Default is false
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    })
- });
- ````
-
- @class Geometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Geometry.
- @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
- @param [cfg.positions] {Array of Number} Positions array.
- @param [cfg.normals] {Array of Number} Vertex normal vectors array.
- @param [cfg.uv] {Array of Number} UVs array.
- @param [cfg.colors] {Array of Number} Vertex colors.
- @param [cfg.indices] {Array of Number} Indices array.
- @param [cfg.autoVertexNormals=false] {Boolean} Set true to automatically generate normal vectors from the positions and
- indices, if those are supplied.
- @param [cfg.quantized=false] {Boolean} Stores positions, colors, normals and UVs in quantized and oct-encoded formats
- for reduced memory footprint and GPU bus usage.
- @param [cfg.combined=false] {Boolean} Combines positions, colors, normals and UVs into the same WebGL vertex buffers
- with other Geometries, in order to reduce the number of buffer binds performed per frame.
- @param [cfg.edgeThreshold=2] {Number} When a {@link Mesh} renders this Geometry as wireframe,
- this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
- @extends Component
- */
-
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {ArrayBuf} from '../webgl/ArrayBuf.js';
@@ -107,6 +13,98 @@ const IndexArrayType = bigIndicesSupported ? Uint32Array : Uint16Array;
 const nullVertexBufs = new RenderState({});
 const tempAABB = math.AABB3();
 
+/**
+ * @desc Defines a shape for one or more {@link Mesh}es.
+ *
+ * ## Basic Usage
+ *
+ * Creating a {@link Mesh} with a Geometry defining a single triangle and a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *      geometry: new Geometry(myViewer.scene, {
+ *          primitive: "triangles",
+ *          positions:  [0.0, 0.9, 0.0, -0.9,-0.9, 0.0, 0.9, -0.9, 0.0],
+ *          normals:    [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+ *          uv:         [0.0, 0.0, 0.5, 0.0, 1.0, 0.0],
+ *          indices:    [0, 1, 2]
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ * ````
+ *
+ * ## Default Geometry
+ *
+ * A {@link Mesh} created without a Geometry will automatically inherit the
+ * default {@link Scene#geometry}, which is a {@link BoxGeometry} of unit size.
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ * ````
+ *
+ * ## Geometry Compression
+ *
+ * By default, a Geometry automatically quantizes its vertex data to reduce memory and GPU bus usage. Usually the data arrays,
+ * such as positions and normals, are stored as 32-bit floating-point values. Quantization compresses those arrays
+ * to 16-bit integers represented on a scale between their minimum and maximum values. The arrays are then decompressed
+ * on the GPU, via a simple matrix multiplication in the vertex shader.
+ *
+ * Geometry quantizes each normal vector by oct-encoded it into two 8-bit unsigned integers. This can cause them to lose
+ * precision, which may affect the accuracy of any operations that rely on them being perfectly perpendicular to their
+ * surfaces. In such cases, you may need to disable compression, as shown below.
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *      geometry: new Geometry(myViewer.scene, {
+ *          primitive: "triangles",
+ *          positions:  [0.0, 0.9, 0.0, -0.9,-0.9, 0.0, 0.9, -0.9, 0.0],
+ *          normals:    [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+ *          uv:         [0.0, 0.0, 0.5, 0.0, 1.0, 0.0],
+ *          indices:    [0, 1, 2],
+ *          compressGeometry: false // <<------------ Disable automatic geometry compression
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ * ````
+ *
+ * ## Geometry Batching
+ *
+ * Geometries may be optionally combined into the same vertex buffer objects (VBOs) to reduce the number of VBO
+ * binds performed by WebGL when rendering each frame. VBO binds are expensive, so this really makes a difference when
+ * we have large numbers of Meshes that share similar Materials.
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *      geometry: new Geometry(myViewer.scene, {
+ *          primitive: "triangles",
+ *          positions:  [0.0, 0.9, 0.0, -0.9,-0.9, 0.0, 0.9, -0.9, 0.0],
+ *          normals:    [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+ *          uv:         [0.0, 0.0, 0.5, 0.0, 1.0, 0.0],
+ *          indices:    [0, 1, 2],
+ *          combineGeometry:   true // <<------------- Enable geometry batching
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ * ````
+ */
 class Geometry extends Component {
 
     /**
@@ -122,31 +120,60 @@ class Geometry extends Component {
         return "Geometry";
     }
 
-    init(cfg) {
+    /**
+     *
+     @class Geometry
+     @module xeokit
+     @submodule geometry
+     @constructor
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
+     generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Geometry.
+     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     @param [cfg.positions] {Array of Number} Positions array.
+     @param [cfg.normals] {Array of Number} Vertex normal vectors array.
+     @param [cfg.uv] {Array of Number} UVs array.
+     @param [cfg.colors] {Array of Number} Vertex colors.
+     @param [cfg.indices] {Array of Number} Indices array.
+     @param [cfg.autoVertexNormals=false] {Boolean} Set true to automatically generate normal vectors from the positions and
+     indices, if those are supplied.
+     @param [cfg.compressGeometry=false] {Boolean} Stores positions, colors, normals and UVs in compressGeometry and oct-encoded formats
+     for reduced memory footprint and GPU bus usage.
+     @param [cfg.combineGeometry=false] {Boolean} Combines positions, colors, normals and UVs into the same WebGL vertex buffers
+     with other Geometries, in order to reduce the number of buffer binds performed per frame.
+     @param [cfg.edgeThreshold=2] {Number} When a {@link Mesh} renders this Geometry as wireframe,
+     this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
+     @extends Component
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         const self = this;
 
         this._state = new RenderState({ // Arrays for emphasis effects are got from xeokit.Geometry friend methods
-            combined: !!cfg.combined,
-            quantized: !!cfg.quantized,
+            combineGeometry: !!cfg.combineGeometry,
+            compressGeometry: !!cfg.compressGeometry,
             autoVertexNormals: !!cfg.autoVertexNormals,
             primitive: null, // WebGL enum
             primitiveName: null, // String
-            positions: null,    // Uint16Array when quantized == true, else Float32Array
-            normals: null,      // Uint8Array when quantized == true, else Float32Array
+            positions: null,    // Uint16Array when compressGeometry == true, else Float32Array
+            normals: null,      // Uint8Array when compressGeometry == true, else Float32Array
             colors: null,
-            uv: null,           // Uint8Array when quantized == true, else Float32Array
+            uv: null,           // Uint8Array when compressGeometry == true, else Float32Array
             indices: null,
-            positionsDecodeMatrix: null, // Set when quantized == true
-            uvDecodeMatrix: null, // Set when quantized == true
+            positionsDecodeMatrix: null, // Set when compressGeometry == true
+            uvDecodeMatrix: null, // Set when compressGeometry == true
             positionsBuf: null,
             normalsBuf: null,
             colorsbuf: null,
             uvBuf: null,
             indicesBuf: null,
-            indicesBufCombined: null, // Indices into a shared VertexBufs, set when combined == true
+            indicesBufCombined: null, // Indices into a shared VertexBufs, set when combineGeometry == true
             hash: ""
         });
 
@@ -212,11 +239,11 @@ class Geometry extends Component {
         }
 
         if (cfg.positions) {
-            if (this._state.quantized) {
+            if (this._state.compressGeometry) {
                 var bounds = getBounds(cfg.positions, 3);
-                var quantized = quantizeVec3(cfg.positions, bounds.min, bounds.max);
-                state.positions = quantized.quantized;
-                state.positionsDecodeMatrix = quantized.decode;
+                var compressed = quantizeVec3(cfg.positions, bounds.min, bounds.max);
+                state.positions = compressed.compressed;
+                state.positionsDecodeMatrix = compressed.decode;
             } else {
                 state.positions = cfg.positions.constructor === Float32Array ? cfg.positions : new Float32Array(cfg.positions);
             }
@@ -225,17 +252,17 @@ class Geometry extends Component {
             state.colors = cfg.colors.constructor === Float32Array ? cfg.colors : new Float32Array(cfg.colors);
         }
         if (cfg.uv) {
-            if (this._state.quantized) {
+            if (this._state.compressGeometry) {
                 var bounds = getBounds(cfg.uv, 2);
-                var quantized = quantizeVec2(cfg.uv, bounds.min, bounds.max);
-                state.uv = quantized.quantized;
-                state.uvDecodeMatrix = quantized.decode;
+                var compressed = quantizeVec2(cfg.uv, bounds.min, bounds.max);
+                state.uv = compressed.compressed;
+                state.uvDecodeMatrix = compressed.decode;
             } else {
                 state.uv = cfg.uv.constructor === Float32Array ? cfg.uv : new Float32Array(cfg.uv);
             }
         }
         if (cfg.normals) {
-            if (this._state.quantized) {
+            if (this._state.compressGeometry) {
                 state.normals = octEncode(cfg.normals);
             } else {
                 state.normals = cfg.normals.constructor === Float32Array ? cfg.normals : new Float32Array(cfg.normals);
@@ -258,7 +285,7 @@ class Geometry extends Component {
 
         memoryStats.meshes++;
 
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs = getSceneVertexBufs(this.scene, this._state);
             this._sceneVertexBufs.addGeometry(this._state);
         }
@@ -275,7 +302,7 @@ class Geometry extends Component {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, state.indices, state.indices.length, 1, gl.STATIC_DRAW);
             memoryStats.indices += state.indicesBuf.numItems;
         }
-        if (state.combined) {
+        if (state.combineGeometry) {
             if (state.indices) {
                 // indicesBufCombined is created when VertexBufs are built for this Geometry
             }
@@ -285,7 +312,7 @@ class Geometry extends Component {
                 memoryStats.positions += state.positionsBuf.numItems;
             }
             if (state.normals) {
-                let normalized = state.quantized;
+                let normalized = state.compressGeometry;
                 state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.normals, state.normals.length, 3, gl.STATIC_DRAW, normalized);
                 memoryStats.normals += state.normalsBuf.numItems;
             }
@@ -316,7 +343,7 @@ class Geometry extends Component {
         if (state.uv) {
             hash.push("u");
         }
-        if (state.quantized) {
+        if (state.compressGeometry) {
             hash.push("cp");
         }
         hash.push(";");
@@ -350,8 +377,8 @@ class Geometry extends Component {
             return;
         }
         const gl = this.scene.canvas.gl;
-        const edgeIndices = buildEdgeIndices(state.positions, state.indices, state.positionsDecodeMatrix, this._edgeThreshold, state.combined);
-        if (state.combined) {
+        const edgeIndices = buildEdgeIndices(state.positions, state.indices, state.positionsDecodeMatrix, this._edgeThreshold, state.combineGeometry);
+        if (state.combineGeometry) {
             const indicesOffset = this._sceneVertexBufs.getIndicesOffset(state);
             for (let i = 0, len = edgeIndices.length; i < len; i++) {
                 edgeIndices[i] += indicesOffset;
@@ -367,7 +394,7 @@ class Geometry extends Component {
             return;
         }
         const gl = this.scene.canvas.gl;
-        const arrays = math.buildPickTriangles(state.positions, state.indices, state.quantized);
+        const arrays = math.buildPickTriangles(state.positions, state.indices, state.compressGeometry);
         const positions = arrays.positions;
         const colors = arrays.colors;
         this._pickTrianglePositionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
@@ -382,7 +409,7 @@ class Geometry extends Component {
         //     return;
         // }
         // var gl = this.scene.canvas.gl;
-        // var arrays = math.buildPickVertices(state.positions, state.indices, state.quantized);
+        // var arrays = math.buildPickVertices(state.positions, state.indices, state.compressGeometry);
         // var pickVertexPositions = arrays.positions;
         // var pickColors = arrays.colors;
         // this._pickVertexPositionsBuf = new xeokit.renderer.ArrayBuf(gl, gl.ARRAY_BUFFER, pickVertexPositions, pickVertexPositions.length, 3, gl.STATIC_DRAW);
@@ -431,13 +458,13 @@ class Geometry extends Component {
 
      Quantized geometry may not be updated.
 
-     @property quantized
+     @property compressGeometry
      @default false
      @type Boolean
      @final
      */
-    get quantized() {
-        return this._state.quantized;
+    get compressGeometry() {
+        return this._state.compressGeometry;
     }
 
     /**
@@ -447,13 +474,13 @@ class Geometry extends Component {
      the same WebGL vertex buffers with other Geometries, in order to reduce the number of buffer binds
      performed per frame.
 
-     @property combined
+     @property combineGeometry
      @default false
      @type Boolean
      @final
      */
-    get combined() {
-        return this._state.combined;
+    get combineGeometry() {
+        return this._state.combineGeometry;
     }
 
     /**
@@ -467,7 +494,7 @@ class Geometry extends Component {
         if (!this._state.positions) {
             return;
         }
-        if (!this._state.quantized) {
+        if (!this._state.compressGeometry) {
             return this._state.positions;
         }
         if (!this._decompressedPositions) {
@@ -488,17 +515,17 @@ class Geometry extends Component {
             this.error("can't update geometry positions - new positions are wrong length");
             return;
         }
-        if (this._state.quantized) {
+        if (this._state.compressGeometry) {
             const bounds = getBounds(newPositions, 3);
-            const quantized = quantizeVec3(newPositions, bounds.min, bounds.max);
-            newPositions = quantized.quantized; // TODO: Copy in-place
-            state.positionsDecodeMatrix = quantized.decode;
+            const compressed = quantizeVec3(newPositions, bounds.min, bounds.max);
+            newPositions = compressed.compressed; // TODO: Copy in-place
+            state.positionsDecodeMatrix = compressed.decode;
         }
         positions.set(newPositions);
         if (state.positionsBuf) {
             state.positionsBuf.setData(positions);
         }
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs.setPositions(state);
         }
         this._setBoundaryDirty();
@@ -516,7 +543,7 @@ class Geometry extends Component {
         if (!this._state.normals) {
             return;
         }
-        if (!this._state.quantized) {
+        if (!this._state.compressGeometry) {
             return this._state.normals;
         }
         if (!this._decompressedNormals) {
@@ -529,7 +556,7 @@ class Geometry extends Component {
     }
 
     set normals(newNormals) {
-        if (this._state.quantized) {
+        if (this._state.compressGeometry) {
             this.error("can't update geometry normals - quantized geometry is immutable"); // But will be eventually
             return;
         }
@@ -547,7 +574,7 @@ class Geometry extends Component {
         if (state.normalsBuf) {
             state.normalsBuf.setData(normals);
         }
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs.setNormals(state);
         }
         this.glRedraw();
@@ -565,7 +592,7 @@ class Geometry extends Component {
         if (!this._state.uv) {
             return;
         }
-        if (!this._state.quantized) {
+        if (!this._state.compressGeometry) {
             return this._state.uv;
         }
         if (!this._decompressedUV) {
@@ -576,7 +603,7 @@ class Geometry extends Component {
     }
 
     set uv(newUV) {
-        if (this._state.quantized) {
+        if (this._state.compressGeometry) {
             this.error("can't update geometry UVs - quantized geometry is immutable"); // But will be eventually
             return;
         }
@@ -594,7 +621,7 @@ class Geometry extends Component {
         if (state.uvBuf) {
             state.uvBuf.setData(uv);
         }
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs.setUVs(state);
         }
         this.glRedraw();
@@ -612,7 +639,7 @@ class Geometry extends Component {
     }
 
     set colors(newColors) {
-        if (this._state.quantized) {
+        if (this._state.compressGeometry) {
             this.error("can't update geometry colors - quantized geometry is immutable"); // But will be eventually
             return;
         }
@@ -630,7 +657,7 @@ class Geometry extends Component {
         if (state.colorsBuf) {
             state.colorsBuf.setData(colors);
         }
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs.setColors(state);
         }
         this.glRedraw();
@@ -731,7 +758,7 @@ class Geometry extends Component {
     }
 
     _getVertexBufs() {
-        return this._state && this._state.combined ? this._sceneVertexBufs.getVertexBufs(this._state) : nullVertexBufs;
+        return this._state && this._state.combineGeometry ? this._sceneVertexBufs.getVertexBufs(this._state) : nullVertexBufs;
     }
 
     destroy() {
@@ -767,7 +794,7 @@ class Geometry extends Component {
         if (this._pickVertexColorsBuf) {
             this._pickVertexColorsBuf.destroy();
         }
-        if (this._state.combined) {
+        if (this._state.combineGeometry) {
             this._sceneVertexBufs.removeGeometry(state);
         }
         state.destroy();
@@ -822,7 +849,7 @@ var quantizeVec3 = (function () {
         ], scale);
         const decodeMat = math.mulMat4(translate, scale, math.identityMat4());
         return {
-            quantized: quantized,
+            compressed: compressed,
             decode: decodeMat
         };
     };

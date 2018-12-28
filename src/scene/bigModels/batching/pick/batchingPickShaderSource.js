@@ -11,7 +11,7 @@ class BatchingPickShaderSource {
 function buildVertex(layer) {
     const scene = layer.model.scene;
     const clipping = scene._clipsState.clips.length > 0;
-    const quantizedGeometry = !!layer._state.quantized;
+    const quantizedGeometry = !!layer._state.compressGeometry;
     const src = [];
 
     src.push("// Batched geometry picking vertex shader");

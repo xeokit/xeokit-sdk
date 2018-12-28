@@ -32,7 +32,7 @@ function Core() {
     this.version = "1.0.0";
 
     /**
-     Existing {@link Scene}}Scene{{/crossLink}}s , mapped to their IDs
+     Existing {@link Scene}s , mapped to their IDs
      @property scenes
      @namespace xeokit
      @type {{Scene}}
@@ -100,7 +100,7 @@ function Core() {
             renderCountdown: ticksPerRender
         };
         stats.components.scenes++;
-        scene.on("destroyed", () => { // Unregister destroyed scenes
+        scene.once("destroyed", () => { // Unregister destroyed scenes
             sceneIDMap.removeItem(scene.id);
             delete core.scenes[scene.id];
             delete scenesRenderInfo[scene.id];
@@ -110,7 +110,7 @@ function Core() {
 
     /**
      Destroys all user-created {@link Scene}}Scenes{{/crossLink}} and
-     clears the default {@link Scene}}Scene{{/crossLink}}.
+     clears the default {@link Scene}.
 
      @method clear
      @demo foo

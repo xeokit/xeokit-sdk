@@ -1,12 +1,12 @@
 
-import {Model} from "./Model.js";
+import {Node} from "../Model.js";
 import {Mesh} from "../mesh/Mesh.js";
 import {Geometry} from "../geometry/Geometry.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {MetallicMaterial} from "../materials/MetallicMaterial.js";
 import {SpecularMaterial} from "../materials/SpecularMaterial.js";
 import {LambertMaterial} from "../materials/LambertMaterial.js";
-import {Group} from "../objects/Group.js";
+import {Node} from "../nodes/Node.js";
 import {utils} from "../utils.js";
 import {math} from "../math/math.js";
 
@@ -19,11 +19,11 @@ zipExt(zip);
 /**
  * @private
  */
-class XML3DModel extends Model {
+class XML3DModel extends GroupModel {
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         /**
          * Supported 3DXML schema versions
@@ -238,7 +238,7 @@ class XML3DModel extends Model {
  *
  * @method load
  * @static
- * @param {Model} model Model to load into.
+ * @param {Node} model Model to load into.
  * @param {String} src Path to 3DXML file.
  * @param {Object} options Loading options.
  * @param {Function} [ok] Completion callback.
@@ -555,7 +555,7 @@ var parse3DXML = (function () {
                     var translate = [matrix[9], matrix[10], matrix[11]];
                     var mat3 = matrix.slice(0, 9); // Rotation matrix
                     var mat4 = math.mat3ToMat4(mat3, math.identityMat4()); // Convert rotation matrix to 4x4
-                    var childGroup = new Group(ctx.model.scene, {
+                    var childGroup = new Node(ctx.model.scene, {
                         position: translate
                     });
                     if (group) {
@@ -564,13 +564,13 @@ var parse3DXML = (function () {
                         ctx.model.addChild(childGroup, true);
                     }
                     group = childGroup;
-                    childGroup = new Group(ctx.model.scene, {
+                    childGroup = new Node(ctx.model.scene, {
                         matrix: mat4
                     });
                     group.addChild(childGroup, true);
                     group = childGroup;
                 } else {
-                    var childGroup = new Group(ctx.model.scene, {});
+                    var childGroup = new Node(ctx.model.scene, {});
                     if (group) {
                         group.addChild(childGroup, true);
                     } else {
@@ -771,8 +771,8 @@ var parse3DXML = (function () {
         }
         var meshesResult = {
             edgeThreshold: ctx.edgeThreshold || 30,
-            combined: true,
-            quantized: true
+            combineGeometry: true,
+            compressGeometry: true
         };
         var children = node.children;
         for (var i = 0, len = children.length; i < len; i++) {

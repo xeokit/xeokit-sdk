@@ -1,8 +1,8 @@
 import {VectorTextGeometry} from "../../../scene/geometry/VectorTextGeometry.js"
 import {Plugin} from "./../../../viewer/Plugin.js";
 import {Scene} from  "./../../../scene/scene/Scene.js";
-import {AmbientLight} from  "./../../../scene/lighting/AmbientLight.js";
-import {DirLight} from  "./../../../scene/lighting/DirLight.js";
+import {AmbientLight} from  "./../../../scene/lights/AmbientLight.js";
+import {DirLight} from  "./../../../scene/lights/DirLight.js";
 import {Mesh} from  "./../../../scene/mesh/Mesh.js";
 import {CylinderGeometry} from  "./../../../scene/geometry/CylinderGeometry.js";
 import {SphereGeometry}     from  "./../../../scene/geometry/SphereGeometry.js";
@@ -63,7 +63,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // The scene containing this helper
         var scene = new Scene({
-            canvas: helperCanvas,
+            canvasId: canvasId,
             transparent: true
         });
 

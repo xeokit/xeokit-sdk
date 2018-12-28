@@ -149,15 +149,15 @@ OutlineRenderer.prototype.drawMesh = function (frame, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         const vertexBufs = mesh._geometry._getVertexBufs();
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             if (vertexBufs.normalsBuf && this._aNormal) {
-                this._aNormal.bindArrayBuffer(vertexBufs.normalsBuf, vertexBufs.quantized ? gl.BYTE : gl.FLOAT);
+                this._aNormal.bindArrayBuffer(vertexBufs.normalsBuf, vertexBufs.compressGeometry ? gl.BYTE : gl.FLOAT);
                 frame.bindArray++;
             }
             this._lastVertexBufsId = vertexBufs.id;
@@ -171,18 +171,18 @@ OutlineRenderer.prototype.drawMesh = function (frame, mesh) {
         if (this._uUVDecodeMatrix) {
             gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometryState.uvDecodeMatrix);
         }
-        if (geometryState.combined) { // VBOs were bound by the VertexBufs logic above
+        if (geometryState.combineGeometry) { // VBOs were bound by the VertexBufs logic above
             if (geometryState.indicesBufCombined) {
                 geometryState.indicesBufCombined.bind();
                 frame.bindArray++;
             }
         } else {
             if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             if (this._aNormal) {
-                this._aNormal.bindArrayBuffer(geometryState.normalsBuf, geometryState.quantized ? gl.BYTE : gl.FLOAT);
+                this._aNormal.bindArrayBuffer(geometryState.normalsBuf, geometryState.compressGeometry ? gl.BYTE : gl.FLOAT);
                 frame.bindArray++;
             }
             if (geometryState.indicesBuf) {
@@ -198,7 +198,7 @@ OutlineRenderer.prototype.drawMesh = function (frame, mesh) {
         this._lastGeometryId = geometryState.id;
     }
     // Draw (indices bound in prev step)
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         if (geometryState.indicesBufCombined) { // Geometry indices into portion of uber-array
             gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
             frame.drawElements++;

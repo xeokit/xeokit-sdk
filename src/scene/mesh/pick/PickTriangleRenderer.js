@@ -23,7 +23,7 @@ PickTriangleRenderer.get = function (mesh) {
     const hash = [
         mesh.scene.canvas.canvas.id,
         mesh.scene._clipsState.getHash(),
-        mesh._geometry._state.quantized ? "cp" : "",
+        mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ].join(";");
     let renderer = renderers[hash];
@@ -122,7 +122,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
     }
     if (this._uPositionsDecodeMatrix) {
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
-        this._aPosition.bindArrayBuffer(positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+        this._aPosition.bindArrayBuffer(positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
     } else {
         this._aPosition.bindArrayBuffer(positionsBuf);
     }

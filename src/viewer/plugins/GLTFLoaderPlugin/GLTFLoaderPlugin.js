@@ -28,7 +28,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  *
  * // Load the glTF model
  * const model = plugin.load({
- *      id: "myModel",
+ *      modelId: "myModel",
  *      src: "models/mygltfModel.gltf",
  *      metaModelSrc: "models/mygltfModelMetadata.json", // Optional metadata JSON
  *      scale: [0.1, 0.1, 0.1],
@@ -37,7 +37,7 @@ import {GLTFLoader} from "./GLTFLoader.js";
  *      edges: true
  * });
  *
- * // When the Model has loaded, fit it to view
+ * // When the model has loaded, fit it to view
  * model.on("loaded", function() {
  *      viewer.cameraFlight.flyTo(model);
  * });
@@ -76,12 +76,6 @@ class GLTFLoaderPlugin extends Plugin {
          * @type {{String:Node}}
          */
         this.models = {};
-
-        /**
-         * Saves load params for bookmarks.
-         * @private
-         */
-        this._modelLoadParams = {};
     }
 
     /**
@@ -90,11 +84,11 @@ class GLTFLoaderPlugin extends Plugin {
      * Creates a {@link Model} within the Viewer's {@link Scene}.
      *
      * @param {*} params  Loading parameters.
-     * @param {String} params.id ID to assign to the {@link Model}, unique among all components in the Viewer's {@link Scene}.
+     * @param {String} params.modelId ID to assign to the {@link Model}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to a glTF file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file
      * (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {Object} [params.parent] The parent {@link Node}, if we want to graft the {@link Model} into a xeokit object hierarchy.
+     * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the {@link Model} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
      * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s local 3D position.
      * @param {Float32Array} [params.scale=[1,1,1]] The {@link Model}'s local scale.
@@ -107,34 +101,29 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Function} [params.handleNode] Optional callback to control how {@link Node}s and {@link Mesh}s are created as the glTF node hierarchy is parsed. See usage examples.
      * @returns {Model} A {@link Model} representing the loaded glTF model.
      */
-    load(params) {
+    load(params={}) {
+
+        var node = new Node(this.viewer.scene, params);
 
         const self = this;
-        const id = params.id;
+        const modelId = params.modelId;
 
-        if (!id) {
-            this.error("load() param expected: id");
-            return;
+        if (!modelId) {
+            this.error("load() param expected: modelId");
+            return node;
         }
 
         const src = params.src;
 
         if (!src) {
             this.error("load() param expected: src");
-            return;
+            return node;
         }
 
-        if (this.viewer.scene.components[id]) {
-            this.error(`Component with this ID already exists in viewer: ${id}`);
-            return;
+        if (this.viewer.scene.components[modelId]) {
+            this.error(`Component with this ID already exists in viewer: ${modelId}`);
+            return node;
         }
-
-        params = utils.apply(params, {
-            modelId: id // Registers the Node on viewer.scene.models
-        });
-
-        var node = new Node(this.viewer.scene, params);
-        this._modelLoadParams[id] = params;
 
         params.handleNode = params.handleNode || function(modelId, nodeInfo, actions) {
             const name = nodeInfo.name;
@@ -153,22 +142,21 @@ class GLTFLoaderPlugin extends Plugin {
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
                 // self.viewer.metaScene.transform(modelMetadata);
                 // console.log(JSON.stringify(modelMetadata), null, "\t");
-                self.viewer.metaScene.createMetaModel(id, modelMetadata);
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
                 self._loader.load(this, node, src, params);
             }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metaModelSrc}' - ${errMsg}`);
+                self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
             });
         } else {
             this._loader.load(this, node, src, params);
         }
 
-        this.models[id] = node;
+        this.models[modelId] = node;
 
         node.once("destroyed", () => {
-            delete this.models[id];
-            delete this._modelLoadParams[id];
-            this.viewer.metaScene.destroyMetaModel(id);
-            this.fire("unloaded", id);
+            delete this.models[modelId];
+            this.viewer.metaScene.destroyMetaModel(modelId);
+            this.fire("unloaded", modelId);
         });
 
         return node;
@@ -177,12 +165,12 @@ class GLTFLoaderPlugin extends Plugin {
     /**
      * Unloads a {@link Model} that was previously loaded by this Plugin.
      *
-     * @param {String} id  ID of model to unload.
+     * @param {String} modelId  ID of model to unload.
      */
-    unload(id) {
+    unload(modelId) {
         const model = this.models;
         if (!model) {
-            this.error(`unload() model with this ID not found: ${id}`);
+            this.error(`unload() model with this ID not found: ${modelId}`);
             return;
         }
         model.destroy();
@@ -200,47 +188,11 @@ class GLTFLoaderPlugin extends Plugin {
     }
 
     /**
-     * @private
-     */
-    writeBookmark(bookmark) {
-        bookmark[this.id] = this._modelLoadParams;
-    }
-
-    /**
-     * @private
-     */
-    readBookmarkAsynch(bookmark, ok) {
-        this.clear();
-        var modelLoadParams = bookmark[this.id];
-        if (modelLoadParams) {
-            var modelParamsList = [];
-            for (const id in modelLoadParams) {
-                modelParamsList.push(modelLoadParams[id]);
-            }
-            if (modelParamsList.length === 0) {
-                ok();
-                return;
-            }
-            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);
-        }
-    }
-
-    _loadModel(modelLoadParams, i, ok) {
-        this.load(modelLoadParams[i], () => {
-            if (i === 0) {
-                ok();
-            } else {
-                this._loadModel(modelLoadParams, i - 1, ok);
-            }
-        });
-    }
-
-    /**
      * Unloads models loaded by this plugin.
      */
     clear() {
-        for (const id in this.models) {
-            this.models[id].destroy();
+        for (const modelId in this.models) {
+            this.models[modelId].destroy();
         }
     }
 

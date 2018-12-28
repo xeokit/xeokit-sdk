@@ -1,94 +1,23 @@
+import {Mesh} from "./../../../scene/mesh/Mesh.js";
+import {Geometry} from "./../../../scene/geometry/Geometry.js";
+import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
+import {math} from "./../../../scene/math/math.js";
+import {core} from "./../../../scene/core.js";
 
-import {Model} from "./Model.js";
-import {Mesh} from "../mesh/Mesh.js";
-import {Geometry} from "../geometry/Geometry.js";
-import {MetallicMaterial} from "../materials/MetallicMaterial.js";
-import {utils} from "../utils.js";
-import {core} from "../core.js";
 
 /**
  * @private
  */
-class STLModel extends Model {
+class STLLoader {
 
-    init(cfg) {
-        super.init(cfg);
-        this._src = null;
-        this._options = {
-            combineGeometry: cfg.combineGeometry !== false,
-            quantizeGeometry: cfg.quantizeGeometry !== false,
-            edgeThreshold: cfg.edgeThreshold,
-            splitMeshes: cfg.splitMeshes,
-            smoothNormals: cfg.smoothNormals,
-            smoothNormalsAngleThreshold: cfg.smoothNormalsAngleThreshold,
-            edges: cfg.edges
-        };
-        this.src = cfg.src;
-    }
-
-    /**
-     Path to an STL file.
-
-     You can set this to a new file path at any time (except while loading), which will cause the STLModel to load components from
-     the new file (after first destroying any components loaded from a previous file path).
-
-     Fires a {@link STLModel/loaded:event} event when the STL has loaded.
-
-     @property src
-     @type String
-     */
-    set src(value) {
-        if (!value) {
-            return;
-        }
-        if (!utils.isString(value)) {
-            this.error("Value for 'src' should be a string");
-            return;
-        }
-        if (value === this._src) { // Already loaded this STLModel
-
-            /**
-             Fired whenever this STLModel has finished loading components from the STL file
-             specified by {@link STLModel/src}.
-             @event loaded
-             */
-            this.fire("loaded", true, true);
-            return;
-        }
-        this.clear();
-        this._src = value;
-        STLModel.load(this, this._src, this._options);
-    }
-
-    get source() {
-        return this._src;
-    }
-
-
-    destroy() {
-        this.destroyAll();
-        super.destroy();
-    }
-
-
-    /**
-     * Loads STL from a URL into a {@link Model}.
-     *
-     * @method load
-     * @static
-     * @param {Model} model Model to load into.
-     * @param {String} src Path to STL file.
-     * @param {Object} options Loading options.
-     * @param {Function} [ok] Completion callback.
-     * @param {Function} [error] Error callback.
-     */
-    static load(model, src, options, ok, error) {
-        var spinner = model.scene.canvas.spinner;
+    load(plugin, modelNode, src, options, ok, error) {
+        options = options || {};
+        var spinner = plugin.viewer.scene.canvas.spinner;
         spinner.processes++;
-        load(model, src, options, function () {
+        load(plugin, modelNode, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
-                    model.fire("loaded", true, true);
+                    modelNode.fire("loaded", true, true);
                 });
                 if (ok) {
                     ok();
@@ -96,46 +25,14 @@ class STLModel extends Model {
             },
             function (msg) {
                 spinner.processes--;
-                model.error(msg);
+                plugin.error(msg);
                 if (error) {
                     error(msg);
                 }
-                /**
-                 Fired whenever this STLModel fails to load the STL file
-                 specified by {@link STLModel/src}.
-                 @event error
-                 @param msg {String} Description of the error
-                 */
-                model.fire("error", msg);
+                modelNode.fire("error", msg);
             });
     }
-
-    /**
-     * Parses STL into a {@link Model}.
-     *
-     * @method parse
-     * @static
-     * @param {Model} model Model to parse into.
-     * @param {ArrayBuffer} data The STL data.
-     * @param {Object} [options] Parsing options
-     * @param {String} [options.basePath] Base path path to find external resources on, if any.
-     * @param {String} [options.loadBuffer] Callback to load buffer files.
-     */
-    static parse(model, data, options) {
-        options = options || {};
-        var spinner = model.scene.canvas.spinner;
-        spinner.processes++;
-        parse(data, "", options, model, function () {
-                spinner.processes--;
-                model.fire("loaded", true, true);
-            },
-            function (msg) {
-                spinner.processes--;
-                model.error(msg);
-                model.fire("error", msg);
-            });
-    }
-};
+}
 
 var load = (function () {
     function loadData(src, ok, error) {
@@ -151,16 +48,16 @@ var load = (function () {
         request.send(null);
     }
 
-    return function (model, src, options, ok, error) {
+    return function (plugin, model, src, options, ok, error) {
         loadData(src, function (data) { // OK
-                parse(data, model, options);
+                parse(data, plugin, model, options);
                 ok();
             },
             error);
     };
 })();
 
-function parse(data, model, options) {
+function parse(data, plugin, modelNode, options) {
 
     var entityCount = 0;
 
@@ -174,14 +71,14 @@ function parse(data, model, options) {
         }
         var solid = [115, 111, 108, 105, 100];
         for (var i = 0; i < 5; i++) {
-            if (solid[i] != reader.getUint8(i, false)) {
+            if (solid[i] !== reader.getUint8(i, false)) {
                 return true;
             }
         }
         return false;
     }
 
-    function parseBinary(data, model, options) {
+    function parseBinary(data, plugin, modelNode, options) {
         var autoVertexNormals = options.autoVertexNormals;
         var reader = new DataView(data);
         var faces = reader.getUint32(80, true);
@@ -210,15 +107,14 @@ function parse(data, model, options) {
                 alpha = reader.getUint8(index + 9) / 255;
             }
         }
-        var material = new MetallicMaterial(model, { // Share material with all meshes
+        var material = new MetallicMaterial(modelNode, { // Share material with all meshes
             roughness: 0.5
         });
-        // var material = new PhongMaterial(model, { // Share material with all meshes
+        // var material = new PhongMaterial(modelNode, { // Share material with all meshes
         //     diffuse: [0.4, 0.4, 0.4],
         //     reflectivity: 1,
         //     specular: [0.5, 0.5, 1.0]
         // });
-        model._addComponent(material);
         var dataOffset = 84;
         var faceLength = 12 * 4 + 2;
         var positions = [];
@@ -262,7 +158,7 @@ function parse(data, model, options) {
                 }
             }
             if (splitMeshes && newMesh) {
-                addMesh(model, positions, normals, colors, material, options);
+                addMesh(modelNode, positions, normals, colors, material, options);
                 positions = [];
                 normals = [];
                 colors = colors ? [] : null;
@@ -270,11 +166,11 @@ function parse(data, model, options) {
             }
         }
         if (positions.length > 0) {
-            addMesh(model, positions, normals, colors, material, options);
+            addMesh(modelNode, positions, normals, colors, material, options);
         }
     }
 
-    function parseASCII(data, model, options) {
+    function parseASCII(data, plugin, modelNode, options) {
         var faceRegex = /facet([\s\S]*?)endfacet/g;
         var faceCounter = 0;
         var floatRegex = /[\s]+([+-]?(?:\d+.\d+|\d+.|\d+|.\d+)(?:[eE][+-]?\d+)?)/.source;
@@ -306,26 +202,25 @@ function parse(data, model, options) {
                 verticesPerFace++;
             }
             if (normalsPerFace !== 1) {
-                model.error("Error in normal of face " + faceCounter);
+                plugin.error("Error in normal of face " + faceCounter);
             }
             if (verticesPerFace !== 3) {
-                model.error("Error in positions of face " + faceCounter);
+                plugin.error("Error in positions of face " + faceCounter);
             }
             faceCounter++;
         }
-        var material = new MetallicMaterial(model, {
+        var material = new MetallicMaterial(modelNode, {
             roughness: 0.5
         });
-        // var material = new PhongMaterial(model, {
+        // var material = new PhongMaterial(modelNode, {
         //     diffuse: [0.4, 0.4, 0.4],
         //     reflectivity: 1,
         //     specular: [0.5, 0.5, 1.0]
         // });
-        model._addComponent(material);
-        addMesh(model, positions, normals, colors, material, options);
+        addMesh(modelNode, positions, normals, colors, material, options);
     }
 
-    function addMesh(model, positions, normals, colors, material, options) {
+    function addMesh(modelNode, positions, normals, colors, material, options) {
 
         var indices = new Int32Array(positions.length / 3);
         for (var ni = 0, len = indices.length; ni < len; ni++) {
@@ -339,7 +234,7 @@ function parse(data, model, options) {
             math.faceToVertexNormals(positions, normals, options);
         }
 
-        var geometry = new Geometry(model, {
+        var geometry = new Geometry(modelNode, {
             primitive: "triangles",
             positions: positions,
             normals: normals,
@@ -348,15 +243,14 @@ function parse(data, model, options) {
             indices: indices
         });
 
-        var mesh = new Mesh(model, {
-            id: model.id + "#" + entityCount++,
+        var mesh = new Mesh(modelNode, {
+            id: modelNode.id + "#" + entityCount++,
             geometry: geometry,
             material: material,
             edges: options.edges
         });
 
-        model._addComponent(geometry);
-        model.addChild(mesh);
+        modelNode.addChild(mesh);
     }
 
     function ensureString(buffer) {
@@ -391,7 +285,7 @@ function parse(data, model, options) {
 
     var binData = ensureBinary(data);
 
-    return isBinary(binData) ? parseBinary(binData, model, options) : parseASCII(ensureString(data), model, options);
+    return isBinary(binData) ? parseBinary(binData, plugin, modelNode, options) : parseASCII(ensureString(data), plugin, modelNode, options);
 }
 
-export {STLModel}
+export {STLLoader}

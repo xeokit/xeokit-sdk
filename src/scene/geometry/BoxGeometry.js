@@ -1,80 +1,67 @@
-/**
- A **BoxGeometry** is a parameterized {@link Geometry} that defines a box-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
-
- <a href="../../examples/#geometry_primitives_box"><img src="../../assets/images/screenshots/BoxGeometry.png"></img></a>
-
- ## Overview
-
- * Dynamically modify a BoxGeometry's dimensions at any time by updating its {@link BoxGeometry/center}, {@link BoxGeometry/xSize}, {@link BoxGeometry/ySize} and {@link BoxGeometry/zSize} properties.
- * Dynamically switch its primitive type between ````"points"````, ````"lines"```` and ````"triangles"```` at any time by
- updating its {@link Geometry/primitive} property.
-
- ## Examples
-
- * [Textured BoxGeometry](../../examples/#geometry_primitives_box)
-
- ## Usage
-
- An {@link Mesh} with a BoxGeometry and a {@link PhongMaterial} with
- diffuse {@link Texture}:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.BoxGeometry({
-        center: [0,0,0],
-        xSize: 1,  // Half-size on each axis; BoxGeometry is actually two units big on each side.
-        ySize: 1,
-        zSize: 1
-     }),
-
-     material: new xeokit.PhongMaterial({
-        diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-        })
-     })
- });
- ````
-
- @class BoxGeometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this BoxGeometry.
- @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a BoxGeometry are 'points', 'lines' and 'triangles'.
- @param [cfg.center] {Float32Array} 3D point indicating the center position.
- @param [cfg.xSize=1.0] {Number} Half-size on the X-axis.
- @param [cfg.ySize=1.0] {Number} Half-size on the Y-axis.
- @param [cfg.zSize=1.0] {Number} Half-size on the Z-axis.
- @extends Geometry
- */
-
 import {utils} from '../utils.js';
 import {Geometry} from './Geometry.js';
 
+/**
+ * @desc Defines a box shape for one or more {@link Mesh}es.
+ *
+ * ## Usage
+ * Creating a {@link Mesh} with a BoxGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *      geometry: new BoxGeometry(myViewer.scene,{
+ *         center: [0,0,0],
+ *         xSize: 1,  // Half-size on each axis; BoxGeometry is actually two units big on each side.
+ *         ySize: 1,
+ *         zSize: 1
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *         diffuseMap: new Texture(myViewer.scene, {
+ *             src: "textures/diffuse/uvGrid2.jpg"
+ *         })
+ *      })
+ * });
+ ````
+ */
 class BoxGeometry extends Geometry {
 
-    init(cfg) {
+    /**
+     *
+     @class BoxGeometry
+     @module xeokit
+     @submodule geometry
+     @constructor
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
+     generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this BoxGeometry.
+     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a BoxGeometry are 'points', 'lines' and 'triangles'.
+     @param [cfg.center] {Float32Array} 3D point indicating the center position.
+     @param [cfg.xSize=1.0] {Number} Half-size on the X-axis.
+     @param [cfg.ySize=1.0] {Number} Half-size on the Y-axis.
+     @param [cfg.zSize=1.0] {Number} Half-size on the Z-axis.
+     @extends Geometry
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg={}) {
 
         let xSize = cfg.xSize || 1;
         if (xSize < 0) {
-            this.error("negative xSize not allowed - will invert");
+            console.error("negative xSize not allowed - will invert");
             xSize *= -1;
         }
 
         let ySize = cfg.ySize || 1;
         if (ySize < 0) {
-            this.error("negative ySize not allowed - will invert");
+            console.error("negative ySize not allowed - will invert");
             ySize *= -1;
         }
 
         let zSize = cfg.zSize || 1;
         if (zSize < 0) {
-            this.error("negative zSize not allowed - will invert");
+            console.error("negative zSize not allowed - will invert");
             zSize *= -1;
         }
 
@@ -90,7 +77,7 @@ class BoxGeometry extends Geometry {
         const ymax = ySize + centerY;
         const zmax = zSize + centerZ;
 
-        super.init(utils.apply(cfg, {
+        super(owner, utils.apply(cfg, {
 
             // The vertices - eight for our cube, each
             // one spanning three array elements for X,Y and Z

@@ -104,11 +104,11 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
         this._lastMaterialId = materialState.id;
     }
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         const vertexBufs = mesh.vertexBufs;
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             this._lastVertexBufsId = vertexBufs.id;
@@ -121,14 +121,14 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
-        if (geometryState.combined) { // VBOs were bound by the preceding VertexBufs chunk
+        if (geometryState.combineGeometry) { // VBOs were bound by the preceding VertexBufs chunk
             if (geometryState.indicesBufCombined) {
                 geometryState.indicesBufCombined.bind();
                 frame.bindArray++;
             }
         } else {
             if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             if (geometryState.indicesBuf) {
@@ -138,7 +138,7 @@ ShadowRenderer.prototype.drawMesh = function (frame, mesh, light) {
         }
         this._lastGeometryId = geometryState.id;
     }
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         if (geometryState.indicesBufCombined) {
             gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
             frame.drawElements++;

@@ -1,40 +1,14 @@
-/**
- A **Perspective** defines a perspective projection transform for a {@link Camera}.
-
- ## Overview
-
- * A {@link Camera} has a Perspective to configure its perspective projection mode.
-
- ## Examples
-
- * [Camera with perspective projection](../../examples/#camera_perspective)
-
- ## Usage
-
- * See {@link Camera}
-
- @class Perspective
- @module xeokit
- @submodule camera
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Perspective.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene}}Scene{{/crossLink}}.
- @param [cfg.fov=60.0] {Number} Field-of-view angle, in degrees.
- @param [cfg.fovAxis="min"] {String} The field-of-view axis: "x", "y", or "min" to use whichever is currently the minimum.
- @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.
- @param [cfg.far=10000] {Number} Position of the far plane on the View-space Z-axis.
- @author xeolabs / http://xeolabs.com
- @author Artur-Sampaio / https://github.com/Artur-Sampaio
- @extends Component
- */
-
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 
+/**
+ * @desc Defines its {@link Camera}'s perspective projection using a field-of-view angle.
+ *
+ * * Located at {@link Camera#perspective}.
+ * * Implicitly sets the left, right, top, bottom frustum planes using {@link Perspective#fov}.
+ * * {@link Perspective#near} and {@link Perspective#far} specify the distances to the WebGL clipping planes.
+ */
 class Perspective extends Component {
 
     /**
@@ -50,9 +24,13 @@ class Perspective extends Component {
         return "Perspective";
     }
 
-    init(cfg) {
+    /**
+     * @constructor
+     * @private
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             matrix: math.mat4()

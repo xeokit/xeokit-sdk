@@ -53,10 +53,10 @@
  @submodule lighting
  @constructor
  @extends Component
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The Shadow configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Shadow.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] The Shadow configuration
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+ @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Shadow.
  @param [cfg.resolution=[1000,1000]] {Uint16Array} Resolution of the texture map for this Shadow.
  @param [cfg.intensity=1.0] {Number} Intensity of this Shadow.
  */
@@ -78,8 +78,8 @@ class Shadow extends Component {
         return "Shadow";
     }
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         this._state = {
             resolution: math.vec3([1000, 1000]),
             intensity: 1.0

@@ -9,7 +9,7 @@ import {Renderer} from '../webgl/Renderer.js';
 import {Input} from '../input/Input.js';
 import {Viewport} from '../viewport/Viewport.js';
 import {Camera} from '../camera/Camera.js';
-import {DirLight} from '../lighting/DirLight.js';
+import {DirLight} from '../lights/DirLight.js';
 import {BoxGeometry} from '../geometry/BoxGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
@@ -53,17 +53,18 @@ function getMeshIDMap(scene, meshIds) {
  */
 
 /**
- * @desc The container for all 3D scene objects and state.
+ * @desc Contains the components that comprise a 3D scene.
  *
- * * A {@link Viewer} has a single Scene.
+ * * A {@link Viewer} has a single Scene, which it provides in {@link Viewer#scene}.
+ * * Plugins like {@link AxisGizmoPlugin} and {@link PlanViewPlugin} also have their own private Scenes.
  *
- * # Getting the {@link Viewer}'s Scene:
+ * ## Getting a Viewer's Scene
  *
  * ````javascript
  * var scene = myViewer.scene;
  * ````
  *
- * # Creating and accessing components
+ * ## Creating and accessing Scene components
  *
  * As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
  * {@link TorusGeometry} and a {@link PhongMaterial}:
@@ -81,7 +82,7 @@ function getMeshIDMap(scene, meshIds) {
  * teapotMesh.scene.camera.eye = [45, 45, 45];
  * ````
  *
- * Find components by ID in their Scene's {@link Scene/components} map:
+ * Find components by ID in their Scene's {@link Scene#components} map:
  *
  * ````javascript
  * var teapotMesh = scene.components["myMesh"];
@@ -105,7 +106,7 @@ function getMeshIDMap(scene, meshIds) {
  *
  * See {@link Node}, {@link Node} and {@link Model} for how to create and access more sophisticated content.
  *
- * # Controlling the camera
+ * ## Controlling the camera
  *
  * Use the Scene's {@link Camera} to control the current viewpoint and projection:
  *
@@ -121,7 +122,7 @@ function getMeshIDMap(scene, meshIds) {
  * //...
  * ````
  *
- * # Managing the canvas, taking snapshots
+ * ## Managing the canvas, taking snapshots
  *
  * The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
  * as getting getting snapshots, firing resize events etc:
@@ -140,7 +141,7 @@ function getMeshIDMap(scene, meshIds) {
  * });
  * ````
  *
- * # Picking
+ * ## Picking
  *
  * Use {@link Scene#pick} to pick and raycast meshes.
  *
@@ -168,7 +169,7 @@ function getMeshIDMap(scene, meshIds) {
  * }
  * ````
  *
- * # Pick masking
+ * ## Pick masking
  *
  * We can use {@link Scene#pick}'s ````includeMeshes```` and ````excludeMeshes````  options to mask which {@link Mesh}es we attempt to pick.
  *
@@ -206,7 +207,7 @@ function getMeshIDMap(scene, meshIds) {
  *
  * See {@link Scene#pick} for more info on picking.
  *
- * # Querying and tracking boundaries
+ * ## Querying and tracking boundaries
  *
  * Getting a Scene's World-space axis-aligned boundary (AABB):
  *
@@ -231,9 +232,9 @@ function getMeshIDMap(scene, meshIds) {
  * scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of two Objects
  * ````
  *
- * See {@link Scene#getAABB"} and {@link Node} for more info on querying and tracking boundaries.
+ * See {@link Scene#getAABB} and {@link Node} for more info on querying and tracking boundaries.
  *
- * # Managing the viewport
+ * ## Managing the viewport
  *
  * The Scene's {@link Viewport} component manages the WebGL viewport:
  *
@@ -242,7 +243,7 @@ function getMeshIDMap(scene, meshIds) {
  * viewport.boundary = [0, 0, 500, 400];;
  * ````
  *
- * # Controlling rendering
+ * ## Controlling rendering
  *
  * You can configure a Scene to perform multiple "passes" (renders) per frame. This is useful when we want to render the
  * scene to multiple viewports, such as for stereo effects.
@@ -295,7 +296,7 @@ function getMeshIDMap(scene, meshIds) {
  * });
  * ````
  *
- * # Gamma correction
+ * ## Gamma correction
  *
  * Within its shaders, xeokit performs shading calculations in linear space.
  *
@@ -339,11 +340,20 @@ class Scene extends Component {
     }
 
     /**
-     * @private
+     * @constructor
      */
-    init(cfg) {
+    constructor(cfg={}) {
 
-        super.init(cfg);
+        super(null, cfg);
+
+        if (!cfg.canvasId) {
+            throw "Mandatory config expected: canvasId";
+        }
+
+        const canvas = document.getElementById(cfg.canvasId);
+        if (!canvas) {
+            throw "Canvas not found: '" + cfg.canvasId + "'";
+        }
 
         const self = this;
 
@@ -462,9 +472,8 @@ class Scene extends Component {
          */
         this.types = {};
 
-
         /**
-         The {@link Component"}}Component{{/crossLink}} within this Scene, mapped to their IDs.
+         The {@link Component}s within this Scene, each mapped to its {@link Component#id}.
 
          @property components
          @final
@@ -473,7 +482,7 @@ class Scene extends Component {
         this.components = {};
 
         /**
-         The {@link Clip"}}Clip{{/crossLink}} components in this Scene, mapped to their IDs.
+         The {@link Clip}s in this Scene, each mapped to its {@link Clip#id}.
 
          @property clips
          @final
@@ -482,17 +491,16 @@ class Scene extends Component {
         this.clips = {};
 
         /**
-         The {@link PointLight}, {@link DirLight},
-         {@link SpotLight} and {@link AmbientLight} components in this Scene, mapped to their IDs.
+         The {@link Light}s in this Scene, each mapped to its {@link Light#id}.
 
          @property lights
          @final
-         @type {{String:Object}}
+         @type {{String:Light}}
          */
         this.lights = {};
 
         /**
-         The {@link LightMap} components in this Scene, mapped to their IDs.
+         The {@link LightMap}s in this Scene, each mapped to its its {@link LightMap#id}.
 
          @property lightMaps
          @final
@@ -501,7 +509,7 @@ class Scene extends Component {
         this.lightMaps = {};
 
         /**
-         The {@link ReflectionMap} components in this Scene, mapped to their IDs.
+         The {@link ReflectionMap}s in this Scene, mapped to its {@link ReflectionMap#id}.
 
          @property reflectionMaps
          @final
@@ -517,7 +525,7 @@ class Scene extends Component {
          */
         this.canvas = new Canvas(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
-            canvas: cfg.canvas, // Can be canvas ID, canvas element, or null
+            canvas: canvas,
             transparent: transparent,
             backgroundColor: cfg.backgroundColor,
             backgroundImage: cfg.backgroundImage,
@@ -776,6 +784,9 @@ class Scene extends Component {
         dummy = this.material;
         dummy = this.ghostMaterial;
         dummy = this.outlineMaterial;
+        dummy = this.edgeMaterial;
+        dummy = this.selectedMaterial;
+        dummy = this.highlightMaterial;
     }
 
     _addComponent(component) {
@@ -993,7 +1004,6 @@ class Scene extends Component {
             pass: 0
         };
 
-
         if (this._needRecompile) {
             this._recompile();
             this._needRecompile = false;
@@ -1026,7 +1036,7 @@ class Scene extends Component {
              *
              * @event rendering
              * @param {String} sceneID The ID of this Scene.
-             * @param {Number} pass Index of the pass we are about to render (see {@link Scene/passes}).
+             * @param {Number} pass Index of the pass we are about to render (see {@link Scene#passes}).
              */
             this.fire("rendering", renderEvent, true);
 
@@ -1039,7 +1049,7 @@ class Scene extends Component {
              *
              * @event rendering
              * @param {String} sceneID The ID of this Scene.
-             * @param {Number} pass Index of the pass we rendered (see {@link Scene/passes}).
+             * @param {Number} pass Index of the pass we rendered (see {@link Scene#passes}).
              */
             this.fire("rendered", renderEvent, true);
         }
@@ -1076,7 +1086,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/models}.
+     Convenience array of IDs in {@link Scene#models}.
      @property modelIds
      @final
      @type {Array of String}
@@ -1089,7 +1099,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/objects}.
+     Convenience array of IDs in {@link Scene#objects}.
      @property objectIds
      @final
      @type {Array of String}
@@ -1102,7 +1112,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/visibleObjects}.
+     Convenience array of IDs in {@link Scene#visibleObjects}.
      @property visibleObjectIds
      @final
      @type {Array of String}
@@ -1115,7 +1125,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/ghostedObjects}.
+     Convenience array of IDs in {@link Scene#ghostedObjects}.
      @property ghostedObjectIds
      @final
      @type {Array of String}
@@ -1128,7 +1138,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/highlightedObjects}.
+     Convenience array of IDs in {@link Scene#highlightedObjects}.
      @property highlightedObjectIds
      @final
      @type {Array of String}
@@ -1141,7 +1151,7 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene/selectedObjects}.
+     Convenience array of IDs in {@link Scene#selectedObjects}.
      @property selectedObjectIds
      @final
      @type {Array of String}
@@ -1154,7 +1164,7 @@ class Scene extends Component {
     }
 
     /**
-     The number of {@link Scene/tick} that happen between each render or this Scene.
+     The number of {@link Scene#tick} that happen between each render or this Scene.
 
      @property ticksPerRender
      @default 1
@@ -1266,7 +1276,7 @@ class Scene extends Component {
     }
 
     /**
-     The gamma factor to use when {@link Scene/property:gammaOutput} is set true.
+     The gamma factor to use when {@link Scene#property:gammaOutput} is set true.
 
      @property gammaOutput
      @default 1.0
@@ -1286,12 +1296,11 @@ class Scene extends Component {
     }
 
     /**
-     The default geometry for this Scene, which is a {@link BoxGeometry"}}BoxGeometry{{/crossLink}}.
+     The default geometry for this Scene, which is a {@link BoxGeometry}.
 
-     This {@link BoxGeometry"}}BoxGeometry{{/crossLink}} has an {@link Component/id:property"}}id{{/crossLink}} equal to "default.geometry".
+     This {@link BoxGeometry} has an {@link Component#id} equal to "default.geometry".
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
-     {@link Geometry}}Geometry{{/crossLink}} by default.
+     {@link Mesh}s in this Scene are attached to this {@link Geometry} by default.
      @property geometry
      @final
      @type BoxGeometry
@@ -1311,7 +1320,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.material", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link PhongMaterial"}}PhongMaterial{{/crossLink}} by default.
      @property material
      @final
@@ -1332,7 +1341,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.ghostMaterial", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} by default.
      @property ghostMaterial
      @final
@@ -1353,7 +1362,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.highlightMaterial", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link HighlightMaterial"}}HighlightMaterial{{/crossLink}} by default.
      @property highlightMaterial
      @final
@@ -1374,7 +1383,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.selectedMaterial", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link SelectedMaterial"}}SelectedMaterial{{/crossLink}} by default.
      @property selectedMaterial
      @final
@@ -1395,7 +1404,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.edgeMaterial", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link EdgeMaterial"}}EdgeMaterial{{/crossLink}} by default.
      @property edgeMaterial
      @final
@@ -1419,7 +1428,7 @@ class Scene extends Component {
      an {@link Component/id:property"}}id{{/crossLink}} equal to "default.outlineMaterial", with all
      other properties initialised to their default values.
 
-     {@link Mesh"}}Meshes{{/crossLink}} in this Scene are attached to this
+     {@link Mesh}es in this Scene are attached to this
      {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} by default.
      @property outlineMaterial
      @final
@@ -1546,7 +1555,7 @@ class Scene extends Component {
     /**
      Attempts to pick an {@link Mesh"}}Mesh{{/crossLink}} in this Scene.
 
-     Ignores {@link Mesh"}}Meshes{{/crossLink}} with {@link Mesh/pickable:property"}}pickable{{/crossLink}}
+     Ignores {@link Mesh}es with {@link Mesh#pickable:property"}}pickable{{/crossLink}}
      set *false*.
 
      When a {@link Mesh} is picked, fires a "pick" event on the {@link Mesh}
@@ -1627,8 +1636,8 @@ class Scene extends Component {
      directly along the negative View-space Z-axis.
      @param {Float32Array} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
      @param {Float32Array} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
-     @param {Array} [params.includeMeshes] IDs of {@link Mesh"}}Meshes{{/crossLink}} to restrict picking to. When given, ignores {@link Mesh"}}Meshes{{/crossLink}} whose IDs are not in this list.
-     @param {Array} [params.excludeMeshes] IDs of {@link Mesh"}}Meshes{{/crossLink}} to ignore. When given, will pick *through* these {@link Mesh"}}Meshes{{/crossLink}}, as if they were not there.
+     @param {Array} [params.includeMeshes] IDs of {@link Mesh}es to restrict picking to. When given, ignores {@link Mesh}es whose IDs are not in this list.
+     @param {Array} [params.excludeMeshes] IDs of {@link Mesh}es to ignore. When given, will pick *through* these {@link Mesh}es, as if they were not there.
      @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
      @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
      */
@@ -1673,7 +1682,7 @@ class Scene extends Component {
 
      When no arguments are given, returns the total boundary of all objects in the scene.
 
-     Only {@link Mesh"}}Meshes{{/crossLink}} with {@link Mesh/collidable:property"}}collidable{{/crossLink}}
+     Only {@link Mesh}es with {@link Mesh#collidable:property"}}collidable{{/crossLink}}
      set ````true```` are included in the boundary.
 
      # Usage
@@ -1803,7 +1812,7 @@ class Scene extends Component {
      Each Object indicates its visibility status in its {@link Node/visibility} property.
 
      Each visible Object is registered in the {@link Scene}'s
-     {@link Scene/visibleObjects} map while its {@link Node/objectId}
+     {@link Scene#visibleObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setVisible
@@ -1843,7 +1852,7 @@ class Scene extends Component {
      Each Object indicates its selected status in its {@link Node/selected} property.
 
      Each selected Object is registered in the {@link Scene}'s
-     {@link Scene/selectedObjects} map while its {@link Node/objectId}
+     {@link Scene#selectedObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setSelected
@@ -1865,7 +1874,7 @@ class Scene extends Component {
      Each Object indicates its highlight status in its {@link Node/highlighted} property.
 
      Each highlighted Object is registered in the {@link Scene}'s
-     {@link Scene/highlightedObjects} map while its {@link Node/objectId}
+     {@link Scene#highlightedObjects} map while its {@link Node/objectId}
      is assigned a value.
 
      @method setHighlighted
@@ -1887,7 +1896,7 @@ class Scene extends Component {
      Each Object indicates its ghosted status in its {@link Node/ghosted} property.
 
      Each ghosted Object is registered in the {@link Scene}'s
-     {@link Scene/ghostedObjects} map when its {@link Node/objectId}
+     {@link Scene#ghostedObjects} map when its {@link Node/objectId}
      is assigned a value.
 
      @method setGhosted
@@ -1925,7 +1934,7 @@ class Scene extends Component {
      Each Object indicates its outlined status in its {@link Node/outlined} property.
 
      Each outlined Object is registered in the {@link Scene}'s
-     {@link Scene/outlinedObjects} map when its {@link Node/entityType}
+     {@link Scene#outlinedObjects} map when its {@link Node/entityType}
      is assigned a value.
 
      @method setOutlined
@@ -1970,7 +1979,7 @@ class Scene extends Component {
     /**
      Sets a batch of {@link Node}s pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
 
-     Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     Picking is done with {@link Scene#pick}.
 
      @method setPickable
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.

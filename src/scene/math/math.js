@@ -4432,10 +4432,10 @@ const math = {
      *
      * @private
      */
-    buildPickTriangles(positions, indices, quantized) {
+    buildPickTriangles(positions, indices, compressGeometry) {
 
         const numIndices = indices.length;
-        const pickPositions = quantized ? new Uint16Array(numIndices * 9) : new Float32Array(numIndices * 9);
+        const pickPositions = compressGeometry ? new Uint16Array(numIndices * 9) : new Float32Array(numIndices * 9);
         const pickColors = new Uint8Array(numIndices * 12);
         let primIndex = 0;
         let vi;// Positions array index
@@ -4945,7 +4945,7 @@ math.buildEdgeIndices = (function () {
         }
     }
 
-    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combined = false) {
+    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combineGeometry = false) {
         weldVertices(positions, indices);
         buildFaces(indices.length, positionsDecodeMatrix);
         const edgeIndices = [];
@@ -5002,7 +5002,7 @@ math.buildEdgeIndices = (function () {
             edgeIndices.push(ia);
             edgeIndices.push(ib);
         }
-        return (largeIndex || combined) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
+        return (largeIndex || combineGeometry) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
     };
 })();
 

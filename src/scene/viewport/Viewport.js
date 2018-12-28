@@ -53,11 +53,11 @@
  @module xeokit
  @submodule rendering
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Viewport configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent
- {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Viewport.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] Viewport configuration
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent
+ {@link Scene}, generated automatically when omitted.
+ @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Viewport.
  @param [cfg.boundary] {Array of Number} Canvas-space Viewport boundary, given as
  (min, max, width, height). Defaults to the size of the parent
  {@link Scene} {@link Canvas}.
@@ -84,9 +84,9 @@ class Viewport extends Component {
         return "Viewport";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             boundary: [0, 0, 100, 100]

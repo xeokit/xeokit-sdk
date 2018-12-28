@@ -5,11 +5,31 @@ import {utils} from "../utils.js";
 var letters;
 
 /**
- * @private
+ * @desc Defines a wireframe vector text shape for one or more {@link Mesh}es.
+ *
+ * ## Usage
+ * Creating a {@link Mesh} with a VectorTextGeometry and a {@link PhongMaterial}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new VectorTextGeometry(myViewer.scene, {
+ *          origin: [0,0,0],
+ *          text: "On the other side of the screen, it all looks so easy!"
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.3, 1.0, 0.3]
+ *      })
+ * });
+ ````
  */
  class VectorTextGeometry extends Geometry {
 
-    init(cfg) {
+    /**
+     * @constructor
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg={}) {
 
         if (!letters) {
             letters = buildStrokeData();
@@ -52,7 +72,7 @@ var letters;
 
                 c = letters[str.charAt(i)];
 
-                if (c == '\n') {
+                if (c === '\n') {
                     //alert("newline");
                 }
 
@@ -70,7 +90,7 @@ var letters;
                 for (var j = 0; j < pointsLen; j++) {
                     a = c.points[j];
 
-                    if (a[0] == -1 && a[1] == -1) {
+                    if (a[0] === -1 && a[1] === -1) {
                         penUp = 1;
                         needLine = false;
                         continue;
@@ -80,9 +100,9 @@ var letters;
                     positions.push((y + (a[1] * size) * mag) + yOrigin);
                     positions.push(0 + zOrigin);
 
-                    if (p1 == -1) {
+                    if (p1 === -1) {
                         p1 = countVerts;
-                    } else if (p2 == -1) {
+                    } else if (p2 === -1) {
                         p2 = countVerts;
                     } else {
                         p1 = p2;
@@ -106,7 +126,7 @@ var letters;
             y -= 35 * mag * size;
         }
 
-        super.init(utils.apply(cfg, {
+        super(owner, utils.apply(cfg, {
             primitive: "lines",
             positions: positions,
             indices: indices

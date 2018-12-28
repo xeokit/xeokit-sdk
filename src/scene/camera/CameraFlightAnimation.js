@@ -14,50 +14,37 @@ const newLookEyeVec = math.vec3();
 const lookEyeVec = math.vec3();
 
 /**
- * @desc Jumps or flies the {@link Scene} {@link Camera} to look at a given target.
+ * @desc Jumps or flies the {@link Scene}'s {@link Camera} to look at a given target.
  *
- * ## Overview
- *
- * Can be made to either fly or jump to its target.
- * While busy flying to a target, it can be stopped, or redirected to fly to a different target.
+ * * Located at {@link Viewer#cameraFlight}
+ * * Can fly or jump to its target.
+ * * While flying, can be stopped, or redirected to a different target.
  *
  * A CameraFlightAnimation's target can be:
  *
- * specific ````eye````, ````look```` and ````up```` positions,
- * an axis-aligned World-space bounding box (AABB), or
- * an instance or ID of any {@link Component} subtype that provides a World-space AABB.
+ * * specific ````eye````, ````look```` and ````up```` positions,
+ * * an axis-aligned World-space bounding box (AABB), or
+ * * an instance or ID of any {@link Component} subtype that provides a World-space AABB.
  *
- * You can configure its {@link CameraFlightAnimation/fit}
- * and {@link CameraFlightAnimation/fitFOV} properties to make it stop at the point where the target
- * occupies a certain amount of the field-of-view.
+ * Configure {@link CameraFlightAnimation#fit} and {@link CameraFlightAnimation#fitFOV} to make it stop at the point
+ * where the target occupies a certain amount of the field-of-view.
  *
  * ## Flying to a Mesh
  *
  * Flying to a {@link Mesh}:
  *
  * ````Javascript
- * // Create a CameraFlightAnimation that takes one second to fly
- * // the default Scene's Camera to each specified target
- * var cameraFlight = new xeokit.CameraFlightAnimation({
- *    fit: true, // Default
- *    fitFOV: 45, // Default, degrees
- *    duration: 1 // Default, seconds
- * }, function() {
- *           // Arrived
- *       });
- *
- * // Create a Mesh, which gets all the default components
- * var mesh = new Mesh();
+ * var mesh = new Mesh(myViewer.scene);
  *
  * // Fly to the Mesh's World-space AABB
- * cameraFlight.flyTo(mesh);
+ * myViewer.cameraFlight.flyTo(mesh);
  * ````
  * ## Flying to a position
  *
  * Flying the CameraFlightAnimation from the previous example to specified eye, look and up positions:
  *
  * ````Javascript
- * cameraFlight.flyTo({
+ * myViewer.cameraFlight.flyTo({
  *    eye: [-5,-5,-5],
  *    look: [0,0,0]
  *    up: [0,1,0],
@@ -73,7 +60,7 @@ const lookEyeVec = math.vec3();
  * axis-aligned bounding box:
  *
  * ````Javascript
- * cameraFlight.flyTo(mesh.aabb);
+ * myViewer.cameraFlight.flyTo(mesh.aabb);
  * ````
  */
 class CameraFlightAnimation extends Component {
@@ -93,22 +80,11 @@ class CameraFlightAnimation extends Component {
 
     /**
      @constructor
-     @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
-     @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraFlightAnimation.
-     @param [cfg.fit=true] {Boolean} When true, will ensure that when this CameraFlightAnimation has flown or jumped to a boundary
-     it will adjust the distance between the {@link Camera}'s {@link Lookat/eye:property"}}eye{{/crossLink}}
-     and {@link Lookat/look} position so as to ensure that the target boundary is filling the view volume.
-     @param [cfg.fitFOV=45] {Number} How much field-of-view, in degrees, that a target boundary should
-     fill the canvas when fitting the {@link Camera} to the target boundary. Only applies when the {@link Camera}'s active projection is a{@link Perspective}.
-     @param [cfg.trail] {Boolean} When true, will cause this CameraFlightAnimation to point the {@link Camera} in the direction that it is travelling.
-     @param [cfg.duration=1] {Number} Flight duration, in seconds, when calling {@link CameraFlightAnimation/flyTo:method"}}CameraFlightAnimation#flyTo(){{/crossLink}}.
-     @extends Component
-     * @param cfg
+     @private
      */
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._aabbHelper = new Mesh(this, { // Shows a wireframe box for target AABBs
             geometry: new AABBGeometry(this),
@@ -148,7 +124,7 @@ class CameraFlightAnimation extends Component {
     }
 
     /**
-     * Begins flying the {@link Camera}'s {@link Camera} to the given target.
+     * Begins flying the {@link Camera} to the given target.
      *
      *  * When the target is a boundary, the {@link Camera} will fly towards the target
      *    and stop when the target fills most of the canvas.
@@ -164,10 +140,10 @@ class CameraFlightAnimation extends Component {
      * @param [params.eye] {Float32Array} Position to fly the eye position to.
      * @param [params.look] {Float32Array} Position to fly the look position to.
      * @param [params.up] {Float32Array} Position to fly the up vector to.
-     * @param [params.fit=true] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation/fit}.
+     * @param [params.fit=true] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
      * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
-     * fill the canvas on arrival. Overrides {@link CameraFlightAnimation/fitFOV}.
-     * @param [params.duration] {Number} Flight duration in seconds.  Overrides {@link CameraFlightAnimation/duration}.
+     * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
+     * @param [params.duration] {Number} Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
      * @param [params.orthoScale] {Number} TODO: document this
      * @param [callback] {Function} Callback fired on arrival
      * @param [scope] {Object} Optional scope for callback
@@ -336,7 +312,7 @@ class CameraFlightAnimation extends Component {
      * @param [params.up] {Float32Array} Position to fly the up vector to.
      * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
-     * @param [params.fit] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation/fit}.
+     * @param [params.fit] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
      */
     jumpTo(params) {
         this._jumpTo(params);
@@ -528,7 +504,7 @@ class CameraFlightAnimation extends Component {
     }
 
     /**
-     * Flight duration, in seconds, when calling {@link CameraFlightAnimation/flyTo:method"}}CameraFlightAnimation#flyTo(){{/crossLink}}.
+     * Flight duration, in seconds, when calling {@link CameraFlightAnimation#flyTo}.
      *
      * Stops any flight currently in progress.
      *
@@ -547,9 +523,7 @@ class CameraFlightAnimation extends Component {
 
     /**
      * When true, will ensure that this CameraFlightAnimation is flying to a boundary it will always adjust the distance between the
-     * {@link CameraFlightAnimation/camera:property"}}camera{{/crossLink}}'s {@link Lookat/eye:property"}}eye{{/crossLink}}
-     * and {@link Lookat/look}
-     * so as to ensure that the target boundary is always filling the view volume.
+     * {@link Camera#eye} and {@link Camera#look} so as to ensure that the target boundary is always filling the view volume.
      *
      * When false, the eye will remain at its current distance from the look position.
      *
@@ -568,7 +542,7 @@ class CameraFlightAnimation extends Component {
 
     /**
      * How much of the perspective field-of-view, in degrees, that a target {@link Node} or its AABB should
-     * fill the canvas when calling {@link CameraFlightAnimation/flyTo:method"}}CameraFlightAnimation#jumpTo(){{/crossLink}} or {@link CameraFlightAnimation/jumpTo:method}.
+     * fill the canvas when calling {@link CameraFlightAnimation#flyTo} or {@link CameraFlightAnimation#jumpTo}.
      *
      * @property fitFOV
      * @default 45
@@ -583,7 +557,7 @@ class CameraFlightAnimation extends Component {
     }
 
     /**
-     * When true, will cause this CameraFlightAnimation to point the {@link CameraFlightAnimation/camera}
+     * When true, will cause this CameraFlightAnimation to point the {@link Camera}
      * in the direction that it is travelling.
      *
      * @property trail

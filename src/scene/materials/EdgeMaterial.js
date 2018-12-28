@@ -1,190 +1,3 @@
-/**
- An **EdgeMaterial** is a {@link Material} that defines the appearance of attached
- {@link Mesh"}}Meshes{{/crossLink}} when they are highlighted, selected or ghosted.
-
- ## Examples
-
- | <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/HighlightMaterial/teapot.png"></img></a> | <a href="../../examples/#effects_demo_housePlan"><img src="../../assets/images/screenshots/HighlightMaterial/house.png"></img></a> | <a href="../../examples/#effects_demo_gearbox"><img src="../../assets/images/screenshots/HighlightMaterial/gearbox.png"></img></a> | <a href="../../examples/#effects_demo_adam"><img src="../../assets/images/screenshots/HighlightMaterial/adam.png"></img></a>|
- |:------:|:------:|:----:|:-----:|:-----:|
- |[Example 1: Ghost effect](../../examples/#effects_ghost)|[Example 2: Ghost and highlight effects for architecture](../../examples/#effects_demo_housePlan)|[Example 3: Ghost and highlight effects for CAD](../../examples/#effects_demo_gearbox)| [Example 4: Ghost effect for CAD ](../../examples//#effects_demo_adam)|
-
- ## Overview
-
- * Ghost an {@link Mesh} by setting its {@link Mesh/ghost} property ````true````.
- * When ghosted, a Mesh's appearance is controlled by its EdgeMaterial.
- * An EdgeMaterial provides several preset configurations that you can set it to. Select a preset by setting {@link EdgeMaterial/preset} to the preset's ID. A map of available presets is provided in {@link EdgeMaterial/presets:property"}}xeokit.EdgeMaterial.presets{{/crossLink}}.
- * By default, a Mesh uses the {@link Scene}'s global EdgeMaterials, but you can give each Mesh its own EdgeMaterial when you want to customize the effect per-Mesh.
- * Ghost all Meshes in a {@link Model} by setting the Model's {@link Model/ghost} property ````true````. Note that all Meshes in a Model have the Scene's global EdgeMaterial by default.
- * Modify the Scene's global EdgeMaterial to customize it.
-
- ## Usage
-
- * [Ghosting](#ghosting)
- * [Highlighting](#highlighting)
-
- ### Ghosting
-
- In the usage example below, we'll create a Mesh with a ghost effect applied to it. The Mesh gets its own EdgeMaterial for ghosting, and
- has its {@link Mesh/ghost} property set ````true```` to activate the effect.
-
- <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/HighlightMaterial/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 1
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    edgeMaterial: new xeokit.EdgeMaterial({
-        edges: true,
-        edgeColor: [0.2, 1.0, 0.2],
-        edgeAlpha: 1.0,
-        edgeWidth: 2,
-        vertices: true,
-        vertexColor: [0.6, 1.0, 0.6],
-        vertexAlpha: 1.0,
-        vertexSize: 8,
-        fill: true,
-        fillColor: [0, 0, 0],
-        fillAlpha: 0.7
-    }),
-    ghost: true
- });
- ````
-
- Note the **edgeThreshold** configuration on the {@link Geometry} we've created for our
- Mesh. Our EdgeMaterial is configured to draw a wireframe representation of the Geometry, which will have inner edges (ie. edges between
- adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` configuration indicates
- that, for this particular Geometry, an inner edge is one where the angle between the surface normals of adjacent triangles is not
- greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect as needed for particular Geometries.
-
- Here's the example again, this time using the Scene's global EdgeMaterial by default. We'll also modify that EdgeMaterial
- to customize the effect.
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 5
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    ghost: true
- });
-
- var edgeMaterial = mesh.scene.edgeMaterial;
-
- edgeMaterial.edges = true;
- edgeMaterial.edgeColor = [0.2, 1.0, 0.2];
- edgeMaterial.edgeAlpha = 1.0;
- edgeMaterial.edgeWidth = 2;
- ````
-
- ### Highlighting
-
- In the next example, we'll use a ghosting in conjunction with highlighting, to emphasise a couple of objects within
- a gearbox {@link Model}. We'll load the Model from glTF, then ghost all of its Meshes except for two gears, which we'll highlight instead. The ghosted
- Meshes have the Scene's global ghosting EdgeMaterial, which we'll modify. The  highlighted Meshes also have the Scene's global highlighting EdgeMaterial, which we'll modify as well.
-
- <a href="../../examples/#effects_demo_gearbox"><img src="../../assets/images/screenshots/HighlightMaterial/gearbox.png"></img></a>
-
- ````javascript
- var model = new xeokit.GLTFModel({
-     src: "models/gltf/gearbox_conical/scene.gltf",
-     edgeThreshold: 10
- });
-
- model.on("loaded", function() {
-
-    model.meshes["gearbox#77.0"].highlight = true;
-    model.meshes["gearbox#79.0"].highlight = true;
-
-    var edgeMaterial = model.scene.edgeMaterial;
-
-    edgeMaterial.edgeColor = [0.4, 0.4, 1.6];
-    edgeMaterial.edgeAlpha = 0.8;
-    edgeMaterial.edgeWidth = 3;
-
-    var highlightMaterial = model.scene.highlightMaterial;
-
-    highlightMaterial.color = [1.0, 1.0, 1.0];
-    highlightMaterial.alpha = 1.0;
- });
- ````
-
- ## Presets
-
- For convenience, an EdgeMaterial provides several preset configurations that you can set it to, which are provided in
- {@link EdgeMaterial/presets:property"}}xeokit.EdgeMaterial.presets{{/crossLink}}:
-
- ````javascript
- var presets = xeokit.EdgeMaterial.presets;
- ````
-
- The presets look something like this:
-
- ````json
- {
-        "default": {
-            edgeColor: [0.2, 0.2, 0.2],
-            edgeAlpha: 1.0,
-            edgeWidth: 1
-        },
-
-         "sepia": {
-            edgeColor: [0.45, 0.45, 0.41],
-            edgeAlpha: 1.0,
-            edgeWidth: 1
-        },
-
-        //...
- }
- ````
-
- Let's switch the Scene's global default  EdgeMaterial over to the "sepia" preset used in <a href="/examples/#effects_demo_adam">Example 4: Ghost effect for CAD</a>.
-
- ````javascript
- scene.edgeMaterial.preset = "sepia";
- ````
-
- You can also just create an EdgeMaterial from a preset:
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry({
-        edgeThreshold: 5
-    }),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    edgeMaterial: new xeokit.EdgeMaterial({
-        preset: "sepia"
-    });
-    ghost: true
- });
- ````
-
- Note that applying a preset just sets the EdgeMaterial's property values, which you are then free to modify afterwards.
-
- @class EdgeMaterial
- @module xeokit
- @submodule materials
- @constructor
- @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The EdgeMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta=null] {String:Object} Metadata to attach to this EdgeMaterial.
-
- @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
- @param [cfg.edgeAlpha=1.0] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
- @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
-
- @param [cfg.preset] {String} Selects a preset EdgeMaterial configuration - see {@link EdgeMaterial/preset:method"}}EdgeMaterial#preset(){{/crossLink}}.
- */
-
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 
@@ -211,6 +24,80 @@ const PRESETS = {
     }
 };
 
+/**
+ * Defines the appearance of {@link Mesh}es when their edges are emphasised.
+ *
+ * * Emphasise edges of a {@link Mesh} by setting {@link Mesh#edges} ````true````.
+ * * When {@link Mesh}es are within the subtree of a {@link Node}, then setting {@link Node#edges} ````true```` will collectively set {@link Mesh#edges} ````true```` on all those {@link Mesh}es.
+ * * EdgeMaterial provides several presets. Select a preset by setting {@link EdgeMaterial#preset} to the ID of a preset in {@link EdgeMaterial#presets}.
+ * * By default, a {@link Mesh} uses the default EdgeMaterial in {@link Scene#edgeMaterial}, but you can assign each {@link Mesh#edgeMaterial} to a custom EdgeMaterial if required.
+ *
+ * ## Usage
+ *
+ * In the example below, we'll create a {@link Mesh} with its own EdgeMaterial and set {@link Mesh#edges} ````true```` to emphasise its edges.
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new BoxGeometry(myViewer.scene, {
+ *         edgeThreshold: 1
+ *     }),
+ *     material: new PhongMaterial(myViewer.scene, {
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     }),
+ *     edgeMaterial: new EdgeMaterial(myViewer.scene, {
+ *         edgeColor: [0.2, 1.0, 0.2],
+ *         edgeAlpha: 1.0,
+ *         edgeWidth: 2
+ *     }),
+ *     edges: true
+ * });
+ * ````
+ *
+ * Note the ````edgeThreshold```` configuration for the {@link Geometry} on our {@link Mesh}.  EdgeMaterial configures
+ * a wireframe representation of the {@link Geometry}, which will have inner edges (those edges between
+ * adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` indicates that, for
+ * this particular {@link Geometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
+ * is not greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect
+ * as needed for particular Geometries.
+ *
+ * Here's the example again, this time implicitly defaulting to the {@link Scene#edgeMaterial}. We'll also modify that EdgeMaterial
+ * to customize the effect.
+ *
+ * ````javascript
+ * new Mesh({
+ *     geometry: new TeapotGeometry(myViewer.scene, {
+ *         edgeThreshold: 5
+ *     }),
+ *     material: new PhongMaterial(myViewer.scene, {
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     }),
+ *     edges: true
+ * });
+ *
+ * var edgeMaterial = myViewer.scene.edgeMaterial;
+ *
+ * edgeMaterial.edgeColor = [0.2, 1.0, 0.2];
+ * edgeMaterial.edgeAlpha = 1.0;
+ * edgeMaterial.edgeWidth = 2;
+ * ````
+*
+ *  ## Presets
+ *
+ * Let's switch the {@link Scene#edgeMaterial} to one of the presets in {@link EdgeMaterial#presets}:
+ *
+ * ````javascript
+ * myViewer.edgeMaterial.preset = EdgeMaterial.presets["sepia"];
+ * ````
+ *
+ * We can also create an EdgeMaterial from a preset, while overriding properties of the preset as required:
+ *
+ * ````javascript
+ * var myEdgeMaterial = new EdgeMaterial(myViewer.scene, {
+ *      preset: "sepia",
+ *      edgeColor = [1.0, 0.5, 0.5]
+ * });
+ * ````
+ */
 class EdgeMaterial extends Material {
 
     /**
@@ -237,9 +124,27 @@ class EdgeMaterial extends Material {
         return PRESETS;
     };
 
-    init(cfg) {
+    /**
 
-        super.init(cfg);
+     @class EdgeMaterial
+     @module xeokit
+     @submodule materials
+     @constructor
+     @extends Material
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] The EdgeMaterial configuration
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     @param [cfg.meta=null] {String:Object} Metadata to attach to this EdgeMaterial.
+
+     @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
+     @param [cfg.edgeAlpha=1.0] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
+     @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
+
+     @param [cfg.preset] {String} Selects a preset EdgeMaterial configuration - see {@link EdgeMaterial#preset:method"}}EdgeMaterial#preset(){{/crossLink}}.
+     */
+    constructor(owner, cfg = {}) {
+
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "EdgeMaterial",

@@ -1,86 +1,74 @@
-/**
- A **CylinderGeometry** is a parameterized {@link Geometry} that defines a cylinder-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
-
- <a href="../../examples/#geometry_primitives_cylinder"><img src="../../assets/images/screenshots/CylinderGeometry.png"></img></a>
-
- ## Examples
-
- * [Textured CylinderGeometry](../../examples/#geometry_primitives_cylinder)
-
- ## Usage
-
- An {@link Mesh} with a CylinderGeometry and a {@link PhongMaterial} with
- diffuse {@link Texture}:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.CylinderGeometry({
-         center: [0,0,0],
-         radiusTop: 2.0,
-         radiusBottom: 2.0,
-         height: 5.0,
-         radialSegments: 20,
-         heightSegments: 1,
-         openEnded: false
-     }),
-
-     material: new xeokit.PhongMaterial({
-        diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-        })
-     })
- });
- ````
-
- @class CylinderGeometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CylinderGeometry.
- @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a CylinderGeometry are 'points', 'lines' and 'triangles'.
- @param [cfg.center] {Float32Array} 3D point indicating the center position of the CylinderGeometry.
- @param [cfg.radiusTop=1] {Number} Radius of top.
- @param [cfg.radiusBottom=1] {Number} Radius of bottom.
- @param [cfg.height=1] {Number} Height.
- @param [cfg.radialSegments=60] {Number} Number of segments around the CylinderGeometry.
- @param [cfg.heightSegments=1] {Number} Number of vertical segments.
- @param [cfg.openEnded=false] {Boolean} Whether or not the CylinderGeometry has solid caps on the ends.
- @param [cfg.lod=1] {Number} Level-of-detail, in range [0..1].
- @extends Geometry
- */
 import {utils} from '../utils.js';
 import {Geometry} from './Geometry.js';
 
+/**
+ * @desc Defines a cylindrical shape for one or more {@link Mesh}es.
+ *
+ * ## Usage
+ * Creating a {@link Mesh} with a CylinderGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new CylinderGeometry(myViewer.scene, {
+ *          center: [0,0,0],
+ *          radiusTop: 2.0,
+ *          radiusBottom: 2.0,
+ *          height: 5.0,
+ *          radialSegments: 20,
+ *          heightSegments: 1,
+ *          openEnded: false
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ *  });
+ ````
+ */
 class CylinderGeometry extends Geometry {
 
-    init(cfg) {
+    /**
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
+     generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this CylinderGeometry.
+     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a CylinderGeometry are 'points', 'lines' and 'triangles'.
+     @param [cfg.center] {Float32Array} 3D point indicating the center position of the CylinderGeometry.
+     @param [cfg.radiusTop=1] {Number} Radius of top.
+     @param [cfg.radiusBottom=1] {Number} Radius of bottom.
+     @param [cfg.height=1] {Number} Height.
+     @param [cfg.radialSegments=60] {Number} Number of segments around the CylinderGeometry.
+     @param [cfg.heightSegments=1] {Number} Number of vertical segments.
+     @param [cfg.openEnded=false] {Boolean} Whether or not the CylinderGeometry has solid caps on the ends.
+     @param [cfg.lod=1] {Number} Level-of-detail, in range [0..1].
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
         let radiusTop = cfg.radiusTop || 1;
         if (radiusTop < 0) {
-            this.error("negative radiusTop not allowed - will invert");
+            console.error("negative radiusTop not allowed - will invert");
             radiusTop *= -1;
         }
 
         let radiusBottom = cfg.radiusBottom || 1;
         if (radiusBottom < 0) {
-            this.error("negative radiusBottom not allowed - will invert");
+            console.error("negative radiusBottom not allowed - will invert");
             radiusBottom *= -1;
         }
 
         let height = cfg.height || 1;
         if (height < 0) {
-            this.error("negative height not allowed - will invert");
+            console.error("negative height not allowed - will invert");
             height *= -1;
         }
 
         let radialSegments = cfg.radialSegments || 32;
         if (radialSegments < 0) {
-            this.error("negative radialSegments not allowed - will invert");
+            console.error("negative radialSegments not allowed - will invert");
             radialSegments *= -1;
         }
         if (radialSegments < 3) {
@@ -89,7 +77,7 @@ class CylinderGeometry extends Geometry {
 
         let heightSegments = cfg.heightSegments || 1;
         if (heightSegments < 0) {
-            this.error("negative heightSegments not allowed - will invert");
+            console.error("negative heightSegments not allowed - will invert");
             heightSegments *= -1;
         }
         if (heightSegments < 1) {
@@ -266,7 +254,7 @@ class CylinderGeometry extends Geometry {
             }
         }
 
-        super.init(utils.apply(cfg, {
+        super(owner, utils.apply(cfg, {
             positions: positions,
             normals: normals,
             uv: uvs,

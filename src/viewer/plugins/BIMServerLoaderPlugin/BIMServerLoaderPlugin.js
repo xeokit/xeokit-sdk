@@ -158,7 +158,7 @@ class BIMServerLoaderPlugin extends Plugin {
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.id ID to assign to the {@link Model},
+     * @param {String} params.modelId ID to assign to the {@link Model},
      * unique among all components in the Viewer's {@link Scene}.
      *
      * @param {Number} params.poid ID of the model's project within BIMServer.
@@ -201,7 +201,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
         const self = this;
 
-        const modelId = params.id;
+        const modelId = params.modelId;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -215,7 +215,7 @@ class BIMServerLoaderPlugin extends Plugin {
         var onTick;
 
         if (!modelId) {
-            this.error("load() param expected: id");
+            this.error("load() param expected: modelId");
             return;
         }
 
@@ -341,8 +341,8 @@ class BIMServerLoaderPlugin extends Plugin {
                             positions: positions,
                             normals: normals,
                             indices: indices,
-                            quantized: quantizeGeometry,
-                            combined: combineGeometry
+                            compressGeometry: quantizeGeometry,
+                            combineGeometry: combineGeometry
                         });
                     },
 

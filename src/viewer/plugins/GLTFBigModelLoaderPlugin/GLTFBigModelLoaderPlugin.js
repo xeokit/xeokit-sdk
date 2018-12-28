@@ -90,7 +90,7 @@ class GLTFBigModelLoader extends Plugin {
      Loads a large-scale glTF model from the file system into the viewer.
 
      @param params {*} Configs
-     @param [params.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
+     @param [params.id] {String} Optional ID, unique among all components in the parent {@link Scene},
      generated automatically when omitted.
      @param [params.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
      @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.
@@ -112,7 +112,7 @@ class GLTFBigModelLoader extends Plugin {
      @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
      @param [params.src] {String} Path to a glTF file.
      @param  [params.metaModelSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     @param [params.lambertMaterials=false] {Boolean} When true, gives each {@link Mesh} the same {@link LambertMaterial} and a {@link Mesh/colorize} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
+     @param [params.lambertMaterials=false] {Boolean} When true, gives each {@link Mesh} the same {@link LambertMaterial} and a {@link Mesh#colorize} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
      @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.
      @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.
      @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.

@@ -134,10 +134,10 @@ var tempMat4 = math.mat4();
  @module xeokit
  @submodule models
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] Configs
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+ @param {String:Object} [cfg.meta] Optional map of user-defined metadata.
  @param [cfg.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
@@ -191,9 +191,9 @@ class BigModel extends Component {
         return true;
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._aabb = math.collapseAABB3();
         this._layers = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
@@ -832,7 +832,7 @@ class BigModel extends Component {
     /**
      Indicates if this BigModel is clippable.
 
-     Clipping is done by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} component.
+     Clipping is done by the {@link Scene}'s {@link Clips} component.
 
      @property clippable
      @default true

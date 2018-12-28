@@ -13,7 +13,7 @@ import {math} from "../../../scene/math/math.js"
  * });
  *
  * // Add a GLTFModelsPlugin
- * var gltfModelsPlugin = new GLTFModelsPlugin(viewer, {
+ * var gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
  *      id: "GLTFModels"
  * });
  *
@@ -23,7 +23,7 @@ import {math} from "../../../scene/math/math.js"
  * });
  *
  * // Load a glTF model
- * gltfModelsPlugin.load({
+ * gltfLoaderPlugin.load({
  *      id: "myModel",
  *      src: "./models/gltf/mygltfmodel.gltf"
  * });

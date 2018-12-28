@@ -1,65 +1,43 @@
-/**
- A **Fresnel** specifies a Fresnel effect for attached {@link PhongMaterial"}}PhongMaterials{{/crossLink}}.
-
- <a href="../../examples/#materials_phong_fresnel"><img src="../../assets/images/screenshots/PhongMaterial/fresnelWide.png"></img></a>
-
- ## Overview
-
- * Fresnels are grouped within {@link PhongMaterial}s, which are attached to
- {@link Mesh"}}Meshes{{/crossLink}}.
-
- ## Examples
-
- * [PhongMaterials with Fresnels](../../examples/#materials_phong_fresnel)
-
- ## Usage
-
- ````javascript
- var mesh = new xeokit.Mesh({
-
-     material: new xeokit.PhongMaterial({
-         ambient: [0.3, 0.3, 0.3],
-         shininess: 30,
-
-         diffuseFresnel: new xeokit.Fresnel({
-             edgeColor: [1.0, 1.0, 1.0],
-             centerColor: [0.0, 0.0, 0.0],
-             power: 4,
-             bias: 0.6
-         }),
-
-         specularFresnel: new xeokit.Fresnel({
-             edgeColor: [1.0, 1.0, 1.0],
-             centerColor: [0.0, 0.0, 0.0],
-             power: 4,
-             bias: 0.2
-         })
-     }),
-
-     new xeokit.TorusGeometry()
- });
- ````
-
- @class Fresnel
- @module xeokit
- @submodule materials
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Fresnel.
- @param [cfg.edgeColor=[ 0.0, 0.0, 0.0 ]] {Array of Number} Color used on edges.
- @param [cfg.centerColor=[ 1.0, 1.0, 1.0 ]] {Array of Number} Color used on center.
- @param [cfg.edgeBias=0] {Number} Bias at the edge.
- @param [cfg.centerBias=1] {Number} Bias at the center.
- @param [cfg.power=0] {Number} The power.
- @extends Component
- */
-
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
 
+/**
+ * Configures Fresnel effects for {@link PhongMaterial}s.
+ *
+ * Fresnels are attached to {@link PhongMaterial}s, which are attached to {@link Mesh}es.
+ *
+ * ## Usage
+ *
+ * In the example below we'll create a {@link Mesh} with a {@link PhongMaterial} that uses two Fresnels to configure
+ * Fresnel effects for diffuse and specular illumination.
+ *
+ *  ````javascript
+ * var mesh = new Mesh(myViewer.scene, {
+ *
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          ambient: [0.3, 0.3, 0.3],
+ *          shininess: 30,
+ *
+ *          diffuseFresnel: new Fresnel(myViewer.scene, {
+ *              edgeColor: [1.0, 1.0, 1.0],
+ *              centerColor: [0.0, 0.0, 0.0],
+ *              power: 4,
+ *              bias: 0.6
+ *          }),
+ *
+ *          specularFresnel: new Fresnel(myViewer.scene, {
+ *              edgeColor: [1.0, 1.0, 1.0],
+ *              centerColor: [0.0, 0.0, 0.0],
+ *              power: 4,
+ *              bias: 0.2
+ *          })
+ *      }),
+ *
+ *      new TorusGeometry(myViewer.scene)
+ * });
+ * ````
+ */
 class Fresnel extends Component {
 
     /**
@@ -75,9 +53,27 @@ class Fresnel extends Component {
         return "Fresnel";
     }
 
-    init(cfg) {
+    /**
+     @class Fresnel
+     @module xeokit
+     @submodule materials
+     @constructor
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Fresnel.
+     @param [cfg.edgeColor=[ 0.0, 0.0, 0.0 ]] {Array of Number} Color used on edges.
+     @param [cfg.centerColor=[ 1.0, 1.0, 1.0 ]] {Array of Number} Color used on center.
+     @param [cfg.edgeBias=0] {Number} Bias at the edge.
+     @param [cfg.centerBias=1] {Number} Bias at the center.
+     @param [cfg.power=0] {Number} The power.
+     @extends Component
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             edgeColor: math.vec3([0, 0, 0]),

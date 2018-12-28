@@ -1,44 +1,17 @@
-/**
- An **Ortho** defines an orthographic projection transform for a {@link Camera}.
 
- ## Overview
-
- * A {@link Camera} has an Ortho to configure its orthographic projection mode.
- * An Ortho works like Blender's orthographic projection, where the positions of the left, right, top and bottom planes are
- implicitly specified with a single {@link Ortho/scale} property, which causes the frustum to be symmetrical on X and Y axis, large enough to
- contain the number of units given by {@link Ortho/scale}.
- * An Ortho's {@link Ortho/near} and {@link Ortho/far} properties
- specify the distances to the WebGL clipping planes.
-
-
- ## Examples
-
- * [Camera with orthographic projection](../../examples/#camera_orthographic)
-
- ## Usage
-
- * See {@link Camera}
-
- @class Ortho
- @module xeokit
- @submodule camera
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Ortho.
- @param [cfg.parent] {String|Transform} ID or instance of a parent {@link Transform} within the same {@link Scene}}Scene{{/crossLink}}.
- @param [cfg.scale=1.0] {Number} Scale factor for this Ortho's extents on X and Y axis.
- @param [cfg.near=0.1] {Number} Position of the near plane on the View-space Z-axis.
- @param [cfg.far=10000] {Number} Position of the far plane on the positive View-space Z-axis.
- @author xeolabs / http://xeolabs.com
- @author Artur-Sampaio / https://github.com/Artur-Sampaio
- @extends Component
- */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
 
+/**
+ * @desc Defines its {@link Camera}'s orthographic projection as a box-shaped view volume.
+ *
+ * * Located at {@link Camera#frustum}.
+ * * Works like Blender's orthographic projection, where the positions of the left, right, top and bottom planes are implicitly
+ * indicated with a single {@link Ortho#scale} property, which causes the frustum to be symmetrical on X and Y axis, large enough to
+ * contain the number of units given by {@link Ortho#scale}.
+ * * {@link Ortho#near} and {@link Ortho#far} indicated the distances to the WebGL clipping planes.
+ */
 class Ortho extends Component {
 
     /**
@@ -54,9 +27,13 @@ class Ortho extends Component {
         return "Ortho";
     }
 
-    init(cfg) {
+    /**
+     * @constructor
+     * @private
+     */
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             matrix: math.mat4()
@@ -114,7 +91,7 @@ class Ortho extends Component {
 
      Clamps to minimum value of ````0.01```.
 
-     Fires a {@link Ortho/scale:event} event on change.
+     Fires a {@link Ortho#scale:event} event on change.
 
      @property scale
      @default 1.0
@@ -131,7 +108,7 @@ class Ortho extends Component {
         this._scale = value;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's {@link Ortho/scale} property changes.
+         Fired whenever this Ortho's {@link Ortho#scale} property changes.
 
          @event scale
          @param value The property's new value
@@ -146,7 +123,7 @@ class Ortho extends Component {
     /**
      Position of this Ortho's near plane on the positive View-space Z-axis.
 
-     Fires a {@link Ortho/near:event} event on change.
+     Fires a {@link Ortho#near:event} event on change.
 
      @property near
      @default 0.1
@@ -156,7 +133,7 @@ class Ortho extends Component {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's  {@link Ortho/near} property changes.
+         Fired whenever this Ortho's  {@link Ortho#near} property changes.
 
          @event near
          @param value The property's new value
@@ -171,7 +148,7 @@ class Ortho extends Component {
     /**
      Position of this Ortho's far plane on the positive View-space Z-axis.
 
-     Fires a {@link Ortho/far:event} event on change.
+     Fires a {@link Ortho#far:event} event on change.
 
      @property far
      @default 10000.0
@@ -181,7 +158,7 @@ class Ortho extends Component {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
         /**
-         Fired whenever this Ortho's {@link Ortho/far} property changes.
+         Fired whenever this Ortho's {@link Ortho#far} property changes.
 
          @event far
          @param value The property's new value
@@ -196,7 +173,7 @@ class Ortho extends Component {
     /**
      The Ortho's projection transform matrix.
 
-     Fires a {@link Ortho/matrix:event} event on change.
+     Fires a {@link Ortho#matrix:event} event on change.
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

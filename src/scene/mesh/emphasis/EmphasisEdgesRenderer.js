@@ -28,7 +28,7 @@ EmphasisEdgesRenderer.get = function (mesh) {
         mesh.scene.id,
         mesh.scene.gammaOutput ? "go" : "", // Gamma input not needed
         mesh.scene._clipsState.getHash(),
-        mesh._geometry._state.quantized ? "cp" : "",
+        mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ].join(";");
     let renderer = renderers[hash];
@@ -113,11 +113,11 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         const vertexBufs = mesh._geometry._getVertexBufs();
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             this._lastVertexBufsId = vertexBufs.id;
@@ -135,9 +135,9 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
             if (this._uPositionsDecodeMatrix) {
                 gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
             }
-            if (!geometryState.combined) { // VBOs were bound by the VertexBufs logic above
+            if (!geometryState.combineGeometry) { // VBOs were bound by the VertexBufs logic above
                 if (this._aPosition) {
-                    this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                    this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                     frame.bindArray++;
                 }
             }

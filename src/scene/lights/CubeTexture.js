@@ -1,23 +1,3 @@
-/**
- A **CubeTexture** specifies a cube texture map.
-
- ## Overview
-
- See {@link Lights} for an example of how to use CubeTextures for light and reflection mapping.
-
- @class CubeTexture
- @module xeokit
- @submodule lighting
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CubeTexture.
- @param [cfg.src=null] {Array of String} Paths to six image files to load into this CubeTexture.
- @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
- @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
- @extends Component
- */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {Texture2D} from '../webgl/Texture2D.js';
@@ -49,7 +29,10 @@ function nextHighestPowerOfTwo(x) {
     return x + 1;
 }
 
-class CubeTexture extends Component{
+/**
+ * @desc A cube texture map.
+ */
+class CubeTexture extends Component {
 
     /**
      JavaScript class name for this Component.
@@ -64,9 +47,21 @@ class CubeTexture extends Component{
         return "CubeTexture";
     }
 
-    init(cfg) {
+    /**
+     *  @constructor
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] Configs
+     @param {String} [cfg.id] Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this CubeTexture.
+     @param [cfg.src=null] {Array of String} Paths to six image files to load into this CubeTexture.
+     @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
+     @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         const gl = this.scene.canvas.gl;
 
@@ -93,7 +88,7 @@ class CubeTexture extends Component{
         return !!value;
     }
 
-    _checkEncoding (value) {
+    _checkEncoding(value) {
         value = value || "linear";
         if (value !== "linear" && value !== "sRGB" && value !== "gamma") {
             this.error("Unsupported value for 'encoding': '" + value + "' - supported values are 'linear', 'sRGB', 'gamma'. Defaulting to 'linear'.");
@@ -102,7 +97,7 @@ class CubeTexture extends Component{
         return value;
     }
 
-    _webglContextRestored () {
+    _webglContextRestored() {
         const gl = this.scene.canvas.gl;
         this._state.texture = null;
         // if (this._images.length > 0) {
@@ -115,7 +110,7 @@ class CubeTexture extends Component{
         }
     }
 
-    _loadSrc (src) {
+    _loadSrc(src) {
         const self = this;
         const gl = this.scene.canvas.gl;
         this._images = [];

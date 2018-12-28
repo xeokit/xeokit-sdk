@@ -1,94 +1,62 @@
-/**
- A **PointLight** defines a positional light source that originates from a single point and spreads outward in all directions,
- to illuminate {@link Mesh"}}Meshes{{/crossLink}}.
-
- <a href="../../examples/#lights_point_world_normalMap"><img src="http://i.giphy.com/3o6ZsZoFGIOJ2nlmN2.gif"></img></a>
-
- ## Overview
-
- * PointLights have a position, but no direction.
- * PointLights may be defined in either **World** or **View** coordinate space. When in World-space, their positions
- are relative to the World coordinate system, and will appear to move as the {@link Camera} moves.
- When in View-space, their positions are relative to the View coordinate system, and will behave as if fixed to the viewer's
- head as the {@link Camera} moves.
- * PointLights have {@link PointLight/constantAttenuation}, {@link PointLight/linearAttenuation} and
- {@link PointLight/quadraticAttenuation} factors, which indicate how their intensity attenuates over distance.
- * {@link AmbientLight}, {@link DirLight},
- {@link SpotLight} and {@link PointLight} instances are registered by ID
- on {@link Scene/lights:property"}}Scene#lights{{/crossLink}} for convenient access.
-
- ## Examples
-
- * [View-space positional three-point lighting](../../examples/#lights_point_view_threePoint)
- * [World-space positional three-point lighting](../../examples/#lights_point_world_threePoint)
- * [World-space point light and normal map](../../examples/#lights_point_world_normalMap)
-
- ## Usage
-
- In the example below we'll customize the default Scene's light sources, defining an AmbientLight and a couple of
- PointLights, then create a Phong-shaded box mesh.
-
- ````javascript
- new xeokit.AmbientLight({
-        color: [0.8, 0.8, 0.8],
-        intensity: 0.5
-    });
-
- new xeokit.PointLight({
-        pos: [-100, 0, 100],
-        color: [0.3, 0.3, 0.5],
-        intensity: .7
-        constantAttenuation: 0,
-        linearAttenuation: 0,
-        quadraticAttenuation: 0,
-        space: "view"
-    });
-
- new xeokit.PointLight({
-        pos: [0, 100, 100],
-        color: [0.5, 0.7, 0.5],
-        intensity: 1
-        constantAttenuation: 0,
-        linearAttenuation: 0,
-        quadraticAttenuation: 0,
-        space: "view"
-    });
-
- // Create box mesh
- new xeokit.Mesh({
-    material: new xeokit.PhongMaterial({
-        ambient: [0.5, 0.5, 0.5],
-        diffuse: [1,0.3,0.3]
-    }),
-    geometry: new xeokit.BoxGeometry()
- });
- ````
-
-
- @class PointLight
- @module xeokit
- @submodule lighting
- @constructor
- @extends Component
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The PointLight configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this PointLight.
- @param [cfg.pos=[ 1.0, 1.0, 1.0 ]] {Float32Array} Position, in either World or View space, depending on the value of the **space** parameter.
- @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} Color of this PointLight.
- @param [cfg.intensity=1.0] {Number} Intensity of this PointLight, as a factor in range ````[0..1]````.
- @param [cfg.constantAttenuation=0] {Number} Constant attenuation factor.
- @param [cfg.linearAttenuation=0] {Number} Linear attenuation factor.
- @param [cfg.quadraticAttenuation=0] {Number} Quadratic attenuation factor.
- @param [cfg.space="view"] {String} The coordinate system this PointLight is defined in - "view" or "world".
- @param [cfg.castShadow=false] {Boolean} Flag which indicates if this PointLight casts a castShadow.
- */
-import {Component} from '../Component.js';
+import {Light} from './Light.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {RenderBuffer} from '../webgl/RenderBuffer.js';
 import {math} from '../math/math.js';
 
-class PointLight extends Component {
+/**
+ * A positional light source that originates from a single point and spreads outward in all directions, with optional attenuation over distance.
+ *
+ * * Has a position in {@link PointLight#pos}, but no direction.
+ * * Defined in either *World* or *View* coordinate space. When in World-space, {@link PointLight#pos} is relative to
+ * the World coordinate system, and will appear to move as the {@link Camera} moves. When in View-space,
+ * {@link PointLight#pos} is relative to the View coordinate system, and will behave as if fixed to the viewer's head.
+ * * Has {@link PointLight#constantAttenuation}, {@link PointLight#linearAttenuation} and {@link PointLight#quadraticAttenuation}
+ * factors, which indicate how intensity attenuates over distance.
+ * * {@link AmbientLight}s, {@link DirLight}s and {@link PointLight}s are registered by their {@link Component#id} on {@link Scene#lights}.
+ *
+ * ## Usage
+ *
+ * In the example below we'll destroy the {@link Scene}'s default light sources then create an {@link AmbientLight}
+ * and a couple of PointLights positioned within the View-space coordinate system:
+ *
+ * ````javascript
+ * myViewer.scene.clearLights();
+ *
+ * new AmbientLight({
+ *      id: "myAmbientLight",
+ *      color: [0.8, 0.8, 0.8],
+ *      intensity: 0.5
+ * });
+ *
+ * new PointLight({
+ *      id: "myPointLight1",
+ *      pos: [-100, 0, 100],
+ *      color: [0.3, 0.3, 0.5],
+ *      intensity: .7
+ *      constantAttenuation: 0,
+ *      linearAttenuation: 0,
+ *      quadraticAttenuation: 0,
+ *      space: "view"
+ * });
+ *
+ * new PointLight({
+ *      id: "myPointLight2",
+ *      pos: [0, 100, 100],
+ *      color: [0.5, 0.7, 0.5],
+ *      intensity: 1
+ *      constantAttenuation: 0,
+ *      linearAttenuation: 0,
+ *      quadraticAttenuation: 0,
+ *      space: "view"
+ * });
+ *
+ * // Adjust the position of one of our PointLights
+ *
+ * var pointLight1 = myViewer.scene.lights["myPointLight1"];
+ * dirLight.pos = [-150.0, 0.0, 100.0];
+ * ````
+ */
+class PointLight extends Light {
 
     /**
      JavaScript class name for this Component.
@@ -103,9 +71,25 @@ class PointLight extends Component {
         return "PointLight";
     }
 
-    init(cfg) {
+    /**
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] The PointLight configuration
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this PointLight.
+     @param [cfg.pos=[ 1.0, 1.0, 1.0 ]] {Float32Array} Position, in either World or View space, depending on the value of the **space** parameter.
+     @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} Color of this PointLight.
+     @param [cfg.intensity=1.0] {Number} Intensity of this PointLight, as a factor in range ````[0..1]````.
+     @param [cfg.constantAttenuation=0] {Number} Constant attenuation factor.
+     @param [cfg.linearAttenuation=0] {Number} Linear attenuation factor.
+     @param [cfg.quadraticAttenuation=0] {Number} Quadratic attenuation factor.
+     @param [cfg.space="view"] {String} The coordinate system this PointLight is defined in - "view" or "world".
+     @param [cfg.castShadow=false] {Boolean} Flag which indicates if this PointLight casts a castShadow.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         const self = this;
 
@@ -174,7 +158,7 @@ class PointLight extends Component {
     /**
      The position of this PointLight.
 
-     This will be either World- or View-space, depending on the value of {@link PointLight/space}.
+     This will be either World- or View-space, depending on the value of {@link PointLight#space}.
 
      @property pos
      @default [1.0, 1.0, 1.0]

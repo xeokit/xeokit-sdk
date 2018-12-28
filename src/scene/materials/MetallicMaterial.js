@@ -1,6 +1,6 @@
 /**
  A **MetallicMaterial** is a physically-based {@link Material} that defines the surface appearance of
- {@link Mesh"}}Meshes{{/crossLink}} using the *metallic-roughness* workflow.
+ {@link Mesh}es using the *metallic-roughness* workflow.
 
  ## Examples
 
@@ -219,11 +219,11 @@
  @constructor
  @extends Material
 
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
 
- @param [cfg] {*} The MetallicMaterial configuration.
+ @param {*} [cfg] The MetallicMaterial configuration.
 
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
 
  @param [cfg.meta=null] {String:Object} Metadata to attach to this material.
 
@@ -254,34 +254,34 @@
 
  @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial/alpha} property. Must
- be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ be within the same {@link Scene} as this MetallicMaterial.
 
  @param [cfg.metallicMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  metallic factor in its *R* component. The *R* component multiplies by the
  {@link MetallicMaterial/metallic} property. Must be within the same
- {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene} as this MetallicMaterial.
 
  @param [cfg.roughnessMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
  roughness factor in its *R* component. The *R* component multiplies by the
  {@link MetallicMaterial/roughness} property. Must be within the same
- {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene} as this MetallicMaterial.
 
  @param [cfg.metallicRoughnessMap=undefined] {Texture} RGB {@link Texture} containing this
  MetallicMaterial's metalness in its *R* component and roughness in its *G* component. Its *R* component multiplies by the
  {@link MetallicMaterial/metallic} property, while its *G* component multiplies by the
  {@link MetallicMaterial/roughness} property. Must be within the same
- {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ {@link Scene} as this MetallicMaterial.
 
  @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
  MetallicMaterial. Multiplies by the {@link MetallicMaterial/emissive} property.
- Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ Must be within the same {@link Scene} as this MetallicMaterial.
 
  @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
  multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
  as this MetallicMaterial.
 
  @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
- within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+ within the same {@link Scene} as this MetallicMaterial.
 
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode, which specifies how alpha is to be interpreted. Accepted
  values are "opaque", "blend" and "mask". See the {@link MetallicMaterial/alphaMode} property for more info.
@@ -319,9 +319,9 @@ class MetallicMaterial extends Material {
         return "MetallicMaterial";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "MetallicMaterial",
@@ -556,7 +556,7 @@ class MetallicMaterial extends Material {
 
      The *R* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene} as this MetallicMaterial.
 
      @property roughnessMap
      @default undefined
@@ -573,7 +573,7 @@ class MetallicMaterial extends Material {
      Its *B* component multiplies by the {@link MetallicMaterial/metallic} property, while
      its *G* component multiplies by the {@link MetallicMaterial/roughness} property.
 
-     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene} as this MetallicMaterial.
 
      @property metallicRoughnessMap
      @default undefined
@@ -707,7 +707,7 @@ class MetallicMaterial extends Material {
     /**
      RGB tangent-space normal map {@link Texture}.
 
-     Must be within the same {@link Scene}}Scene{{/crossLink}} as this MetallicMaterial.
+     Must be within the same {@link Scene} as this MetallicMaterial.
 
      @property normalMap
      @default undefined
@@ -783,10 +783,10 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh}es.
 
      The backfaces will belong to {@link Geometry} compoents that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property backfaces
      @default false
@@ -806,10 +806,10 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh}es.
 
      The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property frontface
      @default "ccw"

@@ -1,5 +1,5 @@
 import {Plugin} from "./../../Plugin.js";
-import {DirLight} from "../../../scene/lighting/DirLight.js"
+import {DirLight} from "../../../scene/lights/DirLight.js"
 
 /**
  * A viewer plugin that manages light sources.
@@ -12,7 +12,7 @@ import {DirLight} from "../../../scene/lighting/DirLight.js"
  * });
  *
  * // Add a GLTFModelsPlugin
- * var gltfModelsPlugin = new GLTFModelsPlugin(viewer, {
+ * var gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
  *     id: "GLTFModels"  // Default value
  * });
  *
@@ -22,7 +22,7 @@ import {DirLight} from "../../../scene/lighting/DirLight.js"
  * });
  *
  * // Load a glTF model
- * const model = gltfModelsPlugin.load({
+ * const model = gltfLoaderPlugin.load({
  *     id: "myModel",
  *     src: "./models/gltf/mygltfmodel.gltf"
  * });

@@ -3,9 +3,9 @@ import {CameraPath} from "./CameraPath.js"
 
 class CameraPathAnimation extends Component {
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._cameraFlightAnimation = this.create({
             type: "CameraFlightAnimation"
@@ -85,8 +85,6 @@ class CameraPathAnimation extends Component {
 
     /**
      The {@link CameraPath} for this CameraPathAnimation.
-
-     Fires a {@link CameraPathAnimation/cameraPath:event} event on change.
 
      @property cameraPath
      @type CameraPath

@@ -525,7 +525,7 @@ DrawRenderer.prototype.drawMesh = function (frame, mesh) {
         }
     }
 
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         const vertexBufs = mesh._geometry._getVertexBufs();
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
@@ -561,7 +561,7 @@ DrawRenderer.prototype.drawMesh = function (frame, mesh) {
         if (this._uUVDecodeMatrix) {
             gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometryState.uvDecodeMatrix);
         }
-        if (geometryState.combined) { // VBOs were bound by the VertexBufs logic above
+        if (geometryState.combineGeometry) { // VBOs were bound by the VertexBufs logic above
             if (geometryState.indicesBufCombined) {
                 geometryState.indicesBufCombined.bind();
                 frame.bindArray++;
@@ -602,7 +602,7 @@ DrawRenderer.prototype.drawMesh = function (frame, mesh) {
 
     // Draw (indices bound in prev step)
 
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         if (geometryState.indicesBufCombined) { // Geometry indices into portion of uber-array
             gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
             frame.drawElements++;

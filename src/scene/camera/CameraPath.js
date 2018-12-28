@@ -6,9 +6,9 @@ const tempVec3a = math.vec3();
 
 class CameraPath extends Component {
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._frames = [];
 
@@ -22,7 +22,7 @@ class CameraPath extends Component {
     }
 
     /**
-     The frames set on the constructor and added with {@link CameraPath/addFrame:method}.
+     The frames set on the constructor and added with {@link CameraPath#addFrame}.
 
      @property frames
      @type {[]}
@@ -33,8 +33,7 @@ class CameraPath extends Component {
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which a
-     {@link Camera/property:eye"}}Camera's eye position{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which the {@link Camera#eye} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -47,8 +46,7 @@ class CameraPath extends Component {
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which a
-     {@link Camera/property:eye"}}Camera's look position{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which the {@link Camera#look} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -61,8 +59,7 @@ class CameraPath extends Component {
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which a
-     {@link Camera/property:up"}}Camera's up vector{{/crossLink}} travels.
+     The {@link SplineCurve} which defines the path along which the {@link Camera#up"} travels.
 
      This property is read-only and is internally created and destroyed by this CameraPath.
 
@@ -75,7 +72,7 @@ class CameraPath extends Component {
     }
 
     /**
-     Adds a frame to this CameraPath, given as the current position of a {@link Camera}.
+     Adds a frame to this CameraPath, given as the current position of the {@link Camera}.
 
      @param {Number} t Time instant for the new frame.
      */
@@ -120,7 +117,7 @@ class CameraPath extends Component {
     }
 
     /**
-     Sets the position of the {@link Scene}'s {@link Camera} to a position interpolated within this CameraPath
+     Sets the position of the {@link Camera} to a position interpolated within this CameraPath
      at the given time instant.
 
      @param {Number} t Time instant.

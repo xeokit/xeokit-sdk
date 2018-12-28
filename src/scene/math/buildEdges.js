@@ -98,7 +98,7 @@ var buildEdgeIndices = (function () {
         }
     }
 
-    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combined = false) {
+    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combineGeometry = false) {
         weldVertices(positions, indices);
         buildFaces(indices.length, positionsDecodeMatrix);
         const edgeIndices = [];
@@ -155,7 +155,7 @@ var buildEdgeIndices = (function () {
             edgeIndices.push(ia);
             edgeIndices.push(ib);
         }
-        return (largeIndex || combined) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
+        return (largeIndex || combineGeometry) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
     };
 })();
 

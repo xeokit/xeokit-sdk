@@ -23,7 +23,7 @@ function hasNormals(mesh) {
 function buildVertex(mesh) {
     const scene = mesh.scene;
     const clipping = scene._clipsState.clips.length > 0;
-    const quantizedGeometry = !!mesh._geometry._state.quantized;
+    const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const normals = hasNormals(mesh);
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;

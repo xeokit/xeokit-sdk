@@ -1,551 +1,5 @@
 /**
- A **Mesh** is an {@link Node} that implements the {@link Drawable }
- interface, to represent a visible element within the 3D scene.
 
- ## Overview
-
- * A Mesh represents a WebGL draw call.
- * Each Mesh has six components: {@link Geometry} for shape, {@link Material}
- for normal rendered appearance, three {@link EmphasisMaterial"}}EmphasisMaterials{{/crossLink}} for ghosted, highlighted and selected effects,
- and {@link EdgeMaterial} for rendering emphasised edges.
- * By default, Meshes in the same Scene share the same global scene flyweight instances of those components among themselves. The default
- component instances are provided by the {@link Scene}'s {@link Scene/geometry},
- {@link Scene/material}, {@link Scene/ghostMaterial}, {@link Scene/highlightMaterial},
- {@link Scene/selectedMaterial} and {@link Scene/edgeMaterial} properties.
- * A Mesh with all defaults is a white unit-sized box centered at the World-space origin.
- * Customize your Meshes by attaching your own instances of those component types, to override the defaults as needed.
- * For best performance, reuse as many of the same component instances among your Meshes as possible.
- * Use {@link Node"}}Node{{/crossLink}} components to organize Meshes into hierarchies, if required.
-
- This page covers functionality specific to the Mesh component, while {@link Node} covers generic
- functionality inherited from the base class.
-
- ## Usage
-
- * [Creating a Mesh](#creating-a-mesh)
- * [Creating hierarchies](#creating-hierarchies)
- * [Controlling visibility](#controlling-visibility)
- * [Controlling clipping](#controlling-clipping)
- * [Controlling rendering order](#controlling-rendering-order)
- * [Geometry](#geometry)
- * [Material](#material)
- * [Transforming](#transforming)
- * [Ghosting](#ghosting)
- * [Highlighting](#highlighting)
- * [Outlining](#outlining)
- * [Local-space boundary](#local-space-boundary)
- * [World-space boundary](#world-space-boundary)
- * [Skyboxing](#skyboxing)
- * [Billboarding](#billboarding)
- * [Shadows](#shadows) TODO
-
- ### Creating a Mesh
-
- Creating a minimal Mesh that has all the default components:
-
- <img src="../../assets/images/screenshots/Scene/defaultMesh.png"></img>
-
- ````javascript
- var mesh = new xeokit.Mesh(); // A white unit-sized box centered at the World-space origin
- ````
-
- Since our Mesh has all the default components, we can get those off either the Mesh or its Scene:
-
- ````javascript
- mesh.material.diffuse = [1.0, 0.0, 0.0];           // This is the same Material component...
- mesh.scene.material.diffuse  = [1.0, 0.0, 0.0];    // ...as this one.
- ````
-
- In practice, we would provide (at least) our own Geometry and Material for the Mesh:
-
- <a href="../../examples/#geometry_primitives_teapot"><img src="../../assets/images/screenshots/Scene/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-     geometry: new xeokit.TeapotGeometry(),
-     material: new xeokit.MetallicMaterial({
-         baseColor: [1.0, 1.0, 1.0]
-     })
- });
- ````
-
- ### Creating hierarchies
-
- In xeokit we represent an object hierarchy as a tree of {@link Node}s in which
- the leaf Objects are Meshes. In an Object tree, an operation on an Object is recursively applied to sub-Objects, down
- to the Meshes at the leaves.
-
- See {@link Node} for information on organizing Meshes hierarchically.
-
- ### Controlling visibility
-
- Show or hide a Mesh by setting its {@link Mesh/visible} property:
-
- ````javascript
- mesh.visible = false; // Hide
- mesh.visible = true; // Show (default)
- ````
-
- This property is inherited from {@link Node/visible:property"}}Object{{/crossLink}}.
-
- ### Controlling clipping
-
- By default, a Mesh will be clipped by the
- Scene's {@link Scene/clips:property"}}clipping planes{{/crossLink}}.
-
- Make a Mesh unclippable by setting its {@link Mesh/clippable} property false:
-
- ````javascript
- mesh.clippable = false; // Default is true
- ````
-
- ### Controlling rendering order
-
- Control the order in which a Mesh is rendered relative to others by setting its {@link Mesh/layer}
- property. You would normally do this when you need to ensure that transparent Meshes are rendered in back-to-front order for correct alpha blending.
-
- Assigning our Mesh to layer 0 (all Meshes are in layer 0 by default):
-
- ````javascript
- mesh.layer = 0;
- ````
-
- Create another Mesh in a higher layer, that will get rendered after layer 0:
-
- ````javascript
- var mesh2 = new xeokit.Mesh({
-     geometry: new xeokit.Sphere(),
-     layer: 1
- });
- ````
-
- ### Geometry
-
- A Mesh has a {@link Geometry} which describes its shape. When we don't provide a Geometry,
- a Mesh will automatically get its {@link Scene}'s {@link Scene/geometry} by default.
-
- Creating a Mesh with its own Geometry:
-
- ````javascript
- var mesh = new xeokit.Mesh({
-     geometry: new xeokit.TeapotGeometry()
- });
- ````
-
- Getting geometry arrays:
-
- ````javascript
- ver geometry = mesh.geometry;
-
- var primitive = geometry.primitive;        // Default is "triangles"
- var positions = geometry.positions;        // Local-space vertex positions
- var normals = geometry.normals;            // Local-space vertex Normals
- var uv = geometry.uv;                      // UV coordinates
- var indices = mesh.geometry.indices;     // Vertex indices for pimitives
- ````
-
- The Mesh also has a convenience property which provides the vertex positions in World-space, ie. after they have been
- transformed by the Mesh's {@link Node/worldMatrix}:
-
- ````javascript
- // These are internally generated on-demand and cached. To free the cached
- // vertex World positions when you're done with them, set this property to null or undefined
- var worldPositions = mesh.worldPositions;
- ````
-
- ### Material
-
- A Mesh has a {@link Material}, which describes its appearance. When we don't provide it with
- a Material, it will automatically get its {@link Scene}'s {@link Scene/material} by default.
-
- Creating a Mesh with its own custom {@link Geometry} and {@link MetallicMaterial}:
-
- ````javascript
- var mesh = new xeokit.Mesh({
-     geometry: new xeokit.TeapotGeometry(),
-     material: new xeokit.MetallicMaterial({
-         baseColor: [0.0, 0.0, 1.0],
-         metallic: 1.0,
-         roughness: 1.0,
-         emissive: [0.0, 0.0, 0.0],
-         alpha: 1.0
-     })
- });
- ````
-
- Animating the {@link MetallicMaterial}'s diffuse color - making the Mesh rapidly pulse red:
-
- ````javascript
- mesh.scene.on("tick", function(e) {
-    var t = e.time - e.startTime; // Millisecs
-    mesh.material.baseColor = [0.5 + Math.sin(t * 0.01), 0.0, 0.0]; // RGB
- });
- ````
-
- ### Transforming
-
- A Mesh can be positioned within the World-space coordinate system.
-
- See {@link Node}.
-
- ### Ghosting
-
- Ghost a Mesh by setting its {@link Mesh/ghosted} property true. The Mesh's
- {@link Mesh/ghostMaterial} property holds the {@link EmphasisMaterial}
- that controls its appearance while ghosted.
-
- When we don't provide it with a EmphasisMaterial, the Mesh will automatically get its Scene's {@link Scene/ghostMaterial}
- by default.
-
- In the example below, we'll create a ghosted Mesh with its own EmphasisMaterial for ghosted appearance:
-
- <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/EmphasisMaterial/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    ghostMaterial: new xeokit.EmphasisMaterial({
-        fill: true,
-        fillColor: [0, 0, 0],
-        fillAlpha: 0.7,
-        edges: true,
-        edgeColor: [0.2, 1.0, 0.2],
-        edgeAlpha: 1.0,
-        edgeWidth: 2
-    }),
-    ghosted: true
- });
- ````
-
- #### Examples
-
- * [Ghosted teapot](../../examples/#effects_demo_hoverToGhost)
-
- ### Highlighting
-
- Highlight a Mesh by setting its {@link Mesh/highlighted} property true. The Mesh's
- {@link Mesh/highlightMaterial} property holds the {@link EmphasisMaterial}
- that controls its appearance while highlighted.
-
- When we don't provide it with a EmphasisMaterial for highlighting, it will automatically get its Scene's {@link Scene/highlightMaterial}
- by default.
-
- In the example below, we'll create a highlighted Mesh with its own EmphasisMaterial for highlighted appearance:
-
- <a href="../../examples/#effects_highlight"><img src="../../assets/images/screenshots/EmphasisMaterial/teapotHighlighted.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    highlightMaterial: new xeokit.EmphasisMaterial({
-        color: [1.0, 1.0, 0.0],
-        alpha: 0.6
-    }),
-    highlighted: true
- });
- ````
-
- #### Examples
-
- * [Ghost and highlight effects](../../examples/#effects_demo_hoverToHighlight)
-
- ### Selecting
-
- Make a Mesh appear selected by setting its {@link Mesh/selected} property true. The Mesh's
- {@link Mesh/selectedMaterial} property holds the {@link EmphasisMaterial}
- that controls its appearance while selected.
-
- When we don't provide it with a EmphasisMaterial for selecting, it will automatically get its Scene's {@link Scene/selectMaterial}
- by default.
-
- In the example below, we'll create a selected Mesh with its own EmphasisMaterial for selection appearance:
-
- <a href="../../examples/#effects_select"><img src="../../assets/images/screenshots/EmphasisMaterial/teapotSelected.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    selectMaterial: new xeokit.EmphasisMaterial({
-        color: [1.0, 1.0, 0.0],
-        alpha: 0.6
-    }),
-    selected: true
- });
- ````
-
- #### Examples
-
- * [Ghost and select effects](../../examples/#effects_demo_gearbox)
-
-
- ### Edges
-
- Emphasise a Mesh's edges by setting its {@link Mesh/edges} property true. The Mesh's
- {@link Mesh/edgeMaterial} property holds the {@link EdgeMaterial}
- that controls the appearance of the edges while they are emphasized.
-
- When we don't provide it with an EdgeMaterial, the Mesh will automatically get its Scene's {@link Scene/edgeMaterial}
- by default.
-
- In the example below, we'll create a edges Mesh with its own EdgeMaterial for edges appearance:
-
- <a href="../../examples/#effects_ghost"><img src="../../assets/images/screenshots/EdgeMaterial/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    edgeMaterial: new xeokit.EdgeMaterial({
-        edgeColor: [0.2, 1.0, 0.2],
-        edgeAlpha: 1.0,
-        edgeWidth: 2
-    }),
-    edges: true
- });
- ````
-
- ### Outlining
-
- Outline a Mesh by setting its {@link Mesh/outlined} property true. The Mesh's
- {@link Mesh/outlineMaterial} property holds the {@link OutlineMaterial}
- that controls its appearance while outlined.
-
- When we don't provide it with an {@link OutlineMaterial}, it will automatically get its Scene's
- {@link Scene/outlineMaterial} by default.
-
- In the example below, we'll create a outlined Mesh with its own {@link OutlineMaterial}:
-
- <a href="../../examples/#effects_outline"><img src="../../assets/images/screenshots/OutlineMaterial/teapot.png"></img></a>
-
- ````javascript
- var mesh = new xeokit.Mesh({
-    geometry: new xeokit.TeapotGeometry(),
-    material: new xeokit.PhongMaterial({
-        diffuse: [0.2, 0.2, 1.0]
-    }),
-    outlineMaterial: new xeokit.OutlineMaterial({
-        color: [1.0, 1.0, 0.0],
-        alpha: 0.6,
-        width: 5
-    }),
-    outlined: true
- });
- ````
-
- ### Local-space boundary
-
- We can query a Mesh's Local-space boundary at any time, getting it as either an axis-aligned bounding box (AABB) or
- an object-aligned bounding box (OBB).
-
- The Local-space AABB and OBB belong to the Mesh's {@link Geometry}.
-
- Getting the Local-space AABB:
-
- ````
- var aabb = mesh.geometry.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
- ````
-
- Getting the Local-space OBB:
-
- ```` javascript
- var obb = mesh.geometry.obb; // Flat array containing eight 3D corner vertices of a box
- ````
-
- #### Examples
-
- * [Local-space Geometry AABB](../../examples/#boundaries_geometry_aabb)
- * [Local-space Geometry OBB](../../examples/#boundaries_geometry_obb)
-
- ### World-space boundary
-
- We can query a Mesh's World-space boundary at any time, getting it as an axis-aligned bounding box (AABB).
-
- The World-space AABB is the boundary of the Mesh's {@link Geometry} after transformation by the
- Mesh's {@link Node/worldMatrix} and the {@link Camera}'s
- {@link Camera/matrix}.
-
- Getting the World-space boundary AABB:
-
- ````javascript
- var aabb = mesh.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
- ````
-
- Subscribing to updates of the World-space boundary, which occur after each update to the
- Mesh's {@link Node/worldMatrix} or the {@link Camera}:
-
- ````javascript
- mesh.on("boundary", function() {
-     var aabb = mesh.aabb;
-     var obb = mesh.obb;
- });
- ````
-
- The {@link Scene} also has a {@link Scene/getAABB:method"}}Scene#getAABB(){{/crossLink}}, which returns
- the collective World-space AABBs of the {@link Node}s with the given IDs:
-
- ````JavaScript
- var scene = mesh.scene;
-
- scene.getAABB(); // Gets collective boundary of all meshes in the scene
- scene.getAABB("saw"); // Gets collective boundary of all meshes in a model
- scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of all meshes in two models
- scene.getAABB("saw#0.1"); // Get boundary of a mesh
- scene.getAABB(["saw#0.1", "saw#0.2"]); // Get collective boundary of two meshes
- ````
-
- #### Excluding from boundary calculations
-
- The {@link Scene/aabb:property"}}Scene aabb{{/crossLink}}
- and parent {@link Node/aabb:property"}}Object{{/crossLink}}'s {@link Node/aabb:property"}}aabb{{/crossLink}}
- properties provide AABBs that dynamically include the AABB of all contained Meshes, except those Meshes that have
- their {@link Mesh/collidable:property"}}collidable{{/crossLink}} properties set ````false````.
-
- Toggle that inclusion like so:
-
- ````javascript
- mesh.collidable = false; // Exclude mesh from calculation of its Scene/Model boundary
- mesh.collidable = true; // Include mesh in calculation of its Scene/Model boundary
- ````
- Setting this false is useful when a Mesh represents some element, such as a control gizmo, that you don't want to
- contribute to the  {@link Scene}}Scene{{/crossLink}} or parent {@link Node}'s AABB. It
- also helps performance, since boundaries will not need dynamically re-calculated whenever the Mesh's boundary changes after
- a {@link Node/worldMatrix} or {@link Camera} update.
-
- #### Examples
-
- * [World-space Mesh AABB](../../examples/#boundaries_mesh_aabb)
- * [World-space Mesh OBB](../../examples/#boundaries_mesh_obb)
-
- ### Skyboxing
-
- A Mesh has a {@link Mesh/stationary} property
- that will cause it to never translate with respect to the viewpoint.
-
- This is useful for using Meshes as skyboxes, like this:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.BoxGeometry({
-         xSize: 1000,
-         ySize: 1000,
-         zSize: 1000
-     }),
-
-     material: new xeokit.PhongMaterial({
-         diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-         })
-     }),
-
-     stationary: true // Locks position with respect to viewpoint
- });
- ````
-
- #### Examples
-
- * [Skybox component](../../examples/#skyboxes_skybox)
- * [Custom skybox](../../examples/#skyboxes_skybox_custom)
-
- ### Billboarding
-
- A Mesh has a {@link Mesh/billboard} property
- that can make it behave as a billboard.
-
- Two billboard types are supported:
-
- * **Spherical** billboards are free to rotate their Meshes in any direction and always face the {@link Camera} perfectly.
- * **Cylindrical** billboards rotate their Meshes towards the {@link Camera}, but only about the Y-axis.
-
- Note that scaling transformations to have no effect on billboarded Meshes.
-
- The example below shows a box that remains rotated directly towards the viewpoint, using spherical billboarding:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.BoxGeometry(),
-
-     material: new xeokit.PhongMaterial({
-         diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-         })
-     }),
-
-     billboard: "spherical" // Or "cylindrical"
- });
- ````
-
- #### Examples
-
- * [Spherical billboards](../../examples/#billboards_spherical)
- * [Cylindrical billboards](../../examples/#billboards_cylindrical)
- * [Clouds using billboards](../../examples/#billboards_spherical_clouds)
-
-
- ### Shadows
-
- [Work-in-progress]
-
- @class Mesh
- @module xeokit
- @submodule objects
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Mesh.
- @param [cfg.objectId] {String} Optional object ID. See the {@link Node} documentation for usage.
- @param [cfg.parent] {Object} The parent.
- @param [cfg.position=[0,0,0]] {Float32Array} The Mesh's local 3D position.
- @param [cfg.scale=[1,1,1]] {Float32Array} The Mesh's local scale.
- @param [cfg.rotation=[0,0,0]] {Float32Array} The Mesh's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
- @param [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} The Mesh's local modelling transform matrix. Overrides the position, scale and rotation parameters.
- @param [cfg.geometry] {Geometry} Defines shape. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/geometry:property"}}geometry{{/crossLink}}, which is a 2x2x2 box.
- @param [cfg.material] {Material} Defines normal rendered appearance. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/material:property"}}material{{/crossLink}}.
- @param [cfg.outlineMaterial] {OutlineMaterial} Defines appearance when outlined. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
- @param [cfg.ghostMaterial] Defines appearance when ghosted. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
- @param [cfg.highlightMaterial] Defines appearance when highlighted. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
- @param [cfg.selectedMaterial] Defines appearance when selected. Must be within the same {@link Scene}}Scene{{/crossLink}} as this Mesh. Defaults to the
- parent {@link Scene}}Scene{{/crossLink}}'s default instance, {@link Scene/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
- @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array} RGB colorize color, multiplies by the rendered fragment colors.
- @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
- @param [cfg.layer=0] {Number} Indicates this Mesh's rendering priority, relative to other Meshes. Typically used for transparency sorting,
- @param [cfg.stationary=false] {Boolean} Disables the effect of {@link Camera} translations for this Mesh. This is useful for making skyboxes.
- @param [cfg.billboard="none"] {String} Specifies the billboarding behaviour for this Mesh. Options are "none", "spherical" and "cylindrical".
- @param [cfg.visible=true] {Boolean}        Indicates if this Mesh is visible. Mesh is only rendered when visible and not culled.
- @param [cfg.culled=false] {Boolean}        Indicates if this Mesh is culled from view. Mesh is only rendered when visible and not culled.
- @param [cfg.pickable=true] {Boolean}       Indicates if this Mesh is pickable. When false, the Mesh will never be picked by calls to the {@link Scene/pick:method"}}Scene pick(){{/crossLink}} method, and picking will happen as "through" the Mesh, to attempt to pick whatever lies on the other side of it.
- @param [cfg.clippable=true] {Boolean}      Indicates if this Mesh is clippable by {@link Clips}. When false, Mesh will not be affected by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips}.
- @param [cfg.collidable=true] {Boolean}     Whether this Mesh is included in boundary calculations. When false, the bounding boxes of the containing {@link Scene} and parent {@link Node}, {@link Node} or {@link Model} will not be calculated to enclose this Mesh.
- @param [cfg.castShadow=true] {Boolean}     Whether this Mesh casts shadows.
- @param [cfg.receiveShadow=true] {Boolean}  Whether this Mesh receives shadows.
- @param [cfg.outlined=false] {Boolean}      Whether an outline is rendered around this mesh.
- @param [cfg.ghosted=false] {Boolean}       Whether this Mesh is rendered with a ghosted appearance.
- @param [cfg.highlighted=false] {Boolean}   Whether this Mesh is rendered with a highlighted appearance.
- @param [cfg.selected=false] {Boolean}      Whether this Mesh is rendered with a selected appearance.
- @param [cfg.aabbVisible=false] {Boolean}   Whether this Mesh's World-space axis-aligned bounding box (AABB) is visible.
- @param [cfg.obbVisible=false] {Boolean}    Whether this Mesh's World-space oriented bounding box (OBB) is visible.
- @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
- @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
- @param [cfg.loading=false] {Boolean} Flag which indicates that this Mesh is freshly loaded.
- @extends Object
  */
 
 /**
@@ -555,18 +9,28 @@
  @event picked
  */
 import {math} from '../math/math.js';
-import {Node} from './../nodes/Node.js';
+import {Component} from './../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
 import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
 import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
-import {ShadowRenderer} from "./shadow/ShadowRenderer.js";
-import {OutlineRenderer} from "./outline/OutlineRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickVertexRenderer} from "./pick/PickVertexRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
 
 const obb = math.OBB3();
+const angleAxis = new Float32Array(4);
+const q1 = new Float32Array(4);
+const q2 = new Float32Array(4);
+const xAxis = new Float32Array([1, 0, 0]);
+const yAxis = new Float32Array([0, 1, 0]);
+const zAxis = new Float32Array([0, 0, 1]);
+
+const veca = new Float32Array(3);
+const vecb = new Float32Array(3);
+
+const identityMat = math.identityMat4();
+
 
 const getPickResult = (function () {
 
@@ -666,7 +130,7 @@ const getPickResult = (function () {
                 positionC[1] = positions[ic3 + 1];
                 positionC[2] = positions[ic3 + 2];
 
-                if (geometry.quantized) {
+                if (geometry.compressGeometry) {
 
                     // Decompress vertex positions
 
@@ -739,7 +203,7 @@ const getPickResult = (function () {
 
                 if (normals) {
 
-                    if (geometry.quantized) {
+                    if (geometry.compressGeometry) {
 
                         // Decompress vertex normals
 
@@ -789,7 +253,7 @@ const getPickResult = (function () {
                     uvc[0] = uvs[(ic * 2)];
                     uvc[1] = uvs[(ic * 2) + 1];
 
-                    if (geometry.quantized) {
+                    if (geometry.compressGeometry) {
 
                         // Decompress vertex UVs
 
@@ -812,7 +276,7 @@ const getPickResult = (function () {
     }
 })();
 
-class Mesh extends Node {
+class Mesh extends Component {
 
     /**
      * @private
@@ -835,10 +299,11 @@ class Mesh extends Node {
         return true;
     }
 
-    init(cfg) {
+    constructor(owner, cfg = {}) {
+
+        super(owner, cfg);
 
         this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from xeokit.Object#matrix and xeokit.Object.#normalMatrix
-
             visible: true,
             culled: false,
             pickable: null,
@@ -878,9 +343,103 @@ class Mesh extends Node {
         this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
         this._edgeMaterial = cfg.edgeMaterial ? this._checkComponent("EdgeMaterial", cfg.edgeMaterial) : this.scene.edgeMaterial;
 
-        this.compile();
+        this._parent = null;
 
-        super.init(cfg); // Call xeokit.Object._init()
+        this._aabb = null;
+        this._aabbDirty = true;
+        this.scene._aabbDirty = true;
+
+        this._scale = math.vec3();
+        this._quaternion = math.identityQuaternion();
+        this._rotation = math.vec3();
+        this._position = math.vec3();
+
+        this._worldMatrix = math.identityMat4();
+        this._worldNormalMatrix = math.identityMat4();
+
+        this._localMatrixDirty = true;
+        this._worldMatrixDirty = true;
+        this._worldNormalMatrixDirty = true;
+
+        if (cfg.matrix) {
+            this.matrix = cfg.matrix;
+        } else {
+            this.scale = cfg.scale;
+            this.position = cfg.position;
+            if (cfg.quaternion) {
+            } else {
+                this.rotation = cfg.rotation;
+            }
+        }
+
+        if (cfg.objectId) {
+            this._objectId = cfg.objectId;
+            this.scene._registerObject(this); // Must assign type before setting properties
+        }
+
+        if (cfg.modelId) {
+            this._modelId = cfg.modelId;
+            this.scene._registerModel(this);
+        }
+
+        this.visible = cfg.visible;
+        this.culled = cfg.culled;
+        this.pickable = cfg.pickable;
+        this.clippable = cfg.clippable;
+        this.collidable = cfg.collidable;
+        this.castShadow = cfg.castShadow;
+        this.receiveShadow = cfg.receiveShadow;
+        this.outlined = cfg.outlined;
+        this.ghosted = cfg.ghosted;
+        this.highlighted = cfg.highlighted;
+        this.selected = cfg.selected;
+        this.edges = cfg.edges;
+        this.aabbVisible = cfg.aabbVisible;
+        this.layer = cfg.layer;
+        this.colorize = cfg.colorize;
+        this.opacity = cfg.opacity;
+
+        if (cfg.parentId) {
+            const parentNode = this.scene.components[cfg.parentId];
+            if (!parentNode) {
+                this.error("Parent not found: '" + cfg.parentId + "'");
+            } else if (!parentNode.isNode) {
+                this.error("Parent is not a Node: '" + cfg.parentId + "'");
+            } else {
+                parentNode.addChild(this);
+            }
+        } else if (cfg.parent) {
+            if (!cfg.parent.isNode) {
+                this.error("Parent is not a Node");
+            }
+            cfg.parent.addChild(this);
+        }
+
+        this.compile();
+    }
+
+    /**
+     Optional ID to identify this Mesh as an {@link Object}.
+
+     @property objectId
+     @default null
+     @type String
+     @final
+     */
+    get objectId() {
+        return this._objectId;
+    }
+
+    /**
+     Optional ID to identify this Mesh as a {@link Model}.
+
+     @property modelId
+     @default null
+     @type String
+     @final
+     */
+    get modelId() {
+        return this._modelId;
     }
 
     _checkBillboard(value) {
@@ -913,6 +472,59 @@ class Mesh extends Node {
             this._putPickRenderers();
             this._pickMeshRenderer = PickMeshRenderer.get(this);
         }
+    }
+
+    _setLocalMatrixDirty() {
+        this._localMatrixDirty = true;
+        this._setWorldMatrixDirty();
+    }
+
+    _setWorldMatrixDirty() {
+        this._worldMatrixDirty = true;
+        this._worldNormalMatrixDirty = true;
+    }
+
+    _buildWorldMatrix() {
+        const localMatrix = this.matrix;
+        if (!this._parent) {
+            for (let i = 0, len = localMatrix.length; i < len; i++) {
+                this._worldMatrix[i] = localMatrix[i];
+            }
+        } else {
+            math.mulMat4(this._parent.worldMatrix, localMatrix, this._worldMatrix);
+        }
+        this._worldMatrixDirty = false;
+    }
+
+    _buildWorldNormalMatrix() {
+        if (this._worldMatrixDirty) {
+            this._buildWorldMatrix();
+        }
+        if (!this._worldNormalMatrix) {
+            this._worldNormalMatrix = math.mat4();
+        }
+        // Note: order of inverse and transpose doesn't matter
+        math.transposeMat4(this._worldMatrix, this._worldNormalMatrix);
+        math.inverseMat4(this._worldNormalMatrix);
+        this._worldNormalMatrixDirty = false;
+    }
+
+    _setAABBDirty() {
+        if (this.collidable) {
+            for (let object = this; object; object = object._parent) {
+                object._aabbDirty = true;
+                object.fire("boundary", true);
+            }
+        }
+    }
+
+    _updateAABB() {
+        this.scene._aabbDirty = true;
+        if (!this._aabb) {
+            this._aabb = math.AABB3();
+        }
+        this._buildAABB(this.worldMatrix, this._aabb); // Mesh or BigModel
+        this._aabbDirty = false;
     }
 
     _webglContextRestored() {
@@ -1090,14 +702,330 @@ class Mesh extends Node {
         return this._outlineMaterial;
     }
 
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Transform properties
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     Local translation.
+
+     @property position
+     @default [0,0,0]
+     @type {Float32Array}
+     */
+    set position(value) {
+        this._position.set(value || [0, 0, 0]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    get position() {
+        return this._position;
+    }
+
+    /**
+     Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+
+     @property rotation
+     @default [0,0,0]
+     @type {Float32Array}
+     */
+    set rotation(value) {
+        this._rotation.set(value || [0, 0, 0]);
+        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    get rotation() {
+        return this._rotation;
+    }
+
+    /**
+     Local rotation quaternion.
+
+     @property quaternion
+     @default [0,0,0, 1]
+     @type {Float32Array}
+     */
+    set quaternion(value) {
+        this._quaternion.set(value || [0, 0, 0, 1]);
+        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    get quaternion() {
+        return this._quaternion;
+    }
+
+    /**
+     Local scale.
+
+     @property scale
+     @default [1,1,1]
+     @type {Float32Array}
+     */
+    set scale(value) {
+        this._scale.set(value || [1, 1, 1]);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    get scale() {
+        return this._scale;
+    }
+
+    /**
+     * Local matrix.
+     *
+     * @property matrix
+     * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+     * @type {Float32Array}
+     */
+    set matrix(value) {
+        if (!this.__localMatrix) {
+            this.__localMatrix = math.identityMat4();
+        }
+        this.__localMatrix.set(value || identityMat);
+        math.decomposeMat4(this.__localMatrix, this._position, this._quaternion, this._scale);
+        this._localMatrixDirty = false;
+        this._setWorldMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+    }
+
+    get matrix() {
+        if (this._localMatrixDirty) {
+            if (!this.__localMatrix) {
+                this.__localMatrix = math.identityMat4();
+            }
+            math.composeMat4(this._position, this._quaternion, this._scale, this.__localMatrix);
+            this._localMatrixDirty = false;
+        }
+        return this.__localMatrix;
+    }
+
+    /**
+     * The World matrix.
+     *
+     * @property worldMatrix
+     * @type {Float32Array}
+     */
+    get worldMatrix() {
+        if (this._worldMatrixDirty) {
+            this._buildWorldMatrix();
+        }
+        return this._worldMatrix;
+    }
+
+    /**
+     * This World normal matrix.
+     *
+     * @property worldNormalMatrix
+     * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+     * @type {Float32Array}
+     */
+    get worldNormalMatrix() {
+        if (this._worldNormalMatrixDirty) {
+            this._buildWorldNormalMatrix();
+        }
+        return this._worldNormalMatrix;
+    }
+
+
+    /**
+     Rotates about the given local axis by the given increment.
+
+     @method rotate
+     @param {Float32Array} axis Local axis about which to rotate.
+     @param {Number} angle Angle increment in degrees.
+     */
+    rotate(axis, angle) {
+        angleAxis[0] = axis[0];
+        angleAxis[1] = axis[1];
+        angleAxis[2] = axis[2];
+        angleAxis[3] = angle * math.DEGTORAD;
+        math.angleAxisToQuaternion(angleAxis, q1);
+        math.mulQuaternions(this.quaternion, q1, q2);
+        this.quaternion = q2;
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+        return this;
+    }
+
+    /**
+     Rotates about the given World-space axis by the given increment.
+
+     @method rotate
+     @param {Float32Array} axis Local axis about which to rotate.
+     @param {Number} angle Angle increment in degrees.
+     */
+    rotateOnWorldAxis(axis, angle) {
+        angleAxis[0] = axis[0];
+        angleAxis[1] = axis[1];
+        angleAxis[2] = axis[2];
+        angleAxis[3] = angle * math.DEGTORAD;
+        math.angleAxisToQuaternion(angleAxis, q1);
+        math.mulQuaternions(q1, this.quaternion, q1);
+        //this.quaternion.premultiply(q1);
+        return this;
+    }
+
+    /**
+     Rotates about the local X-axis by the given increment.
+
+     @method rotateX
+     @param {Number} angle Angle increment in degrees.
+     */
+    rotateX(angle) {
+        return this.rotate(xAxis, angle);
+    }
+
+    /**
+     Rotates about the local Y-axis by the given increment.
+
+     @method rotateY
+     @param {Number} angle Angle increment in degrees.
+     */
+    rotateY(angle) {
+        return this.rotate(yAxis, angle);
+    }
+
+    /**
+     Rotates about the local Z-axis by the given increment.
+
+     @method rotateZ
+     @param {Number} angle Angle increment in degrees.
+     */
+    rotateZ(angle) {
+        return this.rotate(zAxis, angle);
+    }
+
+    /**
+     Translates along local space vector by the given increment.
+
+     @method translate
+     @param {Float32Array} axis Normalized local space 3D vector along which to translate.
+     @param {Number} distance Distance to translate along  the vector.
+     */
+    translate(axis, distance) {
+        math.vec3ApplyQuaternion(this.quaternion, axis, veca);
+        math.mulVec3Scalar(veca, distance, vecb);
+        math.addVec3(this.position, vecb, this.position);
+        this._setLocalMatrixDirty();
+        this._setAABBDirty();
+        this.glRedraw();
+        return this;
+    }
+
+    /**
+     Translates along the local X-axis by the given increment.
+
+     @method translateX
+     @param {Number} distance Distance to translate along  the X-axis.
+     */
+    translateX(distance) {
+        return this.translate(xAxis, distance);
+    }
+
+    /**
+     * Translates along the local Y-axis by the given increment.
+     *
+     * @method translateX
+     * @param {Number} distance Distance to translate along  the Y-axis.
+     */
+    translateY(distance) {
+        return this.translate(yAxis, distance);
+    }
+
+    /**
+     Translates along the local Z-axis by the given increment.
+
+     @method translateX
+     @param {Number} distance Distance to translate along  the Z-axis.
+     */
+    translateZ(distance) {
+        return this.translate(zAxis, distance);
+    }
+
+    /**
+     Optional ID to identify this Node as an {@link Object}.
+
+     @property objectId
+     @default null
+     @type String
+     @final
+     */
+    get objectId() {
+        return this._objectId;
+    }
+
+    /**
+     Optional ID to identify this Mesh as a {@link Model}.
+
+     @property modelId
+     @default null
+     @type String
+     @final
+     */
+    get modelId() {
+        return this._modelId;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Boundary properties
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     World-space 3D axis-aligned bounding box (AABB).
+
+     Represented by a six-element Float32Array containing the min/max extents of the
+     axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+
+     @property aabb
+     @final
+     @type {Float32Array}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            this._updateAABB();
+        }
+        return this._aabb;
+    }
+
+    /**
+     World-space 3D center.
+
+     @property center
+     @final
+     @type {Float32Array}
+     */
+    get center() {
+        if (this._aabbDirty) {
+            this._updateAABB();
+        }
+        return this._aabbCenter;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Rendering states
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
      Indicates if visible.
 
-     The Mesh is only rendered when {@link Mesh/visible} is true and
-     {@link Mesh/culled} is false.
+     The Mesh is only rendered when {@link Mesh#visible} is true and
+     {@link Mesh#culled} is false.
 
      Each visible Mesh is registered in the {@link Scene}'s
-     {@link Scene/visibleObjects} map when its {@link Node/objectId}
+     {@link Scene/visibleObjects} map when its {@link Mesh#objectId}
      is set to a value.
 
      @property visible
@@ -1120,10 +1048,10 @@ class Mesh extends Node {
     /**
      Indicates if ghosted.
 
-     The ghosted appearance is configured by {@link Mesh/ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
+     The ghosted appearance is configured by {@link Mesh#ghostMaterial:property"}}ghostMaterial{{/crossLink}}.
 
      Each ghosted Mesh is registered in its {@link Scene}'s
-     {@link Scene/ghostedObjects} map when its {@link Node/objectId}
+     {@link Scene/ghostedObjects} map when its {@link Mesh#objectId}
      is set to a value.
 
      @property ghosted
@@ -1149,10 +1077,10 @@ class Mesh extends Node {
     /**
      Indicates if highlighted.
 
-     The highlight appearance is configured by {@link Mesh/highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
+     The highlight appearance is configured by {@link Mesh#highlightMaterial:property"}}highlightMaterial{{/crossLink}}.
 
      Each highlighted Mesh is registered in its {@link Scene}'s
-     {@link Scene/highlightedObjects} map when its {@link Node/objectId}
+     {@link Scene/highlightedObjects} map when its {@link Mesh#objectId}
      is set to a value.
 
      @property highlighted
@@ -1178,10 +1106,10 @@ class Mesh extends Node {
     /**
      Indicates if selected.
 
-     The selected appearance is configured by {@link Mesh/selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
+     The selected appearance is configured by {@link Mesh#selectedMaterial:property"}}selectedMaterial{{/crossLink}}.
 
      Each selected Mesh is registered in its {@link Scene}'s
-     {@link Scene/selectedObjects} map when its {@link Node/objectId}
+     {@link Scene/selectedObjects} map when its {@link Mesh#objectId}
      is set to a value.
 
      @property selected
@@ -1207,7 +1135,7 @@ class Mesh extends Node {
     /**
      Indicates if edges are shown.
 
-     The edges appearance is configured by {@link Mesh/edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
+     The edges appearance is configured by {@link Mesh#edgeMaterial:property"}}edgeMaterial{{/crossLink}}.
 
      @property edges
      @default false
@@ -1229,8 +1157,8 @@ class Mesh extends Node {
     /**
      Indicates if culled from view.
 
-     The Mesh is only rendered when {@link Mesh/visible} is true and
-     {@link Mesh/culled} is false.
+     The Mesh is only rendered when {@link Mesh#visible} is true and
+     {@link Mesh#culled} is false.
 
      @property culled
      @default false
@@ -1271,7 +1199,7 @@ class Mesh extends Node {
     /**
      Indicates if clippable.
 
-     When false, the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} will have no effect on the Mesh.
+     When false, the {@link Scene}'s {@link Clips} will have no effect on the Mesh.
 
      @property clippable
      @default true
@@ -1359,7 +1287,7 @@ class Mesh extends Node {
     /**
      Indicates if rendered with an outline.
 
-     The outline appearance is configured by {@link Mesh/outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
+     The outline appearance is configured by {@link Mesh#outlineMaterial:property"}}outlineMaterial{{/crossLink}}.
 
      @property outlined
      @default false
@@ -1503,7 +1431,7 @@ class Mesh extends Node {
      Property with final value ````true```` to indicate that xeokit should render this Mesh Drawable in sorted order, relative to
      other Mesh Drawables of the same class.
 
-     The sort order is determined by the Mesh's {@link Mesh/stateSortCompare:methd"}}Mesh#stateSortCompare(){{/crossLink}} method.
+     The sort order is determined by the Mesh's {@link Mesh#stateSortCompare:methd"}}Mesh#stateSortCompare(){{/crossLink}} method.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes
      to the GPU, ie. can collapse them.
@@ -1520,7 +1448,7 @@ class Mesh extends Node {
      relative to to other Meshes.
 
      The renderer requires this because Mesh defines
-     {@link Mesh/isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}}, which returns true.
+     {@link Mesh#isStateSortable:property"}}Drawable#isStateSortable{{/crossLink}}, which returns true.
 
      Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same
      rendering state changes to the GPU, ie. can collapse them.

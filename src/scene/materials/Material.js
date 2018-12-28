@@ -1,5 +1,5 @@
 /**
- A **Material** defines the surface appearance of attached {@link Mesh"}}Meshes{{/crossLink}}.
+ A **Material** defines the surface appearance of attached {@link Mesh}es.
 
  Material is the base class for:
 
@@ -13,7 +13,7 @@
  * {@link EdgeMaterial} - defines the appearance of Meshes when edges are emphasized.
  * {@link OutlineMaterial} - defines the appearance of outlines drawn around Meshes.
 
- A {@link Scene}}Scene{{/crossLink}} is allowed to contain a mixture of these material types.
+ A {@link Scene} is allowed to contain a mixture of these material types.
 
  @class Material
  @module xeokit
@@ -39,8 +39,8 @@ class Material extends Component {
         return "Material";
     }
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
         stats.memory.materials++;
     }
 

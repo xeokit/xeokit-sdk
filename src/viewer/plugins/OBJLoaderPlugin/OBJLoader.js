@@ -14,24 +14,24 @@ class OBJLoader  {
      *
      * @method load
      * @static
-     * @param {GroupModel} groupModel Model to load into.
+     * @param {Node} modelNode Model to load into.
      * @param {String} src Path to OBJ file.
      * @param {Object} params Loading options.
      */
-    load(groupModel, src, params = {}) {
+    load(modelNode, src, params = {}) {
 
-        var spinner = groupModel.scene.canvas.spinner;
+        var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
 
-        loadOBJ(groupModel, src, function (state) {
-            loadMTLs(groupModel, state, function () {
+        loadOBJ(modelNode, src, function (state) {
+            loadMTLs(modelNode, state, function () {
 
-                createMeshes(groupModel, state);
+                createMeshes(modelNode, state);
 
                 spinner.processes--;
 
                 core.scheduleTask(function () {
-                    groupModel.fire("loaded", true);
+                    modelNode.fire("loaded", true);
                 });
             });
         });
@@ -42,23 +42,23 @@ class OBJLoader  {
      *
      * @method parse
      * @static
-     * @param {GroupModel} groupModel Model to load into.
+     * @param {Node} modelNode Model to load into.
      * @param {String} objText OBJ text string.
      * @param {String} [mtlText] MTL text string.
      * @param {String} [basePath] Base path for external resources.
      */
-    parse(groupModel, objText, mtlText, basePath) {
+    parse(modelNode, objText, mtlText, basePath) {
         if (!objText) {
             this.warn("load() param expected: objText");
             return;
         }
-        var state = parseOBJ(groupModel, objText, null);
+        var state = parseOBJ(modelNode, objText, null);
         if (mtlText) {
-            parseMTL(groupModel, mtlText, basePath);
+            parseMTL(modelNode, mtlText, basePath);
         }
-        createMeshes(groupModel, state);
-        groupModel.src = null;
-        groupModel.fire("loaded", true, true);
+        createMeshes(modelNode, state);
+        modelNode.src = null;
+        modelNode.fire("loaded", true, true);
     }
 }
 
@@ -75,13 +75,13 @@ class OBJLoader  {
 // https://github.com/mrdoob/three.js/blob/dev/examples/js/loaders/MTLLoader.js
 //--------------------------------------------------------------------------------------------
 
-var loadOBJ = function (groupModel, url, ok) {
+var loadOBJ = function (modelNode, url, ok) {
     loadFile(url, function (text) {
-            var state = parseOBJ(groupModel, text, url);
+            var state = parseOBJ(modelNode, text, url);
             ok(state);
         },
         function (error) {
-            groupModel.error(error);
+            modelNode.error(error);
         });
 };
 
@@ -112,7 +112,7 @@ var parseOBJ = (function () {
         material_use_pattern: /^usemtl /
     };
 
-    return function (groupModel, text, url) {
+    return function (modelNode, text, url) {
 
         url = url || "";
 
@@ -201,7 +201,7 @@ var parseOBJ = (function () {
 
                 } else {
 
-                    groupModel.error('Unexpected vertex/normal/uv line: \'' + line + '\'');
+                    modelNode.error('Unexpected vertex/normal/uv line: \'' + line + '\'');
                     return;
                 }
 
@@ -250,7 +250,7 @@ var parseOBJ = (function () {
 
                     addFace(state, result[1], result[2], result[3], result[4]);
                 } else {
-                    groupModel.error('Unexpected face line: \'' + line + '\'');
+                    modelNode.error('Unexpected face line: \'' + line + '\'');
                     return;
                 }
 
@@ -312,7 +312,7 @@ var parseOBJ = (function () {
                     continue;
                 }
 
-                groupModel.error('Unexpected line: \'' + line + '\'');
+                modelNode.error('Unexpected line: \'' + line + '\'');
                 return;
             }
         }
@@ -492,12 +492,12 @@ var parseOBJ = (function () {
 // Loads MTL files listed in parsed state
 //--------------------------------------------------------------------------------------------
 
-function loadMTLs(groupModel, state, ok) {
+function loadMTLs(modelNode, state, ok) {
     var basePath = state.basePath;
     var srcList = Object.keys(state.materialLibraries);
     var numToLoad = srcList.length;
     for (var i = 0, len = numToLoad; i < len; i++) {
-        loadMTL(groupModel, basePath, basePath + srcList[i], function () {
+        loadMTL(modelNode, basePath, basePath + srcList[i], function () {
             if (--numToLoad === 0) {
                 ok();
             }
@@ -509,13 +509,13 @@ function loadMTLs(groupModel, state, ok) {
 // Loads an MTL file
 //--------------------------------------------------------------------------------------------
 
-var loadMTL = function (groupModel, basePath, src, ok) {
+var loadMTL = function (modelNode, basePath, src, ok) {
     loadFile(src, function (text) {
-            parseMTL(groupModel, text, basePath);
+            parseMTL(modelNode, text, basePath);
             ok();
         },
         function (error) {
-            groupModel.error(error);
+            modelNode.error(error);
             ok();
         });
 };
@@ -524,7 +524,7 @@ var parseMTL = (function () {
 
     var delimiter_pattern = /\s+/;
 
-    return function (groupModel, mtlText, basePath) {
+    return function (modelNode, mtlText, basePath) {
 
         var lines = mtlText.split('\n');
         var materialCfg = {
@@ -559,7 +559,7 @@ var parseMTL = (function () {
 
                 case "newmtl": // New material
                     //if (needCreate) {
-                    createMaterial(groupModel, materialCfg);
+                    createMaterial(modelNode, materialCfg);
                     //}
                     materialCfg = {
                         id: value
@@ -581,20 +581,20 @@ var parseMTL = (function () {
 
                 case 'map_kd':
                     if (!materialCfg.diffuseMap) {
-                        materialCfg.diffuseMap = createTexture(groupModel, basePath, value, "sRGB");
+                        materialCfg.diffuseMap = createTexture(modelNode, basePath, value, "sRGB");
                     }
                     break;
 
                 case 'map_ks':
                     if (!materialCfg.specularMap) {
-                        materialCfg.specularMap = createTexture(groupModel, basePath, value, "linear");
+                        materialCfg.specularMap = createTexture(modelNode, basePath, value, "linear");
                     }
                     break;
 
                 case 'map_bump':
                 case 'bump':
                     if (!materialCfg.normalMap) {
-                        materialCfg.normalMap = createTexture(groupModel, basePath, value);
+                        materialCfg.normalMap = createTexture(modelNode, basePath, value);
                     }
                     break;
 
@@ -619,16 +619,16 @@ var parseMTL = (function () {
                     break;
 
                 default:
-                // groupModel.error("Unrecognized token: " + key);
+                // modelNode.error("Unrecognized token: " + key);
             }
         }
 
         if (needCreate) {
-            createMaterial(groupModel, materialCfg);
+            createMaterial(modelNode, materialCfg);
         }
     };
 
-    function createTexture(groupModel, basePath, value, encoding) {
+    function createTexture(modelNode, basePath, value, encoding) {
         var textureCfg = {};
         var items = value.split(/\s+/);
         var pos = items.indexOf('-bm');
@@ -651,12 +651,12 @@ var parseMTL = (function () {
         textureCfg.encoding = encoding || "linear";
         //textureCfg.wrapS = self.wrap;
         //textureCfg.wrapT = self.wrap;
-        var texture = new Texture(groupModel, textureCfg);
+        var texture = new Texture(modelNode, textureCfg);
         return texture.id;
     }
 
-    function createMaterial(groupModel, materialCfg) {
-       new PhongMaterial(groupModel, materialCfg);
+    function createMaterial(modelNode, materialCfg) {
+       new PhongMaterial(modelNode, materialCfg);
     }
 
     function parseRGB(value) {
@@ -671,7 +671,7 @@ var parseMTL = (function () {
 
 var createMeshes = (function () {
 
-    return function (groupModel, state) {
+    return function (modelNode, state) {
 
         for (var j = 0, k = state.objects.length; j < k; j++) {
 
@@ -706,17 +706,17 @@ var createMeshes = (function () {
             }
             geometryCfg.indices = indices;
 
-            var geometry = new Geometry(groupModel, geometryCfg);
+            var geometry = new Geometry(modelNode, geometryCfg);
 
             var materialId = object.material.id;
             var material;
             if (materialId && materialId !== "") {
-                material = groupModel.scene.components[materialId];
+                material = modelNode.scene.components[materialId];
                 if (!material) {
-                    groupModel.error("Material not found: " + materialId);
+                    modelNode.error("Material not found: " + materialId);
                 }
             } else {
-                material = new PhongMaterial(groupModel, {
+                material = new PhongMaterial(modelNode, {
                     //emissive: [0.6, 0.6, 0.0],
                     diffuse: [0.6, 0.6, 0.6],
                     backfaces: true
@@ -726,15 +726,15 @@ var createMeshes = (function () {
 
             // material.emissive = [Math.random(), Math.random(), Math.random()];
 
-            var mesh = new Mesh(groupModel, {
-                id: groupModel.id + "#" + object.id,
-                entityType: "default",
+            var mesh = new Mesh(modelNode, {
+                id: modelNode.id + "#" + object.id,
+                objectId: "default",
                 geometry: geometry,
                 material: material,
                 pickable: true
             });
 
-            groupModel.addChild(mesh);
+            modelNode.addChild(mesh);
         }
     };
 })();

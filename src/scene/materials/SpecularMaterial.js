@@ -1,6 +1,6 @@
 /**
  A **SpecularMaterial** is a physically-based {@link Material} that defines the surface appearance of
- {@link Mesh"}}Meshes{{/crossLink}} using the *specular-glossiness* workflow.
+ {@link Mesh}es using the *specular-glossiness* workflow.
 
  ## Examples
 
@@ -217,11 +217,11 @@
  @constructor
  @extends Material
 
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
 
- @param [cfg] {*} The SpecularMaterial configuration
+ @param {*} [cfg] The SpecularMaterial configuration
 
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
 
  @param [cfg.meta=null] {String:Object} Metadata to attach to this SpecularMaterial.
 
@@ -238,7 +238,7 @@
  {@link SpecularMaterial/specularGlossinessMap}.
 
  @param [cfg.specularMap=undefined] {Texture} RGB texture containing the specular color of this SpecularMaterial. Multiplies
- by the {@link SpecularMaterial/specular} property. Must be within the same {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+ by the {@link SpecularMaterial/specular} property. Must be within the same {@link Scene} as this SpecularMaterial.
 
  @param [cfg.glossiness=1.0] {Number} Factor in the range [0..1] indicating how glossy this SpecularMaterial is. 0 is
  no glossiness, 1 is full glossiness. Multiplies by the *R* component of {@link SpecularMaterial/glossinessMap}
@@ -248,7 +248,7 @@
  SpecularMaterial's specular color in its *RGB* component and glossiness in its *A* component. Its *RGB* components multiply by the
  {@link SpecularMaterial/specular} property, while its *A* component multiplies by the
  {@link SpecularMaterial/glossiness} property. Must be within the same
- {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+ {@link Scene} as this SpecularMaterial.
 
  @param [cfg.specularF0=0.0] {Number} Factor in the range 0..1 indicating how reflective this SpecularMaterial is.
 
@@ -257,14 +257,14 @@
 
  @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
  SpecularMaterial. Multiplies by the {@link SpecularMaterial/emissive} property.
- Must be within the same {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+ Must be within the same {@link Scene} as this SpecularMaterial.
 
  @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
  multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
  as this SpecularMaterial.
 
  @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
- within the same {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+ within the same {@link Scene} as this SpecularMaterial.
 
  @param [cfg.alpha=1.0] {Number} Factor in the range 0..1 indicating how transparent this SpecularMaterial is.
  A value of 0.0 indicates fully transparent, 1.0 is fully opaque. Multiplies by the *R* component of
@@ -273,7 +273,7 @@
 
  @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this SpecularMaterial's
  alpha in its *R* component. The *R* component multiplies by the {@link SpecularMaterial/alpha} property. Must
- be within the same {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+ be within the same {@link Scene} as this SpecularMaterial.
 
  @param [cfg.alphaMode="opaque"] {String} The alpha blend mode - accepted values are "opaque", "blend" and "mask".
  See the {@link SpecularMaterial/alphaMode} property for more info.
@@ -311,9 +311,9 @@ class SpecularMaterial extends Material {
         return "SpecularMaterial";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "SpecularMaterial",
@@ -570,7 +570,7 @@ class SpecularMaterial extends Material {
 
      The *R* component multiplies by the {@link SpecularMaterial/glossiness} property.
 
-     Must be within the same {@link Scene}}Scene{{/crossLink}} as this SpecularMaterial.
+     Must be within the same {@link Scene} as this SpecularMaterial.
 
      @property glossinessMap
      @default undefined
@@ -776,10 +776,10 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh}es.
 
      The backfaces will belong to {@link Geometry} compoents that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property backfaces
      @default false
@@ -799,10 +799,10 @@ class SpecularMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh}es.
 
      The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property frontface
      @default "ccw"

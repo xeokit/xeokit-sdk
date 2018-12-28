@@ -1,201 +1,4 @@
-/**
- A **Camera** defines viewing and projection transforms for its {@link Scene}.
 
- ## Overview
-
- * One Camera per Scene
- * Controls viewing and projection transforms
- * Has methods to pan, zoom and orbit (or first-person rotation)
- * Dynamically configurable World-space "up" direction
- * Switchable between perspective, frustum and orthographic projections
- * Switchable gimbal lock
- * Can be "flown" to look at targets using a {@link CameraFlightAnimation}
- * Can be animated along a path using a {@link CameraPathAnimation}
- * Can follow a target using a {@link CameraFollowAnimation}
-
- ## Examples
-
- * [Perspective projection](../../examples/#camera_perspective)
- * [Orthographic projection](../../examples/#camera_orthographic)
- * [Frustum projection](../../examples/#camera_frustum)
- * [Camera with world Z-axis as "up"](../../examples/#camera_zAxisUp)
- * [Camera with world Y-axis as "up"](../../examples/#camera_yAxisUp)
- * [Automatically following a Mesh with a Camera](../../examples/#camera_follow)
- * [Animating a Camera along a path](../../examples/#camera_path_interpolation)
- * [Architectural fly-through](../../examples/#importing_gltf_ModernOffice)
-
- ## Usage
-
- * [Getting the Camera](#getting-the-camera)
- * [Moving around](#moving-around)
- * [Projection](#projection)
- * [Configuring World up direction](#configuring-world-up-direction)
- * [Gimbal locking](#gimbal-locking)
- * [Stereo rendering](#stereo-rendering)
-
- ### Getting the Camera
-
- There is exactly one Camera per Scene:
-
- ````javascript
- var camera = myScene.camera;
- ````
-
- ### Moving around
-
- Get and set the Camera's absolute position at any time via its {@link Camera/eye},
- {@link Camera/look} and {@link Camera/up} properties:
-
- ````javascript
- camera.eye = [-10,0,0];
- camera.look = [-10,0,0];
- camera.up = [0,1,0];
- ````
-
- Get the view matrix:
-
- ````javascript
- var viewMatrix = camera.viewMatrix;
- var viewNormalMatrix = camera.normalMatrix;
- ````
-
- Listen for view matrix updates:
-
- ````javascript
- camera.on("matrix", function(matrix) { ... });
- ````
-
- Orbiting the {@link Camera/look} position:
-
- ````javascript
- camera.orbitYaw(20.0);
- camera.orbitPitch(10.0);
- ````
-
- First-person rotation, rotates {@link Camera/look}
- and {@link Camera/up} about {@link Camera/eye}:
-
- ````javascript
- camera.yaw(5.0);
- camera.pitch(-10.0);
- ````
-
- Panning along the Camera's local axis (ie. left/right, up/down, forward/backward):
-
- ````javascript
- camera.pan([-20, 0, 10]);
- ````
-
- Zoom to vary distance between {@link Camera/eye} and {@link Camera/look}:
-
- ````javascript
- camera.zoom(-5); // Move five units closer
- ````
-
- Get the current distance between {@link Camera/eye} and {@link Camera/look}:
-
- ````javascript
- var distance = camera.eyeLookDist;
- ````
-
- ### Projection
-
- For each projection type, the Camera has a Component to manage that projection's configuration. You can hot-switch the Camera
- between those projection types, while updating the properties of each projection component at any time.
-
- ````javascript
- camera.perspective.near = 0.4;
- camera.perspective.fov = 45;
- //...
-
- camera.ortho.near = 0.8;
- camera.ortho.far = 1000;
- //...
-
- camera.frustum.left = -1.0;
- camera.frustum.right = 1.0;
- camera.frustum.far = 1000.0;
- //...
-
- camera.customProjection.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-
- camera.projection = "perspective"; // Switch to perspective
- camera.projection = "frustum"; // Switch to frustum
- camera.projection = "ortho"; // Switch to ortho
- camera.projection = "customProjection"; // Switch to custom
- ````
-
- Get the projection matrix:
-
- ````javascript
- var projMatrix = camera.projMatrix;
- ````
-
- Listen for projection matrix updates:
-
- ````javascript
- camera.on("projMatrix", function(matrix) { ... });
- ````
-
- ### Configuring World up direction
-
- We can dynamically configure the direction that we consider to be "up" in the World-space coordinate system.
-
- Set the +Y axis as World "up" (convention in some modeling software):
-
- ````javascript
- camera.worldAxis = [
- 1, 0, 0,    // Right
- 0, 1, 0,    // Up
- 0, 0,-1     // Forward
- ];
- ````
-
- Set the +Z axis as World "up" (convention in most CAD and BIM viewers):
-
- ````javascript
- camera.worldAxis = [
- 1, 0, 0, // Right
- 0, 0, 1, // Up
- 0,-1, 0  // Forward
- ];
- ````
-
- The Camera has read-only convenience properties that provide each axis individually:
-
- ````javascript
- var worldRight = camera.worldRight;
- var worldForward = camera.worldForward;
- var worldUp = camera.worldUp;
- ````
-
- ### Gimbal locking
-
- By default, the Camera locks yaw rotation to pivot about the World-space "up" axis. We can dynamically lock and unlock that
- at any time:
-
- ````javascript
- camera.gimbalLock = false; // Yaw rotation now happens about Camera's local Y-axis
- camera.gimbalLock = true; // Yaw rotation now happens about World's "up" axis
- ````
-
- See: <a href="https://en.wikipedia.org/wiki/Gimbal_lock">https://en.wikipedia.org/wiki/Gimbal_lock</a>
-
- ### Stereo rendering
-
- TODO: Describe stereo techniques and the deviceMatrix property
-
- @class Camera
- @module xeokit
- @submodule camera
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
- You only need to supply an ID if you need to be able to find the Camera by ID within its parent {@link Scene}}Scene{{/crossLink}} later.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Camera.
- @extends Component
- */
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
@@ -217,6 +20,171 @@ const eyeLookVecNorm = math.vec3();
 const eyeLookOffset = math.vec3();
 const offsetEye = math.vec3();
 
+/**
+ * @desc Manages viewing and projection transforms for its {@link Scene}.
+ *
+ * * One Camera per {@link Scene}
+ * * Located at {@link Scene#camera}
+ * * Also located for convenience at {@link Viewer#camera}
+ * * Controls viewing and projection transforms
+ * * Has methods to pan, zoom and orbit (or first-person rotation)
+ * * Dynamically configurable World-space "up" direction
+ * * Switchable between perspective, frustum and orthographic projections
+ * * Switchable gimbal lock
+ * * Can be "flown" to look at targets using a {@link CameraFlightAnimation}
+ * * Can be animated along a path using a {@link CameraPathAnimation}
+ *
+ * ## Getting the Camera
+ *
+ * There is exactly one Camera per {@link Scene}:
+ *
+ * ````javascript
+ * var camera = myViewer.scene.camera;
+ * ````
+ * Can also be found on the {@link Viewer} for convenience:
+ *
+ * ````javascript
+ * var camera = myViewer.camera;
+ * ````
+ *
+ * ## Moving around
+ *
+ * Get and set the Camera's absolute position at any time via its {@link Camera#eye}, {@link Camera#look} and {@link Camera#up} properties:
+ *
+ * ````javascript
+ * camera.eye = [-10,0,0];
+ * camera.look = [-10,0,0];
+ * camera.up = [0,1,0];
+ * ````
+ *
+ * Get the view matrix:
+ *
+ * ````javascript
+ * var viewMatrix = camera.viewMatrix;
+ * var viewNormalMatrix = camera.normalMatrix;
+ * ````
+ *
+ * Listen for view matrix updates:
+ *
+ * ````javascript
+ * camera.on("matrix", function(matrix) { ... });
+ * ````
+ *
+ * Orbiting the {@link Camera#look} position:
+ *
+ * ````javascript
+ * camera.orbitYaw(20.0);
+ * camera.orbitPitch(10.0);
+ * ````
+ *
+ * First-person rotation, rotates {@link Camera#look}
+ * and {@link Camera#up} about {@link Camera#eye}:
+ *
+ * ````javascript
+ * camera.yaw(5.0);
+ * camera.pitch(-10.0);
+ * ````
+ *
+ * Panning along the Camera's local axis (ie. left/right, up/down, forward/backward):
+ *
+ * ````javascript
+ * camera.pan([-20, 0, 10]);
+ * ````
+ *
+ * Zoom to vary distance between {@link Camera#eye} and {@link Camera#look}:
+ *
+ * ````javascript
+ * camera.zoom(-5); // Move five units closer
+ * ````
+ *
+ * Get the current distance between {@link Camera#eye} and {@link Camera#look}:
+ *
+ * ````javascript
+ * var distance = camera.eyeLookDist;
+ * ````
+ *
+ * ## Projection
+ *
+ * For each projection type, the Camera has a Component to manage that projection's configuration. You can hot-switch the Camera
+ * between those projection types, while updating the properties of each projection component at any time.
+ *
+ * ````javascript
+ * camera.perspective.near = 0.4;
+ * camera.perspective.fov = 45;
+ * //...
+ *
+ * camera.ortho.near = 0.8;
+ * camera.ortho.far = 1000;
+ * //...
+ *
+ * camera.frustum.left = -1.0;
+ * camera.frustum.right = 1.0;
+ * camera.frustum.far = 1000.0;
+ * //...
+ *
+ * camera.customProjection.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+ *
+ * camera.projection = "perspective"; // Switch to perspective
+ * camera.projection = "frustum"; // Switch to frustum
+ * camera.projection = "ortho"; // Switch to ortho
+ * camera.projection = "customProjection"; // Switch to custom
+ * ````
+ *
+ * Get the projection matrix:
+ *
+ * ````javascript
+ * var projMatrix = camera.projMatrix;
+ * ````
+ *
+ * Listen for projection matrix updates:
+ *
+ * ````javascript
+ * camera.on("projMatrix", function(matrix) { ... });
+ * ````
+ *
+ * ## Configuring World up direction
+ *
+ * We can dynamically configure the direction that we consider to be "up" in the World-space coordinate system.
+ *
+ * Set the +Y axis as World "up" (convention in some modeling software):
+ *
+ * ````javascript
+ * camera.worldAxis = [
+ *  1, 0, 0,    // Right
+ *  0, 1, 0,    // Up
+ *  0, 0,-1     // Forward
+ * ];
+ * ````
+ *
+ * Set the +Z axis as World "up" (convention in most CAD and BIM viewers):
+ *
+ * ````javascript
+ * camera.worldAxis = [
+ *  1, 0, 0, // Right
+ *  0, 0, 1, // Up
+ *  0,-1, 0  // Forward
+ * ];
+ * ````
+ *
+ * The Camera has read-only convenience properties that provide each axis individually:
+ *
+ * ````javascript
+ * var worldRight = camera.worldRight;
+ * var worldForward = camera.worldForward;
+ * var worldUp = camera.worldUp;
+ * ````
+ *
+ * ### Gimbal locking
+ *
+ * By default, the Camera locks yaw rotation to pivot about the World-space "up" axis. We can dynamically lock and unlock that at any time:
+ *
+ * ````javascript
+ * camera.gimbalLock = false; // Yaw rotation now happens about Camera's local Y-axis
+ * camera.gimbalLock = true; // Yaw rotation now happens about World's "up" axis
+ * ````
+ *
+ * See: <a href="https://en.wikipedia.org/wiki/Gimbal_lock">https://en.wikipedia.org/wiki/Gimbal_lock</a>
+ */
 class Camera extends Component {
 
     /**
@@ -232,9 +200,13 @@ class Camera extends Component {
         return "Camera";
     }
 
-    init(cfg) {
+    /**
+     @constructor
+     @private
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             deviceMatrix: math.mat4(),
@@ -320,7 +292,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {@link Camera/eye} about {@link Camera/look}, around the {@link Camera/up} vector
+     Rotates {@link Camera#eye} about {@link Camera#look}, around the {@link Camera#up} vector
 
      @method orbitYaw
      @param {Number} angle Angle of rotation in degrees
@@ -334,7 +306,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {@link Camera/eye} about {@link Camera/look} around the right axis (orthogonal to {@link Camera/up} and "look").
+     Rotates {@link Camera#eye} about {@link Camera#look} around the right axis (orthogonal to {@link Camera#up} and "look").
 
      @method orbitPitch
      @param {Number} angle Angle of rotation in degrees
@@ -356,7 +328,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {@link Camera/look} about {@link Camera/eye}, around the {@link Camera/up} vector.
+     Rotates {@link Camera#look} about {@link Camera#eye}, around the {@link Camera#up} vector.
 
      @method yaw
      @param {Number} angle Angle of rotation in degrees
@@ -372,7 +344,7 @@ class Camera extends Component {
     }
 
     /**
-     Rotates {@link Camera/look} about {@link Camera/eye}, around the right axis (orthogonal to {@link Camera/up} and "look").
+     Rotates {@link Camera#look} about {@link Camera#eye}, around the right axis (orthogonal to {@link Camera#up} and "look").
 
      @method pitch
      @param {Number} angle Angle of rotation in degrees
@@ -427,8 +399,8 @@ class Camera extends Component {
     }
 
     /**
-     Increments/decrements zoom factor, ie. distance between {@link Camera/eye}
-     and {@link Camera/look}.
+     Increments/decrements zoom factor, ie. distance between {@link Camera#eye}
+     and {@link Camera#look}.
 
      @method zoom
      @param delta
@@ -448,7 +420,7 @@ class Camera extends Component {
     /**
      Position of this Camera's eye.
 
-     Fires an {@link Camera/eye:event} event on change.
+     Fires an {@link Camera#eye:event} event on change.
 
      @property eye
      @default [0,0,10]
@@ -458,7 +430,7 @@ class Camera extends Component {
         this._eye.set(value || [0, 0, 10]);
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Camera's {@link Camera/eye} property changes.
+         Fired whenever this Camera's {@link Camera#eye} property changes.
 
          @event eye
          @param value The property's new value
@@ -473,7 +445,7 @@ class Camera extends Component {
     /**
      Position of this Camera's point-of-interest.
 
-     Fires a {@link Camera/look:event} event on change.
+     Fires a {@link Camera#look:event} event on change.
 
      @property look
      @default [0,0,0]
@@ -483,7 +455,7 @@ class Camera extends Component {
         this._look.set(value || [0, 0, 0]);
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
-         Fired whenever this Camera's {@link Camera/look} property changes.
+         Fired whenever this Camera's {@link Camera#look} property changes.
 
          @event look
          @param value The property's new value
@@ -496,9 +468,9 @@ class Camera extends Component {
     }
 
     /**
-     Direction of this Camera's {@link Camera/up} vector.
+     Direction of this Camera's {@link Camera#up} vector.
 
-     Fires an {@link Camera/up:event} event on change.
+     Fires an {@link Camera#up:event} event on change.
 
      @property up
      @default [0,1,0]
@@ -508,7 +480,7 @@ class Camera extends Component {
         this._up.set(value || [0, 1, 0]);
         this._needUpdate(0);
         /**
-         Fired whenever this Camera's {@link Camera/up} property changes.
+         Fired whenever this Camera's {@link Camera#up} property changes.
 
          @event up
          @param value The property's new value
@@ -521,7 +493,7 @@ class Camera extends Component {
     }
 
     /**
-     Sets an optional matrix to premultiply into this Camera's {@link Camera/matrix} matrix.
+     Sets an optional matrix to premultiply into {@link Camera#matrix} matrix.
 
      This is intended to be used for stereo rendering with WebVR etc.
 
@@ -571,7 +543,7 @@ class Camera extends Component {
         this._worldForward[1] = this._worldAxis[7];
         this._worldForward[2] = this._worldAxis[8];
         /**
-         * Fired whenever this Camera's {@link Camera/worldAxis} property changes.
+         * Fired whenever this Camera's {@link Camera#worldAxis} property changes.
          *
          * @event worldAxis
          * @param value The property's new value
@@ -622,7 +594,7 @@ class Camera extends Component {
     /**
      Whether to lock yaw rotation to pivot about the World-space "up" axis.
 
-     Fires a {@link Camera/gimbalLock:event} event on change.
+     Fires a {@link Camera#gimbalLock:event} event on change.
 
      @property gimbalLock
      @default true
@@ -631,7 +603,7 @@ class Camera extends Component {
     set gimbalLock(value) {
         this._gimbalLock = value !== false;
         /**
-         Fired whenever this Camera's  {@link Camera/gimbalLock} property changes.
+         Fired whenever this Camera's  {@link Camera#gimbalLock} property changes.
 
          @event gimbalLock
          @param value The property's new value
@@ -647,9 +619,9 @@ class Camera extends Component {
      Whether to prevent camera from being pitched upside down.
 
      The camera is upside down when the angle
-     between {@link Camera/up} and {@link Camera/worldUp} is less than one degree.
+     between {@link Camera#up} and {@link Camera#worldUp} is less than one degree.
 
-     Fires a {@link Camera/constrainPitch:event} event on change.
+     Fires a {@link Camera#constrainPitch:event} event on change.
 
      @property constrainPitch
      @default false
@@ -658,7 +630,7 @@ class Camera extends Component {
     set constrainPitch(value) {
         this._constrainPitch = !!value;
         /**
-         Fired whenever this Camera's  {@link Camera/constrainPitch} property changes.
+         Fired whenever this Camera's  {@link Camera#constrainPitch} property changes.
 
          @event constrainPitch
          @param value The property's new value
@@ -683,7 +655,7 @@ class Camera extends Component {
     /**
      The Camera's viewing transformation matrix.
 
-     Fires a {@link Camera/matrix:event} event on change.
+     Fires a {@link Camera#matrix:event} event on change.
 
      @property matrix
      @type {Float32Array}
@@ -700,7 +672,7 @@ class Camera extends Component {
     /**
      The Camera's viewing transformation matrix.
 
-     Fires a {@link Camera/matrix:event} event on change.
+     Fires a {@link Camera#matrix:event} event on change.
 
      @property viewMatrix
      @final
@@ -717,7 +689,7 @@ class Camera extends Component {
     /**
      The Camera's viewing normal transformation matrix.
 
-     Fires a {@link Camera/matrix:event} event on change.
+     Fires a {@link Camera#matrix:event} event on change.
 
      @property normalMatrix
      @type {Float32Array}
@@ -734,13 +706,13 @@ class Camera extends Component {
     /**
      The Camera's viewing normal transformation matrix.
 
-     Fires a {@link Camera/matrix:event} event on change.
+     Fires a {@link Camera#matrix:event} event on change.
 
      @property viewNormalMatrix
      @final
      @type {Float32Array}
      */
-    get  viewNormalMatrix() {
+    get viewNormalMatrix() {
         if (this._updateScheduled) {
             this._doUpdate();
         }
@@ -750,7 +722,7 @@ class Camera extends Component {
     /**
      Camera's projection transformation projMatrix.
 
-     Fires a {@link Camera/projMatrix:event} event on change.
+     Fires a {@link Camera#projMatrix:event} event on change.
 
      @property projMatrix
      @final
@@ -764,7 +736,7 @@ class Camera extends Component {
     /**
      The perspective projection transform for this Camera.
 
-     This is used while {@link Camera/projection} equals "perspective".
+     This is used while {@link Camera#projection} equals "perspective".
 
      @property perspective
      @type Perspective
@@ -777,7 +749,7 @@ class Camera extends Component {
     /**
      The orthographic projection transform for this Camera.
 
-     This is used while {@link Camera/projection} equals "ortho".
+     This is used while {@link Camera#projection} equals "ortho".
 
      @property ortho
      @type Ortho
@@ -791,7 +763,7 @@ class Camera extends Component {
     /**
      The frustum projection transform for this Camera.
 
-     This is used while {@link Camera/projection} equals "frustum".
+     This is used while {@link Camera#projection} equals "frustum".
 
      @property frustum
      @type Frustum
@@ -804,7 +776,7 @@ class Camera extends Component {
     /**
      A custom projection transform, given as a 4x4 matrix.
 
-     This is used while {@link Camera/projection} equals "customProjection".
+     This is used while {@link Camera#projection} equals "customProjection".
 
      @property customProjection
      @type CustomProjection

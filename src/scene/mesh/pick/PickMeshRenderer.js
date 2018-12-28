@@ -97,11 +97,11 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
         this._lastMaterialId = materialState.id;
     }
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         const vertexBufs = mesh._geometry._getVertexBufs();
         if (vertexBufs.id !== this._lastVertexBufsId) {
             if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             this._lastVertexBufsId = vertexBufs.id;
@@ -116,14 +116,14 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
         if (this._uPositionsDecodeMatrix) {
             gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
         }
-        if (geometryState.combined) { // VBOs were bound by the preceding VertexBufs chunk
+        if (geometryState.combineGeometry) { // VBOs were bound by the preceding VertexBufs chunk
             if (geometryState.indicesBufCombined) {
                 geometryState.indicesBufCombined.bind();
                 frame.bindArray++;
             }
         } else {
             if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.quantized ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
                 frame.bindArray++;
             }
             if (geometryState.indicesBuf) {
@@ -141,7 +141,7 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
     const r = pickID & 0xFF;
     gl.uniform4f(this._uPickColor, r / 255, g / 255, b / 255, a / 255);
     // Draw (indices bound in prev step)
-    if (geometryState.combined) {
+    if (geometryState.combineGeometry) {
         if (geometryState.indicesBufCombined) { // Geometry indices into portion of uber-array
             gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
             frame.drawElements++;

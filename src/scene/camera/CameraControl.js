@@ -1,82 +1,28 @@
-/**
- Rotates, pans and zooms the {@link Scene}'s {@link Camera} with keyboard, mouse and touch input.
-
- CameraControl fires these events:
-
- * "hover" - Hover enters a new object
- * "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
- * "hoverLeave"  - Hover has left the last object we were hovering over
- * "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
- * "picked" - Clicked or tapped object
- * "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
- * "doublePicked" - Double-clicked or double-tapped object
- * "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
- * "pickedNothing" - Clicked or tapped, but not on any objects
- * "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
-
- CameraControl only fires "hover" events when the mouse is up.
-
- For efficiency, CameraControl only does surface intersection picking when you subscribe to "doublePicked" and
- "doublePickedSurface" events. Therefore, only subscribe to those when you're OK with the overhead incurred by the
- surface intersection tests.
-
- ## Panning
-
- ## Rotating
-
- ## Pivoting
-
- ## Zooming
-
- ## Events
-
- ## Activating and deactivating
-
- ## Inertia
-
- ## First person
-
- ## Zoom to pointer
-
- TODO: describe only works for first-person
- TODO: make configurable?
-
- ## Keyboard layout
-
- # Fly-to
-
-
- @class CameraControl
- @module xeokit
- @submodule controls
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraControl.
- @param [cfg.firstPerson=false] {Boolean} Whether or not this CameraControl is in "first person" mode.
- @param [cfg.walking=false] {Boolean} Whether or not this CameraControl is in "walking" mode.
- @param [cfg.keyboardLayout="qwerty"] {String} Keyboard layout.
- @param [cfg.doublePickFlyTo=true] {Boolean} Whether to fly the camera to each {@link Mesh} that's double-clicked.
- @param [cfg.active=true] {Boolean} Indicates whether or not this CameraControl is active.
- @param [cfg.pivoting=false] {Boolean} When true, clicking on a {@link Mesh} and dragging will pivot
- the {@link Camera} about the picked point on the Mesh's surface.
- @param [cfg.panToPointer=false] {Boolean} When true, mouse wheel when mouse is over a {@link Mesh} will zoom
- the {@link Camera} towards the hoveredd point on the Mesh's surface.
- @param [cfg.panToPivot=false] {Boolean} TODO.
- @param [cfg.inertia=0.5] {Number} A factor in range [0..1] indicating how much the camera keeps moving after you finish panning or rotating it.
- @author xeolabs / http://xeolabs.com
- @author DerSchmale / http://www.derschmale.com
- @extends Component
- */
-
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {Mesh} from '../mesh/Mesh.js';
 import {AABBGeometry} from '../geometry/AABBGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
-import {CameraFlightAnimation} from '../animation/CameraFlightAnimation.js';
+import {CameraFlightAnimation} from './CameraFlightAnimation.js';
 
+/**
+ * @desc Controls a {@link Camera} with keyboard, mouse and touch input.
+ *
+ * Located for convenience at {@link Viewer#cameraControl}.
+ *
+ * Fires these events:
+ *
+ * * "hover" - Hover enters a new object
+ * * "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
+ * * "hoverLeave"  - Hover has left the last object we were hovering over
+ * * "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
+ * * "picked" - Clicked or tapped object
+ * * "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
+ * * "doublePicked" - Double-clicked or double-tapped object
+ * * "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
+ * * "pickedNothing" - Clicked or tapped, but not on any objects
+ * * "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
+ */
 class CameraControl extends Component {
 
     /**
@@ -92,9 +38,13 @@ class CameraControl extends Component {
         return "CameraControl";
     }
 
-    init(cfg) {
+    /**
+     * @private
+     * @constructor
+     */
+    constructor(owner, cfg = {}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         const self = this;
 

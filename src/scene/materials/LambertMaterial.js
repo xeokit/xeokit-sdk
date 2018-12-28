@@ -1,6 +1,6 @@
 /**
  A **LambertMaterial** is a {@link Material} that defines the surface appearance of
- attached {@link Mesh"}}Meshes{{/crossLink}} using
+ attached {@link Mesh}es using
  the non-physically based <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> model for calculating reflectance.
 
  ## Examples
@@ -49,9 +49,9 @@
  @submodule materials
  @constructor
  @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The LambertMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] The LambertMaterial configuration
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
  @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
  @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
@@ -83,9 +83,9 @@ class LambertMaterial extends Material {
         return "LambertMaterial";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "LambertMaterial",
@@ -261,10 +261,10 @@ class LambertMaterial extends Material {
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Whether backfaces are visible on attached {@link Mesh}es.
 
      The backfaces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property backfaces
      @default false
@@ -284,10 +284,10 @@ class LambertMaterial extends Material {
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh"}}Meshes{{/crossLink}}.
+     Indicates the winding direction of front faces on attached {@link Mesh}es.
 
      The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh"}}Meshes{{/crossLink}}.
+     the {@link Mesh}es.
 
      @property frontface
      @default "ccw"

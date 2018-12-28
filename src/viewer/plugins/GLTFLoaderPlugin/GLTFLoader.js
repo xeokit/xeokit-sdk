@@ -666,8 +666,8 @@ var parseGLTF = (function () {
 
                 geometryCfg = {
                     primitive: "triangles",
-                    combined: ctx.combineGeometry,
-                    quantized: ctx.quantizeGeometry,
+                    combineGeometry: ctx.combineGeometry,
+                    compressGeometry: ctx.quantizeGeometry,
                     edgeThreshold: ctx.edgeThreshold
                 };
 

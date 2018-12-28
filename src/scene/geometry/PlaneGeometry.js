@@ -1,84 +1,58 @@
-/**
- A **PlaneGeometry** is a parameterized {@link Geometry} that defines a plane-shaped mesh for attached {@link Mesh"}}Meshes{{/crossLink}}.
-
- <a href="../../examples/#geometry_primitives_plane"><img src="../../assets/images/screenshots/PlaneGeometry.png"></img></a>
-
- ## Overview
-
- * A PlaneGeometry lies in the X-Z plane.
- * Dynamically modify it's shape at any time by updating its {@link PlaneGeometry/center}, {@link PlaneGeometry/xSize}, {@link PlaneGeometry/zSize}, {@link PlaneGeometry/xSegments} and
- {@link PlaneGeometry/zSegments} properties.
- * Dynamically switch its primitive type between ````"points"````, ````"lines"```` and ````"triangles"```` at any time by
- updating its {@link Geometry/primitive} property.
-
- ## Examples
-
- * [Textured PlaneGeometry](../../examples/#geometry_primitives_plane)
-
- ## Usage
-
- An {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with
- diffuse {@link Texture}:
-
- ````javascript
- new xeokit.Mesh({
-
-     geometry: new xeokit.PlaneGeometry({
-         primitive: "triangles",
-         center: [0,0,0],
-         xSize: 2,
-         zSize: 2,
-         xSegments: 10,
-         zSegments: 10
-     }),
-
-     material: new xeokit.PhongMaterial({
-        diffuseMap: new xeokit.Texture({
-            src: "textures/diffuse/uvGrid2.jpg"
-        })
-     })
- });
- ````
-
- @class PlaneGeometry
- @module xeokit
- @submodule geometry
- @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}},
- generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this PlaneGeometry.
- @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a PlaneGeometry are 'points', 'lines' and 'triangles'.
- @param [cfg.center] {Float32Array} 3D point indicating the center position of the PlaneGeometry.
- @param [cfg.xSize=1] {Number} Dimension on the X-axis.
- @param [cfg.zSize=1] {Number} Dimension on the Z-axis.
- @param [cfg.xSegments=1] {Number} Number of segments on the X-axis.
- @param [cfg.zSegments=1] {Number} Number of segments on the Z-axis.
- @extends Geometry
- */
 import {utils} from '../utils.js';
 import {Geometry} from './Geometry.js';
 
+/**
+ * @desc Defines a planar shape for one or more {@link Mesh}es.
+ *
+ * ## Usage
+ * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * ````javascript
+ * new Mesh(myViewer.scene, {
+ *     geometry: new PlaneGeometry(myViewer.scene, {
+ *          center: [0,0,0],
+ *          xSize: 2,
+ *          zSize: 2,
+ *          xSegments: 10,
+ *          zSegments: 10
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ *  });
+ ````
+ */
 class PlaneGeometry extends Geometry {
 
-    init(cfg) {
+    /**
+     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values for a PlaneGeometry are 'points', 'lines' and 'triangles'.
+     @param [cfg.center] {Float32Array} 3D point indicating the center position of the PlaneGeometry.
+     @param [cfg.xSize=1] {Number} Dimension on the X-axis.
+     @param [cfg.zSize=1] {Number} Dimension on the Z-axis.
+     @param [cfg.xSegments=1] {Number} Number of segments on the X-axis.
+     @param [cfg.zSegments=1] {Number} Number of segments on the Z-axis.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
         let xSize = cfg.xSize || 1;
         if (xSize < 0) {
-            this.error("negative xSize not allowed - will invert");
+            console.error("negative xSize not allowed - will invert");
             xSize *= -1;
         }
 
         let zSize = cfg.zSize || 1;
         if (zSize < 0) {
-            this.error("negative zSize not allowed - will invert");
+            console.error("negative zSize not allowed - will invert");
             zSize *= -1;
         }
 
         let xSegments = cfg.xSegments || 1;
         if (xSegments < 0) {
-            this.error("negative xSegments not allowed - will invert");
+            console.error("negative xSegments not allowed - will invert");
             xSegments *= -1;
         }
         if (xSegments < 1) {
@@ -87,7 +61,7 @@ class PlaneGeometry extends Geometry {
 
         let zSegments = cfg.xSegments || 1;
         if (zSegments < 0) {
-            this.error("negative zSegments not allowed - will invert");
+            console.error("negative zSegments not allowed - will invert");
             zSegments *= -1;
         }
         if (zSegments < 1) {
@@ -173,7 +147,7 @@ class PlaneGeometry extends Geometry {
             }
         }
 
-        super.init(utils.apply(cfg, {
+        super(owner, utils.apply(cfg, {
             positions: positions,
             normals: normals,
             uv: uvs,

@@ -1,5 +1,5 @@
 /**
- An **OutlineMaterial** is a {@link Material} that's applied to {@link Mesh"}}Meshes{{/crossLink}}
+ An **OutlineMaterial** is a {@link Material} that's applied to {@link Mesh}es
  to render an outline around them.
 
  WIP
@@ -9,9 +9,9 @@
  @submodule materials
  @constructor
  @extends Material
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} The OutlineMaterial configuration
- @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}}Scene{{/crossLink}}, generated automatically when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] The OutlineMaterial configuration
+ @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  @param [cfg.meta=null] {String:Object} Metadata to attach to this OutlineMaterial.
  @param [cfg.color=[1.0,0.2,0.2]] {Array of Number}  Outline RGB color.
  @param [cfg.alpha=1.0] {Number} Outline opacity. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
@@ -35,9 +35,9 @@ class OutlineMaterial extends Material {
         return "OutlineMaterial";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             type: "OutlineMaterial",

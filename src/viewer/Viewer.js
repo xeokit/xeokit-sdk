@@ -1,7 +1,7 @@
 import {math} from "../scene/math/math.js";
 import {Scene} from "../scene/scene/Scene.js";
-import {CameraFlightAnimation} from "../scene/animation/CameraFlightAnimation.js";
-import {CameraControl} from "../scene/controls/CameraControl.js";
+import {CameraFlightAnimation} from "../scene/camera/CameraFlightAnimation.js";
+import {CameraControl} from "../scene/camera/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 
 /**
@@ -45,7 +45,7 @@ class Viewer {
          */
         this.scene = new Scene({
             viewer: this,
-            canvas: cfg.canvasId,
+            canvasId: cfg.canvasId,
             webgl2: false,
             contextAttr: {preserveDrawingBuffer: false},
             transparent: !!cfg.transparent,
@@ -70,13 +70,19 @@ class Viewer {
         this.id = cfg.id || this.scene.id;
 
         /**
+         * The Viewer's {@link Camera}. This is also found on {@link Scene#camera}.
+         * @property camera
+         * @type {Camera}
+         */
+        this.camera = this.scene.camera;
+
+        /**
          * The Viewer's {@link CameraFlightAnimation}, which
          * is used to fly the {@link Scene}'s {@link Camera} to given targets.
          * @property cameraFlight
          * @type {CameraFlightAnimation}
          */
         this.cameraFlight = new CameraFlightAnimation(this.scene, {
-            fitFOV: 35,
             duration: 0.5
         });
 
@@ -87,10 +93,10 @@ class Viewer {
          * @type {CameraControl}
          */
         this.cameraControl = new CameraControl(this.scene, {
-            panToPointer: true,
+            // panToPointer: true,
             doublePickFlyTo: true
         });
-        
+
         /**
          * {@link Plugin}s that have been installed into this Viewer, mapped to their IDs.
          * @property plugins
@@ -232,153 +238,6 @@ class Viewer {
         // this.show();
         // this.hide("space");
         // this.hide("DEFAULT");
-    }
-
-    /**
-     * Gets a JSON bookmark that captures the state of the Viewer and all installed {@link Plugin}s.
-     *
-     * @returns {*} The bookmark
-     */
-    getBookmark() {
-
-        const vecToArray = math.vecToArray;
-        const bookmark = {};
-        let id;
-        let model;
-        let modelState;
-        let position;
-        let scale;
-        let rotation;
-        let object;
-        let objectState;
-
-        /*
-         // Save object states that have non-default properties
-
-         const objectStates = [];
-         for (id in this.scene.entities) {
-         if (this.scene.entities.hasOwnProperty(id)) {
-         object = this.scene.entities[id];
-         objectState = null;
-         position = getPosition(object);
-         if (position) {
-         objectState = objectState || {id};
-         objectState.position = position;
-         }
-         scale = getScale(object);
-         if (scale) {
-         objectState = objectState || {id};
-         objectState.scale = scale;
-         }
-         rotation = getRotation(object);
-         if (rotation) {
-         objectState = objectState || {id};
-         objectState.rotation = rotation;
-         }
-         if (!object.visible) {
-         objectState = objectState || {id};
-         objectState.visible = false;
-         }
-         if (object.outlined) {
-         objectState = objectState || {id};
-         objectState.outlined = true;
-         }
-         if (!object.clippable) {
-         objectState = objectState || {id};
-         objectState.clippable = false;
-         }
-         if (!object.pickable) {
-         objectState = objectState || {id};
-         objectState.pickable = false;
-         }
-         if (!object.pickable) {
-         objectState = objectState || {id};
-         objectState.pickable = false;
-         }
-         if (objectState) {
-         objectStates.push(objectState);
-         }
-         }
-         }
-         if (objectStates.length > 0) {
-         bookmark.objects = objectStates;
-         }
-
-         const camera = this.camera;
-
-         bookmark.lookat = {
-         eye: vecToArray(camera.eye),
-         look: vecToArray(camera.look),
-         up: vecToArray(camera.up),
-         worldZUp: worldZUp === true
-         };
-
-         // Save other viewer properties that have non-default values
-
-         if (camera.gimbalLock !== true) {
-         bookmark.gimbalLock = camera.gimbalLock;
-         }
-
-         if (camera.projection !== "perspective") {
-         bookmark.projection = camera.projection;
-         }
-
-         if (camera.perspective.near !== 0.1) {
-         bookmark.perspectiveNear = camera.perspective.near;
-         }
-
-         if (camera.perspective.far !== 10000.0) {
-         bookmark.perspectiveFar = camera.perspective.far;
-         }
-
-         if (camera.perspective.fov !== 60.0) {
-         bookmark.perspectiveFOV = camera.perspective.fov;
-         }
-
-         if (camera.ortho.near !== 0.1) {
-         bookmark.orthoNear = camera.ortho.near;
-         }
-
-         if (camera.ortho.far !== 10000.0) {
-         bookmark.orthoFar = camera.ortho.far;
-         }
-
-         if (camera.ortho.scale !== 1.0) {
-         bookmark.orthoScale = camera.ortho.scale;
-         }
-
-         bookmark.viewFitFOV = this.cameraFlight.fitFOV;
-         bookmark.viewFitDuration = this.cameraFlight.duration;
-         */
-        // Save plugin states
-
-        for (const pluginId in this.plugins) {
-            if (this.plugins.hasOwnProperty(pluginId)) {
-                const plugin = this.plugins[pluginId];
-                if (plugin.writeBookmark) {
-                    plugin.writeBookmark(bookmark);
-                }
-            }
-        }
-
-        return bookmark;
-    }
-
-    /**
-     * Restores the Viewer and all installed {@link Plugin}s to the state captured in the given JSON bookmark.
-     *
-     * @param {*} bookmark
-     */
-    setBookmark(bookmark) {
-
-        for (const pluginId in this.plugins) {
-            if (this.plugins.hasOwnProperty(pluginId)) {
-                const plugin = this.plugins[pluginId];
-                if (plugin.readBookmark) {
-                    plugin.readBookmark(bookmark);
-                }
-            }
-        }
     }
 
     getSnapshot(params = {}, ok) {

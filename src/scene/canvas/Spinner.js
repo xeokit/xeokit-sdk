@@ -1,58 +1,3 @@
-/**
- A Progress displays a progress animation at the center of its {@link Canvas} while things are loading or otherwise busy.
-
- ## Overview
-
- * Spinners are normally shown by {@link Model"}}Models{{/crossLink}} while they are loading, however they may also
- be shown by any application code that wants to indicate busyness.
- * By default, they are also shown by components that load assets, such as {@link Texture}. You
- can disable that by flipping the Spinner's {@link Spinner/textures} property.
- * A Spinner component has a {@link Spinner/processes} count that indicates how many
- active processes it currently represents. As a process starts, a process would increment {@link Spinner/processes}, then as it
- completes (or fails), would decrement it again.
- * A Spinner is only visible while {@link Spinner/processes} is greater than zero.
-
- ## Examples
-
- * [Loading glTF model with spinner](../../examples/#importing_gltf_GearboxAssy)
-
- ## Usage
-
- ````javascript
- var spinner = myScene.canvas.spinner;
-
- // Increment count of busy processes represented by the spinner;
- // assuming the count was zero, this now shows the spinner
- spinner.processes++;
-
- // Increment the count again, by some other process;
- // spinner already visible, now requires two decrements
- // before it becomes invisible again
- spinner.processes++;
-
- // Decrement the count; count still greater
- // than zero, so spinner remains visible
- spinner.process--;
-
- // Decrement the count; count now zero,
- // so spinner becomes invisible
- spinner.process--;
- ````
-
- By default, a Spinner shows while resources are loading for components like
- {@link Texture}. We can disable that like this:
-
- ````javascript
- // Don't show while resources are loading for Textures etc.
- spinner.textures = false;
- ````
-
- @class Spinner
- @module xeokit
- @submodule canvas
- @extends Component
- */
-
 import {Component} from '../Component.js';
 
 let spinnerCSSInjected = false; // Ensures lazy-injected CSS only injected once
@@ -190,6 +135,33 @@ const spinnerCSS = ".sk-fading-circle {\
         40% { opacity: 1; }\
     }";
 
+/**
+ * @desc Displays a progress animation at the center of its {@link Canvas} while things are loading or otherwise busy.
+ *
+ *
+ * * Located at {@link Canvas#spinner}.
+ * * Automatically shown while things are loading, however may also be shown by application code wanting to indicate busyness.
+ * * {@link Spinner#processes} holds the count of active processes. As a process starts, it increments {@link Spinner#processes}, then decrements it on completion or failure.
+ * * A Spinner is only visible while {@link Spinner#processes} is greater than zero.
+ *
+ * ````javascript
+ * var spinner = myViewer.scene.canvas.spinner;
+ *
+ * // Increment count of busy processes represented by the spinner;
+ * // assuming the count was zero, this now shows the spinner
+ * spinner.processes++;
+ *
+ * // Increment the count again, by some other process; spinner already visible, now requires two decrements
+ * // before it becomes invisible again
+ * spinner.processes++;
+ *
+ * // Decrement the count; count still greater than zero, so spinner remains visible
+ * spinner.process--;
+ *
+ * // Decrement the count; count now zero, so spinner becomes invisible
+ * spinner.process--;
+ * ````
+ */
 class Spinner extends Component {
 
     /**
@@ -205,8 +177,8 @@ class Spinner extends Component {
         return "Spinner";
     }
 
-    init(cfg) {
-        super.init(cfg);
+    constructor(owner, cfg = {}) {
+        super(owner, cfg);
         this._canvas = cfg.canvas;
         this._injectSpinnerCSS();
         const div = document.createElement('div');
@@ -243,7 +215,7 @@ class Spinner extends Component {
 
      Clamps to zero if you attempt to set to to a negative value.
 
-     Fires a {@link Spinner/processes:event} event on change.
+     Fires a {@link Spinner#processes:event} event on change.
 
      @property processes
      @default 0
@@ -261,7 +233,7 @@ class Spinner extends Component {
         this._processes = value;
         this._element.style["visibility"] = (this._processes > 0) ? "visible" : "hidden";
         /**
-         Fired whenever this Spinner's {@link Spinner/visible} property changes.
+         Fired whenever this Spinner's {@link Spinner#visible} property changes.
 
          @event processes
          @param value The property's new value
@@ -269,7 +241,7 @@ class Spinner extends Component {
         this.fire("processes", this._processes);
         if (this._processes === 0 && this._processes !== prevValue) {
             /**
-             Fired whenever this Spinner's {@link Spinner/visible} property becomes zero.
+             Fired whenever this Spinner's {@link Spinner#visible} property becomes zero.
 
              @event zeroProcesses
              */

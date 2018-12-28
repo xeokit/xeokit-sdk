@@ -4,7 +4,7 @@
  ## Overview
 
  * Textures are grouped within {@link Material"}}Materials{{/crossLink}}, which are attached to
- {@link Mesh"}}Meshes{{/crossLink}}.
+ {@link Mesh}es.
  * To create a Texture from an image file, set the Texture's {@link Texture/src}
  property to the image file path.
  * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture/image}
@@ -54,10 +54,10 @@
  @module xeokit
  @submodule materials
  @constructor
- @param [owner] {Component} Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param [cfg] {*} Configs
- @param [cfg.id] {String} Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
- @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this Texture.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {*} [cfg] Configs
+ @param {String} [cfg.id] Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
+ @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Texture.
  @param [cfg.src=null] {String} Path to image file to load into this Texture. See the {@link Texture/src} property for more info.
  @param [cfg.image=null] {HTMLImageElement} HTML Image object to load into this Texture. See the {@link Texture/image} property for more info.
  @param [cfg.minFilter="linearMipmapLinear"] {String} How the texture is sampled when a texel covers less than one pixel. See the {@link Texture/minFilter} property for more info.
@@ -119,9 +119,9 @@ class Texture extends Component {
         return "Texture";
     }
 
-    init(cfg) {
+    constructor(owner, cfg={}) {
 
-        super.init(cfg);
+        super(owner, cfg);
 
         this._state = new RenderState({
             texture: new Texture2D(this.scene.canvas.gl),

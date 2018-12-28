@@ -3,7 +3,7 @@ import {Map} from "../utils/Map.js";
 const ids = new Map({});
 
 /**
- A **RenderState** represents a chunk of state changes applied by the {@link Scene}}Scene{{/crossLink}}'s renderer while it renders a frame.
+ A **RenderState** represents a chunk of state changes applied by the {@link Scene}'s renderer while it renders a frame.
 
  * Contains properties that represent the state changes.
  * Has a unique automatically-generated numeric ID, which the renderer can use to sort these, in order to avoid applying redundant state changes for each frame.

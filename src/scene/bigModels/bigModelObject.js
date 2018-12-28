@@ -254,7 +254,7 @@ class BigModelObject {
     /**
      * Indicates if clippable.
      *
-     * Clipping is done by the {@link Scene}}Scene{{/crossLink}}'s {@link Clips} component.
+     * Clipping is done by the {@link Scene}'s {@link Clips} component.
      *
      * @property clippable
      * @default true
