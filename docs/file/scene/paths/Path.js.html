@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">scene/paths/Path.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WEBGL_INFO">WEBGL_INFO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bigmodels">bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelObject.js~BigModelObject.html">BigModelObject</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#camera">camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#canvas">canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#clipping">clipping</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/clipping/Clip.js~Clip.html">Clip</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#geometry">geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/AABBGeometry.js~AABBGeometry.html">AABBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/BoxGeometry.js~BoxGeometry.html">BoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html">CylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/OBBGeometry.js~OBBGeometry.html">OBBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html">PlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/SphereGeometry.js~SphereGeometry.html">SphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/TorusGeometry.js~TorusGeometry.html">TorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html">VectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#input">input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lights">lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#mesh">mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#nodes">nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#paths">paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skybox">skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewport">viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#webgl">webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/ArrayBuf.js~ArrayBuf.html">ArrayBuf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Attribute.js~Attribute.html">Attribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/FrameContext.js~FrameContext.html">FrameContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Program.js~Program.html">Program</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderBuffer.js~RenderBuffer.html">RenderBuffer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderFlags.js~RenderFlags.html">RenderFlags</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderState.js~RenderState.html">RenderState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Sampler.js~Sampler.html">Sampler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Shader.js~Shader.html">Shader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Texture2D.js~Texture2D.html">Texture2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-webglEnums">webglEnums</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">scene/paths/Path.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {utils} from &quot;../utils.js&quot;;
+import {Curve} from &quot;./curve.js&quot;
+
+class Path extends Curve {
+
+    constructor(owner, cfg={}) {
+        super(owner, cfg);
+        this._cachedLengths = [];
+        this._dirty = true;
+        this._curves = []; // Array of child Curve components
+        this._t = 0;
+        this._dirtySubs = []; // Subscriptions to &quot;dirty&quot; events from child Curve components
+        this._destroyedSubs = []; // Subscriptions to &quot;destroyed&quot; events from child Curve components
+        this.curves = cfg.curves || [];    // Add initial curves
+        this.t = cfg.t; // Set initial progress
+    }
+
+    /**
+     * Adds a {@link Curve} to this Path.
+     *
+     * @param {Curve} curve The {@link Curve} to add.
+     */
+    addCurve(curve) {
+        this._curves.push(curve);
+        this._dirty = true;
+    }
+
+    /**
+     The {@link Curve&quot;}}Curves{{/crossLink}} in this Path.
+
+     @property curves
+     @default []
+     @type {{Array of Spline, Path, QuadraticBezierCurve or CubicBezierCurve}}
+     */
+    set curves(value) {
+
+        value = value || [];
+
+        var curve;
+        // Unsubscribe from events on old curves
+        var i;
+        var len;
+        for (i = 0, len = this._curves.length; i &lt; len; i++) {
+            curve = this._curves[i];
+            curve.off(this._dirtySubs[i]);
+            curve.off(this._destroyedSubs[i]);
+        }
+
+        this._curves = [];
+        this._dirtySubs = [];
+        this._destroyedSubs = [];
+
+        var self = this;
+
+        function curveDirty() {
+            self._dirty = true;
+        }
+
+        function curveDestroyed() {
+            var id = this.id;
+            for (i = 0, len = self._curves.length; i &lt; len; i++) {
+                if (self._curves[i].id === id) {
+                    self._curves = self._curves.slice(i, i + 1);
+                    self._dirtySubs = self._dirtySubs.slice(i, i + 1);
+                    self._destroyedSubs = self._destroyedSubs.slice(i, i + 1);
+                    self._dirty = true;
+                    self.fire(&quot;curves&quot;, self._curves);
+                    return;
+                }
+            }
+        }
+
+        for (i = 0, len = value.length; i &lt; len; i++) {
+            curve = value[i];
+            if (utils.isNumeric(curve) || utils.isString(curve)) {
+                // ID given for curve - find the curve component
+                var id = curve;
+                curve = this.scene.components[id];
+                if (!curve) {
+                    this.error(&quot;Component not found: &quot; + _inQuotes(id));
+                    continue;
+                }
+            }
+
+            var type = curve.type;
+
+            if (type !== &quot;xeokit.SplineCurve&quot; &amp;&amp;
+                type !== &quot;xeokit.Path&quot; &amp;&amp;
+                type !== &quot;xeokit.CubicBezierCurve&quot; &amp;&amp;
+                type !== &quot;xeokit.QuadraticBezierCurve&quot;) {
+
+                this.error(&quot;Component &quot; + _inQuotes(curve.id)
+                    + &quot; is not a xeokit.SplineCurve, xeokit.Path or xeokit.QuadraticBezierCurve&quot;);
+
+                continue;
+            }
+
+            this._curves.push(curve);
+            this._dirtySubs.push(curve.on(&quot;dirty&quot;, curveDirty));
+            this._destroyedSubs.push(curve.once(&quot;destroyed&quot;, curveDestroyed));
+        }
+
+        this._dirty = true;
+
+        this.fire(&quot;curves&quot;, this._curves);
+    }
+
+    get curves() {
+        return this._curves;
+    }
+
+    /**
+     Current point of progress along this Path.
+
+     Automatically clamps to range [0..1].
+
+     Fires a {@link Path/t:event} event on change.
+
+     @property t
+     @default 0
+     @type Number
+     */
+    set t(value) {
+        value = value || 0;
+        this._t = value &lt; 0.0 ? 0.0 : (value &gt; 1.0 ? 1.0 : value);
+        /**
+         * Fired whenever this Path&apos;s
+         * {@link Path/t} property changes.
+         * @event t
+         * @param value The property&apos;s new value
+         */
+        this.fire(&quot;t&quot;, this._t);
+    }
+
+    get t() {
+        return this._t;
+    }
+
+    /**
+     Point on this Path corresponding to the current value of {@link Path/t}.
+
+     @property point
+     @type {{Array of Number}}
+     */
+    get point() {
+        return this.getPoint(this._t);
+    }
+
+    /**
+     Length of this Path, which is the cumulative length of all {@link Curve/t:property&quot;}}Curves{{/crossLink}}
+     currently in {@link Path/curves}.
+
+     @property length
+     @type {Number}
+     */
+    get length() {
+        var lens = this._getCurveLengths();
+        return lens[lens.length - 1];
+    }
+
+    /**
+     * Gets a point on this Path corresponding to the given progress position.
+     * @param {Number} t Indicates point of progress along this curve, in the range [0..1].
+     * @returns {{Array of Number}}
+     */
+    getPoint(t) {
+        var d = t * this.length;
+        var curveLengths = this._getCurveLengths();
+        var i = 0, diff, curve;
+        while (i &lt; curveLengths.length) {
+            if (curveLengths[i] &gt;= d) {
+                diff = curveLengths[i] - d;
+                curve = this._curves[i];
+                var u = 1 - diff / curve.length;
+                return curve.getPointAt(u);
+            }
+            i++;
+        }
+        return null;
+    }
+
+    _getCurveLengths() {
+        if (!this._dirty) {
+            return this._cachedLengths;
+        }
+        var lengths = [];
+        var sums = 0;
+        var i, il = this._curves.length;
+        for (i = 0; i &lt; il; i++) {
+            sums += this._curves[i].length;
+            lengths.push(sums);
+
+        }
+        this._cachedLengths = lengths;
+        this._dirty = false;
+        return lengths;
+    }
+
+    _getJSON() {
+        var curveIds = [];
+        for (var i = 0, len = this._curves.length; i &lt; len; i++) {
+            curveIds.push(this._curves[i].id);
+        }
+        return {
+            curves: curveIds,
+            t: this._t
+        };
+    }
+
+    destroy() {
+        super.destroy();
+        var i;
+        var len;
+        var curve;
+        for (i = 0, len = this._curves.length; i &lt; len; i++) {
+            curve = this._curves[i];
+            curve.off(this._dirtySubs[i]);
+            curve.off(this._destroyedSubs[i]);
+        }
+    }
+}
+
+export {Path}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

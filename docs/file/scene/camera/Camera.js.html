@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">scene/camera/Camera.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WEBGL_INFO">WEBGL_INFO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bigmodels">bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelObject.js~BigModelObject.html">BigModelObject</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#camera">camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#canvas">canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#clipping">clipping</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/clipping/Clip.js~Clip.html">Clip</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#geometry">geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/AABBGeometry.js~AABBGeometry.html">AABBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/BoxGeometry.js~BoxGeometry.html">BoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html">CylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/OBBGeometry.js~OBBGeometry.html">OBBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html">PlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/SphereGeometry.js~SphereGeometry.html">SphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/TorusGeometry.js~TorusGeometry.html">TorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html">VectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#input">input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lights">lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#mesh">mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#nodes">nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#paths">paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skybox">skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewport">viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#webgl">webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/ArrayBuf.js~ArrayBuf.html">ArrayBuf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Attribute.js~Attribute.html">Attribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/FrameContext.js~FrameContext.html">FrameContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Program.js~Program.html">Program</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderBuffer.js~RenderBuffer.html">RenderBuffer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderFlags.js~RenderFlags.html">RenderFlags</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderState.js~RenderState.html">RenderState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Sampler.js~Sampler.html">Sampler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Shader.js~Shader.html">Shader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Texture2D.js~Texture2D.html">Texture2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-webglEnums">webglEnums</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">scene/camera/Camera.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+import {math} from &apos;../math/math.js&apos;;
+import {Component} from &apos;../Component.js&apos;;
+import {RenderState} from &apos;../webgl/RenderState.js&apos;;
+import {Perspective} from &apos;./Perspective.js&apos;;
+import {Ortho} from &apos;./Ortho.js&apos;;
+import {Frustum} from &apos;./Frustum.js&apos;;
+import {CustomProjection} from &apos;./CustomProjection.js&apos;;
+
+const tempVec3 = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempVec3f = math.vec3();
+const tempMat = math.mat4();
+const tempMatb = math.mat4();
+const eyeLookVec = math.vec3();
+const eyeLookVecNorm = math.vec3();
+const eyeLookOffset = math.vec3();
+const offsetEye = math.vec3();
+
+/**
+ * @desc Manages viewing and projection transforms for its {@link Scene}.
+ *
+ * * One Camera per {@link Scene}
+ * * Located at {@link Scene#camera}
+ * * Also located for convenience at {@link Viewer#camera}
+ * * Controls viewing and projection transforms
+ * * Has methods to pan, zoom and orbit (or first-person rotation)
+ * * Dynamically configurable World-space &quot;up&quot; direction
+ * * Switchable between perspective, frustum and orthographic projections
+ * * Switchable gimbal lock
+ * * Can be &quot;flown&quot; to look at targets using a {@link CameraFlightAnimation}
+ * * Can be animated along a path using a {@link CameraPathAnimation}
+ *
+ * ## Getting the Camera
+ *
+ * There is exactly one Camera per {@link Scene}:
+ *
+ * ````javascript
+ * var camera = myViewer.scene.camera;
+ * ````
+ * Can also be found on the {@link Viewer} for convenience:
+ *
+ * ````javascript
+ * var camera = myViewer.camera;
+ * ````
+ *
+ * ## Moving around
+ *
+ * Get and set the Camera&apos;s absolute position at any time via its {@link Camera#eye}, {@link Camera#look} and {@link Camera#up} properties:
+ *
+ * ````javascript
+ * camera.eye = [-10,0,0];
+ * camera.look = [-10,0,0];
+ * camera.up = [0,1,0];
+ * ````
+ *
+ * Get the view matrix:
+ *
+ * ````javascript
+ * var viewMatrix = camera.viewMatrix;
+ * var viewNormalMatrix = camera.normalMatrix;
+ * ````
+ *
+ * Listen for view matrix updates:
+ *
+ * ````javascript
+ * camera.on(&quot;matrix&quot;, function(matrix) { ... });
+ * ````
+ *
+ * Orbiting the {@link Camera#look} position:
+ *
+ * ````javascript
+ * camera.orbitYaw(20.0);
+ * camera.orbitPitch(10.0);
+ * ````
+ *
+ * First-person rotation, rotates {@link Camera#look}
+ * and {@link Camera#up} about {@link Camera#eye}:
+ *
+ * ````javascript
+ * camera.yaw(5.0);
+ * camera.pitch(-10.0);
+ * ````
+ *
+ * Panning along the Camera&apos;s local axis (ie. left/right, up/down, forward/backward):
+ *
+ * ````javascript
+ * camera.pan([-20, 0, 10]);
+ * ````
+ *
+ * Zoom to vary distance between {@link Camera#eye} and {@link Camera#look}:
+ *
+ * ````javascript
+ * camera.zoom(-5); // Move five units closer
+ * ````
+ *
+ * Get the current distance between {@link Camera#eye} and {@link Camera#look}:
+ *
+ * ````javascript
+ * var distance = camera.eyeLookDist;
+ * ````
+ *
+ * ## Projection
+ *
+ * For each projection type, the Camera has a Component to manage that projection&apos;s configuration. You can hot-switch the Camera
+ * between those projection types, while updating the properties of each projection component at any time.
+ *
+ * ````javascript
+ * camera.perspective.near = 0.4;
+ * camera.perspective.fov = 45;
+ * //...
+ *
+ * camera.ortho.near = 0.8;
+ * camera.ortho.far = 1000;
+ * //...
+ *
+ * camera.frustum.left = -1.0;
+ * camera.frustum.right = 1.0;
+ * camera.frustum.far = 1000.0;
+ * //...
+ *
+ * camera.customProjection.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+ *
+ * camera.projection = &quot;perspective&quot;; // Switch to perspective
+ * camera.projection = &quot;frustum&quot;; // Switch to frustum
+ * camera.projection = &quot;ortho&quot;; // Switch to ortho
+ * camera.projection = &quot;customProjection&quot;; // Switch to custom
+ * ````
+ *
+ * Get the projection matrix:
+ *
+ * ````javascript
+ * var projMatrix = camera.projMatrix;
+ * ````
+ *
+ * Listen for projection matrix updates:
+ *
+ * ````javascript
+ * camera.on(&quot;projMatrix&quot;, function(matrix) { ... });
+ * ````
+ *
+ * ## Configuring World up direction
+ *
+ * We can dynamically configure the direction that we consider to be &quot;up&quot; in the World-space coordinate system.
+ *
+ * Set the +Y axis as World &quot;up&quot; (convention in some modeling software):
+ *
+ * ````javascript
+ * camera.worldAxis = [
+ *  1, 0, 0,    // Right
+ *  0, 1, 0,    // Up
+ *  0, 0,-1     // Forward
+ * ];
+ * ````
+ *
+ * Set the +Z axis as World &quot;up&quot; (convention in most CAD and BIM viewers):
+ *
+ * ````javascript
+ * camera.worldAxis = [
+ *  1, 0, 0, // Right
+ *  0, 0, 1, // Up
+ *  0,-1, 0  // Forward
+ * ];
+ * ````
+ *
+ * The Camera has read-only convenience properties that provide each axis individually:
+ *
+ * ````javascript
+ * var worldRight = camera.worldRight;
+ * var worldForward = camera.worldForward;
+ * var worldUp = camera.worldUp;
+ * ````
+ *
+ * ### Gimbal locking
+ *
+ * By default, the Camera locks yaw rotation to pivot about the World-space &quot;up&quot; axis. We can dynamically lock and unlock that at any time:
+ *
+ * ````javascript
+ * camera.gimbalLock = false; // Yaw rotation now happens about Camera&apos;s local Y-axis
+ * camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;up&quot; axis
+ * ````
+ *
+ * See: &lt;a href=&quot;https://en.wikipedia.org/wiki/Gimbal_lock&quot;&gt;https://en.wikipedia.org/wiki/Gimbal_lock&lt;/a&gt;
+ */
+class Camera extends Component {
+
+    /**
+     JavaScript class name for this Component.
+
+     For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.
+
+     @property type
+     @type String
+     @final
+     */
+    get type() {
+        return &quot;Camera&quot;;
+    }
+
+    /**
+     @constructor
+     @private
+     */
+    constructor(owner, cfg = {}) {
+
+        super(owner, cfg);
+
+        this._state = new RenderState({
+            deviceMatrix: math.mat4(),
+            hasDeviceMatrix: false, // True when deviceMatrix set to other than identity
+            matrix: math.mat4(),
+            normalMatrix: math.mat4()
+        });
+
+        this._perspective = new Perspective(this);
+        this._ortho = new Ortho(this);
+        this._frustum = new Frustum(this);
+        this._customProjection = new CustomProjection(this);
+        this._project = this._perspective;
+
+        this._eye = math.vec3([0, 0, 10.0]);
+        this._look = math.vec3([0, 0, 0]);
+        this._up = math.vec3([0, 1, 0]);
+
+        this._worldUp = math.vec3([0, 1, 0]);
+        this._worldRight = math.vec3([1, 0, 0]);
+        this._worldForward = math.vec3([0, 0, -1]);
+
+        this.deviceMatrix = cfg.deviceMatrix;
+        this.eye = cfg.eye;
+        this.look = cfg.look;
+        this.up = cfg.up;
+        this.worldAxis = cfg.worldAxis;
+        this.gimbalLock = cfg.gimbalLock;
+        this.constrainPitch = cfg.constrainPitch;
+
+        this.projection = cfg.projection;
+
+        this._perspective.on(&quot;matrix&quot;, () =&gt; {
+            if (this._projectionType === &quot;perspective&quot;) {
+                this.fire(&quot;projMatrix&quot;, this._perspective.matrix);
+            }
+        });
+        this._ortho.on(&quot;matrix&quot;, () =&gt; {
+            if (this._projectionType === &quot;ortho&quot;) {
+                this.fire(&quot;projMatrix&quot;, this._ortho.matrix);
+            }
+        });
+        this._frustum.on(&quot;matrix&quot;, () =&gt; {
+            if (this._projectionType === &quot;frustum&quot;) {
+                this.fire(&quot;projMatrix&quot;, this._frustum.matrix);
+            }
+        });
+        this._customProjection.on(&quot;matrix&quot;, () =&gt; {
+            if (this._projectionType === &quot;customProjection&quot;) {
+                this.fire(&quot;projMatrix&quot;, this._customProjection.matrix);
+            }
+        });
+    }
+
+    _update() {
+        const state = this._state;
+        // In ortho mode, build the view matrix with an eye position that&apos;s translated
+        // well back from look, so that the front clip plane doesn&apos;t unexpectedly cut
+        // the front off the view (not a problem with perspective, since objects close enough
+        // to be clipped by the front plane are usually too big to see anything of their cross-sections).
+        let eye;
+        if (this.projection === &quot;ortho&quot;) {
+            math.subVec3(this._eye, this._look, eyeLookVec);
+            math.normalizeVec3(eyeLookVec, eyeLookVecNorm);
+            math.mulVec3Scalar(eyeLookVecNorm, 1000.0, eyeLookOffset);
+            math.addVec3(this._look, eyeLookOffset, offsetEye);
+            eye = offsetEye;
+        } else {
+            eye = this._eye;
+        }
+        if (state.hasDeviceMatrix) {
+            math.lookAtMat4v(eye, this._look, this._up, tempMatb);
+            math.mulMat4(state.deviceMatrix, tempMatb, state.matrix);
+            //state.matrix.set(state.deviceMatrix);
+        } else {
+            math.lookAtMat4v(eye, this._look, this._up, state.matrix);
+        }
+        math.inverseMat4(this._state.matrix, this._state.normalMatrix);
+        math.transposeMat4(this._state.normalMatrix);
+        this.glRedraw();
+        this.fire(&quot;matrix&quot;, this._state.matrix);
+        this.fire(&quot;viewMatrix&quot;, this._state.matrix);
+    }
+
+    /**
+     Rotates {@link Camera#eye} about {@link Camera#look}, around the {@link Camera#up} vector
+
+     @method orbitYaw
+     @param {Number} angle Angle of rotation in degrees
+     */
+    orbitYaw(angle) {
+        let lookEyeVec = math.subVec3(this._eye, this._look, tempVec3);
+        math.rotationMat4v(angle * 0.0174532925, this._gimbalLock ? this._worldUp : this._up, tempMat);
+        lookEyeVec = math.transformPoint3(tempMat, lookEyeVec, tempVec3b);
+        this.eye = math.addVec3(this._look, lookEyeVec, tempVec3c); // Set eye position as &apos;look&apos; plus &apos;eye&apos; vector
+        this.up = math.transformPoint3(tempMat, this._up, tempVec3d); // Rotate &apos;up&apos; vector
+    }
+
+    /**
+     Rotates {@link Camera#eye} about {@link Camera#look} around the right axis (orthogonal to {@link Camera#up} and &quot;look&quot;).
+
+     @method orbitPitch
+     @param {Number} angle Angle of rotation in degrees
+     */
+    orbitPitch(angle) {
+        let eye2 = math.subVec3(this._eye, this._look, tempVec3);
+        const left = math.cross3Vec3(math.normalizeVec3(eye2, tempVec3b), math.normalizeVec3(this._up, tempVec3c));
+        math.rotationMat4v(angle * 0.0174532925, left, tempMat);
+        eye2 = math.transformPoint3(tempMat, eye2, tempVec3d);
+        const up = math.transformPoint3(tempMat, this._up, tempVec3e);
+        if (this._constrainPitch) {
+            var angle = math.dotVec3(up, this._worldUp) / math.DEGTORAD;
+            if (angle &lt; 1) {
+                return;
+            }
+        }
+        this.up = up;
+        this.eye = math.addVec3(eye2, this._look, tempVec3f);
+    }
+
+    /**
+     Rotates {@link Camera#look} about {@link Camera#eye}, around the {@link Camera#up} vector.
+
+     @method yaw
+     @param {Number} angle Angle of rotation in degrees
+     */
+    yaw(angle) {
+        let look2 = math.subVec3(this._look, this._eye, tempVec3);
+        math.rotationMat4v(angle * 0.0174532925, this._gimbalLock ? this._worldUp : this._up, tempMat);
+        look2 = math.transformPoint3(tempMat, look2, tempVec3b);
+        this.look = math.addVec3(look2, this._eye, tempVec3c);
+        if (this._gimbalLock) {
+            this.up = math.transformPoint3(tempMat, this._up, tempVec3d);
+        }
+    }
+
+    /**
+     Rotates {@link Camera#look} about {@link Camera#eye}, around the right axis (orthogonal to {@link Camera#up} and &quot;look&quot;).
+
+     @method pitch
+     @param {Number} angle Angle of rotation in degrees
+     */
+    pitch(angle) {
+        let look2 = math.subVec3(this._look, this._eye, tempVec3);
+        const left = math.cross3Vec3(math.normalizeVec3(look2, tempVec3b), math.normalizeVec3(this._up, tempVec3c));
+        math.rotationMat4v(angle * 0.0174532925, left, tempMat);
+        const up = math.transformPoint3(tempMat, this._up, tempVec3f);
+        if (this._constrainPitch) {
+            var angle = math.dotVec3(up, this._worldUp) / math.DEGTORAD;
+            if (angle &lt; 1) {
+                return;
+            }
+        }
+        this.up = up;
+        look2 = math.transformPoint3(tempMat, look2, tempVec3d);
+        this.look = math.addVec3(look2, this._eye, tempVec3e);
+    }
+
+    /**
+     Pans the camera along the camera&apos;s local X, Y and Z axis.
+
+     @method pan
+     @param pan The pan vector
+     */
+    pan(pan) {
+        const eye2 = math.subVec3(this._eye, this._look, tempVec3);
+        const vec = [0, 0, 0];
+        let v;
+        if (pan[0] !== 0) {
+            const left = math.cross3Vec3(math.normalizeVec3(eye2, []), math.normalizeVec3(this._up, tempVec3b));
+            v = math.mulVec3Scalar(left, pan[0]);
+            vec[0] += v[0];
+            vec[1] += v[1];
+            vec[2] += v[2];
+        }
+        if (pan[1] !== 0) {
+            v = math.mulVec3Scalar(math.normalizeVec3(this._up, tempVec3c), pan[1]);
+            vec[0] += v[0];
+            vec[1] += v[1];
+            vec[2] += v[2];
+        }
+        if (pan[2] !== 0) {
+            v = math.mulVec3Scalar(math.normalizeVec3(eye2, tempVec3d), pan[2]);
+            vec[0] += v[0];
+            vec[1] += v[1];
+            vec[2] += v[2];
+        }
+        this.eye = math.addVec3(this._eye, vec, tempVec3e);
+        this.look = math.addVec3(this._look, vec, tempVec3f);
+    }
+
+    /**
+     Increments/decrements zoom factor, ie. distance between {@link Camera#eye}
+     and {@link Camera#look}.
+
+     @method zoom
+     @param delta
+     */
+    zoom(delta) {
+        const vec = math.subVec3(this._eye, this._look, tempVec3);
+        const lenLook = Math.abs(math.lenVec3(vec, tempVec3b));
+        const newLenLook = Math.abs(lenLook + delta);
+        if (newLenLook &lt; 0.5) {
+            return;
+        }
+        const dir = math.normalizeVec3(vec, tempVec3c);
+        this.eye = math.addVec3(this._look, math.mulVec3Scalar(dir, newLenLook), tempVec3d);
+    }
+
+
+    /**
+     Position of this Camera&apos;s eye.
+
+     Fires an {@link Camera#eye:event} event on change.
+
+     @property eye
+     @default [0,0,10]
+     @type Float32Array
+     */
+    set eye(value) {
+        this._eye.set(value || [0, 0, 10]);
+        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
+        /**
+         Fired whenever this Camera&apos;s {@link Camera#eye} property changes.
+
+         @event eye
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;eye&quot;, this._eye);
+    }
+
+    get eye() {
+        return this._eye;
+    }
+
+    /**
+     Position of this Camera&apos;s point-of-interest.
+
+     Fires a {@link Camera#look:event} event on change.
+
+     @property look
+     @default [0,0,0]
+     @type Float32Array
+     */
+    set look(value) {
+        this._look.set(value || [0, 0, 0]);
+        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
+        /**
+         Fired whenever this Camera&apos;s {@link Camera#look} property changes.
+
+         @event look
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;look&quot;, this._look);
+    }
+
+    get look() {
+        return this._look;
+    }
+
+    /**
+     Direction of this Camera&apos;s {@link Camera#up} vector.
+
+     Fires an {@link Camera#up:event} event on change.
+
+     @property up
+     @default [0,1,0]
+     @type Float32Array
+     */
+    set up(value) {
+        this._up.set(value || [0, 1, 0]);
+        this._needUpdate(0);
+        /**
+         Fired whenever this Camera&apos;s {@link Camera#up} property changes.
+
+         @event up
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;up&quot;, this._up);
+    }
+
+    get up() {
+        return this._up;
+    }
+
+    /**
+     Sets an optional matrix to premultiply into {@link Camera#matrix} matrix.
+
+     This is intended to be used for stereo rendering with WebVR etc.
+
+     @property deviceMatrix
+     @type {Float32Array}
+     */
+    set deviceMatrix(matrix) {
+        this._state.deviceMatrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+        this._state.hasDeviceMatrix = !!matrix;
+        this._needUpdate(0);
+        /**
+         Fired whenever this CustomProjection&apos;s {@link CustomProjection/matrix} property changes.
+
+         @event deviceMatrix
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;deviceMatrix&quot;, this._state.deviceMatrix);
+    }
+
+    get deviceMatrix() {
+        return this._state.deviceMatrix;
+    }
+
+    /**
+     Indicates the up, right and forward axis of the World coordinate system.
+
+     Has format: ````[rightX, rightY, rightZ, upX, upY, upZ, forwardX, forwardY, forwardZ]````
+
+     @property worldAxis
+     @default [1, 0, 0, 0, 1, 0, 0, 0, 1]
+     @type Float32Array
+     */
+    set worldAxis(value) {
+        value = value || [1, 0, 0, 0, 1, 0, 0, 0, 1];
+        if (!this._worldAxis) {
+            this._worldAxis = new Float32Array(value);
+        } else {
+            this._worldAxis.set(value);
+        }
+        this._worldRight[0] = this._worldAxis[0];
+        this._worldRight[1] = this._worldAxis[1];
+        this._worldRight[2] = this._worldAxis[2];
+        this._worldUp[0] = this._worldAxis[3];
+        this._worldUp[1] = this._worldAxis[4];
+        this._worldUp[2] = this._worldAxis[5];
+        this._worldForward[0] = this._worldAxis[6];
+        this._worldForward[1] = this._worldAxis[7];
+        this._worldForward[2] = this._worldAxis[8];
+        /**
+         * Fired whenever this Camera&apos;s {@link Camera#worldAxis} property changes.
+         *
+         * @event worldAxis
+         * @param value The property&apos;s new value
+         */
+        this.fire(&quot;worldAxis&quot;, this._worldAxis);
+    }
+
+    get worldAxis() {
+        return this._worldAxis;
+    }
+
+    /**
+     Direction of World-space &quot;up&quot;.
+
+     @property worldUp
+     @default [0,1,0]
+     @type Float32Array
+     @final
+     */
+    get worldUp() {
+        return this._worldUp;
+    }
+
+    /**
+     Direction of World-space &quot;right&quot;.
+
+     @property worldRight
+     @default [1,0,0]
+     @type Float32Array
+     @final
+     */
+    get worldRight() {
+        return this._worldRight;
+    }
+
+    /**
+     Direction of World-space &quot;forwards&quot;.
+
+     @property worldForward
+     @default [0,0,-1]
+     @type Float32Array
+     @final
+     */
+    get worldForward() {
+        return this._worldForward;
+    }
+
+    /**
+     Whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.
+
+     Fires a {@link Camera#gimbalLock:event} event on change.
+
+     @property gimbalLock
+     @default true
+     @type Boolean
+     */
+    set gimbalLock(value) {
+        this._gimbalLock = value !== false;
+        /**
+         Fired whenever this Camera&apos;s  {@link Camera#gimbalLock} property changes.
+
+         @event gimbalLock
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;gimbalLock&quot;, this._gimbalLock);
+    }
+
+    get gimbalLock() {
+        return this._gimbalLock;
+    }
+
+    /**
+     Whether to prevent camera from being pitched upside down.
+
+     The camera is upside down when the angle
+     between {@link Camera#up} and {@link Camera#worldUp} is less than one degree.
+
+     Fires a {@link Camera#constrainPitch:event} event on change.
+
+     @property constrainPitch
+     @default false
+     @type Boolean
+     */
+    set constrainPitch(value) {
+        this._constrainPitch = !!value;
+        /**
+         Fired whenever this Camera&apos;s  {@link Camera#constrainPitch} property changes.
+
+         @event constrainPitch
+         @param value The property&apos;s new value
+         */
+        this.fire(&quot;constrainPitch&quot;, this._constrainPitch);
+    }
+
+    get constrainPitch() {
+        return this._constrainPitch;
+    }
+
+    /**
+     Distance from &quot;look&quot; to &quot;eye&quot;.
+     @property eyeLookDist
+     @type Number
+     @final
+     */
+    get eyeLookDist() {
+        return math.lenVec3(math.subVec3(this._look, this._eye, tempVec3));
+    }
+
+    /**
+     The Camera&apos;s viewing transformation matrix.
+
+     Fires a {@link Camera#matrix:event} event on change.
+
+     @property matrix
+     @type {Float32Array}
+     @final
+     @deprecated
+     */
+    get matrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        return this._state.matrix;
+    }
+
+    /**
+     The Camera&apos;s viewing transformation matrix.
+
+     Fires a {@link Camera#matrix:event} event on change.
+
+     @property viewMatrix
+     @final
+     @type {Float32Array}
+     */
+    get viewMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        return this._state.matrix;
+    }
+
+
+    /**
+     The Camera&apos;s viewing normal transformation matrix.
+
+     Fires a {@link Camera#matrix:event} event on change.
+
+     @property normalMatrix
+     @type {Float32Array}
+     @final
+     @deprecated
+     */
+    get normalMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        return this._state.normalMatrix;
+    }
+
+    /**
+     The Camera&apos;s viewing normal transformation matrix.
+
+     Fires a {@link Camera#matrix:event} event on change.
+
+     @property viewNormalMatrix
+     @final
+     @type {Float32Array}
+     */
+    get viewNormalMatrix() {
+        if (this._updateScheduled) {
+            this._doUpdate();
+        }
+        return this._state.normalMatrix;
+    }
+
+    /**
+     Camera&apos;s projection transformation projMatrix.
+
+     Fires a {@link Camera#projMatrix:event} event on change.
+
+     @property projMatrix
+     @final
+     @type {Float32Array}
+     */
+    get projMatrix() {
+        return this[this.projection].matrix;
+    }
+
+
+    /**
+     The perspective projection transform for this Camera.
+
+     This is used while {@link Camera#projection} equals &quot;perspective&quot;.
+
+     @property perspective
+     @type Perspective
+     @final
+     */
+    get perspective() {
+        return this._perspective;
+    }
+
+    /**
+     The orthographic projection transform for this Camera.
+
+     This is used while {@link Camera#projection} equals &quot;ortho&quot;.
+
+     @property ortho
+     @type Ortho
+     @final
+     */
+    get ortho() {
+        return this._ortho;
+    }
+
+
+    /**
+     The frustum projection transform for this Camera.
+
+     This is used while {@link Camera#projection} equals &quot;frustum&quot;.
+
+     @property frustum
+     @type Frustum
+     @final
+     */
+    get frustum() {
+        return this._frustum;
+    }
+
+    /**
+     A custom projection transform, given as a 4x4 matrix.
+
+     This is used while {@link Camera#projection} equals &quot;customProjection&quot;.
+
+     @property customProjection
+     @type CustomProjection
+     @final
+     */
+    get customProjection() {
+        return this._customProjection;
+    }
+
+    /**
+     The active projection type.
+
+     Accepted values are &quot;perspective&quot;, &quot;ortho&quot;, &quot;frustum&quot; and &quot;customProjection&quot;.
+
+     @property projection
+     @default &quot;perspective&quot;
+     @type {String}
+     */
+    set projection(value) {
+        value = value || &quot;perspective&quot;;
+        if (this._projectionType === value) {
+            return;
+        }
+        if (value === &quot;perspective&quot;) {
+            this._project = this._perspective;
+        } else if (value === &quot;ortho&quot;) {
+            this._project = this._ortho;
+        } else if (value === &quot;frustum&quot;) {
+            this._project = this._frustum;
+        } else if (value === &quot;customProjection&quot;) {
+            this._project = this._customProjection;
+        } else {
+            this.error(&quot;Unsupported value for &apos;projection&apos;: &quot; + value + &quot; defaulting to &apos;perspective&apos;&quot;);
+            this._project = this._perspective;
+            value = &quot;perspective&quot;;
+        }
+        this._projectionType = value;
+        this.glRedraw();
+        this._update(); // Need to rebuild lookat matrix with full eye, look &amp; up
+        this.fire(&quot;dirty&quot;);
+    }
+
+    get projection() {
+        return this._projectionType;
+    }
+
+    /**
+     The active projection transform for this Camera.
+
+     @property project
+     @type Transform
+     @final
+     */
+    get project() {
+        return this._project;
+    }
+
+    get view() {
+        return this;
+    }
+
+    destroy() {
+        super.destroy();
+        this._state.destroy();
+    }
+}
+
+export {Camera};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

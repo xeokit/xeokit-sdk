@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">scene/camera/CameraPathAnimation.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WEBGL_INFO">WEBGL_INFO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bigmodels">bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelObject.js~BigModelObject.html">BigModelObject</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#camera">camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#canvas">canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#clipping">clipping</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/clipping/Clip.js~Clip.html">Clip</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#geometry">geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/AABBGeometry.js~AABBGeometry.html">AABBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/BoxGeometry.js~BoxGeometry.html">BoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html">CylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/OBBGeometry.js~OBBGeometry.html">OBBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html">PlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/SphereGeometry.js~SphereGeometry.html">SphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/TorusGeometry.js~TorusGeometry.html">TorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html">VectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#input">input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lights">lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#mesh">mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#nodes">nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#paths">paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skybox">skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewport">viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#webgl">webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/ArrayBuf.js~ArrayBuf.html">ArrayBuf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Attribute.js~Attribute.html">Attribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/FrameContext.js~FrameContext.html">FrameContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Program.js~Program.html">Program</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderBuffer.js~RenderBuffer.html">RenderBuffer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderFlags.js~RenderFlags.html">RenderFlags</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderState.js~RenderState.html">RenderState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Sampler.js~Sampler.html">Sampler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Shader.js~Shader.html">Shader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Texture2D.js~Texture2D.html">Texture2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-webglEnums">webglEnums</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">scene/camera/CameraPathAnimation.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Component} from &quot;../Component.js&quot;
+import {CameraPath} from &quot;./CameraPath.js&quot;
+
+class CameraPathAnimation extends Component {
+
+    constructor(owner, cfg={}) {
+
+        super(owner, cfg);
+
+        this._cameraFlightAnimation = this.create({
+            type: &quot;CameraFlightAnimation&quot;
+        });
+
+        this._t = 0;
+
+        this.state = CameraPathAnimation.SCRUBBING;
+
+        this._playingFromT = 0;
+        this._playingToT = 0;
+        this._playingRate = cfg.playingRate || 1.0;
+        this._playingDir = 1.0;
+
+        this.cameraPath = cfg.cameraPath;
+
+        this._tick = this.scene.on(&quot;tick&quot;, this._updateT, this);
+    }
+
+    _updateT() {
+
+        const cameraPath = this._attached.cameraPath;
+
+        if (!cameraPath) {
+            return;
+        }
+
+        const f = 0.002;
+        //var f = 1.0;
+
+        switch (this.state) {
+
+            case CameraPathAnimation.SCRUBBING:
+                return;
+
+            case CameraPathAnimation.PLAYING:
+
+                this._t += this._playingRate * f;
+
+                const numFrames = this.cameraPath.frames.length;
+                if (numFrames === 0 || (this._playingDir &lt; 0 &amp;&amp; this._t &lt;= 0) || (this._playingDir &gt; 0 &amp;&amp; this._t &gt;= this.cameraPath.frames[numFrames - 1].t)) {
+                    this.state = CameraPathAnimation.SCRUBBING;
+                    this._t = this.cameraPath.frames[numFrames - 1].t;
+                    return;
+                }
+
+                cameraPath.loadFrame(this._t);
+
+                break;
+
+            case CameraPathAnimation.PLAYING_TO:
+
+                let t = this._t + (this._playingRate * f * this._playingDir);
+
+                //t = this._ease(t, this._playingFromT, this._playingToT, this._playingToT - this._playingFromT);
+
+                if ((this._playingDir &lt; 0 &amp;&amp; t &lt;= this._playingToT) || (this._playingDir &gt; 0 &amp;&amp; t &gt;= this._playingToT)) {
+                    t = this._playingToT;
+                    this.state = CameraPathAnimation.SCRUBBING;
+                }
+
+                this._t = t;
+
+                cameraPath.loadFrame(this._t);
+
+                break;
+        }
+    }
+
+    // Quadratic easing out - decelerating to zero velocity
+    // http://gizma.com/easing
+
+    _ease(t, b, c, d) {
+        t /= d;
+        return -c * t * (t - 2) + b;
+    }
+
+    /**
+     The {@link CameraPath} for this CameraPathAnimation.
+
+     @property cameraPath
+     @type CameraPath
+     */
+    set cameraPath(value) {
+        this._attach({name: &quot;cameraPath&quot;, type: &quot;CameraPath&quot;, component: value, sceneDefault: false});
+    }
+
+    get cameraPath() {
+        return this._attached.cameraPath;
+    }
+
+    /**
+     The rate at which this CameraPathAnimation plays.
+
+     @property rate
+     @type Number
+     */
+    set rate(value) {
+        this._playingRate = value;
+    }
+
+    get rate() {
+        return this._playingRate;
+    }
+
+    /**
+     * Begins playing this CameraPathAnimation from the current time.
+     * @method play
+     */
+    play() {
+        if (!this._attached.cameraPath) {
+            return;
+        }
+        this.state = CameraPathAnimation.PLAYING;
+    }
+
+    /**
+     * Begins playing this CameraPathAnimation from the current time to the given time.
+     *
+     * @method playToT
+     * @param {Number} t Time instant.
+     */
+    playToT(t) {
+        const cameraPath = this._attached.cameraPath;
+        if (!cameraPath) {
+            return;
+        }
+        this._playingFromT = this._t;
+        this._playingToT = t;
+        this._playingDir = (this._playingToT - this._playingFromT) &lt; 0 ? -1 : 1;
+        this.state = CameraPathAnimation.PLAYING_TO;
+    }
+
+    /**
+     * Begins playing this CameraPathAnimation from the current time to the time at the given frame.
+     *
+     * @method playToFrame
+     * @param {Number} frameIdx Index of the frame to play to.
+     */
+    playToFrame(frameIdx) {
+        const cameraPath = this._attached.cameraPath;
+        if (!cameraPath) {
+            return;
+        }
+        const frame = cameraPath.frames[frameIdx];
+        if (!frame) {
+            this.error(&quot;playToFrame - frame index out of range: &quot; + frameIdx);
+            return;
+        }
+        const t = (1.0 / cameraPath.frames.length) * frameIdx;
+        this.playToT(t);
+    }
+
+    /**
+     * Flies this CameraPathAnimation&apos;s {@link Camera} to the time at the given frame.
+     *
+     * @method flyToFrame
+     * @param {Number} frameIdx Index of the frame to play to.
+     * @param {Function} [ok] Callback to fire when playing is complete.
+     */
+    flyToFrame(frameIdx, ok) {
+        const cameraPath = this._attached.cameraPath;
+        if (!cameraPath) {
+            return;
+        }
+        const frame = cameraPath.frames[frameIdx];
+        if (!frame) {
+            this.error(&quot;flyToFrame - frame index out of range: &quot; + frameIdx);
+            return;
+        }
+        this.state = CameraPathAnimation.SCRUBBING;
+        this._cameraFlightAnimation.flyTo(frame, ok);
+    }
+
+    /**
+     * Scrubs (sets) this CameraPathAnimation to the the given time.
+     *
+     * @method scrubToT
+     * @param {Number} t Time instant.
+     */
+    scrubToT(t) {
+        const cameraPath = this._attached.cameraPath;
+        if (!cameraPath) {
+            return;
+        }
+        const camera = this.scene.camera;
+        if (!camera) {
+            return;
+        }
+        this._t = t;
+        cameraPath.loadFrame(this._t, camera);
+        this.state = CameraPathAnimation.SCRUBBING;
+    }
+
+    /**
+     * Scrubs this CameraPathAnimation to the given frame.
+     *
+     * @method scrubToFrame
+     * @param {Number} frameIdx Index of the frame to scrub to.
+     */
+    scrubToFrame(frameIdx) {
+        const cameraPath = this._attached.cameraPath;
+        if (!cameraPath) {
+            return;
+        }
+        const camera = this.scene.camera;
+        if (!camera) {
+            return;
+        }
+        const frame = cameraPath.frames[frameIdx];
+        if (!frame) {
+            this.error(&quot;playToFrame - frame index out of range: &quot; + frameIdx);
+            return;
+        }
+        this._t = (1.0 / cameraPath.frames.length) * frameIdx;
+        cameraPath.loadFrame(this._t, camera);
+        this.state = CameraPathAnimation.SCRUBBING;
+    }
+
+    /**
+     * Stops playing this CameraPathAnimation.
+     *
+     * @method stop
+     */
+    stop() {
+        this.state = CameraPathAnimation.SCRUBBING;
+    }
+
+    destroy() {
+        super.destroy();
+        this.scene.off(this._tick);
+    }
+}
+
+CameraPathAnimation.STOPPED = 0;
+CameraPathAnimation.SCRUBBING = 1;
+CameraPathAnimation.PLAYING = 2;
+CameraPathAnimation.PLAYING_TO = 3;
+
+export {CameraPathAnimation}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

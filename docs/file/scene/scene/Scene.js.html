@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">scene/scene/Scene.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/scene/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WEBGL_INFO">WEBGL_INFO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#bigmodels">bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/bigModels/bigModelObject.js~BigModelObject.html">BigModelObject</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#camera">camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#canvas">canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#clipping">clipping</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/clipping/Clip.js~Clip.html">Clip</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#geometry">geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/AABBGeometry.js~AABBGeometry.html">AABBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/BoxGeometry.js~BoxGeometry.html">BoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html">CylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/OBBGeometry.js~OBBGeometry.html">OBBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html">PlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/SphereGeometry.js~SphereGeometry.html">SphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/TorusGeometry.js~TorusGeometry.html">TorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html">VectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#input">input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#lights">lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/OutlineMaterial.js~OutlineMaterial.html">OutlineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#mesh">mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#nodes">nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#paths">paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#skybox">skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utils">utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewport">viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#webgl">webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/ArrayBuf.js~ArrayBuf.html">ArrayBuf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Attribute.js~Attribute.html">Attribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/FrameContext.js~FrameContext.html">FrameContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Program.js~Program.html">Program</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderBuffer.js~RenderBuffer.html">RenderBuffer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderFlags.js~RenderFlags.html">RenderFlags</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/RenderState.js~RenderState.html">RenderState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Sampler.js~Sampler.html">Sampler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Shader.js~Shader.html">Shader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/scene/webgl/Texture2D.js~Texture2D.html">Texture2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-webglEnums">webglEnums</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">scene/scene/Scene.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+import {core} from &apos;../core.js&apos;;
+import {utils} from &apos;../utils.js&apos;;
+import {math} from &apos;../math/math.js&apos;;
+import {stats} from &apos;../stats.js&apos;;
+import {Component} from &apos;../Component.js&apos;;
+import {Canvas} from &apos;../canvas/Canvas.js&apos;;
+import {Renderer} from &apos;../webgl/Renderer.js&apos;;
+import {Input} from &apos;../input/Input.js&apos;;
+import {Viewport} from &apos;../viewport/Viewport.js&apos;;
+import {Camera} from &apos;../camera/Camera.js&apos;;
+import {DirLight} from &apos;../lights/DirLight.js&apos;;
+import {BoxGeometry} from &apos;../geometry/BoxGeometry.js&apos;;
+import {PhongMaterial} from &apos;../materials/PhongMaterial.js&apos;;
+import {EmphasisMaterial} from &apos;../materials/EmphasisMaterial.js&apos;;
+import {EdgeMaterial} from &apos;../materials/EdgeMaterial.js&apos;;
+import {OutlineMaterial} from &apos;../materials/OutlineMaterial.js&apos;;
+
+// Cached vars to avoid garbage collection
+
+function getMeshIDMap(scene, meshIds) {
+    const map = {};
+    let meshId;
+    let mesh;
+    for (let i = 0, len = meshIds.length; i &lt; len; i++) {
+        meshId = meshIds[i];
+        mesh = scene.meshes[meshId];
+        if (!mesh) {
+            scene.warn(&quot;pick(): Mesh not found: &quot; + meshId);
+            continue;
+        }
+        map[meshId] = true;
+    }
+    return map;
+}
+
+/**
+ * Fired whenever a debug message is logged on a component within this Scene.
+ * @event log
+ * @param {String} value The debug message
+ */
+
+/**
+ * Fired whenever an error is logged on a component within this Scene.
+ * @event error
+ * @param {String} value The error message
+ */
+
+/**
+ * Fired whenever a warning is logged on a component within this Scene.
+ * @event warn
+ * @param {String} value The warning message
+ */
+
+/**
+ * @desc Contains the components that comprise a 3D scene.
+ *
+ * * A {@link Viewer} has a single Scene, which it provides in {@link Viewer#scene}.
+ * * Plugins like {@link AxisGizmoPlugin} and {@link PlanViewPlugin} also have their own private Scenes.
+ *
+ * ## Getting a Viewer&apos;s Scene
+ *
+ * ````javascript
+ * var scene = myViewer.scene;
+ * ````
+ *
+ * ## Creating and accessing Scene components
+ *
+ * As a brief introduction to creating Scene components, we&apos;ll create a {@link Mesh} that has a
+ * {@link TorusGeometry} and a {@link PhongMaterial}:
+ *
+ * ````javascript
+ * var teapotMesh = new Mesh(scene, {
+ *     id: &quot;myMesh&quot;,                               // &lt;&lt;---------- ID automatically generated if not provided
+ *     geometry: new TorusGeometry(scene),
+ *     material: new PhongMaterial(scene, {
+ *         id: &quot;myMaterial&quot;,
+ *         diffuse: [0.2, 0.2, 1.0]
+ *     })
+ * });
+ *
+ * teapotMesh.scene.camera.eye = [45, 45, 45];
+ * ````
+ *
+ * Find components by ID in their Scene&apos;s {@link Scene#components} map:
+ *
+ * ````javascript
+ * var teapotMesh = scene.components[&quot;myMesh&quot;];
+ * teapotMesh.visible = false;
+ *
+ * var teapotMaterial = scene.components[&quot;myMaterial&quot;];
+ * teapotMaterial.diffuse = [1,0,0]; // Change to red
+ * ````
+ *
+ * A Scene also has a map of component instances for each {@link Component} subtype:
+ *
+ * ````javascript
+ * var meshes = scene.types[&quot;Mesh&quot;];
+ * var teapotMesh = meshes[&quot;myMesh&quot;];
+ * teapotMesh.ghosted = true;
+ *
+ * var phongMaterials = scene.types[&quot;PhongMaterial&quot;];
+ * var teapotMaterial = phongMaterials[&quot;myMaterial&quot;];
+ * teapotMaterial.diffuse = [0,1,0]; // Change to green
+ * ````
+ *
+ * See {@link Node}, {@link Node} and {@link Model} for how to create and access more sophisticated content.
+ *
+ * ## Controlling the camera
+ *
+ * Use the Scene&apos;s {@link Camera} to control the current viewpoint and projection:
+ *
+ * ````javascript
+ * var camera = myScene.camera;
+ *
+ * camera.eye = [-10,0,0];
+ * camera.look = [-10,0,0];
+ * camera.up = [0,1,0];
+ *
+ * camera.projection = &quot;perspective&quot;;
+ * camera.perspective.fov = 45;
+ * //...
+ * ````
+ *
+ * ## Managing the canvas, taking snapshots
+ *
+ * The Scene&apos;s {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
+ * as getting getting snapshots, firing resize events etc:
+ *
+ * ````javascript
+ * var canvas = scene.canvas;
+ *
+ * canvas.on(&quot;boundary&quot;, function(boundary) {
+ *     //...
+ * });
+ *
+ * var imageData = canvas.getSnapshot({
+ *     width: 500,
+ *     height: 500,
+ *     format: &quot;png&quot;
+ * });
+ * ````
+ *
+ * ## Picking
+ *
+ * Use {@link Scene#pick} to pick and raycast meshes.
+ *
+ * For example, to pick a point on the surface of the closest mesh at the given canvas coordinates:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      pickSurface: true,
+ *      canvasPos: [23, 131]
+ * });
+ *
+ * if (hit) { // Picked a Mesh
+ *
+ *     var mesh = hit.mesh;
+ *
+ *     var primitive = hit.primitive; // Type of primitive that was picked, usually &quot;triangles&quot;
+ *     var primIndex = hit.primIndex; // Position of triangle&apos;s first index in the picked Mesh&apos;s Geometry&apos;s indices array
+ *     var indices = hit.indices; // UInt32Array containing the triangle&apos;s vertex indices
+ *     var localPos = hit.localPos; // Float32Array containing the picked Local-space position on the triangle
+ *     var worldPos = hit.worldPos; // Float32Array containing the picked World-space position on the triangle
+ *     var viewPos = hit.viewPos; // Float32Array containing the picked View-space position on the triangle
+ *     var bary = hit.bary; // Float32Array containing the picked barycentric position within the triangle
+ *     var normal = hit.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+ *     var uv = hit.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+ * }
+ * ````
+ *
+ * ## Pick masking
+ *
+ * We can use {@link Scene#pick}&apos;s ````includeMeshes```` and ````excludeMeshes````  options to mask which {@link Mesh}es we attempt to pick.
+ *
+ * This is useful for picking &lt;em&gt;through&lt;/em&gt; things, to pick only the Meshes of interest.
+ *
+ * To pick only Meshes ````&quot;gearbox#77.0&quot;```` and ````&quot;gearbox#79.0&quot;````, picking through any other Meshes that are
+ * in the way, as if they weren&apos;t there:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      canvasPos: [23, 131],
+ *      includeMeshes: [&quot;gearbox#77.0&quot;, &quot;gearbox#79.0&quot;]
+ * });
+ *
+ * if (hit) {
+ *       // Mesh will always be either &quot;gearbox#77.0&quot; or &quot;gearbox#79.0&quot;
+ *       var mesh = hit.mesh;
+ * }
+ * ````
+ *
+ * To pick any pickable Mesh, except for ````&quot;gearbox#77.0&quot;```` and ````&quot;gearbox#79.0&quot;````, picking through those
+ * Meshes if they happen to be in the way:
+ *
+ * ````javascript
+ * var hit = scene.pick({
+ *      canvasPos: [23, 131],
+ *      excludeMeshes: [&quot;gearbox#77.0&quot;, &quot;gearbox#79.0&quot;]
+ * });
+ *
+ * if (hit) {
+ *       // Mesh will never be &quot;gearbox#77.0&quot; or &quot;gearbox#79.0&quot;
+ *       var mesh = hit.mesh;
+ * }
+ * ````
+ *
+ * See {@link Scene#pick} for more info on picking.
+ *
+ * ## Querying and tracking boundaries
+ *
+ * Getting a Scene&apos;s World-space axis-aligned boundary (AABB):
+ *
+ * ````javascript
+ * var aabb = scene.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
+ * ````
+ *
+ * Subscribing to updates to the AABB, which occur whenever {@link Mesh}es are transformed, their
+ * {@link Geometry}s have been updated, or the {@link Camera} has moved:
+ *
+ * ````javascript
+ * scene.on(&quot;boundary&quot;, function() {
+ *      var aabb = scene.aabb;
+ * });
+ * ````
+ *
+ * Getting the AABB of the {@link Node}s with the given IDs:
+ *
+ * ````JavaScript
+ * scene.getAABB(); // Gets collective boundary of all Mesh Objects in the scene
+ * scene.getAABB(&quot;saw&quot;); // Gets boundary of an Object
+ * scene.getAABB([&quot;saw&quot;, &quot;gearbox&quot;]); // Gets collective boundary of two Objects
+ * ````
+ *
+ * See {@link Scene#getAABB} and {@link Node} for more info on querying and tracking boundaries.
+ *
+ * ## Managing the viewport
+ *
+ * The Scene&apos;s {@link Viewport} component manages the WebGL viewport:
+ *
+ * ````javascript
+ * var viewport = scene.viewport
+ * viewport.boundary = [0, 0, 500, 400];;
+ * ````
+ *
+ * ## Controlling rendering
+ *
+ * You can configure a Scene to perform multiple &quot;passes&quot; (renders) per frame. This is useful when we want to render the
+ * scene to multiple viewports, such as for stereo effects.
+ *
+ * In the example, below, we&apos;ll configure the Scene to render twice on each frame, each time to different viewport. We&apos;ll do this
+ * with a callback that intercepts the Scene before each render and sets its {@link Viewport} to a
+ * different portion of the canvas. By default, the Scene will clear the canvas only before the first render, allowing the
+ * two views to be shown on the canvas at the same time.
+ *
+ * ````Javascript
+ * // Load a glTF model
+ * var model = new GLTFModel({
+ *     src: &quot;models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf&quot;
+ * });
+ *
+ * var scene = model.scene;
+ * var viewport = scene.viewport;
+ *
+ * // Configure Scene to render twice for each frame
+ * scene.passes = 2; // Default is 1
+ * scene.clearEachPass = false; // Default is false
+ *
+ * // Render to a separate viewport on each render
+ *
+ * var viewport = scene.viewport;
+ * viewport.autoBoundary = false;
+ *
+ * scene.on(&quot;rendering&quot;, function (e) {
+ *      switch (e.pass) {
+ *          case 0:
+ *              viewport.boundary = [0, 0, 200, 200]; // xmin, ymin, width, height
+ *              break;
+ *
+ *          case 1:
+ *              viewport.boundary = [200, 0, 200, 200];
+ *              break;
+ *      }
+ * });
+ *
+ * // We can also intercept the Scene after each render,
+ * // (though we&apos;re not using this for anything here)
+ * scene.on(&quot;rendered&quot;, function (e) {
+ *      switch (e.pass) {
+ *          case 0:
+ *              break;
+ *
+ *          case 1:
+ *              break;
+ *      }
+ * });
+ * ````
+ *
+ * ## Gamma correction
+ *
+ * Within its shaders, xeokit performs shading calculations in linear space.
+ *
+ * By default, the Scene expects color textures (eg. {@link PhongMaterial#diffuseMap},
+ * {@link MetallicMaterial#baseColorMap} and {@link SpecularMaterial#diffuseMap}) to
+ * be in pre-multipled gamma space, so will convert those to linear space before they are used in shaders. Other textures are
+ * always expected to be in linear space.
+ *
+ * By default, the Scene will also gamma-correct its rendered output.
+ *
+ * You can configure the Scene to expect all those color textures to be linear space, so that it does not gamma-correct them:
+ *
+ * ````javascript
+ * scene.gammaInput = false;
+ * ````
+ *
+ * You would still need to gamma-correct the output, though, if it&apos;s going straight to the canvas, so normally we would
+ * leave that enabled:
+ *
+ * ````javascript
+ * scene.gammaOutput = true;
+ * ````
+ *
+ * See {@link Texture} for more information on texture encoding and gamma.
+ *
+ * @class Scene
+ */
+class Scene extends Component {
+
+    /**
+     JavaScript class name for this Component.
+
+     For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.
+
+     @property type
+     @type String
+     @final
+     */
+    get type() {
+        return &quot;Scene&quot;;
+    }
+
+    /**
+     * @constructor
+     */
+    constructor(cfg={}) {
+
+        super(null, cfg);
+
+        if (!cfg.canvasId) {
+            throw &quot;Mandatory config expected: canvasId&quot;;
+        }
+
+        const canvas = document.getElementById(cfg.canvasId);
+        if (!canvas) {
+            throw &quot;Canvas not found: &apos;&quot; + cfg.canvasId + &quot;&apos;&quot;;
+        }
+
+        const self = this;
+
+        const transparent = !!cfg.transparent;
+
+        /**
+         The number of models currently loading.
+
+         @property loading
+         @final
+         @type {Number}
+         */
+        this.loading = 0;
+
+        /**
+         The epoch time (in milliseconds since 1970) when this Scene was instantiated.
+
+         @property timeCreated
+         @final
+         @type {Number}
+         */
+        this.startTime = (new Date()).getTime();
+
+        /**
+         {@link Model}s in this Scene, mapped to their IDs.
+
+         @property models
+         @final
+         @type {{String:Model}}
+         */
+        this.models = {};
+
+        /**
+         {@link Node}s in this Scene that have {@link Node#objectId} properties, mapped to those IDs.
+
+         Each Object is registered in this map when its {@link Node#objectId} is assigned a value.
+
+         @property objects
+         @final
+         @type {{String:Object}}
+         */
+        this.objects = {};
+
+        /**
+         Visible entity {@link Node}s within this Scene, mapped to their IDs.
+
+         Each Object is registered in this map when its {@link Node/visible} property is true and its
+         {@link Node/objectId} is assigned a value.
+
+         @property visibleObjects
+         @final
+         @type {{String:Object}}
+         */
+        this.visibleObjects = {};
+
+        /**
+         Ghosted entity {@link Node}s within this Scene, mapped to their IDs.
+
+         Each Object is registered in this map when its {@link Node/ghosted} property is true and its
+         {@link Node/objectId} is assigned a value.
+
+         @property ghostedObjects
+         @final
+         @type {{String:Object}}
+         */
+        this.ghostedObjects = {};
+
+        /**
+         Highlighted entity {@link Node}s within this Scene, mapped to their IDs.
+
+         Each Object is registered in this map when its {@link Node/highlighted} property is true and its
+         {@link Node/objectId} is assigned a value.
+
+         @property highlightedObjects
+         @final
+         @type {{String:Object}}
+         */
+        this.highlightedObjects = {};
+
+        /**
+         Selected entity {@link Node}s within this Scene, mapped to their IDs.
+
+         Each Object is registered in this map when its {@link Node/selected} property is true and its
+         {@link Node/objectId} is assigned a value.
+
+         @property selectedObjects
+         @final
+         @type {{String:Object}}
+         */
+        this.selectedObjects = {};
+
+        // Cached ID arrays, lazy-rebuilt as needed when stale after map updates
+
+        /**
+         Lazy-regenerated ID lists.
+         */
+        this._modelIds = null;
+        this._objectIds = null;
+        this._visibleObjectIds = null;
+        this._ghostedObjectIds = null;
+        this._highlightedObjectIds = null;
+        this._selectedObjectIds = null;
+
+        this._collidables = {}; // Components that contribute to the Scene AABB
+        this._compilables = {}; // Components that require shader compilation
+
+        this._needRecompile = false;
+
+        /**
+         For each {@link Component} type, a map of
+         IDs to {@link Component} instances of that type.
+
+         @property types
+         @final
+         @type {String:{String:Component}}
+         */
+        this.types = {};
+
+        /**
+         The {@link Component}s within this Scene, each mapped to its {@link Component#id}.
+
+         @property components
+         @final
+         @type {String:Component}
+         */
+        this.components = {};
+
+        /**
+         The {@link Clip}s in this Scene, each mapped to its {@link Clip#id}.
+
+         @property clips
+         @final
+         @type {{String:Clip}}
+         */
+        this.clips = {};
+
+        /**
+         The {@link Light}s in this Scene, each mapped to its {@link Light#id}.
+
+         @property lights
+         @final
+         @type {{String:Light}}
+         */
+        this.lights = {};
+
+        /**
+         The {@link LightMap}s in this Scene, each mapped to its its {@link LightMap#id}.
+
+         @property lightMaps
+         @final
+         @type {{String:LightMap}}
+         */
+        this.lightMaps = {};
+
+        /**
+         The {@link ReflectionMap}s in this Scene, mapped to its {@link ReflectionMap#id}.
+
+         @property reflectionMaps
+         @final
+         @type {{String:ReflectionMap}}
+         */
+        this.reflectionMaps = {};
+
+        /**
+         Manages the HTML5 canvas for this Scene.
+         @final
+         @property canvas
+         @type {Canvas}
+         */
+        this.canvas = new Canvas(this, {
+            dontClear: true, // Never destroy this component with Scene#clear();
+            canvas: canvas,
+            transparent: transparent,
+            backgroundColor: cfg.backgroundColor,
+            backgroundImage: cfg.backgroundImage,
+            webgl2: cfg.webgl2 !== false,
+            contextAttr: cfg.contextAttr || {},
+            simulateWebGLContextLost: cfg.simulateWebGLContextLost
+        });
+
+        // Redraw as canvas resized
+        this.canvas.on(&quot;boundary&quot;, function () {
+            self.glRedraw();
+        });
+
+        this.canvas.on(&quot;webglContextFailed&quot;, function () {
+            alert(&quot;xeokit failed to find WebGL!&quot;);
+        });
+
+        this._renderer = new Renderer(this, {
+            transparent: transparent
+        });
+
+        this._clipsState = new (function () {
+
+            this.clips = [];
+
+            let hash = null;
+
+            this.getHash = function () {
+                if (hash) {
+                    return hash;
+                }
+                const clips = this.clips;
+                if (clips.length === 0) {
+                    return this.hash = &quot;;&quot;;
+                }
+                let clip;
+                const hashParts = [];
+                for (let i = 0, len = clips.length; i &lt; len; i++) {
+                    clip = clips[i];
+                    hashParts.push(&quot;cp&quot;);
+                }
+                hashParts.push(&quot;;&quot;);
+                hash = hashParts.join(&quot;&quot;);
+                return hash;
+            };
+
+            this.addClip = function (clip) {
+                this.clips.push(clip);
+                hash = null;
+            };
+
+            this.removeClip = function (clip) {
+                for (let i = 0, len = this.clips.length; i &lt; len; i++) {
+                    if (this.clips[i].id === clip.id) {
+                        this.clips.splice(i, 1);
+                        hash = null;
+                        return;
+                    }
+                }
+            };
+        })();
+
+        this._lightsState = new (function () {
+
+            const DEFAULT_AMBIENT = math.vec3([0, 0, 0]);
+            const ambientColor = math.vec3();
+
+            this.lights = [];
+            this.reflectionMaps = [];
+            this.lightMaps = [];
+
+            let hash = null;
+            let ambientLight = null;
+
+            this.getHash = function () {
+                if (hash) {
+                    return hash;
+                }
+                const hashParts = [];
+                const lights = this.lights;
+                let light;
+                for (let i = 0, len = lights.length; i &lt; len; i++) {
+                    light = lights[i];
+                    hashParts.push(&quot;/&quot;);
+                    hashParts.push(light.type);
+                    hashParts.push((light.space === &quot;world&quot;) ? &quot;w&quot; : &quot;v&quot;);
+                    if (light.castShadow) {
+                        hashParts.push(&quot;sh&quot;);
+                    }
+                }
+                if (this.lightMaps.length &gt; 0) {
+                    hashParts.push(&quot;/lm&quot;);
+                }
+                if (this.reflectionMaps.length &gt; 0) {
+                    hashParts.push(&quot;/rm&quot;);
+                }
+                hashParts.push(&quot;;&quot;);
+                hash = hashParts.join(&quot;&quot;);
+                return hash;
+            };
+
+            this.addLight = function (state) {
+                this.lights.push(state);
+                ambientLight = null;
+                hash = null;
+            };
+
+            this.removeLight = function (state) {
+                for (let i = 0, len = this.lights.length; i &lt; len; i++) {
+                    const light = this.lights[i];
+                    if (light.id === state.id) {
+                        this.lights.splice(i, 1);
+                        if (ambientLight &amp;&amp; ambientLight.id === state.id) {
+                            ambientLight = null;
+                        }
+                        hash = null;
+                        return;
+                    }
+                }
+            };
+
+            this.addReflectionMap = function (state) {
+                this.reflectionMaps.push(state);
+                hash = null;
+            };
+
+            this.removeReflectionMap = function (state) {
+                for (let i = 0, len = this.reflectionMaps.length; i &lt; len; i++) {
+                    if (this.reflectionMaps[i].id === state.id) {
+                        this.reflectionMaps.splice(i, 1);
+                        hash = null;
+                        return;
+                    }
+                }
+            };
+
+            this.addLightMap = function (state) {
+                this.lightMaps.push(state);
+                hash = null;
+            };
+
+            this.removeLightMap = function (state) {
+                for (let i = 0, len = this.lightMaps.length; i &lt; len; i++) {
+                    if (this.lightMaps[i].id === state.id) {
+                        this.lightMaps.splice(i, 1);
+                        hash = null;
+                        return;
+                    }
+                }
+            };
+
+            this.getAmbientColor = function () {
+                if (!ambientLight) {
+                    for (let i = 0, len = this.lights.length; i &lt; len; i++) {
+                        const light = this.lights[i];
+                        if (light.type === &quot;ambient&quot;) {
+                            ambientLight = light;
+                            break;
+                        }
+                    }
+                }
+                if (ambientLight) {
+                    const color = ambientLight.color;
+                    const intensity = ambientLight.intensity;
+                    ambientColor[0] = color[0] * intensity;
+                    ambientColor[1] = color[1] * intensity;
+                    ambientColor[2] = color[2] * intensity;
+                    return ambientColor;
+                } else {
+                    return DEFAULT_AMBIENT;
+                }
+            };
+
+        })();
+
+        /**
+         Publishes input events that occur on this Scene&apos;s canvas.
+
+         @final
+         @property input
+         @type {Input}
+         @final
+         */
+        this.input = new Input(this, {
+            dontClear: true, // Never destroy this component with Scene#clear();
+            element: this.canvas.canvas
+        });
+
+        // Register Scene on xeokit
+        // Do this BEFORE we add components below
+        core._addScene(this);
+
+        this._initDefaults();
+
+        // Global components
+
+        this._viewport = new Viewport(this, {
+            id: &quot;default.viewport&quot;,
+            autoBoundary: true,
+            dontClear: true // Never destroy this component with Scene#clear();
+        });
+
+        this._camera = new Camera(this, {
+            id: &quot;default.camera&quot;,
+            dontClear: true // Never destroy this component with Scene#clear();
+        });
+
+        // Default lights
+
+        new DirLight(this, {
+            dir: [0.8, -0.6, -0.8],
+            color: [1.0, 1.0, 1.0],
+            intensity: 1.0,
+            space: &quot;view&quot;
+        });
+
+        new DirLight(this, {
+            dir: [-0.8, -0.4, -0.4],
+            color: [1.0, 1.0, 1.0],
+            intensity: 1.0,
+            space: &quot;view&quot;
+        });
+
+        new DirLight(this, {
+            dir: [0.2, -0.8, 0.8],
+            color: [0.6, 0.6, 0.6],
+            intensity: 1.0,
+            space: &quot;view&quot;
+        });
+
+        // Plug global components into renderer
+
+        const viewport = this._viewport;
+        const renderer = this._renderer;
+        const camera = this._camera;
+
+        camera.on(&quot;dirty&quot;, function () {
+            renderer.imageDirty();
+        });
+
+        this.ticksPerRender = cfg.ticksPerRender;
+        this.passes = cfg.passes;
+        this.clearEachPass = cfg.clearEachPass;
+        this.gammaInput = cfg.gammaInput;
+        this.gammaOutput = cfg.gammaOutput;
+        this.gammaFactor = cfg.gammaFactor;
+    }
+
+    _initDefaults() {
+
+        // Call this Scene&apos;s property accessors to lazy-init their properties
+
+        let dummy; // Keeps Codacy happy
+
+        dummy = this.geometry;
+        dummy = this.material;
+        dummy = this.ghostMaterial;
+        dummy = this.outlineMaterial;
+        dummy = this.edgeMaterial;
+        dummy = this.selectedMaterial;
+        dummy = this.highlightMaterial;
+    }
+
+    _addComponent(component) {
+        if (component.id) { // Manual ID
+            if (this.components[component.id]) {
+                this.error(&quot;Component &quot; + utils.inQuotes(component.id) + &quot; already exists in Scene - ignoring ID, will randomly-generate instead&quot;);
+                component.id = null;
+            }
+        }
+        if (!component.id) { // Auto ID
+            if (window.nextID === undefined) {
+                window.nextID = 0;
+            }
+            //component.id = math.createUUID();
+            component.id = &quot;_&quot; + window.nextID++;
+            while (this.components[component.id]) {
+                component.id = math.createUUID();
+            }
+        }
+        this.components[component.id] = component;
+
+        // Register for class type
+        const type = component.type;
+        let types = this.types[component.type];
+        if (!types) {
+            types = this.types[type] = {};
+        }
+        types[component.id] = component;
+
+        if (component.compile) {
+            this._compilables[component.id] = component;
+        }
+        if (component.isDrawable) {
+            this._renderer.addDrawable(component.id, component);
+            this._collidables[component.id] = component;
+        }
+        if (component.isModel) {
+            this.models[component.id] = component;
+        }
+    }
+
+    _removeComponent(component) {
+        var id = component.id;
+        var type = component.type;
+        delete this.components[id];
+        // Unregister for types
+        const types = this.types[type];
+        if (types) {
+            delete types[id];
+            if (utils.isEmptyObject(types)) {
+                delete this.types[type];
+            }
+        }
+        if (component.compile) {
+            delete this._compilables[component.id];
+        }
+        if (component.isDrawable) {
+            this._renderer.removeDrawable(component.id);
+            delete this._collidables[component.id];
+        }
+    }
+
+    // Methods below are called by various component types to register themselves on their
+    // Scene. Violates Hollywood Principle, where we could just filter on type in _addComponent,
+    // but this is faster than checking the type of each component in such a filter.
+
+    _clipCreated(clip) {
+        this.clips[clip.id] = clip;
+        this.scene._clipsState.addClip(clip._state);
+        this._needRecompile = true;
+    }
+
+    _lightCreated(light) {
+        this.lights[light.id] = light;
+        this.scene._lightsState.addLight(light._state);
+        this._needRecompile = true;
+    }
+
+    _lightMapCreated(lightMap) {
+        this.lightMaps[lightMap.id] = lightMap;
+        this.scene._lightsState.addLightMap(lightMap._state);
+        this._needRecompile = true;
+    }
+
+    _reflectionMapCreated(reflectionMap) {
+        this.reflectionMaps[reflectionMap.id] = reflectionMap;
+        this.scene._lightsState.addReflectionMap(reflectionMap._state);
+        this._needRecompile = true;
+    }
+
+    _clipDestroyed(clip) {
+        delete this.clips[clip.id];
+        this.scene._clipsState.removeClip(clip._state);
+        this._needRecompile = true;
+    }
+
+    _lightDestroyed(light) {
+        delete this.lights[light.id];
+        this.scene._lightsState.removeLight(light._state);
+        this._needRecompile = true;
+    }
+
+    _lightMapDestroyed(lightMap) {
+        delete this.lightMaps[lightMap.id];
+        this.scene._lightsState.removeLightMap(lightMap._state);
+        this._needRecompile = true;
+    }
+
+    _reflectionMapDestroyed(reflectionMap) {
+        delete this.reflectionMaps[reflectionMap.id];
+        this.scene._lightsState.removeReflectionMap(reflectionMap._state);
+        this._needRecompile = true;
+    }
+
+    _registerModel(component) {
+        this.models[component.modelId] = component;
+        this._modelIds = null; // Lazy regenerate
+    }
+
+    _deregisterModel(component) {
+        delete this.models[component.modelId];
+        this._modelIds = null; // Lazy regenerate
+    }
+    
+    _registerObject(component) {
+        this.objects[component.objectId] = component;
+        this._objectIds = null; // Lazy regenerate
+    }
+
+    _deregisterObject(component) {
+        delete this.objects[component.objectId];
+        this._objectIds = null; // Lazy regenerate
+    }
+
+    _objectVisibilityUpdated(component, visible) {
+        if (visible) {
+            this.visibleObjects[component.objectId] = component;
+        } else {
+            delete this.visibleObjects[component.objectId];
+        }
+        this._visibleObjectIds = null; // Lazy regenerate
+    }
+
+    _objectGhostedUpdated(component, ghosted) {
+        if (ghosted) {
+            this.ghostedObjects[component.objectId] = component;
+        } else {
+            delete this.ghostedObjects[component.objectId];
+        }
+        this._ghostedObjectIds = null; // Lazy regenerate
+    }
+
+    _objectHighlightedUpdated(component, highlighted) {
+        if (highlighted) {
+            this.highlightedObjects[component.objectId] = component;
+        } else {
+            delete this.highlightedObjects[component.objectId];
+        }
+        this._highlightedObjectIds = null; // Lazy regenerate
+    }
+
+    _objectSelectedUpdated(component, selected) {
+        if (selected) {
+            this.selectedObjects[component.objectId] = component;
+        } else {
+            delete this.selectedObjects[component.objectId];
+        }
+        this._selectedObjectIds = null; // Lazy regenerate
+    }
+
+    _webglContextLost() {
+        //  this.loading++;
+        this.canvas.spinner.processes++;
+        for (const id in this.components) {
+            if (this.components.hasOwnProperty(id)) {
+                const component = this.components[id];
+                if (component._webglContextLost) {
+                    component._webglContextLost();
+                }
+            }
+        }
+        this._renderer.webglContextLost();
+    }
+
+    _webglContextRestored() {
+        const gl = this.canvas.gl;
+        for (const id in this.components) {
+            if (this.components.hasOwnProperty(id)) {
+                const component = this.components[id];
+                if (component._webglContextRestored) {
+                    component._webglContextRestored(gl);
+                }
+            }
+        }
+        this._renderer.webglContextRestored(gl);
+        //this.loading--;
+        this.canvas.spinner.processes--;
+    }
+
+    /**
+     * Renders a single frame of this Scene.
+     *
+     * The Scene will periodically render itself after any updates, but you can call this method to force a render
+     * if required. This method is typically used when we want to synchronously take a snapshot of the canvas and
+     * need everything rendered right at that moment.
+     *
+     * @method render
+     * @param {Boolean} [forceRender=false] Forces a render when true, otherwise only renders if something has changed in this Scene
+     * since the last render.
+     */
+    render(forceRender) {
+
+        const renderEvent = {
+            sceneId: null,
+            pass: 0
+        };
+
+        if (this._needRecompile) {
+            this._recompile();
+            this._needRecompile = false;
+        }
+
+        if (this.loading &gt; 0 || this.canvas.spinner.processes &gt; 0) {
+            this.canvas.canvas.style.opacity = 0.0;
+            return;
+        }
+
+        let opacity = Number.parseFloat(this.canvas.canvas.style.opacity);
+        if (opacity &lt; 1.0) {
+            opacity += 0.1;
+            this.canvas.canvas.style.opacity = opacity;
+        }
+
+        renderEvent.sceneId = this.id;
+
+        const passes = this._passes;
+        const clearEachPass = this._clearEachPass;
+        let pass;
+        let clear;
+
+        for (pass = 0; pass &lt; passes; pass++) {
+
+            renderEvent.pass = pass;
+
+            /**
+             * Fired when about to render a frame for a Scene.
+             *
+             * @event rendering
+             * @param {String} sceneID The ID of this Scene.
+             * @param {Number} pass Index of the pass we are about to render (see {@link Scene#passes}).
+             */
+            this.fire(&quot;rendering&quot;, renderEvent, true);
+
+            clear = clearEachPass || (pass === 0);
+
+            this._renderer.render({pass: pass, clear: clear, force: forceRender});
+
+            /**
+             * Fired when we have just rendered a frame for a Scene.
+             *
+             * @event rendering
+             * @param {String} sceneID The ID of this Scene.
+             * @param {Number} pass Index of the pass we rendered (see {@link Scene#passes}).
+             */
+            this.fire(&quot;rendered&quot;, renderEvent, true);
+        }
+
+        this._saveAmbientColor();
+    }
+
+    _recompile() {
+        for (const id in this._compilables) {
+            if (this._compilables.hasOwnProperty(id)) {
+                this._compilables[id].compile();
+            }
+        }
+    }
+
+    _saveAmbientColor() {
+        const canvas = this.canvas;
+        if (!canvas.transparent &amp;&amp; !canvas.backgroundImage &amp;&amp; !canvas.backgroundColor) {
+            const ambientColor = this._lightsState.getAmbientColor();
+            if (!this._lastAmbientColor ||
+                this._lastAmbientColor[0] !== ambientColor[0] ||
+                this._lastAmbientColor[1] !== ambientColor[1] ||
+                this._lastAmbientColor[2] !== ambientColor[2] ||
+                this._lastAmbientColor[3] !== ambientColor[3]) {
+                canvas.backgroundColor = ambientColor;
+                if (!this._lastAmbientColor) {
+                    this._lastAmbientColor = math.vec4([0, 0, 0, 1]);
+                }
+                this._lastAmbientColor.set(ambientColor);
+            }
+        } else {
+            this._lastAmbientColor = null;
+        }
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#models}.
+     @property modelIds
+     @final
+     @type {Array of String}
+     */
+    get modelIds() {
+        if (!this._modelIds) {
+            this._modelIds = Object.keys(this.models);
+        }
+        return this._modelIds;
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#objects}.
+     @property objectIds
+     @final
+     @type {Array of String}
+     */
+    get objectIds() {
+        if (!this._objectIds) {
+            this._objectIds = Object.keys(this.objects);
+        }
+        return this._objectIds;
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#visibleObjects}.
+     @property visibleObjectIds
+     @final
+     @type {Array of String}
+     */
+    get visibleObjectIds() {
+        if (!this._visibleObjectIds) {
+            this._visibleObjectIds = Object.keys(this.visibleObjects);
+        }
+        return this._visibleObjectIds;
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#ghostedObjects}.
+     @property ghostedObjectIds
+     @final
+     @type {Array of String}
+     */
+    get ghostedObjectIds() {
+        if (!this._ghostedObjectIds) {
+            this._ghostedObjectIds = Object.keys(this.ghostedObjects);
+        }
+        return this._ghostedObjectIds;
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#highlightedObjects}.
+     @property highlightedObjectIds
+     @final
+     @type {Array of String}
+     */
+    get highlightedObjectIds() {
+        if (!this._highlightedObjectIds) {
+            this._highlightedObjectIds = Object.keys(this.highlightedObjects);
+        }
+        return this._highlightedObjectIds;
+    }
+
+    /**
+     Convenience array of IDs in {@link Scene#selectedObjects}.
+     @property selectedObjectIds
+     @final
+     @type {Array of String}
+     */
+    get selectedObjectIds() {
+        if (!this._selectedObjectIds) {
+            this._selectedObjectIds = Object.keys(this.selectedObjects);
+        }
+        return this._selectedObjectIds;
+    }
+
+    /**
+     The number of {@link Scene#tick} that happen between each render or this Scene.
+
+     @property ticksPerRender
+     @default 1
+     @type Number
+     */
+    set ticksPerRender(value) {
+        if (value === undefined || value === null) {
+            value = 1;
+        } else if (!utils.isNumeric(value) || value &lt;= 0) {
+            this.error(&quot;Unsupported value for &apos;ticksPerRender&apos;: &apos;&quot; + value +
+                &quot;&apos; - should be an integer greater than zero.&quot;);
+            value = 1;
+        }
+        if (value === this._ticksPerRender) {
+            return;
+        }
+        this._ticksPerRender = value;
+    }
+
+    get ticksPerRender() {
+        return this._ticksPerRender;
+    }
+
+    /**
+     The number of times this Scene renders per frame.
+
+     @property passes
+     @default 1
+     @type Number
+     */
+    set passes(value) {
+        if (value === undefined || value === null) {
+            value = 1;
+        } else if (!utils.isNumeric(value) || value &lt;= 0) {
+            this.error(&quot;Unsupported value for &apos;passes&apos;: &apos;&quot; + value +
+                &quot;&apos; - should be an integer greater than zero.&quot;);
+            value = 1;
+        }
+        if (value === this._passes) {
+            return;
+        }
+        this._passes = value;
+        this.glRedraw();
+    }
+
+    get passes() {
+        return this._passes;
+    }
+
+    /**
+     When doing multiple passes per frame, specifies whether to clear the
+     canvas before each pass (true) or just before the first pass (false).
+
+     @property clearEachPass
+     @default false
+     @type {Boolean}
+     */
+    set clearEachPass(value) {
+        value = !!value;
+        if (value === this._clearEachPass) {
+            return;
+        }
+        this._clearEachPass = value;
+        this.glRedraw();
+    }
+
+    get clearEachPass() {
+        return this._clearEachPass;
+    }
+
+    /**
+     When true, expects all textures and colors are premultiplied gamma.
+
+     @property gammaInput
+     @default false
+     @type {Boolean}
+     */
+    set gammaInput(value) {
+        value = value !== false;
+        if (value === this._renderer.gammaInput) {
+            return;
+        }
+        this._renderer.gammaInput = value;
+        this._needRecompile = true;
+    }
+
+    get gammaInput() {
+        return this._renderer.gammaInput;
+    }
+
+    /**
+     Whether or not to render pixels with pre-multiplied gama.
+
+     @property gammaOutput
+     @default true
+     @type Boolean
+     */
+    set gammaOutput(value) {
+        value = value !== false;
+        if (value === this._renderer.gammaOutput) {
+            return;
+        }
+        this._renderer.gammaOutput = value;
+        this._needRecompile = true;
+    }
+
+    get gammaOutput() {
+        return this._renderer.gammaOutput;
+    }
+
+    /**
+     The gamma factor to use when {@link Scene#property:gammaOutput} is set true.
+
+     @property gammaOutput
+     @default 1.0
+     @type Number
+     */
+    set gammaFactor(value) {
+        value = (value === undefined || value === null) ? 2.2 : value;
+        if (value === this._renderer.gammaFactor) {
+            return;
+        }
+        this._renderer.gammaFactor = value;
+        this.glRedraw();
+    }
+
+    get gammaFactor() {
+        return this._renderer.gammaFactor;
+    }
+
+    /**
+     The default geometry for this Scene, which is a {@link BoxGeometry}.
+
+     This {@link BoxGeometry} has an {@link Component#id} equal to &quot;default.geometry&quot;.
+
+     {@link Mesh}s in this Scene are attached to this {@link Geometry} by default.
+     @property geometry
+     @final
+     @type BoxGeometry
+     */
+    get geometry() {
+        return this.components[&quot;default.geometry&quot;] ||
+            new BoxGeometry(this, {
+                id: &quot;default.geometry&quot;,
+                dontClear: true
+            });
+    }
+
+    /**
+     The default drawing material for this Scene, which is a {@link PhongMaterial&quot;}}PhongMaterial{{/crossLink}}.
+
+     This {@link PhongMaterial&quot;}}PhongMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.material&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link PhongMaterial&quot;}}PhongMaterial{{/crossLink}} by default.
+     @property material
+     @final
+     @type PhongMaterial
+     */
+    get material() {
+        return this.components[&quot;default.material&quot;] || new PhongMaterial(this, {
+            id: &quot;default.material&quot;,
+            emissive: [0.4, 0.4, 0.4], // Visible by default on geometry without normals
+            dontClear: true
+        });
+    }
+
+    /**
+     The Scene&apos;s default {@link EmphasisMaterial&quot;}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when they are ghosted.
+
+     This {@link EmphasisMaterial&quot;}}EmphasisMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.ghostMaterial&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link EmphasisMaterial&quot;}}EmphasisMaterial{{/crossLink}} by default.
+     @property ghostMaterial
+     @final
+     @type EmphasisMaterial
+     */
+    get ghostMaterial() {
+        return this.components[&quot;default.ghostMaterial&quot;] || new EmphasisMaterial(this, {
+            id: &quot;default.ghostMaterial&quot;,
+            preset: &quot;sepia&quot;,
+            dontClear: true
+        });
+    }
+
+    /**
+     The Scene&apos;s default {@link EmphasisMaterial&quot;}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when they are highlighted.
+
+     This {@link HighlightMaterial&quot;}}HighlightMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.highlightMaterial&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link HighlightMaterial&quot;}}HighlightMaterial{{/crossLink}} by default.
+     @property highlightMaterial
+     @final
+     @type HighlightMaterial
+     */
+    get highlightMaterial() {
+        return this.components[&quot;default.highlightMaterial&quot;] || new EmphasisMaterial(this, {
+            id: &quot;default.highlightMaterial&quot;,
+            preset: &quot;yellowHighlight&quot;,
+            dontClear: true
+        });
+    }
+
+    /**
+     The Scene&apos;s default {@link EmphasisMaterial&quot;}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when they are selected.
+
+     This {@link SelectedMaterial&quot;}}SelectedMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.selectedMaterial&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link SelectedMaterial&quot;}}SelectedMaterial{{/crossLink}} by default.
+     @property selectedMaterial
+     @final
+     @type SelectedMaterial
+     */
+    get selectedMaterial() {
+        return this.components[&quot;default.selectedMaterial&quot;] || new EmphasisMaterial(this, {
+            id: &quot;default.selectedMaterial&quot;,
+            preset: &quot;greenSelected&quot;,
+            dontClear: true
+        });
+    }
+
+    /**
+     The Scene&apos;s default {@link EdgeMaterial&quot;}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when edges are emphasized.
+
+     This {@link EdgeMaterial&quot;}}EdgeMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.edgeMaterial&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link EdgeMaterial&quot;}}EdgeMaterial{{/crossLink}} by default.
+     @property edgeMaterial
+     @final
+     @type EdgeMaterial
+     */
+    get edgeMaterial() {
+        return this.components[&quot;default.edgeMaterial&quot;] || new EdgeMaterial(this, {
+            id: &quot;default.edgeMaterial&quot;,
+            preset: &quot;default&quot;,
+            edgeColor: [0.0, 0.0, 0.0],
+            edgeAlpha: 1.0,
+            edgeWidth: 1,
+            dontClear: true
+        });
+    }
+
+    /**
+     The Scene&apos;s default {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when they are outlined.
+
+     This {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} has
+     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.outlineMaterial&quot;, with all
+     other properties initialised to their default values.
+
+     {@link Mesh}es in this Scene are attached to this
+     {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} by default.
+     @property outlineMaterial
+     @final
+     @type OutlineMaterial
+     */
+    get outlineMaterial() {
+        return this.components[&quot;default.outlineMaterial&quot;] || new OutlineMaterial(this, {
+            id: &quot;default.outlineMaterial&quot;,
+            dontClear: true
+        });
+    }
+
+    /**
+     The {@link Viewport} belonging to this Scene.
+
+     @property viewport
+     @final
+     @type Viewport
+     */
+    get viewport() {
+        return this._viewport;
+    }
+
+    /**
+     The {@link Camera} belonging to this Scene.
+
+     @property camera
+     @final
+     @type Camera
+     */
+    get camera() {
+        return this._camera;
+    }
+
+    /**
+     World-space 3D center of this Scene.
+
+     @property center
+     @final
+     @type {Float32Array}
+     */
+    get center() {
+        if (this._aabbDirty || !this._center) {
+            if (!this._center || !this._center) {
+                this._center = math.vec3();
+            }
+            const aabb = this.aabb;
+            this._center[0] = (aabb[0] + aabb[3]) / 2;
+            this._center[1] = (aabb[1] + aabb[4]) / 2;
+            this._center[2] = (aabb[2] + aabb[5]) / 2;
+        }
+        return this._center;
+    }
+
+    /**
+     World-space axis-aligned 3D boundary (AABB) of this Scene.
+
+     The AABB is represented by a six-element Float32Array containing the min/max extents of the
+     axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+
+     @property aabb
+     @final
+     @type {Float32Array}
+     */
+    get aabb() {
+        if (this._aabbDirty) {
+            if (!this._aabb) {
+                this._aabb = math.AABB3();
+            }
+            let xmin = math.MAX_DOUBLE;
+            let ymin = math.MAX_DOUBLE;
+            let zmin = math.MAX_DOUBLE;
+            let xmax = -math.MAX_DOUBLE;
+            let ymax = -math.MAX_DOUBLE;
+            let zmax = -math.MAX_DOUBLE;
+            let aabb;
+            const collidables = this._collidables;
+            let collidable;
+            for (const collidableId in collidables) {
+                if (collidables.hasOwnProperty(collidableId)) {
+                    collidable = collidables[collidableId];
+                    if (collidable.collidable === false) {
+                        continue;
+                    }
+                    aabb = collidable.aabb;
+                    if (aabb[0] &lt; xmin) {
+                        xmin = aabb[0];
+                    }
+                    if (aabb[1] &lt; ymin) {
+                        ymin = aabb[1];
+                    }
+                    if (aabb[2] &lt; zmin) {
+                        zmin = aabb[2];
+                    }
+                    if (aabb[3] &gt; xmax) {
+                        xmax = aabb[3];
+                    }
+                    if (aabb[4] &gt; ymax) {
+                        ymax = aabb[4];
+                    }
+                    if (aabb[5] &gt; zmax) {
+                        zmax = aabb[5];
+                    }
+                }
+            }
+            this._aabb[0] = xmin;
+            this._aabb[1] = ymin;
+            this._aabb[2] = zmin;
+            this._aabb[3] = xmax;
+            this._aabb[4] = ymax;
+            this._aabb[5] = zmax;
+            this._aabbDirty = false;
+        }
+        return this._aabb;
+    }
+
+    _setBoundaryDirty() {
+        //if (!this._aabbDirty) {
+        this._aabbDirty = true;
+        this.fire(&quot;boundary&quot;);
+        // }
+    }
+
+    /**
+     Attempts to pick an {@link Mesh&quot;}}Mesh{{/crossLink}} in this Scene.
+
+     Ignores {@link Mesh}es with {@link Mesh#pickable:property&quot;}}pickable{{/crossLink}}
+     set *false*.
+
+     When a {@link Mesh} is picked, fires a &quot;pick&quot; event on the {@link Mesh}
+     with the pick result as parameters.
+
+     Picking the {@link Mesh} at the given canvas coordinates:
+
+     ````javascript
+     var pickResult = scene.pick({
+              canvasPos: [23, 131]
+           });
+
+     if (pickResult) { // Picked a Mesh
+              var mesh = pickResult.mesh;
+          }
+     ````
+
+     **Usage:**
+
+     Picking, with a ray cast through the canvas, hits a {@link Mesh}:
+
+     ````javascript
+     var pickResult = scene.pick({
+              pickSurface: true,
+              canvasPos: [23, 131]
+           });
+
+     if (pickResult) { // Picked a Mesh
+
+              var mesh = pickResult.mesh;
+
+              // These properties are only on the pick result when we do a ray-pick:
+
+              var primitive = pickResult.primitive; // Type of primitive that was picked, usually &quot;triangles&quot;
+              var primIndex = pickResult.primIndex; // Position of triangle&apos;s first index in the picked Mesh&apos;s Geometry&apos;s indices array
+              var indices = pickResult.indices; // UInt32Array containing the triangle&apos;s vertex indices
+              var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+              var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+              var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+              var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+              var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+              var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+          }
+     ````
+
+     Picking the {@link Mesh} that intersects an arbitrarily-aligned World-space ray:
+
+     ````javascript
+     var pickResult = scene.pick({
+              pickSurface: true,   // Picking with arbitrarily-positioned ray
+              origin: [0,0,-5],    // Ray origin
+              direction: [0,0,1]   // Ray direction
+          });
+
+     if (pickResult) { // Picked a Mesh with the ray
+
+              var mesh = pickResult.mesh;
+
+              var primitive = pickResult.primitive; // Type of primitive that was picked, usually &quot;triangles&quot;
+              var primIndex = pickResult.primIndex; // Position of triangle&apos;s first index in the picked Mesh&apos;s Geometry&apos;s indices array
+              var indices = pickResult.indices; // UInt32Array containing the triangle&apos;s vertex indices
+              var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+              var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+              var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+              var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+              var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+              var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+              var origin = pickResult.origin; // Float32Array containing the World-space ray origin
+              var direction = pickResult.direction; // Float32Array containing the World-space ray direction
+          }
+     ````
+     @method pick
+
+     @param {*} params Picking parameters.
+     @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Mesh.
+     @param {Float32Array} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the
+     **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position,
+     directly along the negative View-space Z-axis.
+     @param {Float32Array} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
+     @param {Float32Array} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
+     @param {Array} [params.includeMeshes] IDs of {@link Mesh}es to restrict picking to. When given, ignores {@link Mesh}es whose IDs are not in this list.
+     @param {Array} [params.excludeMeshes] IDs of {@link Mesh}es to ignore. When given, will pick *through* these {@link Mesh}es, as if they were not there.
+     @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene&apos;s singleton PickResult if you don&apos;t supply your own.
+     @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
+     */
+    pick(params, pickResult) {
+
+        if (this.canvas.boundary[2] === 0 || this.canvas.boundary[3] === 0) {
+            this.error(&quot;Picking not allowed while canvas has zero width or height&quot;);
+            return null;
+        }
+
+        params = params || {};
+
+        params.pickSurface = params.pickSurface || params.rayPick; // Backwards compatibility
+
+        if (!params.canvasPos &amp;&amp; (!params.origin || !params.direction)) {
+            this.warn(&quot;picking without canvasPos or ray origin and direction&quot;);
+        }
+
+        const includeMeshes = params.includeMeshes || params.include; // Backwards compat
+        if (includeMeshes) {
+            params.includeMeshIds = getMeshIDMap(this, includeMeshes);
+        }
+
+        const excludeMeshes = params.excludeMeshes || params.exclude; // Backwards compat
+        if (excludeMeshes) {
+            params.excludeMeshIds = getMeshIDMap(this, excludeMeshes);
+        }
+
+        if (pickResult = this._renderer.pick(params, pickResult)) {
+            utils.apply(params, pickResult);
+            pickResult.object = pickResult.mesh; // Backwards compat
+            if (params.pickSurface) {
+                pickResult.mesh.getPickResult(pickResult);
+            }
+            pickResult.mesh.fire(&quot;picked&quot;, pickResult); // TODO: BigModelMesh doeosn;t fire events...
+            return pickResult;
+        }
+    }
+
+    /**
+     Returns the collective axis-aligned bounding box of the {@link Node}s, specified by their IDs or objectIds.
+
+     When no arguments are given, returns the total boundary of all objects in the scene.
+
+     Only {@link Mesh}es with {@link Mesh#collidable:property&quot;}}collidable{{/crossLink}}
+     set ````true```` are included in the boundary.
+
+     # Usage
+
+     ````JavaScript
+     scene.getAABB(); // Gets collective boundary of all objects in the scene
+     scene.getAABB(&quot;saw&quot;); // Gets collective boundary of all objects in saw model
+     scene.getAABB([&quot;saw&quot;, &quot;gearbox&quot;]); // Gets collective boundary of all objects in saw and gearbox models
+     scene.getAABB(&quot;saw#0.1&quot;); // Get boundary of an object in the saw model
+     scene.getAABB([&quot;saw#0.1&quot;, &quot;saw#0.2&quot;]); // Get collective boundary of two objects in saw model
+     scene.getAABB([&quot;saw#0.1&quot;, &quot;surface&quot;, &quot;support&quot;]); // Get collective boundary an object, and all objects of the given two entity classes.
+     ````
+
+     @method getAABB
+     @param {String|String[]} target {Array} Array of  {@link Node} IDs of objectIds.
+     @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
+     */
+    getAABB(target) {
+        if (target === undefined) {
+            return this.aabb;
+        }
+        if (utils.isString(target)) {
+            const component = this.components[target];
+            if (component &amp;&amp; component.aabb) { // A Component subclass with an AABB
+                return component.aabb;
+            }
+            target = [target]; // Must be an entity type
+        }
+        if (target.length === 0) {
+            return this.aabb;
+        }
+        let xmin = 100000;
+        let ymin = 100000;
+        let zmin = 100000;
+        let xmax = -100000;
+        let ymax = -100000;
+        let zmax = -100000;
+        let valid;
+        this.withComponents(target, object =&gt; {
+                const aabb = object.aabb;
+                if (aabb[0] &lt; xmin) {
+                    xmin = aabb[0];
+                }
+                if (aabb[1] &lt; ymin) {
+                    ymin = aabb[1];
+                }
+                if (aabb[2] &lt; zmin) {
+                    zmin = aabb[2];
+                }
+                if (aabb[3] &gt; xmax) {
+                    xmax = aabb[3];
+                }
+                if (aabb[4] &gt; ymax) {
+                    ymax = aabb[4];
+                }
+                if (aabb[5] &gt; zmax) {
+                    zmax = aabb[5];
+                }
+                valid = true;
+            }
+        );
+        if (valid) {
+            const aabb2 = math.AABB3();
+            aabb2[0] = xmin;
+            aabb2[1] = ymin;
+            aabb2[2] = zmin;
+            aabb2[3] = xmax;
+            aabb2[4] = ymax;
+            aabb2[5] = zmax;
+            return aabb2;
+        } else {
+            return this.aabb; // Scene AABB
+        }
+    }
+
+    /**
+     Resets this Scene to its default state.
+
+     References to any components in this Scene will become invalid.
+
+     @method clear
+     */
+    clear() {
+        var component;
+        for (const id in this.components) {
+            if (this.components.hasOwnProperty(id)) {
+                // Each component fires &quot;destroyed&quot; as it is destroyed,
+                // which this Scene handles by removing the component
+                component = this.components[id];
+                if (!component._dontClear) { // Don&apos;t destroy components like Camera, Input, Viewport etc.
+                    component.destroy();
+                }
+            }
+        }
+    }
+
+    /**
+     Convenience method that destroys all light sources.
+
+     Removes all {@link AmbientLight&quot;}}AmbientLights{{/crossLink}}, {@link PointLight&quot;}}PointLights{{/crossLink}},
+     {@link DirLight&quot;}}DirLights{{/crossLink}} and {@link SpotLight&quot;}}SpotLights{{/crossLink}}.
+
+     @method clearLights
+     */
+    clearLights() {
+        const ids = Object.keys(this.lights);
+        for (let i = 0, len = ids.length; i &lt; len; i++) {
+            this.lights[ids[i]].destroy();
+        }
+    }
+
+    /**
+     Convenience method that destroys all {@link Clip&quot;}}Clips{{/crossLink}}.
+
+     @method clearClips
+     */
+    clearClips() {
+        const ids = Object.keys(this.clips);
+        for (let i = 0, len = ids.length; i &lt; len; i++) {
+            this.clips[ids[i]].destroy();
+        }
+    }
+
+    /**
+     Shows or hides a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its visibility status in its {@link Node/visibility} property.
+
+     Each visible Object is registered in the {@link Scene}&apos;s
+     {@link Scene#visibleObjects} map while its {@link Node/objectId}
+     is assigned a value.
+
+     @method setVisible
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param visible {Boolean} The new visibility state.
+     @returns {Boolean} True if any {@link Node}s changed visibility, else false if all updates were redundant and not applied.
+     */
+    setVisible(ids, visible) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.visible !== visible);
+            object.visible = visible;
+            return changed;
+        });
+    }
+
+    /**
+     Culls or unculls a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its culled status in its {@link Node/visibility} property.
+
+     @method setVisible
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param culled {Boolean} The new cull state.
+     @returns {Boolean} True if any {@link Node}s changed culled state, else false if all updates were redundant and not applied.
+     */
+    setCulled(ids, culled) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.culled !== culled);
+            object.culled = culled;
+            return changed;
+        });
+    }
+
+    /**
+     Selects or de-selects a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its selected status in its {@link Node/selected} property.
+
+     Each selected Object is registered in the {@link Scene}&apos;s
+     {@link Scene#selectedObjects} map while its {@link Node/objectId}
+     is assigned a value.
+
+     @method setSelected
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param selected {Boolean} Whether to select or deselect.
+     @returns {Boolean} True if any {@link Node}s changed selection state, else false if all updates were redundant and not applied.
+     */
+    setSelected(ids, selected) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.selected !== selected);
+            object.selected = selected;
+            return changed;
+        });
+    }
+
+    /**
+     Highlights or de-highlights a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its highlight status in its {@link Node/highlighted} property.
+
+     Each highlighted Object is registered in the {@link Scene}&apos;s
+     {@link Scene#highlightedObjects} map while its {@link Node/objectId}
+     is assigned a value.
+
+     @method setHighlighted
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param highlighted {Boolean} Whether to highlight or un-highlight.
+     @returns {Boolean} True if any {@link Node}s changed highlighted state, else false if all updates were redundant and not applied.
+     */
+    setHighlighted(ids, highlighted) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.highlighted !== highlighted);
+            object.highlighted = highlighted;
+            return changed;
+        });
+    }
+
+    /**
+     Ghosts or un-ghosts a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its ghosted status in its {@link Node/ghosted} property.
+
+     Each ghosted Object is registered in the {@link Scene}&apos;s
+     {@link Scene#ghostedObjects} map when its {@link Node/objectId}
+     is assigned a value.
+
+     @method setGhosted
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param ghosted {Float32Array} Whether to ghost or un-ghost.
+     @returns {Boolean} True if any {@link Node}s changed ghosted state, else false if all updates were redundant and not applied.
+     */
+    setGhosted(ids, ghosted) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.ghosted !== ghosted);
+            object.ghosted = ghosted;
+            return changed;
+        });
+    }
+
+    /**
+     Shows or hides wireeframe edges for batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     @method setEdges
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param edges {Float32Array} Whether to show or hide edges.
+     @returns {Boolean} True if any {@link Node}s changed edges state, else false if all updates were redundant and not applied.
+     */
+    setEdges(ids, edges) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.edges !== edges);
+            object.edges = edges;
+            return changed;
+        });
+    }
+
+    /**
+     Shows or hides an outline around a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     Each Object indicates its outlined status in its {@link Node/outlined} property.
+
+     Each outlined Object is registered in the {@link Scene}&apos;s
+     {@link Scene#outlinedObjects} map when its {@link Node/entityType}
+     is assigned a value.
+
+     @method setOutlined
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param outlined {Float32Array} Whether to show or hide the outline.
+     @returns {Boolean} True if any {@link Node}s changed outlined state, else false if all updates were redundant and not applied.
+     */
+    setOutlined(ids, outlined) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.outlined !== outlined);
+            object.outlined = outlined;
+            return changed;
+        });
+    }
+
+    /**
+     Colorizes a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     @method setColorize
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param [colorize=(1,1,1)] Float32Array RGB colorize factors, multiplied by the rendered pixel colors.
+     */
+    setColorize(ids, colorize) {
+        return this.withComponents(ids, object =&gt; {
+            object.colorize = colorize;
+        });
+    }
+
+    /**
+     Updates opacities of a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
+
+     @method setOpacity
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param [opacity=1] Number Opacity factor in range ````[0..1]````, multiplies by the rendered pixel alphas.
+     */
+    setOpacity(ids, opacity) {
+        return this.withComponents(ids, object =&gt; {
+            object.opacity = opacity;
+        });
+    }
+
+    /**
+     Sets a batch of {@link Node}s pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
+
+     Picking is done with {@link Scene#pick}.
+
+     @method setPickable
+     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
+     @param pickable {Float32Array} Whether to ghost or un-ghost.
+     @returns {Boolean} True if any {@link Node}s changed pickable state, else false if all updates were redundant and not applied.
+     */
+    setPickable(ids, pickable) {
+        return this.withComponents(ids, object =&gt; {
+            const changed = (object.pickable !== pickable);
+            object.pickable = pickable;
+            return changed;
+        });
+    }
+
+    /**
+     Iterates with a callback over {@link Component}s, specified by their IDs or objectIds.
+
+     @method withComponents
+     @param ids {String|Array} One or more {@link Component} IDs or objectIds.
+     @param callback {Function} The callback, which takes each object as its argument.
+     */
+    withComponents(ids, callback) {
+        if (utils.isString(ids)) {
+            ids = [ids];
+        }
+        let changed = false;
+        for (let i = 0, len = ids.length; i &lt; len; i++) {
+            const id = ids[i];
+            let component = this.components[id];
+            if (component) {
+                changed = callback(component) || changed;
+            } else {
+                component = this.objects[id];
+                if (component) {
+                    changed = callback(component) || changed;
+                } else {
+                    this.warn(&quot;Component not found: &apos;&quot; + id + &quot;&apos;&quot;);
+                }
+            }
+        }
+        return changed;
+    }
+
+    destroy() {
+
+        super.destroy();
+
+        for (const id in this.components) {
+            if (this.components.hasOwnProperty(id)) {
+                this.components[id].destroy();
+            }
+        }
+
+        this.canvas.gl = null;
+
+        // Memory leak prevention
+        this.models = null;
+        this.components = null;
+        this.objects = null;
+        this.visibleObjects = null;
+        this.ghostedObjects = null;
+        this.highlightedObjects = null;
+        this.selectedObjects = null;
+        this.clips = null;
+        this.lights = null;
+        this.lightMaps = null;
+        this.reflectionMaps = null;
+        this._objectGUIDs = null;
+        this._objectIds = null;
+        this._visibleObjectIds = null;
+        this._ghostedObjectIds = null;
+        this._highlightedObjectIds = null;
+        this._selectedObjectIds = null;
+        this.types = null;
+        this.components = null;
+        this.canvas = null;
+        this._renderer = null;
+        this.input = null;
+        this._viewport = null;
+        this._camera = null;
+    }
+}
+
+export {Scene};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
