@@ -21,11 +21,11 @@
 
  In this example we have a Mesh with
 
- * a {@link PhongMaterial} which applies diffuse and specular {@link Texture"}}Textures{{/crossLink}}, and
+ * a {@link PhongMaterial} which applies diffuse and specular {@link Texture}, and
  * a {@link TorusGeometry}.
 
  Note that xeokit will ignore the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuse}
- and {@link PhongMaterial/specular} properties, since we assigned {@link Texture"}}Textures{{/crossLink}} to the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuseMap} and
+ and {@link PhongMaterial/specular} properties, since we assigned {@link Texture} to the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuseMap} and
  {@link PhongMaterial/specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
  colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
 

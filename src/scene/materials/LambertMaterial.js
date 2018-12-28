@@ -1,73 +1,49 @@
-/**
- A **LambertMaterial** is a {@link Material} that defines the surface appearance of
- attached {@link Mesh}es using
- the non-physically based <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> model for calculating reflectance.
-
- ## Examples
-
- TODO
-
- ## Overview
-
- * Used for rendering non-realistic objects such as "helpers", wireframe objects, labels etc.
- * Use  {@link PhongMaterial} when you need specular highlights.
- * Use the physically based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
-
- For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
- interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
- {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and
- the illumination calculation is performed at each texel.
-
- The following table summarizes LambertMaterial properties:
-
- | Property | Type | Range | Default Value | Space | Description |
- |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
- |  {@link LambertMaterial/ambient} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
- |  {@link LambertMaterial/color} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
- |  {@link LambertMaterial/emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
- | {@link LambertMaterial/alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
- | {@link LambertMaterial/lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
- | {@link LambertMaterial/pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
- | {@link LambertMaterial/backfaces} | Boolean |  | false |  | Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces. |
- | {@link LambertMaterial/backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry}}Geometry{{/crossLink}} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
-
- ## Usage
-
- ```` javascript
- var torus = new xeokit.Mesh({
-    material: new xeokit.LambertMaterial({
-        ambient: [0.3, 0.3, 0.3],
-        color: [0.5, 0.5, 0.0],
-        alpha: 1.0 // Default
-    }),
-
-    geometry: new xeokit.TorusGeometry()
-});
- ````
- @class LambertMaterial
- @module xeokit
- @submodule materials
- @constructor
- @extends Material
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param {*} [cfg] The LambertMaterial configuration
- @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
- @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
- @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
- @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
- @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} LambertMaterial emissive color.
- @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
- @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
- @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
- @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
- @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
- @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry}}Geometry{{/crossLink}} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
- */
-
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
 
+/**
+ * @desc Configures the normal rendered appearance of {@link Mesh}es using the non-realistic
+ * but GPU-efficient <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> model for calculating reflectance.
+ *
+ * * Used for efficiently rendering non-realistic objects for high-detail CAD.
+ * * Use  {@link PhongMaterial} when you need specular highlights.
+ * * Use the physically based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
+ *
+ * For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
+ * interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
+ * {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and
+ * the illumination calculation is performed at each texel.
+ *
+ * The following table summarizes LambertMaterial properties:
+ *
+ *  | Property | Type | Range | Default Value | Space | Description |
+ *  |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
+ *  | {@link LambertMaterial#ambient} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the ambient light reflected by the material. |
+ *  | {@link LambertMaterial#color} | Array | [0, 1] for all components | [1,1,1,1] | linear | The RGB components of the diffuse light reflected by the material. |
+ *  | {@link LambertMaterial#emissive} | Array | [0, 1] for all components | [0,0,0] | linear | The RGB components of the light emitted by the material. |
+ *  | {@link LambertMaterial#alpha} | Number | [0, 1] | 1 | linear | The transparency of the material surface (0 fully transparent, 1 fully opaque). |
+ *  | {@link LambertMaterial#lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
+ *  | {@link LambertMaterial#pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
+ *  | {@link LambertMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
+ *  | {@link LambertMaterial#backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ *
+ * ## Usage
+ *
+ * In the example below we'll create a {@link Mesh} with a shape defined by a {@link TorusGeometry} and
+ * normal rendering appearance configured with a LambertMaterial.
+ *
+ * ```` javascript
+ * new Mesh(myViewer.scene, {
+ *      material: new LambertMaterial(myViewer.scene, {
+ *          ambient: [0.3, 0.3, 0.3],
+ *          color: [0.5, 0.5, 0.0],
+ *          alpha: 1.0 // Default
+ *      }),
+ *      geometry: new TorusGeometry(myViewer.scene)
+ * });
+ * ````
+ */
 class LambertMaterial extends Material {
 
     /**
@@ -83,7 +59,26 @@ class LambertMaterial extends Material {
         return "LambertMaterial";
     }
 
-    constructor(owner, cfg={}) {
+    /**
+     @constructor
+     @extends Material
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {*} [cfg] The LambertMaterial configuration
+     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
+     @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
+     @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
+     @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} LambertMaterial emissive color.
+     @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
+     @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
+     @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
+     @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
+     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
+     @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
+     * @param owner
+     * @param cfg
+     */
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 

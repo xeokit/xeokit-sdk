@@ -112,7 +112,7 @@ const PRESETS = {
 };
 
 /**
- * Defines the appearance of {@link Mesh}es when ghosted, highlighted or selected.
+ * Configures the appearance of {@link Mesh}es when ghosted, highlighted or selected.
  *
  * * Ghost a {@link Mesh} by setting {@link Mesh#ghosted} ````true````.
  * * Highlight a {@link Mesh} by setting {@link Mesh#highlighted} ````true````.
@@ -232,7 +232,7 @@ class EmphasisMaterial extends Material {
      @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
      @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
      @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
-     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry}}Geometry{{/crossLink}} backfaces.
+     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
      @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
      * @param owner
      * @param cfg
