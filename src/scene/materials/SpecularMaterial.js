@@ -13,17 +13,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * * {@link PhongMaterial} is appropriate for non-realistic objects.
  * * {@link LambertMaterial} is appropriate for high-detail models that need to render as efficiently as possible.
  *
- *
- * SpecularMaterial is usually used for insulators, such as ceramic, wood and plastic.
- * {@link MetallicMaterial} is usually used for conductive materials, such as metal.
- * {@link PhongMaterial} is usually used for non-realistic objects.
  * For an introduction to PBR concepts, try these articles:
  *
  * * Joe Wilson's [Basic Theory of Physically-Based Rendering](https://www.marmoset.co/posts/basic-theory-of-physically-based-rendering/)
  * * Jeff Russel's [Physically-based Rendering, and you can too!](https://www.marmoset.co/posts/physically-based-rendering-and-you-can-too/)
  * * Sebastien Legarde's [Adapting a physically-based shading model](http://seblagarde.wordpress.com/tag/physically-based-rendering/)
  *
- *  The following table summarizes SpecularMaterial properties:
+ * The following table summarizes SpecularMaterial properties:
  *
  * | Property | Type | Range | Default Value | Space | Description |
  * |:--------:|:----:|:-----:|:-------------:|:-----:|:-----------:|
