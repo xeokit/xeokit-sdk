@@ -106,13 +106,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetallicMaterial} from &apos;<span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber191">xeokit-sdk/scene/materials/MetallicMaterial.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MetallicMaterial} from &apos;<span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber195">xeokit-sdk/scene/materials/MetallicMaterial.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber191">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber195">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -139,13 +139,13 @@
 <li><span><a href="class/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span> is appropriate for non-realistic objects.</li>
 <li><span><a href="class/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span> is appropriate for high-detail models that need to render as efficiently as possible.</li>
 </ul>
-<p>For an introduction to PBR concepts, try these articles:</p>
+<h2 id="background-theory">Background Theory</h2><p>For an introduction to physically-based rendering (PBR) concepts, try these articles:</p>
 <ul>
 <li>Joe Wilson&apos;s <a href="https://www.marmoset.co/posts/basic-theory-of-physically-based-rendering/">Basic Theory of Physically-Based Rendering</a></li>
 <li>Jeff Russel&apos;s <a href="https://www.marmoset.co/posts/physically-based-rendering-and-you-can-too/">Physically-based Rendering, and you can too!</a></li>
 <li>Sebastien Legarde&apos;s <a href="http://seblagarde.wordpress.com/tag/physically-based-rendering/">Adapting a physically-based shading model</a></li>
 </ul>
-<p>The following table summarizes MetallicMaterial properties:</p>
+<h2 id="metallicmaterial-properties">MetallicMaterial Properties</h2><p>The following table summarizes MetallicMaterial properties:</p>
 <table>
 <thead>
 <tr>
@@ -324,24 +324,24 @@ within the same <span><a href="class/scene/materials/Texture.js~Texture.html">Te
 
         // Textures to multiply by some of the channels
         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
-            src: &quot;textures/diffuse/fire_hydrant_Base_Color.png&quot;
+            src: &quot;textures/baseColor.png&quot;
         }),
         metallicMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
-            src: &quot;textures/metallic/fire_hydrant_Metallic.png&quot;
+            src: &quot;textures/metallic.png&quot;
         }),
         roughnessMap : new Texture(myViewer.scene, {  // R component multiplies by roughness
-            src: &quot;textures/roughness/fire_hydrant_Roughness.png&quot;
+            src: &quot;textures/roughness.png&quot;
         }),
         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
-            src: &quot;textures/occlusion/fire_hydrant_Mixed_AO.png&quot;
+            src: &quot;textures/occlusion.png&quot;
         }),
         normalMap : new Texture(myViewer.scene, {
-            src: &quot;textures/normal/fire_hydrant_Normal_OpenGL.png&quot;
+            src: &quot;textures/normalMap.png&quot;
         })
     })
 });</code>
 </code></pre>
-<h2 id="combining-channels-within-the-same-textures">Combining channels within the same textures</h2><p>In the previous example we provided separate <span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span> for the <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic">MetallicMaterial#metallic</a></span> and
+<h2 id="combining-channels-within-the-same-textures">Combining Channels Within the Same Textures</h2><p>In the previous example we provided separate <span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span> for the <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic">MetallicMaterial#metallic</a></span> and
 <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-roughness">MetallicMaterial#roughness</a></span> channels, but we can combine those channels into the same <span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span> to
 reduce download time, memory footprint and rendering time (and also for glTF compatibility).</p>
 <p>Here&apos;s our MetallicMaterial again with those channels combined in the <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallicRoughnessMap">MetallicMaterial#metallicRoughnessMap</a></span>
@@ -364,16 +364,16 @@ by <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.htm
         // Textures to multiply by some of the channels
 
         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
-            src: &quot;textures/Base_Color.png&quot;
+            src: &quot;textures/baseColor.png&quot;
         }),
         metallicRoughnessMap : new Texture(myViewer.scene, {   // &lt;&lt;----------- Added
-            src: &quot;textures/MetallicRoughness.png&quot;              // R component multiplies by metallic
+            src: &quot;textures/metallicRoughness.png&quot;              // R component multiplies by metallic
         }),                                                    // G component multiplies by roughness
         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
-            src: &quot;textures/Mixed_AO.png&quot;
+            src: &quot;textures/occlusion.png&quot;
         }),
         normalMap : new Texture(myViewer.scene, {
-            src: &quot;textures/Normal.png&quot;
+            src: &quot;textures/normalMap.png&quot;
         })
     })
 });</code>
@@ -408,19 +408,19 @@ with <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMaterial.h
         // Textures to multiply by some of the channels
 
         alphaMap : new Texture(myViewer.scene{ // &lt;&lt;---------------- Added
-             src: &quot;textures/crossGridColorMap.jpg&quot;
+             src: &quot;textures/alphaMap.jpg&quot;
         }),
         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
-            src: &quot;textures/Base_Color.png&quot;
+            src: &quot;textures/baseColor.png&quot;
         }),
         metallicRoughnessMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
-            src: &quot;textures/MetallicRoughness.png&quot;              // G component multiplies by roughness
+            src: &quot;textures/metallicRoughness.png&quot;              // G component multiplies by roughness
         }),
         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
-            src: &quot;textures/Mixed_AO.png&quot;
+            src: &quot;textures/occlusion.png&quot;
         }),
         normalMap : new Texture(myViewer.scene, {
-            src: &quot;textures/Normal.png&quot;
+            src: &quot;textures/normalMap.png&quot;
         })
      })
 });</code>
@@ -2079,7 +2079,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber289">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
@@ -2366,7 +2366,7 @@ See the <span><a href="class/scene/materials/MetallicMaterial.js~MetallicMateria
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber647">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber651">source</a></span></span>
     </span>
   </h3>
 
@@ -2430,7 +2430,7 @@ interpreted when rendering.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber660">source</a></span></span>
     </span>
   </h3>
 
@@ -2473,7 +2473,7 @@ interpreted when rendering.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber748">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber752">source</a></span></span>
     </span>
   </h3>
 
@@ -2516,7 +2516,7 @@ interpreted when rendering.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber738">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber742">source</a></span></span>
     </span>
   </h3>
 
@@ -2583,7 +2583,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber670">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber674">source</a></span></span>
     </span>
   </h3>
 
@@ -2644,7 +2644,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber704">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber708">source</a></span></span>
     </span>
   </h3>
 
@@ -2710,7 +2710,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber718">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber722">source</a></span></span>
     </span>
   </h3>
 
@@ -2753,7 +2753,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber771">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber775">source</a></span></span>
     </span>
   </h3>
 
@@ -2796,7 +2796,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber762">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber766">source</a></span></span>
     </span>
   </h3>
 
@@ -2858,7 +2858,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber442">source</a></span></span>
     </span>
   </h3>
 
@@ -2901,7 +2901,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber419">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -2962,7 +2962,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber458">source</a></span></span>
     </span>
   </h3>
 
@@ -3024,7 +3024,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber602">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber606">source</a></span></span>
     </span>
   </h3>
 
@@ -3067,7 +3067,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber583">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber587">source</a></span></span>
     </span>
   </h3>
 
@@ -3128,7 +3128,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber616">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber620">source</a></span></span>
     </span>
   </h3>
 
@@ -3189,7 +3189,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber794">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber798">source</a></span></span>
     </span>
   </h3>
 
@@ -3232,7 +3232,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber789">source</a></span></span>
     </span>
   </h3>
 
@@ -3294,7 +3294,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber810">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber814">source</a></span></span>
     </span>
   </h3>
 
@@ -3337,7 +3337,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber805">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber809">source</a></span></span>
     </span>
   </h3>
 
@@ -3397,7 +3397,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber479">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber483">source</a></span></span>
     </span>
   </h3>
 
@@ -3440,7 +3440,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber470">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber474">source</a></span></span>
     </span>
   </h3>
 
@@ -3503,7 +3503,7 @@ and the <em>A</em> component of <span>MetallicMaterial#metalRoughnessMap</span>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber493">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber497">source</a></span></span>
     </span>
   </h3>
 
@@ -3564,7 +3564,7 @@ and the <em>A</em> component of <span>MetallicMaterial#metalRoughnessMap</span>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber550">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber554">source</a></span></span>
     </span>
   </h3>
 
@@ -3627,7 +3627,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber684">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber688">source</a></span></span>
     </span>
   </h3>
 
@@ -3688,7 +3688,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber630">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber634">source</a></span></span>
     </span>
   </h3>
 
@@ -3749,7 +3749,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber821">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber825">source</a></span></span>
     </span>
   </h3>
 
@@ -3809,7 +3809,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber826">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber830">source</a></span></span>
     </span>
   </h3>
 
@@ -3852,7 +3852,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -3895,7 +3895,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber508">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber512">source</a></span></span>
     </span>
   </h3>
 
@@ -3957,7 +3957,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber533">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber537">source</a></span></span>
     </span>
   </h3>
 
@@ -4019,7 +4019,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber570">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber574">source</a></span></span>
     </span>
   </h3>
 
@@ -4062,7 +4062,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber561">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber565">source</a></span></span>
     </span>
   </h3>
 
@@ -4122,7 +4122,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber202">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -4186,7 +4186,7 @@ its <em>G</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/MetallicMaterial.js.html#lineNumber834">source</a></span></span>
     </span>
   </h3>
 

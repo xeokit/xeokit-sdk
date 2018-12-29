@@ -114,14 +114,15 @@ import {math} from &apos;../math/math.js&apos;;
  * @desc Configures the normal rendered appearance of {@link Mesh}es using the non-realistic
  * but GPU-efficient &lt;a href=&quot;https://en.wikipedia.org/wiki/Lambertian_reflectance&quot;&gt;Lambertian&lt;/a&gt; model for calculating reflectance.
  *
- * * Used for efficiently rendering non-realistic objects for high-detail CAD.
+ * * Useful for efficiently rendering non-realistic objects for high-detail CAD.
  * * Use  {@link PhongMaterial} when you need specular highlights.
  * * Use the physically based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
- *
- * For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
+ * * For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
  * interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
  * {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and
  * the illumination calculation is performed at each texel.
+ *
+ * ## LambertMaterial properties
  *
  * The following table summarizes LambertMaterial properties:
  *
