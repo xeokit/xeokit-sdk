@@ -13,11 +13,15 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * * {@link PhongMaterial} is appropriate for non-realistic objects.
  * * {@link LambertMaterial} is appropriate for high-detail models that need to render as efficiently as possible.
  *
- * For an introduction to PBR concepts, try these articles:
+ * ## Background Theory
+ *
+ * For an introduction to physically-based rendering (PBR) concepts, try these articles:
  *
  * * Joe Wilson's [Basic Theory of Physically-Based Rendering](https://www.marmoset.co/posts/basic-theory-of-physically-based-rendering/)
  * * Jeff Russel's [Physically-based Rendering, and you can too!](https://www.marmoset.co/posts/physically-based-rendering-and-you-can-too/)
  * * Sebastien Legarde's [Adapting a physically-based shading model](http://seblagarde.wordpress.com/tag/physically-based-rendering/)
+ *
+ * ## SpecularMaterial Properties
  *
  * The following table summarizes SpecularMaterial properties:
  *
@@ -41,8 +45,6 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * | {@link SpecularMaterial#alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
  * | {@link SpecularMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
  * | {@link SpecularMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
- *
- * ## Usage
  *
  * ## Usage
  *
@@ -79,13 +81,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *              src: "textures/glossiness.jpg"
  *          }),
  *          normalMap: new Texture(myViewer.scene, {
- *              src: "textures/normals.jpg"
+ *              src: "textures/normalMap.jpg"
  *          })
  *      })
  * });
  * ````
  *
- * ## Combining channels within the same textures
+ * ## Combining Channels Within the Same Textures
  *
  *  In the previous example we provided separate {@link Texture} for the {@link SpecularMaterial#specular} and
  * {@link SpecularMaterial#glossiness} channels, but we can combine those channels into the same {@link Texture} to reduce
@@ -116,7 +118,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *              src: "textures/specularGlossiness.jpg"
  *          }),
  *          normalMap: new Texture(myViewer.scene, {
- *              src: "textures/normals.jpg"
+ *              src: "textures/normalMap.jpg"
  *          })
  *      })
  * });
@@ -125,7 +127,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * Although not shown in this example, we can also texture {@link SpecularMaterial#alpha} with
  * the *A* component of {@link SpecularMaterial#diffuseMap}'s {@link Texture}, if required.
  *
- * ### Alpha Blending
+ * ## Alpha Blending
  *
  * Let's make our {@link Mesh} transparent. We'll redefine {@link SpecularMaterial#alpha}
  * and {@link SpecularMaterial#alphaMode}, causing it to blend 50% with the background:
@@ -153,13 +155,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *              src: "textures/specularGlossiness.jpg"
  *          }),
  *          normalMap: new Texture(myViewer.scene, {
- *              src: "textures/normals.jpg"
+ *              src: "textures/normalMap.jpg"
  *          })
  *      })
  * });
  * ````
  *
- * ### Alpha Masking
+ * ## Alpha Masking
  *
  * Now let's make holes in our {@link Mesh}. We'll give its SpecularMaterial an {@link SpecularMaterial#alphaMap}
  * and configure {@link SpecularMaterial#alpha}, {@link SpecularMaterial#alphaMode},
@@ -192,7 +194,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *              src: "textures/specularGlossiness.jpg"
  *          }),
  *          normalMap: new Texture(myViewer.scene, {
- *              src: "textures/normals.jpg"
+ *              src: "textures/normalMap.jpg"
  *          })
  *      })
  * });

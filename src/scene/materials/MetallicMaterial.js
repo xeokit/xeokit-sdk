@@ -13,11 +13,15 @@ const modeNames = ["opaque", "mask", "blend"];
  * * {@link PhongMaterial} is appropriate for non-realistic objects.
  * * {@link LambertMaterial} is appropriate for high-detail models that need to render as efficiently as possible.
  *
- * For an introduction to PBR concepts, try these articles:
+ * ## Background Theory
+ *
+ * For an introduction to physically-based rendering (PBR) concepts, try these articles:
  *
  * * Joe Wilson's [Basic Theory of Physically-Based Rendering](https://www.marmoset.co/posts/basic-theory-of-physically-based-rendering/)
  * * Jeff Russel's [Physically-based Rendering, and you can too!](https://www.marmoset.co/posts/physically-based-rendering-and-you-can-too/)
  * * Sebastien Legarde's [Adapting a physically-based shading model](http://seblagarde.wordpress.com/tag/physically-based-rendering/)
+ *
+ * ## MetallicMaterial Properties
  *
  * The following table summarizes MetallicMaterial properties:
  *
@@ -67,25 +71,25 @@ const modeNames = ["opaque", "mask", "blend"];
  *
  *         // Textures to multiply by some of the channels
  *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/diffuse/fire_hydrant_Base_Color.png"
+ *             src: "textures/baseColor.png"
  *         }),
  *         metallicMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
- *             src: "textures/metallic/fire_hydrant_Metallic.png"
+ *             src: "textures/metallic.png"
  *         }),
  *         roughnessMap : new Texture(myViewer.scene, {  // R component multiplies by roughness
- *             src: "textures/roughness/fire_hydrant_Roughness.png"
+ *             src: "textures/roughness.png"
  *         }),
  *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/occlusion/fire_hydrant_Mixed_AO.png"
+ *             src: "textures/occlusion.png"
  *         }),
  *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/normal/fire_hydrant_Normal_OpenGL.png"
+ *             src: "textures/normalMap.png"
  *         })
  *     })
  * });
  * ````
  *
- * ## Combining channels within the same textures
+ * ## Combining Channels Within the Same Textures
  *
  * In the previous example we provided separate {@link Texture} for the {@link MetallicMaterial#metallic} and
  * {@link MetallicMaterial#roughness} channels, but we can combine those channels into the same {@link Texture} to
@@ -113,16 +117,16 @@ const modeNames = ["opaque", "mask", "blend"];
  *         // Textures to multiply by some of the channels
  *
  *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/Base_Color.png"
+ *             src: "textures/baseColor.png"
  *         }),
  *         metallicRoughnessMap : new Texture(myViewer.scene, {   // <<----------- Added
- *             src: "textures/MetallicRoughness.png"              // R component multiplies by metallic
+ *             src: "textures/metallicRoughness.png"              // R component multiplies by metallic
  *         }),                                                    // G component multiplies by roughness
  *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/Mixed_AO.png"
+ *             src: "textures/occlusion.png"
  *         }),
  *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/Normal.png"
+ *             src: "textures/normalMap.png"
  *         })
  *     })
  * });
@@ -170,19 +174,19 @@ const modeNames = ["opaque", "mask", "blend"];
  *         // Textures to multiply by some of the channels
  *
  *         alphaMap : new Texture(myViewer.scene{ // <<---------------- Added
- *              src: "textures/crossGridColorMap.jpg"
+ *              src: "textures/alphaMap.jpg"
  *         }),
  *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/Base_Color.png"
+ *             src: "textures/baseColor.png"
  *         }),
  *         metallicRoughnessMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
- *             src: "textures/MetallicRoughness.png"              // G component multiplies by roughness
+ *             src: "textures/metallicRoughness.png"              // G component multiplies by roughness
  *         }),
  *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/Mixed_AO.png"
+ *             src: "textures/occlusion.png"
  *         }),
  *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/Normal.png"
+ *             src: "textures/normalMap.png"
  *         })
  *      })
  * });

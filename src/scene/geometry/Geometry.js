@@ -16,7 +16,7 @@ const tempAABB = math.AABB3();
 /**
  * @desc Defines a shape for one or more {@link Mesh}es.
  *
- * ## Basic Usage
+ * ## Usage
  *
  * Creating a {@link Mesh} with a Geometry defining a single triangle and a {@link PhongMaterial} with diffuse {@link Texture}:
  *
