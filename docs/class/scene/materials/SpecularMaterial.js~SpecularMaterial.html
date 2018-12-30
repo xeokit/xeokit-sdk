@@ -106,13 +106,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SpecularMaterial} from &apos;<span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber203">xeokit-sdk/scene/materials/SpecularMaterial.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SpecularMaterial} from &apos;<span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber210">xeokit-sdk/scene/materials/SpecularMaterial.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber203">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber210">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -308,7 +308,14 @@
 <p>Note that in this example we&apos;re providing separate <span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span> for the <span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specular">SpecularMaterial#specular</a></span> and <span><a href="class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-glossiness">SpecularMaterial#glossiness</a></span>
 channels, which allows us a little creative flexibility. Then, in the next example further down, we&apos;ll combine those channels
 within the same <span><a href="class/scene/materials/Texture.js~Texture.html">Texture</a></span> for efficiency.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const myMesh = new Mesh(myViewer.scene,{
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;src/scene/mesh/Mesh.js&quot;;
+import {TorusGeometry} from &quot;src/scene/geometry/TorusGeometry.js&quot;;
+import {SpecularMaterial} from &quot;src/scene/materials/SpecularMaterial.js&quot;;
+
+const myViewer = new Viewer({ canvasId: &quot;myCanvas&quot; });
+
+const myMesh = new Mesh(myViewer.scene,{
 
     geometry: new TorusGeometry(myViewer.scene),
 
@@ -2086,7 +2093,7 @@ the <em>A</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -2361,7 +2368,7 @@ See the <span><a href="class/scene/materials/SpecularMaterial.js~SpecularMateria
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber645">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber652">source</a></span></span>
     </span>
   </h3>
 
@@ -2424,7 +2431,7 @@ the <em>A</em> component, if present, of <span><a href="class/scene/materials/Sp
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber654">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber661">source</a></span></span>
     </span>
   </h3>
 
@@ -2467,7 +2474,7 @@ the <em>A</em> component, if present, of <span><a href="class/scene/materials/Sp
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber757">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber764">source</a></span></span>
     </span>
   </h3>
 
@@ -2510,7 +2517,7 @@ the <em>A</em> component, if present, of <span><a href="class/scene/materials/Sp
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber747">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber754">source</a></span></span>
     </span>
   </h3>
 
@@ -2577,7 +2584,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber668">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber675">source</a></span></span>
     </span>
   </h3>
 
@@ -2638,7 +2645,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber727">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber734">source</a></span></span>
     </span>
   </h3>
 
@@ -2681,7 +2688,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber713">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber720">source</a></span></span>
     </span>
   </h3>
 
@@ -2747,7 +2754,7 @@ material as fully transparent. This value is ignored for other modes.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber771">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber778">source</a></span></span>
     </span>
   </h3>
 
@@ -2809,7 +2816,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber780">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber787">source</a></span></span>
     </span>
   </h3>
 
@@ -2852,7 +2859,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber445">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber452">source</a></span></span>
     </span>
   </h3>
 
@@ -2895,7 +2902,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber433">source</a></span></span>
     </span>
   </h3>
 
@@ -2956,7 +2963,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber460">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber467">source</a></span></span>
     </span>
   </h3>
 
@@ -3018,7 +3025,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber615">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber622">source</a></span></span>
     </span>
   </h3>
 
@@ -3061,7 +3068,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber596">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber603">source</a></span></span>
     </span>
   </h3>
 
@@ -3122,7 +3129,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber629">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber636">source</a></span></span>
     </span>
   </h3>
 
@@ -3183,7 +3190,7 @@ while the <em>A</em> component, if present, multiplies by the <span><a href="cla
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber794">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber801">source</a></span></span>
     </span>
   </h3>
 
@@ -3245,7 +3252,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber803">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber810">source</a></span></span>
     </span>
   </h3>
 
@@ -3288,7 +3295,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber547">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber554">source</a></span></span>
     </span>
   </h3>
 
@@ -3331,7 +3338,7 @@ the <span><a href="class/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber538">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber545">source</a></span></span>
     </span>
   </h3>
 
@@ -3394,7 +3401,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber563">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber570">source</a></span></span>
     </span>
   </h3>
 
@@ -3456,7 +3463,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber814">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber821">source</a></span></span>
     </span>
   </h3>
 
@@ -3516,7 +3523,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber826">source</a></span></span>
     </span>
   </h3>
 
@@ -3559,7 +3566,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber680">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber687">source</a></span></span>
     </span>
   </h3>
 
@@ -3619,7 +3626,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber694">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber701">source</a></span></span>
     </span>
   </h3>
 
@@ -3680,7 +3687,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber837">source</a></span></span>
     </span>
   </h3>
 
@@ -3740,7 +3747,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber835">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber842">source</a></span></span>
     </span>
   </h3>
 
@@ -3783,7 +3790,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber493">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 
@@ -3826,7 +3833,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber474">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -3888,7 +3895,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber583">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber590">source</a></span></span>
     </span>
   </h3>
 
@@ -3931,7 +3938,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber574">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber581">source</a></span></span>
     </span>
   </h3>
 
@@ -3991,7 +3998,7 @@ and the <em>A</em> component of <span><a href="class/scene/materials/SpecularMat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber522">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber529">source</a></span></span>
     </span>
   </h3>
 
@@ -4053,7 +4060,7 @@ the <em>A</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber507">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 
@@ -4114,7 +4121,7 @@ the <em>A</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber221">source</a></span></span>
     </span>
   </h3>
 
@@ -4178,7 +4185,7 @@ the <em>A</em> component multiplies by the <span><a href="class/scene/materials/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber839">source</a></span></span>
+      <span data-ice="source"><span><a href="file/scene/materials/SpecularMaterial.js.html#lineNumber846">source</a></span></span>
     </span>
   </h3>
 

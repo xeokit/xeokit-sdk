@@ -1,1 +1,109 @@
-[]
+[
+  {
+    "name": "MetaScene#loadMetaModelJSON",
+    "filePath": "src/viewer/metadata/MetaScene.js",
+    "lines": [
+      {
+        "lineNumber": 136,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 137,
+        "line": "     * Loads a {@link MetaModel} from a URL."
+      },
+      {
+        "lineNumber": 138,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 139,
+        "line": "     * @param src"
+      },
+      {
+        "lineNumber": 140,
+        "line": "     * @param ok"
+      },
+      {
+        "lineNumber": 141,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 142,
+        "line": "    loadMetaModelJSON(modelId, src, ok) {"
+      }
+    ],
+    "codeParams": [
+      "modelId",
+      "src",
+      "ok"
+    ],
+    "docParams": [
+      "src",
+      "ok"
+    ]
+  },
+  {
+    "name": "BIMServerBigGeometryLoader",
+    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js",
+    "lines": [
+      {
+        "lineNumber": 3,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 4,
+        "line": " *"
+      },
+      {
+        "lineNumber": 5,
+        "line": " * @param bimServerClient"
+      },
+      {
+        "lineNumber": 6,
+        "line": " * @param bimServerModel"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * @param roid"
+      },
+      {
+        "lineNumber": 8,
+        "line": " * @param globalTransformationMatrix"
+      },
+      {
+        "lineNumber": 9,
+        "line": " * @param bigModelBuilder"
+      },
+      {
+        "lineNumber": 10,
+        "line": " * @constructor"
+      },
+      {
+        "lineNumber": 11,
+        "line": " * @private"
+      },
+      {
+        "lineNumber": 12,
+        "line": " */"
+      },
+      {
+        "lineNumber": 13,
+        "line": "function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, bigModelBuilder) {"
+      }
+    ],
+    "codeParams": [
+      "bimServerClient",
+      "bimServerClientModel",
+      "roid",
+      "globalTransformationMatrix",
+      "bigModelBuilder"
+    ],
+    "docParams": [
+      "bimServerClient",
+      "bimServerModel",
+      "roid",
+      "globalTransformationMatrix",
+      "bigModelBuilder"
+    ]
+  }
+]

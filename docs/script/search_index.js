@@ -1,8174 +1,9530 @@
 window.esdocSearchIndex = [
   [
-    "xeokit-sdk/scene/geometry/aabbgeometry.js~aabbgeometry",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html",
-    "<span>AABBGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/AABBGeometry.js</span>",
+    "xeokit-sdk/src/scene/geometry/aabbgeometry.js~aabbgeometry",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html",
+    "<span>AABBGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/AABBGeometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/ambientlight.js~ambientlight",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html",
-    "<span>AmbientLight</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/AmbientLight.js</span>",
+    "xeokit-sdk/src/scene/lights/ambientlight.js~ambientlight",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html",
+    "<span>AmbientLight</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/AmbientLight.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/arraybuf.js~arraybuf",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html",
-    "<span>ArrayBuf</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/ArrayBuf.js</span>",
+    "xeokit-sdk/src/scene/webgl/arraybuf.js~arraybuf",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html",
+    "<span>ArrayBuf</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/ArrayBuf.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/attribute.js~attribute",
-    "class/scene/webgl/Attribute.js~Attribute.html",
-    "<span>Attribute</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Attribute.js</span>",
+    "xeokit-sdk/src/scene/webgl/attribute.js~attribute",
+    "class/src/scene/webgl/Attribute.js~Attribute.html",
+    "<span>Attribute</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Attribute.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/bigmodels/bigmodel.js~bigmodel",
-    "class/scene/bigModels/BigModel.js~BigModel.html",
-    "<span>BigModel</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/bigModels/BigModel.js</span>",
+    "xeokit-sdk/src/viewer/plugins/axisgizmoplugin/axisgizmoplugin.js~axisgizmoplugin",
+    "class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html",
+    "<span>AxisGizmoPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/bigmodels/bigmodelmesh.js~bigmodelmesh",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html",
-    "<span>BigModelMesh</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/bigModels/bigModelMesh.js</span>",
+    "xeokit-sdk/src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html",
+    "<span>BCFViewpointsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/bigmodels/bigmodelobject.js~bigmodelobject",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html",
-    "<span>BigModelObject</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/bigModels/bigModelObject.js</span>",
+    "xeokit-sdk/src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html",
+    "<span>BIMServerBigLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/boxgeometry.js~boxgeometry",
-    "class/scene/geometry/BoxGeometry.js~BoxGeometry.html",
-    "<span>BoxGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/BoxGeometry.js</span>",
+    "xeokit-sdk/src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html",
+    "<span>BIMServerLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/camera.js~camera",
-    "class/scene/camera/Camera.js~Camera.html",
-    "<span>Camera</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/Camera.js</span>",
+    "xeokit-sdk/src/scene/bigmodels/bigmodel.js~bigmodel",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html",
+    "<span>BigModel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/BigModel.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/cameracontrol.js~cameracontrol",
-    "class/scene/camera/CameraControl.js~CameraControl.html",
-    "<span>CameraControl</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/CameraControl.js</span>",
+    "xeokit-sdk/src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html",
+    "<span>BigModelMesh</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/bigModelMesh.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/cameraflightanimation.js~cameraflightanimation",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html",
-    "<span>CameraFlightAnimation</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/CameraFlightAnimation.js</span>",
+    "xeokit-sdk/src/scene/bigmodels/bigmodelobject.js~bigmodelobject",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html",
+    "<span>BigModelObject</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/bigModelObject.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/camerapath.js~camerapath",
-    "class/scene/camera/CameraPath.js~CameraPath.html",
-    "<span>CameraPath</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/CameraPath.js</span>",
+    "xeokit-sdk/src/scene/geometry/boxgeometry.js~boxgeometry",
+    "class/src/scene/geometry/BoxGeometry.js~BoxGeometry.html",
+    "<span>BoxGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/BoxGeometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/camerapathanimation.js~camerapathanimation",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html",
-    "<span>CameraPathAnimation</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/CameraPathAnimation.js</span>",
+    "xeokit-sdk/src/scene/camera/camera.js~camera",
+    "class/src/scene/camera/Camera.js~Camera.html",
+    "<span>Camera</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/Camera.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/canvas/canvas.js~canvas",
-    "class/scene/canvas/Canvas.js~Canvas.html",
-    "<span>Canvas</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/canvas/Canvas.js</span>",
+    "xeokit-sdk/src/scene/camera/cameracontrol.js~cameracontrol",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html",
+    "<span>CameraControl</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/CameraControl.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/clipping/clip.js~clip",
-    "class/scene/clipping/Clip.js~Clip.html",
-    "<span>Clip</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/clipping/Clip.js</span>",
+    "xeokit-sdk/src/scene/camera/cameraflightanimation.js~cameraflightanimation",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html",
+    "<span>CameraFlightAnimation</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/CameraFlightAnimation.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/component.js~component",
-    "class/scene/Component.js~Component.html",
-    "<span>Component</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/Component.js</span>",
+    "xeokit-sdk/src/scene/camera/camerapath.js~camerapath",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html",
+    "<span>CameraPath</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/CameraPath.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/cubetexture.js~cubetexture",
-    "class/scene/lights/CubeTexture.js~CubeTexture.html",
-    "<span>CubeTexture</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/CubeTexture.js</span>",
+    "xeokit-sdk/src/scene/camera/camerapathanimation.js~camerapathanimation",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html",
+    "<span>CameraPathAnimation</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/CameraPathAnimation.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/paths/cubicbeziercurve.js~cubicbeziercurve",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html",
-    "<span>CubicBezierCurve</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/paths/CubicBezierCurve.js</span>",
+    "xeokit-sdk/src/scene/canvas/canvas.js~canvas",
+    "class/src/scene/canvas/Canvas.js~Canvas.html",
+    "<span>Canvas</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/canvas/Canvas.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/paths/curve.js~curve",
-    "class/scene/paths/Curve.js~Curve.html",
-    "<span>Curve</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/paths/Curve.js</span>",
+    "xeokit-sdk/src/scene/clipping/clip.js~clip",
+    "class/src/scene/clipping/Clip.js~Clip.html",
+    "<span>Clip</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/clipping/Clip.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/customprojection.js~customprojection",
-    "class/scene/camera/CustomProjection.js~CustomProjection.html",
-    "<span>CustomProjection</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/CustomProjection.js</span>",
+    "xeokit-sdk/src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html",
+    "<span>ClipsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/cylindergeometry.js~cylindergeometry",
-    "class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html",
-    "<span>CylinderGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/CylinderGeometry.js</span>",
+    "xeokit-sdk/src/scene/component.js~component",
+    "class/src/scene/Component.js~Component.html",
+    "<span>Component</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/Component.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/dirlight.js~dirlight",
-    "class/scene/lights/DirLight.js~DirLight.html",
-    "<span>DirLight</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/DirLight.js</span>",
+    "xeokit-sdk/src/scene/lights/cubetexture.js~cubetexture",
+    "class/src/scene/lights/CubeTexture.js~CubeTexture.html",
+    "<span>CubeTexture</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/CubeTexture.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/drawable.js~drawable",
-    "class/scene/Drawable.js~Drawable.html",
-    "<span>Drawable</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/Drawable.js</span>",
+    "xeokit-sdk/src/scene/paths/cubicbeziercurve.js~cubicbeziercurve",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html",
+    "<span>CubicBezierCurve</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/paths/CubicBezierCurve.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/drawable.js~drawable",
-    "class/scene/webgl/Drawable.js~Drawable.html",
-    "<span>Drawable</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Drawable.js</span>",
+    "xeokit-sdk/src/scene/paths/curve.js~curve",
+    "class/src/scene/paths/Curve.js~Curve.html",
+    "<span>Curve</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/paths/Curve.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/edgematerial.js~edgematerial",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
-    "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/EdgeMaterial.js</span>",
+    "xeokit-sdk/src/scene/camera/customprojection.js~customprojection",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html",
+    "<span>CustomProjection</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/CustomProjection.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/emphasismaterial.js~emphasismaterial",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html",
-    "<span>EmphasisMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/EmphasisMaterial.js</span>",
+    "xeokit-sdk/src/scene/geometry/cylindergeometry.js~cylindergeometry",
+    "class/src/scene/geometry/CylinderGeometry.js~CylinderGeometry.html",
+    "<span>CylinderGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/CylinderGeometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/entity.js~entity",
-    "class/scene/Entity.js~Entity.html",
-    "<span>Entity</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/Entity.js</span>",
+    "xeokit-sdk/src/scene/lights/dirlight.js~dirlight",
+    "class/src/scene/lights/DirLight.js~DirLight.html",
+    "<span>DirLight</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/DirLight.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/framecontext.js~framecontext",
-    "class/scene/webgl/FrameContext.js~FrameContext.html",
-    "<span>FrameContext</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/FrameContext.js</span>",
+    "xeokit-sdk/src/scene/drawable.js~drawable",
+    "class/src/scene/Drawable.js~Drawable.html",
+    "<span>Drawable</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/Drawable.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/fresnel.js~fresnel",
-    "class/scene/materials/Fresnel.js~Fresnel.html",
-    "<span>Fresnel</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/Fresnel.js</span>",
+    "xeokit-sdk/src/scene/webgl/drawable.js~drawable",
+    "class/src/scene/webgl/Drawable.js~Drawable.html",
+    "<span>Drawable</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Drawable.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/frustum.js~frustum",
-    "class/scene/camera/Frustum.js~Frustum.html",
-    "<span>Frustum</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/Frustum.js</span>",
+    "xeokit-sdk/src/scene/materials/edgematerial.js~edgematerial",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html",
+    "<span>EdgeMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/EdgeMaterial.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/geometry.js~geometry",
-    "class/scene/geometry/Geometry.js~Geometry.html",
-    "<span>Geometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/Geometry.js</span>",
+    "xeokit-sdk/src/scene/materials/emphasismaterial.js~emphasismaterial",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html",
+    "<span>EmphasisMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/EmphasisMaterial.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/input/input.js~input",
-    "class/scene/input/Input.js~Input.html",
-    "<span>Input</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/input/Input.js</span>",
+    "xeokit-sdk/src/scene/entity.js~entity",
+    "class/src/scene/Entity.js~Entity.html",
+    "<span>Entity</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/Entity.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/lambertmaterial.js~lambertmaterial",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html",
-    "<span>LambertMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/LambertMaterial.js</span>",
+    "xeokit-sdk/src/scene/events.js~events",
+    "class/src/scene/Events.js~Events.html",
+    "<span>Events</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/Events.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/light.js~light",
-    "class/scene/lights/Light.js~Light.html",
-    "<span>Light</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/Light.js</span>",
+    "xeokit-sdk/src/scene/webgl/framecontext.js~framecontext",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html",
+    "<span>FrameContext</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/FrameContext.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/lightmap.js~lightmap",
-    "class/scene/lights/LightMap.js~LightMap.html",
-    "<span>LightMap</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/LightMap.js</span>",
+    "xeokit-sdk/src/scene/materials/fresnel.js~fresnel",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html",
+    "<span>Fresnel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/Fresnel.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/utils/map.js~map",
-    "class/scene/utils/Map.js~Map.html",
-    "<span>Map</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/utils/Map.js</span>",
+    "xeokit-sdk/src/scene/camera/frustum.js~frustum",
+    "class/src/scene/camera/Frustum.js~Frustum.html",
+    "<span>Frustum</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/Frustum.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/material.js~material",
-    "class/scene/materials/Material.js~Material.html",
-    "<span>Material</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/Material.js</span>",
+    "xeokit-sdk/src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html",
+    "<span>GLTFBigModelLoader</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/mesh/mesh.js~mesh",
-    "class/scene/mesh/Mesh.js~Mesh.html",
-    "<span>Mesh</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/mesh/Mesh.js</span>",
+    "xeokit-sdk/src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html",
+    "<span>GLTFLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/metallicmaterial.js~metallicmaterial",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html",
-    "<span>MetallicMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/MetallicMaterial.js</span>",
+    "xeokit-sdk/src/scene/geometry/geometry.js~geometry",
+    "class/src/scene/geometry/Geometry.js~Geometry.html",
+    "<span>Geometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/Geometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/model.js~model",
-    "class/scene/Model.js~Model.html",
-    "<span>Model</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/Model.js</span>",
+    "xeokit-sdk/src/scene/input/input.js~input",
+    "class/src/scene/input/Input.js~Input.html",
+    "<span>Input</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/input/Input.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/nodes/node.js~node",
-    "class/scene/nodes/Node.js~Node.html",
-    "<span>Node</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/nodes/Node.js</span>",
+    "xeokit-sdk/src/scene/materials/lambertmaterial.js~lambertmaterial",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html",
+    "<span>LambertMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/LambertMaterial.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/obbgeometry.js~obbgeometry",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html",
-    "<span>OBBGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/OBBGeometry.js</span>",
+    "xeokit-sdk/src/scene/lights/light.js~light",
+    "class/src/scene/lights/Light.js~Light.html",
+    "<span>Light</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/Light.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/ortho.js~ortho",
-    "class/scene/camera/Ortho.js~Ortho.html",
-    "<span>Ortho</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/Ortho.js</span>",
+    "xeokit-sdk/src/scene/lights/lightmap.js~lightmap",
+    "class/src/scene/lights/LightMap.js~LightMap.html",
+    "<span>LightMap</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/LightMap.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/outlinematerial.js~outlinematerial",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html",
-    "<span>OutlineMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/OutlineMaterial.js</span>",
+    "xeokit-sdk/src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html",
+    "<span>LightsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/LightsPlugin/LightsPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/paths/path.js~path",
-    "class/scene/paths/Path.js~Path.html",
-    "<span>Path</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/paths/Path.js</span>",
+    "xeokit-sdk/src/scene/utils/map.js~map",
+    "class/src/scene/utils/Map.js~Map.html",
+    "<span>Map</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/utils/Map.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/camera/perspective.js~perspective",
-    "class/scene/camera/Perspective.js~Perspective.html",
-    "<span>Perspective</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/camera/Perspective.js</span>",
+    "xeokit-sdk/src/scene/materials/material.js~material",
+    "class/src/scene/materials/Material.js~Material.html",
+    "<span>Material</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/Material.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/phongmaterial.js~phongmaterial",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html",
-    "<span>PhongMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/PhongMaterial.js</span>",
+    "xeokit-sdk/src/scene/mesh/mesh.js~mesh",
+    "class/src/scene/mesh/Mesh.js~Mesh.html",
+    "<span>Mesh</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/mesh/Mesh.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/pickresult.js~pickresult",
-    "class/scene/webgl/PickResult.js~PickResult.html",
-    "<span>PickResult</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/PickResult.js</span>",
+    "xeokit-sdk/src/viewer/metadata/metamodel.js~metamodel",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html",
+    "<span>MetaModel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/metadata/MetaModel.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/planegeometry.js~planegeometry",
-    "class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html",
-    "<span>PlaneGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/PlaneGeometry.js</span>",
+    "xeokit-sdk/src/viewer/metadata/metaobject.js~metaobject",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html",
+    "<span>MetaObject</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/metadata/MetaObject.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/pointlight.js~pointlight",
-    "class/scene/lights/PointLight.js~PointLight.html",
-    "<span>PointLight</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/PointLight.js</span>",
+    "xeokit-sdk/src/viewer/metadata/metascene.js~metascene",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html",
+    "<span>MetaScene</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/metadata/MetaScene.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/program.js~program",
-    "class/scene/webgl/Program.js~Program.html",
-    "<span>Program</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Program.js</span>",
+    "xeokit-sdk/src/scene/materials/metallicmaterial.js~metallicmaterial",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html",
+    "<span>MetallicMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/MetallicMaterial.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/utils/queue.js~queue",
-    "class/scene/utils/Queue.js~Queue.html",
-    "<span>Queue</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/utils/Queue.js</span>",
+    "xeokit-sdk/src/scene/model.js~model",
+    "class/src/scene/Model.js~Model.html",
+    "<span>Model</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/Model.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/reflectionmap.js~reflectionmap",
-    "class/scene/lights/ReflectionMap.js~ReflectionMap.html",
-    "<span>ReflectionMap</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/ReflectionMap.js</span>",
+    "xeokit-sdk/src/scene/nodes/node.js~node",
+    "class/src/scene/nodes/Node.js~Node.html",
+    "<span>Node</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/nodes/Node.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/renderbuffer.js~renderbuffer",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html",
-    "<span>RenderBuffer</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/RenderBuffer.js</span>",
+    "xeokit-sdk/src/scene/geometry/obbgeometry.js~obbgeometry",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html",
+    "<span>OBBGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/OBBGeometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/renderflags.js~renderflags",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html",
-    "<span>RenderFlags</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/RenderFlags.js</span>",
+    "xeokit-sdk/src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html",
+    "<span>OBJLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/renderstate.js~renderstate",
-    "class/scene/webgl/RenderState.js~RenderState.html",
-    "<span>RenderState</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/RenderState.js</span>",
+    "xeokit-sdk/src/scene/camera/ortho.js~ortho",
+    "class/src/scene/camera/Ortho.js~Ortho.html",
+    "<span>Ortho</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/Ortho.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/sampler.js~sampler",
-    "class/scene/webgl/Sampler.js~Sampler.html",
-    "<span>Sampler</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Sampler.js</span>",
+    "xeokit-sdk/src/scene/paths/path.js~path",
+    "class/src/scene/paths/Path.js~Path.html",
+    "<span>Path</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/paths/Path.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/scene/scene.js~scene",
-    "class/scene/scene/Scene.js~Scene.html",
-    "<span>Scene</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/scene/Scene.js</span>",
+    "xeokit-sdk/src/scene/camera/perspective.js~perspective",
+    "class/src/scene/camera/Perspective.js~Perspective.html",
+    "<span>Perspective</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/camera/Perspective.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/shader.js~shader",
-    "class/scene/webgl/Shader.js~Shader.html",
-    "<span>Shader</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Shader.js</span>",
+    "xeokit-sdk/src/scene/materials/phongmaterial.js~phongmaterial",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html",
+    "<span>PhongMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/PhongMaterial.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/lights/shadow.js~shadow",
-    "class/scene/lights/Shadow.js~Shadow.html",
-    "<span>Shadow</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/lights/Shadow.js</span>",
+    "xeokit-sdk/src/scene/webgl/pickresult.js~pickresult",
+    "class/src/scene/webgl/PickResult.js~PickResult.html",
+    "<span>PickResult</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/PickResult.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/skybox/skybox.js~skybox",
-    "class/scene/skybox/Skybox.js~Skybox.html",
-    "<span>Skybox</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/skybox/Skybox.js</span>",
+    "xeokit-sdk/src/viewer/plugins/planviewplugin/planviewplugin.js~planviewplugin",
+    "class/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js~PlanViewPlugin.html",
+    "<span>PlanViewPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/specularmaterial.js~specularmaterial",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html",
-    "<span>SpecularMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/SpecularMaterial.js</span>",
+    "xeokit-sdk/src/scene/geometry/planegeometry.js~planegeometry",
+    "class/src/scene/geometry/PlaneGeometry.js~PlaneGeometry.html",
+    "<span>PlaneGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/PlaneGeometry.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/spheregeometry.js~spheregeometry",
-    "class/scene/geometry/SphereGeometry.js~SphereGeometry.html",
-    "<span>SphereGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/SphereGeometry.js</span>",
+    "xeokit-sdk/src/viewer/plugin.js~plugin",
+    "class/src/viewer/Plugin.js~Plugin.html",
+    "<span>Plugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/Plugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/canvas/spinner.js~spinner",
-    "class/scene/canvas/Spinner.js~Spinner.html",
-    "<span>Spinner</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/canvas/Spinner.js</span>",
+    "xeokit-sdk/src/scene/lights/pointlight.js~pointlight",
+    "class/src/scene/lights/PointLight.js~PointLight.html",
+    "<span>PointLight</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/PointLight.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webgl/texture2d.js~texture2d",
-    "class/scene/webgl/Texture2D.js~Texture2D.html",
-    "<span>Texture2D</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/Texture2D.js</span>",
+    "xeokit-sdk/src/scene/webgl/program.js~program",
+    "class/src/scene/webgl/Program.js~Program.html",
+    "<span>Program</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Program.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/materials/texture.js~texture",
-    "class/scene/materials/Texture.js~Texture.html",
-    "<span>Texture</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/materials/Texture.js</span>",
+    "xeokit-sdk/src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin",
+    "class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html",
+    "<span>PropertiesPanelPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/torusgeometry.js~torusgeometry",
-    "class/scene/geometry/TorusGeometry.js~TorusGeometry.html",
-    "<span>TorusGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/TorusGeometry.js</span>",
+    "xeokit-sdk/src/scene/utils/queue.js~queue",
+    "class/src/scene/utils/Queue.js~Queue.html",
+    "<span>Queue</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/utils/Queue.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/geometry/vectortextgeometry.js~vectortextgeometry",
-    "class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html",
-    "<span>VectorTextGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/geometry/VectorTextGeometry.js</span>",
+    "xeokit-sdk/src/scene/lights/reflectionmap.js~reflectionmap",
+    "class/src/scene/lights/ReflectionMap.js~ReflectionMap.html",
+    "<span>ReflectionMap</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/ReflectionMap.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/viewport/viewport.js~viewport",
-    "class/scene/viewport/Viewport.js~Viewport.html",
-    "<span>Viewport</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/viewport/Viewport.js</span>",
+    "xeokit-sdk/src/scene/webgl/renderbuffer.js~renderbuffer",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html",
+    "<span>RenderBuffer</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/RenderBuffer.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/scene/webglinfo.js~webgl_info",
+    "xeokit-sdk/src/scene/webgl/renderflags.js~renderflags",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html",
+    "<span>RenderFlags</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/RenderFlags.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/webgl/renderstate.js~renderstate",
+    "class/src/scene/webgl/RenderState.js~RenderState.html",
+    "<span>RenderState</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/RenderState.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html",
+    "<span>STLLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/webgl/sampler.js~sampler",
+    "class/src/scene/webgl/Sampler.js~Sampler.html",
+    "<span>Sampler</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Sampler.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/scene/scene.js~scene",
+    "class/src/scene/scene/Scene.js~Scene.html",
+    "<span>Scene</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/scene/Scene.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/webgl/shader.js~shader",
+    "class/src/scene/webgl/Shader.js~Shader.html",
+    "<span>Shader</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Shader.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/lights/shadow.js~shadow",
+    "class/src/scene/lights/Shadow.js~Shadow.html",
+    "<span>Shadow</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/lights/Shadow.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/skybox/skybox.js~skybox",
+    "class/src/scene/skybox/Skybox.js~Skybox.html",
+    "<span>Skybox</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/skybox/Skybox.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html",
+    "<span>SkyboxesPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/materials/specularmaterial.js~specularmaterial",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html",
+    "<span>SpecularMaterial</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/SpecularMaterial.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/geometry/spheregeometry.js~spheregeometry",
+    "class/src/scene/geometry/SphereGeometry.js~SphereGeometry.html",
+    "<span>SphereGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/SphereGeometry.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/canvas/spinner.js~spinner",
+    "class/src/scene/canvas/Spinner.js~Spinner.html",
+    "<span>Spinner</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/canvas/Spinner.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html",
+    "<span>StructurePanelPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/webgl/texture2d.js~texture2d",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html",
+    "<span>Texture2D</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/Texture2D.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/materials/texture.js~texture",
+    "class/src/scene/materials/Texture.js~Texture.html",
+    "<span>Texture</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/materials/Texture.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/geometry/torusgeometry.js~torusgeometry",
+    "class/src/scene/geometry/TorusGeometry.js~TorusGeometry.html",
+    "<span>TorusGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/TorusGeometry.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/geometry/vectortextgeometry.js~vectortextgeometry",
+    "class/src/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html",
+    "<span>VectorTextGeometry</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/geometry/VectorTextGeometry.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/viewer.js~viewer",
+    "class/src/viewer/Viewer.js~Viewer.html",
+    "<span>Viewer</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/Viewer.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/viewport/viewport.js~viewport",
+    "class/src/scene/viewport/Viewport.js~Viewport.html",
+    "<span>Viewport</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/viewport/Viewport.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/webglinfo.js~webgl_info",
     "variable/index.html#static-variable-WEBGL_INFO",
-    "<span>WEBGL_INFO</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webglInfo.js</span>",
+    "<span>WEBGL_INFO</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webglInfo.js</span>",
     "variable"
   ],
   [
-    "xeokit-sdk/scene/stats.js~stats",
+    "xeokit-sdk/src/viewer/plugins/webvrplugin/webvrplugin.js~webvrplugin",
+    "class/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html",
+    "<span>WebVRPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin",
+    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html",
+    "<span>XML3DLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/viewer/utils/ifcdefaultstates.js~ifcdefaultstates",
+    "variable/index.html#static-variable-ifcDefaultStates",
+    "<span>ifcDefaultStates</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/utils/ifcDefaultStates.js</span>",
+    "variable"
+  ],
+  [
+    "xeokit-sdk/src/viewer/plugins/bimserverloaderplugin/lib/loadmetamodel.js~loadmetamodel",
+    "function/index.html#static-function-loadMetaModel",
+    "<span>loadMetaModel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js</span>",
+    "function"
+  ],
+  [
+    "xeokit-sdk/src/scene/stats.js~stats",
     "variable/index.html#static-variable-stats",
-    "<span>stats</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/stats.js</span>",
+    "<span>stats</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/stats.js</span>",
     "variable"
   ],
   [
-    "xeokit-sdk/scene/webgl/webglenums.js~webglenums",
+    "xeokit-sdk/src/scene/webgl/webglenums.js~webglenums",
     "variable/index.html#static-variable-webglEnums",
-    "<span>webglEnums</span> <span class=\"search-result-import-path\">xeokit-sdk/scene/webgl/webglEnums.js</span>",
+    "<span>webglEnums</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/webgl/webglEnums.js</span>",
     "variable"
   ],
   [
-    "scene/.external-ecmascript.js~array",
+    "src/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
-    "scene/.external-ecmascript.js~Array",
+    "src/.external-ecmascript.js~Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~arraybuffer",
+    "src/.external-ecmascript.js~arraybuffer",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
-    "scene/.external-ecmascript.js~ArrayBuffer",
+    "src/.external-ecmascript.js~ArrayBuffer",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~boolean",
+    "src/.external-ecmascript.js~boolean",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-    "scene/.external-ecmascript.js~Boolean",
+    "src/.external-ecmascript.js~Boolean",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~dataview",
+    "src/.external-ecmascript.js~dataview",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
-    "scene/.external-ecmascript.js~DataView",
+    "src/.external-ecmascript.js~DataView",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~date",
+    "src/.external-ecmascript.js~date",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
-    "scene/.external-ecmascript.js~Date",
+    "src/.external-ecmascript.js~Date",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~error",
+    "src/.external-ecmascript.js~error",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
-    "scene/.external-ecmascript.js~Error",
+    "src/.external-ecmascript.js~Error",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~evalerror",
+    "src/.external-ecmascript.js~evalerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
-    "scene/.external-ecmascript.js~EvalError",
+    "src/.external-ecmascript.js~EvalError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~float32array",
+    "src/.external-ecmascript.js~float32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
-    "scene/.external-ecmascript.js~Float32Array",
+    "src/.external-ecmascript.js~Float32Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~float64array",
+    "src/.external-ecmascript.js~float64array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
-    "scene/.external-ecmascript.js~Float64Array",
+    "src/.external-ecmascript.js~Float64Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~function",
+    "src/.external-ecmascript.js~function",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-    "scene/.external-ecmascript.js~Function",
+    "src/.external-ecmascript.js~Function",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~generator",
+    "src/.external-ecmascript.js~generator",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
-    "scene/.external-ecmascript.js~Generator",
+    "src/.external-ecmascript.js~Generator",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~generatorfunction",
+    "src/.external-ecmascript.js~generatorfunction",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
-    "scene/.external-ecmascript.js~GeneratorFunction",
+    "src/.external-ecmascript.js~GeneratorFunction",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~infinity",
+    "src/.external-ecmascript.js~infinity",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
-    "scene/.external-ecmascript.js~Infinity",
+    "src/.external-ecmascript.js~Infinity",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~int16array",
+    "src/.external-ecmascript.js~int16array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
-    "scene/.external-ecmascript.js~Int16Array",
+    "src/.external-ecmascript.js~Int16Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~int32array",
+    "src/.external-ecmascript.js~int32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
-    "scene/.external-ecmascript.js~Int32Array",
+    "src/.external-ecmascript.js~Int32Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~int8array",
+    "src/.external-ecmascript.js~int8array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
-    "scene/.external-ecmascript.js~Int8Array",
+    "src/.external-ecmascript.js~Int8Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~internalerror",
+    "src/.external-ecmascript.js~internalerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
-    "scene/.external-ecmascript.js~InternalError",
+    "src/.external-ecmascript.js~InternalError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~json",
+    "src/.external-ecmascript.js~json",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
-    "scene/.external-ecmascript.js~JSON",
+    "src/.external-ecmascript.js~JSON",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~map",
+    "src/.external-ecmascript.js~map",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
-    "scene/.external-ecmascript.js~Map",
+    "src/.external-ecmascript.js~Map",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~nan",
+    "src/.external-ecmascript.js~nan",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
-    "scene/.external-ecmascript.js~NaN",
+    "src/.external-ecmascript.js~NaN",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~number",
+    "src/.external-ecmascript.js~number",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-    "scene/.external-ecmascript.js~Number",
+    "src/.external-ecmascript.js~Number",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~object",
+    "src/.external-ecmascript.js~object",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-    "scene/.external-ecmascript.js~Object",
+    "src/.external-ecmascript.js~Object",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~promise",
+    "src/.external-ecmascript.js~promise",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
-    "scene/.external-ecmascript.js~Promise",
+    "src/.external-ecmascript.js~Promise",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~proxy",
+    "src/.external-ecmascript.js~proxy",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
-    "scene/.external-ecmascript.js~Proxy",
+    "src/.external-ecmascript.js~Proxy",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~rangeerror",
+    "src/.external-ecmascript.js~rangeerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
-    "scene/.external-ecmascript.js~RangeError",
+    "src/.external-ecmascript.js~RangeError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~referenceerror",
+    "src/.external-ecmascript.js~referenceerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
-    "scene/.external-ecmascript.js~ReferenceError",
+    "src/.external-ecmascript.js~ReferenceError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~reflect",
+    "src/.external-ecmascript.js~reflect",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
-    "scene/.external-ecmascript.js~Reflect",
+    "src/.external-ecmascript.js~Reflect",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~regexp",
+    "src/.external-ecmascript.js~regexp",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
-    "scene/.external-ecmascript.js~RegExp",
+    "src/.external-ecmascript.js~RegExp",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~set",
+    "src/.external-ecmascript.js~set",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
-    "scene/.external-ecmascript.js~Set",
+    "src/.external-ecmascript.js~Set",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~string",
+    "src/.external-ecmascript.js~string",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-    "scene/.external-ecmascript.js~String",
+    "src/.external-ecmascript.js~String",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~symbol",
+    "src/.external-ecmascript.js~symbol",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
-    "scene/.external-ecmascript.js~Symbol",
+    "src/.external-ecmascript.js~Symbol",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~syntaxerror",
+    "src/.external-ecmascript.js~syntaxerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
-    "scene/.external-ecmascript.js~SyntaxError",
+    "src/.external-ecmascript.js~SyntaxError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~typeerror",
+    "src/.external-ecmascript.js~typeerror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
-    "scene/.external-ecmascript.js~TypeError",
+    "src/.external-ecmascript.js~TypeError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~urierror",
+    "src/.external-ecmascript.js~urierror",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
-    "scene/.external-ecmascript.js~URIError",
+    "src/.external-ecmascript.js~URIError",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~uint16array",
+    "src/.external-ecmascript.js~uint16array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
-    "scene/.external-ecmascript.js~Uint16Array",
+    "src/.external-ecmascript.js~Uint16Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~uint32array",
+    "src/.external-ecmascript.js~uint32array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
-    "scene/.external-ecmascript.js~Uint32Array",
+    "src/.external-ecmascript.js~Uint32Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~uint8array",
+    "src/.external-ecmascript.js~uint8array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
-    "scene/.external-ecmascript.js~Uint8Array",
+    "src/.external-ecmascript.js~Uint8Array",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~uint8clampedarray",
+    "src/.external-ecmascript.js~uint8clampedarray",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
-    "scene/.external-ecmascript.js~Uint8ClampedArray",
+    "src/.external-ecmascript.js~Uint8ClampedArray",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~weakmap",
+    "src/.external-ecmascript.js~weakmap",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
-    "scene/.external-ecmascript.js~WeakMap",
+    "src/.external-ecmascript.js~WeakMap",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~weakset",
+    "src/.external-ecmascript.js~weakset",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
-    "scene/.external-ecmascript.js~WeakSet",
+    "src/.external-ecmascript.js~WeakSet",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~boolean",
+    "src/.external-ecmascript.js~boolean",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-    "scene/.external-ecmascript.js~boolean",
+    "src/.external-ecmascript.js~boolean",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~function",
+    "src/.external-ecmascript.js~function",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-    "scene/.external-ecmascript.js~function",
+    "src/.external-ecmascript.js~function",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~null",
+    "src/.external-ecmascript.js~null",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
-    "scene/.external-ecmascript.js~null",
+    "src/.external-ecmascript.js~null",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~number",
+    "src/.external-ecmascript.js~number",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-    "scene/.external-ecmascript.js~number",
+    "src/.external-ecmascript.js~number",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~object",
+    "src/.external-ecmascript.js~object",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-    "scene/.external-ecmascript.js~object",
+    "src/.external-ecmascript.js~object",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~string",
+    "src/.external-ecmascript.js~string",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-    "scene/.external-ecmascript.js~string",
+    "src/.external-ecmascript.js~string",
     "external"
   ],
   [
-    "scene/.external-ecmascript.js~undefined",
+    "src/.external-ecmascript.js~undefined",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
-    "scene/.external-ecmascript.js~undefined",
+    "src/.external-ecmascript.js~undefined",
     "external"
   ],
   [
-    "scene/component.js",
-    "file/scene/Component.js.html",
-    "scene/Component.js",
+    "src/scene/component.js",
+    "file/src/scene/Component.js.html",
+    "src/scene/Component.js",
     "file"
   ],
   [
-    "scene/component.js~component#clear",
-    "class/scene/Component.js~Component.html#instance-method-clear",
-    "scene/Component.js~Component#clear",
+    "src/scene/component.js~component#clear",
+    "class/src/scene/Component.js~Component.html#instance-method-clear",
+    "src/scene/Component.js~Component#clear",
     "method"
   ],
   [
-    "scene/component.js~component#constructor",
-    "class/scene/Component.js~Component.html#instance-constructor-constructor",
-    "scene/Component.js~Component#constructor",
+    "src/scene/component.js~component#constructor",
+    "class/src/scene/Component.js~Component.html#instance-constructor-constructor",
+    "src/scene/Component.js~Component#constructor",
     "method"
   ],
   [
-    "scene/component.js~component#destroy",
-    "class/scene/Component.js~Component.html#instance-method-destroy",
-    "scene/Component.js~Component#destroy",
+    "src/scene/component.js~component#destroy",
+    "class/src/scene/Component.js~Component.html#instance-method-destroy",
+    "src/scene/Component.js~Component#destroy",
     "method"
   ],
   [
-    "scene/component.js~component#destroyed",
-    "class/scene/Component.js~Component.html#instance-member-destroyed",
-    "scene/Component.js~Component#destroyed",
+    "src/scene/component.js~component#destroyed",
+    "class/src/scene/Component.js~Component.html#instance-member-destroyed",
+    "src/scene/Component.js~Component#destroyed",
     "member"
   ],
   [
-    "scene/component.js~component#error",
-    "class/scene/Component.js~Component.html#instance-method-error",
-    "scene/Component.js~Component#error",
+    "src/scene/component.js~component#error",
+    "class/src/scene/Component.js~Component.html#instance-method-error",
+    "src/scene/Component.js~Component#error",
     "method"
   ],
   [
-    "scene/component.js~component#fire",
-    "class/scene/Component.js~Component.html#instance-method-fire",
-    "scene/Component.js~Component#fire",
+    "src/scene/component.js~component#fire",
+    "class/src/scene/Component.js~Component.html#instance-method-fire",
+    "src/scene/Component.js~Component#fire",
     "method"
   ],
   [
-    "scene/component.js~component#hassubs",
-    "class/scene/Component.js~Component.html#instance-method-hasSubs",
-    "scene/Component.js~Component#hasSubs",
+    "src/scene/component.js~component#hassubs",
+    "class/src/scene/Component.js~Component.html#instance-method-hasSubs",
+    "src/scene/Component.js~Component#hasSubs",
     "method"
   ],
   [
-    "scene/component.js~component#id",
-    "class/scene/Component.js~Component.html#instance-member-id",
-    "scene/Component.js~Component#id",
+    "src/scene/component.js~component#id",
+    "class/src/scene/Component.js~Component.html#instance-member-id",
+    "src/scene/Component.js~Component#id",
     "member"
   ],
   [
-    "scene/component.js~component#istype",
-    "class/scene/Component.js~Component.html#instance-method-isType",
-    "scene/Component.js~Component#isType",
+    "src/scene/component.js~component#istype",
+    "class/src/scene/Component.js~Component.html#instance-method-isType",
+    "src/scene/Component.js~Component#isType",
     "method"
   ],
   [
-    "scene/component.js~component#log",
-    "class/scene/Component.js~Component.html#instance-method-log",
-    "scene/Component.js~Component#log",
+    "src/scene/component.js~component#log",
+    "class/src/scene/Component.js~Component.html#instance-method-log",
+    "src/scene/Component.js~Component#log",
     "method"
   ],
   [
-    "scene/component.js~component#meta",
-    "class/scene/Component.js~Component.html#instance-member-meta",
-    "scene/Component.js~Component#meta",
+    "src/scene/component.js~component#meta",
+    "class/src/scene/Component.js~Component.html#instance-member-meta",
+    "src/scene/Component.js~Component#meta",
     "member"
   ],
   [
-    "scene/component.js~component#off",
-    "class/scene/Component.js~Component.html#instance-method-off",
-    "scene/Component.js~Component#off",
+    "src/scene/component.js~component#off",
+    "class/src/scene/Component.js~Component.html#instance-method-off",
+    "src/scene/Component.js~Component#off",
     "method"
   ],
   [
-    "scene/component.js~component#on",
-    "class/scene/Component.js~Component.html#instance-method-on",
-    "scene/Component.js~Component#on",
+    "src/scene/component.js~component#on",
+    "class/src/scene/Component.js~Component.html#instance-method-on",
+    "src/scene/Component.js~Component#on",
     "method"
   ],
   [
-    "scene/component.js~component#once",
-    "class/scene/Component.js~Component.html#instance-method-once",
-    "scene/Component.js~Component#once",
+    "src/scene/component.js~component#once",
+    "class/src/scene/Component.js~Component.html#instance-method-once",
+    "src/scene/Component.js~Component#once",
     "method"
   ],
   [
-    "scene/component.js~component#owner",
-    "class/scene/Component.js~Component.html#instance-get-owner",
-    "scene/Component.js~Component#owner",
+    "src/scene/component.js~component#owner",
+    "class/src/scene/Component.js~Component.html#instance-get-owner",
+    "src/scene/Component.js~Component#owner",
     "member"
   ],
   [
-    "scene/component.js~component#scene",
-    "class/scene/Component.js~Component.html#instance-member-scene",
-    "scene/Component.js~Component#scene",
+    "src/scene/component.js~component#scene",
+    "class/src/scene/Component.js~Component.html#instance-member-scene",
+    "src/scene/Component.js~Component#scene",
     "member"
   ],
   [
-    "scene/component.js~component#type",
-    "class/scene/Component.js~Component.html#instance-get-type",
-    "scene/Component.js~Component#type",
+    "src/scene/component.js~component#type",
+    "class/src/scene/Component.js~Component.html#instance-get-type",
+    "src/scene/Component.js~Component#type",
     "member"
   ],
   [
-    "scene/component.js~component#viewer",
-    "class/scene/Component.js~Component.html#instance-member-viewer",
-    "scene/Component.js~Component#viewer",
+    "src/scene/component.js~component#viewer",
+    "class/src/scene/Component.js~Component.html#instance-member-viewer",
+    "src/scene/Component.js~Component#viewer",
     "member"
   ],
   [
-    "scene/component.js~component#warn",
-    "class/scene/Component.js~Component.html#instance-method-warn",
-    "scene/Component.js~Component#warn",
+    "src/scene/component.js~component#warn",
+    "class/src/scene/Component.js~Component.html#instance-method-warn",
+    "src/scene/Component.js~Component#warn",
     "method"
   ],
   [
-    "scene/drawable.js",
-    "file/scene/Drawable.js.html",
-    "scene/Drawable.js",
+    "src/scene/drawable.js",
+    "file/src/scene/Drawable.js.html",
+    "src/scene/Drawable.js",
     "file"
   ],
   [
-    "scene/entity.js",
-    "file/scene/Entity.js.html",
-    "scene/Entity.js",
+    "src/scene/entity.js",
+    "file/src/scene/Entity.js.html",
+    "src/scene/Entity.js",
     "file"
   ],
   [
-    "scene/model.js",
-    "file/scene/Model.js.html",
-    "scene/Model.js",
+    "src/scene/events.js",
+    "file/src/scene/Events.js.html",
+    "src/scene/Events.js",
     "file"
   ],
   [
-    "scene/bigmodels/bigmodel.js",
-    "file/scene/bigModels/BigModel.js.html",
-    "scene/bigModels/BigModel.js",
+    "src/scene/events.js~events#constructor",
+    "class/src/scene/Events.js~Events.html#instance-constructor-constructor",
+    "src/scene/Events.js~Events#constructor",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#destroy",
+    "class/src/scene/Events.js~Events.html#instance-method-destroy",
+    "src/scene/Events.js~Events#destroy",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#fire",
+    "class/src/scene/Events.js~Events.html#instance-method-fire",
+    "src/scene/Events.js~Events#fire",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#hassubs",
+    "class/src/scene/Events.js~Events.html#instance-method-hasSubs",
+    "src/scene/Events.js~Events#hasSubs",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#off",
+    "class/src/scene/Events.js~Events.html#instance-method-off",
+    "src/scene/Events.js~Events#off",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#on",
+    "class/src/scene/Events.js~Events.html#instance-method-on",
+    "src/scene/Events.js~Events#on",
+    "method"
+  ],
+  [
+    "src/scene/events.js~events#once",
+    "class/src/scene/Events.js~Events.html#instance-method-once",
+    "src/scene/Events.js~Events#once",
+    "method"
+  ],
+  [
+    "src/scene/model.js",
+    "file/src/scene/Model.js.html",
+    "src/scene/Model.js",
+    "file"
+  ],
+  [
+    "src/scene/bigmodels/bigmodel.js",
+    "file/src/scene/bigModels/BigModel.js.html",
+    "src/scene/bigModels/BigModel.js",
     "file"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#aabb",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-aabb",
-    "scene/bigModels/BigModel.js~BigModel#aabb",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#aabb",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-aabb",
+    "src/scene/bigModels/BigModel.js~BigModel#aabb",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#aabbvisible",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-aabbVisible",
-    "scene/bigModels/BigModel.js~BigModel#aabbVisible",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#aabbvisible",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-aabbVisible",
+    "src/scene/bigModels/BigModel.js~BigModel#aabbVisible",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#castshadow",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-castShadow",
-    "scene/bigModels/BigModel.js~BigModel#castShadow",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#castshadow",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-castShadow",
+    "src/scene/bigModels/BigModel.js~BigModel#castShadow",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#clippable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-clippable",
-    "scene/bigModels/BigModel.js~BigModel#clippable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#clippable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-clippable",
+    "src/scene/bigModels/BigModel.js~BigModel#clippable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#clippable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-clippable",
-    "scene/bigModels/BigModel.js~BigModel#clippable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#clippable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-clippable",
+    "src/scene/bigModels/BigModel.js~BigModel#clippable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#collidable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-collidable",
-    "scene/bigModels/BigModel.js~BigModel#collidable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#collidable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-collidable",
+    "src/scene/bigModels/BigModel.js~BigModel#collidable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#collidable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-collidable",
-    "scene/bigModels/BigModel.js~BigModel#collidable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#collidable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-collidable",
+    "src/scene/bigModels/BigModel.js~BigModel#collidable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#colorize",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-colorize",
-    "scene/bigModels/BigModel.js~BigModel#colorize",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#colorize",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-colorize",
+    "src/scene/bigModels/BigModel.js~BigModel#colorize",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#compile",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-compile",
-    "scene/bigModels/BigModel.js~BigModel#compile",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#compile",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-compile",
+    "src/scene/bigModels/BigModel.js~BigModel#compile",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#constructor",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-constructor-constructor",
-    "scene/bigModels/BigModel.js~BigModel#constructor",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#constructor",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-constructor-constructor",
+    "src/scene/bigModels/BigModel.js~BigModel#constructor",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#creategeometry",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-createGeometry",
-    "scene/bigModels/BigModel.js~BigModel#createGeometry",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#creategeometry",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createGeometry",
+    "src/scene/bigModels/BigModel.js~BigModel#createGeometry",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#createmesh",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-createMesh",
-    "scene/bigModels/BigModel.js~BigModel#createMesh",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#createmesh",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createMesh",
+    "src/scene/bigModels/BigModel.js~BigModel#createMesh",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#createobject",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-createObject",
-    "scene/bigModels/BigModel.js~BigModel#createObject",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#createobject",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createObject",
+    "src/scene/bigModels/BigModel.js~BigModel#createObject",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#culled",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-culled",
-    "scene/bigModels/BigModel.js~BigModel#culled",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#culled",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-culled",
+    "src/scene/bigModels/BigModel.js~BigModel#culled",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#culled",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-culled",
-    "scene/bigModels/BigModel.js~BigModel#culled",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#culled",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-culled",
+    "src/scene/bigModels/BigModel.js~BigModel#culled",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#destroy",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-destroy",
-    "scene/bigModels/BigModel.js~BigModel#destroy",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#destroy",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-destroy",
+    "src/scene/bigModels/BigModel.js~BigModel#destroy",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawghostededgesopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedEdgesOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawGhostedEdgesOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawghostededgesopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedEdgesOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawGhostedEdgesOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawghostededgestransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedEdgesTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawGhostedEdgesTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawghostededgestransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedEdgesTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawGhostedEdgesTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawghostedfillopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedFillOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawGhostedFillOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawghostedfillopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedFillOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawGhostedFillOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawghostedfilltransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedFillTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawGhostedFillTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawghostedfilltransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawGhostedFillTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawGhostedFillTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawhighlightededgesopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedEdgesOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawHighlightedEdgesOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawhighlightededgesopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedEdgesOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawHighlightedEdgesOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawhighlightededgestransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedEdgesTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawHighlightedEdgesTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawhighlightededgestransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedEdgesTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawHighlightedEdgesTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawhighlightedfillopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedFillOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawHighlightedFillOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawhighlightedfillopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedFillOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawHighlightedFillOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawhighlightedfilltransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedFillTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawHighlightedFillTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawhighlightedfilltransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawHighlightedFillTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawHighlightedFillTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawnormaledgesopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalEdgesOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawNormalEdgesOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawnormaledgesopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalEdgesOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawNormalEdgesOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawnormaledgestransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalEdgesTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawNormalEdgesTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawnormaledgestransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalEdgesTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawNormalEdgesTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawnormalfillopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalFillOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawNormalFillOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawnormalfillopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalFillOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawNormalFillOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawnormalfilltransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalFillTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawNormalFillTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawnormalfilltransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawNormalFillTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawNormalFillTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawoutline",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawOutline",
-    "scene/bigModels/BigModel.js~BigModel#drawOutline",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawoutline",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawOutline",
+    "src/scene/bigModels/BigModel.js~BigModel#drawOutline",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawpickmesh",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawPickMesh",
-    "scene/bigModels/BigModel.js~BigModel#drawPickMesh",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawpickmesh",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawPickMesh",
+    "src/scene/bigModels/BigModel.js~BigModel#drawPickMesh",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawselectededgesopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedEdgesOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawSelectedEdgesOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawselectededgesopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedEdgesOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawSelectedEdgesOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawselectededgestransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedEdgesTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawSelectedEdgesTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawselectededgestransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedEdgesTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawSelectedEdgesTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawselectedfillopaque",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedFillOpaque",
-    "scene/bigModels/BigModel.js~BigModel#drawSelectedFillOpaque",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawselectedfillopaque",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedFillOpaque",
+    "src/scene/bigModels/BigModel.js~BigModel#drawSelectedFillOpaque",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawselectedfilltransparent",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedFillTransparent",
-    "scene/bigModels/BigModel.js~BigModel#drawSelectedFillTransparent",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawselectedfilltransparent",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawSelectedFillTransparent",
+    "src/scene/bigModels/BigModel.js~BigModel#drawSelectedFillTransparent",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#drawshadow",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawShadow",
-    "scene/bigModels/BigModel.js~BigModel#drawShadow",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#drawshadow",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-drawShadow",
+    "src/scene/bigModels/BigModel.js~BigModel#drawShadow",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#edgematerial",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-edgeMaterial",
-    "scene/bigModels/BigModel.js~BigModel#edgeMaterial",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#edgematerial",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-edgeMaterial",
+    "src/scene/bigModels/BigModel.js~BigModel#edgeMaterial",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#edges",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-edges",
-    "scene/bigModels/BigModel.js~BigModel#edges",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#edges",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-edges",
+    "src/scene/bigModels/BigModel.js~BigModel#edges",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#edges",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-edges",
-    "scene/bigModels/BigModel.js~BigModel#edges",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#edges",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-edges",
+    "src/scene/bigModels/BigModel.js~BigModel#edges",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#finalize",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-finalize",
-    "scene/bigModels/BigModel.js~BigModel#finalize",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#finalize",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-finalize",
+    "src/scene/bigModels/BigModel.js~BigModel#finalize",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#getobjectids",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-getObjectIDs",
-    "scene/bigModels/BigModel.js~BigModel#getObjectIDs",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#getobjectids",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-getObjectIDs",
+    "src/scene/bigModels/BigModel.js~BigModel#getObjectIDs",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#getrenderflags",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-method-getRenderFlags",
-    "scene/bigModels/BigModel.js~BigModel#getRenderFlags",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#getrenderflags",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-getRenderFlags",
+    "src/scene/bigModels/BigModel.js~BigModel#getRenderFlags",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#ghostmaterial",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghostMaterial",
-    "scene/bigModels/BigModel.js~BigModel#ghostMaterial",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#ghostmaterial",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghostMaterial",
+    "src/scene/bigModels/BigModel.js~BigModel#ghostMaterial",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#ghosted",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-ghosted",
-    "scene/bigModels/BigModel.js~BigModel#ghosted",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#ghosted",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-ghosted",
+    "src/scene/bigModels/BigModel.js~BigModel#ghosted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#ghosted",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghosted",
-    "scene/bigModels/BigModel.js~BigModel#ghosted",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#ghosted",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghosted",
+    "src/scene/bigModels/BigModel.js~BigModel#ghosted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#highlightmaterial",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlightMaterial",
-    "scene/bigModels/BigModel.js~BigModel#highlightMaterial",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#highlightmaterial",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlightMaterial",
+    "src/scene/bigModels/BigModel.js~BigModel#highlightMaterial",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#highlighted",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-highlighted",
-    "scene/bigModels/BigModel.js~BigModel#highlighted",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#highlighted",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlighted",
+    "src/scene/bigModels/BigModel.js~BigModel#highlighted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#highlighted",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlighted",
-    "scene/bigModels/BigModel.js~BigModel#highlighted",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#highlighted",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-highlighted",
+    "src/scene/bigModels/BigModel.js~BigModel#highlighted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#layer",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-layer",
-    "scene/bigModels/BigModel.js~BigModel#layer",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#layer",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-layer",
+    "src/scene/bigModels/BigModel.js~BigModel#layer",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#matrix",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-matrix",
-    "scene/bigModels/BigModel.js~BigModel#matrix",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#matrix",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-matrix",
+    "src/scene/bigModels/BigModel.js~BigModel#matrix",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#meshes",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-meshes",
-    "scene/bigModels/BigModel.js~BigModel#meshes",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#meshes",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-meshes",
+    "src/scene/bigModels/BigModel.js~BigModel#meshes",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numedgesobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numEdgesObjects",
-    "scene/bigModels/BigModel.js~BigModel#numEdgesObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numedgesobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numEdgesObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numEdgesObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numgeometries",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGeometries",
-    "scene/bigModels/BigModel.js~BigModel#numGeometries",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numgeometries",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGeometries",
+    "src/scene/bigModels/BigModel.js~BigModel#numGeometries",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numghostedobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGhostedObjects",
-    "scene/bigModels/BigModel.js~BigModel#numGhostedObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numghostedobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGhostedObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numGhostedObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numhighlightedobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numHighlightedObjects",
-    "scene/bigModels/BigModel.js~BigModel#numHighlightedObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numhighlightedobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numHighlightedObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numHighlightedObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numObjects",
-    "scene/bigModels/BigModel.js~BigModel#numObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numselectedobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numSelectedObjects",
-    "scene/bigModels/BigModel.js~BigModel#numSelectedObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numselectedobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numSelectedObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numSelectedObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numtransparentobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numTransparentObjects",
-    "scene/bigModels/BigModel.js~BigModel#numTransparentObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numtransparentobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numTransparentObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numTransparentObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#numvisibleobjects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-numVisibleObjects",
-    "scene/bigModels/BigModel.js~BigModel#numVisibleObjects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#numvisibleobjects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numVisibleObjects",
+    "src/scene/bigModels/BigModel.js~BigModel#numVisibleObjects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#objects",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-objects",
-    "scene/bigModels/BigModel.js~BigModel#objects",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#objects",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-objects",
+    "src/scene/bigModels/BigModel.js~BigModel#objects",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#opacity",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-opacity",
-    "scene/bigModels/BigModel.js~BigModel#opacity",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#opacity",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-opacity",
+    "src/scene/bigModels/BigModel.js~BigModel#opacity",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#outlined",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-outlined",
-    "scene/bigModels/BigModel.js~BigModel#outlined",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#outlined",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-outlined",
+    "src/scene/bigModels/BigModel.js~BigModel#outlined",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#pickable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-pickable",
-    "scene/bigModels/BigModel.js~BigModel#pickable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#pickable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-pickable",
+    "src/scene/bigModels/BigModel.js~BigModel#pickable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#pickable",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-pickable",
-    "scene/bigModels/BigModel.js~BigModel#pickable",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#pickable",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-pickable",
+    "src/scene/bigModels/BigModel.js~BigModel#pickable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#position",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-position",
-    "scene/bigModels/BigModel.js~BigModel#position",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#position",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-position",
+    "src/scene/bigModels/BigModel.js~BigModel#position",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#quaternion",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-quaternion",
-    "scene/bigModels/BigModel.js~BigModel#quaternion",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#quaternion",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-quaternion",
+    "src/scene/bigModels/BigModel.js~BigModel#quaternion",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#receiveshadow",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-member-receiveShadow",
-    "scene/bigModels/BigModel.js~BigModel#receiveShadow",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#receiveshadow",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-receiveShadow",
+    "src/scene/bigModels/BigModel.js~BigModel#receiveShadow",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#rotation",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-rotation",
-    "scene/bigModels/BigModel.js~BigModel#rotation",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#rotation",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-rotation",
+    "src/scene/bigModels/BigModel.js~BigModel#rotation",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#scale",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-scale",
-    "scene/bigModels/BigModel.js~BigModel#scale",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#scale",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-scale",
+    "src/scene/bigModels/BigModel.js~BigModel#scale",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#selected",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-selected",
-    "scene/bigModels/BigModel.js~BigModel#selected",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#selected",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-selected",
+    "src/scene/bigModels/BigModel.js~BigModel#selected",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#selected",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-selected",
-    "scene/bigModels/BigModel.js~BigModel#selected",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#selected",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-selected",
+    "src/scene/bigModels/BigModel.js~BigModel#selected",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#selectedmaterial",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-selectedMaterial",
-    "scene/bigModels/BigModel.js~BigModel#selectedMaterial",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#selectedmaterial",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-selectedMaterial",
+    "src/scene/bigModels/BigModel.js~BigModel#selectedMaterial",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#type",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-type",
-    "scene/bigModels/BigModel.js~BigModel#type",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#type",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-type",
+    "src/scene/bigModels/BigModel.js~BigModel#type",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#visible",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-set-visible",
-    "scene/bigModels/BigModel.js~BigModel#visible",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#visible",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-visible",
+    "src/scene/bigModels/BigModel.js~BigModel#visible",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#visible",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-visible",
-    "scene/bigModels/BigModel.js~BigModel#visible",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#visible",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-visible",
+    "src/scene/bigModels/BigModel.js~BigModel#visible",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#worldmatrix",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldMatrix",
-    "scene/bigModels/BigModel.js~BigModel#worldMatrix",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#worldmatrix",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldMatrix",
+    "src/scene/bigModels/BigModel.js~BigModel#worldMatrix",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel#worldnormalmatrix",
-    "class/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldNormalMatrix",
-    "scene/bigModels/BigModel.js~BigModel#worldNormalMatrix",
+    "src/scene/bigmodels/bigmodel.js~bigmodel#worldnormalmatrix",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldNormalMatrix",
+    "src/scene/bigModels/BigModel.js~BigModel#worldNormalMatrix",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodel.js~bigmodel.getgeometrybytesused",
-    "class/scene/bigModels/BigModel.js~BigModel.html#static-method-getGeometryBytesUsed",
-    "scene/bigModels/BigModel.js~BigModel.getGeometryBytesUsed",
+    "src/scene/bigmodels/bigmodel.js~bigmodel.getgeometrybytesused",
+    "class/src/scene/bigModels/BigModel.js~BigModel.html#static-method-getGeometryBytesUsed",
+    "src/scene/bigModels/BigModel.js~BigModel.getGeometryBytesUsed",
     "method"
   ],
   [
-    "scene/bigmodels/batching/batchingbuffer.js",
-    "file/scene/bigModels/batching/batchingBuffer.js.html",
-    "scene/bigModels/batching/batchingBuffer.js",
+    "src/scene/bigmodels/batching/batchingbuffer.js",
+    "file/src/scene/bigModels/batching/batchingBuffer.js.html",
+    "src/scene/bigModels/batching/batchingBuffer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/batchinglayer.js",
-    "file/scene/bigModels/batching/batchingLayer.js.html",
-    "scene/bigModels/batching/batchingLayer.js",
+    "src/scene/bigmodels/batching/batchinglayer.js",
+    "file/src/scene/bigModels/batching/batchingLayer.js.html",
+    "src/scene/bigModels/batching/batchingLayer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/draw/batchingdrawrenderer.js",
-    "file/scene/bigModels/batching/draw/batchingDrawRenderer.js.html",
-    "scene/bigModels/batching/draw/batchingDrawRenderer.js",
+    "src/scene/bigmodels/batching/draw/batchingdrawrenderer.js",
+    "file/src/scene/bigModels/batching/draw/batchingDrawRenderer.js.html",
+    "src/scene/bigModels/batching/draw/batchingDrawRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/draw/batchingdrawshadersource.js",
-    "file/scene/bigModels/batching/draw/batchingDrawShaderSource.js.html",
-    "scene/bigModels/batching/draw/batchingDrawShaderSource.js",
+    "src/scene/bigmodels/batching/draw/batchingdrawshadersource.js",
+    "file/src/scene/bigModels/batching/draw/batchingDrawShaderSource.js.html",
+    "src/scene/bigModels/batching/draw/batchingDrawShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/emphasis/batchingemphasisedgesrenderer.js",
-    "file/scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js.html",
-    "scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js",
+    "src/scene/bigmodels/batching/emphasis/batchingemphasisedgesrenderer.js",
+    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js.html",
+    "src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/emphasis/batchingemphasisedgesshadersource.js",
-    "file/scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js.html",
-    "scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js",
+    "src/scene/bigmodels/batching/emphasis/batchingemphasisedgesshadersource.js",
+    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js.html",
+    "src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/emphasis/batchingemphasisfillrenderer.js",
-    "file/scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js.html",
-    "scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js",
+    "src/scene/bigmodels/batching/emphasis/batchingemphasisfillrenderer.js",
+    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js.html",
+    "src/scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/emphasis/batchingemphasisfillshadersource.js",
-    "file/scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js.html",
-    "scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js",
+    "src/scene/bigmodels/batching/emphasis/batchingemphasisfillshadersource.js",
+    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js.html",
+    "src/scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/pick/batchingpickrenderer.js",
-    "file/scene/bigModels/batching/pick/batchingPickRenderer.js.html",
-    "scene/bigModels/batching/pick/batchingPickRenderer.js",
+    "src/scene/bigmodels/batching/pick/batchingpickrenderer.js",
+    "file/src/scene/bigModels/batching/pick/batchingPickRenderer.js.html",
+    "src/scene/bigModels/batching/pick/batchingPickRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/batching/pick/batchingpickshadersource.js",
-    "file/scene/bigModels/batching/pick/batchingPickShaderSource.js.html",
-    "scene/bigModels/batching/pick/batchingPickShaderSource.js",
+    "src/scene/bigmodels/batching/pick/batchingpickshadersource.js",
+    "file/src/scene/bigModels/batching/pick/batchingPickShaderSource.js.html",
+    "src/scene/bigModels/batching/pick/batchingPickShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js",
-    "file/scene/bigModels/bigModelMesh.js.html",
-    "scene/bigModels/bigModelMesh.js",
+    "src/scene/bigmodels/bigmodelmesh.js",
+    "file/src/scene/bigModels/bigModelMesh.js.html",
+    "src/scene/bigModels/bigModelMesh.js",
     "file"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#aabb",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-aabb",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#aabb",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#aabb",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-aabb",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#aabb",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#constructor",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-constructor-constructor",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#constructor",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#constructor",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-constructor-constructor",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#constructor",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#drawpicktriangles",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-drawPickTriangles",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#drawPickTriangles",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#drawpicktriangles",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-drawPickTriangles",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#drawPickTriangles",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#fire",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-fire",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#fire",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#fire",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-fire",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#fire",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#getpickresult",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-getPickResult",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#getPickResult",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#getpickresult",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-method-getPickResult",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#getPickResult",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#id",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-id",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#id",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#id",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-id",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#id",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#model",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-model",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#model",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#model",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-model",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#model",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#object",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-object",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#object",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#object",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-object",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#object",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelmesh.js~bigmodelmesh#parent",
-    "class/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-parent",
-    "scene/bigModels/bigModelMesh.js~BigModelMesh#parent",
+    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#parent",
+    "class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html#instance-member-parent",
+    "src/scene/bigModels/bigModelMesh.js~BigModelMesh#parent",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js",
-    "file/scene/bigModels/bigModelObject.js.html",
-    "scene/bigModels/bigModelObject.js",
+    "src/scene/bigmodels/bigmodelobject.js",
+    "file/src/scene/bigModels/bigModelObject.js.html",
+    "src/scene/bigModels/bigModelObject.js",
     "file"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#aabb",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-aabb",
-    "scene/bigModels/bigModelObject.js~BigModelObject#aabb",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#aabb",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-aabb",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#aabb",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#clippable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-clippable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#clippable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#clippable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-clippable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#clippable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#clippable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-clippable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#clippable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#clippable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-clippable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#clippable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#collidable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-collidable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#collidable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#collidable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-collidable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#collidable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#collidable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-collidable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#collidable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#collidable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-collidable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#collidable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#colorize",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-colorize",
-    "scene/bigModels/bigModelObject.js~BigModelObject#colorize",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#colorize",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-colorize",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#colorize",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#colorize",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-colorize",
-    "scene/bigModels/bigModelObject.js~BigModelObject#colorize",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#colorize",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-colorize",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#colorize",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#constructor",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-constructor-constructor",
-    "scene/bigModels/bigModelObject.js~BigModelObject#constructor",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#constructor",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-constructor-constructor",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#constructor",
     "method"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#edges",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-edges",
-    "scene/bigModels/bigModelObject.js~BigModelObject#edges",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#edges",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-edges",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#edges",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#edges",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-edges",
-    "scene/bigModels/bigModelObject.js~BigModelObject#edges",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#edges",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-edges",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#edges",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#ghosted",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-ghosted",
-    "scene/bigModels/bigModelObject.js~BigModelObject#ghosted",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#ghosted",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-ghosted",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#ghosted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#ghosted",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-ghosted",
-    "scene/bigModels/bigModelObject.js~BigModelObject#ghosted",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#ghosted",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-ghosted",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#ghosted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#highlighted",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-highlighted",
-    "scene/bigModels/bigModelObject.js~BigModelObject#highlighted",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#highlighted",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-highlighted",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#highlighted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#highlighted",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-highlighted",
-    "scene/bigModels/bigModelObject.js~BigModelObject#highlighted",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#highlighted",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-highlighted",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#highlighted",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#id",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-id",
-    "scene/bigModels/bigModelObject.js~BigModelObject#id",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#id",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-id",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#id",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#meshes",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-meshes",
-    "scene/bigModels/bigModelObject.js~BigModelObject#meshes",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#meshes",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-meshes",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#meshes",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#model",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-model",
-    "scene/bigModels/bigModelObject.js~BigModelObject#model",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#model",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-model",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#model",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#objectid",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-objectId",
-    "scene/bigModels/bigModelObject.js~BigModelObject#objectId",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#objectid",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-member-objectId",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#objectId",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#opacity",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-opacity",
-    "scene/bigModels/bigModelObject.js~BigModelObject#opacity",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#opacity",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-opacity",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#opacity",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#opacity",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-opacity",
-    "scene/bigModels/bigModelObject.js~BigModelObject#opacity",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#opacity",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-opacity",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#opacity",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#pickable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-pickable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#pickable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#pickable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-pickable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#pickable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#pickable",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-pickable",
-    "scene/bigModels/bigModelObject.js~BigModelObject#pickable",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#pickable",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-pickable",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#pickable",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#selected",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-selected",
-    "scene/bigModels/bigModelObject.js~BigModelObject#selected",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#selected",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-selected",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#selected",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#selected",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-selected",
-    "scene/bigModels/bigModelObject.js~BigModelObject#selected",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#selected",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-selected",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#selected",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#visible",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-visible",
-    "scene/bigModels/bigModelObject.js~BigModelObject#visible",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#visible",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-set-visible",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#visible",
     "member"
   ],
   [
-    "scene/bigmodels/bigmodelobject.js~bigmodelobject#visible",
-    "class/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-visible",
-    "scene/bigModels/bigModelObject.js~BigModelObject#visible",
+    "src/scene/bigmodels/bigmodelobject.js~bigmodelobject#visible",
+    "class/src/scene/bigModels/bigModelObject.js~BigModelObject.html#instance-get-visible",
+    "src/scene/bigModels/bigModelObject.js~BigModelObject#visible",
     "member"
   ],
   [
-    "scene/bigmodels/instancing/draw/instancingdrawrenderer.js",
-    "file/scene/bigModels/instancing/draw/instancingDrawRenderer.js.html",
-    "scene/bigModels/instancing/draw/instancingDrawRenderer.js",
+    "src/scene/bigmodels/instancing/draw/instancingdrawrenderer.js",
+    "file/src/scene/bigModels/instancing/draw/instancingDrawRenderer.js.html",
+    "src/scene/bigModels/instancing/draw/instancingDrawRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/instancing/draw/instancingdrawshadersource.js",
-    "file/scene/bigModels/instancing/draw/instancingDrawShaderSource.js.html",
-    "scene/bigModels/instancing/draw/instancingDrawShaderSource.js",
+    "src/scene/bigmodels/instancing/draw/instancingdrawshadersource.js",
+    "file/src/scene/bigModels/instancing/draw/instancingDrawShaderSource.js.html",
+    "src/scene/bigModels/instancing/draw/instancingDrawShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/instancing/instancinglayer.js",
-    "file/scene/bigModels/instancing/instancingLayer.js.html",
-    "scene/bigModels/instancing/instancingLayer.js",
+    "src/scene/bigmodels/instancing/instancinglayer.js",
+    "file/src/scene/bigModels/instancing/instancingLayer.js.html",
+    "src/scene/bigModels/instancing/instancingLayer.js",
     "file"
   ],
   [
-    "scene/bigmodels/instancing/pick/instancingpickrenderer.js",
-    "file/scene/bigModels/instancing/pick/instancingPickRenderer.js.html",
-    "scene/bigModels/instancing/pick/instancingPickRenderer.js",
+    "src/scene/bigmodels/instancing/pick/instancingpickrenderer.js",
+    "file/src/scene/bigModels/instancing/pick/instancingPickRenderer.js.html",
+    "src/scene/bigModels/instancing/pick/instancingPickRenderer.js",
     "file"
   ],
   [
-    "scene/bigmodels/instancing/pick/instancingpickshadersource.js",
-    "file/scene/bigModels/instancing/pick/instancingPickShaderSource.js.html",
-    "scene/bigModels/instancing/pick/instancingPickShaderSource.js",
+    "src/scene/bigmodels/instancing/pick/instancingpickshadersource.js",
+    "file/src/scene/bigModels/instancing/pick/instancingPickShaderSource.js.html",
+    "src/scene/bigModels/instancing/pick/instancingPickShaderSource.js",
     "file"
   ],
   [
-    "scene/bigmodels/renderflags.js",
-    "file/scene/bigModels/renderFlags.js.html",
-    "scene/bigModels/renderFlags.js",
+    "src/scene/bigmodels/renderflags.js",
+    "file/src/scene/bigModels/renderFlags.js.html",
+    "src/scene/bigModels/renderFlags.js",
     "file"
   ],
   [
-    "scene/bigmodels/renderpasses.js",
-    "file/scene/bigModels/renderPasses.js.html",
-    "scene/bigModels/renderPasses.js",
+    "src/scene/bigmodels/renderpasses.js",
+    "file/src/scene/bigModels/renderPasses.js.html",
+    "src/scene/bigModels/renderPasses.js",
     "file"
   ],
   [
-    "scene/camera/camera.js",
-    "file/scene/camera/Camera.js.html",
-    "scene/camera/Camera.js",
+    "src/scene/camera/camera.js",
+    "file/src/scene/camera/Camera.js.html",
+    "src/scene/camera/Camera.js",
     "file"
   ],
   [
-    "scene/camera/camera.js~camera#constrainpitch",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-constrainPitch",
-    "scene/camera/Camera.js~Camera#constrainPitch",
+    "src/scene/camera/camera.js~camera#constrainpitch",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-constrainPitch",
+    "src/scene/camera/Camera.js~Camera#constrainPitch",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#constrainpitch",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-constrainPitch",
-    "scene/camera/Camera.js~Camera#constrainPitch",
+    "src/scene/camera/camera.js~camera#constrainpitch",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-constrainPitch",
+    "src/scene/camera/Camera.js~Camera#constrainPitch",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#customprojection",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-customProjection",
-    "scene/camera/Camera.js~Camera#customProjection",
+    "src/scene/camera/camera.js~camera#customprojection",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-customProjection",
+    "src/scene/camera/Camera.js~Camera#customProjection",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#destroy",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-destroy",
-    "scene/camera/Camera.js~Camera#destroy",
+    "src/scene/camera/camera.js~camera#destroy",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-destroy",
+    "src/scene/camera/Camera.js~Camera#destroy",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#devicematrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix",
-    "scene/camera/Camera.js~Camera#deviceMatrix",
+    "src/scene/camera/camera.js~camera#devicematrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix",
+    "src/scene/camera/Camera.js~Camera#deviceMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#devicematrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix",
-    "scene/camera/Camera.js~Camera#deviceMatrix",
+    "src/scene/camera/camera.js~camera#devicematrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix",
+    "src/scene/camera/Camera.js~Camera#deviceMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#eye",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-eye",
-    "scene/camera/Camera.js~Camera#eye",
+    "src/scene/camera/camera.js~camera#eye",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-eye",
+    "src/scene/camera/Camera.js~Camera#eye",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#eye",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-eye",
-    "scene/camera/Camera.js~Camera#eye",
+    "src/scene/camera/camera.js~camera#eye",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-eye",
+    "src/scene/camera/Camera.js~Camera#eye",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#eyelookdist",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-eyeLookDist",
-    "scene/camera/Camera.js~Camera#eyeLookDist",
+    "src/scene/camera/camera.js~camera#eyelookdist",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-eyeLookDist",
+    "src/scene/camera/Camera.js~Camera#eyeLookDist",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#frustum",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-frustum",
-    "scene/camera/Camera.js~Camera#frustum",
+    "src/scene/camera/camera.js~camera#frustum",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-frustum",
+    "src/scene/camera/Camera.js~Camera#frustum",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#gimballock",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
-    "scene/camera/Camera.js~Camera#gimbalLock",
+    "src/scene/camera/camera.js~camera#gimballock",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
+    "src/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#gimballock",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
-    "scene/camera/Camera.js~Camera#gimbalLock",
+    "src/scene/camera/camera.js~camera#gimballock",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
+    "src/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#look",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-look",
-    "scene/camera/Camera.js~Camera#look",
+    "src/scene/camera/camera.js~camera#look",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-look",
+    "src/scene/camera/Camera.js~Camera#look",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#look",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-look",
-    "scene/camera/Camera.js~Camera#look",
+    "src/scene/camera/camera.js~camera#look",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-look",
+    "src/scene/camera/Camera.js~Camera#look",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#matrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-matrix",
-    "scene/camera/Camera.js~Camera#matrix",
+    "src/scene/camera/camera.js~camera#matrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-matrix",
+    "src/scene/camera/Camera.js~Camera#matrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#normalmatrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-normalMatrix",
-    "scene/camera/Camera.js~Camera#normalMatrix",
+    "src/scene/camera/camera.js~camera#normalmatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-normalMatrix",
+    "src/scene/camera/Camera.js~Camera#normalMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#orbitpitch",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-orbitPitch",
-    "scene/camera/Camera.js~Camera#orbitPitch",
+    "src/scene/camera/camera.js~camera#orbitpitch",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitPitch",
+    "src/scene/camera/Camera.js~Camera#orbitPitch",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#orbityaw",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-orbitYaw",
-    "scene/camera/Camera.js~Camera#orbitYaw",
+    "src/scene/camera/camera.js~camera#orbityaw",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitYaw",
+    "src/scene/camera/Camera.js~Camera#orbitYaw",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#ortho",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-ortho",
-    "scene/camera/Camera.js~Camera#ortho",
+    "src/scene/camera/camera.js~camera#ortho",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-ortho",
+    "src/scene/camera/Camera.js~Camera#ortho",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#pan",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-pan",
-    "scene/camera/Camera.js~Camera#pan",
+    "src/scene/camera/camera.js~camera#pan",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-pan",
+    "src/scene/camera/Camera.js~Camera#pan",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#perspective",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-perspective",
-    "scene/camera/Camera.js~Camera#perspective",
+    "src/scene/camera/camera.js~camera#perspective",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-perspective",
+    "src/scene/camera/Camera.js~Camera#perspective",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#pitch",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-pitch",
-    "scene/camera/Camera.js~Camera#pitch",
+    "src/scene/camera/camera.js~camera#pitch",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-pitch",
+    "src/scene/camera/Camera.js~Camera#pitch",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#projmatrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-projMatrix",
-    "scene/camera/Camera.js~Camera#projMatrix",
+    "src/scene/camera/camera.js~camera#projmatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-projMatrix",
+    "src/scene/camera/Camera.js~Camera#projMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#project",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-project",
-    "scene/camera/Camera.js~Camera#project",
+    "src/scene/camera/camera.js~camera#project",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-project",
+    "src/scene/camera/Camera.js~Camera#project",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#projection",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-projection",
-    "scene/camera/Camera.js~Camera#projection",
+    "src/scene/camera/camera.js~camera#projection",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-projection",
+    "src/scene/camera/Camera.js~Camera#projection",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#projection",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-projection",
-    "scene/camera/Camera.js~Camera#projection",
+    "src/scene/camera/camera.js~camera#projection",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-projection",
+    "src/scene/camera/Camera.js~Camera#projection",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#type",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-type",
-    "scene/camera/Camera.js~Camera#type",
+    "src/scene/camera/camera.js~camera#type",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-type",
+    "src/scene/camera/Camera.js~Camera#type",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#up",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-up",
-    "scene/camera/Camera.js~Camera#up",
+    "src/scene/camera/camera.js~camera#up",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-up",
+    "src/scene/camera/Camera.js~Camera#up",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#up",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-up",
-    "scene/camera/Camera.js~Camera#up",
+    "src/scene/camera/camera.js~camera#up",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-up",
+    "src/scene/camera/Camera.js~Camera#up",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#view",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-view",
-    "scene/camera/Camera.js~Camera#view",
+    "src/scene/camera/camera.js~camera#view",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-view",
+    "src/scene/camera/Camera.js~Camera#view",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#viewmatrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-viewMatrix",
-    "scene/camera/Camera.js~Camera#viewMatrix",
+    "src/scene/camera/camera.js~camera#viewmatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-viewMatrix",
+    "src/scene/camera/Camera.js~Camera#viewMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#viewnormalmatrix",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-viewNormalMatrix",
-    "scene/camera/Camera.js~Camera#viewNormalMatrix",
+    "src/scene/camera/camera.js~camera#viewnormalmatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-viewNormalMatrix",
+    "src/scene/camera/Camera.js~Camera#viewNormalMatrix",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#worldaxis",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
-    "scene/camera/Camera.js~Camera#worldAxis",
+    "src/scene/camera/camera.js~camera#worldaxis",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
+    "src/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#worldaxis",
-    "class/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
-    "scene/camera/Camera.js~Camera#worldAxis",
+    "src/scene/camera/camera.js~camera#worldaxis",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
+    "src/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#worldforward",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-worldForward",
-    "scene/camera/Camera.js~Camera#worldForward",
+    "src/scene/camera/camera.js~camera#worldforward",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldForward",
+    "src/scene/camera/Camera.js~Camera#worldForward",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#worldright",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-worldRight",
-    "scene/camera/Camera.js~Camera#worldRight",
+    "src/scene/camera/camera.js~camera#worldright",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldRight",
+    "src/scene/camera/Camera.js~Camera#worldRight",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#worldup",
-    "class/scene/camera/Camera.js~Camera.html#instance-get-worldUp",
-    "scene/camera/Camera.js~Camera#worldUp",
+    "src/scene/camera/camera.js~camera#worldup",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp",
+    "src/scene/camera/Camera.js~Camera#worldUp",
     "member"
   ],
   [
-    "scene/camera/camera.js~camera#yaw",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-yaw",
-    "scene/camera/Camera.js~Camera#yaw",
+    "src/scene/camera/camera.js~camera#yaw",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-yaw",
+    "src/scene/camera/Camera.js~Camera#yaw",
     "method"
   ],
   [
-    "scene/camera/camera.js~camera#zoom",
-    "class/scene/camera/Camera.js~Camera.html#instance-method-zoom",
-    "scene/camera/Camera.js~Camera#zoom",
+    "src/scene/camera/camera.js~camera#zoom",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-method-zoom",
+    "src/scene/camera/Camera.js~Camera#zoom",
     "method"
   ],
   [
-    "scene/camera/cameracontrol.js",
-    "file/scene/camera/CameraControl.js.html",
-    "scene/camera/CameraControl.js",
+    "src/scene/camera/cameracontrol.js",
+    "file/src/scene/camera/CameraControl.js.html",
+    "src/scene/camera/CameraControl.js",
     "file"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#active",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-active",
-    "scene/camera/CameraControl.js~CameraControl#active",
+    "src/scene/camera/cameracontrol.js~cameracontrol#active",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-active",
+    "src/scene/camera/CameraControl.js~CameraControl#active",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#active",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-active",
-    "scene/camera/CameraControl.js~CameraControl#active",
+    "src/scene/camera/cameracontrol.js~cameracontrol#active",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-active",
+    "src/scene/camera/CameraControl.js~CameraControl#active",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#destroy",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-method-destroy",
-    "scene/camera/CameraControl.js~CameraControl#destroy",
+    "src/scene/camera/cameracontrol.js~cameracontrol#destroy",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-method-destroy",
+    "src/scene/camera/CameraControl.js~CameraControl#destroy",
     "method"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo",
-    "scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
+    "src/scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
+    "src/scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
-    "scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
+    "src/scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo",
+    "src/scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#firstperson",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson",
-    "scene/camera/CameraControl.js~CameraControl#firstPerson",
+    "src/scene/camera/cameracontrol.js~cameracontrol#firstperson",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-firstPerson",
+    "src/scene/camera/CameraControl.js~CameraControl#firstPerson",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#firstperson",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-firstPerson",
-    "scene/camera/CameraControl.js~CameraControl#firstPerson",
+    "src/scene/camera/cameracontrol.js~cameracontrol#firstperson",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson",
+    "src/scene/camera/CameraControl.js~CameraControl#firstPerson",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#inertia",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-inertia",
-    "scene/camera/CameraControl.js~CameraControl#inertia",
+    "src/scene/camera/cameracontrol.js~cameracontrol#inertia",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-inertia",
+    "src/scene/camera/CameraControl.js~CameraControl#inertia",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#inertia",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia",
-    "scene/camera/CameraControl.js~CameraControl#inertia",
+    "src/scene/camera/cameracontrol.js~cameracontrol#inertia",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia",
+    "src/scene/camera/CameraControl.js~CameraControl#inertia",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#keyboardlayout",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-keyboardLayout",
-    "scene/camera/CameraControl.js~CameraControl#keyboardLayout",
+    "src/scene/camera/cameracontrol.js~cameracontrol#keyboardlayout",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-keyboardLayout",
+    "src/scene/camera/CameraControl.js~CameraControl#keyboardLayout",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#keyboardlayout",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-keyboardLayout",
-    "scene/camera/CameraControl.js~CameraControl#keyboardLayout",
+    "src/scene/camera/cameracontrol.js~cameracontrol#keyboardlayout",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-keyboardLayout",
+    "src/scene/camera/CameraControl.js~CameraControl#keyboardLayout",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pantopivot",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot",
-    "scene/camera/CameraControl.js~CameraControl#panToPivot",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pantopivot",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPivot",
+    "src/scene/camera/CameraControl.js~CameraControl#panToPivot",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pantopivot",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPivot",
-    "scene/camera/CameraControl.js~CameraControl#panToPivot",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pantopivot",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot",
+    "src/scene/camera/CameraControl.js~CameraControl#panToPivot",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pantopointer",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPointer",
-    "scene/camera/CameraControl.js~CameraControl#panToPointer",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pantopointer",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer",
+    "src/scene/camera/CameraControl.js~CameraControl#panToPointer",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pantopointer",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer",
-    "scene/camera/CameraControl.js~CameraControl#panToPointer",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pantopointer",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPointer",
+    "src/scene/camera/CameraControl.js~CameraControl#panToPointer",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pivoting",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-pivoting",
-    "scene/camera/CameraControl.js~CameraControl#pivoting",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pivoting",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting",
+    "src/scene/camera/CameraControl.js~CameraControl#pivoting",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#pivoting",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting",
-    "scene/camera/CameraControl.js~CameraControl#pivoting",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pivoting",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-pivoting",
+    "src/scene/camera/CameraControl.js~CameraControl#pivoting",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#type",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-type",
-    "scene/camera/CameraControl.js~CameraControl#type",
+    "src/scene/camera/cameracontrol.js~cameracontrol#type",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-type",
+    "src/scene/camera/CameraControl.js~CameraControl#type",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#walking",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-set-walking",
-    "scene/camera/CameraControl.js~CameraControl#walking",
+    "src/scene/camera/cameracontrol.js~cameracontrol#walking",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-walking",
+    "src/scene/camera/CameraControl.js~CameraControl#walking",
     "member"
   ],
   [
-    "scene/camera/cameracontrol.js~cameracontrol#walking",
-    "class/scene/camera/CameraControl.js~CameraControl.html#instance-get-walking",
-    "scene/camera/CameraControl.js~CameraControl#walking",
+    "src/scene/camera/cameracontrol.js~cameracontrol#walking",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-walking",
+    "src/scene/camera/CameraControl.js~CameraControl#walking",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js",
-    "file/scene/camera/CameraFlightAnimation.js.html",
-    "scene/camera/CameraFlightAnimation.js",
+    "src/scene/camera/cameraflightanimation.js",
+    "file/src/scene/camera/CameraFlightAnimation.js.html",
+    "src/scene/camera/CameraFlightAnimation.js",
     "file"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#cancel",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-cancel",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#cancel",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#cancel",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-cancel",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#cancel",
     "method"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#duration",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-duration",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#duration",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#duration",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-duration",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#duration",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#duration",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#duration",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#duration",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-duration",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#duration",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#easing",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-member-easing",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#easing",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#easing",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-member-easing",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#easing",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fitFOV",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fitFOV",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#flyto",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#flyTo",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#flyto",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-flyTo",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#flyTo",
     "method"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#jumpto",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#jumpTo",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#jumpto",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-jumpTo",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#jumpTo",
     "method"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#stop",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-stop",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#stop",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#stop",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-method-stop",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#stop",
     "method"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
   [
-    "scene/camera/cameraflightanimation.js~cameraflightanimation#type",
-    "class/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-type",
-    "scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#type",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#type",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-type",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#type",
     "member"
   ],
   [
-    "scene/camera/camerapath.js",
-    "file/scene/camera/CameraPath.js.html",
-    "scene/camera/CameraPath.js",
+    "src/scene/camera/camerapath.js",
+    "file/src/scene/camera/CameraPath.js.html",
+    "src/scene/camera/CameraPath.js",
     "file"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#addframe",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrame",
-    "scene/camera/CameraPath.js~CameraPath#addFrame",
+    "src/scene/camera/camerapath.js~camerapath#addframe",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrame",
+    "src/scene/camera/CameraPath.js~CameraPath#addFrame",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#addframes",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrames",
-    "scene/camera/CameraPath.js~CameraPath#addFrames",
+    "src/scene/camera/camerapath.js~camerapath#addframes",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrames",
+    "src/scene/camera/CameraPath.js~CameraPath#addFrames",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#clearframes",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-clearFrames",
-    "scene/camera/CameraPath.js~CameraPath#clearFrames",
+    "src/scene/camera/camerapath.js~camerapath#clearframes",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-clearFrames",
+    "src/scene/camera/CameraPath.js~CameraPath#clearFrames",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#constructor",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-constructor-constructor",
-    "scene/camera/CameraPath.js~CameraPath#constructor",
+    "src/scene/camera/camerapath.js~camerapath#constructor",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-constructor-constructor",
+    "src/scene/camera/CameraPath.js~CameraPath#constructor",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#eyecurve",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-get-eyeCurve",
-    "scene/camera/CameraPath.js~CameraPath#eyeCurve",
+    "src/scene/camera/camerapath.js~camerapath#eyecurve",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-eyeCurve",
+    "src/scene/camera/CameraPath.js~CameraPath#eyeCurve",
     "member"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#frames",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-get-frames",
-    "scene/camera/CameraPath.js~CameraPath#frames",
+    "src/scene/camera/camerapath.js~camerapath#frames",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-frames",
+    "src/scene/camera/CameraPath.js~CameraPath#frames",
     "member"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#loadframe",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-loadFrame",
-    "scene/camera/CameraPath.js~CameraPath#loadFrame",
+    "src/scene/camera/camerapath.js~camerapath#loadframe",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-loadFrame",
+    "src/scene/camera/CameraPath.js~CameraPath#loadFrame",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#lookcurve",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-get-lookCurve",
-    "scene/camera/CameraPath.js~CameraPath#lookCurve",
+    "src/scene/camera/camerapath.js~camerapath#lookcurve",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-lookCurve",
+    "src/scene/camera/CameraPath.js~CameraPath#lookCurve",
     "member"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#sampleframe",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-sampleFrame",
-    "scene/camera/CameraPath.js~CameraPath#sampleFrame",
+    "src/scene/camera/camerapath.js~camerapath#sampleframe",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-sampleFrame",
+    "src/scene/camera/CameraPath.js~CameraPath#sampleFrame",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#saveframe",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-method-saveFrame",
-    "scene/camera/CameraPath.js~CameraPath#saveFrame",
+    "src/scene/camera/camerapath.js~camerapath#saveframe",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-saveFrame",
+    "src/scene/camera/CameraPath.js~CameraPath#saveFrame",
     "method"
   ],
   [
-    "scene/camera/camerapath.js~camerapath#upcurve",
-    "class/scene/camera/CameraPath.js~CameraPath.html#instance-get-upCurve",
-    "scene/camera/CameraPath.js~CameraPath#upCurve",
+    "src/scene/camera/camerapath.js~camerapath#upcurve",
+    "class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-upCurve",
+    "src/scene/camera/CameraPath.js~CameraPath#upCurve",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js",
-    "file/scene/camera/CameraPathAnimation.js.html",
-    "scene/camera/CameraPathAnimation.js",
+    "src/scene/camera/camerapathanimation.js",
+    "file/src/scene/camera/CameraPathAnimation.js.html",
+    "src/scene/camera/CameraPathAnimation.js",
     "file"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#camerapath",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-cameraPath",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#cameraPath",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#camerapath",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-cameraPath",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#cameraPath",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#camerapath",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-cameraPath",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#cameraPath",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#camerapath",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-cameraPath",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#cameraPath",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#constructor",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-constructor-constructor",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#constructor",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#constructor",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-constructor-constructor",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#constructor",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#destroy",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-destroy",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#destroy",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#destroy",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-destroy",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#destroy",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#flytoframe",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-flyToFrame",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#flyToFrame",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#flytoframe",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-flyToFrame",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#flyToFrame",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#play",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-play",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#play",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#play",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-play",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#play",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#playtoframe",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-playToFrame",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#playToFrame",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#playtoframe",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-playToFrame",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#playToFrame",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#playtot",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-playToT",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#playToT",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#playtot",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-playToT",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#playToT",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#rate",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-rate",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#rate",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-rate",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#rate",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-rate",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#rate",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-rate",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#scrubtoframe",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-scrubToFrame",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#scrubToFrame",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#scrubtoframe",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-scrubToFrame",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#scrubToFrame",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#scrubtot",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-scrubToT",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#scrubToT",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#scrubtot",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-scrubToT",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#scrubToT",
     "method"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#state",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-member-state",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#state",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#state",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-member-state",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#state",
     "member"
   ],
   [
-    "scene/camera/camerapathanimation.js~camerapathanimation#stop",
-    "class/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-stop",
-    "scene/camera/CameraPathAnimation.js~CameraPathAnimation#stop",
+    "src/scene/camera/camerapathanimation.js~camerapathanimation#stop",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-method-stop",
+    "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#stop",
     "method"
   ],
   [
-    "scene/camera/customprojection.js",
-    "file/scene/camera/CustomProjection.js.html",
-    "scene/camera/CustomProjection.js",
+    "src/scene/camera/customprojection.js",
+    "file/src/scene/camera/CustomProjection.js.html",
+    "src/scene/camera/CustomProjection.js",
     "file"
   ],
   [
-    "scene/camera/customprojection.js~customprojection#destroy",
-    "class/scene/camera/CustomProjection.js~CustomProjection.html#instance-method-destroy",
-    "scene/camera/CustomProjection.js~CustomProjection#destroy",
+    "src/scene/camera/customprojection.js~customprojection#destroy",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-method-destroy",
+    "src/scene/camera/CustomProjection.js~CustomProjection#destroy",
     "method"
   ],
   [
-    "scene/camera/customprojection.js~customprojection#matrix",
-    "class/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-matrix",
-    "scene/camera/CustomProjection.js~CustomProjection#matrix",
+    "src/scene/camera/customprojection.js~customprojection#matrix",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-matrix",
+    "src/scene/camera/CustomProjection.js~CustomProjection#matrix",
     "member"
   ],
   [
-    "scene/camera/customprojection.js~customprojection#matrix",
-    "class/scene/camera/CustomProjection.js~CustomProjection.html#instance-set-matrix",
-    "scene/camera/CustomProjection.js~CustomProjection#matrix",
+    "src/scene/camera/customprojection.js~customprojection#matrix",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-set-matrix",
+    "src/scene/camera/CustomProjection.js~CustomProjection#matrix",
     "member"
   ],
   [
-    "scene/camera/customprojection.js~customprojection#type",
-    "class/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-type",
-    "scene/camera/CustomProjection.js~CustomProjection#type",
+    "src/scene/camera/customprojection.js~customprojection#type",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-type",
+    "src/scene/camera/CustomProjection.js~CustomProjection#type",
     "member"
   ],
   [
-    "scene/camera/frustum.js",
-    "file/scene/camera/Frustum.js.html",
-    "scene/camera/Frustum.js",
+    "src/scene/camera/frustum.js",
+    "file/src/scene/camera/Frustum.js.html",
+    "src/scene/camera/Frustum.js",
     "file"
   ],
   [
-    "scene/camera/frustum.js~frustum#bottom",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-bottom",
-    "scene/camera/Frustum.js~Frustum#bottom",
+    "src/scene/camera/frustum.js~frustum#bottom",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-bottom",
+    "src/scene/camera/Frustum.js~Frustum#bottom",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#bottom",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-bottom",
-    "scene/camera/Frustum.js~Frustum#bottom",
+    "src/scene/camera/frustum.js~frustum#bottom",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-bottom",
+    "src/scene/camera/Frustum.js~Frustum#bottom",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#destroy",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-method-destroy",
-    "scene/camera/Frustum.js~Frustum#destroy",
+    "src/scene/camera/frustum.js~frustum#destroy",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-method-destroy",
+    "src/scene/camera/Frustum.js~Frustum#destroy",
     "method"
   ],
   [
-    "scene/camera/frustum.js~frustum#far",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-far",
-    "scene/camera/Frustum.js~Frustum#far",
+    "src/scene/camera/frustum.js~frustum#far",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-far",
+    "src/scene/camera/Frustum.js~Frustum#far",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#far",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-far",
-    "scene/camera/Frustum.js~Frustum#far",
+    "src/scene/camera/frustum.js~frustum#far",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-far",
+    "src/scene/camera/Frustum.js~Frustum#far",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#left",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-left",
-    "scene/camera/Frustum.js~Frustum#left",
+    "src/scene/camera/frustum.js~frustum#left",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-left",
+    "src/scene/camera/Frustum.js~Frustum#left",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#left",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-left",
-    "scene/camera/Frustum.js~Frustum#left",
+    "src/scene/camera/frustum.js~frustum#left",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-left",
+    "src/scene/camera/Frustum.js~Frustum#left",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#matrix",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-matrix",
-    "scene/camera/Frustum.js~Frustum#matrix",
+    "src/scene/camera/frustum.js~frustum#matrix",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-matrix",
+    "src/scene/camera/Frustum.js~Frustum#matrix",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#near",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-near",
-    "scene/camera/Frustum.js~Frustum#near",
+    "src/scene/camera/frustum.js~frustum#near",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-near",
+    "src/scene/camera/Frustum.js~Frustum#near",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#near",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-near",
-    "scene/camera/Frustum.js~Frustum#near",
+    "src/scene/camera/frustum.js~frustum#near",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-near",
+    "src/scene/camera/Frustum.js~Frustum#near",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#right",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-right",
-    "scene/camera/Frustum.js~Frustum#right",
+    "src/scene/camera/frustum.js~frustum#right",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-right",
+    "src/scene/camera/Frustum.js~Frustum#right",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#right",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-right",
-    "scene/camera/Frustum.js~Frustum#right",
+    "src/scene/camera/frustum.js~frustum#right",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-right",
+    "src/scene/camera/Frustum.js~Frustum#right",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#top",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-set-top",
-    "scene/camera/Frustum.js~Frustum#top",
+    "src/scene/camera/frustum.js~frustum#top",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-set-top",
+    "src/scene/camera/Frustum.js~Frustum#top",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#top",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-top",
-    "scene/camera/Frustum.js~Frustum#top",
+    "src/scene/camera/frustum.js~frustum#top",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-top",
+    "src/scene/camera/Frustum.js~Frustum#top",
     "member"
   ],
   [
-    "scene/camera/frustum.js~frustum#type",
-    "class/scene/camera/Frustum.js~Frustum.html#instance-get-type",
-    "scene/camera/Frustum.js~Frustum#type",
+    "src/scene/camera/frustum.js~frustum#type",
+    "class/src/scene/camera/Frustum.js~Frustum.html#instance-get-type",
+    "src/scene/camera/Frustum.js~Frustum#type",
     "member"
   ],
   [
-    "scene/camera/ortho.js",
-    "file/scene/camera/Ortho.js.html",
-    "scene/camera/Ortho.js",
+    "src/scene/camera/ortho.js",
+    "file/src/scene/camera/Ortho.js.html",
+    "src/scene/camera/Ortho.js",
     "file"
   ],
   [
-    "scene/camera/ortho.js~ortho#destroy",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-method-destroy",
-    "scene/camera/Ortho.js~Ortho#destroy",
+    "src/scene/camera/ortho.js~ortho#destroy",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-method-destroy",
+    "src/scene/camera/Ortho.js~Ortho#destroy",
     "method"
   ],
   [
-    "scene/camera/ortho.js~ortho#far",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-get-far",
-    "scene/camera/Ortho.js~Ortho#far",
+    "src/scene/camera/ortho.js~ortho#far",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-set-far",
+    "src/scene/camera/Ortho.js~Ortho#far",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#far",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-set-far",
-    "scene/camera/Ortho.js~Ortho#far",
+    "src/scene/camera/ortho.js~ortho#far",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-far",
+    "src/scene/camera/Ortho.js~Ortho#far",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#matrix",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-get-matrix",
-    "scene/camera/Ortho.js~Ortho#matrix",
+    "src/scene/camera/ortho.js~ortho#matrix",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-matrix",
+    "src/scene/camera/Ortho.js~Ortho#matrix",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#near",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-get-near",
-    "scene/camera/Ortho.js~Ortho#near",
+    "src/scene/camera/ortho.js~ortho#near",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-near",
+    "src/scene/camera/Ortho.js~Ortho#near",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#near",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-set-near",
-    "scene/camera/Ortho.js~Ortho#near",
+    "src/scene/camera/ortho.js~ortho#near",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-set-near",
+    "src/scene/camera/Ortho.js~Ortho#near",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#scale",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-get-scale",
-    "scene/camera/Ortho.js~Ortho#scale",
+    "src/scene/camera/ortho.js~ortho#scale",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale",
+    "src/scene/camera/Ortho.js~Ortho#scale",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#scale",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-set-scale",
-    "scene/camera/Ortho.js~Ortho#scale",
+    "src/scene/camera/ortho.js~ortho#scale",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-scale",
+    "src/scene/camera/Ortho.js~Ortho#scale",
     "member"
   ],
   [
-    "scene/camera/ortho.js~ortho#type",
-    "class/scene/camera/Ortho.js~Ortho.html#instance-get-type",
-    "scene/camera/Ortho.js~Ortho#type",
+    "src/scene/camera/ortho.js~ortho#type",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-type",
+    "src/scene/camera/Ortho.js~Ortho#type",
     "member"
   ],
   [
-    "scene/camera/perspective.js",
-    "file/scene/camera/Perspective.js.html",
-    "scene/camera/Perspective.js",
+    "src/scene/camera/perspective.js",
+    "file/src/scene/camera/Perspective.js.html",
+    "src/scene/camera/Perspective.js",
     "file"
   ],
   [
-    "scene/camera/perspective.js~perspective#destroy",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-method-destroy",
-    "scene/camera/Perspective.js~Perspective#destroy",
+    "src/scene/camera/perspective.js~perspective#destroy",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-method-destroy",
+    "src/scene/camera/Perspective.js~Perspective#destroy",
     "method"
   ],
   [
-    "scene/camera/perspective.js~perspective#far",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-set-far",
-    "scene/camera/Perspective.js~Perspective#far",
+    "src/scene/camera/perspective.js~perspective#far",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-far",
+    "src/scene/camera/Perspective.js~Perspective#far",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#far",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-far",
-    "scene/camera/Perspective.js~Perspective#far",
+    "src/scene/camera/perspective.js~perspective#far",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-far",
+    "src/scene/camera/Perspective.js~Perspective#far",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#fov",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-set-fov",
-    "scene/camera/Perspective.js~Perspective#fov",
+    "src/scene/camera/perspective.js~perspective#fov",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fov",
+    "src/scene/camera/Perspective.js~Perspective#fov",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#fov",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
-    "scene/camera/Perspective.js~Perspective#fov",
+    "src/scene/camera/perspective.js~perspective#fov",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
+    "src/scene/camera/Perspective.js~Perspective#fov",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#fovaxis",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-fovAxis",
-    "scene/camera/Perspective.js~Perspective#fovAxis",
+    "src/scene/camera/perspective.js~perspective#fovaxis",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis",
+    "src/scene/camera/Perspective.js~Perspective#fovAxis",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#fovaxis",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis",
-    "scene/camera/Perspective.js~Perspective#fovAxis",
+    "src/scene/camera/perspective.js~perspective#fovaxis",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fovAxis",
+    "src/scene/camera/Perspective.js~Perspective#fovAxis",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#matrix",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-matrix",
-    "scene/camera/Perspective.js~Perspective#matrix",
+    "src/scene/camera/perspective.js~perspective#matrix",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-matrix",
+    "src/scene/camera/Perspective.js~Perspective#matrix",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#near",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-set-near",
-    "scene/camera/Perspective.js~Perspective#near",
+    "src/scene/camera/perspective.js~perspective#near",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-near",
+    "src/scene/camera/Perspective.js~Perspective#near",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#near",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-near",
-    "scene/camera/Perspective.js~Perspective#near",
+    "src/scene/camera/perspective.js~perspective#near",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-near",
+    "src/scene/camera/Perspective.js~Perspective#near",
     "member"
   ],
   [
-    "scene/camera/perspective.js~perspective#type",
-    "class/scene/camera/Perspective.js~Perspective.html#instance-get-type",
-    "scene/camera/Perspective.js~Perspective#type",
+    "src/scene/camera/perspective.js~perspective#type",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-type",
+    "src/scene/camera/Perspective.js~Perspective#type",
     "member"
   ],
   [
-    "scene/canvas/canvas.js",
-    "file/scene/canvas/Canvas.js.html",
-    "scene/canvas/Canvas.js",
+    "src/scene/canvas/canvas.js",
+    "file/src/scene/canvas/Canvas.js.html",
+    "src/scene/canvas/Canvas.js",
     "file"
   ],
   [
-    "scene/canvas/canvas.js~canvas#backgroundcolor",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor",
-    "scene/canvas/Canvas.js~Canvas#backgroundColor",
+    "src/scene/canvas/canvas.js~canvas#backgroundcolor",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundColor",
+    "src/scene/canvas/Canvas.js~Canvas#backgroundColor",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#backgroundcolor",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor",
-    "scene/canvas/Canvas.js~Canvas#backgroundColor",
+    "src/scene/canvas/canvas.js~canvas#backgroundcolor",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundColor",
+    "src/scene/canvas/Canvas.js~Canvas#backgroundColor",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#backgroundimage",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundImage",
-    "scene/canvas/Canvas.js~Canvas#backgroundImage",
+    "src/scene/canvas/canvas.js~canvas#backgroundimage",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundImage",
+    "src/scene/canvas/Canvas.js~Canvas#backgroundImage",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#backgroundimage",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundImage",
-    "scene/canvas/Canvas.js~Canvas#backgroundImage",
+    "src/scene/canvas/canvas.js~canvas#backgroundimage",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundImage",
+    "src/scene/canvas/Canvas.js~Canvas#backgroundImage",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#boundary",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary",
-    "scene/canvas/Canvas.js~Canvas#boundary",
+    "src/scene/canvas/canvas.js~canvas#boundary",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary",
+    "src/scene/canvas/Canvas.js~Canvas#boundary",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#canvas",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-canvas",
-    "scene/canvas/Canvas.js~Canvas#canvas",
+    "src/scene/canvas/canvas.js~canvas#canvas",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-canvas",
+    "src/scene/canvas/Canvas.js~Canvas#canvas",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#contextattr",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-contextAttr",
-    "scene/canvas/Canvas.js~Canvas#contextAttr",
+    "src/scene/canvas/canvas.js~canvas#contextattr",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-contextAttr",
+    "src/scene/canvas/Canvas.js~Canvas#contextAttr",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#destroy",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-method-destroy",
-    "scene/canvas/Canvas.js~Canvas#destroy",
+    "src/scene/canvas/canvas.js~canvas#destroy",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-method-destroy",
+    "src/scene/canvas/Canvas.js~Canvas#destroy",
     "method"
   ],
   [
-    "scene/canvas/canvas.js~canvas#getsnapshot",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-method-getSnapshot",
-    "scene/canvas/Canvas.js~Canvas#getSnapshot",
+    "src/scene/canvas/canvas.js~canvas#getsnapshot",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-method-getSnapshot",
+    "src/scene/canvas/Canvas.js~Canvas#getSnapshot",
     "method"
   ],
   [
-    "scene/canvas/canvas.js~canvas#gl",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-gl",
-    "scene/canvas/Canvas.js~Canvas#gl",
+    "src/scene/canvas/canvas.js~canvas#gl",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-gl",
+    "src/scene/canvas/Canvas.js~Canvas#gl",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#losewebglcontext",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-method-loseWebGLContext",
-    "scene/canvas/Canvas.js~Canvas#loseWebGLContext",
+    "src/scene/canvas/canvas.js~canvas#losewebglcontext",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-method-loseWebGLContext",
+    "src/scene/canvas/Canvas.js~Canvas#loseWebGLContext",
     "method"
   ],
   [
-    "scene/canvas/canvas.js~canvas#readpixels",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-method-readPixels",
-    "scene/canvas/Canvas.js~Canvas#readPixels",
+    "src/scene/canvas/canvas.js~canvas#readpixels",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-method-readPixels",
+    "src/scene/canvas/Canvas.js~Canvas#readPixels",
     "method"
   ],
   [
-    "scene/canvas/canvas.js~canvas#spinner",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-get-spinner",
-    "scene/canvas/Canvas.js~Canvas#spinner",
+    "src/scene/canvas/canvas.js~canvas#spinner",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-spinner",
+    "src/scene/canvas/Canvas.js~Canvas#spinner",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#transparent",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent",
-    "scene/canvas/Canvas.js~Canvas#transparent",
+    "src/scene/canvas/canvas.js~canvas#transparent",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-transparent",
+    "src/scene/canvas/Canvas.js~Canvas#transparent",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#type",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-get-type",
-    "scene/canvas/Canvas.js~Canvas#type",
+    "src/scene/canvas/canvas.js~canvas#type",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-type",
+    "src/scene/canvas/Canvas.js~Canvas#type",
     "member"
   ],
   [
-    "scene/canvas/canvas.js~canvas#webgl2",
-    "class/scene/canvas/Canvas.js~Canvas.html#instance-member-webgl2",
-    "scene/canvas/Canvas.js~Canvas#webgl2",
+    "src/scene/canvas/canvas.js~canvas#webgl2",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-webgl2",
+    "src/scene/canvas/Canvas.js~Canvas#webgl2",
     "member"
   ],
   [
-    "scene/canvas/spinner.js",
-    "file/scene/canvas/Spinner.js.html",
-    "scene/canvas/Spinner.js",
+    "src/scene/canvas/spinner.js",
+    "file/src/scene/canvas/Spinner.js.html",
+    "src/scene/canvas/Spinner.js",
     "file"
   ],
   [
-    "scene/canvas/spinner.js~spinner#constructor",
-    "class/scene/canvas/Spinner.js~Spinner.html#instance-constructor-constructor",
-    "scene/canvas/Spinner.js~Spinner#constructor",
+    "src/scene/canvas/spinner.js~spinner#constructor",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-constructor-constructor",
+    "src/scene/canvas/Spinner.js~Spinner#constructor",
     "method"
   ],
   [
-    "scene/canvas/spinner.js~spinner#processes",
-    "class/scene/canvas/Spinner.js~Spinner.html#instance-set-processes",
-    "scene/canvas/Spinner.js~Spinner#processes",
+    "src/scene/canvas/spinner.js~spinner#processes",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-get-processes",
+    "src/scene/canvas/Spinner.js~Spinner#processes",
     "member"
   ],
   [
-    "scene/canvas/spinner.js~spinner#processes",
-    "class/scene/canvas/Spinner.js~Spinner.html#instance-get-processes",
-    "scene/canvas/Spinner.js~Spinner#processes",
+    "src/scene/canvas/spinner.js~spinner#processes",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-set-processes",
+    "src/scene/canvas/Spinner.js~Spinner#processes",
     "member"
   ],
   [
-    "scene/canvas/spinner.js~spinner#type",
-    "class/scene/canvas/Spinner.js~Spinner.html#instance-get-type",
-    "scene/canvas/Spinner.js~Spinner#type",
+    "src/scene/canvas/spinner.js~spinner#type",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-get-type",
+    "src/scene/canvas/Spinner.js~Spinner#type",
     "member"
   ],
   [
-    "scene/clipping/clip.js",
-    "file/scene/clipping/Clip.js.html",
-    "scene/clipping/Clip.js",
+    "src/scene/clipping/clip.js",
+    "file/src/scene/clipping/Clip.js.html",
+    "src/scene/clipping/Clip.js",
     "file"
   ],
   [
-    "scene/clipping/clip.js~clip#active",
-    "class/scene/clipping/Clip.js~Clip.html#instance-set-active",
-    "scene/clipping/Clip.js~Clip#active",
+    "src/scene/clipping/clip.js~clip#active",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-set-active",
+    "src/scene/clipping/Clip.js~Clip#active",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#active",
-    "class/scene/clipping/Clip.js~Clip.html#instance-get-active",
-    "scene/clipping/Clip.js~Clip#active",
+    "src/scene/clipping/clip.js~clip#active",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-get-active",
+    "src/scene/clipping/Clip.js~Clip#active",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#constructor",
-    "class/scene/clipping/Clip.js~Clip.html#instance-constructor-constructor",
-    "scene/clipping/Clip.js~Clip#constructor",
+    "src/scene/clipping/clip.js~clip#constructor",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-constructor-constructor",
+    "src/scene/clipping/Clip.js~Clip#constructor",
     "method"
   ],
   [
-    "scene/clipping/clip.js~clip#destroy",
-    "class/scene/clipping/Clip.js~Clip.html#instance-method-destroy",
-    "scene/clipping/Clip.js~Clip#destroy",
+    "src/scene/clipping/clip.js~clip#destroy",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-method-destroy",
+    "src/scene/clipping/Clip.js~Clip#destroy",
     "method"
   ],
   [
-    "scene/clipping/clip.js~clip#dir",
-    "class/scene/clipping/Clip.js~Clip.html#instance-set-dir",
-    "scene/clipping/Clip.js~Clip#dir",
+    "src/scene/clipping/clip.js~clip#dir",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-set-dir",
+    "src/scene/clipping/Clip.js~Clip#dir",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#dir",
-    "class/scene/clipping/Clip.js~Clip.html#instance-get-dir",
-    "scene/clipping/Clip.js~Clip#dir",
+    "src/scene/clipping/clip.js~clip#dir",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-get-dir",
+    "src/scene/clipping/Clip.js~Clip#dir",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#pos",
-    "class/scene/clipping/Clip.js~Clip.html#instance-get-pos",
-    "scene/clipping/Clip.js~Clip#pos",
+    "src/scene/clipping/clip.js~clip#pos",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-set-pos",
+    "src/scene/clipping/Clip.js~Clip#pos",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#pos",
-    "class/scene/clipping/Clip.js~Clip.html#instance-set-pos",
-    "scene/clipping/Clip.js~Clip#pos",
+    "src/scene/clipping/clip.js~clip#pos",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-get-pos",
+    "src/scene/clipping/Clip.js~Clip#pos",
     "member"
   ],
   [
-    "scene/clipping/clip.js~clip#type",
-    "class/scene/clipping/Clip.js~Clip.html#instance-get-type",
-    "scene/clipping/Clip.js~Clip#type",
+    "src/scene/clipping/clip.js~clip#type",
+    "class/src/scene/clipping/Clip.js~Clip.html#instance-get-type",
+    "src/scene/clipping/Clip.js~Clip#type",
     "member"
   ],
   [
-    "scene/core.js",
-    "file/scene/core.js.html",
-    "scene/core.js",
+    "src/scene/core.js",
+    "file/src/scene/core.js.html",
+    "src/scene/core.js",
     "file"
   ],
   [
-    "scene/geometry/aabbgeometry.js",
-    "file/scene/geometry/AABBGeometry.js.html",
-    "scene/geometry/AABBGeometry.js",
+    "src/scene/geometry/aabbgeometry.js",
+    "file/src/scene/geometry/AABBGeometry.js.html",
+    "src/scene/geometry/AABBGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/aabbgeometry.js~aabbgeometry#constructor",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-constructor-constructor",
-    "scene/geometry/AABBGeometry.js~AABBGeometry#constructor",
+    "src/scene/geometry/aabbgeometry.js~aabbgeometry#constructor",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/AABBGeometry.js~AABBGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/aabbgeometry.js~aabbgeometry#positions",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-member-positions",
-    "scene/geometry/AABBGeometry.js~AABBGeometry#positions",
+    "src/scene/geometry/aabbgeometry.js~aabbgeometry#positions",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-member-positions",
+    "src/scene/geometry/AABBGeometry.js~AABBGeometry#positions",
     "member"
   ],
   [
-    "scene/geometry/aabbgeometry.js~aabbgeometry#target",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-set-target",
-    "scene/geometry/AABBGeometry.js~AABBGeometry#target",
+    "src/scene/geometry/aabbgeometry.js~aabbgeometry#target",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-get-target",
+    "src/scene/geometry/AABBGeometry.js~AABBGeometry#target",
     "member"
   ],
   [
-    "scene/geometry/aabbgeometry.js~aabbgeometry#target",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-get-target",
-    "scene/geometry/AABBGeometry.js~AABBGeometry#target",
+    "src/scene/geometry/aabbgeometry.js~aabbgeometry#target",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-set-target",
+    "src/scene/geometry/AABBGeometry.js~AABBGeometry#target",
     "member"
   ],
   [
-    "scene/geometry/aabbgeometry.js~aabbgeometry#targetaabb",
-    "class/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-set-targetAABB",
-    "scene/geometry/AABBGeometry.js~AABBGeometry#targetAABB",
+    "src/scene/geometry/aabbgeometry.js~aabbgeometry#targetaabb",
+    "class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html#instance-set-targetAABB",
+    "src/scene/geometry/AABBGeometry.js~AABBGeometry#targetAABB",
     "member"
   ],
   [
-    "scene/geometry/boxgeometry.js",
-    "file/scene/geometry/BoxGeometry.js.html",
-    "scene/geometry/BoxGeometry.js",
+    "src/scene/geometry/boxgeometry.js",
+    "file/src/scene/geometry/BoxGeometry.js.html",
+    "src/scene/geometry/BoxGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/boxgeometry.js~boxgeometry#box",
-    "class/scene/geometry/BoxGeometry.js~BoxGeometry.html#instance-member-box",
-    "scene/geometry/BoxGeometry.js~BoxGeometry#box",
+    "src/scene/geometry/boxgeometry.js~boxgeometry#box",
+    "class/src/scene/geometry/BoxGeometry.js~BoxGeometry.html#instance-member-box",
+    "src/scene/geometry/BoxGeometry.js~BoxGeometry#box",
     "member"
   ],
   [
-    "scene/geometry/boxgeometry.js~boxgeometry#constructor",
-    "class/scene/geometry/BoxGeometry.js~BoxGeometry.html#instance-constructor-constructor",
-    "scene/geometry/BoxGeometry.js~BoxGeometry#constructor",
+    "src/scene/geometry/boxgeometry.js~boxgeometry#constructor",
+    "class/src/scene/geometry/BoxGeometry.js~BoxGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/BoxGeometry.js~BoxGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/cylindergeometry.js",
-    "file/scene/geometry/CylinderGeometry.js.html",
-    "scene/geometry/CylinderGeometry.js",
+    "src/scene/geometry/cylindergeometry.js",
+    "file/src/scene/geometry/CylinderGeometry.js.html",
+    "src/scene/geometry/CylinderGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/cylindergeometry.js~cylindergeometry#constructor",
-    "class/scene/geometry/CylinderGeometry.js~CylinderGeometry.html#instance-constructor-constructor",
-    "scene/geometry/CylinderGeometry.js~CylinderGeometry#constructor",
+    "src/scene/geometry/cylindergeometry.js~cylindergeometry#constructor",
+    "class/src/scene/geometry/CylinderGeometry.js~CylinderGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/CylinderGeometry.js~CylinderGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/geometry.js",
-    "file/scene/geometry/Geometry.js.html",
-    "scene/geometry/Geometry.js",
+    "src/scene/geometry/geometry.js",
+    "file/src/scene/geometry/Geometry.js.html",
+    "src/scene/geometry/Geometry.js",
     "file"
   ],
   [
-    "scene/geometry/geometry.js~geometry#aabb",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-aabb",
-    "scene/geometry/Geometry.js~Geometry#aabb",
+    "src/scene/geometry/geometry.js~geometry#aabb",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-aabb",
+    "src/scene/geometry/Geometry.js~Geometry#aabb",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#colors",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-set-colors",
-    "scene/geometry/Geometry.js~Geometry#colors",
+    "src/scene/geometry/geometry.js~geometry#colors",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-set-colors",
+    "src/scene/geometry/Geometry.js~Geometry#colors",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#colors",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-colors",
-    "scene/geometry/Geometry.js~Geometry#colors",
+    "src/scene/geometry/geometry.js~geometry#colors",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-colors",
+    "src/scene/geometry/Geometry.js~Geometry#colors",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#combinegeometry",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-combineGeometry",
-    "scene/geometry/Geometry.js~Geometry#combineGeometry",
+    "src/scene/geometry/geometry.js~geometry#combinegeometry",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-combineGeometry",
+    "src/scene/geometry/Geometry.js~Geometry#combineGeometry",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#compressgeometry",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-compressGeometry",
-    "scene/geometry/Geometry.js~Geometry#compressGeometry",
+    "src/scene/geometry/geometry.js~geometry#compressgeometry",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-compressGeometry",
+    "src/scene/geometry/Geometry.js~Geometry#compressGeometry",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#constructor",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-constructor-constructor",
-    "scene/geometry/Geometry.js~Geometry#constructor",
+    "src/scene/geometry/geometry.js~geometry#constructor",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-constructor-constructor",
+    "src/scene/geometry/Geometry.js~Geometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/geometry.js~geometry#destroy",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-method-destroy",
-    "scene/geometry/Geometry.js~Geometry#destroy",
+    "src/scene/geometry/geometry.js~geometry#destroy",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-method-destroy",
+    "src/scene/geometry/Geometry.js~Geometry#destroy",
     "method"
   ],
   [
-    "scene/geometry/geometry.js~geometry#indices",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-indices",
-    "scene/geometry/Geometry.js~Geometry#indices",
+    "src/scene/geometry/geometry.js~geometry#indices",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-indices",
+    "src/scene/geometry/Geometry.js~Geometry#indices",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#kdtree",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-kdtree",
-    "scene/geometry/Geometry.js~Geometry#kdtree",
+    "src/scene/geometry/geometry.js~geometry#kdtree",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-kdtree",
+    "src/scene/geometry/Geometry.js~Geometry#kdtree",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#normals",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-normals",
-    "scene/geometry/Geometry.js~Geometry#normals",
+    "src/scene/geometry/geometry.js~geometry#normals",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-normals",
+    "src/scene/geometry/Geometry.js~Geometry#normals",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#normals",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-set-normals",
-    "scene/geometry/Geometry.js~Geometry#normals",
+    "src/scene/geometry/geometry.js~geometry#normals",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-set-normals",
+    "src/scene/geometry/Geometry.js~Geometry#normals",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#obb",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-obb",
-    "scene/geometry/Geometry.js~Geometry#obb",
+    "src/scene/geometry/geometry.js~geometry#obb",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-obb",
+    "src/scene/geometry/Geometry.js~Geometry#obb",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#positions",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-set-positions",
-    "scene/geometry/Geometry.js~Geometry#positions",
+    "src/scene/geometry/geometry.js~geometry#positions",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-positions",
+    "src/scene/geometry/Geometry.js~Geometry#positions",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#positions",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-positions",
-    "scene/geometry/Geometry.js~Geometry#positions",
+    "src/scene/geometry/geometry.js~geometry#positions",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-set-positions",
+    "src/scene/geometry/Geometry.js~Geometry#positions",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#primitive",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-primitive",
-    "scene/geometry/Geometry.js~Geometry#primitive",
+    "src/scene/geometry/geometry.js~geometry#primitive",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-primitive",
+    "src/scene/geometry/Geometry.js~Geometry#primitive",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#type",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-type",
-    "scene/geometry/Geometry.js~Geometry#type",
+    "src/scene/geometry/geometry.js~geometry#type",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-type",
+    "src/scene/geometry/Geometry.js~Geometry#type",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#uv",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-get-uv",
-    "scene/geometry/Geometry.js~Geometry#uv",
+    "src/scene/geometry/geometry.js~geometry#uv",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-get-uv",
+    "src/scene/geometry/Geometry.js~Geometry#uv",
     "member"
   ],
   [
-    "scene/geometry/geometry.js~geometry#uv",
-    "class/scene/geometry/Geometry.js~Geometry.html#instance-set-uv",
-    "scene/geometry/Geometry.js~Geometry#uv",
+    "src/scene/geometry/geometry.js~geometry#uv",
+    "class/src/scene/geometry/Geometry.js~Geometry.html#instance-set-uv",
+    "src/scene/geometry/Geometry.js~Geometry#uv",
     "member"
   ],
   [
-    "scene/geometry/obbgeometry.js",
-    "file/scene/geometry/OBBGeometry.js.html",
-    "scene/geometry/OBBGeometry.js",
+    "src/scene/geometry/obbgeometry.js",
+    "file/src/scene/geometry/OBBGeometry.js.html",
+    "src/scene/geometry/OBBGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/obbgeometry.js~obbgeometry#constructor",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-constructor-constructor",
-    "scene/geometry/OBBGeometry.js~OBBGeometry#constructor",
+    "src/scene/geometry/obbgeometry.js~obbgeometry#constructor",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/OBBGeometry.js~OBBGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/obbgeometry.js~obbgeometry#positions",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-member-positions",
-    "scene/geometry/OBBGeometry.js~OBBGeometry#positions",
+    "src/scene/geometry/obbgeometry.js~obbgeometry#positions",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-member-positions",
+    "src/scene/geometry/OBBGeometry.js~OBBGeometry#positions",
     "member"
   ],
   [
-    "scene/geometry/obbgeometry.js~obbgeometry#target",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-get-target",
-    "scene/geometry/OBBGeometry.js~OBBGeometry#target",
+    "src/scene/geometry/obbgeometry.js~obbgeometry#target",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-set-target",
+    "src/scene/geometry/OBBGeometry.js~OBBGeometry#target",
     "member"
   ],
   [
-    "scene/geometry/obbgeometry.js~obbgeometry#target",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-set-target",
-    "scene/geometry/OBBGeometry.js~OBBGeometry#target",
+    "src/scene/geometry/obbgeometry.js~obbgeometry#target",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-get-target",
+    "src/scene/geometry/OBBGeometry.js~OBBGeometry#target",
     "member"
   ],
   [
-    "scene/geometry/obbgeometry.js~obbgeometry#targetobb",
-    "class/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-set-targetOBB",
-    "scene/geometry/OBBGeometry.js~OBBGeometry#targetOBB",
+    "src/scene/geometry/obbgeometry.js~obbgeometry#targetobb",
+    "class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html#instance-set-targetOBB",
+    "src/scene/geometry/OBBGeometry.js~OBBGeometry#targetOBB",
     "member"
   ],
   [
-    "scene/geometry/planegeometry.js",
-    "file/scene/geometry/PlaneGeometry.js.html",
-    "scene/geometry/PlaneGeometry.js",
+    "src/scene/geometry/planegeometry.js",
+    "file/src/scene/geometry/PlaneGeometry.js.html",
+    "src/scene/geometry/PlaneGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/planegeometry.js~planegeometry#constructor",
-    "class/scene/geometry/PlaneGeometry.js~PlaneGeometry.html#instance-constructor-constructor",
-    "scene/geometry/PlaneGeometry.js~PlaneGeometry#constructor",
+    "src/scene/geometry/planegeometry.js~planegeometry#constructor",
+    "class/src/scene/geometry/PlaneGeometry.js~PlaneGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/PlaneGeometry.js~PlaneGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/scenevertexbufs.js",
-    "file/scene/geometry/SceneVertexBufs.js.html",
-    "scene/geometry/SceneVertexBufs.js",
+    "src/scene/geometry/scenevertexbufs.js",
+    "file/src/scene/geometry/SceneVertexBufs.js.html",
+    "src/scene/geometry/SceneVertexBufs.js",
     "file"
   ],
   [
-    "scene/geometry/spheregeometry.js",
-    "file/scene/geometry/SphereGeometry.js.html",
-    "scene/geometry/SphereGeometry.js",
+    "src/scene/geometry/spheregeometry.js",
+    "file/src/scene/geometry/SphereGeometry.js.html",
+    "src/scene/geometry/SphereGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/spheregeometry.js~spheregeometry#constructor",
-    "class/scene/geometry/SphereGeometry.js~SphereGeometry.html#instance-constructor-constructor",
-    "scene/geometry/SphereGeometry.js~SphereGeometry#constructor",
+    "src/scene/geometry/spheregeometry.js~spheregeometry#constructor",
+    "class/src/scene/geometry/SphereGeometry.js~SphereGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/SphereGeometry.js~SphereGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/torusgeometry.js",
-    "file/scene/geometry/TorusGeometry.js.html",
-    "scene/geometry/TorusGeometry.js",
+    "src/scene/geometry/torusgeometry.js",
+    "file/src/scene/geometry/TorusGeometry.js.html",
+    "src/scene/geometry/TorusGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/torusgeometry.js~torusgeometry#constructor",
-    "class/scene/geometry/TorusGeometry.js~TorusGeometry.html#instance-constructor-constructor",
-    "scene/geometry/TorusGeometry.js~TorusGeometry#constructor",
+    "src/scene/geometry/torusgeometry.js~torusgeometry#constructor",
+    "class/src/scene/geometry/TorusGeometry.js~TorusGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/TorusGeometry.js~TorusGeometry#constructor",
     "method"
   ],
   [
-    "scene/geometry/vectortextgeometry.js",
-    "file/scene/geometry/VectorTextGeometry.js.html",
-    "scene/geometry/VectorTextGeometry.js",
+    "src/scene/geometry/vectortextgeometry.js",
+    "file/src/scene/geometry/VectorTextGeometry.js.html",
+    "src/scene/geometry/VectorTextGeometry.js",
     "file"
   ],
   [
-    "scene/geometry/vectortextgeometry.js~vectortextgeometry#constructor",
-    "class/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html#instance-constructor-constructor",
-    "scene/geometry/VectorTextGeometry.js~VectorTextGeometry#constructor",
+    "src/scene/geometry/vectortextgeometry.js~vectortextgeometry#constructor",
+    "class/src/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html#instance-constructor-constructor",
+    "src/scene/geometry/VectorTextGeometry.js~VectorTextGeometry#constructor",
     "method"
   ],
   [
-    "scene/input/input.js",
-    "file/scene/input/Input.js.html",
-    "scene/input/Input.js",
+    "src/scene/input/input.js",
+    "file/src/scene/input/Input.js.html",
+    "src/scene/input/Input.js",
     "file"
   ],
   [
-    "scene/input/input.js~input#key_a",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_A",
-    "scene/input/Input.js~Input#KEY_A",
+    "src/scene/input/input.js~input#key_a",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_A",
+    "src/scene/input/Input.js~Input#KEY_A",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_add",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_ADD",
-    "scene/input/Input.js~Input#KEY_ADD",
+    "src/scene/input/input.js~input#key_add",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_ADD",
+    "src/scene/input/Input.js~Input#KEY_ADD",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_alt",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_ALT",
-    "scene/input/Input.js~Input#KEY_ALT",
+    "src/scene/input/input.js~input#key_alt",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_ALT",
+    "src/scene/input/Input.js~Input#KEY_ALT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_b",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_B",
-    "scene/input/Input.js~Input#KEY_B",
+    "src/scene/input/input.js~input#key_b",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_B",
+    "src/scene/input/Input.js~Input#KEY_B",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_backspace",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_BACKSPACE",
-    "scene/input/Input.js~Input#KEY_BACKSPACE",
+    "src/scene/input/input.js~input#key_backspace",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_BACKSPACE",
+    "src/scene/input/Input.js~Input#KEY_BACKSPACE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_back_slash",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_BACK_SLASH",
-    "scene/input/Input.js~Input#KEY_BACK_SLASH",
+    "src/scene/input/input.js~input#key_back_slash",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_BACK_SLASH",
+    "src/scene/input/Input.js~Input#KEY_BACK_SLASH",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_c",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_C",
-    "scene/input/Input.js~Input#KEY_C",
+    "src/scene/input/input.js~input#key_c",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_C",
+    "src/scene/input/Input.js~Input#KEY_C",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_caps_lock",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_CAPS_LOCK",
-    "scene/input/Input.js~Input#KEY_CAPS_LOCK",
+    "src/scene/input/input.js~input#key_caps_lock",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_CAPS_LOCK",
+    "src/scene/input/Input.js~Input#KEY_CAPS_LOCK",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_close_bracket",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_CLOSE_BRACKET",
-    "scene/input/Input.js~Input#KEY_CLOSE_BRACKET",
+    "src/scene/input/input.js~input#key_close_bracket",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_CLOSE_BRACKET",
+    "src/scene/input/Input.js~Input#KEY_CLOSE_BRACKET",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_comma",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_COMMA",
-    "scene/input/Input.js~Input#KEY_COMMA",
+    "src/scene/input/input.js~input#key_comma",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_COMMA",
+    "src/scene/input/Input.js~Input#KEY_COMMA",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_ctrl",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_CTRL",
-    "scene/input/Input.js~Input#KEY_CTRL",
+    "src/scene/input/input.js~input#key_ctrl",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_CTRL",
+    "src/scene/input/Input.js~Input#KEY_CTRL",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_d",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_D",
-    "scene/input/Input.js~Input#KEY_D",
+    "src/scene/input/input.js~input#key_d",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_D",
+    "src/scene/input/Input.js~Input#KEY_D",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_dash",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_DASH",
-    "scene/input/Input.js~Input#KEY_DASH",
+    "src/scene/input/input.js~input#key_dash",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_DASH",
+    "src/scene/input/Input.js~Input#KEY_DASH",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_decimal_point",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_DECIMAL_POINT",
-    "scene/input/Input.js~Input#KEY_DECIMAL_POINT",
+    "src/scene/input/input.js~input#key_decimal_point",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_DECIMAL_POINT",
+    "src/scene/input/Input.js~Input#KEY_DECIMAL_POINT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_delete",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_DELETE",
-    "scene/input/Input.js~Input#KEY_DELETE",
+    "src/scene/input/input.js~input#key_delete",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_DELETE",
+    "src/scene/input/Input.js~Input#KEY_DELETE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_divide",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_DIVIDE",
-    "scene/input/Input.js~Input#KEY_DIVIDE",
+    "src/scene/input/input.js~input#key_divide",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_DIVIDE",
+    "src/scene/input/Input.js~Input#KEY_DIVIDE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_down_arrow",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_DOWN_ARROW",
-    "scene/input/Input.js~Input#KEY_DOWN_ARROW",
+    "src/scene/input/input.js~input#key_down_arrow",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_DOWN_ARROW",
+    "src/scene/input/Input.js~Input#KEY_DOWN_ARROW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_e",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_E",
-    "scene/input/Input.js~Input#KEY_E",
+    "src/scene/input/input.js~input#key_e",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_E",
+    "src/scene/input/Input.js~Input#KEY_E",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_end",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_END",
-    "scene/input/Input.js~Input#KEY_END",
+    "src/scene/input/input.js~input#key_end",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_END",
+    "src/scene/input/Input.js~Input#KEY_END",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_enter",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_ENTER",
-    "scene/input/Input.js~Input#KEY_ENTER",
+    "src/scene/input/input.js~input#key_enter",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_ENTER",
+    "src/scene/input/Input.js~Input#KEY_ENTER",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_equal_sign",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_EQUAL_SIGN",
-    "scene/input/Input.js~Input#KEY_EQUAL_SIGN",
+    "src/scene/input/input.js~input#key_equal_sign",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_EQUAL_SIGN",
+    "src/scene/input/Input.js~Input#KEY_EQUAL_SIGN",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_escape",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_ESCAPE",
-    "scene/input/Input.js~Input#KEY_ESCAPE",
+    "src/scene/input/input.js~input#key_escape",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_ESCAPE",
+    "src/scene/input/Input.js~Input#KEY_ESCAPE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F",
-    "scene/input/Input.js~Input#KEY_F",
+    "src/scene/input/input.js~input#key_f",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F",
+    "src/scene/input/Input.js~Input#KEY_F",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f1",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F1",
-    "scene/input/Input.js~Input#KEY_F1",
+    "src/scene/input/input.js~input#key_f1",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F1",
+    "src/scene/input/Input.js~Input#KEY_F1",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f10",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F10",
-    "scene/input/Input.js~Input#KEY_F10",
+    "src/scene/input/input.js~input#key_f10",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F10",
+    "src/scene/input/Input.js~Input#KEY_F10",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f11",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F11",
-    "scene/input/Input.js~Input#KEY_F11",
+    "src/scene/input/input.js~input#key_f11",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F11",
+    "src/scene/input/Input.js~Input#KEY_F11",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f12",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F12",
-    "scene/input/Input.js~Input#KEY_F12",
+    "src/scene/input/input.js~input#key_f12",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F12",
+    "src/scene/input/Input.js~Input#KEY_F12",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f2",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F2",
-    "scene/input/Input.js~Input#KEY_F2",
+    "src/scene/input/input.js~input#key_f2",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F2",
+    "src/scene/input/Input.js~Input#KEY_F2",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f3",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F3",
-    "scene/input/Input.js~Input#KEY_F3",
+    "src/scene/input/input.js~input#key_f3",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F3",
+    "src/scene/input/Input.js~Input#KEY_F3",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f4",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F4",
-    "scene/input/Input.js~Input#KEY_F4",
+    "src/scene/input/input.js~input#key_f4",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F4",
+    "src/scene/input/Input.js~Input#KEY_F4",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f5",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F5",
-    "scene/input/Input.js~Input#KEY_F5",
+    "src/scene/input/input.js~input#key_f5",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F5",
+    "src/scene/input/Input.js~Input#KEY_F5",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f6",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F6",
-    "scene/input/Input.js~Input#KEY_F6",
+    "src/scene/input/input.js~input#key_f6",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F6",
+    "src/scene/input/Input.js~Input#KEY_F6",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f7",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F7",
-    "scene/input/Input.js~Input#KEY_F7",
+    "src/scene/input/input.js~input#key_f7",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F7",
+    "src/scene/input/Input.js~Input#KEY_F7",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f8",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F8",
-    "scene/input/Input.js~Input#KEY_F8",
+    "src/scene/input/input.js~input#key_f8",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F8",
+    "src/scene/input/Input.js~Input#KEY_F8",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_f9",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_F9",
-    "scene/input/Input.js~Input#KEY_F9",
+    "src/scene/input/input.js~input#key_f9",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_F9",
+    "src/scene/input/Input.js~Input#KEY_F9",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_forward_slash",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_FORWARD_SLASH",
-    "scene/input/Input.js~Input#KEY_FORWARD_SLASH",
+    "src/scene/input/input.js~input#key_forward_slash",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_FORWARD_SLASH",
+    "src/scene/input/Input.js~Input#KEY_FORWARD_SLASH",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_g",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_G",
-    "scene/input/Input.js~Input#KEY_G",
+    "src/scene/input/input.js~input#key_g",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_G",
+    "src/scene/input/Input.js~Input#KEY_G",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_grave_accent",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_GRAVE_ACCENT",
-    "scene/input/Input.js~Input#KEY_GRAVE_ACCENT",
+    "src/scene/input/input.js~input#key_grave_accent",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_GRAVE_ACCENT",
+    "src/scene/input/Input.js~Input#KEY_GRAVE_ACCENT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_h",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_H",
-    "scene/input/Input.js~Input#KEY_H",
+    "src/scene/input/input.js~input#key_h",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_H",
+    "src/scene/input/Input.js~Input#KEY_H",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_home",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_HOME",
-    "scene/input/Input.js~Input#KEY_HOME",
+    "src/scene/input/input.js~input#key_home",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_HOME",
+    "src/scene/input/Input.js~Input#KEY_HOME",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_i",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_I",
-    "scene/input/Input.js~Input#KEY_I",
+    "src/scene/input/input.js~input#key_i",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_I",
+    "src/scene/input/Input.js~Input#KEY_I",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_insert",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_INSERT",
-    "scene/input/Input.js~Input#KEY_INSERT",
+    "src/scene/input/input.js~input#key_insert",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_INSERT",
+    "src/scene/input/Input.js~Input#KEY_INSERT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_j",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_J",
-    "scene/input/Input.js~Input#KEY_J",
+    "src/scene/input/input.js~input#key_j",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_J",
+    "src/scene/input/Input.js~Input#KEY_J",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_k",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_K",
-    "scene/input/Input.js~Input#KEY_K",
+    "src/scene/input/input.js~input#key_k",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_K",
+    "src/scene/input/Input.js~Input#KEY_K",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_l",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_L",
-    "scene/input/Input.js~Input#KEY_L",
+    "src/scene/input/input.js~input#key_l",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_L",
+    "src/scene/input/Input.js~Input#KEY_L",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_left_arrow",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_LEFT_ARROW",
-    "scene/input/Input.js~Input#KEY_LEFT_ARROW",
+    "src/scene/input/input.js~input#key_left_arrow",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_LEFT_ARROW",
+    "src/scene/input/Input.js~Input#KEY_LEFT_ARROW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_left_window",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_LEFT_WINDOW",
-    "scene/input/Input.js~Input#KEY_LEFT_WINDOW",
+    "src/scene/input/input.js~input#key_left_window",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_LEFT_WINDOW",
+    "src/scene/input/Input.js~Input#KEY_LEFT_WINDOW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_m",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_M",
-    "scene/input/Input.js~Input#KEY_M",
+    "src/scene/input/input.js~input#key_m",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_M",
+    "src/scene/input/Input.js~Input#KEY_M",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_multiply",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_MULTIPLY",
-    "scene/input/Input.js~Input#KEY_MULTIPLY",
+    "src/scene/input/input.js~input#key_multiply",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_MULTIPLY",
+    "src/scene/input/Input.js~Input#KEY_MULTIPLY",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_n",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_N",
-    "scene/input/Input.js~Input#KEY_N",
+    "src/scene/input/input.js~input#key_n",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_N",
+    "src/scene/input/Input.js~Input#KEY_N",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_0",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_0",
-    "scene/input/Input.js~Input#KEY_NUMPAD_0",
+    "src/scene/input/input.js~input#key_numpad_0",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_0",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_0",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_1",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_1",
-    "scene/input/Input.js~Input#KEY_NUMPAD_1",
+    "src/scene/input/input.js~input#key_numpad_1",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_1",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_1",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_2",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_2",
-    "scene/input/Input.js~Input#KEY_NUMPAD_2",
+    "src/scene/input/input.js~input#key_numpad_2",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_2",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_2",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_3",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_3",
-    "scene/input/Input.js~Input#KEY_NUMPAD_3",
+    "src/scene/input/input.js~input#key_numpad_3",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_3",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_3",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_4",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_4",
-    "scene/input/Input.js~Input#KEY_NUMPAD_4",
+    "src/scene/input/input.js~input#key_numpad_4",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_4",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_4",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_5",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_5",
-    "scene/input/Input.js~Input#KEY_NUMPAD_5",
+    "src/scene/input/input.js~input#key_numpad_5",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_5",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_5",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_6",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_6",
-    "scene/input/Input.js~Input#KEY_NUMPAD_6",
+    "src/scene/input/input.js~input#key_numpad_6",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_6",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_6",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_7",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_7",
-    "scene/input/Input.js~Input#KEY_NUMPAD_7",
+    "src/scene/input/input.js~input#key_numpad_7",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_7",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_7",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_8",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_8",
-    "scene/input/Input.js~Input#KEY_NUMPAD_8",
+    "src/scene/input/input.js~input#key_numpad_8",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_8",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_8",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_numpad_9",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_9",
-    "scene/input/Input.js~Input#KEY_NUMPAD_9",
+    "src/scene/input/input.js~input#key_numpad_9",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUMPAD_9",
+    "src/scene/input/Input.js~Input#KEY_NUMPAD_9",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_0",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_0",
-    "scene/input/Input.js~Input#KEY_NUM_0",
+    "src/scene/input/input.js~input#key_num_0",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_0",
+    "src/scene/input/Input.js~Input#KEY_NUM_0",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_1",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_1",
-    "scene/input/Input.js~Input#KEY_NUM_1",
+    "src/scene/input/input.js~input#key_num_1",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_1",
+    "src/scene/input/Input.js~Input#KEY_NUM_1",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_2",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_2",
-    "scene/input/Input.js~Input#KEY_NUM_2",
+    "src/scene/input/input.js~input#key_num_2",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_2",
+    "src/scene/input/Input.js~Input#KEY_NUM_2",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_3",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_3",
-    "scene/input/Input.js~Input#KEY_NUM_3",
+    "src/scene/input/input.js~input#key_num_3",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_3",
+    "src/scene/input/Input.js~Input#KEY_NUM_3",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_4",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_4",
-    "scene/input/Input.js~Input#KEY_NUM_4",
+    "src/scene/input/input.js~input#key_num_4",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_4",
+    "src/scene/input/Input.js~Input#KEY_NUM_4",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_5",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_5",
-    "scene/input/Input.js~Input#KEY_NUM_5",
+    "src/scene/input/input.js~input#key_num_5",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_5",
+    "src/scene/input/Input.js~Input#KEY_NUM_5",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_6",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_6",
-    "scene/input/Input.js~Input#KEY_NUM_6",
+    "src/scene/input/input.js~input#key_num_6",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_6",
+    "src/scene/input/Input.js~Input#KEY_NUM_6",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_7",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_7",
-    "scene/input/Input.js~Input#KEY_NUM_7",
+    "src/scene/input/input.js~input#key_num_7",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_7",
+    "src/scene/input/Input.js~Input#KEY_NUM_7",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_8",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_8",
-    "scene/input/Input.js~Input#KEY_NUM_8",
+    "src/scene/input/input.js~input#key_num_8",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_8",
+    "src/scene/input/Input.js~Input#KEY_NUM_8",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_9",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_9",
-    "scene/input/Input.js~Input#KEY_NUM_9",
+    "src/scene/input/input.js~input#key_num_9",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_9",
+    "src/scene/input/Input.js~Input#KEY_NUM_9",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_num_lock",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_NUM_LOCK",
-    "scene/input/Input.js~Input#KEY_NUM_LOCK",
+    "src/scene/input/input.js~input#key_num_lock",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_NUM_LOCK",
+    "src/scene/input/Input.js~Input#KEY_NUM_LOCK",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_o",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_O",
-    "scene/input/Input.js~Input#KEY_O",
+    "src/scene/input/input.js~input#key_o",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_O",
+    "src/scene/input/Input.js~Input#KEY_O",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_open_bracket",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_OPEN_BRACKET",
-    "scene/input/Input.js~Input#KEY_OPEN_BRACKET",
+    "src/scene/input/input.js~input#key_open_bracket",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_OPEN_BRACKET",
+    "src/scene/input/Input.js~Input#KEY_OPEN_BRACKET",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_p",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_P",
-    "scene/input/Input.js~Input#KEY_P",
+    "src/scene/input/input.js~input#key_p",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_P",
+    "src/scene/input/Input.js~Input#KEY_P",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_page_down",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_PAGE_DOWN",
-    "scene/input/Input.js~Input#KEY_PAGE_DOWN",
+    "src/scene/input/input.js~input#key_page_down",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_PAGE_DOWN",
+    "src/scene/input/Input.js~Input#KEY_PAGE_DOWN",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_page_up",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_PAGE_UP",
-    "scene/input/Input.js~Input#KEY_PAGE_UP",
+    "src/scene/input/input.js~input#key_page_up",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_PAGE_UP",
+    "src/scene/input/Input.js~Input#KEY_PAGE_UP",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_pause_break",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_PAUSE_BREAK",
-    "scene/input/Input.js~Input#KEY_PAUSE_BREAK",
+    "src/scene/input/input.js~input#key_pause_break",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_PAUSE_BREAK",
+    "src/scene/input/Input.js~Input#KEY_PAUSE_BREAK",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_period",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_PERIOD",
-    "scene/input/Input.js~Input#KEY_PERIOD",
+    "src/scene/input/input.js~input#key_period",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_PERIOD",
+    "src/scene/input/Input.js~Input#KEY_PERIOD",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_q",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_Q",
-    "scene/input/Input.js~Input#KEY_Q",
+    "src/scene/input/input.js~input#key_q",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_Q",
+    "src/scene/input/Input.js~Input#KEY_Q",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_r",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_R",
-    "scene/input/Input.js~Input#KEY_R",
+    "src/scene/input/input.js~input#key_r",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_R",
+    "src/scene/input/Input.js~Input#KEY_R",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_right_arrow",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_RIGHT_ARROW",
-    "scene/input/Input.js~Input#KEY_RIGHT_ARROW",
+    "src/scene/input/input.js~input#key_right_arrow",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_RIGHT_ARROW",
+    "src/scene/input/Input.js~Input#KEY_RIGHT_ARROW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_right_window",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_RIGHT_WINDOW",
-    "scene/input/Input.js~Input#KEY_RIGHT_WINDOW",
+    "src/scene/input/input.js~input#key_right_window",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_RIGHT_WINDOW",
+    "src/scene/input/Input.js~Input#KEY_RIGHT_WINDOW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_s",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_S",
-    "scene/input/Input.js~Input#KEY_S",
+    "src/scene/input/input.js~input#key_s",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_S",
+    "src/scene/input/Input.js~Input#KEY_S",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_scroll_lock",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SCROLL_LOCK",
-    "scene/input/Input.js~Input#KEY_SCROLL_LOCK",
+    "src/scene/input/input.js~input#key_scroll_lock",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SCROLL_LOCK",
+    "src/scene/input/Input.js~Input#KEY_SCROLL_LOCK",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_select_key",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SELECT_KEY",
-    "scene/input/Input.js~Input#KEY_SELECT_KEY",
+    "src/scene/input/input.js~input#key_select_key",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SELECT_KEY",
+    "src/scene/input/Input.js~Input#KEY_SELECT_KEY",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_semi_colon",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SEMI_COLON",
-    "scene/input/Input.js~Input#KEY_SEMI_COLON",
+    "src/scene/input/input.js~input#key_semi_colon",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SEMI_COLON",
+    "src/scene/input/Input.js~Input#KEY_SEMI_COLON",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_shift",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SHIFT",
-    "scene/input/Input.js~Input#KEY_SHIFT",
+    "src/scene/input/input.js~input#key_shift",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SHIFT",
+    "src/scene/input/Input.js~Input#KEY_SHIFT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_single_quote",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SINGLE_QUOTE",
-    "scene/input/Input.js~Input#KEY_SINGLE_QUOTE",
+    "src/scene/input/input.js~input#key_single_quote",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SINGLE_QUOTE",
+    "src/scene/input/Input.js~Input#KEY_SINGLE_QUOTE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_space",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SPACE",
-    "scene/input/Input.js~Input#KEY_SPACE",
+    "src/scene/input/input.js~input#key_space",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SPACE",
+    "src/scene/input/Input.js~Input#KEY_SPACE",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_subtract",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_SUBTRACT",
-    "scene/input/Input.js~Input#KEY_SUBTRACT",
+    "src/scene/input/input.js~input#key_subtract",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_SUBTRACT",
+    "src/scene/input/Input.js~Input#KEY_SUBTRACT",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_t",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_T",
-    "scene/input/Input.js~Input#KEY_T",
+    "src/scene/input/input.js~input#key_t",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_T",
+    "src/scene/input/Input.js~Input#KEY_T",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_tab",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_TAB",
-    "scene/input/Input.js~Input#KEY_TAB",
+    "src/scene/input/input.js~input#key_tab",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_TAB",
+    "src/scene/input/Input.js~Input#KEY_TAB",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_u",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_U",
-    "scene/input/Input.js~Input#KEY_U",
+    "src/scene/input/input.js~input#key_u",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_U",
+    "src/scene/input/Input.js~Input#KEY_U",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_up_arrow",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_UP_ARROW",
-    "scene/input/Input.js~Input#KEY_UP_ARROW",
+    "src/scene/input/input.js~input#key_up_arrow",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_UP_ARROW",
+    "src/scene/input/Input.js~Input#KEY_UP_ARROW",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_v",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_V",
-    "scene/input/Input.js~Input#KEY_V",
+    "src/scene/input/input.js~input#key_v",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_V",
+    "src/scene/input/Input.js~Input#KEY_V",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_w",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_W",
-    "scene/input/Input.js~Input#KEY_W",
+    "src/scene/input/input.js~input#key_w",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_W",
+    "src/scene/input/Input.js~Input#KEY_W",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_x",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_X",
-    "scene/input/Input.js~Input#KEY_X",
+    "src/scene/input/input.js~input#key_x",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_X",
+    "src/scene/input/Input.js~Input#KEY_X",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_y",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_Y",
-    "scene/input/Input.js~Input#KEY_Y",
+    "src/scene/input/input.js~input#key_y",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_Y",
+    "src/scene/input/Input.js~Input#KEY_Y",
     "member"
   ],
   [
-    "scene/input/input.js~input#key_z",
-    "class/scene/input/Input.js~Input.html#instance-member-KEY_Z",
-    "scene/input/Input.js~Input#KEY_Z",
+    "src/scene/input/input.js~input#key_z",
+    "class/src/scene/input/Input.js~Input.html#instance-member-KEY_Z",
+    "src/scene/input/Input.js~Input#KEY_Z",
     "member"
   ],
   [
-    "scene/input/input.js~input#altdown",
-    "class/scene/input/Input.js~Input.html#instance-member-altDown",
-    "scene/input/Input.js~Input#altDown",
+    "src/scene/input/input.js~input#altdown",
+    "class/src/scene/input/Input.js~Input.html#instance-member-altDown",
+    "src/scene/input/Input.js~Input#altDown",
     "member"
   ],
   [
-    "scene/input/input.js~input#constructor",
-    "class/scene/input/Input.js~Input.html#instance-constructor-constructor",
-    "scene/input/Input.js~Input#constructor",
+    "src/scene/input/input.js~input#constructor",
+    "class/src/scene/input/Input.js~Input.html#instance-constructor-constructor",
+    "src/scene/input/Input.js~Input#constructor",
     "method"
   ],
   [
-    "scene/input/input.js~input#ctrldown",
-    "class/scene/input/Input.js~Input.html#instance-member-ctrlDown",
-    "scene/input/Input.js~Input#ctrlDown",
+    "src/scene/input/input.js~input#ctrldown",
+    "class/src/scene/input/Input.js~Input.html#instance-member-ctrlDown",
+    "src/scene/input/Input.js~Input#ctrlDown",
     "member"
   ],
   [
-    "scene/input/input.js~input#destroy",
-    "class/scene/input/Input.js~Input.html#instance-method-destroy",
-    "scene/input/Input.js~Input#destroy",
+    "src/scene/input/input.js~input#destroy",
+    "class/src/scene/input/Input.js~Input.html#instance-method-destroy",
+    "src/scene/input/Input.js~Input#destroy",
     "method"
   ],
   [
-    "scene/input/input.js~input#enabled",
-    "class/scene/input/Input.js~Input.html#instance-member-enabled",
-    "scene/input/Input.js~Input#enabled",
+    "src/scene/input/input.js~input#enabled",
+    "class/src/scene/input/Input.js~Input.html#instance-member-enabled",
+    "src/scene/input/Input.js~Input#enabled",
     "member"
   ],
   [
-    "scene/input/input.js~input#keydown",
-    "class/scene/input/Input.js~Input.html#instance-member-keyDown",
-    "scene/input/Input.js~Input#keyDown",
+    "src/scene/input/input.js~input#keydown",
+    "class/src/scene/input/Input.js~Input.html#instance-member-keyDown",
+    "src/scene/input/Input.js~Input#keyDown",
     "member"
   ],
   [
-    "scene/input/input.js~input#mousedownleft",
-    "class/scene/input/Input.js~Input.html#instance-member-mouseDownLeft",
-    "scene/input/Input.js~Input#mouseDownLeft",
+    "src/scene/input/input.js~input#mousedownleft",
+    "class/src/scene/input/Input.js~Input.html#instance-member-mouseDownLeft",
+    "src/scene/input/Input.js~Input#mouseDownLeft",
     "member"
   ],
   [
-    "scene/input/input.js~input#mousedownmiddle",
-    "class/scene/input/Input.js~Input.html#instance-member-mouseDownMiddle",
-    "scene/input/Input.js~Input#mouseDownMiddle",
+    "src/scene/input/input.js~input#mousedownmiddle",
+    "class/src/scene/input/Input.js~Input.html#instance-member-mouseDownMiddle",
+    "src/scene/input/Input.js~Input#mouseDownMiddle",
     "member"
   ],
   [
-    "scene/input/input.js~input#mousedownright",
-    "class/scene/input/Input.js~Input.html#instance-member-mouseDownRight",
-    "scene/input/Input.js~Input#mouseDownRight",
+    "src/scene/input/input.js~input#mousedownright",
+    "class/src/scene/input/Input.js~Input.html#instance-member-mouseDownRight",
+    "src/scene/input/Input.js~Input#mouseDownRight",
     "member"
   ],
   [
-    "scene/input/input.js~input#mouseover",
-    "class/scene/input/Input.js~Input.html#instance-member-mouseover",
-    "scene/input/Input.js~Input#mouseover",
+    "src/scene/input/input.js~input#mouseover",
+    "class/src/scene/input/Input.js~Input.html#instance-member-mouseover",
+    "src/scene/input/Input.js~Input#mouseover",
     "member"
   ],
   [
-    "scene/input/input.js~input#setenabled",
-    "class/scene/input/Input.js~Input.html#instance-method-setEnabled",
-    "scene/input/Input.js~Input#setEnabled",
+    "src/scene/input/input.js~input#setenabled",
+    "class/src/scene/input/Input.js~Input.html#instance-method-setEnabled",
+    "src/scene/input/Input.js~Input#setEnabled",
     "method"
   ],
   [
-    "scene/input/input.js~input#type",
-    "class/scene/input/Input.js~Input.html#instance-get-type",
-    "scene/input/Input.js~Input#type",
+    "src/scene/input/input.js~input#type",
+    "class/src/scene/input/Input.js~Input.html#instance-get-type",
+    "src/scene/input/Input.js~Input#type",
     "member"
   ],
   [
-    "scene/libs/canvas2image.js",
-    "file/scene/libs/canvas2image.js.html",
-    "scene/libs/canvas2image.js",
+    "src/scene/libs/canvas2image.js",
+    "file/src/scene/libs/canvas2image.js.html",
+    "src/scene/libs/canvas2image.js",
     "file"
   ],
   [
-    "scene/lights/ambientlight.js",
-    "file/scene/lights/AmbientLight.js.html",
-    "scene/lights/AmbientLight.js",
+    "src/scene/lights/ambientlight.js",
+    "file/src/scene/lights/AmbientLight.js.html",
+    "src/scene/lights/AmbientLight.js",
     "file"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#color",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color",
-    "scene/lights/AmbientLight.js~AmbientLight#color",
+    "src/scene/lights/ambientlight.js~ambientlight#color",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color",
+    "src/scene/lights/AmbientLight.js~AmbientLight#color",
     "member"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#color",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-color",
-    "scene/lights/AmbientLight.js~AmbientLight#color",
+    "src/scene/lights/ambientlight.js~ambientlight#color",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-color",
+    "src/scene/lights/AmbientLight.js~AmbientLight#color",
     "member"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#constructor",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-constructor-constructor",
-    "scene/lights/AmbientLight.js~AmbientLight#constructor",
+    "src/scene/lights/ambientlight.js~ambientlight#constructor",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-constructor-constructor",
+    "src/scene/lights/AmbientLight.js~AmbientLight#constructor",
     "method"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#destroy",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-method-destroy",
-    "scene/lights/AmbientLight.js~AmbientLight#destroy",
+    "src/scene/lights/ambientlight.js~ambientlight#destroy",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-method-destroy",
+    "src/scene/lights/AmbientLight.js~AmbientLight#destroy",
     "method"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#intensity",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-intensity",
-    "scene/lights/AmbientLight.js~AmbientLight#intensity",
+    "src/scene/lights/ambientlight.js~ambientlight#intensity",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-intensity",
+    "src/scene/lights/AmbientLight.js~AmbientLight#intensity",
     "member"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#intensity",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-intensity",
-    "scene/lights/AmbientLight.js~AmbientLight#intensity",
+    "src/scene/lights/ambientlight.js~ambientlight#intensity",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-intensity",
+    "src/scene/lights/AmbientLight.js~AmbientLight#intensity",
     "member"
   ],
   [
-    "scene/lights/ambientlight.js~ambientlight#type",
-    "class/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-type",
-    "scene/lights/AmbientLight.js~AmbientLight#type",
+    "src/scene/lights/ambientlight.js~ambientlight#type",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-type",
+    "src/scene/lights/AmbientLight.js~AmbientLight#type",
     "member"
   ],
   [
-    "scene/lights/cubetexture.js",
-    "file/scene/lights/CubeTexture.js.html",
-    "scene/lights/CubeTexture.js",
+    "src/scene/lights/cubetexture.js",
+    "file/src/scene/lights/CubeTexture.js.html",
+    "src/scene/lights/CubeTexture.js",
     "file"
   ],
   [
-    "scene/lights/cubetexture.js~cubetexture#constructor",
-    "class/scene/lights/CubeTexture.js~CubeTexture.html#instance-constructor-constructor",
-    "scene/lights/CubeTexture.js~CubeTexture#constructor",
+    "src/scene/lights/cubetexture.js~cubetexture#constructor",
+    "class/src/scene/lights/CubeTexture.js~CubeTexture.html#instance-constructor-constructor",
+    "src/scene/lights/CubeTexture.js~CubeTexture#constructor",
     "method"
   ],
   [
-    "scene/lights/cubetexture.js~cubetexture#destroy",
-    "class/scene/lights/CubeTexture.js~CubeTexture.html#instance-method-destroy",
-    "scene/lights/CubeTexture.js~CubeTexture#destroy",
+    "src/scene/lights/cubetexture.js~cubetexture#destroy",
+    "class/src/scene/lights/CubeTexture.js~CubeTexture.html#instance-method-destroy",
+    "src/scene/lights/CubeTexture.js~CubeTexture#destroy",
     "method"
   ],
   [
-    "scene/lights/cubetexture.js~cubetexture#type",
-    "class/scene/lights/CubeTexture.js~CubeTexture.html#instance-get-type",
-    "scene/lights/CubeTexture.js~CubeTexture#type",
+    "src/scene/lights/cubetexture.js~cubetexture#type",
+    "class/src/scene/lights/CubeTexture.js~CubeTexture.html#instance-get-type",
+    "src/scene/lights/CubeTexture.js~CubeTexture#type",
     "member"
   ],
   [
-    "scene/lights/dirlight.js",
-    "file/scene/lights/DirLight.js.html",
-    "scene/lights/DirLight.js",
+    "src/scene/lights/dirlight.js",
+    "file/src/scene/lights/DirLight.js.html",
+    "src/scene/lights/DirLight.js",
     "file"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#castshadow",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-get-castShadow",
-    "scene/lights/DirLight.js~DirLight#castShadow",
+    "src/scene/lights/dirlight.js~dirlight#castshadow",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-castShadow",
+    "src/scene/lights/DirLight.js~DirLight#castShadow",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#castshadow",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-set-castShadow",
-    "scene/lights/DirLight.js~DirLight#castShadow",
+    "src/scene/lights/dirlight.js~dirlight#castshadow",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-castShadow",
+    "src/scene/lights/DirLight.js~DirLight#castShadow",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#color",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-set-color",
-    "scene/lights/DirLight.js~DirLight#color",
+    "src/scene/lights/dirlight.js~dirlight#color",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-color",
+    "src/scene/lights/DirLight.js~DirLight#color",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#color",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-get-color",
-    "scene/lights/DirLight.js~DirLight#color",
+    "src/scene/lights/dirlight.js~dirlight#color",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-color",
+    "src/scene/lights/DirLight.js~DirLight#color",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#constructor",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-constructor-constructor",
-    "scene/lights/DirLight.js~DirLight#constructor",
+    "src/scene/lights/dirlight.js~dirlight#constructor",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-constructor-constructor",
+    "src/scene/lights/DirLight.js~DirLight#constructor",
     "method"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#destroy",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-method-destroy",
-    "scene/lights/DirLight.js~DirLight#destroy",
+    "src/scene/lights/dirlight.js~dirlight#destroy",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-method-destroy",
+    "src/scene/lights/DirLight.js~DirLight#destroy",
     "method"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#dir",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-set-dir",
-    "scene/lights/DirLight.js~DirLight#dir",
+    "src/scene/lights/dirlight.js~dirlight#dir",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-dir",
+    "src/scene/lights/DirLight.js~DirLight#dir",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#dir",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-get-dir",
-    "scene/lights/DirLight.js~DirLight#dir",
+    "src/scene/lights/dirlight.js~dirlight#dir",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-dir",
+    "src/scene/lights/DirLight.js~DirLight#dir",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#intensity",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-set-intensity",
-    "scene/lights/DirLight.js~DirLight#intensity",
+    "src/scene/lights/dirlight.js~dirlight#intensity",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-intensity",
+    "src/scene/lights/DirLight.js~DirLight#intensity",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#intensity",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-get-intensity",
-    "scene/lights/DirLight.js~DirLight#intensity",
+    "src/scene/lights/dirlight.js~dirlight#intensity",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-intensity",
+    "src/scene/lights/DirLight.js~DirLight#intensity",
     "member"
   ],
   [
-    "scene/lights/dirlight.js~dirlight#type",
-    "class/scene/lights/DirLight.js~DirLight.html#instance-get-type",
-    "scene/lights/DirLight.js~DirLight#type",
+    "src/scene/lights/dirlight.js~dirlight#type",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-type",
+    "src/scene/lights/DirLight.js~DirLight#type",
     "member"
   ],
   [
-    "scene/lights/light.js",
-    "file/scene/lights/Light.js.html",
-    "scene/lights/Light.js",
+    "src/scene/lights/light.js",
+    "file/src/scene/lights/Light.js.html",
+    "src/scene/lights/Light.js",
     "file"
   ],
   [
-    "scene/lights/light.js~light#constructor",
-    "class/scene/lights/Light.js~Light.html#instance-constructor-constructor",
-    "scene/lights/Light.js~Light#constructor",
+    "src/scene/lights/light.js~light#constructor",
+    "class/src/scene/lights/Light.js~Light.html#instance-constructor-constructor",
+    "src/scene/lights/Light.js~Light#constructor",
     "method"
   ],
   [
-    "scene/lights/light.js~light#type",
-    "class/scene/lights/Light.js~Light.html#instance-get-type",
-    "scene/lights/Light.js~Light#type",
+    "src/scene/lights/light.js~light#type",
+    "class/src/scene/lights/Light.js~Light.html#instance-get-type",
+    "src/scene/lights/Light.js~Light#type",
     "member"
   ],
   [
-    "scene/lights/lightmap.js",
-    "file/scene/lights/LightMap.js.html",
-    "scene/lights/LightMap.js",
+    "src/scene/lights/lightmap.js",
+    "file/src/scene/lights/LightMap.js.html",
+    "src/scene/lights/LightMap.js",
     "file"
   ],
   [
-    "scene/lights/lightmap.js~lightmap#constructor",
-    "class/scene/lights/LightMap.js~LightMap.html#instance-constructor-constructor",
-    "scene/lights/LightMap.js~LightMap#constructor",
+    "src/scene/lights/lightmap.js~lightmap#constructor",
+    "class/src/scene/lights/LightMap.js~LightMap.html#instance-constructor-constructor",
+    "src/scene/lights/LightMap.js~LightMap#constructor",
     "method"
   ],
   [
-    "scene/lights/lightmap.js~lightmap#destroy",
-    "class/scene/lights/LightMap.js~LightMap.html#instance-method-destroy",
-    "scene/lights/LightMap.js~LightMap#destroy",
+    "src/scene/lights/lightmap.js~lightmap#destroy",
+    "class/src/scene/lights/LightMap.js~LightMap.html#instance-method-destroy",
+    "src/scene/lights/LightMap.js~LightMap#destroy",
     "method"
   ],
   [
-    "scene/lights/lightmap.js~lightmap#type",
-    "class/scene/lights/LightMap.js~LightMap.html#instance-get-type",
-    "scene/lights/LightMap.js~LightMap#type",
+    "src/scene/lights/lightmap.js~lightmap#type",
+    "class/src/scene/lights/LightMap.js~LightMap.html#instance-get-type",
+    "src/scene/lights/LightMap.js~LightMap#type",
     "member"
   ],
   [
-    "scene/lights/pointlight.js",
-    "file/scene/lights/PointLight.js.html",
-    "scene/lights/PointLight.js",
+    "src/scene/lights/pointlight.js",
+    "file/src/scene/lights/PointLight.js.html",
+    "src/scene/lights/PointLight.js",
     "file"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#castshadow",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-castShadow",
-    "scene/lights/PointLight.js~PointLight#castShadow",
+    "src/scene/lights/pointlight.js~pointlight#castshadow",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-castShadow",
+    "src/scene/lights/PointLight.js~PointLight#castShadow",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#castshadow",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-castShadow",
-    "scene/lights/PointLight.js~PointLight#castShadow",
+    "src/scene/lights/pointlight.js~pointlight#castshadow",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-castShadow",
+    "src/scene/lights/PointLight.js~PointLight#castShadow",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#color",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-color",
-    "scene/lights/PointLight.js~PointLight#color",
+    "src/scene/lights/pointlight.js~pointlight#color",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-color",
+    "src/scene/lights/PointLight.js~PointLight#color",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#color",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-color",
-    "scene/lights/PointLight.js~PointLight#color",
+    "src/scene/lights/pointlight.js~pointlight#color",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-color",
+    "src/scene/lights/PointLight.js~PointLight#color",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#constantattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-constantAttenuation",
-    "scene/lights/PointLight.js~PointLight#constantAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#constantattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-constantAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#constantAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#constantattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-constantAttenuation",
-    "scene/lights/PointLight.js~PointLight#constantAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#constantattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-constantAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#constantAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#constructor",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-constructor-constructor",
-    "scene/lights/PointLight.js~PointLight#constructor",
+    "src/scene/lights/pointlight.js~pointlight#constructor",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-constructor-constructor",
+    "src/scene/lights/PointLight.js~PointLight#constructor",
     "method"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#destroy",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-method-destroy",
-    "scene/lights/PointLight.js~PointLight#destroy",
+    "src/scene/lights/pointlight.js~pointlight#destroy",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-method-destroy",
+    "src/scene/lights/PointLight.js~PointLight#destroy",
     "method"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#intensity",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-intensity",
-    "scene/lights/PointLight.js~PointLight#intensity",
+    "src/scene/lights/pointlight.js~pointlight#intensity",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-intensity",
+    "src/scene/lights/PointLight.js~PointLight#intensity",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#intensity",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-intensity",
-    "scene/lights/PointLight.js~PointLight#intensity",
+    "src/scene/lights/pointlight.js~pointlight#intensity",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-intensity",
+    "src/scene/lights/PointLight.js~PointLight#intensity",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#linearattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-linearAttenuation",
-    "scene/lights/PointLight.js~PointLight#linearAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#linearattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-linearAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#linearAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#linearattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-linearAttenuation",
-    "scene/lights/PointLight.js~PointLight#linearAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#linearattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-linearAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#linearAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#pos",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-pos",
-    "scene/lights/PointLight.js~PointLight#pos",
+    "src/scene/lights/pointlight.js~pointlight#pos",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-pos",
+    "src/scene/lights/PointLight.js~PointLight#pos",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#pos",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-pos",
-    "scene/lights/PointLight.js~PointLight#pos",
+    "src/scene/lights/pointlight.js~pointlight#pos",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-pos",
+    "src/scene/lights/PointLight.js~PointLight#pos",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#quadraticattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-set-quadraticAttenuation",
-    "scene/lights/PointLight.js~PointLight#quadraticAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#quadraticattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-quadraticAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#quadraticAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#quadraticattenuation",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-quadraticAttenuation",
-    "scene/lights/PointLight.js~PointLight#quadraticAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#quadraticattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-quadraticAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#quadraticAttenuation",
     "member"
   ],
   [
-    "scene/lights/pointlight.js~pointlight#type",
-    "class/scene/lights/PointLight.js~PointLight.html#instance-get-type",
-    "scene/lights/PointLight.js~PointLight#type",
+    "src/scene/lights/pointlight.js~pointlight#type",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-type",
+    "src/scene/lights/PointLight.js~PointLight#type",
     "member"
   ],
   [
-    "scene/lights/reflectionmap.js",
-    "file/scene/lights/ReflectionMap.js.html",
-    "scene/lights/ReflectionMap.js",
+    "src/scene/lights/reflectionmap.js",
+    "file/src/scene/lights/ReflectionMap.js.html",
+    "src/scene/lights/ReflectionMap.js",
     "file"
   ],
   [
-    "scene/lights/reflectionmap.js~reflectionmap#constructor",
-    "class/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-constructor-constructor",
-    "scene/lights/ReflectionMap.js~ReflectionMap#constructor",
+    "src/scene/lights/reflectionmap.js~reflectionmap#constructor",
+    "class/src/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-constructor-constructor",
+    "src/scene/lights/ReflectionMap.js~ReflectionMap#constructor",
     "method"
   ],
   [
-    "scene/lights/reflectionmap.js~reflectionmap#destroy",
-    "class/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-method-destroy",
-    "scene/lights/ReflectionMap.js~ReflectionMap#destroy",
+    "src/scene/lights/reflectionmap.js~reflectionmap#destroy",
+    "class/src/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-method-destroy",
+    "src/scene/lights/ReflectionMap.js~ReflectionMap#destroy",
     "method"
   ],
   [
-    "scene/lights/reflectionmap.js~reflectionmap#type",
-    "class/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-get-type",
-    "scene/lights/ReflectionMap.js~ReflectionMap#type",
+    "src/scene/lights/reflectionmap.js~reflectionmap#type",
+    "class/src/scene/lights/ReflectionMap.js~ReflectionMap.html#instance-get-type",
+    "src/scene/lights/ReflectionMap.js~ReflectionMap#type",
     "member"
   ],
   [
-    "scene/lights/shadow.js",
-    "file/scene/lights/Shadow.js.html",
-    "scene/lights/Shadow.js",
+    "src/scene/lights/shadow.js",
+    "file/src/scene/lights/Shadow.js.html",
+    "src/scene/lights/Shadow.js",
     "file"
   ],
   [
-    "scene/lights/shadow.js~shadow#constructor",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-constructor-constructor",
-    "scene/lights/Shadow.js~Shadow#constructor",
+    "src/scene/lights/shadow.js~shadow#constructor",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-constructor-constructor",
+    "src/scene/lights/Shadow.js~Shadow#constructor",
     "method"
   ],
   [
-    "scene/lights/shadow.js~shadow#destroy",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-method-destroy",
-    "scene/lights/Shadow.js~Shadow#destroy",
+    "src/scene/lights/shadow.js~shadow#destroy",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-method-destroy",
+    "src/scene/lights/Shadow.js~Shadow#destroy",
     "method"
   ],
   [
-    "scene/lights/shadow.js~shadow#intensity",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-get-intensity",
-    "scene/lights/Shadow.js~Shadow#intensity",
+    "src/scene/lights/shadow.js~shadow#intensity",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-get-intensity",
+    "src/scene/lights/Shadow.js~Shadow#intensity",
     "member"
   ],
   [
-    "scene/lights/shadow.js~shadow#intensity",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-set-intensity",
-    "scene/lights/Shadow.js~Shadow#intensity",
+    "src/scene/lights/shadow.js~shadow#intensity",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-set-intensity",
+    "src/scene/lights/Shadow.js~Shadow#intensity",
     "member"
   ],
   [
-    "scene/lights/shadow.js~shadow#resolution",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-set-resolution",
-    "scene/lights/Shadow.js~Shadow#resolution",
+    "src/scene/lights/shadow.js~shadow#resolution",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-set-resolution",
+    "src/scene/lights/Shadow.js~Shadow#resolution",
     "member"
   ],
   [
-    "scene/lights/shadow.js~shadow#resolution",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-get-resolution",
-    "scene/lights/Shadow.js~Shadow#resolution",
+    "src/scene/lights/shadow.js~shadow#resolution",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-get-resolution",
+    "src/scene/lights/Shadow.js~Shadow#resolution",
     "member"
   ],
   [
-    "scene/lights/shadow.js~shadow#type",
-    "class/scene/lights/Shadow.js~Shadow.html#instance-get-type",
-    "scene/lights/Shadow.js~Shadow#type",
+    "src/scene/lights/shadow.js~shadow#type",
+    "class/src/scene/lights/Shadow.js~Shadow.html#instance-get-type",
+    "src/scene/lights/Shadow.js~Shadow#type",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js",
-    "file/scene/materials/EdgeMaterial.js.html",
-    "scene/materials/EdgeMaterial.js",
+    "src/scene/materials/edgematerial.js",
+    "file/src/scene/materials/EdgeMaterial.js.html",
+    "src/scene/materials/EdgeMaterial.js",
     "file"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#constructor",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-constructor-constructor",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#constructor",
+    "src/scene/materials/edgematerial.js~edgematerial#constructor",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#destroy",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-method-destroy",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#destroy",
+    "src/scene/materials/edgematerial.js~edgematerial#destroy",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-method-destroy",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#destroy",
     "method"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgealpha",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeAlpha",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeAlpha",
+    "src/scene/materials/edgematerial.js~edgematerial#edgealpha",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeAlpha",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeAlpha",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgealpha",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeAlpha",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeAlpha",
+    "src/scene/materials/edgematerial.js~edgematerial#edgealpha",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeAlpha",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeAlpha",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
+    "src/scene/materials/edgematerial.js~edgematerial#edgecolor",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
+    "src/scene/materials/edgematerial.js~edgematerial#edgecolor",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgewidth",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeWidth",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeWidth",
+    "src/scene/materials/edgematerial.js~edgematerial#edgewidth",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeWidth",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeWidth",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#edgewidth",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeWidth",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#edgeWidth",
+    "src/scene/materials/edgematerial.js~edgematerial#edgewidth",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeWidth",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeWidth",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#preset",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
+    "src/scene/materials/edgematerial.js~edgematerial#preset",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#preset",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
+    "src/scene/materials/edgematerial.js~edgematerial#preset",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#presets",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-presets",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#presets",
+    "src/scene/materials/edgematerial.js~edgematerial#presets",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-presets",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#presets",
     "member"
   ],
   [
-    "scene/materials/edgematerial.js~edgematerial#type",
-    "class/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-type",
-    "scene/materials/EdgeMaterial.js~EdgeMaterial#type",
+    "src/scene/materials/edgematerial.js~edgematerial#type",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-type",
+    "src/scene/materials/EdgeMaterial.js~EdgeMaterial#type",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js",
-    "file/scene/materials/EmphasisMaterial.js.html",
-    "scene/materials/EmphasisMaterial.js",
+    "src/scene/materials/emphasismaterial.js",
+    "file/src/scene/materials/EmphasisMaterial.js.html",
+    "src/scene/materials/EmphasisMaterial.js",
     "file"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-backfaces",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-backfaces",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-backfaces",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-backfaces",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#constructor",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-constructor-constructor",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#constructor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#constructor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#destroy",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-method-destroy",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#destroy",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#destroy",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-method-destroy",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#destroy",
     "method"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeAlpha",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeAlpha",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeAlpha",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgealpha",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeAlpha",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeAlpha",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgecolor",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeColor",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeColor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgecolor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeColor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeColor",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgecolor",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeColor",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeColor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgecolor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeColor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeColor",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgewidth",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeWidth",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeWidth",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgewidth",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edgeWidth",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeWidth",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edgewidth",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeWidth",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeWidth",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edgewidth",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edgeWidth",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edgeWidth",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edges",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edges",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edges",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edges",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#edges",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-edges",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#edges",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-edges",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#edges",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fill",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fill",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fill",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fill",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fill",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fill",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fill",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fill",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fill",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fillAlpha",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillAlpha",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillAlpha",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fillAlpha",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillColor",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fillColor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fillColor",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillColor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#preset",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-preset",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#preset",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-preset",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#preset",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-preset",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#preset",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-preset",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#presets",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-presets",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#presets",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#presets",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-presets",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#presets",
     "member"
   ],
   [
-    "scene/materials/emphasismaterial.js~emphasismaterial#type",
-    "class/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-type",
-    "scene/materials/EmphasisMaterial.js~EmphasisMaterial#type",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#type",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-type",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#type",
     "member"
   ],
   [
-    "scene/materials/fresnel.js",
-    "file/scene/materials/Fresnel.js.html",
-    "scene/materials/Fresnel.js",
+    "src/scene/materials/fresnel.js",
+    "file/src/scene/materials/Fresnel.js.html",
+    "src/scene/materials/Fresnel.js",
     "file"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#centerbias",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerBias",
-    "scene/materials/Fresnel.js~Fresnel#centerBias",
+    "src/scene/materials/fresnel.js~fresnel#centerbias",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerBias",
+    "src/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#centerbias",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
-    "scene/materials/Fresnel.js~Fresnel#centerBias",
+    "src/scene/materials/fresnel.js~fresnel#centerbias",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
+    "src/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#centercolor",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerColor",
-    "scene/materials/Fresnel.js~Fresnel#centerColor",
+    "src/scene/materials/fresnel.js~fresnel#centercolor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerColor",
+    "src/scene/materials/Fresnel.js~Fresnel#centerColor",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#centercolor",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerColor",
-    "scene/materials/Fresnel.js~Fresnel#centerColor",
+    "src/scene/materials/fresnel.js~fresnel#centercolor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerColor",
+    "src/scene/materials/Fresnel.js~Fresnel#centerColor",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#constructor",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-constructor-constructor",
-    "scene/materials/Fresnel.js~Fresnel#constructor",
+    "src/scene/materials/fresnel.js~fresnel#constructor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-constructor-constructor",
+    "src/scene/materials/Fresnel.js~Fresnel#constructor",
     "method"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#destroy",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-method-destroy",
-    "scene/materials/Fresnel.js~Fresnel#destroy",
+    "src/scene/materials/fresnel.js~fresnel#destroy",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-method-destroy",
+    "src/scene/materials/Fresnel.js~Fresnel#destroy",
     "method"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#edgebias",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeBias",
-    "scene/materials/Fresnel.js~Fresnel#edgeBias",
+    "src/scene/materials/fresnel.js~fresnel#edgebias",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeBias",
+    "src/scene/materials/Fresnel.js~Fresnel#edgeBias",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#edgebias",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeBias",
-    "scene/materials/Fresnel.js~Fresnel#edgeBias",
+    "src/scene/materials/fresnel.js~fresnel#edgebias",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeBias",
+    "src/scene/materials/Fresnel.js~Fresnel#edgeBias",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#edgecolor",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeColor",
-    "scene/materials/Fresnel.js~Fresnel#edgeColor",
+    "src/scene/materials/fresnel.js~fresnel#edgecolor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-edgeColor",
+    "src/scene/materials/Fresnel.js~Fresnel#edgeColor",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#edgecolor",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeColor",
-    "scene/materials/Fresnel.js~Fresnel#edgeColor",
+    "src/scene/materials/fresnel.js~fresnel#edgecolor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-edgeColor",
+    "src/scene/materials/Fresnel.js~Fresnel#edgeColor",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#power",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-set-power",
-    "scene/materials/Fresnel.js~Fresnel#power",
+    "src/scene/materials/fresnel.js~fresnel#power",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-power",
+    "src/scene/materials/Fresnel.js~Fresnel#power",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#power",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-power",
-    "scene/materials/Fresnel.js~Fresnel#power",
+    "src/scene/materials/fresnel.js~fresnel#power",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-power",
+    "src/scene/materials/Fresnel.js~Fresnel#power",
     "member"
   ],
   [
-    "scene/materials/fresnel.js~fresnel#type",
-    "class/scene/materials/Fresnel.js~Fresnel.html#instance-get-type",
-    "scene/materials/Fresnel.js~Fresnel#type",
+    "src/scene/materials/fresnel.js~fresnel#type",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-type",
+    "src/scene/materials/Fresnel.js~Fresnel#type",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js",
-    "file/scene/materials/LambertMaterial.js.html",
-    "scene/materials/LambertMaterial.js",
+    "src/scene/materials/lambertmaterial.js",
+    "file/src/scene/materials/LambertMaterial.js.html",
+    "src/scene/materials/LambertMaterial.js",
     "file"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#alpha",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-alpha",
-    "scene/materials/LambertMaterial.js~LambertMaterial#alpha",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#alpha",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-alpha",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#alpha",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-alpha",
-    "scene/materials/LambertMaterial.js~LambertMaterial#alpha",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#alpha",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-alpha",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#ambient",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient",
-    "scene/materials/LambertMaterial.js~LambertMaterial#ambient",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#ambient",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-ambient",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#ambient",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#ambient",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-ambient",
-    "scene/materials/LambertMaterial.js~LambertMaterial#ambient",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#ambient",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#ambient",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-backfaces",
-    "scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-backfaces",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-backfaces",
-    "scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-backfaces",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#color",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-color",
-    "scene/materials/LambertMaterial.js~LambertMaterial#color",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#color",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-color",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#color",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#color",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-color",
-    "scene/materials/LambertMaterial.js~LambertMaterial#color",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#color",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-color",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#color",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#constructor",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-constructor-constructor",
-    "scene/materials/LambertMaterial.js~LambertMaterial#constructor",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#constructor",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#destroy",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-method-destroy",
-    "scene/materials/LambertMaterial.js~LambertMaterial#destroy",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#destroy",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-method-destroy",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#destroy",
     "method"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
-    "scene/materials/LambertMaterial.js~LambertMaterial#emissive",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
-    "scene/materials/LambertMaterial.js~LambertMaterial#emissive",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#frontface",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-frontface",
-    "scene/materials/LambertMaterial.js~LambertMaterial#frontface",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#frontface",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-frontface",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#frontface",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-frontface",
-    "scene/materials/LambertMaterial.js~LambertMaterial#frontface",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#frontface",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-frontface",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#linewidth",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-lineWidth",
-    "scene/materials/LambertMaterial.js~LambertMaterial#lineWidth",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#linewidth",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-lineWidth",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#linewidth",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-lineWidth",
-    "scene/materials/LambertMaterial.js~LambertMaterial#lineWidth",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#linewidth",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-lineWidth",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-pointSize",
-    "scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-pointSize",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-pointSize",
-    "scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#pointsize",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-pointSize",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/lambertmaterial.js~lambertmaterial#type",
-    "class/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-type",
-    "scene/materials/LambertMaterial.js~LambertMaterial#type",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#type",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-type",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#type",
     "member"
   ],
   [
-    "scene/materials/material.js",
-    "file/scene/materials/Material.js.html",
-    "scene/materials/Material.js",
+    "src/scene/materials/material.js",
+    "file/src/scene/materials/Material.js.html",
+    "src/scene/materials/Material.js",
     "file"
   ],
   [
-    "scene/materials/material.js~material#constructor",
-    "class/scene/materials/Material.js~Material.html#instance-constructor-constructor",
-    "scene/materials/Material.js~Material#constructor",
+    "src/scene/materials/material.js~material#constructor",
+    "class/src/scene/materials/Material.js~Material.html#instance-constructor-constructor",
+    "src/scene/materials/Material.js~Material#constructor",
     "method"
   ],
   [
-    "scene/materials/material.js~material#destroy",
-    "class/scene/materials/Material.js~Material.html#instance-method-destroy",
-    "scene/materials/Material.js~Material#destroy",
+    "src/scene/materials/material.js~material#destroy",
+    "class/src/scene/materials/Material.js~Material.html#instance-method-destroy",
+    "src/scene/materials/Material.js~Material#destroy",
     "method"
   ],
   [
-    "scene/materials/material.js~material#type",
-    "class/scene/materials/Material.js~Material.html#instance-get-type",
-    "scene/materials/Material.js~Material#type",
+    "src/scene/materials/material.js~material#type",
+    "class/src/scene/materials/Material.js~Material.html#instance-get-type",
+    "src/scene/materials/Material.js~Material#type",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js",
-    "file/scene/materials/MetallicMaterial.js.html",
-    "scene/materials/MetallicMaterial.js",
+    "src/scene/materials/metallicmaterial.js",
+    "file/src/scene/materials/MetallicMaterial.js.html",
+    "src/scene/materials/MetallicMaterial.js",
     "file"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alpha",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alpha",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alpha",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alpha",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alpha",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alpha",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alpha",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alpha",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alpha",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alpha",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaCutoff",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaCutoff",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaCutoff",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaCutoff",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alphamap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMode",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMode",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-backfaces",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-backfaces",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-backfaces",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-backfaces",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#basecolor",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-baseColor",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#baseColor",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#basecolor",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-baseColor",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#baseColor",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#basecolor",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-baseColor",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#baseColor",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#basecolor",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-baseColor",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#baseColor",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#basecolormap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-baseColorMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#baseColorMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#basecolormap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-baseColorMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#baseColorMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#constructor",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-constructor-constructor",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#constructor",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#constructor",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#destroy",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-method-destroy",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#destroy",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#destroy",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-method-destroy",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#destroy",
     "method"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#emissive",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissive",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#emissive",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-emissive",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#emissivemap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissiveMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#emissiveMap",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#frontface",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-frontface",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#frontface",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#frontface",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-frontface",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#frontface",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#linewidth",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-lineWidth",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#lineWidth",
-    "member"
-  ],
-  [
-    "scene/materials/metallicmaterial.js~metallicmaterial#linewidth",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-lineWidth",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#lineWidth",
-    "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#metallic",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#emissive",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissive",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#metallic",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallic",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#emissive",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-emissive",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#metallicmap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallicMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#metallicMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#emissivemap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissiveMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#emissiveMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#metallicroughnessmap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallicRoughnessMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#metallicRoughnessMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#frontface",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-frontface",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#normalmap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-normalMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#normalMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#frontface",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-frontface",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#occlusionmap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-occlusionMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#occlusionMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#linewidth",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-lineWidth",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-pointSize",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#linewidth",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-lineWidth",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-pointSize",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#metallic",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-metallic",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#roughness",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-roughness",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#roughness",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#metallic",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallic",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#metallic",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#roughness",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-roughness",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#roughness",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#metallicmap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallicMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#metallicMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#roughnessmap",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-roughnessMap",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#roughnessMap",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#metallicroughnessmap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-metallicRoughnessMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#metallicRoughnessMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-specularF0",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#normalmap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-normalMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#normalMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-specularF0",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#occlusionmap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-occlusionMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#occlusionMap",
     "member"
   ],
   [
-    "scene/materials/metallicmaterial.js~metallicmaterial#type",
-    "class/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-type",
-    "scene/materials/MetallicMaterial.js~MetallicMaterial#type",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-pointSize",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
     "member"
-  ],
-  [
-    "scene/materials/outlinematerial.js",
-    "file/scene/materials/OutlineMaterial.js.html",
-    "scene/materials/OutlineMaterial.js",
-    "file"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#alpha",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-set-alpha",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#alpha",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#pointsize",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-pointSize",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#alpha",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-get-alpha",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#alpha",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#roughness",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-roughness",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#roughness",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#color",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-get-color",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#color",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#roughness",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-roughness",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#roughness",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#color",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-set-color",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#color",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#roughnessmap",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-roughnessMap",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#roughnessMap",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#constructor",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-constructor-constructor",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#constructor",
-    "method"
-  ],
-  [
-    "scene/materials/outlinematerial.js~outlinematerial#destroy",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-method-destroy",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#destroy",
-    "method"
-  ],
-  [
-    "scene/materials/outlinematerial.js~outlinematerial#type",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-get-type",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#type",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-specularF0",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#width",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-get-width",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#width",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#specularf0",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-specularF0",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#specularF0",
     "member"
   ],
   [
-    "scene/materials/outlinematerial.js~outlinematerial#width",
-    "class/scene/materials/OutlineMaterial.js~OutlineMaterial.html#instance-set-width",
-    "scene/materials/OutlineMaterial.js~OutlineMaterial#width",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#type",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-type",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#type",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js",
-    "file/scene/materials/PhongMaterial.js.html",
-    "scene/materials/PhongMaterial.js",
+    "src/scene/materials/phongmaterial.js",
+    "file/src/scene/materials/PhongMaterial.js.html",
+    "src/scene/materials/PhongMaterial.js",
     "file"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alpha",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alpha",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alpha",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alpha",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alpha",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alpha",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alpha",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alpha",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alpha",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alpha",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaCutoff",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaCutoff",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaCutoff",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaCutoff",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphafresnel",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaFresnel",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaFresnel",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphafresnel",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaFresnel",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaFresnel",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphamap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphamap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphamode",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMode",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaMode",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphamode",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMode",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#alphamode",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaMode",
-    "scene/materials/PhongMaterial.js~PhongMaterial#alphaMode",
+    "src/scene/materials/phongmaterial.js~phongmaterial#alphamode",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaMode",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
-    "scene/materials/PhongMaterial.js~PhongMaterial#ambient",
+    "src/scene/materials/phongmaterial.js~phongmaterial#ambient",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
-    "scene/materials/PhongMaterial.js~PhongMaterial#ambient",
+    "src/scene/materials/phongmaterial.js~phongmaterial#ambient",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#ambientmap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambientMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#ambientMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#ambientmap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambientMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#ambientMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#backfaces",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-backfaces",
-    "scene/materials/PhongMaterial.js~PhongMaterial#backfaces",
+    "src/scene/materials/phongmaterial.js~phongmaterial#backfaces",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-backfaces",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#backfaces",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-backfaces",
-    "scene/materials/PhongMaterial.js~PhongMaterial#backfaces",
+    "src/scene/materials/phongmaterial.js~phongmaterial#backfaces",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-backfaces",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#constructor",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-constructor-constructor",
-    "scene/materials/PhongMaterial.js~PhongMaterial#constructor",
+    "src/scene/materials/phongmaterial.js~phongmaterial#constructor",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#destroy",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-method-destroy",
-    "scene/materials/PhongMaterial.js~PhongMaterial#destroy",
+    "src/scene/materials/phongmaterial.js~phongmaterial#destroy",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-method-destroy",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#destroy",
     "method"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#diffuse",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-diffuse",
-    "scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
+    "src/scene/materials/phongmaterial.js~phongmaterial#diffuse",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuse",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#diffuse",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuse",
-    "scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
+    "src/scene/materials/phongmaterial.js~phongmaterial#diffuse",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-diffuse",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#diffuse",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#diffusefresnel",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuseFresnel",
-    "scene/materials/PhongMaterial.js~PhongMaterial#diffuseFresnel",
+    "src/scene/materials/phongmaterial.js~phongmaterial#diffusefresnel",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuseFresnel",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#diffuseFresnel",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#diffusemap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuseMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#diffuseMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#diffusemap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-diffuseMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#diffuseMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#emissive",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive",
-    "scene/materials/PhongMaterial.js~PhongMaterial#emissive",
+    "src/scene/materials/phongmaterial.js~phongmaterial#emissive",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#emissive",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-emissive",
-    "scene/materials/PhongMaterial.js~PhongMaterial#emissive",
+    "src/scene/materials/phongmaterial.js~phongmaterial#emissive",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-emissive",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#emissivefresnel",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveFresnel",
-    "scene/materials/PhongMaterial.js~PhongMaterial#emissiveFresnel",
+    "src/scene/materials/phongmaterial.js~phongmaterial#emissivefresnel",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveFresnel",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#emissiveFresnel",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#emissivemap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#emissiveMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#emissivemap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#emissiveMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#frontface",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-frontface",
-    "scene/materials/PhongMaterial.js~PhongMaterial#frontface",
+    "src/scene/materials/phongmaterial.js~phongmaterial#frontface",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-frontface",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#frontface",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-frontface",
-    "scene/materials/PhongMaterial.js~PhongMaterial#frontface",
+    "src/scene/materials/phongmaterial.js~phongmaterial#frontface",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-frontface",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#linewidth",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth",
-    "scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
+    "src/scene/materials/phongmaterial.js~phongmaterial#linewidth",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#linewidth",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-lineWidth",
-    "scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
+    "src/scene/materials/phongmaterial.js~phongmaterial#linewidth",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-lineWidth",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#normalmap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-normalMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#normalMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#normalmap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-normalMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#normalMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#occlusionmap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-occlusionMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#occlusionMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#occlusionmap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-occlusionMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#occlusionMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
-    "scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
+    "src/scene/materials/phongmaterial.js~phongmaterial#pointsize",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
-    "scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
+    "src/scene/materials/phongmaterial.js~phongmaterial#pointsize",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#reflectivity",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-reflectivity",
-    "scene/materials/PhongMaterial.js~PhongMaterial#reflectivity",
+    "src/scene/materials/phongmaterial.js~phongmaterial#reflectivity",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-reflectivity",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#reflectivity",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#reflectivity",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivity",
-    "scene/materials/PhongMaterial.js~PhongMaterial#reflectivity",
+    "src/scene/materials/phongmaterial.js~phongmaterial#reflectivity",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivity",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#reflectivity",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#reflectivityfresnel",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityFresnel",
-    "scene/materials/PhongMaterial.js~PhongMaterial#reflectivityFresnel",
+    "src/scene/materials/phongmaterial.js~phongmaterial#reflectivityfresnel",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityFresnel",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#reflectivityFresnel",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#reflectivitymap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#reflectivityMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#reflectivitymap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#reflectivityMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#shininess",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess",
-    "scene/materials/PhongMaterial.js~PhongMaterial#shininess",
+    "src/scene/materials/phongmaterial.js~phongmaterial#shininess",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-shininess",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#shininess",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-shininess",
-    "scene/materials/PhongMaterial.js~PhongMaterial#shininess",
+    "src/scene/materials/phongmaterial.js~phongmaterial#shininess",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#specular",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular",
-    "scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "src/scene/materials/phongmaterial.js~phongmaterial#specular",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#specular",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#specular",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular",
-    "scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "src/scene/materials/phongmaterial.js~phongmaterial#specular",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#specular",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#specularfresnel",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularFresnel",
-    "scene/materials/PhongMaterial.js~PhongMaterial#specularFresnel",
+    "src/scene/materials/phongmaterial.js~phongmaterial#specularfresnel",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularFresnel",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#specularFresnel",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#specularmap",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap",
-    "scene/materials/PhongMaterial.js~PhongMaterial#specularMap",
+    "src/scene/materials/phongmaterial.js~phongmaterial#specularmap",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#specularMap",
     "member"
   ],
   [
-    "scene/materials/phongmaterial.js~phongmaterial#type",
-    "class/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-type",
-    "scene/materials/PhongMaterial.js~PhongMaterial#type",
+    "src/scene/materials/phongmaterial.js~phongmaterial#type",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-type",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#type",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js",
-    "file/scene/materials/SpecularMaterial.js.html",
-    "scene/materials/SpecularMaterial.js",
+    "src/scene/materials/specularmaterial.js",
+    "file/src/scene/materials/SpecularMaterial.js.html",
+    "src/scene/materials/SpecularMaterial.js",
     "file"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alpha",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alpha",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alpha",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alpha",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alpha",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alpha",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alpha",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alpha",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alpha",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaCutoff",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaCutoff",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaCutoff",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaCutoff",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alphamap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alphamap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alphamode",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMode",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alphamode",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaMode",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#alphamode",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaMode",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
+    "src/scene/materials/specularmaterial.js~specularmaterial#alphamode",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaMode",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaMode",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#backfaces",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-backfaces",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
+    "src/scene/materials/specularmaterial.js~specularmaterial#backfaces",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-backfaces",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#backfaces",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-backfaces",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
+    "src/scene/materials/specularmaterial.js~specularmaterial#backfaces",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-backfaces",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#constructor",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-constructor-constructor",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#constructor",
+    "src/scene/materials/specularmaterial.js~specularmaterial#constructor",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-constructor-constructor",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#constructor",
     "method"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#destroy",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-method-destroy",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#destroy",
+    "src/scene/materials/specularmaterial.js~specularmaterial#destroy",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-method-destroy",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#destroy",
     "method"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#diffuse",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-diffuse",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
+    "src/scene/materials/specularmaterial.js~specularmaterial#diffuse",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-diffuse",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#diffuse",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuse",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
+    "src/scene/materials/specularmaterial.js~specularmaterial#diffuse",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuse",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#diffuse",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#diffusemap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuseMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#diffuseMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#diffusemap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-diffuseMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#diffuseMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#emissive",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-emissive",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#emissive",
+    "src/scene/materials/specularmaterial.js~specularmaterial#emissive",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-emissive",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#emissive",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-emissive",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#emissive",
+    "src/scene/materials/specularmaterial.js~specularmaterial#emissive",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-emissive",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#emissive",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#emissivemap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-emissiveMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#emissiveMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#emissivemap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-emissiveMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#emissiveMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#frontface",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-frontface",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
+    "src/scene/materials/specularmaterial.js~specularmaterial#frontface",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-frontface",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#frontface",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-frontface",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
+    "src/scene/materials/specularmaterial.js~specularmaterial#frontface",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-frontface",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#frontface",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#glossiness",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossiness",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
+    "src/scene/materials/specularmaterial.js~specularmaterial#glossiness",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossiness",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#glossiness",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-glossiness",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
+    "src/scene/materials/specularmaterial.js~specularmaterial#glossiness",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-glossiness",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#glossinessmap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossinessMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#glossinessMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#glossinessmap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossinessMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#glossinessMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#linewidth",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-lineWidth",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
+    "src/scene/materials/specularmaterial.js~specularmaterial#linewidth",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-lineWidth",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#linewidth",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-lineWidth",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
+    "src/scene/materials/specularmaterial.js~specularmaterial#linewidth",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-lineWidth",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#lineWidth",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#normalmap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-normalMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#normalMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#normalmap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-normalMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#normalMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#occlusionmap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-occlusionMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#occlusionMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#occlusionmap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-occlusionMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#occlusionMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
+    "src/scene/materials/specularmaterial.js~specularmaterial#pointsize",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
+    "src/scene/materials/specularmaterial.js~specularmaterial#pointsize",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specular",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specular",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specular",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specular",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specular",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specular",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specular",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specular",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specular",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specular",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specular",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specular",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specularf0",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specularf0",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specularglossinessmap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularGlossinessMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specularGlossinessMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specularglossinessmap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularGlossinessMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularGlossinessMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#specularmap",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularMap",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#specularMap",
+    "src/scene/materials/specularmaterial.js~specularmaterial#specularmap",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularMap",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularMap",
     "member"
   ],
   [
-    "scene/materials/specularmaterial.js~specularmaterial#type",
-    "class/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-type",
-    "scene/materials/SpecularMaterial.js~SpecularMaterial#type",
+    "src/scene/materials/specularmaterial.js~specularmaterial#type",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-type",
+    "src/scene/materials/SpecularMaterial.js~SpecularMaterial#type",
     "member"
   ],
   [
-    "scene/materials/texture.js",
-    "file/scene/materials/Texture.js.html",
-    "scene/materials/Texture.js",
+    "src/scene/materials/texture.js",
+    "file/src/scene/materials/Texture.js.html",
+    "src/scene/materials/Texture.js",
     "file"
   ],
   [
-    "scene/materials/texture.js~texture#constructor",
-    "class/scene/materials/Texture.js~Texture.html#instance-constructor-constructor",
-    "scene/materials/Texture.js~Texture#constructor",
+    "src/scene/materials/texture.js~texture#constructor",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-constructor-constructor",
+    "src/scene/materials/Texture.js~Texture#constructor",
     "method"
   ],
   [
-    "scene/materials/texture.js~texture#destroy",
-    "class/scene/materials/Texture.js~Texture.html#instance-method-destroy",
-    "scene/materials/Texture.js~Texture#destroy",
+    "src/scene/materials/texture.js~texture#destroy",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-method-destroy",
+    "src/scene/materials/Texture.js~Texture#destroy",
     "method"
   ],
   [
-    "scene/materials/texture.js~texture#encoding",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-encoding",
-    "scene/materials/Texture.js~Texture#encoding",
+    "src/scene/materials/texture.js~texture#encoding",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-encoding",
+    "src/scene/materials/Texture.js~Texture#encoding",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#flipy",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-flipY",
-    "scene/materials/Texture.js~Texture#flipY",
+    "src/scene/materials/texture.js~texture#flipy",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-flipY",
+    "src/scene/materials/Texture.js~Texture#flipY",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#image",
-    "class/scene/materials/Texture.js~Texture.html#instance-set-image",
-    "scene/materials/Texture.js~Texture#image",
+    "src/scene/materials/texture.js~texture#image",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-image",
+    "src/scene/materials/Texture.js~Texture#image",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#image",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-image",
-    "scene/materials/Texture.js~Texture#image",
+    "src/scene/materials/texture.js~texture#image",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-set-image",
+    "src/scene/materials/Texture.js~Texture#image",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#magfilter",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-magFilter",
-    "scene/materials/Texture.js~Texture#magFilter",
+    "src/scene/materials/texture.js~texture#magfilter",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-magFilter",
+    "src/scene/materials/Texture.js~Texture#magFilter",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#minfilter",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-minFilter",
-    "scene/materials/Texture.js~Texture#minFilter",
+    "src/scene/materials/texture.js~texture#minfilter",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-minFilter",
+    "src/scene/materials/Texture.js~Texture#minFilter",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#rotate",
-    "class/scene/materials/Texture.js~Texture.html#instance-set-rotate",
-    "scene/materials/Texture.js~Texture#rotate",
+    "src/scene/materials/texture.js~texture#rotate",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-rotate",
+    "src/scene/materials/Texture.js~Texture#rotate",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#rotate",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-rotate",
-    "scene/materials/Texture.js~Texture#rotate",
+    "src/scene/materials/texture.js~texture#rotate",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-set-rotate",
+    "src/scene/materials/Texture.js~Texture#rotate",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#scale",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-scale",
-    "scene/materials/Texture.js~Texture#scale",
+    "src/scene/materials/texture.js~texture#scale",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-scale",
+    "src/scene/materials/Texture.js~Texture#scale",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#scale",
-    "class/scene/materials/Texture.js~Texture.html#instance-set-scale",
-    "scene/materials/Texture.js~Texture#scale",
+    "src/scene/materials/texture.js~texture#scale",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-set-scale",
+    "src/scene/materials/Texture.js~Texture#scale",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#src",
-    "class/scene/materials/Texture.js~Texture.html#instance-set-src",
-    "scene/materials/Texture.js~Texture#src",
+    "src/scene/materials/texture.js~texture#src",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-src",
+    "src/scene/materials/Texture.js~Texture#src",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#src",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-src",
-    "scene/materials/Texture.js~Texture#src",
+    "src/scene/materials/texture.js~texture#src",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-set-src",
+    "src/scene/materials/Texture.js~Texture#src",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#translate",
-    "class/scene/materials/Texture.js~Texture.html#instance-set-translate",
-    "scene/materials/Texture.js~Texture#translate",
+    "src/scene/materials/texture.js~texture#translate",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-translate",
+    "src/scene/materials/Texture.js~Texture#translate",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#translate",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-translate",
-    "scene/materials/Texture.js~Texture#translate",
+    "src/scene/materials/texture.js~texture#translate",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-set-translate",
+    "src/scene/materials/Texture.js~Texture#translate",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#type",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-type",
-    "scene/materials/Texture.js~Texture#type",
+    "src/scene/materials/texture.js~texture#type",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-type",
+    "src/scene/materials/Texture.js~Texture#type",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#wraps",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-wrapS",
-    "scene/materials/Texture.js~Texture#wrapS",
+    "src/scene/materials/texture.js~texture#wraps",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-wrapS",
+    "src/scene/materials/Texture.js~Texture#wrapS",
     "member"
   ],
   [
-    "scene/materials/texture.js~texture#wrapt",
-    "class/scene/materials/Texture.js~Texture.html#instance-get-wrapT",
-    "scene/materials/Texture.js~Texture#wrapT",
+    "src/scene/materials/texture.js~texture#wrapt",
+    "class/src/scene/materials/Texture.js~Texture.html#instance-get-wrapT",
+    "src/scene/materials/Texture.js~Texture#wrapT",
     "member"
   ],
   [
-    "scene/math/buildedges.js",
-    "file/scene/math/buildEdges.js.html",
-    "scene/math/buildEdges.js",
+    "src/scene/math/buildedges.js",
+    "file/src/scene/math/buildEdges.js.html",
+    "src/scene/math/buildEdges.js",
     "file"
   ],
   [
-    "scene/math/math.js",
-    "file/scene/math/math.js.html",
-    "scene/math/math.js",
+    "src/scene/math/math.js",
+    "file/src/scene/math/math.js.html",
+    "src/scene/math/math.js",
     "file"
   ],
   [
-    "scene/mesh/mesh.js",
-    "file/scene/mesh/Mesh.js.html",
-    "scene/mesh/Mesh.js",
+    "src/scene/mesh/mesh.js",
+    "file/src/scene/mesh/Mesh.js.html",
+    "src/scene/mesh/Mesh.js",
     "file"
   ],
   [
-    "scene/mesh/mesh.js~mesh#aabb",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-aabb",
-    "scene/mesh/Mesh.js~Mesh#aabb",
+    "src/scene/mesh/mesh.js~mesh#aabb",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-aabb",
+    "src/scene/mesh/Mesh.js~Mesh#aabb",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#aabbvisible",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-member-aabbVisible",
-    "scene/mesh/Mesh.js~Mesh#aabbVisible",
+    "src/scene/mesh/mesh.js~mesh#aabbvisible",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-member-aabbVisible",
+    "src/scene/mesh/Mesh.js~Mesh#aabbVisible",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#billboard",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-billboard",
-    "scene/mesh/Mesh.js~Mesh#billboard",
+    "src/scene/mesh/mesh.js~mesh#billboard",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-billboard",
+    "src/scene/mesh/Mesh.js~Mesh#billboard",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#castshadow",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-castShadow",
-    "scene/mesh/Mesh.js~Mesh#castShadow",
+    "src/scene/mesh/mesh.js~mesh#castshadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-castShadow",
+    "src/scene/mesh/Mesh.js~Mesh#castShadow",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#castshadow",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-castShadow",
-    "scene/mesh/Mesh.js~Mesh#castShadow",
+    "src/scene/mesh/mesh.js~mesh#castshadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-castShadow",
+    "src/scene/mesh/Mesh.js~Mesh#castShadow",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#center",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-center",
-    "scene/mesh/Mesh.js~Mesh#center",
+    "src/scene/mesh/mesh.js~mesh#center",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-center",
+    "src/scene/mesh/Mesh.js~Mesh#center",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#clippable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-clippable",
-    "scene/mesh/Mesh.js~Mesh#clippable",
+    "src/scene/mesh/mesh.js~mesh#clippable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-clippable",
+    "src/scene/mesh/Mesh.js~Mesh#clippable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#clippable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-clippable",
-    "scene/mesh/Mesh.js~Mesh#clippable",
+    "src/scene/mesh/mesh.js~mesh#clippable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-clippable",
+    "src/scene/mesh/Mesh.js~Mesh#clippable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#collidable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-collidable",
-    "scene/mesh/Mesh.js~Mesh#collidable",
+    "src/scene/mesh/mesh.js~mesh#collidable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-collidable",
+    "src/scene/mesh/Mesh.js~Mesh#collidable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#collidable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-collidable",
-    "scene/mesh/Mesh.js~Mesh#collidable",
+    "src/scene/mesh/mesh.js~mesh#collidable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-collidable",
+    "src/scene/mesh/Mesh.js~Mesh#collidable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#colorize",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-colorize",
-    "scene/mesh/Mesh.js~Mesh#colorize",
+    "src/scene/mesh/mesh.js~mesh#colorize",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-colorize",
+    "src/scene/mesh/Mesh.js~Mesh#colorize",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#colorize",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-colorize",
-    "scene/mesh/Mesh.js~Mesh#colorize",
+    "src/scene/mesh/mesh.js~mesh#colorize",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-colorize",
+    "src/scene/mesh/Mesh.js~Mesh#colorize",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#compile",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-compile",
-    "scene/mesh/Mesh.js~Mesh#compile",
+    "src/scene/mesh/mesh.js~mesh#compile",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-compile",
+    "src/scene/mesh/Mesh.js~Mesh#compile",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#constructor",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-constructor-constructor",
-    "scene/mesh/Mesh.js~Mesh#constructor",
+    "src/scene/mesh/mesh.js~mesh#constructor",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-constructor-constructor",
+    "src/scene/mesh/Mesh.js~Mesh#constructor",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#culled",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-culled",
-    "scene/mesh/Mesh.js~Mesh#culled",
+    "src/scene/mesh/mesh.js~mesh#culled",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-culled",
+    "src/scene/mesh/Mesh.js~Mesh#culled",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#culled",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-culled",
-    "scene/mesh/Mesh.js~Mesh#culled",
+    "src/scene/mesh/mesh.js~mesh#culled",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-culled",
+    "src/scene/mesh/Mesh.js~Mesh#culled",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#destroy",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-destroy",
-    "scene/mesh/Mesh.js~Mesh#destroy",
+    "src/scene/mesh/mesh.js~mesh#destroy",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-destroy",
+    "src/scene/mesh/Mesh.js~Mesh#destroy",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawghostededgesopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedEdgesOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawGhostedEdgesOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawghostededgesopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedEdgesOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawGhostedEdgesOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawghostededgestransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedEdgesTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawGhostedEdgesTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawghostededgestransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedEdgesTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawGhostedEdgesTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawghostedfillopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedFillOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawGhostedFillOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawghostedfillopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedFillOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawGhostedFillOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawghostedfilltransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedFillTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawGhostedFillTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawghostedfilltransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawGhostedFillTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawGhostedFillTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawhighlightededgesopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedEdgesOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawHighlightedEdgesOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawhighlightededgesopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedEdgesOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawHighlightedEdgesOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawhighlightededgestransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedEdgesTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawHighlightedEdgesTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawhighlightededgestransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedEdgesTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawHighlightedEdgesTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawhighlightedfillopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedFillOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawHighlightedFillOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawhighlightedfillopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedFillOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawHighlightedFillOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawhighlightedfilltransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedFillTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawHighlightedFillTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawhighlightedfilltransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawHighlightedFillTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawHighlightedFillTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawnormaledgesopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalEdgesOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawNormalEdgesOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawnormaledgesopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalEdgesOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawNormalEdgesOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawnormaledgestransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalEdgesTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawNormalEdgesTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawnormaledgestransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalEdgesTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawNormalEdgesTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawnormalfillopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalFillOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawNormalFillOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawnormalfillopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalFillOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawNormalFillOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawnormalfilltransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalFillTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawNormalFillTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawnormalfilltransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawNormalFillTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawNormalFillTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawpickmesh",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickMesh",
-    "scene/mesh/Mesh.js~Mesh#drawPickMesh",
+    "src/scene/mesh/mesh.js~mesh#drawpickmesh",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickMesh",
+    "src/scene/mesh/Mesh.js~Mesh#drawPickMesh",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawpicktriangles",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickTriangles",
-    "scene/mesh/Mesh.js~Mesh#drawPickTriangles",
+    "src/scene/mesh/mesh.js~mesh#drawpicktriangles",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickTriangles",
+    "src/scene/mesh/Mesh.js~Mesh#drawPickTriangles",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawpickvertices",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickVertices",
-    "scene/mesh/Mesh.js~Mesh#drawPickVertices",
+    "src/scene/mesh/mesh.js~mesh#drawpickvertices",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawPickVertices",
+    "src/scene/mesh/Mesh.js~Mesh#drawPickVertices",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawselectededgesopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedEdgesOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawSelectedEdgesOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawselectededgesopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedEdgesOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawSelectedEdgesOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawselectededgestransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedEdgesTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawSelectedEdgesTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawselectededgestransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedEdgesTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawSelectedEdgesTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawselectedfillopaque",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedFillOpaque",
-    "scene/mesh/Mesh.js~Mesh#drawSelectedFillOpaque",
+    "src/scene/mesh/mesh.js~mesh#drawselectedfillopaque",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedFillOpaque",
+    "src/scene/mesh/Mesh.js~Mesh#drawSelectedFillOpaque",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#drawselectedfilltransparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedFillTransparent",
-    "scene/mesh/Mesh.js~Mesh#drawSelectedFillTransparent",
+    "src/scene/mesh/mesh.js~mesh#drawselectedfilltransparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-drawSelectedFillTransparent",
+    "src/scene/mesh/Mesh.js~Mesh#drawSelectedFillTransparent",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#edgematerial",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-edgeMaterial",
-    "scene/mesh/Mesh.js~Mesh#edgeMaterial",
+    "src/scene/mesh/mesh.js~mesh#edgematerial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-edgeMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#edgeMaterial",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#edges",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-edges",
-    "scene/mesh/Mesh.js~Mesh#edges",
+    "src/scene/mesh/mesh.js~mesh#edges",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-edges",
+    "src/scene/mesh/Mesh.js~Mesh#edges",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#edges",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-edges",
-    "scene/mesh/Mesh.js~Mesh#edges",
+    "src/scene/mesh/mesh.js~mesh#edges",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-edges",
+    "src/scene/mesh/Mesh.js~Mesh#edges",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#geometry",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-geometry",
-    "scene/mesh/Mesh.js~Mesh#geometry",
+    "src/scene/mesh/mesh.js~mesh#geometry",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-geometry",
+    "src/scene/mesh/Mesh.js~Mesh#geometry",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#getpickresult",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-getPickResult",
-    "scene/mesh/Mesh.js~Mesh#getPickResult",
+    "src/scene/mesh/mesh.js~mesh#getpickresult",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-getPickResult",
+    "src/scene/mesh/Mesh.js~Mesh#getPickResult",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#getrenderflags",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-getRenderFlags",
-    "scene/mesh/Mesh.js~Mesh#getRenderFlags",
+    "src/scene/mesh/mesh.js~mesh#getrenderflags",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-getRenderFlags",
+    "src/scene/mesh/Mesh.js~Mesh#getRenderFlags",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#ghostmaterial",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial",
-    "scene/mesh/Mesh.js~Mesh#ghostMaterial",
+    "src/scene/mesh/mesh.js~mesh#ghostmaterial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#ghostMaterial",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#ghosted",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted",
-    "scene/mesh/Mesh.js~Mesh#ghosted",
+    "src/scene/mesh/mesh.js~mesh#ghosted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted",
+    "src/scene/mesh/Mesh.js~Mesh#ghosted",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#ghosted",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted",
-    "scene/mesh/Mesh.js~Mesh#ghosted",
+    "src/scene/mesh/mesh.js~mesh#ghosted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted",
+    "src/scene/mesh/Mesh.js~Mesh#ghosted",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#highlightmaterial",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-highlightMaterial",
-    "scene/mesh/Mesh.js~Mesh#highlightMaterial",
+    "src/scene/mesh/mesh.js~mesh#highlightmaterial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlightMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#highlightMaterial",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#highlighted",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
-    "scene/mesh/Mesh.js~Mesh#highlighted",
+    "src/scene/mesh/mesh.js~mesh#highlighted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
+    "src/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#highlighted",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
-    "scene/mesh/Mesh.js~Mesh#highlighted",
+    "src/scene/mesh/mesh.js~mesh#highlighted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
+    "src/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#isstatesortable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-isStateSortable",
-    "scene/mesh/Mesh.js~Mesh#isStateSortable",
+    "src/scene/mesh/mesh.js~mesh#isstatesortable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-isStateSortable",
+    "src/scene/mesh/Mesh.js~Mesh#isStateSortable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#layer",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-layer",
-    "scene/mesh/Mesh.js~Mesh#layer",
+    "src/scene/mesh/mesh.js~mesh#layer",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-layer",
+    "src/scene/mesh/Mesh.js~Mesh#layer",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#layer",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-layer",
-    "scene/mesh/Mesh.js~Mesh#layer",
+    "src/scene/mesh/mesh.js~mesh#layer",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-layer",
+    "src/scene/mesh/Mesh.js~Mesh#layer",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#material",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-material",
-    "scene/mesh/Mesh.js~Mesh#material",
+    "src/scene/mesh/mesh.js~mesh#material",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-material",
+    "src/scene/mesh/Mesh.js~Mesh#material",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#matrix",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
-    "scene/mesh/Mesh.js~Mesh#matrix",
+    "src/scene/mesh/mesh.js~mesh#matrix",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-matrix",
+    "src/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#matrix",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-matrix",
-    "scene/mesh/Mesh.js~Mesh#matrix",
+    "src/scene/mesh/mesh.js~mesh#matrix",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
+    "src/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#modelid",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-modelId",
-    "scene/mesh/Mesh.js~Mesh#modelId",
+    "src/scene/mesh/mesh.js~mesh#modelid",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-modelId",
+    "src/scene/mesh/Mesh.js~Mesh#modelId",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#modelid",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-modelId",
-    "scene/mesh/Mesh.js~Mesh#modelId",
+    "src/scene/mesh/mesh.js~mesh#modelid",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-modelId",
+    "src/scene/mesh/Mesh.js~Mesh#modelId",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#objectid",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-objectId",
-    "scene/mesh/Mesh.js~Mesh#objectId",
+    "src/scene/mesh/mesh.js~mesh#objectid",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-objectId",
+    "src/scene/mesh/Mesh.js~Mesh#objectId",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#objectid",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-objectId",
-    "scene/mesh/Mesh.js~Mesh#objectId",
+    "src/scene/mesh/mesh.js~mesh#objectid",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-objectId",
+    "src/scene/mesh/Mesh.js~Mesh#objectId",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#opacity",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
-    "scene/mesh/Mesh.js~Mesh#opacity",
+    "src/scene/mesh/mesh.js~mesh#opacity",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
+    "src/scene/mesh/Mesh.js~Mesh#opacity",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#opacity",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
-    "scene/mesh/Mesh.js~Mesh#opacity",
+    "src/scene/mesh/mesh.js~mesh#opacity",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
+    "src/scene/mesh/Mesh.js~Mesh#opacity",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#outlinematerial",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-outlineMaterial",
-    "scene/mesh/Mesh.js~Mesh#outlineMaterial",
+    "src/scene/mesh/mesh.js~mesh#outlinematerial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-outlineMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#outlineMaterial",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#outlined",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-outlined",
-    "scene/mesh/Mesh.js~Mesh#outlined",
+    "src/scene/mesh/mesh.js~mesh#outlined",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-outlined",
+    "src/scene/mesh/Mesh.js~Mesh#outlined",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#outlined",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-outlined",
-    "scene/mesh/Mesh.js~Mesh#outlined",
+    "src/scene/mesh/mesh.js~mesh#outlined",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-outlined",
+    "src/scene/mesh/Mesh.js~Mesh#outlined",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#pickable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-pickable",
-    "scene/mesh/Mesh.js~Mesh#pickable",
+    "src/scene/mesh/mesh.js~mesh#pickable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-pickable",
+    "src/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#pickable",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-pickable",
-    "scene/mesh/Mesh.js~Mesh#pickable",
+    "src/scene/mesh/mesh.js~mesh#pickable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-pickable",
+    "src/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#position",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-position",
-    "scene/mesh/Mesh.js~Mesh#position",
+    "src/scene/mesh/mesh.js~mesh#position",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-position",
+    "src/scene/mesh/Mesh.js~Mesh#position",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#position",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-position",
-    "scene/mesh/Mesh.js~Mesh#position",
+    "src/scene/mesh/mesh.js~mesh#position",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-position",
+    "src/scene/mesh/Mesh.js~Mesh#position",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#quaternion",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-quaternion",
-    "scene/mesh/Mesh.js~Mesh#quaternion",
+    "src/scene/mesh/mesh.js~mesh#quaternion",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-quaternion",
+    "src/scene/mesh/Mesh.js~Mesh#quaternion",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#quaternion",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-quaternion",
-    "scene/mesh/Mesh.js~Mesh#quaternion",
+    "src/scene/mesh/mesh.js~mesh#quaternion",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-quaternion",
+    "src/scene/mesh/Mesh.js~Mesh#quaternion",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#receiveshadow",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-receiveShadow",
-    "scene/mesh/Mesh.js~Mesh#receiveShadow",
+    "src/scene/mesh/mesh.js~mesh#receiveshadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-receiveShadow",
+    "src/scene/mesh/Mesh.js~Mesh#receiveShadow",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#receiveshadow",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-receiveShadow",
-    "scene/mesh/Mesh.js~Mesh#receiveShadow",
+    "src/scene/mesh/mesh.js~mesh#receiveshadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-receiveShadow",
+    "src/scene/mesh/Mesh.js~Mesh#receiveShadow",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotate",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-rotate",
-    "scene/mesh/Mesh.js~Mesh#rotate",
+    "src/scene/mesh/mesh.js~mesh#rotate",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-rotate",
+    "src/scene/mesh/Mesh.js~Mesh#rotate",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotateonworldaxis",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateOnWorldAxis",
-    "scene/mesh/Mesh.js~Mesh#rotateOnWorldAxis",
+    "src/scene/mesh/mesh.js~mesh#rotateonworldaxis",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateOnWorldAxis",
+    "src/scene/mesh/Mesh.js~Mesh#rotateOnWorldAxis",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotatex",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateX",
-    "scene/mesh/Mesh.js~Mesh#rotateX",
+    "src/scene/mesh/mesh.js~mesh#rotatex",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateX",
+    "src/scene/mesh/Mesh.js~Mesh#rotateX",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotatey",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateY",
-    "scene/mesh/Mesh.js~Mesh#rotateY",
+    "src/scene/mesh/mesh.js~mesh#rotatey",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateY",
+    "src/scene/mesh/Mesh.js~Mesh#rotateY",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotatez",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateZ",
-    "scene/mesh/Mesh.js~Mesh#rotateZ",
+    "src/scene/mesh/mesh.js~mesh#rotatez",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-rotateZ",
+    "src/scene/mesh/Mesh.js~Mesh#rotateZ",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotation",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-rotation",
-    "scene/mesh/Mesh.js~Mesh#rotation",
+    "src/scene/mesh/mesh.js~mesh#rotation",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-rotation",
+    "src/scene/mesh/Mesh.js~Mesh#rotation",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#rotation",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-rotation",
-    "scene/mesh/Mesh.js~Mesh#rotation",
+    "src/scene/mesh/mesh.js~mesh#rotation",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-rotation",
+    "src/scene/mesh/Mesh.js~Mesh#rotation",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#scale",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-scale",
-    "scene/mesh/Mesh.js~Mesh#scale",
+    "src/scene/mesh/mesh.js~mesh#scale",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-scale",
+    "src/scene/mesh/Mesh.js~Mesh#scale",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#scale",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-scale",
-    "scene/mesh/Mesh.js~Mesh#scale",
+    "src/scene/mesh/mesh.js~mesh#scale",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-scale",
+    "src/scene/mesh/Mesh.js~Mesh#scale",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#selected",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-selected",
-    "scene/mesh/Mesh.js~Mesh#selected",
+    "src/scene/mesh/mesh.js~mesh#selected",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-selected",
+    "src/scene/mesh/Mesh.js~Mesh#selected",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#selected",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-selected",
-    "scene/mesh/Mesh.js~Mesh#selected",
+    "src/scene/mesh/mesh.js~mesh#selected",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-selected",
+    "src/scene/mesh/Mesh.js~Mesh#selected",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#selectedmaterial",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-selectedMaterial",
-    "scene/mesh/Mesh.js~Mesh#selectedMaterial",
+    "src/scene/mesh/mesh.js~mesh#selectedmaterial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-selectedMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#selectedMaterial",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#statesortcompare",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-stateSortCompare",
-    "scene/mesh/Mesh.js~Mesh#stateSortCompare",
+    "src/scene/mesh/mesh.js~mesh#statesortcompare",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-stateSortCompare",
+    "src/scene/mesh/Mesh.js~Mesh#stateSortCompare",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#stationary",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-stationary",
-    "scene/mesh/Mesh.js~Mesh#stationary",
+    "src/scene/mesh/mesh.js~mesh#stationary",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-stationary",
+    "src/scene/mesh/Mesh.js~Mesh#stationary",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#translate",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-translate",
-    "scene/mesh/Mesh.js~Mesh#translate",
+    "src/scene/mesh/mesh.js~mesh#translate",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-translate",
+    "src/scene/mesh/Mesh.js~Mesh#translate",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#translatex",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-translateX",
-    "scene/mesh/Mesh.js~Mesh#translateX",
+    "src/scene/mesh/mesh.js~mesh#translatex",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-translateX",
+    "src/scene/mesh/Mesh.js~Mesh#translateX",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#translatey",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-translateY",
-    "scene/mesh/Mesh.js~Mesh#translateY",
+    "src/scene/mesh/mesh.js~mesh#translatey",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-translateY",
+    "src/scene/mesh/Mesh.js~Mesh#translateY",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#translatez",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-method-translateZ",
-    "scene/mesh/Mesh.js~Mesh#translateZ",
+    "src/scene/mesh/mesh.js~mesh#translatez",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-method-translateZ",
+    "src/scene/mesh/Mesh.js~Mesh#translateZ",
     "method"
   ],
   [
-    "scene/mesh/mesh.js~mesh#transparent",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-transparent",
-    "scene/mesh/Mesh.js~Mesh#transparent",
+    "src/scene/mesh/mesh.js~mesh#transparent",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-transparent",
+    "src/scene/mesh/Mesh.js~Mesh#transparent",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#visible",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-visible",
-    "scene/mesh/Mesh.js~Mesh#visible",
+    "src/scene/mesh/mesh.js~mesh#visible",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-visible",
+    "src/scene/mesh/Mesh.js~Mesh#visible",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#visible",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-visible",
-    "scene/mesh/Mesh.js~Mesh#visible",
+    "src/scene/mesh/mesh.js~mesh#visible",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-visible",
+    "src/scene/mesh/Mesh.js~Mesh#visible",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#worldmatrix",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-worldMatrix",
-    "scene/mesh/Mesh.js~Mesh#worldMatrix",
+    "src/scene/mesh/mesh.js~mesh#worldmatrix",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-worldMatrix",
+    "src/scene/mesh/Mesh.js~Mesh#worldMatrix",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#worldnormalmatrix",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-worldNormalMatrix",
-    "scene/mesh/Mesh.js~Mesh#worldNormalMatrix",
+    "src/scene/mesh/mesh.js~mesh#worldnormalmatrix",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-worldNormalMatrix",
+    "src/scene/mesh/Mesh.js~Mesh#worldNormalMatrix",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#worldpositions",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-set-worldPositions",
-    "scene/mesh/Mesh.js~Mesh#worldPositions",
+    "src/scene/mesh/mesh.js~mesh#worldpositions",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-worldPositions",
+    "src/scene/mesh/Mesh.js~Mesh#worldPositions",
     "member"
   ],
   [
-    "scene/mesh/mesh.js~mesh#worldpositions",
-    "class/scene/mesh/Mesh.js~Mesh.html#instance-get-worldPositions",
-    "scene/mesh/Mesh.js~Mesh#worldPositions",
+    "src/scene/mesh/mesh.js~mesh#worldpositions",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-worldPositions",
+    "src/scene/mesh/Mesh.js~Mesh#worldPositions",
     "member"
   ],
   [
-    "scene/mesh/draw/drawrenderer.js",
-    "file/scene/mesh/draw/DrawRenderer.js.html",
-    "scene/mesh/draw/DrawRenderer.js",
+    "src/scene/mesh/draw/drawrenderer.js",
+    "file/src/scene/mesh/draw/DrawRenderer.js.html",
+    "src/scene/mesh/draw/DrawRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/draw/drawshadersource.js",
-    "file/scene/mesh/draw/DrawShaderSource.js.html",
-    "scene/mesh/draw/DrawShaderSource.js",
+    "src/scene/mesh/draw/drawshadersource.js",
+    "file/src/scene/mesh/draw/DrawShaderSource.js.html",
+    "src/scene/mesh/draw/DrawShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/emphasis/emphasisedgesrenderer.js",
-    "file/scene/mesh/emphasis/EmphasisEdgesRenderer.js.html",
-    "scene/mesh/emphasis/EmphasisEdgesRenderer.js",
+    "src/scene/mesh/emphasis/emphasisedgesrenderer.js",
+    "file/src/scene/mesh/emphasis/EmphasisEdgesRenderer.js.html",
+    "src/scene/mesh/emphasis/EmphasisEdgesRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/emphasis/emphasisedgesshadersource.js",
-    "file/scene/mesh/emphasis/EmphasisEdgesShaderSource.js.html",
-    "scene/mesh/emphasis/EmphasisEdgesShaderSource.js",
+    "src/scene/mesh/emphasis/emphasisedgesshadersource.js",
+    "file/src/scene/mesh/emphasis/EmphasisEdgesShaderSource.js.html",
+    "src/scene/mesh/emphasis/EmphasisEdgesShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/emphasis/emphasisfillrenderer.js",
-    "file/scene/mesh/emphasis/EmphasisFillRenderer.js.html",
-    "scene/mesh/emphasis/EmphasisFillRenderer.js",
+    "src/scene/mesh/emphasis/emphasisfillrenderer.js",
+    "file/src/scene/mesh/emphasis/EmphasisFillRenderer.js.html",
+    "src/scene/mesh/emphasis/EmphasisFillRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/emphasis/emphasisfillshadersource.js",
-    "file/scene/mesh/emphasis/EmphasisFillShaderSource.js.html",
-    "scene/mesh/emphasis/EmphasisFillShaderSource.js",
+    "src/scene/mesh/emphasis/emphasisfillshadersource.js",
+    "file/src/scene/mesh/emphasis/EmphasisFillShaderSource.js.html",
+    "src/scene/mesh/emphasis/EmphasisFillShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/outline/outlinerenderer.js",
-    "file/scene/mesh/outline/OutlineRenderer.js.html",
-    "scene/mesh/outline/OutlineRenderer.js",
+    "src/scene/mesh/outline/outlinerenderer.js",
+    "file/src/scene/mesh/outline/OutlineRenderer.js.html",
+    "src/scene/mesh/outline/OutlineRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/outline/outlineshadersource.js",
-    "file/scene/mesh/outline/OutlineShaderSource.js.html",
-    "scene/mesh/outline/OutlineShaderSource.js",
+    "src/scene/mesh/outline/outlineshadersource.js",
+    "file/src/scene/mesh/outline/OutlineShaderSource.js.html",
+    "src/scene/mesh/outline/OutlineShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/pick/pickmeshrenderer.js",
-    "file/scene/mesh/pick/PickMeshRenderer.js.html",
-    "scene/mesh/pick/PickMeshRenderer.js",
+    "src/scene/mesh/pick/pickmeshrenderer.js",
+    "file/src/scene/mesh/pick/PickMeshRenderer.js.html",
+    "src/scene/mesh/pick/PickMeshRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/pick/pickmeshshadersource.js",
-    "file/scene/mesh/pick/PickMeshShaderSource.js.html",
-    "scene/mesh/pick/PickMeshShaderSource.js",
+    "src/scene/mesh/pick/pickmeshshadersource.js",
+    "file/src/scene/mesh/pick/PickMeshShaderSource.js.html",
+    "src/scene/mesh/pick/PickMeshShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/pick/picktrianglerenderer.js",
-    "file/scene/mesh/pick/PickTriangleRenderer.js.html",
-    "scene/mesh/pick/PickTriangleRenderer.js",
+    "src/scene/mesh/pick/picktrianglerenderer.js",
+    "file/src/scene/mesh/pick/PickTriangleRenderer.js.html",
+    "src/scene/mesh/pick/PickTriangleRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/pick/picktriangleshadersource.js",
-    "file/scene/mesh/pick/PickTriangleShaderSource.js.html",
-    "scene/mesh/pick/PickTriangleShaderSource.js",
+    "src/scene/mesh/pick/picktriangleshadersource.js",
+    "file/src/scene/mesh/pick/PickTriangleShaderSource.js.html",
+    "src/scene/mesh/pick/PickTriangleShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/pick/pickvertexrenderer.js",
-    "file/scene/mesh/pick/PickVertexRenderer.js.html",
-    "scene/mesh/pick/PickVertexRenderer.js",
+    "src/scene/mesh/pick/pickvertexrenderer.js",
+    "file/src/scene/mesh/pick/PickVertexRenderer.js.html",
+    "src/scene/mesh/pick/PickVertexRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/pick/pickvertexshadersource.js",
-    "file/scene/mesh/pick/PickVertexShaderSource.js.html",
-    "scene/mesh/pick/PickVertexShaderSource.js",
+    "src/scene/mesh/pick/pickvertexshadersource.js",
+    "file/src/scene/mesh/pick/PickVertexShaderSource.js.html",
+    "src/scene/mesh/pick/PickVertexShaderSource.js",
     "file"
   ],
   [
-    "scene/mesh/shadow/shadowrenderer.js",
-    "file/scene/mesh/shadow/ShadowRenderer.js.html",
-    "scene/mesh/shadow/ShadowRenderer.js",
+    "src/scene/mesh/shadow/shadowrenderer.js",
+    "file/src/scene/mesh/shadow/ShadowRenderer.js.html",
+    "src/scene/mesh/shadow/ShadowRenderer.js",
     "file"
   ],
   [
-    "scene/mesh/shadow/shadowshadersource.js",
-    "file/scene/mesh/shadow/ShadowShaderSource.js.html",
-    "scene/mesh/shadow/ShadowShaderSource.js",
+    "src/scene/mesh/shadow/shadowshadersource.js",
+    "file/src/scene/mesh/shadow/ShadowShaderSource.js.html",
+    "src/scene/mesh/shadow/ShadowShaderSource.js",
     "file"
   ],
   [
-    "scene/nodes/node.js",
-    "file/scene/nodes/Node.js.html",
-    "scene/nodes/Node.js",
+    "src/scene/nodes/node.js",
+    "file/src/scene/nodes/Node.js.html",
+    "src/scene/nodes/Node.js",
     "file"
   ],
   [
-    "scene/nodes/node.js~node#aabb",
-    "class/scene/nodes/Node.js~Node.html#instance-get-aabb",
-    "scene/nodes/Node.js~Node#aabb",
+    "src/scene/nodes/node.js~node#aabb",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-aabb",
+    "src/scene/nodes/Node.js~Node#aabb",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#aabbvisible",
-    "class/scene/nodes/Node.js~Node.html#instance-set-aabbVisible",
-    "scene/nodes/Node.js~Node#aabbVisible",
+    "src/scene/nodes/node.js~node#aabbvisible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-aabbVisible",
+    "src/scene/nodes/Node.js~Node#aabbVisible",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#aabbvisible",
-    "class/scene/nodes/Node.js~Node.html#instance-get-aabbVisible",
-    "scene/nodes/Node.js~Node#aabbVisible",
+    "src/scene/nodes/node.js~node#aabbvisible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-aabbVisible",
+    "src/scene/nodes/Node.js~Node#aabbVisible",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#addchild",
-    "class/scene/nodes/Node.js~Node.html#instance-method-addChild",
-    "scene/nodes/Node.js~Node#addChild",
+    "src/scene/nodes/node.js~node#addchild",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-addChild",
+    "src/scene/nodes/Node.js~Node#addChild",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#castshadow",
-    "class/scene/nodes/Node.js~Node.html#instance-get-castShadow",
-    "scene/nodes/Node.js~Node#castShadow",
+    "src/scene/nodes/node.js~node#castshadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-castShadow",
+    "src/scene/nodes/Node.js~Node#castShadow",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#castshadow",
-    "class/scene/nodes/Node.js~Node.html#instance-set-castShadow",
-    "scene/nodes/Node.js~Node#castShadow",
+    "src/scene/nodes/node.js~node#castshadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-castShadow",
+    "src/scene/nodes/Node.js~Node#castShadow",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#center",
-    "class/scene/nodes/Node.js~Node.html#instance-get-center",
-    "scene/nodes/Node.js~Node#center",
+    "src/scene/nodes/node.js~node#center",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-center",
+    "src/scene/nodes/Node.js~Node#center",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#childids",
-    "class/scene/nodes/Node.js~Node.html#instance-get-childIDs",
-    "scene/nodes/Node.js~Node#childIDs",
+    "src/scene/nodes/node.js~node#childids",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-childIDs",
+    "src/scene/nodes/Node.js~Node#childIDs",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#childmap",
-    "class/scene/nodes/Node.js~Node.html#instance-get-childMap",
-    "scene/nodes/Node.js~Node#childMap",
+    "src/scene/nodes/node.js~node#childmap",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-childMap",
+    "src/scene/nodes/Node.js~Node#childMap",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#children",
-    "class/scene/nodes/Node.js~Node.html#instance-get-children",
-    "scene/nodes/Node.js~Node#children",
+    "src/scene/nodes/node.js~node#children",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-children",
+    "src/scene/nodes/Node.js~Node#children",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#clippable",
-    "class/scene/nodes/Node.js~Node.html#instance-get-clippable",
-    "scene/nodes/Node.js~Node#clippable",
+    "src/scene/nodes/node.js~node#clippable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-clippable",
+    "src/scene/nodes/Node.js~Node#clippable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#clippable",
-    "class/scene/nodes/Node.js~Node.html#instance-set-clippable",
-    "scene/nodes/Node.js~Node#clippable",
+    "src/scene/nodes/node.js~node#clippable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-clippable",
+    "src/scene/nodes/Node.js~Node#clippable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#collidable",
-    "class/scene/nodes/Node.js~Node.html#instance-get-collidable",
-    "scene/nodes/Node.js~Node#collidable",
+    "src/scene/nodes/node.js~node#collidable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-collidable",
+    "src/scene/nodes/Node.js~Node#collidable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#collidable",
-    "class/scene/nodes/Node.js~Node.html#instance-set-collidable",
-    "scene/nodes/Node.js~Node#collidable",
+    "src/scene/nodes/node.js~node#collidable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-collidable",
+    "src/scene/nodes/Node.js~Node#collidable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#colorize",
-    "class/scene/nodes/Node.js~Node.html#instance-set-colorize",
-    "scene/nodes/Node.js~Node#colorize",
+    "src/scene/nodes/node.js~node#colorize",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-colorize",
+    "src/scene/nodes/Node.js~Node#colorize",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#colorize",
-    "class/scene/nodes/Node.js~Node.html#instance-get-colorize",
-    "scene/nodes/Node.js~Node#colorize",
+    "src/scene/nodes/node.js~node#colorize",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-colorize",
+    "src/scene/nodes/Node.js~Node#colorize",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#constructor",
-    "class/scene/nodes/Node.js~Node.html#instance-constructor-constructor",
-    "scene/nodes/Node.js~Node#constructor",
+    "src/scene/nodes/node.js~node#constructor",
+    "class/src/scene/nodes/Node.js~Node.html#instance-constructor-constructor",
+    "src/scene/nodes/Node.js~Node#constructor",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#culled",
-    "class/scene/nodes/Node.js~Node.html#instance-set-culled",
-    "scene/nodes/Node.js~Node#culled",
+    "src/scene/nodes/node.js~node#culled",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-culled",
+    "src/scene/nodes/Node.js~Node#culled",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#culled",
-    "class/scene/nodes/Node.js~Node.html#instance-get-culled",
-    "scene/nodes/Node.js~Node#culled",
+    "src/scene/nodes/node.js~node#culled",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-culled",
+    "src/scene/nodes/Node.js~Node#culled",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#destroy",
-    "class/scene/nodes/Node.js~Node.html#instance-method-destroy",
-    "scene/nodes/Node.js~Node#destroy",
+    "src/scene/nodes/node.js~node#destroy",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-destroy",
+    "src/scene/nodes/Node.js~Node#destroy",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#edges",
-    "class/scene/nodes/Node.js~Node.html#instance-set-edges",
-    "scene/nodes/Node.js~Node#edges",
+    "src/scene/nodes/node.js~node#edges",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-edges",
+    "src/scene/nodes/Node.js~Node#edges",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#edges",
-    "class/scene/nodes/Node.js~Node.html#instance-get-edges",
-    "scene/nodes/Node.js~Node#edges",
+    "src/scene/nodes/node.js~node#edges",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-edges",
+    "src/scene/nodes/Node.js~Node#edges",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#ghosted",
-    "class/scene/nodes/Node.js~Node.html#instance-get-ghosted",
-    "scene/nodes/Node.js~Node#ghosted",
+    "src/scene/nodes/node.js~node#ghosted",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-ghosted",
+    "src/scene/nodes/Node.js~Node#ghosted",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#ghosted",
-    "class/scene/nodes/Node.js~Node.html#instance-set-ghosted",
-    "scene/nodes/Node.js~Node#ghosted",
+    "src/scene/nodes/node.js~node#ghosted",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-ghosted",
+    "src/scene/nodes/Node.js~Node#ghosted",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#highlighted",
-    "class/scene/nodes/Node.js~Node.html#instance-set-highlighted",
-    "scene/nodes/Node.js~Node#highlighted",
+    "src/scene/nodes/node.js~node#highlighted",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-highlighted",
+    "src/scene/nodes/Node.js~Node#highlighted",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#highlighted",
-    "class/scene/nodes/Node.js~Node.html#instance-get-highlighted",
-    "scene/nodes/Node.js~Node#highlighted",
+    "src/scene/nodes/node.js~node#highlighted",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-highlighted",
+    "src/scene/nodes/Node.js~Node#highlighted",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#layer",
-    "class/scene/nodes/Node.js~Node.html#instance-member-layer",
-    "scene/nodes/Node.js~Node#layer",
+    "src/scene/nodes/node.js~node#layer",
+    "class/src/scene/nodes/Node.js~Node.html#instance-member-layer",
+    "src/scene/nodes/Node.js~Node#layer",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#matrix",
-    "class/scene/nodes/Node.js~Node.html#instance-get-matrix",
-    "scene/nodes/Node.js~Node#matrix",
+    "src/scene/nodes/node.js~node#matrix",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-matrix",
+    "src/scene/nodes/Node.js~Node#matrix",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#matrix",
-    "class/scene/nodes/Node.js~Node.html#instance-set-matrix",
-    "scene/nodes/Node.js~Node#matrix",
+    "src/scene/nodes/node.js~node#matrix",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-matrix",
+    "src/scene/nodes/Node.js~Node#matrix",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#modelid",
-    "class/scene/nodes/Node.js~Node.html#instance-get-modelId",
-    "scene/nodes/Node.js~Node#modelId",
+    "src/scene/nodes/node.js~node#modelid",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-modelId",
+    "src/scene/nodes/Node.js~Node#modelId",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#numchildren",
-    "class/scene/nodes/Node.js~Node.html#instance-get-numChildren",
-    "scene/nodes/Node.js~Node#numChildren",
+    "src/scene/nodes/node.js~node#numchildren",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-numChildren",
+    "src/scene/nodes/Node.js~Node#numChildren",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#objectid",
-    "class/scene/nodes/Node.js~Node.html#instance-get-objectId",
-    "scene/nodes/Node.js~Node#objectId",
+    "src/scene/nodes/node.js~node#objectid",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-objectId",
+    "src/scene/nodes/Node.js~Node#objectId",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#opacity",
-    "class/scene/nodes/Node.js~Node.html#instance-set-opacity",
-    "scene/nodes/Node.js~Node#opacity",
+    "src/scene/nodes/node.js~node#opacity",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-opacity",
+    "src/scene/nodes/Node.js~Node#opacity",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#opacity",
-    "class/scene/nodes/Node.js~Node.html#instance-get-opacity",
-    "scene/nodes/Node.js~Node#opacity",
+    "src/scene/nodes/node.js~node#opacity",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-opacity",
+    "src/scene/nodes/Node.js~Node#opacity",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#outlined",
-    "class/scene/nodes/Node.js~Node.html#instance-get-outlined",
-    "scene/nodes/Node.js~Node#outlined",
+    "src/scene/nodes/node.js~node#outlined",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-outlined",
+    "src/scene/nodes/Node.js~Node#outlined",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#outlined",
-    "class/scene/nodes/Node.js~Node.html#instance-set-outlined",
-    "scene/nodes/Node.js~Node#outlined",
+    "src/scene/nodes/node.js~node#outlined",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-outlined",
+    "src/scene/nodes/Node.js~Node#outlined",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#parent",
-    "class/scene/nodes/Node.js~Node.html#instance-set-parent",
-    "scene/nodes/Node.js~Node#parent",
+    "src/scene/nodes/node.js~node#parent",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-parent",
+    "src/scene/nodes/Node.js~Node#parent",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#parent",
-    "class/scene/nodes/Node.js~Node.html#instance-get-parent",
-    "scene/nodes/Node.js~Node#parent",
+    "src/scene/nodes/node.js~node#parent",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-parent",
+    "src/scene/nodes/Node.js~Node#parent",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#pickable",
-    "class/scene/nodes/Node.js~Node.html#instance-get-pickable",
-    "scene/nodes/Node.js~Node#pickable",
+    "src/scene/nodes/node.js~node#pickable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-pickable",
+    "src/scene/nodes/Node.js~Node#pickable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#pickable",
-    "class/scene/nodes/Node.js~Node.html#instance-set-pickable",
-    "scene/nodes/Node.js~Node#pickable",
+    "src/scene/nodes/node.js~node#pickable",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-pickable",
+    "src/scene/nodes/Node.js~Node#pickable",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#position",
-    "class/scene/nodes/Node.js~Node.html#instance-set-position",
-    "scene/nodes/Node.js~Node#position",
+    "src/scene/nodes/node.js~node#position",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-position",
+    "src/scene/nodes/Node.js~Node#position",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#position",
-    "class/scene/nodes/Node.js~Node.html#instance-get-position",
-    "scene/nodes/Node.js~Node#position",
+    "src/scene/nodes/node.js~node#position",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-position",
+    "src/scene/nodes/Node.js~Node#position",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#quaternion",
-    "class/scene/nodes/Node.js~Node.html#instance-set-quaternion",
-    "scene/nodes/Node.js~Node#quaternion",
+    "src/scene/nodes/node.js~node#quaternion",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-quaternion",
+    "src/scene/nodes/Node.js~Node#quaternion",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#quaternion",
-    "class/scene/nodes/Node.js~Node.html#instance-get-quaternion",
-    "scene/nodes/Node.js~Node#quaternion",
+    "src/scene/nodes/node.js~node#quaternion",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-quaternion",
+    "src/scene/nodes/Node.js~Node#quaternion",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#receiveshadow",
-    "class/scene/nodes/Node.js~Node.html#instance-get-receiveShadow",
-    "scene/nodes/Node.js~Node#receiveShadow",
+    "src/scene/nodes/node.js~node#receiveshadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-receiveShadow",
+    "src/scene/nodes/Node.js~Node#receiveShadow",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#receiveshadow",
-    "class/scene/nodes/Node.js~Node.html#instance-set-receiveShadow",
-    "scene/nodes/Node.js~Node#receiveShadow",
+    "src/scene/nodes/node.js~node#receiveshadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-receiveShadow",
+    "src/scene/nodes/Node.js~Node#receiveShadow",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#removechild",
-    "class/scene/nodes/Node.js~Node.html#instance-method-removeChild",
-    "scene/nodes/Node.js~Node#removeChild",
+    "src/scene/nodes/node.js~node#removechild",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-removeChild",
+    "src/scene/nodes/Node.js~Node#removeChild",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#removechildren",
-    "class/scene/nodes/Node.js~Node.html#instance-method-removeChildren",
-    "scene/nodes/Node.js~Node#removeChildren",
+    "src/scene/nodes/node.js~node#removechildren",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-removeChildren",
+    "src/scene/nodes/Node.js~Node#removeChildren",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotate",
-    "class/scene/nodes/Node.js~Node.html#instance-method-rotate",
-    "scene/nodes/Node.js~Node#rotate",
+    "src/scene/nodes/node.js~node#rotate",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-rotate",
+    "src/scene/nodes/Node.js~Node#rotate",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotateonworldaxis",
-    "class/scene/nodes/Node.js~Node.html#instance-method-rotateOnWorldAxis",
-    "scene/nodes/Node.js~Node#rotateOnWorldAxis",
+    "src/scene/nodes/node.js~node#rotateonworldaxis",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-rotateOnWorldAxis",
+    "src/scene/nodes/Node.js~Node#rotateOnWorldAxis",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotatex",
-    "class/scene/nodes/Node.js~Node.html#instance-method-rotateX",
-    "scene/nodes/Node.js~Node#rotateX",
+    "src/scene/nodes/node.js~node#rotatex",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-rotateX",
+    "src/scene/nodes/Node.js~Node#rotateX",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotatey",
-    "class/scene/nodes/Node.js~Node.html#instance-method-rotateY",
-    "scene/nodes/Node.js~Node#rotateY",
+    "src/scene/nodes/node.js~node#rotatey",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-rotateY",
+    "src/scene/nodes/Node.js~Node#rotateY",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotatez",
-    "class/scene/nodes/Node.js~Node.html#instance-method-rotateZ",
-    "scene/nodes/Node.js~Node#rotateZ",
+    "src/scene/nodes/node.js~node#rotatez",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-rotateZ",
+    "src/scene/nodes/Node.js~Node#rotateZ",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#rotation",
-    "class/scene/nodes/Node.js~Node.html#instance-set-rotation",
-    "scene/nodes/Node.js~Node#rotation",
+    "src/scene/nodes/node.js~node#rotation",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-rotation",
+    "src/scene/nodes/Node.js~Node#rotation",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#rotation",
-    "class/scene/nodes/Node.js~Node.html#instance-get-rotation",
-    "scene/nodes/Node.js~Node#rotation",
+    "src/scene/nodes/node.js~node#rotation",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-rotation",
+    "src/scene/nodes/Node.js~Node#rotation",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#scale",
-    "class/scene/nodes/Node.js~Node.html#instance-get-scale",
-    "scene/nodes/Node.js~Node#scale",
+    "src/scene/nodes/node.js~node#scale",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-scale",
+    "src/scene/nodes/Node.js~Node#scale",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#scale",
-    "class/scene/nodes/Node.js~Node.html#instance-set-scale",
-    "scene/nodes/Node.js~Node#scale",
+    "src/scene/nodes/node.js~node#scale",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-scale",
+    "src/scene/nodes/Node.js~Node#scale",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#selected",
-    "class/scene/nodes/Node.js~Node.html#instance-set-selected",
-    "scene/nodes/Node.js~Node#selected",
+    "src/scene/nodes/node.js~node#selected",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-selected",
+    "src/scene/nodes/Node.js~Node#selected",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#selected",
-    "class/scene/nodes/Node.js~Node.html#instance-get-selected",
-    "scene/nodes/Node.js~Node#selected",
+    "src/scene/nodes/node.js~node#selected",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-selected",
+    "src/scene/nodes/Node.js~Node#selected",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#translate",
-    "class/scene/nodes/Node.js~Node.html#instance-method-translate",
-    "scene/nodes/Node.js~Node#translate",
+    "src/scene/nodes/node.js~node#translate",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-translate",
+    "src/scene/nodes/Node.js~Node#translate",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#translatex",
-    "class/scene/nodes/Node.js~Node.html#instance-method-translateX",
-    "scene/nodes/Node.js~Node#translateX",
+    "src/scene/nodes/node.js~node#translatex",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-translateX",
+    "src/scene/nodes/Node.js~Node#translateX",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#translatey",
-    "class/scene/nodes/Node.js~Node.html#instance-method-translateY",
-    "scene/nodes/Node.js~Node#translateY",
+    "src/scene/nodes/node.js~node#translatey",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-translateY",
+    "src/scene/nodes/Node.js~Node#translateY",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#translatez",
-    "class/scene/nodes/Node.js~Node.html#instance-method-translateZ",
-    "scene/nodes/Node.js~Node#translateZ",
+    "src/scene/nodes/node.js~node#translatez",
+    "class/src/scene/nodes/Node.js~Node.html#instance-method-translateZ",
+    "src/scene/nodes/Node.js~Node#translateZ",
     "method"
   ],
   [
-    "scene/nodes/node.js~node#type",
-    "class/scene/nodes/Node.js~Node.html#instance-get-type",
-    "scene/nodes/Node.js~Node#type",
+    "src/scene/nodes/node.js~node#type",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-type",
+    "src/scene/nodes/Node.js~Node#type",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#visible",
-    "class/scene/nodes/Node.js~Node.html#instance-set-visible",
-    "scene/nodes/Node.js~Node#visible",
+    "src/scene/nodes/node.js~node#visible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-visible",
+    "src/scene/nodes/Node.js~Node#visible",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#visible",
-    "class/scene/nodes/Node.js~Node.html#instance-get-visible",
-    "scene/nodes/Node.js~Node#visible",
+    "src/scene/nodes/node.js~node#visible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-visible",
+    "src/scene/nodes/Node.js~Node#visible",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#worldmatrix",
-    "class/scene/nodes/Node.js~Node.html#instance-get-worldMatrix",
-    "scene/nodes/Node.js~Node#worldMatrix",
+    "src/scene/nodes/node.js~node#worldmatrix",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-worldMatrix",
+    "src/scene/nodes/Node.js~Node#worldMatrix",
     "member"
   ],
   [
-    "scene/nodes/node.js~node#worldnormalmatrix",
-    "class/scene/nodes/Node.js~Node.html#instance-get-worldNormalMatrix",
-    "scene/nodes/Node.js~Node#worldNormalMatrix",
+    "src/scene/nodes/node.js~node#worldnormalmatrix",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-worldNormalMatrix",
+    "src/scene/nodes/Node.js~Node#worldNormalMatrix",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js",
-    "file/scene/paths/CubicBezierCurve.js.html",
-    "scene/paths/CubicBezierCurve.js",
+    "src/scene/paths/cubicbeziercurve.js",
+    "file/src/scene/paths/CubicBezierCurve.js.html",
+    "src/scene/paths/CubicBezierCurve.js",
     "file"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#constructor",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-constructor-constructor",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#constructor",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#constructor",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-constructor-constructor",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#constructor",
     "method"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#getjson",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-method-getJSON",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#getJSON",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#getjson",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-method-getJSON",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#getJSON",
     "method"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#getpoint",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-method-getPoint",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#getPoint",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#getpoint",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-method-getPoint",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#getPoint",
     "method"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#point",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#point",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#point",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#point",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v0",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v0",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v2",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v2",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v2",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v2",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v3",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v3",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
     "member"
   ],
   [
-    "scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
-    "class/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3",
-    "scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v3",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v3",
     "member"
   ],
   [
-    "scene/paths/curve.js",
-    "file/scene/paths/Curve.js.html",
-    "scene/paths/Curve.js",
+    "src/scene/paths/curve.js",
+    "file/src/scene/paths/Curve.js.html",
+    "src/scene/paths/Curve.js",
     "file"
   ],
   [
-    "scene/paths/curve.js~curve#cachearclengths",
-    "class/scene/paths/Curve.js~Curve.html#instance-member-cacheArcLengths",
-    "scene/paths/Curve.js~Curve#cacheArcLengths",
+    "src/scene/paths/curve.js~curve#cachearclengths",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-member-cacheArcLengths",
+    "src/scene/paths/Curve.js~Curve#cacheArcLengths",
     "member"
   ],
   [
-    "scene/paths/curve.js~curve#constructor",
-    "class/scene/paths/Curve.js~Curve.html#instance-constructor-constructor",
-    "scene/paths/Curve.js~Curve#constructor",
+    "src/scene/paths/curve.js~curve#constructor",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-constructor-constructor",
+    "src/scene/paths/Curve.js~Curve#constructor",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#getpointat",
-    "class/scene/paths/Curve.js~Curve.html#instance-method-getPointAt",
-    "scene/paths/Curve.js~Curve#getPointAt",
+    "src/scene/paths/curve.js~curve#getpointat",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-method-getPointAt",
+    "src/scene/paths/Curve.js~Curve#getPointAt",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#getpoints",
-    "class/scene/paths/Curve.js~Curve.html#instance-method-getPoints",
-    "scene/paths/Curve.js~Curve#getPoints",
+    "src/scene/paths/curve.js~curve#getpoints",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints",
+    "src/scene/paths/Curve.js~Curve#getPoints",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#getspacedpoints",
-    "class/scene/paths/Curve.js~Curve.html#instance-method-getSpacedPoints",
-    "scene/paths/Curve.js~Curve#getSpacedPoints",
+    "src/scene/paths/curve.js~curve#getspacedpoints",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-method-getSpacedPoints",
+    "src/scene/paths/Curve.js~Curve#getSpacedPoints",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#gettangent",
-    "class/scene/paths/Curve.js~Curve.html#instance-method-getTangent",
-    "scene/paths/Curve.js~Curve#getTangent",
+    "src/scene/paths/curve.js~curve#gettangent",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-method-getTangent",
+    "src/scene/paths/Curve.js~Curve#getTangent",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#getutotmapping",
-    "class/scene/paths/Curve.js~Curve.html#instance-method-getUToTMapping",
-    "scene/paths/Curve.js~Curve#getUToTMapping",
+    "src/scene/paths/curve.js~curve#getutotmapping",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-method-getUToTMapping",
+    "src/scene/paths/Curve.js~Curve#getUToTMapping",
     "method"
   ],
   [
-    "scene/paths/curve.js~curve#length",
-    "class/scene/paths/Curve.js~Curve.html#instance-get-length",
-    "scene/paths/Curve.js~Curve#length",
+    "src/scene/paths/curve.js~curve#length",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-get-length",
+    "src/scene/paths/Curve.js~Curve#length",
     "member"
   ],
   [
-    "scene/paths/curve.js~curve#needsupdate",
-    "class/scene/paths/Curve.js~Curve.html#instance-member-needsUpdate",
-    "scene/paths/Curve.js~Curve#needsUpdate",
+    "src/scene/paths/curve.js~curve#needsupdate",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-member-needsUpdate",
+    "src/scene/paths/Curve.js~Curve#needsUpdate",
     "member"
   ],
   [
-    "scene/paths/curve.js~curve#t",
-    "class/scene/paths/Curve.js~Curve.html#instance-get-t",
-    "scene/paths/Curve.js~Curve#t",
+    "src/scene/paths/curve.js~curve#t",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-set-t",
+    "src/scene/paths/Curve.js~Curve#t",
     "member"
   ],
   [
-    "scene/paths/curve.js~curve#t",
-    "class/scene/paths/Curve.js~Curve.html#instance-set-t",
-    "scene/paths/Curve.js~Curve#t",
+    "src/scene/paths/curve.js~curve#t",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-get-t",
+    "src/scene/paths/Curve.js~Curve#t",
     "member"
   ],
   [
-    "scene/paths/curve.js~curve#tangent",
-    "class/scene/paths/Curve.js~Curve.html#instance-get-tangent",
-    "scene/paths/Curve.js~Curve#tangent",
+    "src/scene/paths/curve.js~curve#tangent",
+    "class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent",
+    "src/scene/paths/Curve.js~Curve#tangent",
     "member"
   ],
   [
-    "scene/paths/path.js",
-    "file/scene/paths/Path.js.html",
-    "scene/paths/Path.js",
+    "src/scene/paths/path.js",
+    "file/src/scene/paths/Path.js.html",
+    "src/scene/paths/Path.js",
     "file"
   ],
   [
-    "scene/paths/path.js~path#addcurve",
-    "class/scene/paths/Path.js~Path.html#instance-method-addCurve",
-    "scene/paths/Path.js~Path#addCurve",
+    "src/scene/paths/path.js~path#addcurve",
+    "class/src/scene/paths/Path.js~Path.html#instance-method-addCurve",
+    "src/scene/paths/Path.js~Path#addCurve",
     "method"
   ],
   [
-    "scene/paths/path.js~path#constructor",
-    "class/scene/paths/Path.js~Path.html#instance-constructor-constructor",
-    "scene/paths/Path.js~Path#constructor",
+    "src/scene/paths/path.js~path#constructor",
+    "class/src/scene/paths/Path.js~Path.html#instance-constructor-constructor",
+    "src/scene/paths/Path.js~Path#constructor",
     "method"
   ],
   [
-    "scene/paths/path.js~path#curves",
-    "class/scene/paths/Path.js~Path.html#instance-set-curves",
-    "scene/paths/Path.js~Path#curves",
+    "src/scene/paths/path.js~path#curves",
+    "class/src/scene/paths/Path.js~Path.html#instance-set-curves",
+    "src/scene/paths/Path.js~Path#curves",
     "member"
   ],
   [
-    "scene/paths/path.js~path#curves",
-    "class/scene/paths/Path.js~Path.html#instance-get-curves",
-    "scene/paths/Path.js~Path#curves",
+    "src/scene/paths/path.js~path#curves",
+    "class/src/scene/paths/Path.js~Path.html#instance-get-curves",
+    "src/scene/paths/Path.js~Path#curves",
     "member"
   ],
   [
-    "scene/paths/path.js~path#destroy",
-    "class/scene/paths/Path.js~Path.html#instance-method-destroy",
-    "scene/paths/Path.js~Path#destroy",
+    "src/scene/paths/path.js~path#destroy",
+    "class/src/scene/paths/Path.js~Path.html#instance-method-destroy",
+    "src/scene/paths/Path.js~Path#destroy",
     "method"
   ],
   [
-    "scene/paths/path.js~path#getpoint",
-    "class/scene/paths/Path.js~Path.html#instance-method-getPoint",
-    "scene/paths/Path.js~Path#getPoint",
+    "src/scene/paths/path.js~path#getpoint",
+    "class/src/scene/paths/Path.js~Path.html#instance-method-getPoint",
+    "src/scene/paths/Path.js~Path#getPoint",
     "method"
   ],
   [
-    "scene/paths/path.js~path#length",
-    "class/scene/paths/Path.js~Path.html#instance-get-length",
-    "scene/paths/Path.js~Path#length",
+    "src/scene/paths/path.js~path#length",
+    "class/src/scene/paths/Path.js~Path.html#instance-get-length",
+    "src/scene/paths/Path.js~Path#length",
     "member"
   ],
   [
-    "scene/paths/path.js~path#point",
-    "class/scene/paths/Path.js~Path.html#instance-get-point",
-    "scene/paths/Path.js~Path#point",
+    "src/scene/paths/path.js~path#point",
+    "class/src/scene/paths/Path.js~Path.html#instance-get-point",
+    "src/scene/paths/Path.js~Path#point",
     "member"
   ],
   [
-    "scene/paths/path.js~path#t",
-    "class/scene/paths/Path.js~Path.html#instance-set-t",
-    "scene/paths/Path.js~Path#t",
+    "src/scene/paths/path.js~path#t",
+    "class/src/scene/paths/Path.js~Path.html#instance-get-t",
+    "src/scene/paths/Path.js~Path#t",
     "member"
   ],
   [
-    "scene/paths/path.js~path#t",
-    "class/scene/paths/Path.js~Path.html#instance-get-t",
-    "scene/paths/Path.js~Path#t",
+    "src/scene/paths/path.js~path#t",
+    "class/src/scene/paths/Path.js~Path.html#instance-set-t",
+    "src/scene/paths/Path.js~Path#t",
     "member"
   ],
   [
-    "scene/paths/quadraticbeziercurve.js",
-    "file/scene/paths/QuadraticBezierCurve.js.html",
-    "scene/paths/QuadraticBezierCurve.js",
+    "src/scene/paths/quadraticbeziercurve.js",
+    "file/src/scene/paths/QuadraticBezierCurve.js.html",
+    "src/scene/paths/QuadraticBezierCurve.js",
     "file"
   ],
   [
-    "scene/paths/splinecurve.js",
-    "file/scene/paths/SplineCurve.js.html",
-    "scene/paths/SplineCurve.js",
+    "src/scene/paths/splinecurve.js",
+    "file/src/scene/paths/SplineCurve.js.html",
+    "src/scene/paths/SplineCurve.js",
     "file"
   ],
   [
-    "scene/scene/scene.js",
-    "file/scene/scene/Scene.js.html",
-    "scene/scene/Scene.js",
+    "src/scene/scene/scene.js",
+    "file/src/scene/scene/Scene.js.html",
+    "src/scene/scene/Scene.js",
     "file"
   ],
   [
-    "scene/scene/scene.js~scene#aabb",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-aabb",
-    "scene/scene/Scene.js~Scene#aabb",
+    "src/scene/scene/scene.js~scene#aabb",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-aabb",
+    "src/scene/scene/Scene.js~Scene#aabb",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#camera",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-camera",
-    "scene/scene/Scene.js~Scene#camera",
+    "src/scene/scene/scene.js~scene#camera",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-camera",
+    "src/scene/scene/Scene.js~Scene#camera",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#canvas",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-canvas",
-    "scene/scene/Scene.js~Scene#canvas",
+    "src/scene/scene/scene.js~scene#canvas",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-canvas",
+    "src/scene/scene/Scene.js~Scene#canvas",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#center",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-center",
-    "scene/scene/Scene.js~Scene#center",
+    "src/scene/scene/scene.js~scene#center",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-center",
+    "src/scene/scene/Scene.js~Scene#center",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#clear",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-clear",
-    "scene/scene/Scene.js~Scene#clear",
+    "src/scene/scene/scene.js~scene#clear",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-clear",
+    "src/scene/scene/Scene.js~Scene#clear",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#clearclips",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-clearClips",
-    "scene/scene/Scene.js~Scene#clearClips",
+    "src/scene/scene/scene.js~scene#clearclips",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-clearClips",
+    "src/scene/scene/Scene.js~Scene#clearClips",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#cleareachpass",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass",
-    "scene/scene/Scene.js~Scene#clearEachPass",
+    "src/scene/scene/scene.js~scene#cleareachpass",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass",
+    "src/scene/scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#cleareachpass",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass",
-    "scene/scene/Scene.js~Scene#clearEachPass",
+    "src/scene/scene/scene.js~scene#cleareachpass",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass",
+    "src/scene/scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#clearlights",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-clearLights",
-    "scene/scene/Scene.js~Scene#clearLights",
+    "src/scene/scene/scene.js~scene#clearlights",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-clearLights",
+    "src/scene/scene/Scene.js~Scene#clearLights",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#clips",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-clips",
-    "scene/scene/Scene.js~Scene#clips",
+    "src/scene/scene/scene.js~scene#clips",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-clips",
+    "src/scene/scene/Scene.js~Scene#clips",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#components",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-components",
-    "scene/scene/Scene.js~Scene#components",
+    "src/scene/scene/scene.js~scene#components",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-components",
+    "src/scene/scene/Scene.js~Scene#components",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#constructor",
-    "class/scene/scene/Scene.js~Scene.html#instance-constructor-constructor",
-    "scene/scene/Scene.js~Scene#constructor",
+    "src/scene/scene/scene.js~scene#constructor",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-constructor-constructor",
+    "src/scene/scene/Scene.js~Scene#constructor",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#destroy",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-destroy",
-    "scene/scene/Scene.js~Scene#destroy",
+    "src/scene/scene/scene.js~scene#destroy",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-destroy",
+    "src/scene/scene/Scene.js~Scene#destroy",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#edgematerial",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-edgeMaterial",
-    "scene/scene/Scene.js~Scene#edgeMaterial",
+    "src/scene/scene/scene.js~scene#edgematerial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-edgeMaterial",
+    "src/scene/scene/Scene.js~Scene#edgeMaterial",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammafactor",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-gammaFactor",
-    "scene/scene/Scene.js~Scene#gammaFactor",
+    "src/scene/scene/scene.js~scene#gammafactor",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-gammaFactor",
+    "src/scene/scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammafactor",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-gammaFactor",
-    "scene/scene/Scene.js~Scene#gammaFactor",
+    "src/scene/scene/scene.js~scene#gammafactor",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-gammaFactor",
+    "src/scene/scene/Scene.js~Scene#gammaFactor",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammainput",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-gammaInput",
-    "scene/scene/Scene.js~Scene#gammaInput",
+    "src/scene/scene/scene.js~scene#gammainput",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-gammaInput",
+    "src/scene/scene/Scene.js~Scene#gammaInput",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammainput",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-gammaInput",
-    "scene/scene/Scene.js~Scene#gammaInput",
+    "src/scene/scene/scene.js~scene#gammainput",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-gammaInput",
+    "src/scene/scene/Scene.js~Scene#gammaInput",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammaoutput",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-gammaOutput",
-    "scene/scene/Scene.js~Scene#gammaOutput",
+    "src/scene/scene/scene.js~scene#gammaoutput",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-gammaOutput",
+    "src/scene/scene/Scene.js~Scene#gammaOutput",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#gammaoutput",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-gammaOutput",
-    "scene/scene/Scene.js~Scene#gammaOutput",
+    "src/scene/scene/scene.js~scene#gammaoutput",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-gammaOutput",
+    "src/scene/scene/Scene.js~Scene#gammaOutput",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#geometry",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-geometry",
-    "scene/scene/Scene.js~Scene#geometry",
+    "src/scene/scene/scene.js~scene#geometry",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-geometry",
+    "src/scene/scene/Scene.js~Scene#geometry",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#getaabb",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-getAABB",
-    "scene/scene/Scene.js~Scene#getAABB",
+    "src/scene/scene/scene.js~scene#getaabb",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-getAABB",
+    "src/scene/scene/Scene.js~Scene#getAABB",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#ghostmaterial",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial",
-    "scene/scene/Scene.js~Scene#ghostMaterial",
+    "src/scene/scene/scene.js~scene#ghostmaterial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial",
+    "src/scene/scene/Scene.js~Scene#ghostMaterial",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#ghostedobjectids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-ghostedObjectIds",
-    "scene/scene/Scene.js~Scene#ghostedObjectIds",
+    "src/scene/scene/scene.js~scene#ghostedobjectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostedObjectIds",
+    "src/scene/scene/Scene.js~Scene#ghostedObjectIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#ghostedobjects",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects",
-    "scene/scene/Scene.js~Scene#ghostedObjects",
+    "src/scene/scene/scene.js~scene#ghostedobjects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects",
+    "src/scene/scene/Scene.js~Scene#ghostedObjects",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#highlightmaterial",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial",
-    "scene/scene/Scene.js~Scene#highlightMaterial",
+    "src/scene/scene/scene.js~scene#highlightmaterial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial",
+    "src/scene/scene/Scene.js~Scene#highlightMaterial",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#highlightedobjectids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-highlightedObjectIds",
-    "scene/scene/Scene.js~Scene#highlightedObjectIds",
+    "src/scene/scene/scene.js~scene#highlightedobjectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightedObjectIds",
+    "src/scene/scene/Scene.js~Scene#highlightedObjectIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#highlightedobjects",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-highlightedObjects",
-    "scene/scene/Scene.js~Scene#highlightedObjects",
+    "src/scene/scene/scene.js~scene#highlightedobjects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-highlightedObjects",
+    "src/scene/scene/Scene.js~Scene#highlightedObjects",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#input",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-input",
-    "scene/scene/Scene.js~Scene#input",
+    "src/scene/scene/scene.js~scene#input",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-input",
+    "src/scene/scene/Scene.js~Scene#input",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#lightmaps",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-lightMaps",
-    "scene/scene/Scene.js~Scene#lightMaps",
+    "src/scene/scene/scene.js~scene#lightmaps",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-lightMaps",
+    "src/scene/scene/Scene.js~Scene#lightMaps",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#lights",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-lights",
-    "scene/scene/Scene.js~Scene#lights",
+    "src/scene/scene/scene.js~scene#lights",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-lights",
+    "src/scene/scene/Scene.js~Scene#lights",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#loading",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-loading",
-    "scene/scene/Scene.js~Scene#loading",
+    "src/scene/scene/scene.js~scene#loading",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-loading",
+    "src/scene/scene/Scene.js~Scene#loading",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#material",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-material",
-    "scene/scene/Scene.js~Scene#material",
+    "src/scene/scene/scene.js~scene#material",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-material",
+    "src/scene/scene/Scene.js~Scene#material",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#modelids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-modelIds",
-    "scene/scene/Scene.js~Scene#modelIds",
+    "src/scene/scene/scene.js~scene#modelids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-modelIds",
+    "src/scene/scene/Scene.js~Scene#modelIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#models",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-models",
-    "scene/scene/Scene.js~Scene#models",
+    "src/scene/scene/scene.js~scene#models",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-models",
+    "src/scene/scene/Scene.js~Scene#models",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#objectids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-objectIds",
-    "scene/scene/Scene.js~Scene#objectIds",
+    "src/scene/scene/scene.js~scene#objectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-objectIds",
+    "src/scene/scene/Scene.js~Scene#objectIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#objects",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-objects",
-    "scene/scene/Scene.js~Scene#objects",
+    "src/scene/scene/scene.js~scene#objects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-objects",
+    "src/scene/scene/Scene.js~Scene#objects",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#outlinematerial",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-outlineMaterial",
-    "scene/scene/Scene.js~Scene#outlineMaterial",
+    "src/scene/scene/scene.js~scene#outlinematerial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-outlineMaterial",
+    "src/scene/scene/Scene.js~Scene#outlineMaterial",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#passes",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-passes",
-    "scene/scene/Scene.js~Scene#passes",
+    "src/scene/scene/scene.js~scene#passes",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-passes",
+    "src/scene/scene/Scene.js~Scene#passes",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#passes",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-passes",
-    "scene/scene/Scene.js~Scene#passes",
+    "src/scene/scene/scene.js~scene#passes",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-passes",
+    "src/scene/scene/Scene.js~Scene#passes",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#pick",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-pick",
-    "scene/scene/Scene.js~Scene#pick",
+    "src/scene/scene/scene.js~scene#pick",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-pick",
+    "src/scene/scene/Scene.js~Scene#pick",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#reflectionmaps",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-reflectionMaps",
-    "scene/scene/Scene.js~Scene#reflectionMaps",
+    "src/scene/scene/scene.js~scene#reflectionmaps",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-reflectionMaps",
+    "src/scene/scene/Scene.js~Scene#reflectionMaps",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#render",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-render",
-    "scene/scene/Scene.js~Scene#render",
+    "src/scene/scene/scene.js~scene#render",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-render",
+    "src/scene/scene/Scene.js~Scene#render",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#selectedmaterial",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial",
-    "scene/scene/Scene.js~Scene#selectedMaterial",
+    "src/scene/scene/scene.js~scene#selectedmaterial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial",
+    "src/scene/scene/Scene.js~Scene#selectedMaterial",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#selectedobjectids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-selectedObjectIds",
-    "scene/scene/Scene.js~Scene#selectedObjectIds",
+    "src/scene/scene/scene.js~scene#selectedobjectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-selectedObjectIds",
+    "src/scene/scene/Scene.js~Scene#selectedObjectIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#selectedobjects",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-selectedObjects",
-    "scene/scene/Scene.js~Scene#selectedObjects",
+    "src/scene/scene/scene.js~scene#selectedobjects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-selectedObjects",
+    "src/scene/scene/Scene.js~Scene#selectedObjects",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#setcolorize",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setColorize",
-    "scene/scene/Scene.js~Scene#setColorize",
+    "src/scene/scene/scene.js~scene#setcolorize",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setColorize",
+    "src/scene/scene/Scene.js~Scene#setColorize",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setculled",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setCulled",
-    "scene/scene/Scene.js~Scene#setCulled",
+    "src/scene/scene/scene.js~scene#setculled",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setCulled",
+    "src/scene/scene/Scene.js~Scene#setCulled",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setedges",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setEdges",
-    "scene/scene/Scene.js~Scene#setEdges",
+    "src/scene/scene/scene.js~scene#setedges",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setEdges",
+    "src/scene/scene/Scene.js~Scene#setEdges",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setghosted",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setGhosted",
-    "scene/scene/Scene.js~Scene#setGhosted",
+    "src/scene/scene/scene.js~scene#setghosted",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setGhosted",
+    "src/scene/scene/Scene.js~Scene#setGhosted",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#sethighlighted",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setHighlighted",
-    "scene/scene/Scene.js~Scene#setHighlighted",
+    "src/scene/scene/scene.js~scene#sethighlighted",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setHighlighted",
+    "src/scene/scene/Scene.js~Scene#setHighlighted",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setopacity",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setOpacity",
-    "scene/scene/Scene.js~Scene#setOpacity",
+    "src/scene/scene/scene.js~scene#setopacity",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setOpacity",
+    "src/scene/scene/Scene.js~Scene#setOpacity",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setoutlined",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setOutlined",
-    "scene/scene/Scene.js~Scene#setOutlined",
+    "src/scene/scene/scene.js~scene#setoutlined",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setOutlined",
+    "src/scene/scene/Scene.js~Scene#setOutlined",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setpickable",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setPickable",
-    "scene/scene/Scene.js~Scene#setPickable",
+    "src/scene/scene/scene.js~scene#setpickable",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setPickable",
+    "src/scene/scene/Scene.js~Scene#setPickable",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setselected",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setSelected",
-    "scene/scene/Scene.js~Scene#setSelected",
+    "src/scene/scene/scene.js~scene#setselected",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setSelected",
+    "src/scene/scene/Scene.js~Scene#setSelected",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#setvisible",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-setVisible",
-    "scene/scene/Scene.js~Scene#setVisible",
+    "src/scene/scene/scene.js~scene#setvisible",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setVisible",
+    "src/scene/scene/Scene.js~Scene#setVisible",
     "method"
   ],
   [
-    "scene/scene/scene.js~scene#starttime",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-startTime",
-    "scene/scene/Scene.js~Scene#startTime",
+    "src/scene/scene/scene.js~scene#starttime",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-startTime",
+    "src/scene/scene/Scene.js~Scene#startTime",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#ticksperrender",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-ticksPerRender",
-    "scene/scene/Scene.js~Scene#ticksPerRender",
+    "src/scene/scene/scene.js~scene#ticksperrender",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-ticksPerRender",
+    "src/scene/scene/Scene.js~Scene#ticksPerRender",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#ticksperrender",
-    "class/scene/scene/Scene.js~Scene.html#instance-set-ticksPerRender",
-    "scene/scene/Scene.js~Scene#ticksPerRender",
+    "src/scene/scene/scene.js~scene#ticksperrender",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-ticksPerRender",
+    "src/scene/scene/Scene.js~Scene#ticksPerRender",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#type",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-type",
-    "scene/scene/Scene.js~Scene#type",
+    "src/scene/scene/scene.js~scene#type",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-type",
+    "src/scene/scene/Scene.js~Scene#type",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#types",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-types",
-    "scene/scene/Scene.js~Scene#types",
+    "src/scene/scene/scene.js~scene#types",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-types",
+    "src/scene/scene/Scene.js~Scene#types",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#viewport",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-viewport",
-    "scene/scene/Scene.js~Scene#viewport",
+    "src/scene/scene/scene.js~scene#viewport",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-viewport",
+    "src/scene/scene/Scene.js~Scene#viewport",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#visibleobjectids",
-    "class/scene/scene/Scene.js~Scene.html#instance-get-visibleObjectIds",
-    "scene/scene/Scene.js~Scene#visibleObjectIds",
+    "src/scene/scene/scene.js~scene#visibleobjectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-visibleObjectIds",
+    "src/scene/scene/Scene.js~Scene#visibleObjectIds",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#visibleobjects",
-    "class/scene/scene/Scene.js~Scene.html#instance-member-visibleObjects",
-    "scene/scene/Scene.js~Scene#visibleObjects",
+    "src/scene/scene/scene.js~scene#visibleobjects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-visibleObjects",
+    "src/scene/scene/Scene.js~Scene#visibleObjects",
     "member"
   ],
   [
-    "scene/scene/scene.js~scene#withcomponents",
-    "class/scene/scene/Scene.js~Scene.html#instance-method-withComponents",
-    "scene/scene/Scene.js~Scene#withComponents",
+    "src/scene/scene/scene.js~scene#withcomponents",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-withComponents",
+    "src/scene/scene/Scene.js~Scene#withComponents",
     "method"
   ],
   [
-    "scene/skybox/skybox.js",
-    "file/scene/skybox/Skybox.js.html",
-    "scene/skybox/Skybox.js",
+    "src/scene/skybox/skybox.js",
+    "file/src/scene/skybox/Skybox.js.html",
+    "src/scene/skybox/Skybox.js",
     "file"
   ],
   [
-    "scene/skybox/skybox.js~skybox#active",
-    "class/scene/skybox/Skybox.js~Skybox.html#instance-get-active",
-    "scene/skybox/Skybox.js~Skybox#active",
+    "src/scene/skybox/skybox.js~skybox#active",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-set-active",
+    "src/scene/skybox/Skybox.js~Skybox#active",
     "member"
   ],
   [
-    "scene/skybox/skybox.js~skybox#active",
-    "class/scene/skybox/Skybox.js~Skybox.html#instance-set-active",
-    "scene/skybox/Skybox.js~Skybox#active",
+    "src/scene/skybox/skybox.js~skybox#active",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-get-active",
+    "src/scene/skybox/Skybox.js~Skybox#active",
     "member"
   ],
   [
-    "scene/skybox/skybox.js~skybox#constructor",
-    "class/scene/skybox/Skybox.js~Skybox.html#instance-constructor-constructor",
-    "scene/skybox/Skybox.js~Skybox#constructor",
+    "src/scene/skybox/skybox.js~skybox#constructor",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-constructor-constructor",
+    "src/scene/skybox/Skybox.js~Skybox#constructor",
     "method"
   ],
   [
-    "scene/skybox/skybox.js~skybox#size",
-    "class/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
-    "scene/skybox/Skybox.js~Skybox#size",
+    "src/scene/skybox/skybox.js~skybox#size",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
+    "src/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
   [
-    "scene/skybox/skybox.js~skybox#size",
-    "class/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
-    "scene/skybox/Skybox.js~Skybox#size",
+    "src/scene/skybox/skybox.js~skybox#size",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
+    "src/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
   [
-    "scene/stats.js",
-    "file/scene/stats.js.html",
-    "scene/stats.js",
+    "src/scene/stats.js",
+    "file/src/scene/stats.js.html",
+    "src/scene/stats.js",
     "file"
   ],
   [
-    "scene/utils.js",
-    "file/scene/utils.js.html",
-    "scene/utils.js",
+    "src/scene/utils.js",
+    "file/src/scene/utils.js.html",
+    "src/scene/utils.js",
     "file"
   ],
   [
-    "scene/utils/map.js",
-    "file/scene/utils/Map.js.html",
-    "scene/utils/Map.js",
+    "src/scene/utils/map.js",
+    "file/src/scene/utils/Map.js.html",
+    "src/scene/utils/Map.js",
     "file"
   ],
   [
-    "scene/utils/map.js~map#additem",
-    "class/scene/utils/Map.js~Map.html#instance-method-addItem",
-    "scene/utils/Map.js~Map#addItem",
+    "src/scene/utils/map.js~map#additem",
+    "class/src/scene/utils/Map.js~Map.html#instance-method-addItem",
+    "src/scene/utils/Map.js~Map#addItem",
     "method"
   ],
   [
-    "scene/utils/map.js~map#constructor",
-    "class/scene/utils/Map.js~Map.html#instance-constructor-constructor",
-    "scene/utils/Map.js~Map#constructor",
+    "src/scene/utils/map.js~map#constructor",
+    "class/src/scene/utils/Map.js~Map.html#instance-constructor-constructor",
+    "src/scene/utils/Map.js~Map#constructor",
     "method"
   ],
   [
-    "scene/utils/map.js~map#items",
-    "class/scene/utils/Map.js~Map.html#instance-member-items",
-    "scene/utils/Map.js~Map#items",
+    "src/scene/utils/map.js~map#items",
+    "class/src/scene/utils/Map.js~Map.html#instance-member-items",
+    "src/scene/utils/Map.js~Map#items",
     "member"
   ],
   [
-    "scene/utils/map.js~map#removeitem",
-    "class/scene/utils/Map.js~Map.html#instance-method-removeItem",
-    "scene/utils/Map.js~Map#removeItem",
+    "src/scene/utils/map.js~map#removeitem",
+    "class/src/scene/utils/Map.js~Map.html#instance-method-removeItem",
+    "src/scene/utils/Map.js~Map#removeItem",
     "method"
   ],
   [
-    "scene/utils/queue.js",
-    "file/scene/utils/Queue.js.html",
-    "scene/utils/Queue.js",
+    "src/scene/utils/queue.js",
+    "file/src/scene/utils/Queue.js.html",
+    "src/scene/utils/Queue.js",
     "file"
   ],
   [
-    "scene/utils/queue.js~queue#constructor",
-    "class/scene/utils/Queue.js~Queue.html#instance-constructor-constructor",
-    "scene/utils/Queue.js~Queue#constructor",
+    "src/scene/utils/queue.js~queue#constructor",
+    "class/src/scene/utils/Queue.js~Queue.html#instance-constructor-constructor",
+    "src/scene/utils/Queue.js~Queue#constructor",
     "method"
   ],
   [
-    "scene/utils/queue.js~queue#length",
-    "class/scene/utils/Queue.js~Queue.html#instance-get-length",
-    "scene/utils/Queue.js~Queue#length",
+    "src/scene/utils/queue.js~queue#length",
+    "class/src/scene/utils/Queue.js~Queue.html#instance-get-length",
+    "src/scene/utils/Queue.js~Queue#length",
     "member"
   ],
   [
-    "scene/utils/queue.js~queue#push",
-    "class/scene/utils/Queue.js~Queue.html#instance-method-push",
-    "scene/utils/Queue.js~Queue#push",
+    "src/scene/utils/queue.js~queue#push",
+    "class/src/scene/utils/Queue.js~Queue.html#instance-method-push",
+    "src/scene/utils/Queue.js~Queue#push",
     "method"
   ],
   [
-    "scene/utils/queue.js~queue#shift",
-    "class/scene/utils/Queue.js~Queue.html#instance-method-shift",
-    "scene/utils/Queue.js~Queue#shift",
+    "src/scene/utils/queue.js~queue#shift",
+    "class/src/scene/utils/Queue.js~Queue.html#instance-method-shift",
+    "src/scene/utils/Queue.js~Queue#shift",
     "method"
   ],
   [
-    "scene/utils/queue.js~queue#unshift",
-    "class/scene/utils/Queue.js~Queue.html#instance-method-unshift",
-    "scene/utils/Queue.js~Queue#unshift",
+    "src/scene/utils/queue.js~queue#unshift",
+    "class/src/scene/utils/Queue.js~Queue.html#instance-method-unshift",
+    "src/scene/utils/Queue.js~Queue#unshift",
     "method"
   ],
   [
-    "scene/viewport/viewport.js",
-    "file/scene/viewport/Viewport.js.html",
-    "scene/viewport/Viewport.js",
+    "src/scene/viewport/viewport.js",
+    "file/src/scene/viewport/Viewport.js.html",
+    "src/scene/viewport/Viewport.js",
     "file"
   ],
   [
-    "scene/viewport/viewport.js~viewport#autoboundary",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary",
-    "scene/viewport/Viewport.js~Viewport#autoBoundary",
+    "src/scene/viewport/viewport.js~viewport#autoboundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary",
+    "src/scene/viewport/Viewport.js~Viewport#autoBoundary",
     "member"
   ],
   [
-    "scene/viewport/viewport.js~viewport#autoboundary",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary",
-    "scene/viewport/Viewport.js~Viewport#autoBoundary",
+    "src/scene/viewport/viewport.js~viewport#autoboundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary",
+    "src/scene/viewport/Viewport.js~Viewport#autoBoundary",
     "member"
   ],
   [
-    "scene/viewport/viewport.js~viewport#boundary",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary",
-    "scene/viewport/Viewport.js~Viewport#boundary",
+    "src/scene/viewport/viewport.js~viewport#boundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary",
+    "src/scene/viewport/Viewport.js~Viewport#boundary",
     "member"
   ],
   [
-    "scene/viewport/viewport.js~viewport#boundary",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
-    "scene/viewport/Viewport.js~Viewport#boundary",
+    "src/scene/viewport/viewport.js~viewport#boundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
+    "src/scene/viewport/Viewport.js~Viewport#boundary",
     "member"
   ],
   [
-    "scene/viewport/viewport.js~viewport#constructor",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-constructor-constructor",
-    "scene/viewport/Viewport.js~Viewport#constructor",
+    "src/scene/viewport/viewport.js~viewport#constructor",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-constructor-constructor",
+    "src/scene/viewport/Viewport.js~Viewport#constructor",
     "method"
   ],
   [
-    "scene/viewport/viewport.js~viewport#destroy",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-method-destroy",
-    "scene/viewport/Viewport.js~Viewport#destroy",
+    "src/scene/viewport/viewport.js~viewport#destroy",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-method-destroy",
+    "src/scene/viewport/Viewport.js~Viewport#destroy",
     "method"
   ],
   [
-    "scene/viewport/viewport.js~viewport#type",
-    "class/scene/viewport/Viewport.js~Viewport.html#instance-get-type",
-    "scene/viewport/Viewport.js~Viewport#type",
+    "src/scene/viewport/viewport.js~viewport#type",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-type",
+    "src/scene/viewport/Viewport.js~Viewport#type",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js",
-    "file/scene/webgl/ArrayBuf.js.html",
-    "scene/webgl/ArrayBuf.js",
+    "src/scene/webgl/arraybuf.js",
+    "file/src/scene/webgl/ArrayBuf.js.html",
+    "src/scene/webgl/ArrayBuf.js",
     "file"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#allocated",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-allocated",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#allocated",
+    "src/scene/webgl/arraybuf.js~arraybuf#allocated",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-allocated",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#allocated",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#bind",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-bind",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#bind",
+    "src/scene/webgl/arraybuf.js~arraybuf#bind",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-bind",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#bind",
     "method"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#constructor",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-constructor-constructor",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#constructor",
+    "src/scene/webgl/arraybuf.js~arraybuf#constructor",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-constructor-constructor",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#constructor",
     "method"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#datalength",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-dataLength",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#dataLength",
+    "src/scene/webgl/arraybuf.js~arraybuf#datalength",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-dataLength",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#dataLength",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#destroy",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-destroy",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#destroy",
+    "src/scene/webgl/arraybuf.js~arraybuf#destroy",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-destroy",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#destroy",
     "method"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#itembytesize",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemByteSize",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#itemByteSize",
+    "src/scene/webgl/arraybuf.js~arraybuf#itembytesize",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemByteSize",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#itemByteSize",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#itemsize",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemSize",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#itemSize",
+    "src/scene/webgl/arraybuf.js~arraybuf#itemsize",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemSize",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#itemSize",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#itemtype",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemType",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#itemType",
+    "src/scene/webgl/arraybuf.js~arraybuf#itemtype",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-itemType",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#itemType",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#length",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-length",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#length",
+    "src/scene/webgl/arraybuf.js~arraybuf#length",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-length",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#length",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#normalized",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-normalized",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#normalized",
+    "src/scene/webgl/arraybuf.js~arraybuf#normalized",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-normalized",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#normalized",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#numitems",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-numItems",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#numItems",
+    "src/scene/webgl/arraybuf.js~arraybuf#numitems",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-numItems",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#numItems",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#offset",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-offset",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#offset",
+    "src/scene/webgl/arraybuf.js~arraybuf#offset",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-offset",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#offset",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#setdata",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-setData",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#setData",
+    "src/scene/webgl/arraybuf.js~arraybuf#setdata",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-setData",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#setData",
     "method"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#stride",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-stride",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#stride",
+    "src/scene/webgl/arraybuf.js~arraybuf#stride",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-stride",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#stride",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#type",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-type",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#type",
+    "src/scene/webgl/arraybuf.js~arraybuf#type",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-type",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#type",
     "member"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#unbind",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-unbind",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#unbind",
+    "src/scene/webgl/arraybuf.js~arraybuf#unbind",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-method-unbind",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#unbind",
     "method"
   ],
   [
-    "scene/webgl/arraybuf.js~arraybuf#usage",
-    "class/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-usage",
-    "scene/webgl/ArrayBuf.js~ArrayBuf#usage",
+    "src/scene/webgl/arraybuf.js~arraybuf#usage",
+    "class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html#instance-member-usage",
+    "src/scene/webgl/ArrayBuf.js~ArrayBuf#usage",
     "member"
   ],
   [
-    "scene/webgl/attribute.js",
-    "file/scene/webgl/Attribute.js.html",
-    "scene/webgl/Attribute.js",
+    "src/scene/webgl/attribute.js",
+    "file/src/scene/webgl/Attribute.js.html",
+    "src/scene/webgl/Attribute.js",
     "file"
   ],
   [
-    "scene/webgl/attribute.js~attribute#bindarraybuffer",
-    "class/scene/webgl/Attribute.js~Attribute.html#instance-method-bindArrayBuffer",
-    "scene/webgl/Attribute.js~Attribute#bindArrayBuffer",
+    "src/scene/webgl/attribute.js~attribute#bindarraybuffer",
+    "class/src/scene/webgl/Attribute.js~Attribute.html#instance-method-bindArrayBuffer",
+    "src/scene/webgl/Attribute.js~Attribute#bindArrayBuffer",
     "method"
   ],
   [
-    "scene/webgl/attribute.js~attribute#constructor",
-    "class/scene/webgl/Attribute.js~Attribute.html#instance-constructor-constructor",
-    "scene/webgl/Attribute.js~Attribute#constructor",
+    "src/scene/webgl/attribute.js~attribute#constructor",
+    "class/src/scene/webgl/Attribute.js~Attribute.html#instance-constructor-constructor",
+    "src/scene/webgl/Attribute.js~Attribute#constructor",
     "method"
   ],
   [
-    "scene/webgl/attribute.js~attribute#location",
-    "class/scene/webgl/Attribute.js~Attribute.html#instance-member-location",
-    "scene/webgl/Attribute.js~Attribute#location",
+    "src/scene/webgl/attribute.js~attribute#location",
+    "class/src/scene/webgl/Attribute.js~Attribute.html#instance-member-location",
+    "src/scene/webgl/Attribute.js~Attribute#location",
     "member"
   ],
   [
-    "scene/webgl/drawable.js",
-    "file/scene/webgl/Drawable.js.html",
-    "scene/webgl/Drawable.js",
+    "src/scene/webgl/drawable.js",
+    "file/src/scene/webgl/Drawable.js.html",
+    "src/scene/webgl/Drawable.js",
     "file"
   ],
   [
-    "scene/webgl/drawable.js~drawable#destroy",
-    "class/scene/webgl/Drawable.js~Drawable.html#instance-method-destroy",
-    "scene/webgl/Drawable.js~Drawable#destroy",
+    "src/scene/webgl/drawable.js~drawable#destroy",
+    "class/src/scene/webgl/Drawable.js~Drawable.html#instance-method-destroy",
+    "src/scene/webgl/Drawable.js~Drawable#destroy",
     "method"
   ],
   [
-    "scene/webgl/drawable.js~drawable#drawpickdrawable",
-    "class/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickDrawable",
-    "scene/webgl/Drawable.js~Drawable#drawPickDrawable",
+    "src/scene/webgl/drawable.js~drawable#drawpickdrawable",
+    "class/src/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickDrawable",
+    "src/scene/webgl/Drawable.js~Drawable#drawPickDrawable",
     "method"
   ],
   [
-    "scene/webgl/drawable.js~drawable#drawpicktriangles",
-    "class/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickTriangles",
-    "scene/webgl/Drawable.js~Drawable#drawPickTriangles",
+    "src/scene/webgl/drawable.js~drawable#drawpicktriangles",
+    "class/src/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickTriangles",
+    "src/scene/webgl/Drawable.js~Drawable#drawPickTriangles",
     "method"
   ],
   [
-    "scene/webgl/drawable.js~drawable#drawpickvertices",
-    "class/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickVertices",
-    "scene/webgl/Drawable.js~Drawable#drawPickVertices",
+    "src/scene/webgl/drawable.js~drawable#drawpickvertices",
+    "class/src/scene/webgl/Drawable.js~Drawable.html#instance-method-drawPickVertices",
+    "src/scene/webgl/Drawable.js~Drawable#drawPickVertices",
     "method"
   ],
   [
-    "scene/webgl/drawable.js~drawable#getpickresult",
-    "class/scene/webgl/Drawable.js~Drawable.html#instance-method-getPickResult",
-    "scene/webgl/Drawable.js~Drawable#getPickResult",
+    "src/scene/webgl/drawable.js~drawable#getpickresult",
+    "class/src/scene/webgl/Drawable.js~Drawable.html#instance-method-getPickResult",
+    "src/scene/webgl/Drawable.js~Drawable#getPickResult",
     "method"
   ],
   [
-    "scene/webgl/framecontext.js",
-    "file/scene/webgl/FrameContext.js.html",
-    "scene/webgl/FrameContext.js",
+    "src/scene/webgl/framecontext.js",
+    "file/src/scene/webgl/FrameContext.js.html",
+    "src/scene/webgl/FrameContext.js",
     "file"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#backfaces",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-backfaces",
-    "scene/webgl/FrameContext.js~FrameContext#backfaces",
+    "src/scene/webgl/framecontext.js~framecontext#backfaces",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-backfaces",
+    "src/scene/webgl/FrameContext.js~FrameContext#backfaces",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#bindarray",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-bindArray",
-    "scene/webgl/FrameContext.js~FrameContext#bindArray",
+    "src/scene/webgl/framecontext.js~framecontext#bindarray",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-bindArray",
+    "src/scene/webgl/FrameContext.js~FrameContext#bindArray",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#bindtexture",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-bindTexture",
-    "scene/webgl/FrameContext.js~FrameContext#bindTexture",
+    "src/scene/webgl/framecontext.js~framecontext#bindtexture",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-bindTexture",
+    "src/scene/webgl/FrameContext.js~FrameContext#bindTexture",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#constructor",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-constructor-constructor",
-    "scene/webgl/FrameContext.js~FrameContext#constructor",
+    "src/scene/webgl/framecontext.js~framecontext#constructor",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-constructor-constructor",
+    "src/scene/webgl/FrameContext.js~FrameContext#constructor",
     "method"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#drawarrays",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-drawArrays",
-    "scene/webgl/FrameContext.js~FrameContext#drawArrays",
+    "src/scene/webgl/framecontext.js~framecontext#drawarrays",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-drawArrays",
+    "src/scene/webgl/FrameContext.js~FrameContext#drawArrays",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#drawelements",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-drawElements",
-    "scene/webgl/FrameContext.js~FrameContext#drawElements",
+    "src/scene/webgl/framecontext.js~framecontext#drawelements",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-drawElements",
+    "src/scene/webgl/FrameContext.js~FrameContext#drawElements",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#frontface",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-frontface",
-    "scene/webgl/FrameContext.js~FrameContext#frontface",
+    "src/scene/webgl/framecontext.js~framecontext#frontface",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-frontface",
+    "src/scene/webgl/FrameContext.js~FrameContext#frontface",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#lastprogramid",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-lastProgramId",
-    "scene/webgl/FrameContext.js~FrameContext#lastProgramId",
+    "src/scene/webgl/framecontext.js~framecontext#lastprogramid",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-lastProgramId",
+    "src/scene/webgl/FrameContext.js~FrameContext#lastProgramId",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#pass",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pass",
-    "scene/webgl/FrameContext.js~FrameContext#pass",
+    "src/scene/webgl/framecontext.js~framecontext#pass",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pass",
+    "src/scene/webgl/FrameContext.js~FrameContext#pass",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#pickprojmatrix",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pickProjMatrix",
-    "scene/webgl/FrameContext.js~FrameContext#pickProjMatrix",
+    "src/scene/webgl/framecontext.js~framecontext#pickprojmatrix",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pickProjMatrix",
+    "src/scene/webgl/FrameContext.js~FrameContext#pickProjMatrix",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#pickviewmatrix",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pickViewMatrix",
-    "scene/webgl/FrameContext.js~FrameContext#pickViewMatrix",
+    "src/scene/webgl/framecontext.js~framecontext#pickviewmatrix",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-pickViewMatrix",
+    "src/scene/webgl/FrameContext.js~FrameContext#pickViewMatrix",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#shadowprojmatrix",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-shadowProjMatrix",
-    "scene/webgl/FrameContext.js~FrameContext#shadowProjMatrix",
+    "src/scene/webgl/framecontext.js~framecontext#shadowprojmatrix",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-shadowProjMatrix",
+    "src/scene/webgl/FrameContext.js~FrameContext#shadowProjMatrix",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#shadowviewmatrix",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-shadowViewMatrix",
-    "scene/webgl/FrameContext.js~FrameContext#shadowViewMatrix",
+    "src/scene/webgl/framecontext.js~framecontext#shadowviewmatrix",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-shadowViewMatrix",
+    "src/scene/webgl/FrameContext.js~FrameContext#shadowViewMatrix",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#textureunit",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-textureUnit",
-    "scene/webgl/FrameContext.js~FrameContext#textureUnit",
+    "src/scene/webgl/framecontext.js~framecontext#textureunit",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-textureUnit",
+    "src/scene/webgl/FrameContext.js~FrameContext#textureUnit",
     "member"
   ],
   [
-    "scene/webgl/framecontext.js~framecontext#useprogram",
-    "class/scene/webgl/FrameContext.js~FrameContext.html#instance-member-useProgram",
-    "scene/webgl/FrameContext.js~FrameContext#useProgram",
+    "src/scene/webgl/framecontext.js~framecontext#useprogram",
+    "class/src/scene/webgl/FrameContext.js~FrameContext.html#instance-member-useProgram",
+    "src/scene/webgl/FrameContext.js~FrameContext#useProgram",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js",
-    "file/scene/webgl/PickResult.js.html",
-    "scene/webgl/PickResult.js",
+    "src/scene/webgl/pickresult.js",
+    "file/src/scene/webgl/PickResult.js.html",
+    "src/scene/webgl/PickResult.js",
     "file"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#bary",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-bary",
-    "scene/webgl/PickResult.js~PickResult#bary",
+    "src/scene/webgl/pickresult.js~pickresult#bary",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-bary",
+    "src/scene/webgl/PickResult.js~PickResult#bary",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#bary",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-bary",
-    "scene/webgl/PickResult.js~PickResult#bary",
+    "src/scene/webgl/pickresult.js~pickresult#bary",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-bary",
+    "src/scene/webgl/PickResult.js~PickResult#bary",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#constructor",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-constructor-constructor",
-    "scene/webgl/PickResult.js~PickResult#constructor",
+    "src/scene/webgl/pickresult.js~pickresult#constructor",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-constructor-constructor",
+    "src/scene/webgl/PickResult.js~PickResult#constructor",
     "method"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#direction",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-direction",
-    "scene/webgl/PickResult.js~PickResult#direction",
+    "src/scene/webgl/pickresult.js~pickresult#direction",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-direction",
+    "src/scene/webgl/PickResult.js~PickResult#direction",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#direction",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-direction",
-    "scene/webgl/PickResult.js~PickResult#direction",
+    "src/scene/webgl/pickresult.js~pickresult#direction",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-direction",
+    "src/scene/webgl/PickResult.js~PickResult#direction",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#indices",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-indices",
-    "scene/webgl/PickResult.js~PickResult#indices",
+    "src/scene/webgl/pickresult.js~pickresult#indices",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-indices",
+    "src/scene/webgl/PickResult.js~PickResult#indices",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#indices",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-indices",
-    "scene/webgl/PickResult.js~PickResult#indices",
+    "src/scene/webgl/pickresult.js~pickresult#indices",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-indices",
+    "src/scene/webgl/PickResult.js~PickResult#indices",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#localpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-localPos",
-    "scene/webgl/PickResult.js~PickResult#localPos",
+    "src/scene/webgl/pickresult.js~pickresult#localpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-localPos",
+    "src/scene/webgl/PickResult.js~PickResult#localPos",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#localpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-localPos",
-    "scene/webgl/PickResult.js~PickResult#localPos",
+    "src/scene/webgl/pickresult.js~pickresult#localpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-localPos",
+    "src/scene/webgl/PickResult.js~PickResult#localPos",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#mesh",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-member-mesh",
-    "scene/webgl/PickResult.js~PickResult#mesh",
+    "src/scene/webgl/pickresult.js~pickresult#mesh",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-member-mesh",
+    "src/scene/webgl/PickResult.js~PickResult#mesh",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#normal",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-normal",
-    "scene/webgl/PickResult.js~PickResult#normal",
+    "src/scene/webgl/pickresult.js~pickresult#normal",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-normal",
+    "src/scene/webgl/PickResult.js~PickResult#normal",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#normal",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-normal",
-    "scene/webgl/PickResult.js~PickResult#normal",
+    "src/scene/webgl/pickresult.js~pickresult#normal",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-normal",
+    "src/scene/webgl/PickResult.js~PickResult#normal",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#origin",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-origin",
-    "scene/webgl/PickResult.js~PickResult#origin",
+    "src/scene/webgl/pickresult.js~pickresult#origin",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-origin",
+    "src/scene/webgl/PickResult.js~PickResult#origin",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#origin",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-origin",
-    "scene/webgl/PickResult.js~PickResult#origin",
+    "src/scene/webgl/pickresult.js~pickresult#origin",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-origin",
+    "src/scene/webgl/PickResult.js~PickResult#origin",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#primindex",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-member-primIndex",
-    "scene/webgl/PickResult.js~PickResult#primIndex",
+    "src/scene/webgl/pickresult.js~pickresult#primindex",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-member-primIndex",
+    "src/scene/webgl/PickResult.js~PickResult#primIndex",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#primitive",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-member-primitive",
-    "scene/webgl/PickResult.js~PickResult#primitive",
+    "src/scene/webgl/pickresult.js~pickresult#primitive",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-member-primitive",
+    "src/scene/webgl/PickResult.js~PickResult#primitive",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#reset",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-method-reset",
-    "scene/webgl/PickResult.js~PickResult#reset",
+    "src/scene/webgl/pickresult.js~pickresult#reset",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-method-reset",
+    "src/scene/webgl/PickResult.js~PickResult#reset",
     "method"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#uv",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-uv",
-    "scene/webgl/PickResult.js~PickResult#uv",
+    "src/scene/webgl/pickresult.js~pickresult#uv",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-uv",
+    "src/scene/webgl/PickResult.js~PickResult#uv",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#uv",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-uv",
-    "scene/webgl/PickResult.js~PickResult#uv",
+    "src/scene/webgl/pickresult.js~pickresult#uv",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-uv",
+    "src/scene/webgl/PickResult.js~PickResult#uv",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#viewpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-viewPos",
-    "scene/webgl/PickResult.js~PickResult#viewPos",
+    "src/scene/webgl/pickresult.js~pickresult#viewpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-viewPos",
+    "src/scene/webgl/PickResult.js~PickResult#viewPos",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#viewpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-viewPos",
-    "scene/webgl/PickResult.js~PickResult#viewPos",
+    "src/scene/webgl/pickresult.js~pickresult#viewpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-viewPos",
+    "src/scene/webgl/PickResult.js~PickResult#viewPos",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#worldpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-get-worldPos",
-    "scene/webgl/PickResult.js~PickResult#worldPos",
+    "src/scene/webgl/pickresult.js~pickresult#worldpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-get-worldPos",
+    "src/scene/webgl/PickResult.js~PickResult#worldPos",
     "member"
   ],
   [
-    "scene/webgl/pickresult.js~pickresult#worldpos",
-    "class/scene/webgl/PickResult.js~PickResult.html#instance-set-worldPos",
-    "scene/webgl/PickResult.js~PickResult#worldPos",
+    "src/scene/webgl/pickresult.js~pickresult#worldpos",
+    "class/src/scene/webgl/PickResult.js~PickResult.html#instance-set-worldPos",
+    "src/scene/webgl/PickResult.js~PickResult#worldPos",
     "member"
   ],
   [
-    "scene/webgl/program.js",
-    "file/scene/webgl/Program.js.html",
-    "scene/webgl/Program.js",
+    "src/scene/webgl/program.js",
+    "file/src/scene/webgl/Program.js.html",
+    "src/scene/webgl/Program.js",
     "file"
   ],
   [
-    "scene/webgl/program.js~program#allocated",
-    "class/scene/webgl/Program.js~Program.html#instance-member-allocated",
-    "scene/webgl/Program.js~Program#allocated",
+    "src/scene/webgl/program.js~program#allocated",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-allocated",
+    "src/scene/webgl/Program.js~Program#allocated",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#attributes",
-    "class/scene/webgl/Program.js~Program.html#instance-member-attributes",
-    "scene/webgl/Program.js~Program#attributes",
+    "src/scene/webgl/program.js~program#attributes",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-attributes",
+    "src/scene/webgl/Program.js~Program#attributes",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#bind",
-    "class/scene/webgl/Program.js~Program.html#instance-method-bind",
-    "scene/webgl/Program.js~Program#bind",
+    "src/scene/webgl/program.js~program#bind",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-bind",
+    "src/scene/webgl/Program.js~Program#bind",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#bindtexture",
-    "class/scene/webgl/Program.js~Program.html#instance-method-bindTexture",
-    "scene/webgl/Program.js~Program#bindTexture",
+    "src/scene/webgl/program.js~program#bindtexture",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-bindTexture",
+    "src/scene/webgl/Program.js~Program#bindTexture",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#compiled",
-    "class/scene/webgl/Program.js~Program.html#instance-member-compiled",
-    "scene/webgl/Program.js~Program#compiled",
+    "src/scene/webgl/program.js~program#compiled",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-compiled",
+    "src/scene/webgl/Program.js~Program#compiled",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#constructor",
-    "class/scene/webgl/Program.js~Program.html#instance-constructor-constructor",
-    "scene/webgl/Program.js~Program#constructor",
+    "src/scene/webgl/program.js~program#constructor",
+    "class/src/scene/webgl/Program.js~Program.html#instance-constructor-constructor",
+    "src/scene/webgl/Program.js~Program#constructor",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#destroy",
-    "class/scene/webgl/Program.js~Program.html#instance-method-destroy",
-    "scene/webgl/Program.js~Program#destroy",
+    "src/scene/webgl/program.js~program#destroy",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-destroy",
+    "src/scene/webgl/Program.js~Program#destroy",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#errors",
-    "class/scene/webgl/Program.js~Program.html#instance-member-errors",
-    "scene/webgl/Program.js~Program#errors",
+    "src/scene/webgl/program.js~program#errors",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-errors",
+    "src/scene/webgl/Program.js~Program#errors",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#getattribute",
-    "class/scene/webgl/Program.js~Program.html#instance-method-getAttribute",
-    "scene/webgl/Program.js~Program#getAttribute",
+    "src/scene/webgl/program.js~program#getattribute",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-getAttribute",
+    "src/scene/webgl/Program.js~Program#getAttribute",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#getlocation",
-    "class/scene/webgl/Program.js~Program.html#instance-method-getLocation",
-    "scene/webgl/Program.js~Program#getLocation",
+    "src/scene/webgl/program.js~program#getlocation",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-getLocation",
+    "src/scene/webgl/Program.js~Program#getLocation",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#gl",
-    "class/scene/webgl/Program.js~Program.html#instance-member-gl",
-    "scene/webgl/Program.js~Program#gl",
+    "src/scene/webgl/program.js~program#gl",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-gl",
+    "src/scene/webgl/Program.js~Program#gl",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#handle",
-    "class/scene/webgl/Program.js~Program.html#instance-member-handle",
-    "scene/webgl/Program.js~Program#handle",
+    "src/scene/webgl/program.js~program#handle",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-handle",
+    "src/scene/webgl/Program.js~Program#handle",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#id",
-    "class/scene/webgl/Program.js~Program.html#instance-member-id",
-    "scene/webgl/Program.js~Program#id",
+    "src/scene/webgl/program.js~program#id",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-id",
+    "src/scene/webgl/Program.js~Program#id",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#init",
-    "class/scene/webgl/Program.js~Program.html#instance-method-init",
-    "scene/webgl/Program.js~Program#init",
+    "src/scene/webgl/program.js~program#init",
+    "class/src/scene/webgl/Program.js~Program.html#instance-method-init",
+    "src/scene/webgl/Program.js~Program#init",
     "method"
   ],
   [
-    "scene/webgl/program.js~program#linked",
-    "class/scene/webgl/Program.js~Program.html#instance-member-linked",
-    "scene/webgl/Program.js~Program#linked",
+    "src/scene/webgl/program.js~program#linked",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-linked",
+    "src/scene/webgl/Program.js~Program#linked",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#samplers",
-    "class/scene/webgl/Program.js~Program.html#instance-member-samplers",
-    "scene/webgl/Program.js~Program#samplers",
+    "src/scene/webgl/program.js~program#samplers",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-samplers",
+    "src/scene/webgl/Program.js~Program#samplers",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#source",
-    "class/scene/webgl/Program.js~Program.html#instance-member-source",
-    "scene/webgl/Program.js~Program#source",
+    "src/scene/webgl/program.js~program#source",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-source",
+    "src/scene/webgl/Program.js~Program#source",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#uniforms",
-    "class/scene/webgl/Program.js~Program.html#instance-member-uniforms",
-    "scene/webgl/Program.js~Program#uniforms",
+    "src/scene/webgl/program.js~program#uniforms",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-uniforms",
+    "src/scene/webgl/Program.js~Program#uniforms",
     "member"
   ],
   [
-    "scene/webgl/program.js~program#validated",
-    "class/scene/webgl/Program.js~Program.html#instance-member-validated",
-    "scene/webgl/Program.js~Program#validated",
+    "src/scene/webgl/program.js~program#validated",
+    "class/src/scene/webgl/Program.js~Program.html#instance-member-validated",
+    "src/scene/webgl/Program.js~Program#validated",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js",
-    "file/scene/webgl/RenderBuffer.js.html",
-    "scene/webgl/RenderBuffer.js",
+    "src/scene/webgl/renderbuffer.js",
+    "file/src/scene/webgl/RenderBuffer.js.html",
+    "src/scene/webgl/RenderBuffer.js",
     "file"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#allocated",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-allocated",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#allocated",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#allocated",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-allocated",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#allocated",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#bind",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-bind",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#bind",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#bind",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-bind",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#bind",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#bound",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-bound",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#bound",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#bound",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-bound",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#bound",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#buffer",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-buffer",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#buffer",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#buffer",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-buffer",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#buffer",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#canvas",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-canvas",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#canvas",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#canvas",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-canvas",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#canvas",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#clear",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-clear",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#clear",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#clear",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-clear",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#clear",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#constructor",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-constructor-constructor",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#constructor",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#constructor",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-constructor-constructor",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#constructor",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#destroy",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-destroy",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#destroy",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#destroy",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-destroy",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#destroy",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#gettexture",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-getTexture",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#getTexture",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#gettexture",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-getTexture",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#getTexture",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#gl",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-gl",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#gl",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#gl",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-gl",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#gl",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#read",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-read",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#read",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#read",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-read",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#read",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#setsize",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-setSize",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#setSize",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#setsize",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-setSize",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#setSize",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#size",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-size",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#size",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#size",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-member-size",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#size",
     "member"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#unbind",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-unbind",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#unbind",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#unbind",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-unbind",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#unbind",
     "method"
   ],
   [
-    "scene/webgl/renderbuffer.js~renderbuffer#webglcontextrestored",
-    "class/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-webglContextRestored",
-    "scene/webgl/RenderBuffer.js~RenderBuffer#webglContextRestored",
+    "src/scene/webgl/renderbuffer.js~renderbuffer#webglcontextrestored",
+    "class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html#instance-method-webglContextRestored",
+    "src/scene/webgl/RenderBuffer.js~RenderBuffer#webglContextRestored",
     "method"
   ],
   [
-    "scene/webgl/renderflags.js",
-    "file/scene/webgl/RenderFlags.js.html",
-    "scene/webgl/RenderFlags.js",
+    "src/scene/webgl/renderflags.js",
+    "file/src/scene/webgl/RenderFlags.js.html",
+    "src/scene/webgl/RenderFlags.js",
     "file"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#constructor",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-constructor-constructor",
-    "scene/webgl/RenderFlags.js~RenderFlags#constructor",
+    "src/scene/webgl/renderflags.js~renderflags#constructor",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-constructor-constructor",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#constructor",
     "method"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#ghostededgesopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedEdgesOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#ghostedEdgesOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#ghostededgesopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedEdgesOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#ghostedEdgesOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#ghostededgestransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedEdgesTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#ghostedEdgesTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#ghostededgestransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedEdgesTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#ghostedEdgesTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#ghostedfillopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedFillOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#ghostedFillOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#ghostedfillopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedFillOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#ghostedFillOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#ghostedfilltransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedFillTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#ghostedFillTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#ghostedfilltransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-ghostedFillTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#ghostedFillTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#highlightededgesopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedEdgesOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#highlightedEdgesOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#highlightededgesopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedEdgesOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#highlightedEdgesOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#highlightededgestransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedEdgesTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#highlightedEdgesTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#highlightededgestransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedEdgesTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#highlightedEdgesTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#highlightedfillopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedFillOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#highlightedFillOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#highlightedfillopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedFillOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#highlightedFillOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#highlightedfilltransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedFillTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#highlightedFillTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#highlightedfilltransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-highlightedFillTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#highlightedFillTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#normaledgesopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalEdgesOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#normalEdgesOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#normaledgesopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalEdgesOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#normalEdgesOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#normaledgestransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalEdgesTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#normalEdgesTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#normaledgestransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalEdgesTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#normalEdgesTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#normalfillopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalFillOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#normalFillOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#normalfillopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalFillOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#normalFillOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#normalfilltransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalFillTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#normalFillTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#normalfilltransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-normalFillTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#normalFillTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#reset",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-method-reset",
-    "scene/webgl/RenderFlags.js~RenderFlags#reset",
+    "src/scene/webgl/renderflags.js~renderflags#reset",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-method-reset",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#reset",
     "method"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#selectededgesopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedEdgesOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#selectedEdgesOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#selectededgesopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedEdgesOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#selectedEdgesOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#selectededgestransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedEdgesTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#selectedEdgesTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#selectededgestransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedEdgesTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#selectedEdgesTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#selectedfillopaque",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedFillOpaque",
-    "scene/webgl/RenderFlags.js~RenderFlags#selectedFillOpaque",
+    "src/scene/webgl/renderflags.js~renderflags#selectedfillopaque",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedFillOpaque",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#selectedFillOpaque",
     "member"
   ],
   [
-    "scene/webgl/renderflags.js~renderflags#selectedfilltransparent",
-    "class/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedFillTransparent",
-    "scene/webgl/RenderFlags.js~RenderFlags#selectedFillTransparent",
+    "src/scene/webgl/renderflags.js~renderflags#selectedfilltransparent",
+    "class/src/scene/webgl/RenderFlags.js~RenderFlags.html#instance-member-selectedFillTransparent",
+    "src/scene/webgl/RenderFlags.js~RenderFlags#selectedFillTransparent",
     "member"
   ],
   [
-    "scene/webgl/renderstate.js",
-    "file/scene/webgl/RenderState.js.html",
-    "scene/webgl/RenderState.js",
+    "src/scene/webgl/renderstate.js",
+    "file/src/scene/webgl/RenderState.js.html",
+    "src/scene/webgl/RenderState.js",
     "file"
   ],
   [
-    "scene/webgl/renderstate.js~renderstate#[key]",
-    "class/scene/webgl/RenderState.js~RenderState.html#instance-member-[key]",
-    "scene/webgl/RenderState.js~RenderState#[key]",
+    "src/scene/webgl/renderstate.js~renderstate#[key]",
+    "class/src/scene/webgl/RenderState.js~RenderState.html#instance-member-[key]",
+    "src/scene/webgl/RenderState.js~RenderState#[key]",
     "member"
   ],
   [
-    "scene/webgl/renderstate.js~renderstate#constructor",
-    "class/scene/webgl/RenderState.js~RenderState.html#instance-constructor-constructor",
-    "scene/webgl/RenderState.js~RenderState#constructor",
+    "src/scene/webgl/renderstate.js~renderstate#constructor",
+    "class/src/scene/webgl/RenderState.js~RenderState.html#instance-constructor-constructor",
+    "src/scene/webgl/RenderState.js~RenderState#constructor",
     "method"
   ],
   [
-    "scene/webgl/renderstate.js~renderstate#destroy",
-    "class/scene/webgl/RenderState.js~RenderState.html#instance-method-destroy",
-    "scene/webgl/RenderState.js~RenderState#destroy",
+    "src/scene/webgl/renderstate.js~renderstate#destroy",
+    "class/src/scene/webgl/RenderState.js~RenderState.html#instance-method-destroy",
+    "src/scene/webgl/RenderState.js~RenderState#destroy",
     "method"
   ],
   [
-    "scene/webgl/renderstate.js~renderstate#id",
-    "class/scene/webgl/RenderState.js~RenderState.html#instance-member-id",
-    "scene/webgl/RenderState.js~RenderState#id",
+    "src/scene/webgl/renderstate.js~renderstate#id",
+    "class/src/scene/webgl/RenderState.js~RenderState.html#instance-member-id",
+    "src/scene/webgl/RenderState.js~RenderState#id",
     "member"
+  ],
+  [
+    "src/scene/webgl/renderer.js",
+    "file/src/scene/webgl/Renderer.js.html",
+    "src/scene/webgl/Renderer.js",
+    "file"
   ],
   [
-    "scene/webgl/renderer.js",
-    "file/scene/webgl/Renderer.js.html",
-    "scene/webgl/Renderer.js",
+    "src/scene/webgl/sampler.js",
+    "file/src/scene/webgl/Sampler.js.html",
+    "src/scene/webgl/Sampler.js",
     "file"
+  ],
+  [
+    "src/scene/webgl/sampler.js~sampler#constructor",
+    "class/src/scene/webgl/Sampler.js~Sampler.html#instance-constructor-constructor",
+    "src/scene/webgl/Sampler.js~Sampler#constructor",
+    "method"
   ],
   [
-    "scene/webgl/sampler.js",
-    "file/scene/webgl/Sampler.js.html",
-    "scene/webgl/Sampler.js",
+    "src/scene/webgl/shader.js",
+    "file/src/scene/webgl/Shader.js.html",
+    "src/scene/webgl/Shader.js",
     "file"
+  ],
+  [
+    "src/scene/webgl/shader.js~shader#allocated",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-member-allocated",
+    "src/scene/webgl/Shader.js~Shader#allocated",
+    "member"
+  ],
+  [
+    "src/scene/webgl/shader.js~shader#compiled",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-member-compiled",
+    "src/scene/webgl/Shader.js~Shader#compiled",
+    "member"
+  ],
+  [
+    "src/scene/webgl/shader.js~shader#constructor",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-constructor-constructor",
+    "src/scene/webgl/Shader.js~Shader#constructor",
+    "method"
   ],
   [
-    "scene/webgl/sampler.js~sampler#constructor",
-    "class/scene/webgl/Sampler.js~Sampler.html#instance-constructor-constructor",
-    "scene/webgl/Sampler.js~Sampler#constructor",
+    "src/scene/webgl/shader.js~shader#destroy",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-method-destroy",
+    "src/scene/webgl/Shader.js~Shader#destroy",
     "method"
+  ],
+  [
+    "src/scene/webgl/shader.js~shader#errors",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-member-errors",
+    "src/scene/webgl/Shader.js~Shader#errors",
+    "member"
   ],
   [
-    "scene/webgl/shader.js",
-    "file/scene/webgl/Shader.js.html",
-    "scene/webgl/Shader.js",
+    "src/scene/webgl/shader.js~shader#handle",
+    "class/src/scene/webgl/Shader.js~Shader.html#instance-member-handle",
+    "src/scene/webgl/Shader.js~Shader#handle",
+    "member"
+  ],
+  [
+    "src/scene/webgl/texture2d.js",
+    "file/src/scene/webgl/Texture2D.js.html",
+    "src/scene/webgl/Texture2D.js",
     "file"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#allocated",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-member-allocated",
+    "src/scene/webgl/Texture2D.js~Texture2D#allocated",
+    "member"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#bind",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-bind",
+    "src/scene/webgl/Texture2D.js~Texture2D#bind",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#constructor",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-constructor-constructor",
+    "src/scene/webgl/Texture2D.js~Texture2D#constructor",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#destroy",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-destroy",
+    "src/scene/webgl/Texture2D.js~Texture2D#destroy",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#gl",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-member-gl",
+    "src/scene/webgl/Texture2D.js~Texture2D#gl",
+    "member"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#setimage",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setImage",
+    "src/scene/webgl/Texture2D.js~Texture2D#setImage",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#setpreloadcolor",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setPreloadColor",
+    "src/scene/webgl/Texture2D.js~Texture2D#setPreloadColor",
+    "method"
   ],
   [
-    "scene/webgl/shader.js~shader#allocated",
-    "class/scene/webgl/Shader.js~Shader.html#instance-member-allocated",
-    "scene/webgl/Shader.js~Shader#allocated",
+    "src/scene/webgl/texture2d.js~texture2d#setprops",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setProps",
+    "src/scene/webgl/Texture2D.js~Texture2D#setProps",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#settarget",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setTarget",
+    "src/scene/webgl/Texture2D.js~Texture2D#setTarget",
+    "method"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#target",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-member-target",
+    "src/scene/webgl/Texture2D.js~Texture2D#target",
     "member"
   ],
   [
-    "scene/webgl/shader.js~shader#compiled",
-    "class/scene/webgl/Shader.js~Shader.html#instance-member-compiled",
-    "scene/webgl/Shader.js~Shader#compiled",
+    "src/scene/webgl/texture2d.js~texture2d#texture",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-member-texture",
+    "src/scene/webgl/Texture2D.js~Texture2D#texture",
     "member"
+  ],
+  [
+    "src/scene/webgl/texture2d.js~texture2d#unbind",
+    "class/src/scene/webgl/Texture2D.js~Texture2D.html#instance-method-unbind",
+    "src/scene/webgl/Texture2D.js~Texture2D#unbind",
+    "method"
+  ],
+  [
+    "src/scene/webgl/webglenums.js",
+    "file/src/scene/webgl/webglEnums.js.html",
+    "src/scene/webgl/webglEnums.js",
+    "file"
+  ],
+  [
+    "src/scene/webglinfo.js",
+    "file/src/scene/webglInfo.js.html",
+    "src/scene/webglInfo.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugin.js",
+    "file/src/viewer/Plugin.js.html",
+    "src/viewer/Plugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugin.js~plugin#constructor",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-constructor-constructor",
+    "src/viewer/Plugin.js~Plugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugin.js~plugin#destroy",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-destroy",
+    "src/viewer/Plugin.js~Plugin#destroy",
+    "method"
   ],
   [
-    "scene/webgl/shader.js~shader#constructor",
-    "class/scene/webgl/Shader.js~Shader.html#instance-constructor-constructor",
-    "scene/webgl/Shader.js~Shader#constructor",
+    "src/viewer/plugin.js~plugin#error",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-error",
+    "src/viewer/Plugin.js~Plugin#error",
     "method"
   ],
   [
-    "scene/webgl/shader.js~shader#destroy",
-    "class/scene/webgl/Shader.js~Shader.html#instance-method-destroy",
-    "scene/webgl/Shader.js~Shader#destroy",
+    "src/viewer/plugin.js~plugin#fire",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-fire",
+    "src/viewer/Plugin.js~Plugin#fire",
     "method"
   ],
   [
-    "scene/webgl/shader.js~shader#errors",
-    "class/scene/webgl/Shader.js~Shader.html#instance-member-errors",
-    "scene/webgl/Shader.js~Shader#errors",
+    "src/viewer/plugin.js~plugin#id",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-member-id",
+    "src/viewer/Plugin.js~Plugin#id",
     "member"
   ],
   [
-    "scene/webgl/shader.js~shader#handle",
-    "class/scene/webgl/Shader.js~Shader.html#instance-member-handle",
-    "scene/webgl/Shader.js~Shader#handle",
+    "src/viewer/plugin.js~plugin#log",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-log",
+    "src/viewer/Plugin.js~Plugin#log",
+    "method"
+  ],
+  [
+    "src/viewer/plugin.js~plugin#on",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-on",
+    "src/viewer/Plugin.js~Plugin#on",
+    "method"
+  ],
+  [
+    "src/viewer/plugin.js~plugin#viewer",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-member-viewer",
+    "src/viewer/Plugin.js~Plugin#viewer",
     "member"
+  ],
+  [
+    "src/viewer/plugin.js~plugin#warn",
+    "class/src/viewer/Plugin.js~Plugin.html#instance-method-warn",
+    "src/viewer/Plugin.js~Plugin#warn",
+    "method"
   ],
   [
-    "scene/webgl/texture2d.js",
-    "file/scene/webgl/Texture2D.js.html",
-    "scene/webgl/Texture2D.js",
+    "src/viewer/viewer.js",
+    "file/src/viewer/Viewer.js.html",
+    "src/viewer/Viewer.js",
     "file"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#camera",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-camera",
+    "src/viewer/Viewer.js~Viewer#camera",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#cameracontrol",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraControl",
+    "src/viewer/Viewer.js~Viewer#cameraControl",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#cameraflight",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight",
+    "src/viewer/Viewer.js~Viewer#cameraFlight",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#clear",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-clear",
+    "src/viewer/Viewer.js~Viewer#clear",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#constructor",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-constructor-constructor",
+    "src/viewer/Viewer.js~Viewer#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#destroy",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-destroy",
+    "src/viewer/Viewer.js~Viewer#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#error",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-error",
+    "src/viewer/Viewer.js~Viewer#error",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#fire",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-fire",
+    "src/viewer/Viewer.js~Viewer#fire",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#getsnapshot",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot",
+    "src/viewer/Viewer.js~Viewer#getSnapshot",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#id",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-id",
+    "src/viewer/Viewer.js~Viewer#id",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#log",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-log",
+    "src/viewer/Viewer.js~Viewer#log",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#metascene",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-metaScene",
+    "src/viewer/Viewer.js~Viewer#metaScene",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#off",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-off",
+    "src/viewer/Viewer.js~Viewer#off",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#on",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-on",
+    "src/viewer/Viewer.js~Viewer#on",
+    "method"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#plugins",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins",
+    "src/viewer/Viewer.js~Viewer#plugins",
+    "member"
+  ],
+  [
+    "src/viewer/viewer.js~viewer#resetview",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-resetView",
+    "src/viewer/Viewer.js~Viewer#resetView",
+    "method"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#allocated",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-member-allocated",
-    "scene/webgl/Texture2D.js~Texture2D#allocated",
+    "src/viewer/viewer.js~viewer#scene",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-member-scene",
+    "src/viewer/Viewer.js~Viewer#scene",
     "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js",
+    "file/src/viewer/metadata/MetaModel.js.html",
+    "src/viewer/metadata/MetaModel.js",
+    "file"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#bind",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-bind",
-    "scene/webgl/Texture2D.js~Texture2D#bind",
+    "src/viewer/metadata/metamodel.js~metamodel#getjson",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-method-getJSON",
+    "src/viewer/metadata/MetaModel.js~MetaModel#getJSON",
     "method"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#metascene",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-metaScene",
+    "src/viewer/metadata/MetaModel.js~MetaModel#metaScene",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#modelid",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-modelId",
+    "src/viewer/metadata/MetaModel.js~MetaModel#modelId",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#projectid",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-projectId",
+    "src/viewer/metadata/MetaModel.js~MetaModel#projectId",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#revisionid",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-revisionId",
+    "src/viewer/metadata/MetaModel.js~MetaModel#revisionId",
+    "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#constructor",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-constructor-constructor",
-    "scene/webgl/Texture2D.js~Texture2D#constructor",
+    "src/viewer/metadata/metamodel.js~metamodel#rootmetaobject",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-rootMetaObject",
+    "src/viewer/metadata/MetaModel.js~MetaModel#rootMetaObject",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js",
+    "file/src/viewer/metadata/MetaObject.js.html",
+    "src/viewer/metadata/MetaObject.js",
+    "file"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#children",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-children",
+    "src/viewer/metadata/MetaObject.js~MetaObject#children",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#constructor",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-constructor-constructor",
+    "src/viewer/metadata/MetaObject.js~MetaObject#constructor",
     "method"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#extid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-extId",
+    "src/viewer/metadata/MetaObject.js~MetaObject#extId",
+    "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#destroy",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-destroy",
-    "scene/webgl/Texture2D.js~Texture2D#destroy",
+    "src/viewer/metadata/metaobject.js~metaobject#getjson",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-method-getJSON",
+    "src/viewer/metadata/MetaObject.js~MetaObject#getJSON",
     "method"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#gid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-gid",
+    "src/viewer/metadata/MetaObject.js~MetaObject#gid",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#metamodel",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-metaModel",
+    "src/viewer/metadata/MetaObject.js~MetaObject#metaModel",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#name",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-name",
+    "src/viewer/metadata/MetaObject.js~MetaObject#name",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#objectid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-objectId",
+    "src/viewer/metadata/MetaObject.js~MetaObject#objectId",
+    "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#gl",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-member-gl",
-    "scene/webgl/Texture2D.js~Texture2D#gl",
+    "src/viewer/metadata/metaobject.js~metaobject#parent",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-parent",
+    "src/viewer/metadata/MetaObject.js~MetaObject#parent",
     "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#properties",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-properties",
+    "src/viewer/metadata/MetaObject.js~MetaObject#properties",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#type",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type",
+    "src/viewer/metadata/MetaObject.js~MetaObject#type",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metascene.js",
+    "file/src/viewer/metadata/MetaScene.js.html",
+    "src/viewer/metadata/MetaScene.js",
+    "file"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#createmetamodel",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-createMetaModel",
+    "src/viewer/metadata/MetaScene.js~MetaScene#createMetaModel",
+    "method"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#destroymetamodel",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-destroyMetaModel",
+    "src/viewer/metadata/MetaScene.js~MetaScene#destroyMetaModel",
+    "method"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#fire",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-fire",
+    "src/viewer/metadata/MetaScene.js~MetaScene#fire",
+    "method"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#getsubobjectids",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-getSubObjectIDs",
+    "src/viewer/metadata/MetaScene.js~MetaScene#getSubObjectIDs",
+    "method"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#setimage",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setImage",
-    "scene/webgl/Texture2D.js~Texture2D#setImage",
+    "src/viewer/metadata/metascene.js~metascene#loadmetamodeljson",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-loadMetaModelJSON",
+    "src/viewer/metadata/MetaScene.js~MetaScene#loadMetaModelJSON",
     "method"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#metamodels",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaModels",
+    "src/viewer/metadata/MetaScene.js~MetaScene#metaModels",
+    "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#setpreloadcolor",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setPreloadColor",
-    "scene/webgl/Texture2D.js~Texture2D#setPreloadColor",
+    "src/viewer/metadata/metascene.js~metascene#metaobjects",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaObjects",
+    "src/viewer/metadata/MetaScene.js~MetaScene#metaObjects",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#off",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-off",
+    "src/viewer/metadata/MetaScene.js~MetaScene#off",
     "method"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#setprops",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setProps",
-    "scene/webgl/Texture2D.js~Texture2D#setProps",
+    "src/viewer/metadata/metascene.js~metascene#on",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-on",
+    "src/viewer/metadata/MetaScene.js~MetaScene#on",
     "method"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#scene",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-scene",
+    "src/viewer/metadata/MetaScene.js~MetaScene#scene",
+    "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#settarget",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-setTarget",
-    "scene/webgl/Texture2D.js~Texture2D#setTarget",
+    "src/viewer/metadata/metascene.js~metascene#transform",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-transform",
+    "src/viewer/metadata/MetaScene.js~MetaScene#transform",
     "method"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#target",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-member-target",
-    "scene/webgl/Texture2D.js~Texture2D#target",
+    "src/viewer/metadata/metascene.js~metascene#viewer",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-viewer",
+    "src/viewer/metadata/MetaScene.js~MetaScene#viewer",
     "member"
+  ],
+  [
+    "src/viewer/plugins/axisgizmoplugin/axisgizmoplugin.js",
+    "file/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js.html",
+    "src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/axisgizmoplugin/axisgizmoplugin.js~axisgizmoplugin#constructor",
+    "class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin#constructor",
+    "method"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#texture",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-member-texture",
-    "scene/webgl/Texture2D.js~Texture2D#texture",
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js",
+    "file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#authoringtool",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-authoringTool",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#authoringTool",
     "member"
   ],
   [
-    "scene/webgl/texture2d.js~texture2d#unbind",
-    "class/scene/webgl/Texture2D.js~Texture2D.html#instance-method-unbind",
-    "scene/webgl/Texture2D.js~Texture2D#unbind",
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#constructor",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#constructor",
     "method"
+  ],
+  [
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#destroy",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#getviewpoint",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#getViewpoint",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#originatingsystem",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-originatingSystem",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#originatingSystem",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#setviewpoint",
+    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint",
+    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#bimserver_version",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-BIMSERVER_VERSION",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#BIMSERVER_VERSION",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#bimserverclient",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-bimServerClient",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#bimServerClient",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#constructor",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#destroy",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#hiddentypes",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-hiddenTypes",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#hiddenTypes",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#load",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#bimserver_version",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-member-BIMSERVER_VERSION",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#BIMSERVER_VERSION",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#bimserverclient",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-member-bimServerClient",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#bimServerClient",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#constructor",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#destroy",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#hiddentypes",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-member-hiddenTypes",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#hiddenTypes",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#load",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/bimserverbiggeometryloader.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/bimservergeometryloader.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/datainputstreamreader.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/DataInputStreamReader.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/DataInputStreamReader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/eventhandler.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/EventHandler.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/EventHandler.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/metadatareader.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/MetaDataReader.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/MetaDataReader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/notifier.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/Notifier.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/Notifier.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/statictreerenderer.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/StaticTreeRenderer.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/StaticTreeRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/stringview.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/StringView.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/StringView.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/defaultmaterials.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/defaultMaterials.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/defaultMaterials.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/loadmetamodel.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/preloadquery.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/preloadQuery.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/preloadQuery.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/bimserverloaderplugin/lib/request.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/request.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/request.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js",
+    "file/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js.html",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clear",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-clear",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#clips",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-member-clips",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#clips",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#constructor",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#createclip",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-createClip",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#createClip",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroy",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/clipsplugin/clipsplugin.js~clipsplugin#destroyclip",
+    "class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html#instance-method-destroyClip",
+    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin#destroyClip",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloader.js",
+    "file/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoader.js.html",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js",
+    "file/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js.html",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#clear",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-method-clear",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#constructor",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-constructor-constructor",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#destroy",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-method-destroy",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#load",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-method-load",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#models",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-member-models",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#models",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloader#unload",
+    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html#instance-method-unload",
+    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader#unload",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloader.js",
+    "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoader.js.html",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js",
+    "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#clear",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-clear",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#constructor",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#destroy",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#load",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#models",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-member-models",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#models",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#unload",
+    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-unload",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#unload",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js",
+    "file/src/viewer/plugins/LightsPlugin/LightsPlugin.js.html",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#clear",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-clear",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#constructor",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#createlight",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-createLight",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#createLight",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#destroy",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/lightsplugin/lightsplugin.js~lightsplugin#lights",
+    "class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html#instance-member-lights",
+    "src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin#lights",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloader.js",
+    "file/src/viewer/plugins/OBJLoaderPlugin/OBJLoader.js.html",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js",
+    "file/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js.html",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#clear",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-clear",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#constructor",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#destroy",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#load",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#models",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-member-models",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#models",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#unload",
+    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-unload",
+    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#unload",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/planviewplugin/planviewplugin.js",
+    "file/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js.html",
+    "src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/planviewplugin/planviewplugin.js~planviewplugin#constructor",
+    "class/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js~PlanViewPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js~PlanViewPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js",
+    "file/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js.html",
+    "src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#addmodel",
+    "class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-method-addModel",
+    "src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#addModel",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#constructor",
+    "class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#domelement",
+    "class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-member-domElement",
+    "src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#domElement",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/propertiespanelplugin/propertiespanelplugin.js~propertiespanelplugin#setselected",
+    "class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html#instance-method-setSelected",
+    "src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin#setSelected",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloader.js",
+    "file/src/viewer/plugins/STLLoaderPlugin/STLLoader.js.html",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js",
+    "file/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js.html",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#clear",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-clear",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#constructor",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#destroy",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#load",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#models",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-member-models",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#models",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#unload",
+    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-unload",
+    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#unload",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js",
+    "file/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js.html",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#clear",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-clear",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#clear",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#constructor",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#createskybox",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-createSkybox",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#createSkybox",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroy",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#destroyskybox",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-method-destroySkybox",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#destroySkybox",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/skyboxesplugin/skyboxesplugin.js~skyboxesplugin#skyboxes",
+    "class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html#instance-member-skyboxes",
+    "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin#skyboxes",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js",
+    "file/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js.html",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#deselect",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-DESELECT",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#DESELECT",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#select",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-SELECT",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#SELECT",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#select_exclusive",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-SELECT_EXCLUSIVE",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#SELECT_EXCLUSIVE",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#toggle",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-TOGGLE",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#TOGGLE",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#constructor",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#destroy",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-destroy",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#getselected",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-getSelected",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#getSelected",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#selectionstate",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-member-selectionState",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#selectionState",
+    "member"
+  ],
+  [
+    "src/viewer/plugins/structurepanelplugin/structurepanelplugin.js~structurepanelplugin#setselected",
+    "class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html#instance-method-setSelected",
+    "src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin#setSelected",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/webvrplugin/webvrplugin.js",
+    "file/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js.html",
+    "src/viewer/plugins/WebVRPlugin/WebVRPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/webvrplugin/webvrplugin.js~webvrplugin#constructor",
+    "class/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/xml3dloader.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoader.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#constructor",
+    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-constructor-constructor",
+    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#load",
+    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-method-load",
+    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/xml3dmodel.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/XML3DModel.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/XML3DModel.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/deflate.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/deflate.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/deflate.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/inflate.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/inflate.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/inflate.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/mime-types.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/mime-types.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/mime-types.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/pako/codecs.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/pako/codecs.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/pako/codecs.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/arraybuffer.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/arraybuffer.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/arraybuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/base64.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/base64.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/base64.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/config.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/config.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/config.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/dataview.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/dataview.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/dataview.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test1.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test1.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test1.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test10.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test10.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test10.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test11.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test11.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test11.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test12.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test12.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test12.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test13.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test13.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test13.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test14.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test14.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test14.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test15.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test15.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test15.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test16.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test16.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test16.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test17.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test17.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test17.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test18.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test18.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test18.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test2.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test2.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test2.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test20.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test20.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test20.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test3.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test3.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test3.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test4.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test4.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test4.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test5.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test5.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test5.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test6.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test6.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test6.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test7.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test7.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test7.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test8.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test8.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test8.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/test9.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test9.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/test9.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/tests/util.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/util.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/tests/util.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/z-worker.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/z-worker.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/z-worker.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/zip-ext.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip-ext.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip-ext.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/zip-fs.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip-fs.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip-fs.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/zip.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/zip.js",
+    "file"
   ],
   [
-    "scene/webgl/webglenums.js",
-    "file/scene/webgl/webglEnums.js.html",
-    "scene/webgl/webglEnums.js",
+    "src/viewer/plugins/xml3dloaderplugin/zipjs/zlib-asm/codecs.js",
+    "file/src/viewer/plugins/XML3DLoaderPlugin/zipjs/zlib-asm/codecs.js.html",
+    "src/viewer/plugins/XML3DLoaderPlugin/zipjs/zlib-asm/codecs.js",
     "file"
   ],
   [
-    "scene/webglinfo.js",
-    "file/scene/webglInfo.js.html",
-    "scene/webglInfo.js",
+    "src/viewer/utils/ifcdefaultstates.js",
+    "file/src/viewer/utils/ifcDefaultStates.js.html",
+    "src/viewer/utils/ifcDefaultStates.js",
     "file"
   ]
 ]
