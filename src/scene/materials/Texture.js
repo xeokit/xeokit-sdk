@@ -24,9 +24,9 @@
  * a {@link PhongMaterial} which applies diffuse and specular {@link Texture}, and
  * a {@link TorusGeometry}.
 
- Note that xeokit will ignore the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuse}
- and {@link PhongMaterial/specular} properties, since we assigned {@link Texture} to the {@link PhongMaterial"}}PhongMaterial's{{/crossLink}} {@link PhongMaterial/diffuseMap} and
- {@link PhongMaterial/specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
+ Note that xeokit will ignore the {@link PhongMaterial}'s {@link PhongMaterial#diffuse}
+ and {@link PhongMaterial#specular} properties, since we assigned {@link Texture} to the {@link PhongMaterial}'s {@link PhongMaterial#diffuseMap} and
+ {@link PhongMaterial#specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
  colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
 
  ```` javascript
@@ -78,6 +78,47 @@ import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 
 
+/**
+ * @desc A 2D texture map.
+ *
+ *  ## Usage
+ *
+ *  In this example we have a Mesh with a {@link PhongMaterial} which applies diffuse and specular Texture, and a {@link TorusGeometry}.
+ *
+ *  Note that xeokit will ignore the {@link PhongMaterial}'s {@link PhongMaterial#diffuse} and {@link PhongMaterial#specular}
+ *  properties, since we assigned {@link Texture} to the {@link PhongMaterial}'s {@link PhongMaterial#diffuseMap} and
+ *  {@link PhongMaterial#specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
+ *  colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
+ *
+ *  ```` javascript
+ *  import {Viewer} from "src/viewer/Viewer.js";
+ *  import {Mesh} from "src/scene/mesh/Mesh.js";
+ *  import {TorusGeometry} from "src/scene/geometry/TorusGeometry.js";
+ *  import {PhongMaterial} from "src/scene/materials/PhongMaterial.js";
+ *  import {Texture} from "src/scene/materials/Texture.js";
+ *
+ *  const myViewer = new Viewer({ canvasId: "myCanvas" });
+ *
+ *  var mesh = new Mesh({
+ *
+ *    material: new PhongMaterial({
+ *         ambient: [0.3, 0.3, 0.3],
+ *         diffuse: [0.5, 0.5, 0.0],   // Ignored, since we have assigned a Texture to diffuseMap, below
+ *         specular: [1.0, 1.0, 1.0],   // Ignored, since we have assigned a Texture to specularMap, below
+ *         diffuseMap: new Texture({
+ *             src: "diffuseMap.jpg"
+ *         }),
+ *         specularMap: new Fresnel({
+ *             src: "diffuseMap.jpg"
+ *         }),
+ *         shininess: 80, // Default
+ *         alpha: 1.0 // Default
+ *     }),
+ *
+ *     geometry: new TorusGeometry()
+ * });
+ *  ````
+ */
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
         const canvas = document.createElement("canvas");

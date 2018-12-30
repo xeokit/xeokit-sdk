@@ -55,6 +55,14 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * within the same {@link Texture} for efficiency.
  *
  * ````javascript
+ * import {Viewer} from "src/viewer/Viewer.js";
+ * import {Mesh} from "src/scene/mesh/Mesh.js";
+ * import {TorusGeometry} from "src/scene/geometry/TorusGeometry.js";
+ * import {SpecularMaterial} from "src/scene/materials/SpecularMaterial.js";
+ * import {Texture} from "src/scene/materials/Texture.js";
+ *
+ * const myViewer = new Viewer({ canvasId: "myCanvas" });
+ *
  * const myMesh = new Mesh(myViewer.scene,{
  *
  *     geometry: new TorusGeometry(myViewer.scene),

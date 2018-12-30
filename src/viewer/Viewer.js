@@ -54,7 +54,7 @@ class Viewer {
         });
 
         /**
-         * Metadata about the {@link Scene} and the {@link Model}s and {@link Entity}s within it.
+         * Metadata about the {@link Scene} and the models and objects within it.
          * @property metaScene
          * @type {MetaScene}
          * @readonly

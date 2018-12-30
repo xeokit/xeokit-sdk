@@ -1,11 +1,14 @@
 import {MetaObject} from "./MetaObject.js";
 
 /**
- * Metadata for a {@link Model} within a {@link Viewer}'s {@link Scene}.
+ * @desc Metadata corresponding to a model within a {@link Scene}.
  *
- * * Each MetaModel corresponds to at least one {@link Model} in the {@link Scene}.
- * * MetaModels are created by {@link MetaScene#createMetaModel}, which registers them by ID in {@link MetaScene#metaModels}.
- * * {@link MetaObject}s are connected into a structural composition hierarchy, with {@link MetaModel#rootMetaObject} pointing to the root.
+ * * Belongs to a {@link MetaScene}.
+ * * Corresponds to a model loaded into a {@link Scene}.
+ * * Created by {@link MetaScene#createMetaModel}.
+ * * Registered by {@link MetaModel#modelId} in {@link MetaScene#metaModels}.
+ * * Each model within a {@link Scene} is represented either by a {@link Node} that has a {@link Node#modelId} or a {@link Mesh} that has a {@link Mesh#modelId}.
+ * * Contains {@link MetaObject}s, which  are connected into a hierarchy with {@link MetaModel#rootMetaObject} referencing the root.
  *
  * @class MetaModel
  */
@@ -14,7 +17,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, rootMetaObject) {
+    constructor(metaScene, modelId, projectId, revisionId, rootMetaObject) {
 
         /**
          * Unique ID.
@@ -24,7 +27,7 @@ class MetaModel {
          * @property id
          * @type {String|Number}
          */
-        this.id = id;
+        this.modelId = modelId;
 
         /**
          * The project ID

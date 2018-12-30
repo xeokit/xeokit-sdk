@@ -18,9 +18,25 @@ const vecb = new Float32Array(3);
 const identityMat = math.identityMat4();
 
 /**
- A scene graph node within a {@link Viewer}'s {@link Scene}.
-
- @class Node
+ * @desc A scene graph node within a {@link Viewer}'s {@link Scene}.
+ *
+ * ## Nodes Representing Objects
+ *
+ * When a Node has an {@link Node#objectId} then
+ *
+ * * it represents an object,
+ * * will be registered by {@link Node#objectId} in {@link Scene#objects} and
+ * * may have a corresponding {@link MetaObject} to specify object metadata for it.
+ *
+ * ## Nodes Representing Models
+ *
+ * When a Node has a {@link Node#modelId} then
+ *
+ * * it represents a model,
+ * * will be registered by {@link Node#modelId} in {@link Scene#models},
+ * * may have a corresponding {@link MetaModel} to specify model metadata for it.
+ *
+ * @implements {Entity}
  */
 class Node extends Component {
 
@@ -119,7 +135,7 @@ class Node extends Component {
 
         if (cfg.objectId) {
             this._objectId = cfg.objectId;
-            this.scene._registerObject(this); // Must assign type before setting properties
+            this.scene._registerObject(this);
         }
 
         if (cfg.modelId) {

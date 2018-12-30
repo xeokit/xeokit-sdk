@@ -2,9 +2,9 @@ import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
 
 /**
- * Metadata on a {@link Viewer}'s {@link Scene}.
+ * @desc Metadata corresponding to a {@link Scene}.
  *
- * * Is provided by {@link Viewer#metaScene}.
+ * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
  */
 class MetaScene {
@@ -15,21 +15,21 @@ class MetaScene {
     constructor(viewer, scene) {
 
         /**
-         * The Viewer.
+         * The {@link Viewer}.
          * @property viewer
          * @type {Viewer}
          */
         this.viewer = viewer;
 
         /**
-         * The Scene.
+         * The {@link Scene}.
          * @property scene
          * @type {Scene}
          */
         this.scene = scene;
 
         /**
-         * The {@link MetaModel}s belonging to this MetaScene, each mapped to its {@link MetaModel#id}.
+         * The {@link MetaModel}s belonging to this MetaScene, each mapped to its {@link MetaModel#modelId}.
          *
          * @type {{String:MetaModel}}
          */
@@ -92,19 +92,19 @@ class MetaScene {
      *
      * Fires a "metaModelCreated" event with the ID of the new {@link MetaModel}.
      *
-     * @param {string} metaModelId ID for the new {@link MetaModel}.
+     * @param {string} modelId ID for the new {@link MetaModel}, corresponding to a {@link Node} that has a {@link Node#modelId}.
      * @param {object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @returns {MetaModel} The new MetaModel.
      */
-    createMetaModel(metaModelId, metaModelData) {
+    createMetaModel(modelId, metaModelData) {
 
         // TODO: validate metadata
 
         var projectId = metaModelData.projectId || "none";
         var revisionId = metaModelData.revisionId || "none";
         var newObjects = metaModelData.metaObjects;
-        const metaModel = new MetaModel(this, metaModelId, projectId, revisionId, null);
-        this.metaModels[metaModelId] = metaModel;
+        const metaModel = new MetaModel(this, modelId, projectId, revisionId, null);
+        this.metaModels[modelId] = metaModel;
         for (let i = 0, len = newObjects.length; i < len; i++) {
             let newObject = newObjects[i];
             let objectId = newObject.objectId;
@@ -130,7 +130,7 @@ class MetaScene {
                 parentMetaObject.children.push(metaObject);
             }
         }
-        this.fire("metaModelCreated", metaModelId);
+        this.fire("metaModelCreated", modelId);
         return metaModel;
     }
 
@@ -140,7 +140,7 @@ class MetaScene {
      * @param src
      * @param ok
      */
-    loadMetaModelJSON(metaModelId, src, ok) {
+    loadMetaModelJSON(modelId, src, ok) {
 
     }
 
@@ -149,10 +149,10 @@ class MetaScene {
      *
      * Fires a "metaModelDestroyed" event with the ID of the {@link Model}.
      *
-     * @param {string} metaModelId ID of the target {@link MetaModel}.
+     * @param {string} modelId ID of the target {@link MetaModel}.
      */
-    destroyMetaModel(metaModelId) {
-        var metaModel = this.metaModels[metaModelId];
+    destroyMetaModel(modelId) {
+        var metaModel = this.metaModels[modelId];
         if (!metaModel) {
             return;
         }
@@ -170,8 +170,8 @@ class MetaScene {
         }
 
         visit(metaModel.rootMetaObject);
-        delete this.metaModels[metaModelId];
-        this.fire("metaModelDestroyed", metaModelId);
+        delete this.metaModels[modelId];
+        this.fire("metaModelDestroyed", modelId);
     }
 
     /**

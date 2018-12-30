@@ -1,10 +1,12 @@
 /**
- * Metadata for an object with a {@link MetaModel}.
+ * @desc Metadata corresponding to an object within a model within a {@link Scene}.
  *
- * * Corresponds to an object within a {@link MetaModel}.
- * * Some MetaObject instances will also correspond to an {@link Entity} within the {@link Scene}.
- * * MetaObject instances are created by {@link MetaScene#createMetaModel}, which registers them by their IDs in {@link MetaScene#metaObjects}.
- * * {@link MetaModel} models its composition structure with a tree of {@link MetaObject}s, with {@link MetaModel#rootMetaObject} set to the root.
+ * * Belongs to a {@link MetaModel}.
+ * * Created by {@link MetaScene#createMetaModel}.
+ * * Registered by {@link MetaObject#objectId} in {@link MetaScene#metaObjects}.
+ * * A MetaObject may correspond to a real object within a {@link Scene}.
+ * * A {@link Scene} object is represented by either a {@link Node} that has an {@link Node#objectId} or a {@link Mesh} that has a {@link Mesh#objectId}.
+ * * {@link MetaModel} represents its composition structure with a tree of MetaObjects, with {@link MetaModel#rootMetaObject} referencing the root MetaObject.
  *
  * @class MetaObject
  */

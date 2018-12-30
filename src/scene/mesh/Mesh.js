@@ -1,8 +1,4 @@
 /**
-
- */
-
-/**
  Fired when this Mesh is picked via a call to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
 
  The event parameters will be the hit result returned by the {@link Scene/pick:method"}}Scene#pick(){{/crossLink}} method.
@@ -276,6 +272,25 @@ const getPickResult = (function () {
     }
 })();
 
+/**
+ * @desc TODO
+ *
+ * ## Meshes Representing Objects
+ *
+ * When a Mesh has an {@link Mesh#objectId} then
+ *
+ * * it represents an object,
+ * * will be registered by {@link Mesh#objectId} in {@link Scene#objects} and
+ * * may have a corresponding {@link MetaObject} to specify object metadata for it.
+ *
+ * ## Meshes Representing Models
+ *
+ * When a Mesh has a {@link Mesh#modelId} then
+ *
+ * * it represents a model,
+ * * will be registered by {@link Mesh#modelId} in {@link Scene#models}, and
+ * * may have a corresponding {@link MetaModel} to specify model metadata for it.
+ */
 class Mesh extends Component {
 
     /**
