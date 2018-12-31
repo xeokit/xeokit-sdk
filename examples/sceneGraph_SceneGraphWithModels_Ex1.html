@@ -11,15 +11,27 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>Scene graph containing models loaded by OBJLoaderPlugin and GLTFLoaderPlugin</h1>
-    <!--<br>-->
-    <!--<ul>-->
-    <!--<li>BCF viewpoint previously saved in example <a target="top" href="../examples/#BIM_BCF_saveViewpoint">BIM_BCF_saveViewpoint</a></li>-->
-    <!--<li>Geometry loaded from <a href="./models/gltf/schependomlaan/">./models/gltf/schependomlaan/scene.gltf</a> </li>-->
-    <!--<li>IFC structure data loaded from <a href="./metaModels/schependomlaan/">./metaModels/schependomlaan/metaModel.json</a></li>-->
-    <!--<li>See source code to examine the BCF JSON record</li>-->
-    <!--<li>More info in tutorial: <a href="">TODO</a></li>-->
-    <!--</ul>-->
+    <h1>Models within a Scene Graph</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads the house from glTF
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a>
+            - Loads the car from OBJ
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/scene/nodes/Node.js~Node.html">Node</a>
+            - Organizes models in a scene graph
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs">Tutorial</a>
+        </li>
+    </ul>
 </div>
 </body>
 <script type="module">
@@ -41,9 +53,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [-3.4462950229644775, -0.14132554829120636, 1.5185661315917969];
-    viewer.camera.look = [-2.2366154193878174, -0.12762285768985748, -0.4791397750377655];
-    viewer.camera.up = [-0.003961625043302774, 0.9884415864944458, 0.008818745613098145];
+    viewer.camera.eye = [-3.44, -0.14, 1.51];
+    viewer.camera.look = [-2.23, -0.12, -0.47];
+    viewer.camera.up = [-0.00, 0.98, 0.00];
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a scene graph containing a bunch of models
@@ -73,18 +85,6 @@
         ]
     });
 
-    window.viewer = viewer;
-
-    // viewer.scene.input.on("mousemove", function (coords) {
-    //
-    //     var hit = viewer.scene.pick({
-    //         canvasPos: coords
-    //     });
-    //
-    //     if (hit) {
-    //         console.log(hit.mesh.objectId);
-    //     }
-    // });
 
 </script>
 </html>
