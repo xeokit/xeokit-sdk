@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/scene/webgl/Renderer.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/Events.js~Events.html">Events</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/scene/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/scene/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WEBGL_INFO">WEBGL_INFO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-bigmodels">scene/bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/bigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/bigModelObject.js~BigModelObject.html">BigModelObject</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-camera">scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-canvas">scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-clipping">scene/clipping</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html">Clip</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-geometry">scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/AABBGeometry.js~AABBGeometry.html">AABBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/BoxGeometry.js~BoxGeometry.html">BoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/CylinderGeometry.js~CylinderGeometry.html">CylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/OBBGeometry.js~OBBGeometry.html">OBBGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/PlaneGeometry.js~PlaneGeometry.html">PlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/SphereGeometry.js~SphereGeometry.html">SphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/TorusGeometry.js~TorusGeometry.html">TorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/VectorTextGeometry.js~VectorTextGeometry.html">VectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-input">scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-lights">scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-materials">scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-mesh">scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-nodes">scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-viewport">scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-webgl">scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/ArrayBuf.js~ArrayBuf.html">ArrayBuf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Attribute.js~Attribute.html">Attribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Drawable.js~Drawable.html">Drawable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/FrameContext.js~FrameContext.html">FrameContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Program.js~Program.html">Program</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/RenderBuffer.js~RenderBuffer.html">RenderBuffer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/RenderFlags.js~RenderFlags.html">RenderFlags</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/RenderState.js~RenderState.html">RenderState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Sampler.js~Sampler.html">Sampler</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Shader.js~Shader.html">Shader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/webgl/Texture2D.js~Texture2D.html">Texture2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-webglEnums">webglEnums</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-axisgizmoplugin">viewer/plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bcfviewpointsplugin">viewer/plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin">viewer/plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html">BIMServerBigLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin-lib">viewer/plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadMetaModel">loadMetaModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-clipsplugin">viewer/plugins/ClipsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-gltfbigmodelloaderplugin">viewer/plugins/GLTFBigModelLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoader.html">GLTFBigModelLoader</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-gltfloaderplugin">viewer/plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-lightsplugin">viewer/plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-objloaderplugin">viewer/plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-planviewplugin">viewer/plugins/PlanViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js~PlanViewPlugin.html">PlanViewPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-propertiespanelplugin">viewer/plugins/PropertiesPanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js~PropertiesPanelPlugin.html">PropertiesPanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-stlloaderplugin">viewer/plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-skyboxesplugin">viewer/plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-structurepanelplugin">viewer/plugins/StructurePanelPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-webvrplugin">viewer/plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-xml3dloaderplugin">viewer/plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ifcDefaultStates">ifcDefaultStates</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/scene/webgl/Renderer.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * @author xeolabs / https://github.com/xeolabs
+ */
+
+import {FrameContext} from &apos;./FrameContext.js&apos;;
+import {RenderFlags} from &apos;./RenderFlags.js&apos;;
+import {RenderBuffer} from &apos;./RenderBuffer.js&apos;;
+import {math} from &apos;../math/math.js&apos;;
+import {stats} from &apos;./../stats.js&apos;;
+import {WEBGL_INFO} from &apos;./../webglInfo.js&apos;;
+import {Map} from &quot;../utils/Map.js&quot;;
+import {PickResult} from &quot;./PickResult.js&quot;;
+
+/**
+ * @private
+ */
+const Renderer = function (scene, options) {
+
+    options = options || {};
+
+    const frameCtx = new FrameContext();
+    const canvas = scene.canvas.canvas;
+    const gl = scene.canvas.gl;
+    const shadowLightMeshes = {};
+    const canvasTransparent = options.transparent === true;
+
+    const pickIDs = new Map({});
+
+    var drawableTypeInfo = {};
+    var drawables = {};
+
+    const drawableListSorted = [];
+    let drawableListSortedLen = 0;
+    const shadowMeshLists = {};
+
+    let drawableListDirty = true;
+    let stateSortDirty = true;
+    let imageDirty = true;
+    let shadowsDirty = true;
+
+    let blendOneMinusSrcAlpha = true;
+
+    let pickBuf = null;
+    let readPixelBuf = null;
+
+    const bindOutputFrameBuffer = null;
+    const unbindOutputFrameBuffer = null;
+
+    this.needStateSort = function () {
+        stateSortDirty = true;
+    };
+
+    this.shadowsDirty = function () {
+        shadowsDirty = true;
+    };
+
+    this.imageDirty = function () {
+        imageDirty = true;
+    };
+
+    this.setBlendOneMinusSrcAlpha = function (value) {
+        blendOneMinusSrcAlpha = value;
+    };
+
+    this.webglContextLost = function () {
+    };
+
+    this.webglContextRestored = function (gl) {
+        if (pickBuf) {
+            pickBuf.webglContextRestored(gl);
+        }
+        if (readPixelBuf) {
+            readPixelBuf.webglContextRestored(gl);
+        }
+        imageDirty = true;
+    };
+
+    /**
+     * Inserts a drawable into this renderer.
+     *  @private
+     */
+    this.addDrawable = function (id, drawable) {
+        var type = drawable.type;
+        if (!type) {
+            console.error(&quot;Renderer#addDrawable() : drawable with ID &quot; + id + &quot; has no &apos;type&apos; - ignoring&quot;);
+            return;
+        }
+        var drawableInfo = drawableTypeInfo[type];
+        if (!drawableInfo) {
+            drawableInfo = {
+                type: drawable.type,
+                count: 0,
+                isStateSortable: drawable.isStateSortable,
+                stateSortCompare: drawable.stateSortCompare,
+                drawableMap: {},
+                drawableList: [],
+                lenDrawableList: 0
+            };
+            drawableTypeInfo[type] = drawableInfo;
+        }
+        drawableInfo.count++;
+        drawableInfo.drawableMap[id] = drawable;
+        drawables[id] = drawable;
+        drawableListDirty = true;
+    };
+
+    /**
+     * Removes a drawable from this renderer.
+     *  @private
+     */
+    this.removeDrawable = function (id) {
+        const drawable = drawables[id];
+        if (!drawable) {
+            console.error(&quot;Renderer#removeDrawable() : drawable not found with ID &quot; + id + &quot; - ignoring&quot;);
+            return;
+        }
+        const type = drawable.type;
+        const drawableInfo = drawableTypeInfo[type];
+        if (--drawableInfo.count &lt;= 0) {
+            delete drawableTypeInfo[type];
+        }
+        delete drawables[id];
+        drawableListDirty = true;
+    };
+
+    /**
+     * Gets a unique pick ID for the given mesh. A mesh can be a {@link Mesh}, or
+     * anything that represents a WebGL draw call within a custom {@link Drawable}
+     * instance.
+     * @param {Mesh|*} mesh A {@link Mesh}, or anything that represents a WebGL
+     * draw call within a custom {@link Drawable} instance.
+     * @returns {Number} New pick ID.
+     */
+    this.getPickID = function (mesh) {
+        return pickIDs.addItem(mesh);
+    };
+
+    /**
+     * Released a pick ID for reuse.
+     * @param {Number} pickID Pick ID to release.
+     */
+    this.putPickID = function (pickID) {
+        pickIDs.removeItem(pickID);
+    };
+
+    /**
+     * Clears the canvas.
+     *  @private
+     */
+    this.clear = function (params) {
+        params = params || {};
+        const boundary = scene.viewport.boundary;
+        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+        if (canvasTransparent) { // Canvas is transparent
+            gl.clearColor(0, 0, 0, 0);
+        } else {
+            const color = params.ambientColor || this.lights.getAmbientColor();
+            gl.clearColor(color[0], color[1], color[2], 1.0);
+        }
+        if (bindOutputFrameBuffer) {
+            bindOutputFrameBuffer(params.pass);
+        }
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+        if (unbindOutputFrameBuffer) {
+            unbindOutputFrameBuffer(params.pass);
+        }
+    };
+
+    /**
+     * Renders inserted drawables.
+     *  @private
+     */
+    this.render = function (params) {
+        params = params || {};
+        updateDrawlist();
+        if (imageDirty || params.force) {
+            draw(params);
+            stats.frame.frameCount++;
+            imageDirty = false;
+        }
+    };
+
+    function updateDrawlist() { // Prepares state-sorted array of drawables from maps of inserted drawables
+        if (drawableListDirty) {
+            buildDrawableList();
+            drawableListDirty = false;
+            stateSortDirty = true;
+        }
+        if (stateSortDirty) {
+            sortDrawableList();
+            stateSortDirty = false;
+            imageDirty = true;
+        }
+    }
+
+    function buildDrawableList() {
+        for (var type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableMap = drawableInfo.drawableMap;
+                const drawableList = drawableInfo.drawableList;
+                var lenDrawableList = 0;
+                for (var id in drawableMap) {
+                    if (drawableMap.hasOwnProperty(id)) {
+                        drawableList[lenDrawableList++] = drawableMap[id];
+                    }
+                }
+                drawableList.length = lenDrawableList;
+                drawableInfo.lenDrawableList = lenDrawableList;
+            }
+        }
+    }
+
+    function sortDrawableList() {
+        for (var type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+                const drawableInfo = drawableTypeInfo[type];
+                if (drawableInfo.isStateSortable) {
+                    drawableInfo.drawableList.sort(drawableInfo.stateSortCompare);
+                }
+            }
+        }
+    }
+
+    function drawShadowMaps() {
+        var lights = scene._lightsState.lights;
+        var light;
+        var i;
+        var len;
+        for (i = 0, len = lights.length; i &lt; len; i++) {
+            light = lights[i];
+            if (!light.castShadow) {
+                continue;
+            }
+            drawShadowMap(light);
+        }
+    }
+
+    function drawShadowMap(light) {
+
+        const castShadow = light.castShadow;
+
+        if (!castShadow) {
+            return;
+        }
+
+        const renderBuf = light.getShadowRenderBuf();
+
+        if (!renderBuf) {
+            return;
+        }
+
+        renderBuf.bind();
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true;
+        frameCtx.drawElements = 0;
+        frameCtx.useProgram = -1;
+        frameCtx.shadowViewMatrix = light.getShadowViewMatrix();
+        frameCtx.shadowProjMatrix = light.getShadowProjMatrix();
+
+        const boundary = scene.viewport.boundary;
+        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+        gl.clearColor(0, 0, 0, 1);
+        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.BLEND);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        let i;
+        let drawable;
+
+        for (i = 0; i &lt; drawableListSortedLen; i++) {
+            drawable = drawableListSorted[i];
+            if (!drawable.visible || !drawable.castShadow) {
+                continue; // For now, culled drawables still cast shadows because they are just out of view
+            }
+            // if (drawable._material._state.alpha === 0) {
+            //     continue;
+            // }
+            //    drawable.drawShadow(frameCtx, light);
+        }
+
+        renderBuf.unbind();
+    }
+
+    var draw = (function () { // Draws the drawables in drawableListSorted
+
+        // On the first pass, we&apos;ll immediately draw the opaque normal-appearance drawables, while deferring
+        // the rest to these bins, then do subsequent passes to render these bins.
+
+        const normalEdgesOpaqueBin = [];
+        const normalFillTransparentBin = [];
+        const normalEdgesTransparentBin = [];
+
+        const ghostedFillOpaqueBin = [];
+        const ghostEdgesOpaqueBin = [];
+        const ghostedFillTransparentBin = [];
+        const ghostEdgesTransparentBin = [];
+
+        const highlightedFillOpaqueBin = [];
+        const highlightedEdgesOpaqueBin = [];
+        const highlightedFillTransparentBin = [];
+        const highlightedEdgesTransparentBin = [];
+
+        const selectedFillOpaqueBin = [];
+        const selectedEdgesOpaqueBin = [];
+        const selectedFillTransparentBin = [];
+        const selectedEdgesTransparentBin = [];
+
+        const renderFlags = new RenderFlags();
+
+        return function (params) {
+
+            var opaqueOnly = !!params.opaqueOnly;
+
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;OES_element_index_uint&quot;]) {  // In case context lost/recovered
+                gl.getExtension(&quot;OES_element_index_uint&quot;);
+            }
+
+            const ambientColor = scene._lightsState.getAmbientColor();
+
+            frameCtx.reset();
+            frameCtx.pass = params.pass;
+
+            const boundary = scene.viewport.boundary;
+            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+            if (canvasTransparent) { // Canvas is transparent
+                gl.clearColor(0, 0, 0, 0);
+            } else {
+                gl.clearColor(ambientColor[0], ambientColor[1], ambientColor[2], 1.0);
+            }
+
+            gl.enable(gl.DEPTH_TEST);
+            gl.frontFace(gl.CCW);
+            gl.enable(gl.CULL_FACE);
+            gl.depthMask(true);
+
+            let i;
+            let len;
+            let drawable;
+
+            const startTime = Date.now();
+
+            if (bindOutputFrameBuffer) {
+                bindOutputFrameBuffer(params.pass);
+            }
+
+            if (params.clear !== false) {
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+            }
+
+            let normalEdgesOpaqueBinLen = 0;
+            let normalFillTransparentBinLen = 0;
+            let normalEdgesTransparentBinLen = 0;
+
+            let ghostedFillOpaqueBinLen = 0;
+            let ghostEdgesOpaqueBinLen = 0;
+            let ghostedFillTransparentBinLen = 0;
+            let ghostEdgesTransparentBinLen = 0;
+
+            let highlightedFillOpaqueBinLen = 0;
+            let highlightedEdgesOpaqueBinLen = 0;
+            let highlightedFillTransparentBinLen = 0;
+            let highlightedEdgesTransparentBinLen = 0;
+
+            let selectedFillOpaqueBinLen = 0;
+            let selectedEdgesOpaqueBinLen = 0;
+            let selectedFillTransparentBinLen = 0;
+            let selectedEdgesTransparentBinLen = 0;
+
+            let outlinedOpaqueBinLen = 0;
+
+            //------------------------------------------------------------------------------------------------------
+            // Render normal opaque solids, defer others to bins to render after
+            //------------------------------------------------------------------------------------------------------
+
+            for (var type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                    const drawableInfo = drawableTypeInfo[type];
+                    const drawableList = drawableInfo.drawableList;
+
+                    for (i = 0, len = drawableList.length; i &lt; len; i++) {
+
+                        drawable = drawableList[i];
+
+                        if (drawable.culled === true || drawable.visible === false) {
+                            continue;
+                        }
+
+                        drawable.getRenderFlags(renderFlags);
+
+                        if (renderFlags.normalFillOpaque) {
+                            drawable.drawNormalFillOpaque(frameCtx);
+                        }
+
+                        if (renderFlags.normalEdgesOpaque) {
+                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.normalFillTransparent) {
+                            normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.normalEdgesTransparent) {
+                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.ghostedFillTransparent) {
+                            ghostedFillTransparentBin[ghostedFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.ghostedFillOpaque) {
+                            ghostedFillOpaqueBin[ghostedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.ghostedEdgesTransparent) {
+                            ghostEdgesTransparentBin[ghostEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.ghostedEdgesOpaque) {
+                            ghostEdgesOpaqueBin[ghostEdgesOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedFillTransparent) {
+                            highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedFillOpaque) {
+                            highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedEdgesTransparent) {
+                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedEdgesOpaque) {
+                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedFillTransparent) {
+                            selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedFillOpaque) {
+                            selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedEdgesTransparent) {
+                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.selectedEdgesOpaque) {
+                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                        }
+                    }
+                }
+            }
+
+            //------------------------------------------------------------------------------------------------------
+            // Render deferred bins
+            //------------------------------------------------------------------------------------------------------
+
+            if (normalEdgesOpaqueBinLen &gt; 0) {
+                for (i = 0; i &lt; normalEdgesOpaqueBinLen; i++) {
+                    normalEdgesOpaqueBin[i].drawNormalEdgesOpaque(frameCtx);
+                }
+            }
+
+            if (ghostedFillOpaqueBinLen &gt; 0) {
+                for (i = 0; i &lt; ghostedFillOpaqueBinLen; i++) {
+                    ghostedFillOpaqueBin[i].drawGhostedFillOpaque(frameCtx);
+                }
+            }
+
+            if (ghostEdgesOpaqueBinLen &gt; 0) {
+                for (i = 0; i &lt; ghostEdgesOpaqueBinLen; i++) {
+                    ghostEdgesOpaqueBin[i].drawGhostedEdgesOpaque(frameCtx);
+                }
+            }
+
+            const transparentDepthMask = true;
+            if (ghostedFillTransparentBinLen &gt; 0 || ghostEdgesTransparentBinLen &gt; 0 || normalFillTransparentBinLen &gt; 0) {
+                gl.enable(gl.CULL_FACE);
+                gl.enable(gl.BLEND);
+                if (blendOneMinusSrcAlpha) { // Makes glTF windows appear correct
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                }
+                frameCtx.backfaces = false;
+                if (!transparentDepthMask) {
+                    gl.depthMask(false);
+                }
+                if (ghostEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; ghostEdgesTransparentBinLen; i++) {
+                        ghostEdgesTransparentBin[i].drawGhostedEdgesTransparent(frameCtx);
+                    }
+                }
+                if (ghostedFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; ghostedFillTransparentBinLen; i++) {
+                        ghostedFillTransparentBin[i].drawGhostedFillTransparent(frameCtx);
+                    }
+                }
+                if (normalFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; normalFillTransparentBinLen; i++) {
+                        drawable = normalFillTransparentBin[i];
+                        drawable.drawNormalFillTransparent(frameCtx);
+                    }
+                }
+                if (normalEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; normalEdgesTransparentBinLen; i++) {
+                        drawable = normalEdgesTransparentBin[i];
+                        drawable.drawNormalEdgesTransparent(frameCtx);
+                    }
+                }
+                gl.disable(gl.BLEND);
+            }
+
+            if (highlightedFillOpaqueBinLen &gt; 0 || highlightedEdgesOpaqueBinLen &gt; 0) {
+                frameCtx.lastProgramId = null;
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (highlightedEdgesOpaqueBinLen &gt; 0) {
+                    for (i = 0; i &lt; highlightedEdgesOpaqueBinLen; i++) {
+                        highlightedEdgesOpaqueBin[i].drawHighlightedEdgesOpaque(frameCtx);
+                    }
+                }
+                if (highlightedFillOpaqueBinLen &gt; 0) {
+                    for (i = 0; i &lt; highlightedFillOpaqueBinLen; i++) {
+                        highlightedFillOpaqueBin[i].drawHighlightedFillOpaque(frameCtx);
+                    }
+                }
+            }
+
+            if (highlightedFillTransparentBinLen &gt; 0 || highlightedEdgesTransparentBinLen &gt; 0 || highlightedFillOpaqueBinLen &gt; 0) {
+                frameCtx.lastProgramId = null;
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                gl.enable(gl.CULL_FACE);
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                if (highlightedEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; highlightedEdgesTransparentBinLen; i++) {
+                        highlightedEdgesTransparentBin[i].drawHighlightedEdgesTransparent(frameCtx);
+                    }
+                }
+                if (highlightedFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; highlightedFillTransparentBinLen; i++) {
+                        highlightedFillTransparentBin[i].drawHighlightedFillTransparent(frameCtx);
+                    }
+                }
+                gl.disable(gl.BLEND);
+            }
+
+            if (selectedFillOpaqueBinLen &gt; 0 || selectedEdgesOpaqueBinLen &gt; 0) {
+                frameCtx.lastProgramId = null;
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                if (selectedEdgesOpaqueBinLen &gt; 0) {
+                    for (i = 0; i &lt; selectedEdgesOpaqueBinLen; i++) {
+                        selectedEdgesOpaqueBin[i].drawSelectedEdgesOpaque(frameCtx);
+                    }
+                }
+                if (selectedFillOpaqueBinLen &gt; 0) {
+                    for (i = 0; i &lt; selectedFillOpaqueBinLen; i++) {
+                        selectedFillOpaqueBin[i].drawSelectedFillOpaque(frameCtx);
+                    }
+                }
+            }
+
+            if (selectedFillTransparentBinLen &gt; 0 || selectedEdgesTransparentBinLen &gt; 0) {
+                frameCtx.lastProgramId = null;
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                gl.enable(gl.CULL_FACE);
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                if (selectedEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; selectedEdgesTransparentBinLen; i++) {
+                        selectedEdgesTransparentBin[i].drawSelectedEdgesTransparent(frameCtx);
+                    }
+                }
+                if (selectedFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; selectedFillTransparentBinLen; i++) {
+                        selectedFillTransparentBin[i].drawSelectedFillTransparent(frameCtx);
+                    }
+                }
+                gl.disable(gl.BLEND);
+            }
+
+            const endTime = Date.now();
+            const frameStats = stats.frame;
+
+            frameStats.renderTime = (endTime - startTime) / 1000.0;
+            frameStats.drawElements = frameCtx.drawElements;
+            frameStats.drawElements = frameCtx.drawElements;
+            frameStats.useProgram = frameCtx.useProgram;
+            frameStats.bindTexture = frameCtx.bindTexture;
+            frameStats.bindArray = frameCtx.bindArray;
+
+            const numTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
+            for (let ii = 0; ii &lt; numTextureUnits; ii++) {
+                gl.activeTexture(gl.TEXTURE0 + ii);
+            }
+            gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
+            gl.bindTexture(gl.TEXTURE_2D, null);
+
+            // Set the backbuffer&apos;s alpha to 1.0
+            // gl.clearColor(1, 1, 1, 1);
+            // gl.colorMask(false, false, false, true);
+            // gl.clear(gl.COLOR_BUFFER_BIT);
+            // gl.colorMask(true, true, true, true);
+
+            if (unbindOutputFrameBuffer) {
+                unbindOutputFrameBuffer(params.pass);
+            }
+        };
+    })();
+
+    /**
+     * Picks a drawable in the scene.
+     * @private
+     */
+    this.pick = (function () {
+
+        const tempVec3a = math.vec3();
+        const tempMat4a = math.mat4();
+        const up = math.vec3([0, 1, 0]);
+        const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.1, 10000);
+        const _pickResult = new PickResult();
+
+        return function (params, pickResult = _pickResult) {
+
+            pickResult.reset();
+
+            updateDrawlist();
+
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;OES_element_index_uint&quot;]) { // In case context lost/recovered
+                gl.getExtension(&quot;OES_element_index_uint&quot;);
+            }
+
+            let canvasX;
+            let canvasY;
+            let origin;
+            let direction;
+            let look;
+            let pickViewMatrix = null;
+            let pickProjMatrix = null;
+
+            if (params.canvasPos) {
+
+                canvasX = params.canvasPos[0];
+                canvasY = params.canvasPos[1];
+
+            } else {
+
+                // Picking with arbitrary World-space ray
+                // Align camera along ray and fire ray through center of canvas
+
+                origin = params.origin || math.vec3([0, 0, 0]);
+                direction = params.direction || math.vec3([0, 0, 1]);
+                look = math.addVec3(origin, direction, tempVec3a);
+
+                pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4a);
+                pickProjMatrix = pickFrustumMatrix;
+
+                canvasX = canvas.clientWidth * 0.5;
+                canvasY = canvas.clientHeight * 0.5;
+            }
+
+            pickBuf = pickBuf || new RenderBuffer(canvas, gl);
+            pickBuf.bind();
+
+            pickMesh(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult);
+
+            if (!pickResult.mesh) {
+                pickBuf.unbind();
+                return null;
+            }
+
+            if (params.pickSurface) {
+                pickTriangle(pickResult.mesh, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+            }
+
+            if (pickViewMatrix) {
+                pickResult.origin = origin;
+                pickResult.direction = direction;
+            }
+
+            pickBuf.unbind();
+
+            return pickResult;
+        };
+    })();
+
+    /**
+     * Picks a mesh, either through the canvas using the camera view transform, or through the center of a virtual
+     * canvas using a view matrix aligned along a World-space ray.
+     *
+     * Calls drawPickMesh() on each Drawable in this Renderer.
+     *
+     * If a mesh was picked, returns it via pickResult.mesh.
+     *
+     * @param canvasX
+     * @param canvasY
+     * @param pickViewMatrix
+     * @param pickProjMatrix
+     * @param params
+     * @params pickResult
+     * @returns {*}
+     */
+    function pickMesh(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult) {
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // &quot;ccw&quot;
+        frameCtx.pickViewMatrix = pickViewMatrix;
+        frameCtx.pickProjMatrix = pickProjMatrix;
+
+        const boundary = scene.viewport.boundary;
+        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.CULL_FACE);
+        gl.disable(gl.BLEND);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        let i;
+        let len;
+        let mesh;
+        const includeMeshIds = params.includeMeshIds;
+        const excludeMeshIds = params.excludeMeshIds;
+
+        for (var type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
+
+                for (i = 0, len = drawableList.length; i &lt; len; i++) {
+
+                    const drawable = drawableList[i];
+
+                    if (!drawable.drawPickMesh || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
+                        continue;
+                    }
+                    if (includeMeshIds &amp;&amp; !includeMeshIds[drawable.id]) { // TODO: push this logic into drawable
+                        continue;
+                    }
+                    if (excludeMeshIds &amp;&amp; excludeMeshIds[drawable.id]) {
+                        continue;
+                    }
+
+                    drawable.drawPickMesh(frameCtx);
+                }
+            }
+        }
+
+        const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+        let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
+
+        if (pickID &lt; 0) {
+            return;
+        }
+
+        pickResult.mesh = pickIDs.items[pickID];
+    }
+
+    function pickTriangle(mesh, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // &quot;ccw&quot;
+        frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
+        frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+
+        const boundary = scene.viewport.boundary;
+        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.CULL_FACE);
+        gl.disable(gl.BLEND);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        mesh.drawPickTriangles(frameCtx);
+
+        const pix = pickBuf.read(canvasX, canvasY);
+
+        let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
+
+        primIndex *= 3; // Convert from triangle number to first vertex in indices
+
+        pickResult.primIndex = primIndex;
+    }
+
+    /**
+     * Read pixels from the renderer&apos;s frameCtx buffer. Performs a force-render first
+     * @param pixels
+     * @param colors
+     * @param len
+     * @param opaqueOnly
+     * @private
+     */
+    this.readPixels = function (pixels, colors, len, opaqueOnly) {
+        readPixelBuf = readPixelBuf || (readPixelBuf = new RenderBuffer(canvas, gl));
+        readPixelBuf.bind();
+        readPixelBuf.clear();
+        this.render({force: true, opaqueOnly: opaqueOnly});
+        let color;
+        let i;
+        let j;
+        let k;
+        for (i = 0; i &lt; len; i++) {
+            j = i * 2;
+            k = i * 4;
+            color = readPixelBuf.read(pixels[j], pixels[j + 1]);
+            colors[k] = color[0];
+            colors[k + 1] = color[1];
+            colors[k + 2] = color[2];
+            colors[k + 3] = color[3];
+        }
+        readPixelBuf.unbind();
+        imageDirty = true;
+    };
+
+    /**
+     * Destroys this renderer.
+     * @private
+     */
+    this.destroy = function () {
+        drawableTypeInfo = {};
+        drawables = {};
+        if (pickBuf) {
+            pickBuf.destroy();
+        }
+        if (readPixelBuf) {
+            readPixelBuf.destroy();
+        }
+    };
+};
+
+export {Renderer};</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
