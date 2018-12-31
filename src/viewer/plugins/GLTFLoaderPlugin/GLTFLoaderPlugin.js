@@ -62,9 +62,11 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
-    constructor(viewer, cfg) {
+    constructor(viewer, cfg={}) {
 
         super("GLTFLoader", viewer, cfg);
+
+        this._handleNode = cfg.handleNode;
 
         /**
          * @private
@@ -125,7 +127,7 @@ class GLTFLoaderPlugin extends Plugin {
             return node;
         }
 
-        params.handleNode = params.handleNode || function(modelId, nodeInfo, actions) {
+        params.handleNode = params.handleNode || this._handleNode || function(modelId, nodeInfo, actions) {
             const name = nodeInfo.name;
             if (!name) {
                 return true; // Continue descending this node subtree
