@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XML3DLoaderPlugin - Loading a Model from 3DXML</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>XML3DLoaderPlugin - Loading a Model from 3DXML</h1>
+    <!--<br>-->
+    <!--<ul>-->
+    <!--<li>BCF viewpoint previously saved in example <a target="top" href="../examples/#BIM_BCF_saveViewpoint">BIM_BCF_saveViewpoint</a></li>-->
+    <!--<li>Geometry loaded from <a href="./models/gltf/schependomlaan/">./models/gltf/schependomlaan/scene.gltf</a> </li>-->
+    <!--<li>IFC structure data loaded from <a href="./metaModels/schependomlaan/">./metaModels/schependomlaan/metaModel.json</a></li>-->
+    <!--<li>See source code to examine the BCF JSON record</li>-->
+    <!--<li>More info in tutorial: <a href="">TODO</a></li>-->
+    <!--</ul>-->
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XML3DLoaderPlugin} from "../src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an AxisGizmo to show the World-space coordinate axis
+    //------------------------------------------------------------------------------------------------------------------
+
+    new AxisGizmoPlugin(viewer, {size: [250, 250]});
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load 3DXML model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xml3dLoader = new XML3DLoaderPlugin(viewer);
+
+    const model = xml3dLoader.load({
+        modelId: "myModel",
+        src: "./models/xml3d/3dpreview.3dxml",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.flyTo(model);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+
+</script>
+</html>

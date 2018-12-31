@@ -1,0 +1,37 @@
+.xeokitStructurePanel, .xeokitStructurePanel * {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    z-index: 1;
+}
+
+.xeokitStructurePanel div.item {
+    /*border-top: solid 1px #eee;*/
+}
+
+.xeokitStructurePanel > div.item {
+    border: none;
+}
+
+.xeokitStructurePanel div.label {
+    margin-left: -100px;
+    padding-left: 100px;
+    /*width: 1000px;*/
+    cursor: pointer;
+}
+
+.xeokitStructurePanel div.children {
+    padding-left: 10px;
+}
+
+.xeokitStructurePanel div.selected {
+    background: #6ae;
+    color: white;
+}
+
+.xeokitStructurePanel div.label:before {
+    content: "\21b3  ";
+}

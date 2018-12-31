@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Minimial OBJ Viewer Demo</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>OBJLoaderPlugin - Loading a Model from OBJ</h1>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {OBJLoaderPlugin} from "../src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load OBJ model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const objLoader = new OBJLoaderPlugin(viewer);
+
+    const model = objLoader.load({
+        modelId: "myModel",
+        src: "./models/obj/sportsCar/sportsCar.obj",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.flyTo(model);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+
+</script>
+</html>

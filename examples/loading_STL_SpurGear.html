@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>STLLoaderPlugin - Loading a Model from STL</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>STLLoaderPlugin - Loading a Model from STL</h1>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {STLLoaderPlugin} from "../src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load STL model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const stlLoader = new STLLoaderPlugin(viewer);
+
+    const model = stlLoader.load({
+        modelId: "myModel",
+        src: "./models/stl/binary/spurGear.stl",
+        smoothNormals: true
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.flyTo(model);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+</script>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GLTFLoaderPlugin - Loading a Model from GLTF</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width:100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas"></canvas>
+    <div id="info">
+        <h1>GLTFLoaderPlugin - Loading a model from GLTF</h1>
+    </div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        modelId: "myModel",
+        src: "./models/gltf/modern_office/scene.gltf",
+        edges: true,
+        edgeThreshold: 20
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.flyTo(model);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+
+</script>
+</html>

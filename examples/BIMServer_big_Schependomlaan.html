@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BIMServerLoaderPlugin - Loading a huge model from BIMServer</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
+    <script src="libs/perfect-scrollbar.min.js"></script>
+
+    <style>
+        #structurePanel {
+            padding: 10px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            position: absolute;
+            background: RGBA(0, 0, 0, 0.4);
+            color: white;
+            top: 0;
+            z-index: 200000;
+            /*font-weight: 600;*/
+            float: left;
+            left: 0;
+        }
+
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="structurePanel" class="xeokitStructurePanel"></div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
+    import {Viewer} from "./../src/viewer/Viewer.js";
+    import {BIMServerBigLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js";
+    import {StructurePanelPlugin} from "./../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
+    import {PropertiesPanelPlugin} from "./../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
+
+    const bimServerAddress = "http://localhost:8082";
+    const username = "admin@bimserver.org";
+    const password = "admin";
+    const poid = 131073;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and position the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a StructurePanelPlugin to the Viewer
+    //
+    // This will display the contents of viewer#metaScene as a tree of nodes that you can click on to
+    // navigate the model.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structurePanel = new StructurePanelPlugin(viewer, {
+        domElementId: "structurePanel"
+    });
+
+    structurePanel.on("clicked", e => {
+
+        const objectId = e.objectId;
+        const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
+        const aabb = viewer.scene.getAABB(objectIds);
+
+        // FIXME: Selected rendering not working for BigModel yet
+        // viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
+        // viewer.scene.setSelected(objectIds, true);
+
+        viewer.cameraFlight.flyTo(aabb);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    //
+    //------------------------------------------------------------------------------------------------------------------
+
+    // const propertiesPanel = new PropertiesPanelPlugin(viewer, {
+    //     domElementId: "propertiesPanel"
+    // });
+
+    //------------------------------------------------------------------------------------------------------------------
+    //
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.input.on("mouseclicked", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+            var mesh = hit.mesh;
+            var metaObject = viewer.metaScene.metaObjects[mesh.id];
+            if (metaObject) {
+                console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+            } else {
+                const parent = mesh.parent;
+                if (parent) {
+                    metaObject = viewer.metaScene.metaObjects[parent.id];
+                    if (metaObject) {
+                        console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+                    }
+                }
+            }
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a BIMServerClient
+    //------------------------------------------------------------------------------------------------------------------
+
+    const bimServerClient = new BimServerClient(bimServerAddress);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a BIMServerLoaderPlugin to the Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const bimServerBigLoader = new BIMServerBigLoaderPlugin(viewer, {
+        bimServerClient: bimServerClient
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Initialize the BIMServerClient
+    //------------------------------------------------------------------------------------------------------------------
+
+    bimServerClient.init(() => {
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Login to the BIMServerClient
+        //------------------------------------------------------------------------------------------------------------------
+
+        bimServerClient.login(username, password, () => {
+
+            //------------------------------------------------------------------------------------------------------------------
+            //
+            //------------------------------------------------------------------------------------------------------------------
+
+            bimServerClient.call("ServiceInterface", "getProjectByPoid", {
+                poid: poid
+            }, (project) => {
+
+                //------------------------------------------------------------------------------------------------------------------
+                //
+                //------------------------------------------------------------------------------------------------------------------
+
+                // Load the latest revision of the project
+                // Use whatever IFC schema that's for
+
+                const roid = project.lastRevisionId;
+                const schema = project.schema;
+
+                const bigModel = bimServerBigLoader.load({
+                    modelId: "myModel",
+                    poid: poid,
+                    roid: roid,
+                    schema: schema,
+                    scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
+                    rotation: [-90, 0, 0],          // xeoglModel has Z+ axis as "up"
+                    edges: true
+                });
+            });
+        });
+    });
+
+</script>
+
+</html>
