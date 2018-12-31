@@ -156,7 +156,7 @@
                     actions.createObject.visible = false;
                     break;
                 default: // Unrecognized type
-                    actions.createObject.pickable = true;
+                  //  actions.createObject.pickable = true;
             }
 
             // Continue descending this glTF node subtree
@@ -167,9 +167,9 @@
     const model = gltfLoader.load({
         modelId: "myModel",
         src: "./models/gltf/OTCConferenceCenter/scene.gltf",
-        compressGeometry: true,
         metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true
+        edges: true,
+        edgeThreshold: 10
     });
 
     model.on("loaded", () => {
@@ -185,33 +185,6 @@
             viewer.cameraFlight.flyTo(aabb);
         });
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    //
-    //------------------------------------------------------------------------------------------------------------------
-
-    // viewer.scene.input.on("mouseclicked", function (coords) {
-    //
-    //     var hit = viewer.scene.pick({
-    //         canvasPos: coords
-    //     });
-    //
-    //     if (hit) {
-    //         var mesh = hit.mesh;
-    //         var metaObject = viewer.metaScene.metaObjects[mesh.objectId];
-    //         if (metaObject) {
-    //             console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-    //         } else {
-    //             const parent = mesh.parent;
-    //             if (parent) {
-    //                 metaObject = viewer.metaScene.metaObjects[parent.objectId];
-    //                 if (metaObject) {
-    //                     console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-    //                 }
-    //             }
-    //         }
-    //     }
-    // });
 
     window.viewer = viewer;
 </script>
