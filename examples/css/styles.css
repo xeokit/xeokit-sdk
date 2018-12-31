@@ -20,7 +20,7 @@ body {
 #myCanvas {
     width: 100%;
     height: 100%;
-    position:absolute;
+    position: absolute;
 
 }
 
@@ -59,18 +59,15 @@ body {
 
 #info {
     position: absolute;
-    top: 0px;
+    top: 0;
     z-index: 200000;
-    /*font-weight: 600;*/
-    float: left;
-    left: 0px;
+    float: right;
+    right: 0;
     padding: 10px;
-    /*border-radius: 0 0 4px 0;*/
-    /*border-radius:6px;*/
     height: auto;
     text-align: left;
-    /*border: solid 1px #bdbcbc;*/
     pointer-events: none;
+    background: RGBA(0, 0, 0, 0.4);
 }
 
 #info-website {
@@ -84,8 +81,6 @@ body {
     font-size: 20px;
     color: black;
 }
-
-
 
 #info a {
     z-index: 200000;
@@ -154,20 +149,20 @@ body {
 
 #menu {
     margin: 0;
-    left:0;
+    left: 0;
     width: auto;
-    height:100%;
+    height: 100%;
     padding: 7px;
     z-index: 200000;
 }
 
 #explorer {
     margin: 0;
-    left:0;
+    left: 0;
     background: black;
     width: auto;
-    height:100%;
-    position:absolute;
+    height: 100%;
+    position: absolute;
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 7px;
@@ -214,12 +209,12 @@ body {
 #dat-gui-container {
     position: absolute;
     /*top: 120px;*/
-    top:0;
+    top: 0;
     right: 0;
     z-index: 100001;
     float: right;
     width: 320px;
-    margin-right : 60px !important;
+    margin-right: 60px !important;
 }
 
 #dat-gui-container-website {
@@ -230,7 +225,7 @@ body {
     z-index: 100001;
     float: right;
     width: 320px;
-    margin-right : 60px !important;
+    margin-right: 60px !important;
 }
 
 #header {
@@ -372,11 +367,11 @@ p.containerTitle {
 }
 
 /*hr {*/
-    /*margin-top: 10px;*/
-    /*margin-bottom: 10px;*/
-    /*color: lightgray;*/
-    /*background-color: lightgray;*/
-    /*height: 1px;*/
+/*margin-top: 10px;*/
+/*margin-bottom: 10px;*/
+/*color: lightgray;*/
+/*background-color: lightgray;*/
+/*height: 1px;*/
 /*}*/
 
 article.fill h3 {
@@ -414,7 +409,7 @@ ul ul {
     /*overflow-Y: scroll;*/
     /*overflow-x: hidden;*/
     background: black;
-    overflow:auto;
+    overflow: auto;
 }
 
 #contents a {
