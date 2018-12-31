@@ -4,7 +4,7 @@ import {Plugin} from "./../../Plugin.js";
 import {GLTFLoader} from "./GLTFLoader.js";
 
 /**
- * A viewer plugin that loads models from [glTF](https://www.khronos.org/gltf/).
+ * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
  *
  * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
  * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.

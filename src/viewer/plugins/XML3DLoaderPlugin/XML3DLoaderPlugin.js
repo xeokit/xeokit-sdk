@@ -1,7 +1,7 @@
 import {LoaderPlugin} from "./../../LoaderPlugin.js";
 
 /**
- * A viewer plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
+ * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
  * For each model loaded, creates a {@link Model} within its
  * {@link Viewer}'s {@link Scene}.

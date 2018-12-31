@@ -7,7 +7,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
 
 
 /**
- * A viewer plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
+ * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
  *
  * In the example below, we'll load the latest revision of a project's model.
  *

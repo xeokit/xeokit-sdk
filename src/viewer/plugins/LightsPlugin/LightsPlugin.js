@@ -2,7 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {DirLight} from "../../../scene/lights/DirLight.js"
 
 /**
- * A viewer plugin that manages light sources.
+ * {@link Viewer} plugin that manages light sources.
  *
  * @example
  *

@@ -1,7 +1,7 @@
 import {Plugin} from "./../../../viewer/Plugin.js";
 
 /**
- * A viewer plugin that supports WebVR.
+ * {@link Viewer} plugin that supports WebVR.
  *
  * @class WebVRPlugin
  */

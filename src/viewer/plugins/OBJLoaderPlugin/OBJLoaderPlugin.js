@@ -4,7 +4,7 @@ import {utils} from "./../../../scene/utils.js";
 import {OBJLoader} from "./OBJLoader.js";
 
 /**
- * A viewer plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
+ * {@link Viewer} plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
  *
  * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
  * * See the {@link OBJLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.

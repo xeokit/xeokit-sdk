@@ -3,7 +3,7 @@ import {Clip} from "../../../scene/clipping/Clip.js"
 import {math} from "../../../scene/math/math.js"
 
 /**
- * A viewer plugin that manages user cross-section planes.
+ * {@link Viewer} plugin that manages user cross-section planes.
  *
  * @example
  *

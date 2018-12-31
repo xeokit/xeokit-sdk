@@ -3,7 +3,7 @@ import {Plugin} from "./../../Plugin.js";
 import {STLLoader} from "./STLLoader.js";
 
 /**
- * A viewer plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
+ * {@link Viewer} plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
  *
  * For each model loaded, creates a {@link Node} within its {@link Viewer}'s {@link Scene}.
  *

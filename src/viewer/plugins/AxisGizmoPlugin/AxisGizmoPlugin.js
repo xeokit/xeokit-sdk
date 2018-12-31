@@ -10,7 +10,7 @@ import {PhongMaterial}     from  "./../../../scene/materials/PhongMaterial.js";
 import {math}     from  "./../../../scene/math/math.js";
 
 /**
- * Viewer plugin that shows the axii of the World-space coordinate system.
+ * {@link Viewer} plugin that shows the axii of the World-space coordinate system.
  *
  * @class AxisGizmoPlugin
  */

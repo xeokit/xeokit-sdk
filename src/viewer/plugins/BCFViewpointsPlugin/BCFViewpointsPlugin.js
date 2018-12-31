@@ -5,7 +5,7 @@ import {math} from "../../../scene/math/math.js";
 const tempVec3 = math.vec3();
 
 /**
- * Viewer plugin that saves and loads BCF viewpoints as JSON objects.
+ * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  *
  * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
  * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.

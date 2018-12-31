@@ -2,7 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {Skybox} from "../../../xeokit/skybox/skybox.js"
 
 /**
- * A viewer plugin that manages skyboxes
+ * {@link Viewer} plugin that manages skyboxes
  *
  * @example
  *

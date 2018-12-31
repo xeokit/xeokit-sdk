@@ -11,7 +11,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
 import {utils} from "../../../scene/utils.js";
 
 /**
- * A viewer plugin that loads models from a [BIMServer](http://bimserver.org).
+ * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org).
  *
  * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
  *
