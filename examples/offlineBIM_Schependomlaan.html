@@ -88,7 +88,9 @@
     cameraFlight.duration = 1.0;
     cameraFlight.fitFOV = 25;
 
-    camera.orbitPitch(20);
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     //------------------------------------------------------------------------------------------------------------------
     // Create UI panels
@@ -171,8 +173,6 @@
     });
 
     model.on("loaded", () => {
-
-        viewer.cameraFlight.flyTo(model);
 
         structurePanel.on("clicked", e => {
             const objectId = e.objectId;
