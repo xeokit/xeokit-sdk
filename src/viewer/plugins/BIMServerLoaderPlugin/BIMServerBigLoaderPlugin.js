@@ -138,7 +138,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
 
         const self = this;
 
-        const modelId = params.id;
+        const modelId = params.modelId;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -152,7 +152,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
         var onTick;
 
         if (!modelId) {
-            this.error("load() param expected: id");
+            this.error("load() param expected: modelId");
             return;
         }
 
