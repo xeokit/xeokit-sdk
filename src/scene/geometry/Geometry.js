@@ -849,7 +849,7 @@ var quantizeVec3 = (function () {
         ], scale);
         const decodeMat = math.mulMat4(translate, scale, math.identityMat4());
         return {
-            compressed: compressed,
+            compressed: quantized,
             decode: decodeMat
         };
     };
