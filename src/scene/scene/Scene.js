@@ -14,7 +14,6 @@ import {BoxGeometry} from '../geometry/BoxGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
-import {OutlineMaterial} from '../materials/OutlineMaterial.js';
 
 // Cached vars to avoid garbage collection
 
@@ -783,7 +782,6 @@ class Scene extends Component {
         dummy = this.geometry;
         dummy = this.material;
         dummy = this.ghostMaterial;
-        dummy = this.outlineMaterial;
         dummy = this.edgeMaterial;
         dummy = this.selectedMaterial;
         dummy = this.highlightMaterial;
@@ -1422,26 +1420,6 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are outlined.
-
-     This {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.outlineMaterial", with all
-     other properties initialised to their default values.
-
-     {@link Mesh}es in this Scene are attached to this
-     {@link OutlineMaterial"}}OutlineMaterial{{/crossLink}} by default.
-     @property outlineMaterial
-     @final
-     @type OutlineMaterial
-     */
-    get outlineMaterial() {
-        return this.components["default.outlineMaterial"] || new OutlineMaterial(this, {
-            id: "default.outlineMaterial",
-            dontClear: true
-        });
-    }
-
-    /**
      The {@link Viewport} belonging to this Scene.
 
      @property viewport
@@ -1769,8 +1747,6 @@ class Scene extends Component {
         var component;
         for (const id in this.components) {
             if (this.components.hasOwnProperty(id)) {
-                // Each component fires "destroyed" as it is destroyed,
-                // which this Scene handles by removing the component
                 component = this.components[id];
                 if (!component._dontClear) { // Don't destroy components like Camera, Input, Viewport etc.
                     component.destroy();
@@ -1924,28 +1900,6 @@ class Scene extends Component {
         return this.withComponents(ids, object => {
             const changed = (object.edges !== edges);
             object.edges = edges;
-            return changed;
-        });
-    }
-
-    /**
-     Shows or hides an outline around a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its outlined status in its {@link Node/outlined} property.
-
-     Each outlined Object is registered in the {@link Scene}'s
-     {@link Scene#outlinedObjects} map when its {@link Node/entityType}
-     is assigned a value.
-
-     @method setOutlined
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param outlined {Float32Array} Whether to show or hide the outline.
-     @returns {Boolean} True if any {@link Node}s changed outlined state, else false if all updates were redundant and not applied.
-     */
-    setOutlined(ids, outlined) {
-        return this.withComponents(ids, object => {
-            const changed = (object.outlined !== outlined);
-            object.outlined = outlined;
             return changed;
         });
     }
