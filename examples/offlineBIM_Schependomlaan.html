@@ -4,42 +4,56 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Minimal BIM Viewer for glTF Models</title>
-    <link href="css/bimViewer.css" type="text/css" rel="stylesheet"/>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
     <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #structurePanel {
+            padding: 10px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            position: absolute;
+            background: RGBA(0, 0, 0, 0.4);
+            color: white;
+            top: 0;
+            z-index: 200000;
+            /*font-weight: 600;*/
+            float: left;
+            left: 0;
+        }
+
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
 
 </head>
 <body>
-<div id="maincontainer">
 
-    <!--<div id="topsection">-->
-        <!--<div class="innertube"><h1>Minimal BIM Viewer for glTF Models</h1></div>-->
-    <!--</div>-->
+<canvas id="myCanvas"></canvas>
 
-    <div id="contentwrapper">
-        <div id="contentcolumn">
-            <div class="innertube">
-                <canvas id="myCanvas"></canvas>
-            </div>
-        </div>
-    </div>
+<div id="structurePanel" class="xeokitStructurePanel"></div>
 
-    <div id="leftcolumn">
-        <div class="innertube">
-            <div id="structurePanel" class="xeokitStructurePanel"></div>
-        </div>
-    </div>
-
-    <div id="rightcolumn">
-        <div class="innertube">
-            <div id="propertiesPanel"></div>
-        </div>
-    </div>
-
-    <div id="footer">
-        <div id="statusPanel">STATUS HERE</div>
-    </div>
-
+<div id="info">
+    <h1>Loading a BIM Model from the File System</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a>
+            - Renders simple IFC explorer tree
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Loading-BIM-Models-from-the-File-System">Tutorial</a>
+        </li>
+    </ul>
 </div>
+
 
 </body>
 
@@ -52,7 +66,6 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
-    import {PropertiesPanelPlugin} from "../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
 
     import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
@@ -83,10 +96,6 @@
 
     const structurePanel = new StructurePanelPlugin(viewer, {
         domElementId: "structurePanel"
-    });
-
-    const propertiesPanel = new PropertiesPanelPlugin(viewer, {
-        domElementId: "propertiesPanel"
     });
 
     //----------------------------------------------------------------------------------------------------------------------
