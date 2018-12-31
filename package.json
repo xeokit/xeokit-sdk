@@ -22,7 +22,8 @@
     "url": "https://github.com/xeolabs/xeokit-sdk/issues"
   },
   "homepage": "https://github.com/xeolabs/xeokit-sdk#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0"
   }
