@@ -80,9 +80,12 @@ class StructurePanelPlugin extends Plugin {
     _build2(modelId, div, metaObject) {
         const label = document.createElement("div");
         const children = document.createElement("div");
-
+        var name = metaObject.name;
+        if (name && name.length > 30) {
+            name = name.slice(0, 30) + "..";
+        }
         label.className = "label";
-        label.appendChild(document.createTextNode(metaObject.name || metaObject.objectId));
+        label.appendChild(document.createTextNode(name || metaObject.objectId));
         div.appendChild(label);
         children.className = "children";
         div.appendChild(children);
