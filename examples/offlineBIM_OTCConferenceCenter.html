@@ -94,6 +94,17 @@
         domElementId: "structurePanel"
     });
 
+    structurePanel.on("clicked", e => {
+        const objectId = e.objectId;
+        const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
+        const aabb = viewer.scene.getAABB(objectIds);
+
+        viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
+        viewer.scene.setSelected(objectIds, true);
+
+        viewer.cameraFlight.flyTo(aabb);
+    });
+
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
     //------------------------------------------------------------------------------------------------------------------
@@ -156,7 +167,7 @@
                     actions.createObject.visible = false;
                     break;
                 default: // Unrecognized type
-                  //  actions.createObject.pickable = true;
+                //  actions.createObject.pickable = true;
             }
 
             // Continue descending this glTF node subtree
@@ -172,19 +183,28 @@
         edgeThreshold: 10
     });
 
-    model.on("loaded", () => {
+    //------------------------------------------------------------------------------------------------------------------
+    //
+    //------------------------------------------------------------------------------------------------------------------
 
-        structurePanel.on("clicked", e => {
-            const objectId = e.objectId;
-            const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
-            const aabb = viewer.scene.getAABB(objectIds);
+    // viewer.cameraControl.on("picked", function (e) {
+    //
+    //
+    //     var mesh = e.mesh;
+    //     var metaObject = viewer.metaScene.metaObjects[mesh.id];
+    //     if (metaObject) {
+    //         console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+    //     } else {
+    //         const parent = mesh.parent;
+    //         if (parent) {
+    //             metaObject = viewer.metaScene.metaObjects[parent.id];
+    //             if (metaObject) {
+    //                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+    //             }
+    //         }
+    //     }
+    // });
 
-            viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
-            viewer.scene.setSelected(objectIds, true);
-
-            viewer.cameraFlight.flyTo(aabb);
-        });
-    });
 
     window.viewer = viewer;
 </script>
