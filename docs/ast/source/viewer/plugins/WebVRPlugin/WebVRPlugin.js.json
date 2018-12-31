@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 510,
+  "end": 516,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 510,
+    "end": 516,
     "loc": {
       "start": {
         "line": 1,
@@ -116,9 +116,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * A viewer plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
+            "value": "*\n * {@link Viewer} plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
             "start": 53,
-            "end": 125,
+            "end": 131,
             "loc": {
               "start": {
                 "line": 3,
@@ -134,8 +134,8 @@
       },
       {
         "type": "Identifier",
-        "start": 126,
-        "end": 488,
+        "start": 132,
+        "end": 494,
         "loc": {
           "start": {
             "line": 8,
@@ -148,8 +148,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 132,
-          "end": 143,
+          "start": 138,
+          "end": 149,
           "loc": {
             "start": {
               "line": 8,
@@ -166,8 +166,8 @@
         },
         "superClass": {
           "type": "Identifier",
-          "start": 152,
-          "end": 158,
+          "start": 158,
+          "end": 164,
           "loc": {
             "start": {
               "line": 8,
@@ -183,8 +183,8 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 159,
-          "end": 488,
+          "start": 165,
+          "end": 494,
           "loc": {
             "start": {
               "line": 8,
@@ -198,8 +198,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 417,
-              "end": 486,
+              "start": 423,
+              "end": 492,
               "loc": {
                 "start": {
                   "line": 16,
@@ -214,8 +214,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 417,
-                "end": 428,
+                "start": 423,
+                "end": 434,
                 "loc": {
                   "start": {
                     "line": 16,
@@ -238,8 +238,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 429,
-                  "end": 435,
+                  "start": 435,
+                  "end": 441,
                   "loc": {
                     "start": {
                       "line": 16,
@@ -255,8 +255,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 437,
-                  "end": 440,
+                  "start": 443,
+                  "end": 446,
                   "loc": {
                     "start": {
                       "line": 16,
@@ -273,8 +273,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 442,
-                "end": 486,
+                "start": 448,
+                "end": 492,
                 "loc": {
                   "start": {
                     "line": 16,
@@ -288,8 +288,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 452,
-                    "end": 480,
+                    "start": 458,
+                    "end": 486,
                     "loc": {
                       "start": {
                         "line": 17,
@@ -302,8 +302,8 @@
                     },
                     "expression": {
                       "type": "CallExpression",
-                      "start": 452,
-                      "end": 479,
+                      "start": 458,
+                      "end": 485,
                       "loc": {
                         "start": {
                           "line": 17,
@@ -316,8 +316,8 @@
                       },
                       "callee": {
                         "type": "Super",
-                        "start": 452,
-                        "end": 457,
+                        "start": 458,
+                        "end": 463,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -332,8 +332,8 @@
                       "arguments": [
                         {
                           "type": "StringLiteral",
-                          "start": 458,
-                          "end": 465,
+                          "start": 464,
+                          "end": 471,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -352,8 +352,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 467,
-                          "end": 473,
+                          "start": 473,
+                          "end": 479,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -369,8 +369,8 @@
                         },
                         {
                           "type": "Identifier",
-                          "start": 475,
-                          "end": 478,
+                          "start": 481,
+                          "end": 484,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -394,8 +394,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"WebVR\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
-                  "start": 166,
-                  "end": 412,
+                  "start": 172,
+                  "end": 418,
                   "loc": {
                     "start": {
                       "line": 10,
@@ -417,8 +417,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 490,
-        "end": 510,
+        "start": 496,
+        "end": 516,
         "loc": {
           "start": {
             "line": 21,
@@ -433,8 +433,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 498,
-            "end": 509,
+            "start": 504,
+            "end": 515,
             "loc": {
               "start": {
                 "line": 21,
@@ -447,8 +447,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 498,
-              "end": 509,
+              "start": 504,
+              "end": 515,
               "loc": {
                 "start": {
                   "line": 21,
@@ -464,8 +464,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 498,
-              "end": 509,
+              "start": 504,
+              "end": 515,
               "loc": {
                 "start": {
                   "line": 21,
@@ -485,8 +485,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 490,
-        "end": 510,
+        "start": 496,
+        "end": 516,
         "loc": {
           "start": {
             "line": 21,
@@ -499,8 +499,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 126,
-          "end": 488,
+          "start": 132,
+          "end": 494,
           "loc": {
             "start": {
               "line": 8,
@@ -513,8 +513,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 132,
-            "end": 143,
+            "start": 138,
+            "end": 149,
             "loc": {
               "start": {
                 "line": 8,
@@ -531,8 +531,8 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 152,
-            "end": 158,
+            "start": 158,
+            "end": 164,
             "loc": {
               "start": {
                 "line": 8,
@@ -548,8 +548,8 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 159,
-            "end": 488,
+            "start": 165,
+            "end": 494,
             "loc": {
               "start": {
                 "line": 8,
@@ -563,8 +563,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 417,
-                "end": 486,
+                "start": 423,
+                "end": 492,
                 "loc": {
                   "start": {
                     "line": 16,
@@ -579,8 +579,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 417,
-                  "end": 428,
+                  "start": 423,
+                  "end": 434,
                   "loc": {
                     "start": {
                       "line": 16,
@@ -603,8 +603,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 429,
-                    "end": 435,
+                    "start": 435,
+                    "end": 441,
                     "loc": {
                       "start": {
                         "line": 16,
@@ -620,8 +620,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 437,
-                    "end": 440,
+                    "start": 443,
+                    "end": 446,
                     "loc": {
                       "start": {
                         "line": 16,
@@ -638,8 +638,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 442,
-                  "end": 486,
+                  "start": 448,
+                  "end": 492,
                   "loc": {
                     "start": {
                       "line": 16,
@@ -653,8 +653,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 452,
-                      "end": 480,
+                      "start": 458,
+                      "end": 486,
                       "loc": {
                         "start": {
                           "line": 17,
@@ -667,8 +667,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 452,
-                        "end": 479,
+                        "start": 458,
+                        "end": 485,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -681,8 +681,8 @@
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 452,
-                          "end": 457,
+                          "start": 458,
+                          "end": 463,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -697,8 +697,8 @@
                         "arguments": [
                           {
                             "type": "StringLiteral",
-                            "start": 458,
-                            "end": 465,
+                            "start": 464,
+                            "end": 471,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -717,8 +717,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 467,
-                            "end": 473,
+                            "start": 473,
+                            "end": 479,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -734,8 +734,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 475,
-                            "end": 478,
+                            "start": 481,
+                            "end": 484,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -759,8 +759,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"WebVR\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
-                    "start": 166,
-                    "end": 412,
+                    "start": 172,
+                    "end": 418,
                     "loc": {
                       "start": {
                         "line": 10,
@@ -779,9 +779,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * A viewer plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
+              "value": "*\n * {@link Viewer} plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
               "start": 53,
-              "end": 125,
+              "end": 131,
               "loc": {
                 "start": {
                   "line": 3,
@@ -807,9 +807,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
+      "value": "*\n * {@link Viewer} plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
       "start": 53,
-      "end": 125,
+      "end": 131,
       "loc": {
         "start": {
           "line": 3,
@@ -824,8 +824,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"WebVR\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 166,
-      "end": 412,
+      "start": 172,
+      "end": 418,
       "loc": {
         "start": {
           "line": 10,
@@ -1024,9 +1024,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * A viewer plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
+      "value": "*\n * {@link Viewer} plugin that supports WebVR.\n *\n * @class WebVRPlugin\n ",
       "start": 53,
-      "end": 125,
+      "end": 131,
       "loc": {
         "start": {
           "line": 3,
@@ -1053,8 +1053,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 126,
-      "end": 131,
+      "start": 132,
+      "end": 137,
       "loc": {
         "start": {
           "line": 8,
@@ -1079,8 +1079,8 @@
         "binop": null
       },
       "value": "WebVRPlugin",
-      "start": 132,
-      "end": 143,
+      "start": 138,
+      "end": 149,
       "loc": {
         "start": {
           "line": 8,
@@ -1107,8 +1107,8 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 144,
-      "end": 151,
+      "start": 150,
+      "end": 157,
       "loc": {
         "start": {
           "line": 8,
@@ -1133,8 +1133,8 @@
         "binop": null
       },
       "value": "Plugin",
-      "start": 152,
-      "end": 158,
+      "start": 158,
+      "end": 164,
       "loc": {
         "start": {
           "line": 8,
@@ -1158,8 +1158,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 159,
-      "end": 160,
+      "start": 165,
+      "end": 166,
       "loc": {
         "start": {
           "line": 8,
@@ -1174,8 +1174,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @constructor\n     * @param {Viewer} viewer The Viewer.\n     * @param {Object} cfg  Plugin configuration.\n     * @param {String} [cfg.id=\"WebVR\"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.\n     ",
-      "start": 166,
-      "end": 412,
+      "start": 172,
+      "end": 418,
       "loc": {
         "start": {
           "line": 10,
@@ -1200,8 +1200,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 417,
-      "end": 428,
+      "start": 423,
+      "end": 434,
       "loc": {
         "start": {
           "line": 16,
@@ -1225,8 +1225,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 428,
-      "end": 429,
+      "start": 434,
+      "end": 435,
       "loc": {
         "start": {
           "line": 16,
@@ -1251,8 +1251,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 429,
-      "end": 435,
+      "start": 435,
+      "end": 441,
       "loc": {
         "start": {
           "line": 16,
@@ -1277,8 +1277,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 435,
-      "end": 436,
+      "start": 441,
+      "end": 442,
       "loc": {
         "start": {
           "line": 16,
@@ -1303,8 +1303,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 437,
-      "end": 440,
+      "start": 443,
+      "end": 446,
       "loc": {
         "start": {
           "line": 16,
@@ -1328,8 +1328,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 440,
-      "end": 441,
+      "start": 446,
+      "end": 447,
       "loc": {
         "start": {
           "line": 16,
@@ -1353,8 +1353,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 442,
-      "end": 443,
+      "start": 448,
+      "end": 449,
       "loc": {
         "start": {
           "line": 16,
@@ -1381,8 +1381,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 452,
-      "end": 457,
+      "start": 458,
+      "end": 463,
       "loc": {
         "start": {
           "line": 17,
@@ -1406,8 +1406,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 457,
-      "end": 458,
+      "start": 463,
+      "end": 464,
       "loc": {
         "start": {
           "line": 17,
@@ -1433,8 +1433,8 @@
         "updateContext": null
       },
       "value": "WebVR",
-      "start": 458,
-      "end": 465,
+      "start": 464,
+      "end": 471,
       "loc": {
         "start": {
           "line": 17,
@@ -1459,8 +1459,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 465,
-      "end": 466,
+      "start": 471,
+      "end": 472,
       "loc": {
         "start": {
           "line": 17,
@@ -1485,8 +1485,8 @@
         "binop": null
       },
       "value": "viewer",
-      "start": 467,
-      "end": 473,
+      "start": 473,
+      "end": 479,
       "loc": {
         "start": {
           "line": 17,
@@ -1511,8 +1511,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 473,
-      "end": 474,
+      "start": 479,
+      "end": 480,
       "loc": {
         "start": {
           "line": 17,
@@ -1537,8 +1537,8 @@
         "binop": null
       },
       "value": "cfg",
-      "start": 475,
-      "end": 478,
+      "start": 481,
+      "end": 484,
       "loc": {
         "start": {
           "line": 17,
@@ -1562,8 +1562,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 478,
-      "end": 479,
+      "start": 484,
+      "end": 485,
       "loc": {
         "start": {
           "line": 17,
@@ -1588,8 +1588,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 479,
-      "end": 480,
+      "start": 485,
+      "end": 486,
       "loc": {
         "start": {
           "line": 17,
@@ -1613,8 +1613,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 485,
-      "end": 486,
+      "start": 491,
+      "end": 492,
       "loc": {
         "start": {
           "line": 18,
@@ -1638,8 +1638,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 487,
-      "end": 488,
+      "start": 493,
+      "end": 494,
       "loc": {
         "start": {
           "line": 19,
@@ -1666,8 +1666,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 490,
-      "end": 496,
+      "start": 496,
+      "end": 502,
       "loc": {
         "start": {
           "line": 21,
@@ -1691,8 +1691,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 497,
-      "end": 498,
+      "start": 503,
+      "end": 504,
       "loc": {
         "start": {
           "line": 21,
@@ -1717,8 +1717,8 @@
         "binop": null
       },
       "value": "WebVRPlugin",
-      "start": 498,
-      "end": 509,
+      "start": 504,
+      "end": 515,
       "loc": {
         "start": {
           "line": 21,
@@ -1742,8 +1742,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 509,
-      "end": 510,
+      "start": 515,
+      "end": 516,
       "loc": {
         "start": {
           "line": 21,
@@ -1768,8 +1768,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 510,
-      "end": 510,
+      "start": 516,
+      "end": 516,
       "loc": {
         "start": {
           "line": 21,
