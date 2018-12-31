@@ -84,6 +84,8 @@
     viewer.camera.look = [45.25, 1.40, -25.43];
     viewer.camera.up = [0.03, 0.98, 0.11];
 
+    viewer.panToPointer = true;
+
     viewer.cameraFlight.fitFOV = 15;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -183,27 +185,42 @@
         edgeThreshold: 10
     });
 
+
     //------------------------------------------------------------------------------------------------------------------
-    //
+    // Mouse over meshes to highlight them
+    // Configure default highlight material to highlight edges yellow
     //------------------------------------------------------------------------------------------------------------------
 
-    // viewer.cameraControl.on("picked", function (e) {
-    //
-    //
-    //     var mesh = e.mesh;
-    //     var metaObject = viewer.metaScene.metaObjects[mesh.id];
-    //     if (metaObject) {
-    //         console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-    //     } else {
-    //         const parent = mesh.parent;
-    //         if (parent) {
-    //             metaObject = viewer.metaScene.metaObjects[parent.id];
-    //             if (metaObject) {
-    //                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-    //             }
-    //         }
-    //     }
-    // });
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.edgeColor = [1,1,0];
+
+    var lastMesh = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+
+                if (lastMesh) {
+                    lastMesh.highlighted = false;
+                }
+
+                lastMesh = hit.mesh;
+                hit.mesh.highlighted = true;
+            }
+        } else {
+
+            if (lastMesh) {
+                lastMesh.highlighted = false;
+                lastMesh = null;
+            }
+        }
+    });
 
 
     window.viewer = viewer;
