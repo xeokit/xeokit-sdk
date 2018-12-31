@@ -11,7 +11,7 @@ models in most major browsers, on both desktop and mobile platforms.
 ### Links
 
 * [Website](https://xeokit.io/)
-* [Examples](http://xeolabs.com/xeokit-examples/)
+* [Examples](http://xeolabs.com/xeokit-sdk/examples/)
 * [Docs](http://xeolabs.com/xeokit-sdk/docs/)
 * [Source code](https://github.com/xeolabs/xeokit-sdk)
 * [Wiki](https://github.com/xeolabs/xeokit.io/wiki)

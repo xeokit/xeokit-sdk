@@ -145,7 +145,6 @@ import {BoxGeometry} from &apos;../geometry/BoxGeometry.js&apos;;
 import {PhongMaterial} from &apos;../materials/PhongMaterial.js&apos;;
 import {EmphasisMaterial} from &apos;../materials/EmphasisMaterial.js&apos;;
 import {EdgeMaterial} from &apos;../materials/EdgeMaterial.js&apos;;
-import {OutlineMaterial} from &apos;../materials/OutlineMaterial.js&apos;;
 
 // Cached vars to avoid garbage collection
 
@@ -914,7 +913,6 @@ class Scene extends Component {
         dummy = this.geometry;
         dummy = this.material;
         dummy = this.ghostMaterial;
-        dummy = this.outlineMaterial;
         dummy = this.edgeMaterial;
         dummy = this.selectedMaterial;
         dummy = this.highlightMaterial;
@@ -1553,26 +1551,6 @@ class Scene extends Component {
     }
 
     /**
-     The Scene&apos;s default {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} for the appearance of {@link Meshes&quot;}}Meshes{{/crossLink}} when they are outlined.
-
-     This {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} has
-     an {@link Component/id:property&quot;}}id{{/crossLink}} equal to &quot;default.outlineMaterial&quot;, with all
-     other properties initialised to their default values.
-
-     {@link Mesh}es in this Scene are attached to this
-     {@link OutlineMaterial&quot;}}OutlineMaterial{{/crossLink}} by default.
-     @property outlineMaterial
-     @final
-     @type OutlineMaterial
-     */
-    get outlineMaterial() {
-        return this.components[&quot;default.outlineMaterial&quot;] || new OutlineMaterial(this, {
-            id: &quot;default.outlineMaterial&quot;,
-            dontClear: true
-        });
-    }
-
-    /**
      The {@link Viewport} belonging to this Scene.
 
      @property viewport
@@ -2053,28 +2031,6 @@ class Scene extends Component {
         return this.withComponents(ids, object =&gt; {
             const changed = (object.edges !== edges);
             object.edges = edges;
-            return changed;
-        });
-    }
-
-    /**
-     Shows or hides an outline around a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its outlined status in its {@link Node/outlined} property.
-
-     Each outlined Object is registered in the {@link Scene}&apos;s
-     {@link Scene#outlinedObjects} map when its {@link Node/entityType}
-     is assigned a value.
-
-     @method setOutlined
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param outlined {Float32Array} Whether to show or hide the outline.
-     @returns {Boolean} True if any {@link Node}s changed outlined state, else false if all updates were redundant and not applied.
-     */
-    setOutlined(ids, outlined) {
-        return this.withComponents(ids, object =&gt; {
-            const changed = (object.outlined !== outlined);
-            object.outlined = outlined;
             return changed;
         });
     }
