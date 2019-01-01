@@ -423,11 +423,13 @@ class Mesh extends Component {
             } else {
                 parentNode.addChild(this);
             }
+            this._parent = parentNode;
         } else if (cfg.parent) {
             if (!cfg.parent.isNode) {
                 this.error("Parent is not a Node");
             }
             cfg.parent.addChild(this);
+            this._parent = cfg.parent;
         }
 
         this.compile();
@@ -455,6 +457,19 @@ class Mesh extends Component {
      */
     get modelId() {
         return this._modelId;
+    }
+
+    /**
+     The parent.
+
+     The parent Node may also be set by passing the Node to the
+     Node/Model's {@link Node/addChild:method"}}addChild(){{/crossLink}} method.
+
+     @property parent
+     @type Node
+     */
+    get parent() {
+        return this._parent;
     }
 
     _checkBillboard(value) {
