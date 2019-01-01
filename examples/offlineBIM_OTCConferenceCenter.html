@@ -69,6 +69,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
+    import {Skybox} from "../src/scene/skybox/Skybox.js";
     import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -86,6 +87,15 @@
 
 
     viewer.cameraFlight.fitFOV = 15;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Skybox
+    //------------------------------------------------------------------------------------------------------------------
+
+   // new Skybox(viewer.scene, {
+   //      src: "textures/skybox/cloudySkyBox.jpg",
+   //      size: 1000 // Default
+   //  });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create UI panels
@@ -181,7 +191,8 @@
         src: "./models/gltf/OTCConferenceCenter/scene.gltf",
         metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true,
-        edgeThreshold: 10
+        edgeThreshold: 10,
+        lambertMaterials: true
     });
 
 
