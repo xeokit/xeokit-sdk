@@ -276,11 +276,6 @@ class Geometry extends Component {
             state.indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new IndexArrayType(cfg.indices);
         }
 
-        if (state.indices) {
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, state.indices, state.indices.length, 1, gl.STATIC_DRAW);
-            memoryStats.indices += state.indicesBuf.numItems;
-        }
-
         this._buildHash();
 
         memoryStats.meshes++;
