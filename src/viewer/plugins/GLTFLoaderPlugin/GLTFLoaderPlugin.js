@@ -141,13 +141,16 @@ class GLTFLoaderPlugin extends Plugin {
 
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
+            this.viewer.scene.canvas.spinner.processes++;
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
                 // self.viewer.metaScene.transform(modelMetadata);
                 // console.log(JSON.stringify(modelMetadata), null, "\t");
                 self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                self.viewer.scene.canvas.spinner.processes--;
                 self._loader.load(this, node, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
+                self.viewer.scene.canvas.spinner.processes--;
             });
         } else {
             this._loader.load(this, node, src, params);
