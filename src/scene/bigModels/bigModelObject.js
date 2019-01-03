@@ -451,7 +451,7 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();
         }
-        scene._aabbDirty = true;
+        scene._boundaryDirty = true;
     }
 }
 

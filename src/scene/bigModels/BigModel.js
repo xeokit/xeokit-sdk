@@ -1,7 +1,5 @@
 import {Component} from "./../Component.js";
 import {Mesh} from "../mesh/Mesh.js";
-import {AABBGeometry} from "../geometry/AABBGeometry.js";
-import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {math} from "../math/math.js";
 import {WEBGL_INFO} from './../webglInfo.js';
 
@@ -134,7 +132,7 @@ var tempMat4 = math.mat4();
  @module xeokit
  @submodule models
  @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
  @param {*} [cfg] Configs
  @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param {String:Object} [cfg.meta] Optional map of user-defined metadata.
@@ -534,19 +532,6 @@ class BigModel extends Component {
 
         // console.log("mesh " + id + " = " + aabb);
 
-        if (false) {
-            new Mesh(this.scene, {
-                geometry: new AABBGeometry(this.scene, {
-                    targetAABB: mesh.aabb
-                }),
-                material: new PhongMaterial(this.scene, {
-                    diffuse: [0.5, 1.0, 0.5],
-                    emissive: [0.5, 1.0, 0.5],
-                    lineWidth: 1
-                })
-            });
-        }
-
         return mesh;
     }
 
@@ -670,7 +655,7 @@ class BigModel extends Component {
             }
         }
         this.glRedraw();
-        this.scene._aabbDirty = true;
+        this.scene._boundaryDirty = true;
         console.log("[BigModel] finalize() - numObjects = " + this.numObjects + ", numGeometries = " + this.numGeometries);
     }
 
@@ -1193,7 +1178,7 @@ class BigModel extends Component {
         for (var i = 0, len = this._objectIds.length; i < len; i++) {
             this.objects[this._objectIds[i]]._destroy();
         }
-        this.scene._aabbDirty = true;
+        this.scene._boundaryDirty = true;
     }
 }
 
