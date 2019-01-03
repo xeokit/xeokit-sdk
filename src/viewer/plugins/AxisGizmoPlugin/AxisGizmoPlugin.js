@@ -1,13 +1,14 @@
-import {VectorTextGeometry} from "../../../scene/geometry/VectorTextGeometry.js"
 import {Plugin} from "./../../../viewer/Plugin.js";
-import {Scene} from  "./../../../scene/scene/Scene.js";
-import {AmbientLight} from  "./../../../scene/lights/AmbientLight.js";
-import {DirLight} from  "./../../../scene/lights/DirLight.js";
-import {Mesh} from  "./../../../scene/mesh/Mesh.js";
-import {CylinderGeometry} from  "./../../../scene/geometry/CylinderGeometry.js";
-import {SphereGeometry}     from  "./../../../scene/geometry/SphereGeometry.js";
-import {PhongMaterial}     from  "./../../../scene/materials/PhongMaterial.js";
-import {math}     from  "./../../../scene/math/math.js";
+import {Scene} from "./../../../scene/scene/Scene.js";
+import {AmbientLight} from "./../../../scene/lights/AmbientLight.js";
+import {DirLight} from "./../../../scene/lights/DirLight.js";
+import {Mesh} from "./../../../scene/mesh/Mesh.js";
+import {VBOGeometry} from "../../../scene/geometry/VBOGeometry.js";
+import {buildCylinderGeometry} from "../../../scene/geometry/builders/buildCylinderGeometry.js";
+import {buildSphereGeometry} from "../../../scene/geometry/builders/buildSphereGeometry.js";
+import {buildVectorTextGeometry} from "../../../scene/geometry/builders/buildVectorTextGeometry.js";
+import {PhongMaterial} from "./../../../scene/materials/PhongMaterial.js";
+import {math} from "./../../../scene/math/math.js";
 
 /**
  * {@link Viewer} plugin that shows the axii of the World-space coordinate system.
@@ -108,7 +109,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // ----------------- Components that are shared among more than one mesh ---------------
 
-        var arrowHead = new CylinderGeometry(scene, {
+        var arrowHead = buildCylinderGeometry(VBOGeometry, scene, {
             radiusTop: 0.01,
             radiusBottom: 0.6,
             height: 1.7,
@@ -117,7 +118,7 @@ class AxisGizmoPlugin extends Plugin {
             openEnded: false
         });
 
-        var arrowShaft = new CylinderGeometry(scene, {
+        var arrowShaft = buildCylinderGeometry(VBOGeometry, scene, {
             radiusTop: 0.2,
             radiusBottom: 0.2,
             height: 4.5,
@@ -198,7 +199,7 @@ class AxisGizmoPlugin extends Plugin {
             // Sphere behind gnomon
 
             new Mesh(scene, {
-                geometry: new SphereGeometry(scene, {
+                geometry: buildSphereGeometry(VBOGeometry, scene, {
                     radius: 9.0,
                     heightSegments: 60,
                     widthSegments: 60
@@ -220,7 +221,7 @@ class AxisGizmoPlugin extends Plugin {
             // Ball at center of axis
 
             new Mesh(scene, {  // Arrow
-                geometry: new SphereGeometry(scene, {
+                geometry: buildSphereGeometry(VBOGeometry, scene, {
                     radius: 1.0
                 }),
                 material: ballMaterial,
@@ -252,7 +253,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: new VectorTextGeometry(scene, {text: "X", size: 1.5}),
+                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "X", size: 1.5}),
                 material: xAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -282,7 +283,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: new VectorTextGeometry(scene, {text: "Y", size: 1.5}),
+                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "Y", size: 1.5}),
                 material: yAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -314,7 +315,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: new VectorTextGeometry(scene, {text: "Z", size: 1.5}),
+                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "Z", size: 1.5}),
                 material: zAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
