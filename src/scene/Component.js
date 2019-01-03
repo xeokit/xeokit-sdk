@@ -13,9 +13,9 @@
 
  Every Component has an ID that's unique within the parent {@link Scene}. xeokit generates
  the IDs automatically by default, however you can also specify them yourself. In the example below, we're creating a
- scene comprised of {@link Scene}, {@link Material}, {@link Geometry} and
+ scene comprised of {@link Scene}, {@link Material}, {@link ReadableGeometry} and
  {@link Mesh} components, while letting xeokit generate its own ID for
- the {@link Geometry}:
+ the {@link ReadableGeometry}:
 
  ````javascript
  // The Scene is a Component too
@@ -208,7 +208,7 @@
  @class Component
  @module xeokit
  @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
  @param {*} [cfg] DepthBuf configuration
  @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Component.
