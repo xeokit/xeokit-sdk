@@ -1,8 +1,6 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {Mesh} from '../mesh/Mesh.js';
-import {AABBGeometry} from '../geometry/AABBGeometry.js';
-import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {CameraFlightAnimation} from './CameraFlightAnimation.js';
 
 /**
@@ -47,19 +45,6 @@ class CameraControl extends Component {
         super(owner, cfg);
 
         const self = this;
-
-        this._boundaryHelper = new Mesh(this, {
-            geometry: new AABBGeometry(this),
-            material: new PhongMaterial(this, {
-                diffuse: [0, 0, 0],
-                ambient: [0, 0, 0],
-                specular: [0, 0, 0],
-                emissive: [1.0, 1.0, 0.6],
-                lineWidth: 4
-            }),
-            visible: false,
-            collidable: false
-        });
 
         this._pivoter = new (function () { // Pivots the Camera around an arbitrary World-space position
 
@@ -1706,8 +1691,6 @@ class CameraControl extends Component {
 
         const aabb = hit ? hit.mesh.aabb : this.scene.aabb;
 
-        this._boundaryHelper.geometry.targetAABB = aabb;
-        //    this._boundaryHelper.visible = true;
 
         if (pos) {
 
@@ -1721,8 +1704,7 @@ class CameraControl extends Component {
                     // eye: xeokit.math.addVec3(pos, diff, []),
                     // up: camera.up,
                     aabb: aabb
-                },
-                this._hideBoundary, this);
+                });
 
             // TODO: Option to back off to fit AABB in view
 
@@ -1732,13 +1714,8 @@ class CameraControl extends Component {
 
             this._cameraFlight.flyTo({
                     aabb: aabb
-                },
-                this._hideBoundary, this);
+                });
         }
-    }
-
-    _hideBoundary() {
-        //    this._boundaryHelper.visible = false;
     }
 
     destroy() {

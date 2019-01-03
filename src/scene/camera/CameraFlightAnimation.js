@@ -3,8 +3,6 @@ import {utils} from '../utils.js';
 import {core} from '../core.js';
 import {Component} from '../Component.js';
 import {Mesh} from '../mesh/Mesh.js';
-import {AABBGeometry} from '../geometry/AABBGeometry.js';
-import {PhongMaterial} from '../materials/PhongMaterial.js';
 
 const tempVec3 = math.vec3();
 const newLook = math.vec3();
@@ -85,19 +83,6 @@ class CameraFlightAnimation extends Component {
     constructor(owner, cfg={}) {
 
         super(owner, cfg);
-
-        this._aabbHelper = new Mesh(this, { // Shows a wireframe box for target AABBs
-            geometry: new AABBGeometry(this),
-            material: new PhongMaterial(this, {
-                diffuse: [0, 0, 0],
-                ambient: [0, 0, 0],
-                specular: [0, 0, 0],
-                emissive: [0.5, 1.0, 0.5],
-                lineWidth: 2
-            }),
-            visible: false,
-            collidable: false
-        });
 
         this._look1 = math.vec3();
         this._eye1 = math.vec3();
@@ -230,10 +215,6 @@ class CameraFlightAnimation extends Component {
             }
             if (aabb[3] === aabb[0] && aabb[4] === aabb[1] && aabb[5] === aabb[2]) { // Don't fly to an empty boundary
                 return;
-            }
-            if (params.showAABB !== false) { // Show boundary
-                this._aabbHelper.geometry.targetAABB = aabb;
-                //this._aabbHelper.visible = true;
             }
 
             aabb = aabb.slice();
@@ -469,7 +450,6 @@ class CameraFlightAnimation extends Component {
         if (!this._flying) {
             return;
         }
-        this._aabbHelper.visible = false;
         this._flying = false;
         this._time1 = null;
         this._time2 = null;
@@ -493,7 +473,6 @@ class CameraFlightAnimation extends Component {
         if (!this._flying) {
             return;
         }
-        this._aabbHelper.visible = false;
         this._flying = false;
         this._time1 = null;
         this._time2 = null;
