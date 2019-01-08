@@ -13,7 +13,7 @@ class Light extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {

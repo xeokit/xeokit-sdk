@@ -1,6 +1,6 @@
 import {Component} from "../Component.js";
 import {Mesh} from "../mesh/Mesh.js";
-import {Geometry} from "../geometry/Geometry.js";
+import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {Texture} from "../materials/Texture.js";
 
@@ -12,7 +12,7 @@ class Skybox extends Component {
 
         this._skyboxMesh = new Mesh(this, {
 
-            geometry: new Geometry(this, { // Box-shaped geometry
+            geometry: new ReadableGeometry(this, { // Box-shaped geometry
                 primitive: "triangles",
                 positions: [
                     1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
@@ -46,7 +46,7 @@ class Skybox extends Component {
                 }),
                 backfaces: true // Show interior faces of our skybox geometry
             }),
-            stationary: true,
+            // stationary: true,
             visible: false,
             pickable: false,
             collidable: false
@@ -75,11 +75,11 @@ class Skybox extends Component {
 
 
     /**
-     Indicates whether this Skybox is visible or not.
+     Indicates if this Skybox is visible or not.
 
      @property active
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set active(value) {
         this._skyboxMesh.visible = value;

@@ -77,7 +77,7 @@ class XML3DModel extends GroupModel {
      Fires a {@link XML3D/loaded:event} event when the 3DXML has loaded.
 
      @property src
-     @type String
+     @type {String}
      */
     set src(value) {
         if (!value) {
@@ -112,7 +112,7 @@ class XML3DModel extends GroupModel {
 
      @property displayEffect
      @default "shaded"
-     @type String
+     @type {String}
      */
     set displayEffect(displayEffect) {
         displayEffect = displayEffect || "shaded";
@@ -193,7 +193,7 @@ class XML3DModel extends GroupModel {
      Opacity factor for the "hiddenLinesVisible" display effect.
      @property ghostOpacity
      @default 0.7
-     @type Number
+     @type {Number}
      */
     set ghostOpacity(opacity) {
         this._ghostOpacity = opacity;
@@ -217,7 +217,7 @@ class XML3DModel extends GroupModel {
      "hiddenLinesVisible" and "wireframe" display effects.
      @property edgeColor
      @default [0,0,0]
-     @type Array
+     @type {Array}
      */
     set edgeColor(edgeColor) {
         this.scene.edgeMaterial.edgeColor = edgeColor;
@@ -234,11 +234,11 @@ class XML3DModel extends GroupModel {
 };
 
 /**
- * Loads 3DXML from a URL into a {@link Model}.
+ * Loads 3DXML from a URL into a {@link Node}.
  *
  * @method load
  * @static
- * @param {Node} model Model to load into.
+ * @param {Node} model Node to load into.
  * @param {String} src Path to 3DXML file.
  * @param {Object} options Loading options.
  * @param {Function} [ok] Completion callback.
@@ -771,7 +771,6 @@ var parse3DXML = (function () {
         }
         var meshesResult = {
             edgeThreshold: ctx.edgeThreshold || 30,
-            combineGeometry: true,
             compressGeometry: true
         };
         var children = node.children;

@@ -106,7 +106,7 @@ function StaticTreeRenderer(args) {
     };
 
     this.build = function () {
-        var build = function (modelId, d, n) {
+        var build = function (id, d, n) {
             var qid = self.qualifyInstance(modelId, fromXml ? n.guid : n.id);
             var label = document.createElement("div");
             var children = document.createElement("div");

@@ -1,5 +1,6 @@
 import {Mesh} from "../../../scene/mesh/Mesh.js";
-import {Geometry} from "../../../scene/geometry/Geometry.js";
+import {ReadableGeometry} from "../../../scene/geometry/ReadableGeometry.js";
+import {VBOGeometry} from "../../../scene/geometry/VBOGeometry.js";
 import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
 import {Texture} from "../../../scene/materials/Texture.js";
 import {core} from "../../../scene/core.js";
@@ -10,11 +11,11 @@ import {core} from "../../../scene/core.js";
 class OBJLoader  {
 
     /**
-     * Loads OBJ and MTL from file(s) into a {@link Model}.
+     * Loads OBJ and MTL from file(s) into a {@link Node}.
      *
      * @method load
      * @static
-     * @param {Node} modelNode Model to load into.
+     * @param {Node} modelNode Node to load into.
      * @param {String} src Path to OBJ file.
      * @param {Object} params Loading options.
      */
@@ -38,11 +39,11 @@ class OBJLoader  {
     }
 
     /**
-     * Parses OBJ and MTL text strings into a {@link Model}.
+     * Parses OBJ and MTL text strings into a {@link Node}.
      *
      * @method parse
      * @static
-     * @param {Node} modelNode Model to load into.
+     * @param {Node} modelNode Node to load into.
      * @param {String} objText OBJ text string.
      * @param {String} [mtlText] MTL text string.
      * @param {String} [basePath] Base path for external resources.
@@ -685,15 +686,14 @@ var createMeshes = (function () {
             }
 
             var geometryCfg = {
-                primitive: "triangles"
+                primitive: "triangles",
+                compressGeometry: true
             };
 
             geometryCfg.positions = geometry.positions;
 
             if (geometry.normals.length > 0) {
                 geometryCfg.normals = geometry.normals;
-            } else {
-                geometryCfg.autoVertexNormals = true;
             }
 
             if (geometry.uv.length > 0) {
@@ -706,7 +706,8 @@ var createMeshes = (function () {
             }
             geometryCfg.indices = indices;
 
-            var geometry = new Geometry(modelNode, geometryCfg);
+            //var geometry = new ReadableGeometry(modelNode, geometryCfg);
+            var geometry = new ReadableGeometry(modelNode, geometryCfg);
 
             var materialId = object.material.id;
             var material;

@@ -5,13 +5,11 @@ import {math} from "../math/math.js";
  A **BigModelMesh** represents an instance of a geometry within a {@link BigModel}.
 
  * A BigModelMesh is created with {@link BigModel/createMesh:method"}}BigModel#createMesh(){{/crossLink}}.
- * Each BigModelMesh is owned by exactly one {@link BigModelObject}.
+ * Each BigModelMesh is owned by exactly one {@link BigModelNode}.
  * A BigModelObject can own multiple BigModelMeshes.
  * A BigModelMesh can have its own geometry, or can reused a geometry previously created with {@link BigModel/createGeometry:method"}}BigModel#createGeometry(){{/crossLink}}.
 
  @class BigModelMesh
- @module xeokit
- @submodule models
 
  */
 class BigModelMesh {
@@ -35,7 +33,7 @@ class BigModelMesh {
          * A BigModelMesh always belongs to exactly one BigModelObject.
          *
          * @property object
-         * @type {BigModelObject}
+         * @type {BigModelNode}
          * @final
          */
         this.object = null;
@@ -46,7 +44,7 @@ class BigModelMesh {
          * A BigModelMesh always belongs to exactly one BigModelObject.
          *
          * @property object
-         * @type {BigModelObject}
+         * @type {BigModelNode}
          * @final
          */
         this.parent = null;

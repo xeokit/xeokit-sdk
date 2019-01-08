@@ -1578,11 +1578,29 @@ const letters = {
  * @desc Creates wireframe vector text {@link Geometry}.
  *
  * ## Usage
- * Creating a {@link Mesh} with vector text {@link VBOGeometry} :
+ * 
+ * Creating a {@link Mesh} with vector text {@link ReadableGeometry} :
  *
+ * [[Run this example](/examples/#geometry_builders_buildVectorTextGeometry)]
+ * 
  * ````javascript
+ *
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildVectorTextGeometry} from "../src/scene/geometry/builders/buildVectorTextGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * viewer.camera.eye = [0, 0, 100];
+ * viewer.camera.look = [0, 0, 0];
+ * viewer.camera.up = [0, 1, 0];
+ *
  * new Mesh(myViewer.scene, {
- *      geometry: buildVectorTextGeometry(VBOGeometry, myViewer.scene, {
+ *      geometry: buildVectorTextGeometry(ReadableGeometry, myViewer.scene, {
  *          origin: [0,0,0],
  *          text: "On the other side of the screen, it all looked so easy"
  *      }),
@@ -1595,7 +1613,7 @@ const letters = {
  * ````
  *
  * @function buildVectorTextGeometry
- * @param {Class} claz {@link Geometry} subtype to instantiate.
+ * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
@@ -1603,9 +1621,9 @@ const letters = {
  * @param {Float32Array} [cfg.origin] 3D point indicating the top left corner.
  * @param {Number} [cfg.size=1] Size of each character.
  * @param {String} [cfg.text=""] The text.
- * @returns {Geometry} The {@link Geometry} subtype indicated by claz.
+ * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildVectorTextGeometry(claz, owner, cfg = {}) {
+function buildVectorTextGeometry(geometryClass, owner, cfg = {}) {
 
     var origin = cfg.origin || [0, 0, 0];
     var xOrigin = origin[0];
@@ -1698,7 +1716,7 @@ function buildVectorTextGeometry(claz, owner, cfg = {}) {
         y -= 35 * mag * size;
     }
 
-    return new claz(owner, utils.apply(cfg, {
+    return new geometryClass(owner, utils.apply(cfg, {
         primitive: "lines",
         positions: positions,
         indices: indices

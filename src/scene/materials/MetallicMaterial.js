@@ -13,6 +13,77 @@ const modeNames = ["opaque", "mask", "blend"];
  * * {@link PhongMaterial} is appropriate for non-realistic objects.
  * * {@link LambertMaterial} is appropriate for high-detail models that need to render as efficiently as possible.
  *
+ * ## Usage
+ *
+ * In the example below we'll create a {@link Mesh} with {@link MetallicMaterial} and {@link ReadableGeometry} loaded from OBJ.
+ *
+ * Note that in this example we're providing separate {@link Texture} for the {@link MetallicMaterial#metallic} and {@link MetallicMaterial#roughness}
+ * channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
+ * within the same {@link Texture} for efficiency.
+ *
+ * [[Run this example](/examples/#materials_MetallicMaterial)]
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {loadOBJGeometry} from "../src/scene/geometry/loaders/loadOBJGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const myViewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * myViewer.scene.camera.eye = [0.57, 1.37, 1.14];
+ * myViewer.scene.camera.look = [0.04, 0.58, 0.00];
+ * myViewer.scene.camera.up = [-0.22, 0.84, -0.48];
+ *
+ * loadOBJGeometry(ReadableGeometry, myViewer.scene, {
+ *
+ *      src: "models/obj/fireHydrant/FireHydrantMesh.obj",
+ *      compressGeometry: false
+ *
+ * })
+ * .then(function (geometry) {
+ *
+ *      // Success
+ *
+ *      new Mesh(myViewer.scene, {
+ *
+ *          geometry: geometry,
+ *
+ *          material: new MetallicMaterial(myViewer.scene, {
+ *
+ *              baseColor: [1, 1, 1],
+ *              metallic: 1.0,
+ *              roughness: 1.0,
+ *
+ *              baseColorMap: new Texture(myViewer.scene, {
+ *                  src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
+ *                  encoding: "sRGB"
+ *              }),
+ *              normalMap: new Texture(myViewer.scene, {
+ *                  src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
+ *              }),
+ *              roughnessMap: new Texture(myViewer.scene, {
+ *                  src: "models/obj/fireHydrant/fire_hydrant_Roughness.png"
+ *              }),
+ *              metallicMap: new Texture(myViewer.scene, {
+ *                  src: "models/obj/fireHydrant/fire_hydrant_Metallic.png"
+ *              }),
+ *              occlusionMap: new Texture(myViewer.scene, {
+ *                  src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
+ *              }),
+ *
+ *              specularF0: 0.7
+ *          })
+ *      });
+ * }, function () {
+ *          // Error
+ *      });
+ * ````
+ *
  * ## Background Theory
  *
  * For an introduction to physically-based rendering (PBR) concepts, try these articles:
@@ -43,59 +114,9 @@ const modeNames = ["opaque", "mask", "blend"];
  * | {@link MetallicMaterial#normalMap} | {@link Texture} |  | null | linear | Tangent-space normal map. |
  * | {@link MetallicMaterial#alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
  * | {@link MetallicMaterial#alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- * | {@link MetallicMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
- * | {@link MetallicMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ * | {@link MetallicMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link ReadableGeometry} backfaces. |
+ * | {@link MetallicMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link ReadableGeometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
  *
- * ## Usage
- *
- * In the example below we'll create a {@link Mesh} with a {@link TorusGeometry} and a MetallicMaterial.
- *
- * Note that in this example we're providing separate {@link Texture} for the {@link MetallicMaterial#metallic} and {@link MetallicMaterial#roughness}
- * channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
- * within the same {@link Texture} for efficiency.
- *
- * ````javascript
- * import {Viewer} from "src/viewer/Viewer.js";
- * import {Mesh} from "src/scene/mesh/Mesh.js";
- * import {TorusGeometry} from "src/scene/geometry/TorusGeometry.js";
- * import {MetallicMaterial} from "src/scene/materials/MetallicMaterial.js";
- * import {Texture} from "src/scene/materials/Texture.js";
- *
- * const myViewer = new Viewer({ canvasId: "myCanvas" });
- *
- * const myMesh = new Mesh(myViewer.scene, {
- *
- *     geometry: new TorusGeometry(myViewer.scene),
- *
- *     material: new MetallicMaterial(myViewer.scene, {
- *
- *         // Channels with default values, just to show them
- *
- *         baseColor: [1.0, 1.0, 1.0],
- *         metallic: 1.0,
- *         roughness: 1.0,
- *         emissive: [0.0, 0.0, 0.0],
- *         alpha: 1.0,
- *
- *         // Textures to multiply by some of the channels
- *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/baseColor.png"
- *         }),
- *         metallicMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
- *             src: "textures/metallic.png"
- *         }),
- *         roughnessMap : new Texture(myViewer.scene, {  // R component multiplies by roughness
- *             src: "textures/roughness.png"
- *         }),
- *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/occlusion.png"
- *         }),
- *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/normalMap.png"
- *         })
- *     })
- * });
- * ````
  *
  * ## Combining Channels Within the Same Textures
  *
@@ -103,41 +124,40 @@ const modeNames = ["opaque", "mask", "blend"];
  * {@link MetallicMaterial#roughness} channels, but we can combine those channels into the same {@link Texture} to
  * reduce download time, memory footprint and rendering time (and also for glTF compatibility).
  *
- * Here's our MetallicMaterial again with those channels combined in the {@link MetallicMaterial#metallicRoughnessMap}
+ * Here's the {@link Mesh} again, with our MetallicMaterial with those channels combined in the {@link MetallicMaterial#metallicRoughnessMap}
  * {@link Texture}, where the *R* component multiplies by {@link MetallicMaterial#metallic} and *G* multiplies
  * by {@link MetallicMaterial#roughness}.
  *
  * ````javascript
- * const myMesh = new Mesh(myViewer.scene, {
+ * new Mesh(myViewer.scene, {
  *
- *     geometry: new TorusGeometry(myViewer.scene),
+ *     geometry: geometry,
  *
  *     material: new MetallicMaterial(myViewer.scene, {
  *
- *         // Channels with default values, just to show them
- *
- *         baseColor: [1.0, 1.0, 1.0],
+ *         baseColor: [1, 1, 1],
  *         metallic: 1.0,
  *         roughness: 1.0,
- *         emissive: [0.0, 0.0, 0.0],
- *         alpha: 1.0,
  *
- *         // Textures to multiply by some of the channels
+ *         baseColorMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
+ *             encoding: "sRGB"
+ *         }),
+ *         normalMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
+ *         }),
+ *         metallicRoughnessMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"
+ *         }),
+ *         metallicRoughnessMap : new Texture(myViewer.scene, {                  // <<----------- Added
+ *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"  // R component multiplies by metallic
+ *         }),                                                                   // G component multiplies by roughness
+ *         occlusionMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
+ *         }),
  *
- *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/baseColor.png"
- *         }),
- *         metallicRoughnessMap : new Texture(myViewer.scene, {   // <<----------- Added
- *             src: "textures/metallicRoughness.png"              // R component multiplies by metallic
- *         }),                                                    // G component multiplies by roughness
- *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/occlusion.png"
- *         }),
- *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/normalMap.png"
- *         })
- *     })
- * });
+ *         specularF0: 0.7
+ *  })
  * ````
  *
  * Although not shown in this example, we can also texture {@link MetallicMaterial#alpha} with the *A* component of
@@ -163,41 +183,41 @@ const modeNames = ["opaque", "mask", "blend"];
  * with {@link MetallicMaterial#alphaMode} and {@link MetallicMaterial#alphaCutoff} to treat it as an alpha mask:
  *
  * ````javascript
- * const myMesh = new Mesh(myViewer.scene, {
+ * new Mesh(myViewer.scene, {
  *
- *     geometry: new TorusGeometry(myViewer.scene),
+ *     geometry: geometry,
  *
  *     material: new MetallicMaterial(myViewer.scene, {
  *
- *         // Channels with default values, just to show them
- *
- *         baseColor: [1.0, 1.0, 1.0],
+ *         baseColor: [1, 1, 1],
  *         metallic: 1.0,
  *         roughness: 1.0,
- *         emissive: [0.0, 0.0, 0.0],
  *         alpha: 1.0,
  *         alphaMode : "mask",  // <<---------------- Added
  *         alphaCutoff : 0.2,   // <<---------------- Added
  *
- *         // Textures to multiply by some of the channels
- *
  *         alphaMap : new Texture(myViewer.scene{ // <<---------------- Added
  *              src: "textures/alphaMap.jpg"
  *         }),
- *         baseColorMap : new Texture(myViewer.scene, {  // Multiplies by baseColor
- *             src: "textures/baseColor.png"
+ *         baseColorMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
+ *             encoding: "sRGB"
  *         }),
- *         metallicRoughnessMap : new Texture(myViewer.scene, {   // R component multiplies by metallic
- *             src: "textures/metallicRoughness.png"              // G component multiplies by roughness
+ *         normalMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
  *         }),
- *         occlusionMap : new Texture(myViewer.scene, {  // Multiplies by fragment alpha
- *             src: "textures/occlusion.png"
+ *         metallicRoughnessMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"
  *         }),
- *         normalMap : new Texture(myViewer.scene, {
- *             src: "textures/normalMap.png"
- *         })
- *      })
- * });
+ *         metallicRoughnessMap : new Texture(myViewer.scene, {                  // <<----------- Added
+ *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"  // R component multiplies by metallic
+ *         }),                                                                   // G component multiplies by roughness
+ *         occlusionMap: new Texture(myViewer.scene, {
+ *             src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
+ *         }),
+ *
+ *         specularF0: 0.7
+ *  })
  * ````
  */
 class MetallicMaterial extends Material {
@@ -208,7 +228,7 @@ class MetallicMaterial extends Material {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -216,87 +236,30 @@ class MetallicMaterial extends Material {
     }
 
     /**
-     @constructor
-     @extends Material
-
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-
-     @param {*} [cfg] The MetallicMaterial configuration.
-
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-
-     @param [cfg.meta=null] {String:Object} Metadata to attach to this material.
-
-     @param [cfg.baseColor=[1,1,1]] {Float32Array}  RGB diffuse color of this MetallicMaterial. Multiplies by the RGB
-     components of {@link MetallicMaterial#baseColorMap}.
-
-     @param [cfg.metallic=1.0] {Number} Factor in the range 0..1 indicating how metallic this MetallicMaterial is.
-     1 is metal, 0 is non-metal. Multiplies by the *R* component of {@link MetallicMaterial#metallicMap} and the *A* component of
-     {@link MetallicMaterial#metalRoughnessMap}.
-
-     @param [cfg.roughness=1.0] {Number} Factor in the range 0..1 indicating the roughness of this MetallicMaterial.
-     0 is fully smooth, 1 is fully rough. Multiplies by the *R* component of {@link MetallicMaterial#roughnessMap}.
-
-     @param [cfg.specularF0=0.0] {Number} Factor in the range 0..1 indicating specular Fresnel.
-
-     @param [cfg.emissive=[0,0,0]] {Float32Array}  RGB emissive color of this MetallicMaterial. Multiplies by the RGB
-     components of {@link MetallicMaterial#emissiveMap}.
-
-     @param [cfg.alpha=1.0] {Number} Factor in the range 0..1 indicating the alpha of this MetallicMaterial.
-     Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and the *A* component,
-     if present, of {@link MetallicMaterial#baseColorMap}. The value of
-     {@link MetallicMaterial#alphaMode} indicates how alpha is interpreted when rendering.
-
-     @param [cfg.baseColorMap=undefined] {Texture} RGBA {@link Texture} containing the diffuse color
-     of this MetallicMaterial, with optional *A* component for alpha. The RGB components multiply by the
-     {@link MetallicMaterial#baseColor} property,
-     while the *A* component, if present, multiplies by the {@link MetallicMaterial#alpha} property.
-
-     @param [cfg.alphaMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
-     alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial#alpha} property. Must
-     be within the same {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.metallicMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
-     metallic factor in its *R* component. The *R* component multiplies by the
-     {@link MetallicMaterial#metallic} property. Must be within the same
-     {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.roughnessMap=undefined] {Texture} RGB {@link Texture} containing this MetallicMaterial's
-     roughness factor in its *R* component. The *R* component multiplies by the
-     {@link MetallicMaterial#roughness} property. Must be within the same
-     {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.metallicRoughnessMap=undefined] {Texture} RGB {@link Texture} containing this
-     MetallicMaterial's metalness in its *R* component and roughness in its *G* component. Its *R* component multiplies by the
-     {@link MetallicMaterial#metallic} property, while its *G* component multiplies by the
-     {@link MetallicMaterial#roughness} property. Must be within the same
-     {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.emissiveMap=undefined] {Texture} RGB {@link Texture} containing the emissive color of this
-     MetallicMaterial. Multiplies by the {@link MetallicMaterial#emissive} property.
-     Must be within the same {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.occlusionMap=undefined] {Texture} RGB ambient occlusion {@link Texture}. Within shaders,
-     multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene}
-     as this MetallicMaterial.
-
-     @param [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be
-     within the same {@link Scene} as this MetallicMaterial.
-
-     @param [cfg.alphaMode="opaque"] {String} The alpha blend mode, which specifies how alpha is to be interpreted. Accepted
-     values are "opaque", "blend" and "mask". See the {@link MetallicMaterial#alphaMode} property for more info.
-
-     @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value.
-     See the {@link MetallicMaterial#alphaCutoff} property for more info.
-
-     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
-     @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
-
-     @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
-     @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
-
-     * @param owner
-     * @param cfg
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this MetallicMaterial as well.
+     * @param {*} [cfg] The MetallicMaterial configuration.
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Float32Array} [cfg.baseColor=[1,1,1]] RGB diffuse color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
+     * @param {Number} [cfg.metallic=1.0] Factor in the range ````[0..1]```` indicating how metallic this MetallicMaterial is.  ````1```` is metal, ````0```` is non-metal. Multiplies by the *R* component of {@link MetallicMaterial#metallicMap} and the *A* component of {@link MetallicMaterial#metallicRoughnessMap}.
+     * @param {Number} [cfg.roughness=1.0] Factor in the range ````[0..1]```` indicating the roughness of this MetallicMaterial.  ````0```` is fully smooth, ````1```` is fully rough. Multiplies by the *R* component of {@link MetallicMaterial#roughnessMap}.
+     * @param {Number} [cfg.specularF0=0.0] Factor in the range ````[0..1]```` indicating specular Fresnel.
+     * @param {Float32Array} [cfg.emissive=[0,0,0]]  RGB emissive color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#emissiveMap}.
+     * @param {Number} [cfg.alpha=1.0] Factor in the range ````[0..1]```` indicating the alpha of this MetallicMaterial.  Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and the *A* component,  if present, of {@link MetallicMaterial#baseColorMap}. The value of  {@link MetallicMaterial#alphaMode} indicates how alpha is interpreted when rendering.
+     * @param {Texture} [cfg.baseColorMap=undefined] RGBA {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha. The RGB components multiply by the {@link MetallicMaterial#baseColor} property, while the *A* component, if present, multiplies by the {@link MetallicMaterial#alpha} property.
+     * @param {Texture} [cfg.alphaMap=undefined] RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial#alpha} property. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.metallicMap=undefined] RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component. The *R* component multiplies by the {@link MetallicMaterial#metallic} property. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.roughnessMap=undefined] RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component. The *R* component multiplies by the  {@link MetallicMaterial#roughness} property. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.metallicRoughnessMap=undefined] RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component. Its *R* component multiplies by the {@link MetallicMaterial#metallic} property, while its *G* component multiplies by the {@link MetallicMaterial#roughness} property. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.emissiveMap=undefined] RGB {@link Texture} containing the emissive color of this MetallicMaterial. Multiplies by the {@link MetallicMaterial#emissive} property. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.occlusionMap=undefined] RGB ambient occlusion {@link Texture}. Within shaders, multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {Texture} [cfg.normalMap=undefined] RGB tangent-space normal {@link Texture}. Must be within the same {@link Scene} as this MetallicMaterial.
+     * @param {String} [cfg.alphaMode="opaque"] The alpha blend mode, which specifies how alpha is to be interpreted. Accepted values are "opaque", "blend" and "mask". See the {@link MetallicMaterial#alphaMode} property for more info.
+     * @param {Number} [cfg.alphaCutoff=0.5] The alpha cutoff value. See the {@link MetallicMaterial#alphaCutoff} property for more info.
+     * @param {Boolean} [cfg.backfaces=false] Whether to render {@link ReadableGeometry} backfaces.
+     * @param {Boolean} [cfg.frontface="ccw"] The winding order for {@link ReadableGeometry} front faces - ````"cw"```` for clockwise, or ````"ccw"```` for counter-clockwise.
+     * @param {Number} [cfg.lineWidth=1] Scalar that controls the width of lines for {@link ReadableGeometry} with {@link ReadableGeometry#primitive} set to "lines".
+     * @param {Number} [cfg.pointSize=1] Scalar that controls the size of points for {@link ReadableGeometry} with {@link ReadableGeometry#primitive} set to "points".
      */
     constructor(owner, cfg = {}) {
 
@@ -420,13 +383,12 @@ class MetallicMaterial extends Material {
 
 
     /**
-     RGB diffuse color.
-
-     Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
-
-     @property baseColor
-     @default [1.0, 1.0, 1.0]
-     @type Float32Array
+     * Sets the RGB diffuse color.
+     *
+     * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     * @type {Float32Array}
      */
     set baseColor(value) {
         let baseColor = this._state.baseColor;
@@ -447,37 +409,42 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB diffuse color.
+     *
+     * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     * @type {Float32Array}
+     */
     get baseColor() {
         return this._state.baseColor;
     }
 
 
     /**
-     RGB {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
-
-     The RGB components multiply by the {@link MetallicMaterial#baseColor} property,
-     while the *A* component, if present, multiplies by the {@link MetallicMaterial#alpha} property.
-
-     @property baseColorMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha.
+     *
+     * The RGB components multiply by {@link MetallicMaterial#baseColor}, while the *A* component, if present, multiplies by {@link MetallicMaterial#alpha}.
+     *
+     * @type {Texture}
      */
     get baseColorMap() {
         return this._baseColorMap;
     }
 
     /**
-     Factor in the range [0..1] indicating how metallic this MetallicMaterial is.
-
-     1 is metal, 0 is non-metal.
-
-     Multiplies by the *R* component of {@link MetallicMaterial#metallicMap}
-     and the *A* component of {@link MetallicMaterial#metalRoughnessMap}.
-
-     @property metallic
-     @default 1.0
-     @type Number
+     * Sets the metallic factor.
+     *
+     * This is in the range ````[0..1]```` and indicates how metallic this MetallicMaterial is.
+     *
+     * ````1```` is metal, ````0```` is non-metal.
+     *
+     * Multiplies by the *R* component of {@link MetallicMaterial#metallicMap} and the *A* component of {@link MetallicMaterial#metallicRoughnessMap}.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set metallic(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
@@ -488,34 +455,36 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the metallic factor.
+     *
+     * @type {Number}
+     */
     get metallic() {
         return this._state.metallic;
     }
 
     /**
-     RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component.
-
-     The *R* component multiplies by the {@link MetallicMaterial#metallic} property.
-
-     @property metallicMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB {@link Texture} containing this MetallicMaterial's metallic factor in its *R* component.
+     *
+     * The *R* component multiplies by {@link MetallicMaterial#metallic}.
+     *
+     * @type {Texture}
      */
     get metallicMap() {
         return this._attached.metallicMap;
     }
 
     /**
-     Factor in the range [0..1] indicating the roughness of this MetallicMaterial.
-
-     0 is fully smooth, 1 is fully rough.
-
-     Multiplies by the *R* component of {@link MetallicMaterial#roughnessMap}.
-
-     @property roughness
-     @default 1.0
-     @type Number
+     *  Sets the roughness factor.
+     *
+     *  This factor is in the range ````[0..1]````, where ````0```` is fully smooth,````1```` is fully rough.
+     *
+     * Multiplies by the *R* component of {@link MetallicMaterial#roughnessMap}.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set roughness(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
@@ -526,49 +495,43 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the roughness factor.
+     *
+     * @type {Number}
+     */
     get roughness() {
         return this._state.roughness;
     }
 
     /**
-     RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component.
-
-     The *R* component multiplies by the {@link MetallicMaterial#roughness} property.
-
-     Must be within the same {@link Scene} as this MetallicMaterial.
-
-     @property roughnessMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB {@link Texture} containing this MetallicMaterial's roughness factor in its *R* component.
+     *
+     * The *R* component multiplies by {@link MetallicMaterial#roughness}.
+     *
+     * @type {Texture}
      */
     get roughnessMap() {
         return this._attached.roughnessMap;
     }
 
     /**
-     RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
-
-     Its *B* component multiplies by the {@link MetallicMaterial#metallic} property, while
-     its *G* component multiplies by the {@link MetallicMaterial#roughness} property.
-
-     Must be within the same {@link Scene} as this MetallicMaterial.
-
-     @property metallicRoughnessMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB {@link Texture} containing this MetallicMaterial's metalness in its *R* component and roughness in its *G* component.
+     *
+     * Its *B* component multiplies by the {@link MetallicMaterial#metallic} property, while its *G* component multiplies by the {@link MetallicMaterial#roughness} property.
+     *
+     * @type {Texture}
      */
     get metallicRoughnessMap() {
         return this._attached.metallicRoughnessMap;
     }
 
     /**
-     Factor in the range [0..1] indicating specular Fresnel value.
-
-     @property specularF0
-     @default 0.0
-     @type Number
+     * Sets the factor in the range [0..1] indicating specular Fresnel value.
+     *
+     * Default value is ````0.0````.
+     *
+     * @type {Number}
      */
     set specularF0(value) {
         value = (value !== undefined && value !== null) ? value : 0.0;
@@ -579,18 +542,23 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the factor in the range [0..1] indicating specular Fresnel value.
+     *
+     * @type {Number}
+     */
     get specularF0() {
         return this._state.specularF0;
     }
 
     /**
-     RGB emissive color.
-
-     Multiplies by {@link MetallicMaterial#emissiveMap}.
-
-     @property emissive
-     @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     * Sets the RGB emissive color.
+     *
+     * Multiplies by {@link MetallicMaterial#emissiveMap}.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     *
+     * @type {Float32Array}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -611,50 +579,47 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB emissive color.
+     *
+     * @type {Float32Array}
+     */
     get emissive() {
         return this._state.emissive;
     }
 
     /**
-     RGB emissive map.
-
-     Multiplies by {@link MetallicMaterial#emissive}.
-
-     @property emissiveMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB emissive map.
+     *
+     * Multiplies by {@link MetallicMaterial#emissive}.
+     *
+     * @type {Texture}
      */
     get emissiveMap() {
         return this._attached.emissiveMap;
     }
 
     /**
-     RGB ambient occlusion map.
-
-     Within objectRenderers, multiplies by the specular and diffuse light reflected by surfaces.
-
-     @property occlusionMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB ambient occlusion map.
+     *
+     * Multiplies by the specular and diffuse light reflected by surfaces.
+     *
+     * @type {Texture}
      */
     get occlusionMap() {
         return this._attached.occlusionMap;
     }
 
     /**
-     Factor in the range [0..1] indicating the alpha value.
-
-     Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and
-     the *A* component, if present, of {@link MetallicMaterial#baseColorMap}.
-
-     The value of {@link MetallicMaterial#alphaMode} indicates how alpha is
-     interpreted when rendering.
-
-     @property alpha
-     @default 1.0
-     @type Number
+     * Sets factor in the range ````[0..1]```` that indicates the alpha value.
+     *
+     * Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and the *A* component, if present, of {@link MetallicMaterial#baseColorMap}.
+     *
+     * The value of {@link MetallicMaterial#alphaMode} indicates how alpha is interpreted when rendering.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set alpha(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
@@ -665,54 +630,48 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets factor in the range ````[0..1]```` that indicates the alpha value.
+     *
+     * @type {Number}
+     */
     get alpha() {
         return this._state.alpha;
     }
 
     /**
-     RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component.
-
-     The *R* component multiplies by the {@link MetallicMaterial#alpha} property.
-
-     @property alphaMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component.
+     *
+     * The *R* component multiplies by the {@link MetallicMaterial#alpha} property.
+     *
+     * @type {Texture}
      */
     get alphaMap() {
         return this._attached.alphaMap;
     }
 
     /**
-     RGB tangent-space normal map {@link Texture}.
-
-     Must be within the same {@link Scene} as this MetallicMaterial.
-
-     @property normalMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the RGB tangent-space normal map {@link Texture}.
+     *
+     * @type {Texture}
      */
     get normalMap() {
         return this._attached.normalMap;
     }
 
     /**
-     The alpha rendering mode.
-
-     This specifies how alpha is interpreted. Alpha is the combined result of the
-     {@link MetallicMaterial#alpha} and
-     {@link MetallicMaterial#alphaMap} properties.
-
-     * "opaque" - The alpha value is ignored and the rendered output is fully opaque.
-     * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha and {@link MetallicMaterial#alphaCutoff}.
-     * "blend" - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
-
-     @property alphaMode
-     @default "opaque"
-     @type {String}
+     * Sets the alpha rendering mode.
+     *
+     * This specifies how alpha is interpreted. Alpha is the combined result of the {@link MetallicMaterial#alpha} and {@link MetallicMaterial#alphaMap} properties.
+     *
+     * Accepted values are:
+     *
+     * * "opaque" - The alpha value is ignored and the rendered output is fully opaque (default).
+     * * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha and {@link MetallicMaterial#alphaCutoff}.
+     * * "blend" - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
+     *
+     * @type {String}
      */
-
     set alphaMode(alphaMode) {
         alphaMode = alphaMode || "opaque";
         let value = modes[alphaMode];
@@ -727,25 +686,26 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the alpha rendering mode.
+     *
+     * @type {String}
+     */
     get alphaMode() {
         return modeNames[this._state.alphaMode];
     }
 
     /**
-     The alpha cutoff value.
-
-     Specifies the cutoff threshold when {@link MetallicMaterial#alphaMode}
-     equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
-     opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
-     material as fully transparent. This value is ignored for other modes.
-
-     Alpha is the combined result of the
-     {@link MetallicMaterial#alpha} and
-     {@link MetallicMaterial#alphaMap} properties.
-
-     @property alphaCutoff
-     @default 0.5
-     @type {Number}
+     * Sets the alpha cutoff value.
+     *
+     * Specifies the cutoff threshold when {@link MetallicMaterial#alphaMode} equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
+     * material as fully transparent. This value is ignored for other modes.
+     *
+     * Alpha is the combined result of the {@link MetallicMaterial#alpha} and {@link MetallicMaterial#alphaMap} properties.
+     *
+     * Default value is ````0.5````.
+     *
+     * @type {Number}
      */
     set alphaCutoff(alphaCutoff) {
         if (alphaCutoff === null || alphaCutoff === undefined) {
@@ -757,19 +717,23 @@ class MetallicMaterial extends Material {
         this._state.alphaCutoff = alphaCutoff;
     }
 
+    /**
+     * Gets the alpha cutoff value.
+     *
+     * @type {Number}
+     */
     get alphaCutoff() {
         return this._state.alphaCutoff;
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh}es.
-
-     The backfaces will belong to {@link Geometry} compoents that are also attached to
-     the {@link Mesh}es.
-
-     @property backfaces
-     @default false
-     @type Boolean
+     * Sets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * The backfaces will belong to {@link ReadableGeometry} compoents that are also attached to the {@link Mesh}es.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
      */
     set backfaces(value) {
         value = !!value;
@@ -780,19 +744,21 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * @type {Boolean}
+     */
     get backfaces() {
         return this._state.backfaces;
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh}es.
-
-     The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh}es.
-
-     @property frontface
-     @default "ccw"
-     @type String
+     * Sets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+     *
+     * Default value is ````"ccw"````.
+     *
+     * @type {String}
      */
     set frontface(value) {
         value = value !== "cw";
@@ -803,42 +769,62 @@ class MetallicMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+*
+     * @type {String}
+     */
     get frontface() {
         return this._state.frontface ? "ccw" : "cw";
     }
 
     /**
-     The MetallicMaterial's line width.
-
-     @property lineWidth
-     @default 1.0
-     @type Number
+     * Sets the MetallicMaterial's line width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set lineWidth(value) {
         this._state.lineWidth = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the MetallicMaterial's line width.
+     *
+     * @type {Number}
+     */
     get lineWidth() {
         return this._state.lineWidth;
     }
 
     /**
-     The MetallicMaterial's point size.
-
-     @property pointSize
-     @default 1.0
-     @type Number
+     * Sets the MetallicMaterial's point size.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set pointSize(value) {
         this._state.pointSize = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the MetallicMaterial's point size.
+     *
+     * @type {Number}
+     */
     get pointSize() {
         return this._state.pointSize;
     }
 
+    /**
+     * Destroys this MetallicMaterial.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

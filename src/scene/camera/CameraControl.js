@@ -29,7 +29,7 @@ class CameraControl extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -203,11 +203,11 @@ class CameraControl extends Component {
     }
 
     /**
-     Indicates whether this CameraControl is active or not.
+     Indicates if this CameraControl is active or not.
 
      @property active
      @default true
-     @type Boolean
+     @type {Boolean}
      */
     set active(value) {
         this._active = value !== false;
@@ -223,7 +223,7 @@ class CameraControl extends Component {
 
      @property pivoting
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set pivoting(value) {
         this._pivoting = !!value;
@@ -239,7 +239,7 @@ class CameraControl extends Component {
 
      @property panToPointer
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set panToPointer(value) {
         this._panToPointer = !!value;
@@ -258,7 +258,7 @@ class CameraControl extends Component {
 
      @property panToPivot
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set panToPivot(value) {
         this._panToPivot = !!value;
@@ -272,14 +272,14 @@ class CameraControl extends Component {
     }
 
     /**
-     Indicates whether this CameraControl is in "first person" mode.
+     Indicates if this CameraControl is in "first person" mode.
 
      In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,
      the eye rotates about the look.
 
      @property firstPerson
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set firstPerson(value) {
         this._firstPerson = !!value;
@@ -290,7 +290,7 @@ class CameraControl extends Component {
     }
 
     /**
-     Indicates whether this CameraControl is in "walking" mode.
+     Indicates if this CameraControl is in "walking" mode.
 
      When set true, this constrains eye movement to the horizontal X-Z plane. When doing a walkthrough,
      this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the
@@ -300,7 +300,7 @@ class CameraControl extends Component {
 
      @property walking
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set walking(value) {
         this._walking = !!value;
@@ -316,7 +316,7 @@ class CameraControl extends Component {
      *
      * @property doublePickFlyTo
      * @default true
-     * @type Boolean
+     * @type {Boolean}
      */
     set doublePickFlyTo(value) {
         this._doublePickFlyTo = value !== false;
@@ -339,7 +339,7 @@ class CameraControl extends Component {
 
      @property inertia
      @default 0.5
-     @type Number
+     @type {Number}
      */
     set inertia(value) {
         this._inertia = value === undefined ? 0.5 : value;
@@ -354,7 +354,7 @@ class CameraControl extends Component {
      *
      * @property keyboardLayout
      * @default "qwerty"
-     * @type String
+     * @type {String}
      */
     set keyboardLayout(value) {
         this._keyboardLayout = value || "qwerty";

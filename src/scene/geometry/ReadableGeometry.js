@@ -1,59 +1,62 @@
 import {Geometry} from './Geometry.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {ArrayBuf} from '../webgl/ArrayBuf.js';
-import {getSceneVertexBufs} from './SceneVertexBufs.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 import {WEBGL_INFO} from './../webglInfo.js';
-import {buildEdgeIndices} from '../math/buildEdges.js';
-import {geometryCompressionUtils} from './geometryCompressionUtils.js';
+import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
+import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
 const memoryStats = stats.memory;
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const IndexArrayType = bigIndicesSupported ? Uint32Array : Uint16Array;
-const nullVertexBufs = new RenderState({});
 const tempAABB = math.AABB3();
 
 /**
- * @desc A {@link Geometry} that retains its geometry data in browser memory, in addition to VBOs on the GPU.
+ * @desc A {@link Geometry} that keeps its geometry data in both browser and GPU memory.
  *
- * ReadableGeometry uses more memory than {@link VBOGeometry}, which only has VBOs. Use {@link VBOGeometry} when you
- * need a lower memory footprint and don't need to keep the geometry data in browser memory.
+ * ReadableGeometry uses more memory than {@link VBOGeometry}, which only stores its geometry data in GPU memory.
  *
  * ## Usage
  *
- * Creating a {@link Mesh} with a ReadableGeometry defining a single triangle and a {@link PhongMaterial} with diffuse {@link Texture}:
+ * Creating a {@link Mesh} with a ReadableGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * [[Run this example](/examples/#geometry_ReadableGeometry)]
  *
  * ````javascript
- * new Mesh(myViewer.scene, {
- *      geometry: new ReadableGeometry(myViewer.scene, {
- *          primitive: "triangles",
- *          positions:  [0.0, 0.9, 0.0, -0.9,-0.9, 0.0, 0.9, -0.9, 0.0],
- *          normals:    [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
- *          uv:         [0.0, 0.0, 0.5, 0.0, 1.0, 0.0],
- *          indices:    [0, 1, 2]
- *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
- *              src: "textures/diffuse/uvGrid2.jpg"
- *          })
- *      })
- * });
- * ````
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js"
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
  *
- * ## Default Geometry
+ * const myViewer = new Viewer({
+ *         canvasId: "myCanvas"
+ *     });
  *
- * A {@link Mesh} created without a ReadableGeometry will automatically inherit the
- * default {@link Scene#geometry}, which is a {@link ReadableGeometry} describing a box of unit size.
+ * const myMesh = new Mesh(myViewer.scene, {
+ *         geometry: new ReadableGeometry(myViewer.scene, {
+ *             primitive: "triangles",
+ *             positions: [0.0, 3, 0.0, -3, -3, 0.0, 3, -3, 0.0],
+ *             normals: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+ *             uv: [0.0, 0.0, 0.5, 1.0, 1.0, 0.0],
+ *             indices: [0, 1, 2]
+ *         }),
+ *         material: new PhongMaterial(myViewer.scene, {
+ *             diffuseMap: new Texture(myViewer.scene, {
+ *                 src: "textures/diffuse/uvGrid2.jpg"
+ *             }),
+ *             backfaces: true
+ *         })
+ *     });
  *
- * ````javascript
- * new Mesh(myViewer.scene, {
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
- *              src: "textures/diffuse/uvGrid2.jpg"
- *          })
- *      })
- * });
+ * // Get geometry data from browser memory:
+ *
+ * const positions = myMesh.geometry.positions; // Flat arrays
+ * const normals = myMesh.geometry.normals;
+ * const uv = myMesh.geometry.uv;
+ * const indices = myMesh.geometry.indices;
+ *
  * ````
  */
 class ReadableGeometry extends Geometry {
@@ -64,7 +67,7 @@ class ReadableGeometry extends Geometry {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -100,8 +103,6 @@ class ReadableGeometry extends Geometry {
      indices, if those are supplied.
      @param [cfg.compressGeometry=false] {Boolean} Stores positions, colors, normals and UVs in compressGeometry and oct-encoded formats
      for reduced memory footprint and GPU bus usage.
-     @param [cfg.combineGeometry=false] {Boolean} Combines positions, colors, normals and UVs into the same WebGL vertex buffers
-     with other Geometries, in order to reduce the number of buffer binds performed per frame.
      @param [cfg.edgeThreshold=10] {Number} When a {@link Mesh} renders this Geometry as wireframe,
      this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
      @extends Component
@@ -115,9 +116,7 @@ class ReadableGeometry extends Geometry {
         const self = this;
 
         this._state = new RenderState({ // Arrays for emphasis effects are got from xeokit.Geometry friend methods
-            combineGeometry: !!cfg.combineGeometry,
             compressGeometry: !!cfg.compressGeometry,
-            autoVertexNormals: !!cfg.autoVertexNormals,
             primitive: null, // WebGL enum
             primitiveName: null, // String
             positions: null,    // Uint16Array when compressGeometry == true, else Float32Array
@@ -132,7 +131,6 @@ class ReadableGeometry extends Geometry {
             colorsbuf: null,
             uvBuf: null,
             indicesBuf: null,
-            indicesBufCombined: null, // Indices into a shared VertexBufs, set when combineGeometry == true
             hash: ""
         });
 
@@ -146,11 +144,11 @@ class ReadableGeometry extends Geometry {
 
         // Local-space Boundary3D
 
-        this._boundaryDirty = true;
+        this._aabbDirty = true;
 
         this._boundingSphere = true;
         this._aabb = null;
-        this._boundaryDirty = true;
+        this._aabbDirty = true;
 
         this._obb = null;
         this._obbDirty = true;
@@ -240,11 +238,6 @@ class ReadableGeometry extends Geometry {
 
         memoryStats.meshes++;
 
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs = getSceneVertexBufs(this.scene, this._state);
-            this._sceneVertexBufs.addGeometry(this._state);
-        }
-
         this._buildVBOs();
     }
 
@@ -255,28 +248,22 @@ class ReadableGeometry extends Geometry {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, state.indices, state.indices.length, 1, gl.STATIC_DRAW);
             memoryStats.indices += state.indicesBuf.numItems;
         }
-        if (state.combineGeometry) {
-            if (state.indices) {
-                // indicesBufCombined is created when VertexBufs are built for this Geometry
-            }
-        } else {
-            if (state.positions) {
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.positions, state.positions.length, 3, gl.STATIC_DRAW);
-                memoryStats.positions += state.positionsBuf.numItems;
-            }
-            if (state.normals) {
-                let normalized = state.compressGeometry;
-                state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.normals, state.normals.length, 3, gl.STATIC_DRAW, normalized);
-                memoryStats.normals += state.normalsBuf.numItems;
-            }
-            if (state.colors) {
-                state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.colors, state.colors.length, 4, gl.STATIC_DRAW);
-                memoryStats.colors += state.colorsBuf.numItems;
-            }
-            if (state.uv) {
-                state.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.uv, state.uv.length, 2, gl.STATIC_DRAW);
-                memoryStats.uvs += state.uvBuf.numItems;
-            }
+        if (state.positions) {
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.positions, state.positions.length, 3, gl.STATIC_DRAW);
+            memoryStats.positions += state.positionsBuf.numItems;
+        }
+        if (state.normals) {
+            let normalized = state.compressGeometry;
+            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.normals, state.normals.length, 3, gl.STATIC_DRAW, normalized);
+            memoryStats.normals += state.normalsBuf.numItems;
+        }
+        if (state.colors) {
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.colors, state.colors.length, 4, gl.STATIC_DRAW);
+            memoryStats.colors += state.colorsBuf.numItems;
+        }
+        if (state.uv) {
+            state.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, state.uv, state.uv.length, 2, gl.STATIC_DRAW);
+            memoryStats.uvs += state.uvBuf.numItems;
         }
     }
 
@@ -330,13 +317,7 @@ class ReadableGeometry extends Geometry {
             return;
         }
         const gl = this.scene.canvas.gl;
-        const edgeIndices = buildEdgeIndices(state.positions, state.indices, state.positionsDecodeMatrix, this._edgeThreshold, state.combineGeometry);
-        if (state.combineGeometry) {
-            const indicesOffset = this._sceneVertexBufs.getIndicesOffset(state);
-            for (let i = 0, len = edgeIndices.length; i < len; i++) {
-                edgeIndices[i] += indicesOffset;
-            }
-        }
+        const edgeIndices = buildEdgeIndices(state.positions, state.indices, state.positionsDecodeMatrix, this._edgeThreshold);
         this._edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, edgeIndices.length, 1, gl.STATIC_DRAW);
         memoryStats.indices += this._edgeIndicesBuf.numItems;
     }
@@ -391,13 +372,13 @@ class ReadableGeometry extends Geometry {
     }
 
     /**
-     The Geometry's primitive type.
+     * Gets the Geometry's primitive type.
 
      Valid types are: 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
 
      @property primitive
      @default "triangles"
-     @type String
+     @type {String}
      */
     get primitive() {
         return this._state.primitiveName;
@@ -413,7 +394,7 @@ class ReadableGeometry extends Geometry {
 
      @property compressGeometry
      @default false
-     @type Boolean
+     @type {Boolean}
      @final
      */
     get compressGeometry() {
@@ -421,27 +402,11 @@ class ReadableGeometry extends Geometry {
     }
 
     /**
-     Indicates if this Geometry is combined.
-
-     Combination is an internally-performed optimization which combines positions, colors, normals and UVs into
-     the same WebGL vertex buffers with other Geometries, in order to reduce the number of buffer binds
-     performed per frame.
-
-     @property combineGeometry
-     @default false
-     @type Boolean
-     @final
-     */
-    get combineGeometry() {
-        return this._state.combineGeometry;
-    }
-
-    /**
      The Geometry's vertex positions.
 
      @property positions
      @default null
-     @type Float32Array
+     @type {Float32Array}
      */
     get positions() {
         if (!this._state.positions) {
@@ -478,10 +443,7 @@ class ReadableGeometry extends Geometry {
         if (state.positionsBuf) {
             state.positionsBuf.setData(positions);
         }
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs.setPositions(state);
-        }
-        this._setBoundaryDirty();
+        this._setAABBDirty();
         this.glRedraw();
     }
 
@@ -490,7 +452,7 @@ class ReadableGeometry extends Geometry {
 
      @property normals
      @default null
-     @type Float32Array
+     @type {Float32Array}
      */
     get normals() {
         if (!this._state.normals) {
@@ -527,9 +489,6 @@ class ReadableGeometry extends Geometry {
         if (state.normalsBuf) {
             state.normalsBuf.setData(normals);
         }
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs.setNormals(state);
-        }
         this.glRedraw();
     }
 
@@ -539,7 +498,7 @@ class ReadableGeometry extends Geometry {
 
      @property uv
      @default null
-     @type Float32Array
+     @type {Float32Array}
      */
     get uv() {
         if (!this._state.uv) {
@@ -574,9 +533,6 @@ class ReadableGeometry extends Geometry {
         if (state.uvBuf) {
             state.uvBuf.setData(uv);
         }
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs.setUVs(state);
-        }
         this.glRedraw();
     }
 
@@ -585,7 +541,7 @@ class ReadableGeometry extends Geometry {
 
      @property colors
      @default null
-     @type Float32Array
+     @type {Float32Array}
      */
     get colors() {
         return this._state.colors;
@@ -609,9 +565,6 @@ class ReadableGeometry extends Geometry {
         colors.set(newColors);
         if (state.colorsBuf) {
             state.colorsBuf.setData(colors);
-        }
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs.setColors(state);
         }
         this.glRedraw();
     }
@@ -642,12 +595,12 @@ class ReadableGeometry extends Geometry {
      * @type {Float32Array}
      */
     get aabb() {
-        if (this._boundaryDirty) {
+        if (this._aabbDirty) {
             if (!this._aabb) {
                 this._aabb = math.AABB3();
             }
             math.positions3ToAABB3(this._state.positions, this._aabb, this._state.positionsDecodeMatrix);
-            this._boundaryDirty = false;
+            this._aabbDirty = false;
         }
         return this._aabb;
     }
@@ -674,32 +627,12 @@ class ReadableGeometry extends Geometry {
         return this._obb;
     }
 
-    /**
-     * Local-space 3D bounding sphere enclosing this ReadableGeometry.
-     *
-     * The Sphere is represented by a 4-element Float32Array for form [centerX, centerY, centerZ, radius].
-     *
-     * @property boundingSphere
-     * @final
-     * @type {Float32Array}
-     */
-    get boundary() {
-        if (this._boundaryDirty) {
-            if (!this._boundingSphere) {
-                this._boundingSphere = math.Sphere3();
-            }
-            math.positions3ToSphere3(this._state.positions, this._boundingSphere);
-            this._boundaryDirty = false;
-        }
-        return this._boundingSphere;
-    }
-
-    _setBoundaryDirty() {
-        if (this._boundaryDirty) {
+    _setAABBDirty() {
+        if (this._aabbDirty) {
             return;
         }
-        this._boundaryDirty = true;
-        this._boundaryDirty = true;
+        this._aabbDirty = true;
+        this._aabbDirty = true;
         this._obbDirty = true;
     }
 
@@ -707,10 +640,9 @@ class ReadableGeometry extends Geometry {
         return this._state;
     }
 
-    _getVertexBufs() {
-        return this._state && this._state.combineGeometry ? this._sceneVertexBufs.getVertexBufs(this._state) : nullVertexBufs;
-    }
-
+    /**
+     * Destroys this ReadableGeometry
+     */
     destroy() {
         super.destroy();
         const state = this._state;
@@ -743,9 +675,6 @@ class ReadableGeometry extends Geometry {
         }
         if (this._pickVertexColorsBuf) {
             this._pickVertexColorsBuf.destroy();
-        }
-        if (this._state.combineGeometry) {
-            this._sceneVertexBufs.removeGeometry(state);
         }
         state.destroy();
         memoryStats.meshes--;

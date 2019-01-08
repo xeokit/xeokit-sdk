@@ -107,20 +107,25 @@ class MetaScene {
         this.metaModels[modelId] = metaModel;
         for (let i = 0, len = newObjects.length; i < len; i++) {
             let newObject = newObjects[i];
+
             let objectId = newObject.objectId;
-            let extId = newObject.extId || newObject.objectId;
             let name = newObject.name;
             let type = newObject.type;
-            let gid = newObject.gid;
             let properties = newObject.properties;
             let parent = null;
             let children = null;
-            this.metaObjects[newObject.objectId] = new MetaObject(metaModel, objectId, extId,  name, type, gid, properties, parent, children);
+            let external = newObject.external;
+
+            this.metaObjects[newObject.objectId] = new MetaObject(metaModel, objectId, name, type, properties, parent, children, external);
+
+
         }
         for (let i = 0, len = newObjects.length; i < len; i++) {
+
             let newObject = newObjects[i];
             let objectId = newObject.objectId;
             let metaObject = this.metaObjects[objectId];
+
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
             } else {
@@ -130,7 +135,9 @@ class MetaScene {
                 parentMetaObject.children.push(metaObject);
             }
         }
+
         this.fire("metaModelCreated", modelId);
+
         return metaModel;
     }
 
@@ -147,7 +154,7 @@ class MetaScene {
     /**
      * Removes a {@link MetaModel} from this MetaScene.
      *
-     * Fires a "metaModelDestroyed" event with the ID of the {@link Model}.
+     * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#modelId}.
      *
      * @param {string} modelId ID of the target {@link MetaModel}.
      */

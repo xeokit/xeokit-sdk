@@ -1,7 +1,7 @@
 import {Plugin} from "./../../Plugin.js";
 import {LambertMaterial} from "../../../scene/materials/LambertMaterial.js";
 import {PhongMaterial} from "../../../scene/materials/PhongMaterial.js";
-import {Geometry} from "../../../scene/geometry/Geometry.js";
+import {ReadableGeometry} from "../../../scene/geometry/ReadableGeometry.js";
 import {Node} from "../../../scene/nodes/Node.js";
 import {Mesh} from "../../../scene/mesh/Mesh.js";
 
@@ -85,7 +85,7 @@ import {utils} from "../../../scene/utils.js";
  *                 roid: roid,                      // Revision ID
  *                 schema: schema,                  // Schema version
  *                 edges: true,                     // Render with emphasized edges (default is false)
- *                 lambertMaterials: true,          // Lambertian flat-shading instead of default Blinn/Phong
+ *                 lambertMaterial: true,          // Lambertian flat-shading instead of default Blinn/Phong
  *                 scale: [0.001, 0.001, 0.001],    // Shrink the model a bit
  *                 rotation: [-90, 0, 0]            // Rotate model for World +Y "up"
  *             });
@@ -158,7 +158,7 @@ class BIMServerLoaderPlugin extends Plugin {
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.modelId ID to assign to the {@link Model},
+     * @param {String} params.id ID to assign to the {@link Model},
      * unique among all components in the Viewer's {@link Scene}.
      *
      * @param {Number} params.poid ID of the model's project within BIMServer.
@@ -185,7 +185,7 @@ class BIMServerLoaderPlugin extends Plugin {
      * {@link Model}'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
-     * @param {Boolean} [params.lambertMaterials=true]  When true, gives each {@link Mesh}
+     * @param {Boolean} [params.lambertMaterial=true]  When true, gives each {@link Mesh}
      * the same {@link LambertMaterial} and a ````colorize````
      * value set the to the corresponding IFC element color. This is typically used for large models, for a lower
      * memory footprint and smoother performance.
@@ -201,7 +201,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
         const self = this;
 
-        const modelId = params.modelId;
+        const id = params.id;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -214,8 +214,8 @@ class BIMServerLoaderPlugin extends Plugin {
         };
         var onTick;
 
-        if (!modelId) {
-            this.error("load() param expected: modelId");
+        if (!id) {
+            this.error("load() param expected: id");
             return;
         }
 
@@ -234,27 +234,25 @@ class BIMServerLoaderPlugin extends Plugin {
             return;
         }
 
-        if (scene.components[modelId]) {
-            this.error("Component with this ID already exists in viewer: " + modelId);
+        if (scene.components[id]) {
+            this.error("Component with this ID already exists in viewer: " + id);
             return;
         }
 
         const edges = !!params.edges;
-        const lambertMaterials = params.lambertMaterials !== false;
-        const quantizeGeometry = params.quantizeGeometry !== false;
-        //const combineGeometry = params.combineGeometry !== false;
-        const combineGeometry = false; // Combination is way too slow ATM
+        const lambertMaterial = params.lambertMaterial !== false;
+        const compressGeometry = params.compressGeometry !== false;
         const logging = !!params.logging;
 
         scene.canvas.spinner.processes++;
 
         params = utils.apply(params, {
-            modelId: modelId // Registers the Node on viewer.scene.models
+            id: id // Registers the Node on viewer.scene.models
         });
 
         const modelNode = new Node(scene, params);
 
-        const xeokitMaterial = lambertMaterials ? new LambertMaterial(modelNode, {
+        const xeokitMaterial = lambertMaterial ? new LambertMaterial(modelNode, {
             backfaces: true
         }) : new PhongMaterial(modelNode, {
             diffuse: [1.0, 1.0, 1.0]
@@ -262,10 +260,10 @@ class BIMServerLoaderPlugin extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {
 
-            loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
+            loadMetaModel(viewer, id, poid, roid, bimServerClientModel).then(function () {
 
                 modelNode.once("destroyed", function () {
-                    viewer.metaScene.destroyMetaModel(modelId);
+                    viewer.metaScene.destroyMetaModel(id);
                 });
 
                 const oids = [];
@@ -273,15 +271,15 @@ class BIMServerLoaderPlugin extends Plugin {
                 const guidToOid = {};
 
                 const visit = metaObject => {
-                    oids[metaObject.gid] = metaObject.extId;
-                    oidToGuid[metaObject.extId] = metaObject.objectId;
-                    guidToOid[metaObject.objectId] = metaObject.extId;
+                    oids[metaObject.external.gid] = metaObject.external.extId;
+                    oidToGuid[metaObject.external.extId] = metaObject.objectId;
+                    guidToOid[metaObject.objectId] = metaObject.external.extId;
                     for (let i = 0; i < (metaObject.children || []).length; ++i) {
                         visit(metaObject.children[i]);
                     }
                 };
 
-                const metaModel = viewer.metaScene.metaModels[modelId];
+                const metaModel = viewer.metaScene.metaModels[id];
                 const rootMetaObject = metaModel.rootMetaObject;
 
                 visit(rootMetaObject);
@@ -334,19 +332,18 @@ class BIMServerLoaderPlugin extends Plugin {
                     },
 
                     createGeometry: function (geometryDataId, positions, normals, indices, reused) {
-                        const geometryId = `${modelId}.${geometryDataId}`;
-                        new Geometry(modelNode, {
+                        const geometryId = `${id}.${geometryDataId}`;
+                        new ReadableGeometry(modelNode, {
                             id: geometryId,
                             primitive: "triangles",
                             positions: positions,
                             normals: normals,
                             indices: indices,
-                            compressGeometry: quantizeGeometry,
-                            combineGeometry: combineGeometry
+                            compressGeometry: compressGeometry
                         });
                     },
 
-                    createObject(oid, geometryDataIds, ifcType, matrix) {
+                    createNode(oid, geometryDataIds, ifcType, matrix) {
                         const objectId = oidToGuid[oid];
                         if (scene.objects[objectId]) {
                             self.error(`Can't create object - object with id ${objectId} already exists`);
@@ -371,7 +368,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         modelNode.addChild(xeokitObject, false);
                         for (let i = 0, len = geometryDataIds.length; i < len; i++) {
                             const xeokitMesh = new Mesh(modelNode, {
-                                geometry: `${modelId}.${geometryDataIds[i]}`,
+                                geometry: `${id}.${geometryDataIds[i]}`,
                                 material: xeokitMaterial
                             });
                             xeokitObject.addChild(xeokitMesh, true);
@@ -387,7 +384,7 @@ class BIMServerLoaderPlugin extends Plugin {
                             //self.error(`Can't find object with id ${objectId}`);
                             return;
                         }
-                        const geometryId = `${modelId}.${geometryDataId}`;
+                        const geometryId = `${id}.${geometryDataId}`;
                         const xeokitMesh = new Mesh(modelNode, {
                             geometry: geometryId,
                             material: xeokitMaterial

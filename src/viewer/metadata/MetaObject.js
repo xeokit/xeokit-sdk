@@ -1,18 +1,25 @@
 /**
- * @desc Metadata corresponding to an object within a model within a {@link Scene}.
+ * @desc Metadata corresponding to an {@link Entity} that represents an object.
  *
  * * Belongs to a {@link MetaModel}.
  * * Created by {@link MetaScene#createMetaModel}.
  * * Registered by {@link MetaObject#objectId} in {@link MetaScene#metaObjects}.
- * * A MetaObject may correspond to a real object within a {@link Scene}.
- * * A {@link Scene} object is represented by either a {@link Node} that has an {@link Node#objectId} or a {@link Mesh} that has a {@link Mesh#objectId}.
  * * {@link MetaModel} represents its composition structure with a tree of MetaObjects, with {@link MetaModel#rootMetaObject} referencing the root MetaObject.
+ * * An {@link Entity} represents an object when it has an {@link Entity#objectId}.
  *
  * @class MetaObject
  */
 class MetaObject {
 
-    constructor(metaModel, objectId, extId, name, type, gid, properties, parent, children) {
+    constructor(metaModel, objectId, name, type, properties, parent, children, external) {
+
+        /**
+         * Model metadata.
+         *
+         * @property metaModel
+         * @type {MetaModel}
+         */
+        this.metaModel = metaModel;
 
         /**
          * Globally-unique ID.
@@ -23,24 +30,6 @@ class MetaObject {
          * @type {String|Number}
          */
         this.objectId = objectId;
-
-        /**
-         * External ID.
-         *
-         * This ID ties the MetaObject to systems external to xeokit, such as BIMServer.
-         *
-         * @property extId
-         * @type {String|Number}
-         */
-        this.extId = extId;
-
-        /**
-         * Model metadata.
-         *
-         * @property metaModel
-         * @type {MetaModel}
-         */
-        this.metaModel = metaModel;
 
         /**
          * Human-readable name.
@@ -58,28 +47,15 @@ class MetaObject {
          */
         this.type = type;
 
-        if (gid !== undefined && gid !== null) {
-
-            /**
-             * Geometry ID.
-             *
-             * Undefined when there is no geometry.
-             *
-             * @property gid
-             * @type {Number|String}
-             */
-            this.gid = gid;
-        }
-
         if (properties) {
 
             /**
-             * Arbitrary properties.
+             * Arbitrary metadata properties.
              *
-             * Undefined when no properties are represented.
+             * Undefined when no metadata properties are represented.
              *
-             * @property children
-             * @type {{Array of MetaObject}}
+             * @property properties
+             * @type {*}
              */
             this.properties = properties;
         }
@@ -109,33 +85,19 @@ class MetaObject {
              */
             this.children = children;
         }
-    }
 
-    getJSON() {
+        if (external !== undefined && external !== null) {
 
-        function visit(metaObject) {
-            metaObjects.push(metaObjects);
-            for (var metaObjectId in metaObjects) {
-                if (this.metaObjects.hasOwnProperty(metaObjectId)) {
-                    var metaObject = this.metaObjects[metaObjectId];
-                    metaObjects.push(metaObject.toJSON());
-                }
-            }
+            /**
+             * External application-specific metadata
+             *
+             * Undefined when there are is no external application-specific metadata.
+             *
+             * @property external
+             * @type {*}
+             */
+            this.external = external;
         }
-
-        var json = {
-            objectId: this.objectId,
-            extId: this.extId,
-            type: this.type,
-            name: this.name
-        };
-        if (this.gid) {
-            json.gid = this.gid;
-        }
-        if (this.parent) {
-            json.parent = this.parent.objectId
-        }
-        return json;
     }
 }
 

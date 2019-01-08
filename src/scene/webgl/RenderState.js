@@ -22,7 +22,7 @@ class RenderState {
         /**
          The RenderState's ID, unique within the renderer.
          @property id
-         @type Number
+         @type {Number}
          @final
          */
         this.id = ids.addItem({});

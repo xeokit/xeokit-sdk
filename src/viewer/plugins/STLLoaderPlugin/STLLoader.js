@@ -1,5 +1,5 @@
 import {Mesh} from "./../../../scene/mesh/Mesh.js";
-import {Geometry} from "./../../../scene/geometry/Geometry.js";
+import {ReadableGeometry} from "../../../scene/geometry/ReadableGeometry.js";
 import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
 import {math} from "./../../../scene/math/math.js";
 import {core} from "./../../../scene/core.js";
@@ -79,7 +79,6 @@ function parse(data, plugin, modelNode, options) {
     }
 
     function parseBinary(data, plugin, modelNode, options) {
-        var autoVertexNormals = options.autoVertexNormals;
         var reader = new DataView(data);
         var faces = reader.getUint32(80, true);
         var r;
@@ -150,9 +149,7 @@ function parse(data, plugin, modelNode, options) {
                 positions.push(reader.getFloat32(vertexstart, true));
                 positions.push(reader.getFloat32(vertexstart + 4, true));
                 positions.push(reader.getFloat32(vertexstart + 8, true));
-                if (!autoVertexNormals) {
-                    normals.push(normalX, normalY, normalZ);
-                }
+                normals.push(normalX, normalY, normalZ);
                 if (hasColors) {
                     colors.push(r, g, b, 1); // TODO: handle alpha
                 }
@@ -234,11 +231,10 @@ function parse(data, plugin, modelNode, options) {
             math.faceToVertexNormals(positions, normals, options);
         }
 
-        var geometry = new Geometry(modelNode, {
+        var geometry = new ReadableGeometry(modelNode, {
             primitive: "triangles",
             positions: positions,
             normals: normals,
-            // autoVertexNormals: !normals,
             colors: colors,
             indices: indices
         });

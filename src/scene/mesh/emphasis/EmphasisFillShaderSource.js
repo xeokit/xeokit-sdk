@@ -169,7 +169,7 @@ function buildVertex(mesh) {
 
 function hasNormals(mesh) {
     const primitive = mesh._geometry._state.primitiveName;
-    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normals) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
+    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
         return true;
     }
     return false;

@@ -291,7 +291,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.components.selection) {
             scene.setSelected(scene.selectedObjects, false);
-            Object.keys(scene.models).forEach(modelId => {
+            Object.keys(scene.models).forEach(id => {
                 bcfViewpoint.components.selection.forEach(x => scene.setSelected(x.ifc_guid, true));
             });
         }

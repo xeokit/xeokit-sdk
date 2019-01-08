@@ -1,124 +1,9 @@
-/**
- A **Texture** specifies a texture map.
-
- ## Overview
-
- * Textures are grouped within {@link Material"}}Materials{{/crossLink}}, which are attached to
- {@link Mesh}es.
- * To create a Texture from an image file, set the Texture's {@link Texture/src}
- property to the image file path.
- * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture/image}
- property to the HTMLImageElement.
-
- ## Examples
-
- * [Textures on MetallicMaterials](../../examples/#materials_metallic_textures)
- * [Textures on SpecularMaterials](../../examples/#materials_specGloss_textures)
- * [Textures on PhongMaterials](../../examples/#materials_phong_textures)
- * [Video texture](../../examples/#materials_phong_textures_video)
-
- ## Usage
-
- In this example we have a Mesh with
-
- * a {@link PhongMaterial} which applies diffuse and specular {@link Texture}, and
- * a {@link TorusGeometry}.
-
- Note that xeokit will ignore the {@link PhongMaterial}'s {@link PhongMaterial#diffuse}
- and {@link PhongMaterial#specular} properties, since we assigned {@link Texture} to the {@link PhongMaterial}'s {@link PhongMaterial#diffuseMap} and
- {@link PhongMaterial#specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
- colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
-
- ```` javascript
- var mesh = new xeokit.Mesh({
-
-    material: new xeokit.PhongMaterial({
-        ambient: [0.3, 0.3, 0.3],
-        diffuse: [0.5, 0.5, 0.0],   // Ignored, since we have assigned a Texture to diffuseMap, below
-        specular: [1.0, 1.0, 1.0],   // Ignored, since we have assigned a Texture to specularMap, below
-        diffuseMap: new xeokit.Texture({
-            src: "diffuseMap.jpg"
-        }),
-        specularMap: new xeokit.Fresnel({
-            src: "diffuseMap.jpg"
-        }),
-        shininess: 80, // Default
-        alpha: 1.0 // Default
-    }),
-
-    geometry: new xeokit.TorusGeometry()
-});
- ````
-
- @class Texture
- @module xeokit
- @submodule materials
- @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
- @param {*} [cfg] Configs
- @param {String} [cfg.id] Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
- @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Texture.
- @param [cfg.src=null] {String} Path to image file to load into this Texture. See the {@link Texture/src} property for more info.
- @param [cfg.image=null] {HTMLImageElement} HTML Image object to load into this Texture. See the {@link Texture/image} property for more info.
- @param [cfg.minFilter="linearMipmapLinear"] {String} How the texture is sampled when a texel covers less than one pixel. See the {@link Texture/minFilter} property for more info.
- @param [cfg.magFilter="linear"] {String} How the texture is sampled when a texel covers more than one pixel. See the {@link Texture/magFilter} property for more info.
- @param [cfg.wrapS="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {@link Texture/wrapS} property for more info.
- @param [cfg.wrapT="repeat"] {String} Wrap parameter for texture coordinate *S*. See the {@link Texture/wrapT} property for more info.
- @param [cfg.flipY=false] {Boolean} Flips this Texture's source data along its vertical axis when true.
- @param [cfg.translate=[0,0]] {Array of Number} 2D translation vector that will be added to texture's *S* and *T* coordinates.
- @param [cfg.scale=[1,1]] {Array of Number} 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
- @param [cfg.rotate=0] {Number} Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
- @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link Texture/encoding} property for more info.
- @extends Component
- */
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {Texture2D} from '../webgl/Texture2D.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 
-
-/**
- * @desc A 2D texture map.
- *
- *  ## Usage
- *
- *  In this example we have a Mesh with a {@link PhongMaterial} which applies diffuse and specular Texture, and a {@link TorusGeometry}.
- *
- *  Note that xeokit will ignore the {@link PhongMaterial}'s {@link PhongMaterial#diffuse} and {@link PhongMaterial#specular}
- *  properties, since we assigned {@link Texture} to the {@link PhongMaterial}'s {@link PhongMaterial#diffuseMap} and
- *  {@link PhongMaterial#specularMap} properties. The {@link Texture"}}Textures'{{/crossLink}} pixel
- *  colors directly provide the diffuse and specular components for each fragment across the {@link Geometry} surface.
- *
- *  ```` javascript
- *  import {Viewer} from "src/viewer/Viewer.js";
- *  import {Mesh} from "src/scene/mesh/Mesh.js";
- *  import {TorusGeometry} from "src/scene/geometry/TorusGeometry.js";
- *  import {PhongMaterial} from "src/scene/materials/PhongMaterial.js";
- *  import {Texture} from "src/scene/materials/Texture.js";
- *
- *  const myViewer = new Viewer({ canvasId: "myCanvas" });
- *
- *  var mesh = new Mesh({
- *
- *    material: new PhongMaterial({
- *         ambient: [0.3, 0.3, 0.3],
- *         diffuse: [0.5, 0.5, 0.0],   // Ignored, since we have assigned a Texture to diffuseMap, below
- *         specular: [1.0, 1.0, 1.0],   // Ignored, since we have assigned a Texture to specularMap, below
- *         diffuseMap: new Texture({
- *             src: "diffuseMap.jpg"
- *         }),
- *         specularMap: new Fresnel({
- *             src: "diffuseMap.jpg"
- *         }),
- *         shininess: 80, // Default
- *         alpha: 1.0 // Default
- *     }),
- *
- *     geometry: new TorusGeometry()
- * });
- *  ````
- */
 function ensureImageSizePowerOfTwo(image) {
     if (!isPowerOfTwo(image.width) || !isPowerOfTwo(image.height)) {
         const canvas = document.createElement("canvas");
@@ -145,22 +30,87 @@ function nextHighestPowerOfTwo(x) {
     return x + 1;
 }
 
+/**
+ * @desc A 2D texture map.
+ *
+ * * Textures are attached to {@link Material}s, which are attached to {@link Mesh}es.
+ * * To create a Texture from an image file, set {@link Texture#src} to the image file path.
+ * * To create a Texture from an HTMLImageElement, set the Texture's {@link Texture#image} to the HTMLImageElement.
+ *
+ * ## Usage
+ *
+ * In this example we have a Mesh with a {@link PhongMaterial} which applies diffuse {@link Texture}, and a {@link buildTorusGeometry} which builds a {@link ReadableGeometry}.
+ *
+ * Note that xeokit will ignore {@link PhongMaterial#diffuse} and {@link PhongMaterial#specular}, since we override those
+ * with {@link PhongMaterial#diffuseMap} and {@link PhongMaterial#specularMap}. The {@link Texture} pixel colors directly
+ * provide the diffuse and specular components for each fragment across the {@link ReadableGeometry} surface.
+ *
+ * [[Run this example](/examples/#materials_Texture)]
+ *
+ * ```` javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * viewer.camera.eye = [0, 0, 5];
+ * viewer.camera.look = [0, 0, 0];
+ * viewer.camera.up = [0, 1, 0];
+ *
+ * new Mesh(viewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+ *          center: [0, 0, 0],
+ *          radius: 1.5,
+ *          tube: 0.5,
+ *          radialSegments: 32,
+ *          tubeSegments: 24,
+ *          arc: Math.PI * 2.0
+ *      }),
+ *      material: new PhongMaterial(viewer.scene, {
+ *          ambient: [0.9, 0.3, 0.9],
+ *          shininess: 30,
+ *          diffuseMap: new Texture(viewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ *````
+ */
 class Texture extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
+     * Gets the JavaScript class name for this Component.
+     *
+     * @type {String}
      */
     get type() {
         return "Texture";
     }
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this Texture as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID for this Texture, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {String} [cfg.src=null] Path to image file to load into this Texture. See the {@link Texture#src} property for more info.
+     * @param {HTMLImageElement} [cfg.image=null] HTML Image object to load into this Texture. See the {@link Texture#image} property for more info.
+     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. See the {@link Texture#minFilter} property for more info.
+     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. See the {@link Texture#magFilter} property for more info.
+     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapS} property for more info.
+     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapT} property for more info.
+     * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when true.
+     * @param {Array} [cfg.translate=[0,0]] 2D translation vector that will be added to texture's *S* and *T* coordinates.
+     * @param {Array} [cfg.scale=[1,1]] 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
+     * @param {Number} [cfg.rotate=0] Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
+     * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture#encoding} property for more info.
+     */
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -309,13 +259,11 @@ class Texture extends Component {
 
 
     /**
-     Indicates an HTML DOM Image object to source this Texture from.
-
-     Sets the {@link Texture/src} property to null.
-
-     @property image
-     @default null
-     @type {HTMLImageElement}
+     * Sets an HTML DOM Image object to source this Texture from.
+     *
+     * Sets {@link Texture#src} null.
+     *
+     * @type {HTMLImageElement}
      */
     set image(value) {
         this._image = ensureImageSizePowerOfTwo(value);
@@ -326,18 +274,23 @@ class Texture extends Component {
         this.glRedraw();
     }
 
+    /**
+     * Gets HTML DOM Image object this Texture is sourced from, if any.
+     *
+     * Returns null if not set.
+     *
+     * @type {HTMLImageElement}
+     */
     get image() {
         return this._image;
     }
 
     /**
-     Indicates a path to an image file to source this Texture from.
-
-     Sets the {@link Texture/image} property to null.
-
-     @property src
-     @default null
-     @type String
+     * Sets path to an image file to source this Texture from.
+     *
+     * Sets {@link Texture#image} null.
+     *
+     * @type {String}
      */
     set src(src) {
         this.scene.loading++;
@@ -358,16 +311,23 @@ class Texture extends Component {
         this._image = null;
     }
 
+    /**
+     * Gets path to the image file this Texture from, if any.
+     *
+     * Returns null if not set.
+     *
+     * @type {String}
+     */
     get src() {
         return this._src;
     }
 
     /**
-     2D translation vector that will be added to this Texture's *S* and *T* coordinates.
-
-     @property translate
-     @default [0, 0]
-     @type Array(Number)
+     * Sets the 2D translation vector added to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````[0, 0]````.
+     *
+     * @type {Array}
      */
     set translate(value) {
         this._translate.set(value || [0, 0]);
@@ -375,16 +335,23 @@ class Texture extends Component {
         this._needUpdate();
     }
 
+    /**
+     * Gets the 2D translation vector added to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````[0, 0]````.
+     *
+     * @type {Array}
+     */
     get translate() {
         return this._translate;
     }
 
     /**
-     2D scaling vector that will be applied to this Texture's *S* and *T* coordinates.
-
-     @property scale
-     @default [1, 1]
-     @type Array(Number)
+     * Sets the 2D scaling vector that will be applied to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````[1, 1]````.
+     *
+     * @type {Array}
      */
     set scale(value) {
         this._scale.set(value || [1, 1]);
@@ -392,16 +359,23 @@ class Texture extends Component {
         this._needUpdate();
     }
 
+    /**
+     * Gets the 2D scaling vector that will be applied to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````[1, 1]````.
+     *
+     * @type {Array}
+     */
     get scale() {
         return this._scale;
     }
 
     /**
-     Rotation, in degrees, that will be applied to this Texture's *S* and *T* coordinates.
-
-     @property rotate
-     @default 0
-     @type Number
+     * Sets the rotation angles, in degrees, that will be applied to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````0````.
+     *
+     * @type {Number}
      */
     set rotate(value) {
         value = value || 0;
@@ -413,134 +387,134 @@ class Texture extends Component {
         this._needUpdate();
     }
 
+    /**
+     * Gets the rotation angles, in degrees, that will be applied to this Texture's *S* and *T* UV coordinates.
+     *
+     * Default value is ````0````.
+     *
+     * @type {Number}
+     */
     get rotate() {
         return this._rotate;
     }
 
     /**
-     How this Texture is sampled when a texel covers less than one pixel.
-
-     Options are:
-
-     * **"nearest"** - Uses the value of the texture element that is nearest
-     (in Manhattan distance) to the center of the pixel being textured.
-
-     * **"linear"** - Uses the weighted average of the four texture elements that are
-     closest to the center of the pixel being textured.
-
-     * **"nearestMipmapNearest"** - Chooses the mipmap that most closely matches the
-     size of the pixel being textured and uses the "nearest" criterion (the texture
-     element nearest to the center of the pixel) to produce a texture value.
-
-     * **"linearMipmapNearest"** - Chooses the mipmap that most closely matches the size of
-     the pixel being textured and uses the "linear" criterion (a weighted average of the
-     four texture elements that are closest to the center of the pixel) to produce a
-     texture value.
-
-     * **"nearestMipmapLinear"** - Chooses the two mipmaps that most closely
-     match the size of the pixel being textured and uses the "nearest" criterion
-     (the texture element nearest to the center of the pixel) to produce a texture
-     value from each mipmap. The final texture value is a weighted average of those two
-     values.
-
-     * **"linearMipmapLinear"** - **(default)** - Chooses the two mipmaps that most closely match the size
-     of the pixel being textured and uses the "linear" criterion (a weighted average
-     of the four texture elements that are closest to the center of the pixel) to
-     produce a texture value from each mipmap. The final texture value is a weighted
-     average of those two values.
-
-     @property minFilter
-     @default "linearMipmapLinear"
-     @type String
-     @final
+     * Gets how this Texture is sampled when a texel covers less than one pixel.
+     *
+     * Options are:
+     *
+     * * "nearest" - Uses the value of the texture element that is nearest
+     * (in Manhattan distance) to the center of the pixel being textured.
+     *
+     * * "linear" - Uses the weighted average of the four texture elements that are
+     * closest to the center of the pixel being textured.
+     *
+     * * "nearestMipmapNearest" - Chooses the mipmap that most closely matches the
+     * size of the pixel being textured and uses the "nearest" criterion (the texture
+     * element nearest to the center of the pixel) to produce a texture value.
+     *
+     * * "linearMipmapNearest" - Chooses the mipmap that most closely matches the size of
+     * the pixel being textured and uses the "linear" criterion (a weighted average of the
+     * four texture elements that are closest to the center of the pixel) to produce a
+     * texture value.
+     *
+     * * "nearestMipmapLinear" - Chooses the two mipmaps that most closely
+     * match the size of the pixel being textured and uses the "nearest" criterion
+     * (the texture element nearest to the center of the pixel) to produce a texture
+     * value from each mipmap. The final texture value is a weighted average of those two
+     * values.
+     *
+     * * "linearMipmapLinear" - (default) - Chooses the two mipmaps that most closely match the size
+     * of the pixel being textured and uses the "linear" criterion (a weighted average
+     * of the four texture elements that are closest to the center of the pixel) to
+     * produce a texture value from each mipmap. The final texture value is a weighted
+     * average of those two values.
+     *
+     * Default value is "linearMipmapLinear".
+     *
+     *  @type {String}
      */
     get minFilter() {
         return this._state.minFilter;
     }
 
     /**
-     How this Texture is sampled when a texel covers more than one pixel.
-
-     Options are:
-
-     * **"nearest"** - Uses the value of the texture element that is nearest
-     (in Manhattan distance) to the center of the pixel being textured.
-     * **"linear"** - **(default)** - Uses the weighted average of the four texture elements that are
-     closest to the center of the pixel being textured.
-
-     @property magFilter
-     @default "linear"
-     @type String
-     @final
+     * Gets how this Texture is sampled when a texel covers more than one pixel.
+     *
+     * * "nearest" - Uses the value of the texture element that is nearest
+     * (in Manhattan distance) to the center of the pixel being textured.
+     * * "linear" - (default) - Uses the weighted average of the four texture elements that are
+     * closest to the center of the pixel being textured.
+     *
+     * Default value is "linearMipmapLinear".
+     *
+     * @type {String}
      */
     get magFilter() {
         return this._state.magFilter;
     }
 
     /**
-     Wrap parameter for this Texture's *S* coordinate.
-
-     Options are:
-
-     * **"clampToEdge"** -  causes *S* coordinates to be clamped to the size of the texture.
-     * **"mirroredRepeat"** - causes the *S* coordinate to be set to the fractional part of the texture coordinate
-     if the integer part of *S* is even; if the integer part of *S* is odd, then the *S* texture coordinate is
-     set to *1 - frac ⁡ S* , where *frac ⁡ S* represents the fractional part of *S*.
-     * **"repeat"** - **(default)** - causes the integer part of the *S* coordinate to be ignored; xeokit uses only the
-     fractional part, thereby creating a repeating pattern.
-
-     @property wrapS
-     @default "repeat"
-     @type String
-     @final
+     * Gets the wrap parameter for this Texture's *S* coordinate.
+     *
+     * Values can be:
+     *
+     * * "clampToEdge" -  causes *S* coordinates to be clamped to the size of the texture.
+     * * "mirroredRepeat" - causes the *S* coordinate to be set to the fractional part of the texture coordinate
+     * if the integer part of *S* is even; if the integer part of *S* is odd, then the *S* texture coordinate is
+     * set to *1 - frac ⁡ S* , where *frac ⁡ S* represents the fractional part of *S*.
+     * * "repeat" - (default) - causes the integer part of the *S* coordinate to be ignored; xeokit uses only the
+     * fractional part, thereby creating a repeating pattern.
+     *
+     * Default value is "repeat".
+     *
+     * @type {String}
      */
     get wrapS() {
         return this._state.wrapS;
     }
 
     /**
-     Wrap parameter for this Texture's *T* coordinate.
-
-     Options are:
-
-     * **"clampToEdge"** -  Causes *T* coordinates to be clamped to the size of the texture.
-     * **"mirroredRepeat"** - Causes the *T* coordinate to be set to the fractional part of the texture coordinate
-     if the integer part of *T* is even; if the integer part of *T* is odd, then the *T* texture coordinate is
-     set to *1 - frac ⁡ S* , where *frac ⁡ S* represents the fractional part of *T*.
-     * **"repeat"** - **(default)** - Causes the integer part of the *T* coordinate to be ignored; xeokit uses only the
-     fractional part, thereby creating a repeating pattern.
-
-     @property wrapT
-     @default "repeat"
-     @type String
-     @final
+     * Gets the wrap parameter for this Texture's *T* coordinate.
+     *
+     * Values can be:
+     *
+     * * "clampToEdge" -  causes *S* coordinates to be clamped to the size of the texture.
+     *  * "mirroredRepeat" - causes the *S* coordinate to be set to the fractional part of the texture coordinate
+     * if the integer part of *S* is even; if the integer part of *S* is odd, then the *S* texture coordinate is
+     * set to *1 - frac ⁡ S* , where *frac ⁡ S* represents the fractional part of *S*.
+     * * "repeat" - (default) - causes the integer part of the *S* coordinate to be ignored; xeokit uses only the
+     * fractional part, thereby creating a repeating pattern.
+     *
+     * Default value is "repeat".
+     *
+     * @type {String}
      */
     get wrapT() {
         return this._state.wrapT;
     }
 
     /**
-     Flips this Texture's source data along its vertical axis when true.
-
-     @property flipY
-     @type Boolean
-     @final
+     * Gets if this Texture's source data is flipped along its vertical axis.
+     *
+     * @type {Boolean}
      */
     get flipY() {
         return this._state.flipY;
     }
 
     /**
-     The Texture's encoding format.
-
-     @property encoding
-     @type String
-     @final
+     * Gets the Texture's encoding format.
+     *
+     * @type {String}
      */
     get encoding() {
         return this._state.encoding;
     }
 
+    /**
+     * Destroys this Texture
+     */
     destroy() {
         super.destroy();
         if (this._state.texture) {

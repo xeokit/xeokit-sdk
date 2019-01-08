@@ -1,14 +1,13 @@
 import {MetaObject} from "./MetaObject.js";
 
 /**
- * @desc Metadata corresponding to a model within a {@link Scene}.
+ * @desc Metadata corresponding to an {@link Entity} that represents a model.
  *
  * * Belongs to a {@link MetaScene}.
- * * Corresponds to a model loaded into a {@link Scene}.
  * * Created by {@link MetaScene#createMetaModel}.
- * * Registered by {@link MetaModel#modelId} in {@link MetaScene#metaModels}.
- * * Each model within a {@link Scene} is represented either by a {@link Node} that has a {@link Node#modelId} or a {@link Mesh} that has a {@link Mesh#modelId}.
+ * * Registered by {@link MetaModel#id} in {@link MetaScene#metaModels}.
  * * Contains {@link MetaObject}s, which  are connected into a hierarchy with {@link MetaModel#rootMetaObject} referencing the root.
+ * * An {@link Entity} represents a model when it has a {@link Entity#modelId}.
  *
  * @class MetaModel
  */

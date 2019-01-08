@@ -44,7 +44,7 @@ const offsetEye = math.vec3();
  * Can also be found on the {@link Viewer} for convenience:
  *
  * ````javascript
- * var camera = myViewer.camera;
+ * var camera = myViewer.scene.camera;
  * ````
  *
  * ## Moving around
@@ -193,7 +193,7 @@ class Camera extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -424,7 +424,7 @@ class Camera extends Component {
 
      @property eye
      @default [0,0,10]
-     @type Float32Array
+     @type {Float32Array}
      */
     set eye(value) {
         this._eye.set(value || [0, 0, 10]);
@@ -449,7 +449,7 @@ class Camera extends Component {
 
      @property look
      @default [0,0,0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set look(value) {
         this._look.set(value || [0, 0, 0]);
@@ -474,7 +474,7 @@ class Camera extends Component {
 
      @property up
      @default [0,1,0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set up(value) {
         this._up.set(value || [0, 1, 0]);
@@ -524,7 +524,7 @@ class Camera extends Component {
 
      @property worldAxis
      @default [1, 0, 0, 0, 1, 0, 0, 0, 1]
-     @type Float32Array
+     @type {Float32Array}
      */
     set worldAxis(value) {
         value = value || [1, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -560,7 +560,7 @@ class Camera extends Component {
 
      @property worldUp
      @default [0,1,0]
-     @type Float32Array
+     @type {Float32Array}
      @final
      */
     get worldUp() {
@@ -572,7 +572,7 @@ class Camera extends Component {
 
      @property worldRight
      @default [1,0,0]
-     @type Float32Array
+     @type {Float32Array}
      @final
      */
     get worldRight() {
@@ -584,7 +584,7 @@ class Camera extends Component {
 
      @property worldForward
      @default [0,0,-1]
-     @type Float32Array
+     @type {Float32Array}
      @final
      */
     get worldForward() {
@@ -598,7 +598,7 @@ class Camera extends Component {
 
      @property gimbalLock
      @default true
-     @type Boolean
+     @type {Boolean}
      */
     set gimbalLock(value) {
         this._gimbalLock = value !== false;
@@ -625,7 +625,7 @@ class Camera extends Component {
 
      @property constrainPitch
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set constrainPitch(value) {
         this._constrainPitch = !!value;
@@ -645,7 +645,7 @@ class Camera extends Component {
     /**
      Distance from "look" to "eye".
      @property eyeLookDist
-     @type Number
+     @type {Number}
      @final
      */
     get eyeLookDist() {

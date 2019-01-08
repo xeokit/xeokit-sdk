@@ -1,19 +1,21 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
 /**
- A **BigModelObject** represents a 3D object within a {@link BigModel}.
-
- * Created by the BigModel {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}} method.
- * Owns one or more {@link BigModelMesh"}}BigModelMesh{{/crossLink}}es.
-
- @class BigModelObject
- @module xeokit
- @submodule models
-
+ * @desc An element within a {@link BigModel}.
+ *
+ * * Created by {@link BigModel#createNode}.
+ * * Has one or more {@link BigModelMesh}es.
+ *
+ * @implements {Entity}
  */
-class BigModelObject {
+class BigModelNode {
 
+    /**
+     * @private
+     */
     constructor(model, objectId, id, meshes, flags, aabb) {
+
+        this._objectId = objectId;
 
         /**
          * The BigModel that contains this BigModelObject.
@@ -37,7 +39,6 @@ class BigModelObject {
             mesh.parent = this;
         }
 
-
         /**
          * ID of this BigModelObject, unique within the xeokit.Scene.
          * @property id
@@ -47,48 +48,57 @@ class BigModelObject {
         this.id = id;
 
         this._flags = flags;
-        this._colorize = new Uint8Array([255,255,255,255]);
+        this._colorize = new Uint8Array([255, 255, 255, 255]);
 
-        /**
-         * World-space 3D axis-aligned bounding box (AABB) enclosing the objects within this BigModel.
-         *
-         * Represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-         *
-         * @property aabb
-         * @final
-         * @type {Float32Array}
-         */
-        this.aabb = aabb;
+        this._aabb = aabb;
 
-        if (objectId) {
-
-            /**
-             * The entity type of this BigModelObject.
-             *
-             * @property objectId
-             * @type {String}
-             * @final
-             */
-            this.objectId = objectId;
-            model.scene._registerObject(this, objectId);
-        } else {
-            this.objectId = null;
+        if (this._objectId) {
+            model.scene._registerObject(this);
         }
     }
 
     /**
-     * Indicates if visible.
+     * Always returns false because a BigModelNode can never me a model.
      *
-     * Only rendered when {@link BigModelObject/visible} is true and
-     * {@link BigModelObject/culled} is false.
+     * @type {Number|String}
+     */
+    get modelId() {
+        return false;
+    }
+
+    /**
+     * Object ID, defined if this BigModelNode represents an object.
      *
-     * Each visible BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/visibleObjects} map while its {@link BigModelObject/objectId}
-     * is set to a value.
+     * When this returns a value, the BigModelNode will be registered by {@link BigModelNode#objectId} in {@link Scene#objects} and
+     * may also have a corresponding {@link MetaObject}.
      *
-     * @property visible
-     * @default true
-     * @type Boolean
+     * @type {Number|String}
+     */
+    get objectId() {
+        return this._objectId;
+    }
+
+    /**
+     * World-space 3D axis-aligned bounding box (AABB) of this BigModelNode.
+     *
+     * Represented by a six-element Float32Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Float32Array}
+     */
+    get aabb() {
+        return this._aabb;
+    }
+
+    /**
+     * Sets if this BigModelNode is visible.
+     *
+     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
+     *
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
      */
     set visible(visible) {
         if (!!(this._flags & RENDER_FLAGS.VISIBLE) === visible) {
@@ -105,11 +115,21 @@ class BigModelObject {
             this.meshes[i]._setVisible(this._flags);
         }
         if (this._objectId) {
-            this.model.scene._objectVisibilityUpdated(this, visible);
+            this.model.scene._objectVisibilityUpdated(this);
         }
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this BigModelNode is visible.
+     *
+     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
+     *
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
     get visible() {
         return this._getFlag(RENDER_FLAGS.VISIBLE);
     }
@@ -119,15 +139,12 @@ class BigModelObject {
     }
 
     /**
-     * Indicates if highlighted.
+     * Sets if this BigModelNode is highlighted.
      *
-     * Each highlighted BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/highlightedObjects} map while its {@link BigModelObject/objectId}
-     * is set to a value.
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#highlighted} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#highlightedObjects}.
      *
-     * @property highlighted
-     * @default false
-     * @type Boolean
+     * @type {Boolean}
      */
     set highlighted(highlighted) {
         if (!!(this._flags & RENDER_FLAGS.HIGHLIGHTED) === highlighted) {
@@ -144,25 +161,30 @@ class BigModelObject {
             this.meshes[i]._setHighlighted(this._flags);
         }
         if (this._objectId) {
-            this.model.scene._objectHighlightedUpdated(this, highlighted);
+            this.model.scene._objectHighlightedUpdated(this);
         }
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this BigModelNode is highlighted.
+     *
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#highlighted} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
     get highlighted() {
         return this._getFlag(RENDER_FLAGS.HIGHLIGHTED);
     }
 
     /**
-     * Indicates if ghosted.
+     * Sets if this BigModelNode is ghosted.
      *
-     * Each ghosted BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/ghostedObjects} map while its {@link BigModelObject/objectId}
-     * is set to a value.
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#ghosted} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#ghostedObjects}.
      *
-     * @property ghosted
-     * @default false
-     * @type Boolean
+     * @type {Boolean}
      */
     set ghosted(ghosted) {
         if (!!(this._flags & RENDER_FLAGS.GHOSTED) === ghosted) {
@@ -179,25 +201,30 @@ class BigModelObject {
             this.meshes[i]._setGhosted(this._flags);
         }
         if (this._objectId) {
-            this.model.scene._objectGhostedUpdated(this, ghosted);
+            this.model.scene._objectGhostedUpdated(this);
         }
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this BigModelNode is ghosted.
+     *
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#ghosted} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#ghostedObjects}.
+     *
+     * @type {Boolean}
+     */
     get ghosted() {
         return this._getFlag(RENDER_FLAGS.GHOSTED);
     }
 
     /**
-     * Indicates if selected.
+     * Gets if this BigModelNode is selected.
      *
-     * Each selected BigModelObject is registered in its {@link Scene}'s
-     * {@link Scene/selectedObjects} map while its {@link BigModelObject/objectId}
-     * is set to a value.
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#selected} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#selectedObjects}.
      *
-     * @property selected
-     * @default false
-     * @type Boolean
+     * @type {Boolean}
      */
     set selected(selected) {
         if (!!(this._flags & RENDER_FLAGS.SELECTED) === selected) {
@@ -214,21 +241,24 @@ class BigModelObject {
             this.meshes[i]._setSelected(this._flags);
         }
         if (this._objectId) {
-            this.model.scene._objectSelectedUpdated(this, selected);
+            this.model.scene._objectSelectedUpdated(this);
         }
         this.model.glRedraw();
     }
 
+    /**
+     * Sets if this BigModelNode's edges are enhanced.
+     *
+     * @type {Boolean}
+     */
     get selected() {
         return this._getFlag(RENDER_FLAGS.SELECTED);
     }
 
     /**
-     * Indicates if edges are emphasized.
+     * Sets if this BigModelNode's edges are enhanced.
      *
-     * @property edges
-     * @default false
-     * @type Boolean
+     * @type {Boolean}
      */
     set edges(edges) {
         if (!!(this._flags & RENDER_FLAGS.EDGES) === edges) {
@@ -247,18 +277,48 @@ class BigModelObject {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this BigModelNode's edges are enhanced.
+     *
+     * @type {Boolean}
+     */
     get edges() {
         return this._getFlag(RENDER_FLAGS.EDGES);
     }
 
     /**
-     * Indicates if clippable.
+     * Sets if this BigModelNode is culled.
      *
-     * Clipping is done by the {@link Scene}'s {@link Clips} component.
+     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
      *
-     * @property clippable
-     * @default true
-     * @type Boolean
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    set culled(culled) { // TODO
+    }
+
+    /**
+     * Gets if this BigModelNode is culled.
+     *
+     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
+     *
+     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
+     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
+    get culled() { // TODO
+        return false;
+    }
+
+    /**
+     * Sets if this BigModelNode is clippable.
+     *
+     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     *
+     * @type {Boolean}
      */
     set clippable(clippable) {
         if ((!!(this._flags & RENDER_FLAGS.CLIPPABLE)) === clippable) {
@@ -275,16 +335,21 @@ class BigModelObject {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this BigModelNode is clippable.
+     *
+     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     *
+     * @type {Boolean}
+     */
     get clippable() {
         return this._getFlag(RENDER_FLAGS.CLIPPABLE);
     }
 
     /**
-     * Indicates if included in boundary calculations.
+     * Sets if this BigModelNode is included in boundary calculations.
      *
-     * @property collidable
-     * @default true
-     * @type Boolean
+     * @type {Boolean}
      */
     set collidable(collidable) {
         if (!!(this._flags & RENDER_FLAGS.COLLIDABLE) === collidable) {
@@ -300,18 +365,21 @@ class BigModelObject {
         }
     }
 
+    /**
+     * Gets if this BigModelNode is included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
     get collidable() {
         return this._getFlag(RENDER_FLAGS.COLLIDABLE);
     }
 
     /**
-     * Whether or not to allow picking.
+     * Sets if this BigModelNode is pickable.
      *
-     * Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+     * Picking is done via calls to {@link Scene#pick}.
      *
-     * @property pickable
-     * @default true
-     * @type Boolean
+     * @type {Boolean}
      */
     set pickable(pickable) {
         if (!!(this._flags & RENDER_FLAGS.PICKABLE) === pickable) {
@@ -327,18 +395,23 @@ class BigModelObject {
         }
     }
 
+    /**
+     * Gets if this BigModelNode is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
     get pickable() {
         return this._getFlag(RENDER_FLAGS.PICKABLE);
     }
 
     /**
-     * Sets the RGB color of this BigModelObject.
+     * Gets the BigModelNode's RGB colorize color, multiplies by the BigModelNode's rendered fragment colors.
      *
-     * Since objects within a BigModel don't have materials for normal rendering, this is effectively how their colors are specified.
+     * Each element of the color is in range ````[0..1]````.
      *
-     * @property colorize
-     * @default [1.0, 1.0, 1.0]
-     * @type Float32Array
+     * @type {Float32Array}
      */
     set colorize(color) {
         this._colorize[0] = Math.floor(color[0] * 255.0); // Quantize
@@ -350,6 +423,13 @@ class BigModelObject {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets the BigModelNode's RGB colorize color, multiplies by the BigModelNode's rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Float32Array}
+     */
     get colorize() {
         tempColor[0] = this._colorize[0] / 255.0; // Unquantize
         tempColor[1] = this._colorize[1] / 255.0;
@@ -358,11 +438,11 @@ class BigModelObject {
     }
 
     /**
-     * Opacity factor, multiplies by the rendered fragment alpha.
+     * Sets the BigModelNode's opacity factor, multiplies by the BigModelNode's rendered fragment alphas.
      *
-     * @property opacity
-     * @default 1.0
-     * @type Number
+     * This is a factor in range ````[0..1]````.
+     *
+     * @type {Number}
      */
     set opacity(opacity) {
         if (opacity < 0) {
@@ -393,8 +473,51 @@ class BigModelObject {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets the BigModelNode's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
     get opacity() {
         return this._colorize[3] / 255.0;
+    }
+
+    /**
+     * Sets if to this BigModelNode casts shadows.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(pickable) { // TODO
+
+    }
+
+    /**
+     * Gets if this BigModelNode casts shadows.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() { // TODO
+        return false;
+    }
+
+    /**
+     * Whether or not this BigModelNode can have shadows cast upon it
+     *
+     * @type {Boolean}
+     */
+    set receivesShadow(pickable) { // TODO
+
+    }
+
+    /**
+     * Whether or not this BigModelNode can have shadows cast upon it
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() { // TODO
+        return false;
     }
 
     _finalize() {
@@ -427,7 +550,7 @@ class BigModelObject {
             }
 
 
-        //    meshes[i]._setColor(this._colorize);
+            //    meshes[i]._setColor(this._colorize);
         }
     }
 
@@ -451,8 +574,9 @@ class BigModelObject {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();
         }
-        scene._boundaryDirty = true;
+        scene._aabbDirty = true;
     }
+
 }
 
-export {BigModelObject};
+export {BigModelNode};

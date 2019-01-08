@@ -100,7 +100,7 @@ class Input extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -119,7 +119,7 @@ class Input extends Component {
          * Code for the BACKSPACE key.
          * @property KEY_BACKSPACE
          * @final
-         * @type Number
+         * @type {Number}
          */
         // Key codes
 
@@ -127,7 +127,7 @@ class Input extends Component {
          * Code for the BACKSPACE key.
          * @property KEY_BACKSPACE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_BACKSPACE = 8;
 
@@ -135,7 +135,7 @@ class Input extends Component {
          * Code for the TAB key.
          * @property KEY_TAB
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_TAB = 9;
 
@@ -143,7 +143,7 @@ class Input extends Component {
          * Code for the ENTER key.
          * @property KEY_ENTER
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ENTER = 13;
 
@@ -151,7 +151,7 @@ class Input extends Component {
          * Code for the SHIFT key.
          * @property KEY_SHIFT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SHIFT = 16;
 
@@ -159,7 +159,7 @@ class Input extends Component {
          * Code for the CTRL key.
          * @property KEY_CTRL
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CTRL = 17;
 
@@ -167,7 +167,7 @@ class Input extends Component {
          * Code for the ALT key.
          * @property KEY_ALT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ALT = 18;
 
@@ -175,7 +175,7 @@ class Input extends Component {
          * Code for the PAUSE_BREAK key.
          * @property KEY_PAUSE_BREAK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAUSE_BREAK = 19;
 
@@ -183,7 +183,7 @@ class Input extends Component {
          * Code for the CAPS_LOCK key.
          * @property KEY_CAPS_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CAPS_LOCK = 20;
 
@@ -191,7 +191,7 @@ class Input extends Component {
          * Code for the ESCAPE key.
          * @property KEY_ESCAPE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ESCAPE = 27;
 
@@ -199,7 +199,7 @@ class Input extends Component {
          * Code for the PAGE_UP key.
          * @property KEY_PAGE_UP
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAGE_UP = 33;
 
@@ -207,7 +207,7 @@ class Input extends Component {
          * Code for the PAGE_DOWN key.
          * @property KEY_PAGE_DOWN
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAGE_DOWN = 34;
 
@@ -215,7 +215,7 @@ class Input extends Component {
          * Code for the END key.
          * @property KEY_END
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_END = 35;
 
@@ -223,7 +223,7 @@ class Input extends Component {
          * Code for the HOME key.
          * @property KEY_HOME
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_HOME = 36;
 
@@ -231,7 +231,7 @@ class Input extends Component {
          * Code for the LEFT_ARROW key.
          * @property KEY_LEFT_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_LEFT_ARROW = 37;
 
@@ -239,7 +239,7 @@ class Input extends Component {
          * Code for the UP_ARROW key.
          * @property KEY_UP_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_UP_ARROW = 38;
 
@@ -247,7 +247,7 @@ class Input extends Component {
          * Code for the RIGHT_ARROW key.
          * @property KEY_RIGHT_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_RIGHT_ARROW = 39;
 
@@ -255,7 +255,7 @@ class Input extends Component {
          * Code for the DOWN_ARROW key.
          * @property KEY_DOWN_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DOWN_ARROW = 40;
 
@@ -263,7 +263,7 @@ class Input extends Component {
          * Code for the INSERT key.
          * @property KEY_INSERT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_INSERT = 45;
 
@@ -271,7 +271,7 @@ class Input extends Component {
          * Code for the DELETE key.
          * @property KEY_DELETE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DELETE = 46;
 
@@ -279,7 +279,7 @@ class Input extends Component {
          * Code for the 0 key.
          * @property KEY_NUM_0
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_0 = 48;
 
@@ -287,7 +287,7 @@ class Input extends Component {
          * Code for the 1 key.
          * @property KEY_NUM_1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_1 = 49;
 
@@ -295,7 +295,7 @@ class Input extends Component {
          * Code for the 2 key.
          * @property KEY_NUM_2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_2 = 50;
 
@@ -303,7 +303,7 @@ class Input extends Component {
          * Code for the 3 key.
          * @property KEY_NUM_3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_3 = 51;
 
@@ -311,7 +311,7 @@ class Input extends Component {
          * Code for the 4 key.
          * @property KEY_NUM_4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_4 = 52;
 
@@ -319,7 +319,7 @@ class Input extends Component {
          * Code for the 5 key.
          * @property KEY_NUM_5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_5 = 53;
 
@@ -327,7 +327,7 @@ class Input extends Component {
          * Code for the 6 key.
          * @property KEY_NUM_6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_6 = 54;
 
@@ -335,7 +335,7 @@ class Input extends Component {
          * Code for the 7 key.
          * @property KEY_NUM_7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_7 = 55;
 
@@ -343,7 +343,7 @@ class Input extends Component {
          * Code for the 8 key.
          * @property KEY_NUM_8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_8 = 56;
 
@@ -351,7 +351,7 @@ class Input extends Component {
          * Code for the 9 key.
          * @property KEY_NUM_9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_9 = 57;
 
@@ -359,7 +359,7 @@ class Input extends Component {
          * Code for the A key.
          * @property KEY_A
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_A = 65;
 
@@ -367,7 +367,7 @@ class Input extends Component {
          * Code for the B key.
          * @property KEY_B
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_B = 66;
 
@@ -375,7 +375,7 @@ class Input extends Component {
          * Code for the C key.
          * @property KEY_C
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_C = 67;
 
@@ -383,7 +383,7 @@ class Input extends Component {
          * Code for the D key.
          * @property KEY_D
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_D = 68;
 
@@ -391,7 +391,7 @@ class Input extends Component {
          * Code for the E key.
          * @property KEY_E
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_E = 69;
 
@@ -399,7 +399,7 @@ class Input extends Component {
          * Code for the F key.
          * @property KEY_F
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F = 70;
 
@@ -407,7 +407,7 @@ class Input extends Component {
          * Code for the G key.
          * @property KEY_G
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_G = 71;
 
@@ -415,7 +415,7 @@ class Input extends Component {
          * Code for the H key.
          * @property KEY_H
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_H = 72;
 
@@ -423,7 +423,7 @@ class Input extends Component {
          * Code for the I key.
          * @property KEY_I
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_I = 73;
 
@@ -431,7 +431,7 @@ class Input extends Component {
          * Code for the J key.
          * @property KEY_J
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_J = 74;
 
@@ -439,7 +439,7 @@ class Input extends Component {
          * Code for the K key.
          * @property KEY_K
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_K = 75;
 
@@ -447,7 +447,7 @@ class Input extends Component {
          * Code for the L key.
          * @property KEY_L
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_L = 76;
 
@@ -455,7 +455,7 @@ class Input extends Component {
          * Code for the M key.
          * @property KEY_M
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_M = 77;
 
@@ -463,7 +463,7 @@ class Input extends Component {
          * Code for the N key.
          * @property KEY_N
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_N = 78;
 
@@ -471,7 +471,7 @@ class Input extends Component {
          * Code for the O key.
          * @property KEY_O
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_O = 79;
 
@@ -479,7 +479,7 @@ class Input extends Component {
          * Code for the P key.
          * @property KEY_P
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_P = 80;
 
@@ -487,7 +487,7 @@ class Input extends Component {
          * Code for the Q key.
          * @property KEY_Q
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Q = 81;
 
@@ -495,7 +495,7 @@ class Input extends Component {
          * Code for the R key.
          * @property KEY_R
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_R = 82;
 
@@ -503,7 +503,7 @@ class Input extends Component {
          * Code for the S key.
          * @property KEY_S
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_S = 83;
 
@@ -511,7 +511,7 @@ class Input extends Component {
          * Code for the T key.
          * @property KEY_T
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_T = 84;
 
@@ -519,7 +519,7 @@ class Input extends Component {
          * Code for the U key.
          * @property KEY_U
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_U = 85;
 
@@ -527,7 +527,7 @@ class Input extends Component {
          * Code for the V key.
          * @property KEY_V
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_V = 86;
 
@@ -535,7 +535,7 @@ class Input extends Component {
          * Code for the W key.
          * @property KEY_W
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_W = 87;
 
@@ -543,7 +543,7 @@ class Input extends Component {
          * Code for the X key.
          * @property KEY_X
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_X = 88;
 
@@ -551,7 +551,7 @@ class Input extends Component {
          * Code for the Y key.
          * @property KEY_Y
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Y = 89;
 
@@ -559,7 +559,7 @@ class Input extends Component {
          * Code for the Z key.
          * @property KEY_Z
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Z = 90;
 
@@ -567,7 +567,7 @@ class Input extends Component {
          * Code for the LEFT_WINDOW key.
          * @property KEY_LEFT_WINDOW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_LEFT_WINDOW = 91;
 
@@ -575,7 +575,7 @@ class Input extends Component {
          * Code for the RIGHT_WINDOW key.
          * @property KEY_RIGHT_WINDOW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_RIGHT_WINDOW = 92;
 
@@ -583,7 +583,7 @@ class Input extends Component {
          * Code for the SELECT key.
          * @property KEY_SELECT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SELECT_KEY = 93;
 
@@ -591,7 +591,7 @@ class Input extends Component {
          * Code for the number pad 0 key.
          * @property KEY_NUMPAD_0
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_0 = 96;
 
@@ -599,7 +599,7 @@ class Input extends Component {
          * Code for the number pad 1 key.
          * @property KEY_NUMPAD_1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_1 = 97;
 
@@ -607,7 +607,7 @@ class Input extends Component {
          * Code for the number pad 2 key.
          * @property KEY_NUMPAD 2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_2 = 98;
 
@@ -615,7 +615,7 @@ class Input extends Component {
          * Code for the number pad 3 key.
          * @property KEY_NUMPAD_3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_3 = 99;
 
@@ -623,7 +623,7 @@ class Input extends Component {
          * Code for the number pad 4 key.
          * @property KEY_NUMPAD_4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_4 = 100;
 
@@ -631,7 +631,7 @@ class Input extends Component {
          * Code for the number pad 5 key.
          * @property KEY_NUMPAD_5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_5 = 101;
 
@@ -639,7 +639,7 @@ class Input extends Component {
          * Code for the number pad 6 key.
          * @property KEY_NUMPAD_6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_6 = 102;
 
@@ -647,7 +647,7 @@ class Input extends Component {
          * Code for the number pad 7 key.
          * @property KEY_NUMPAD_7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_7 = 103;
 
@@ -655,7 +655,7 @@ class Input extends Component {
          * Code for the number pad 8 key.
          * @property KEY_NUMPAD_8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_8 = 104;
 
@@ -663,7 +663,7 @@ class Input extends Component {
          * Code for the number pad 9 key.
          * @property KEY_NUMPAD_9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_9 = 105;
 
@@ -671,7 +671,7 @@ class Input extends Component {
          * Code for the MULTIPLY key.
          * @property KEY_MULTIPLY
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_MULTIPLY = 106;
 
@@ -679,7 +679,7 @@ class Input extends Component {
          * Code for the ADD key.
          * @property KEY_ADD
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ADD = 107;
 
@@ -687,7 +687,7 @@ class Input extends Component {
          * Code for the SUBTRACT key.
          * @property KEY_SUBTRACT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SUBTRACT = 109;
 
@@ -695,7 +695,7 @@ class Input extends Component {
          * Code for the DECIMAL POINT key.
          * @property KEY_DECIMAL_POINT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DECIMAL_POINT = 110;
 
@@ -703,7 +703,7 @@ class Input extends Component {
          * Code for the DIVIDE key.
          * @property KEY_DIVIDE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DIVIDE = 111;
 
@@ -711,7 +711,7 @@ class Input extends Component {
          * Code for the F1 key.
          * @property KEY_F1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F1 = 112;
 
@@ -719,7 +719,7 @@ class Input extends Component {
          * Code for the F2 key.
          * @property KEY_F2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F2 = 113;
 
@@ -727,7 +727,7 @@ class Input extends Component {
          * Code for the F3 key.
          * @property KEY_F3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F3 = 114;
 
@@ -735,7 +735,7 @@ class Input extends Component {
          * Code for the F4 key.
          * @property KEY_F4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F4 = 115;
 
@@ -743,7 +743,7 @@ class Input extends Component {
          * Code for the F5 key.
          * @property KEY_F5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F5 = 116;
 
@@ -751,7 +751,7 @@ class Input extends Component {
          * Code for the F6 key.
          * @property KEY_F6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F6 = 117;
 
@@ -759,7 +759,7 @@ class Input extends Component {
          * Code for the F7 key.
          * @property KEY_F7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F7 = 118;
 
@@ -767,7 +767,7 @@ class Input extends Component {
          * Code for the F8 key.
          * @property KEY_F8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F8 = 119;
 
@@ -775,7 +775,7 @@ class Input extends Component {
          * Code for the F9 key.
          * @property KEY_F9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F9 = 120;
 
@@ -783,7 +783,7 @@ class Input extends Component {
          * Code for the F10 key.
          * @property KEY_F10
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F10 = 121;
 
@@ -791,7 +791,7 @@ class Input extends Component {
          * Code for the F11 key.
          * @property KEY_F11
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F11 = 122;
 
@@ -799,7 +799,7 @@ class Input extends Component {
          * Code for the F12 key.
          * @property KEY_F12
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F12 = 123;
 
@@ -807,7 +807,7 @@ class Input extends Component {
          * Code for the NUM_LOCK key.
          * @property KEY_NUM_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_LOCK = 144;
 
@@ -815,7 +815,7 @@ class Input extends Component {
          * Code for the SCROLL_LOCK key.
          * @property KEY_SCROLL_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SCROLL_LOCK = 145;
 
@@ -823,7 +823,7 @@ class Input extends Component {
          * Code for the SEMI_COLON key.
          * @property KEY_SEMI_COLON
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SEMI_COLON = 186;
 
@@ -831,7 +831,7 @@ class Input extends Component {
          * Code for the EQUAL_SIGN key.
          * @property KEY_EQUAL_SIGN
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_EQUAL_SIGN = 187;
 
@@ -839,7 +839,7 @@ class Input extends Component {
          * Code for the COMMA key.
          * @property KEY_COMMA
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_COMMA = 188;
 
@@ -847,7 +847,7 @@ class Input extends Component {
          * Code for the DASH key.
          * @property KEY_DASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DASH = 189;
 
@@ -855,7 +855,7 @@ class Input extends Component {
          * Code for the PERIOD key.
          * @property KEY_PERIOD
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PERIOD = 190;
 
@@ -863,7 +863,7 @@ class Input extends Component {
          * Code for the FORWARD_SLASH key.
          * @property KEY_FORWARD_SLASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_FORWARD_SLASH = 191;
 
@@ -871,7 +871,7 @@ class Input extends Component {
          * Code for the GRAVE_ACCENT key.
          * @property KEY_GRAVE_ACCENT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_GRAVE_ACCENT = 192;
 
@@ -879,7 +879,7 @@ class Input extends Component {
          * Code for the OPEN_BRACKET key.
          * @property KEY_OPEN_BRACKET
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_OPEN_BRACKET = 219;
 
@@ -887,7 +887,7 @@ class Input extends Component {
          * Code for the BACK_SLASH key.
          * @property KEY_BACK_SLASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_BACK_SLASH = 220;
 
@@ -895,7 +895,7 @@ class Input extends Component {
          * Code for the CLOSE_BRACKET key.
          * @property KEY_CLOSE_BRACKET
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CLOSE_BRACKET = 221;
 
@@ -903,7 +903,7 @@ class Input extends Component {
          * Code for the SINGLE_QUOTE key.
          * @property KEY_SINGLE_QUOTE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SINGLE_QUOTE = 222;
 
@@ -911,7 +911,7 @@ class Input extends Component {
          * Code for the SPACE key.
          * @property KEY_SPACE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SPACE = 32;
         this.KEY_BACKSPACE = 8;
@@ -920,7 +920,7 @@ class Input extends Component {
          * Code for the TAB key.
          * @property KEY_TAB
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_TAB = 9;
 
@@ -928,7 +928,7 @@ class Input extends Component {
          * Code for the ENTER key.
          * @property KEY_ENTER
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ENTER = 13;
 
@@ -936,7 +936,7 @@ class Input extends Component {
          * Code for the SHIFT key.
          * @property KEY_SHIFT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SHIFT = 16;
 
@@ -944,7 +944,7 @@ class Input extends Component {
          * Code for the CTRL key.
          * @property KEY_CTRL
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CTRL = 17;
 
@@ -952,7 +952,7 @@ class Input extends Component {
          * Code for the ALT key.
          * @property KEY_ALT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ALT = 18;
 
@@ -960,7 +960,7 @@ class Input extends Component {
          * Code for the PAUSE_BREAK key.
          * @property KEY_PAUSE_BREAK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAUSE_BREAK = 19;
 
@@ -968,7 +968,7 @@ class Input extends Component {
          * Code for the CAPS_LOCK key.
          * @property KEY_CAPS_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CAPS_LOCK = 20;
 
@@ -976,7 +976,7 @@ class Input extends Component {
          * Code for the ESCAPE key.
          * @property KEY_ESCAPE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ESCAPE = 27;
 
@@ -984,7 +984,7 @@ class Input extends Component {
          * Code for the PAGE_UP key.
          * @property KEY_PAGE_UP
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAGE_UP = 33;
 
@@ -992,7 +992,7 @@ class Input extends Component {
          * Code for the PAGE_DOWN key.
          * @property KEY_PAGE_DOWN
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PAGE_DOWN = 34;
 
@@ -1000,7 +1000,7 @@ class Input extends Component {
          * Code for the END key.
          * @property KEY_END
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_END = 35;
 
@@ -1008,7 +1008,7 @@ class Input extends Component {
          * Code for the HOME key.
          * @property KEY_HOME
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_HOME = 36;
 
@@ -1016,7 +1016,7 @@ class Input extends Component {
          * Code for the LEFT_ARROW key.
          * @property KEY_LEFT_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_LEFT_ARROW = 37;
 
@@ -1024,7 +1024,7 @@ class Input extends Component {
          * Code for the UP_ARROW key.
          * @property KEY_UP_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_UP_ARROW = 38;
 
@@ -1032,7 +1032,7 @@ class Input extends Component {
          * Code for the RIGHT_ARROW key.
          * @property KEY_RIGHT_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_RIGHT_ARROW = 39;
 
@@ -1040,7 +1040,7 @@ class Input extends Component {
          * Code for the DOWN_ARROW key.
          * @property KEY_DOWN_ARROW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DOWN_ARROW = 40;
 
@@ -1048,7 +1048,7 @@ class Input extends Component {
          * Code for the INSERT key.
          * @property KEY_INSERT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_INSERT = 45;
 
@@ -1056,7 +1056,7 @@ class Input extends Component {
          * Code for the DELETE key.
          * @property KEY_DELETE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DELETE = 46;
 
@@ -1064,7 +1064,7 @@ class Input extends Component {
          * Code for the 0 key.
          * @property KEY_NUM_0
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_0 = 48;
 
@@ -1072,7 +1072,7 @@ class Input extends Component {
          * Code for the 1 key.
          * @property KEY_NUM_1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_1 = 49;
 
@@ -1080,7 +1080,7 @@ class Input extends Component {
          * Code for the 2 key.
          * @property KEY_NUM_2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_2 = 50;
 
@@ -1088,7 +1088,7 @@ class Input extends Component {
          * Code for the 3 key.
          * @property KEY_NUM_3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_3 = 51;
 
@@ -1096,7 +1096,7 @@ class Input extends Component {
          * Code for the 4 key.
          * @property KEY_NUM_4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_4 = 52;
 
@@ -1104,7 +1104,7 @@ class Input extends Component {
          * Code for the 5 key.
          * @property KEY_NUM_5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_5 = 53;
 
@@ -1112,7 +1112,7 @@ class Input extends Component {
          * Code for the 6 key.
          * @property KEY_NUM_6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_6 = 54;
 
@@ -1120,7 +1120,7 @@ class Input extends Component {
          * Code for the 7 key.
          * @property KEY_NUM_7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_7 = 55;
 
@@ -1128,7 +1128,7 @@ class Input extends Component {
          * Code for the 8 key.
          * @property KEY_NUM_8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_8 = 56;
 
@@ -1136,7 +1136,7 @@ class Input extends Component {
          * Code for the 9 key.
          * @property KEY_NUM_9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_9 = 57;
 
@@ -1144,7 +1144,7 @@ class Input extends Component {
          * Code for the A key.
          * @property KEY_A
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_A = 65;
 
@@ -1152,7 +1152,7 @@ class Input extends Component {
          * Code for the B key.
          * @property KEY_B
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_B = 66;
 
@@ -1160,7 +1160,7 @@ class Input extends Component {
          * Code for the C key.
          * @property KEY_C
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_C = 67;
 
@@ -1168,7 +1168,7 @@ class Input extends Component {
          * Code for the D key.
          * @property KEY_D
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_D = 68;
 
@@ -1176,7 +1176,7 @@ class Input extends Component {
          * Code for the E key.
          * @property KEY_E
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_E = 69;
 
@@ -1184,7 +1184,7 @@ class Input extends Component {
          * Code for the F key.
          * @property KEY_F
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F = 70;
 
@@ -1192,7 +1192,7 @@ class Input extends Component {
          * Code for the G key.
          * @property KEY_G
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_G = 71;
 
@@ -1200,7 +1200,7 @@ class Input extends Component {
          * Code for the H key.
          * @property KEY_H
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_H = 72;
 
@@ -1208,7 +1208,7 @@ class Input extends Component {
          * Code for the I key.
          * @property KEY_I
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_I = 73;
 
@@ -1216,7 +1216,7 @@ class Input extends Component {
          * Code for the J key.
          * @property KEY_J
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_J = 74;
 
@@ -1224,7 +1224,7 @@ class Input extends Component {
          * Code for the K key.
          * @property KEY_K
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_K = 75;
 
@@ -1232,7 +1232,7 @@ class Input extends Component {
          * Code for the L key.
          * @property KEY_L
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_L = 76;
 
@@ -1240,7 +1240,7 @@ class Input extends Component {
          * Code for the M key.
          * @property KEY_M
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_M = 77;
 
@@ -1248,7 +1248,7 @@ class Input extends Component {
          * Code for the N key.
          * @property KEY_N
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_N = 78;
 
@@ -1256,7 +1256,7 @@ class Input extends Component {
          * Code for the O key.
          * @property KEY_O
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_O = 79;
 
@@ -1264,7 +1264,7 @@ class Input extends Component {
          * Code for the P key.
          * @property KEY_P
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_P = 80;
 
@@ -1272,7 +1272,7 @@ class Input extends Component {
          * Code for the Q key.
          * @property KEY_Q
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Q = 81;
 
@@ -1280,7 +1280,7 @@ class Input extends Component {
          * Code for the R key.
          * @property KEY_R
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_R = 82;
 
@@ -1288,7 +1288,7 @@ class Input extends Component {
          * Code for the S key.
          * @property KEY_S
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_S = 83;
 
@@ -1296,7 +1296,7 @@ class Input extends Component {
          * Code for the T key.
          * @property KEY_T
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_T = 84;
 
@@ -1304,7 +1304,7 @@ class Input extends Component {
          * Code for the U key.
          * @property KEY_U
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_U = 85;
 
@@ -1312,7 +1312,7 @@ class Input extends Component {
          * Code for the V key.
          * @property KEY_V
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_V = 86;
 
@@ -1320,7 +1320,7 @@ class Input extends Component {
          * Code for the W key.
          * @property KEY_W
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_W = 87;
 
@@ -1328,7 +1328,7 @@ class Input extends Component {
          * Code for the X key.
          * @property KEY_X
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_X = 88;
 
@@ -1336,7 +1336,7 @@ class Input extends Component {
          * Code for the Y key.
          * @property KEY_Y
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Y = 89;
 
@@ -1344,7 +1344,7 @@ class Input extends Component {
          * Code for the Z key.
          * @property KEY_Z
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_Z = 90;
 
@@ -1352,7 +1352,7 @@ class Input extends Component {
          * Code for the LEFT_WINDOW key.
          * @property KEY_LEFT_WINDOW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_LEFT_WINDOW = 91;
 
@@ -1360,7 +1360,7 @@ class Input extends Component {
          * Code for the RIGHT_WINDOW key.
          * @property KEY_RIGHT_WINDOW
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_RIGHT_WINDOW = 92;
 
@@ -1368,7 +1368,7 @@ class Input extends Component {
          * Code for the SELECT key.
          * @property KEY_SELECT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SELECT_KEY = 93;
 
@@ -1376,7 +1376,7 @@ class Input extends Component {
          * Code for the number pad 0 key.
          * @property KEY_NUMPAD_0
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_0 = 96;
 
@@ -1384,7 +1384,7 @@ class Input extends Component {
          * Code for the number pad 1 key.
          * @property KEY_NUMPAD_1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_1 = 97;
 
@@ -1392,7 +1392,7 @@ class Input extends Component {
          * Code for the number pad 2 key.
          * @property KEY_NUMPAD 2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_2 = 98;
 
@@ -1400,7 +1400,7 @@ class Input extends Component {
          * Code for the number pad 3 key.
          * @property KEY_NUMPAD_3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_3 = 99;
 
@@ -1408,7 +1408,7 @@ class Input extends Component {
          * Code for the number pad 4 key.
          * @property KEY_NUMPAD_4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_4 = 100;
 
@@ -1416,7 +1416,7 @@ class Input extends Component {
          * Code for the number pad 5 key.
          * @property KEY_NUMPAD_5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_5 = 101;
 
@@ -1424,7 +1424,7 @@ class Input extends Component {
          * Code for the number pad 6 key.
          * @property KEY_NUMPAD_6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_6 = 102;
 
@@ -1432,7 +1432,7 @@ class Input extends Component {
          * Code for the number pad 7 key.
          * @property KEY_NUMPAD_7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_7 = 103;
 
@@ -1440,7 +1440,7 @@ class Input extends Component {
          * Code for the number pad 8 key.
          * @property KEY_NUMPAD_8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_8 = 104;
 
@@ -1448,7 +1448,7 @@ class Input extends Component {
          * Code for the number pad 9 key.
          * @property KEY_NUMPAD_9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUMPAD_9 = 105;
 
@@ -1456,7 +1456,7 @@ class Input extends Component {
          * Code for the MULTIPLY key.
          * @property KEY_MULTIPLY
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_MULTIPLY = 106;
 
@@ -1464,7 +1464,7 @@ class Input extends Component {
          * Code for the ADD key.
          * @property KEY_ADD
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_ADD = 107;
 
@@ -1472,7 +1472,7 @@ class Input extends Component {
          * Code for the SUBTRACT key.
          * @property KEY_SUBTRACT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SUBTRACT = 109;
 
@@ -1480,7 +1480,7 @@ class Input extends Component {
          * Code for the DECIMAL POINT key.
          * @property KEY_DECIMAL_POINT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DECIMAL_POINT = 110;
 
@@ -1488,7 +1488,7 @@ class Input extends Component {
          * Code for the DIVIDE key.
          * @property KEY_DIVIDE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DIVIDE = 111;
 
@@ -1496,7 +1496,7 @@ class Input extends Component {
          * Code for the F1 key.
          * @property KEY_F1
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F1 = 112;
 
@@ -1504,7 +1504,7 @@ class Input extends Component {
          * Code for the F2 key.
          * @property KEY_F2
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F2 = 113;
 
@@ -1512,7 +1512,7 @@ class Input extends Component {
          * Code for the F3 key.
          * @property KEY_F3
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F3 = 114;
 
@@ -1520,7 +1520,7 @@ class Input extends Component {
          * Code for the F4 key.
          * @property KEY_F4
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F4 = 115;
 
@@ -1528,7 +1528,7 @@ class Input extends Component {
          * Code for the F5 key.
          * @property KEY_F5
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F5 = 116;
 
@@ -1536,7 +1536,7 @@ class Input extends Component {
          * Code for the F6 key.
          * @property KEY_F6
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F6 = 117;
 
@@ -1544,7 +1544,7 @@ class Input extends Component {
          * Code for the F7 key.
          * @property KEY_F7
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F7 = 118;
 
@@ -1552,7 +1552,7 @@ class Input extends Component {
          * Code for the F8 key.
          * @property KEY_F8
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F8 = 119;
 
@@ -1560,7 +1560,7 @@ class Input extends Component {
          * Code for the F9 key.
          * @property KEY_F9
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F9 = 120;
 
@@ -1568,7 +1568,7 @@ class Input extends Component {
          * Code for the F10 key.
          * @property KEY_F10
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F10 = 121;
 
@@ -1576,7 +1576,7 @@ class Input extends Component {
          * Code for the F11 key.
          * @property KEY_F11
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F11 = 122;
 
@@ -1584,7 +1584,7 @@ class Input extends Component {
          * Code for the F12 key.
          * @property KEY_F12
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_F12 = 123;
 
@@ -1592,7 +1592,7 @@ class Input extends Component {
          * Code for the NUM_LOCK key.
          * @property KEY_NUM_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_NUM_LOCK = 144;
 
@@ -1600,7 +1600,7 @@ class Input extends Component {
          * Code for the SCROLL_LOCK key.
          * @property KEY_SCROLL_LOCK
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SCROLL_LOCK = 145;
 
@@ -1608,7 +1608,7 @@ class Input extends Component {
          * Code for the SEMI_COLON key.
          * @property KEY_SEMI_COLON
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SEMI_COLON = 186;
 
@@ -1616,7 +1616,7 @@ class Input extends Component {
          * Code for the EQUAL_SIGN key.
          * @property KEY_EQUAL_SIGN
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_EQUAL_SIGN = 187;
 
@@ -1624,7 +1624,7 @@ class Input extends Component {
          * Code for the COMMA key.
          * @property KEY_COMMA
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_COMMA = 188;
 
@@ -1632,7 +1632,7 @@ class Input extends Component {
          * Code for the DASH key.
          * @property KEY_DASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_DASH = 189;
 
@@ -1640,7 +1640,7 @@ class Input extends Component {
          * Code for the PERIOD key.
          * @property KEY_PERIOD
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_PERIOD = 190;
 
@@ -1648,7 +1648,7 @@ class Input extends Component {
          * Code for the FORWARD_SLASH key.
          * @property KEY_FORWARD_SLASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_FORWARD_SLASH = 191;
 
@@ -1656,7 +1656,7 @@ class Input extends Component {
          * Code for the GRAVE_ACCENT key.
          * @property KEY_GRAVE_ACCENT
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_GRAVE_ACCENT = 192;
 
@@ -1664,7 +1664,7 @@ class Input extends Component {
          * Code for the OPEN_BRACKET key.
          * @property KEY_OPEN_BRACKET
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_OPEN_BRACKET = 219;
 
@@ -1672,7 +1672,7 @@ class Input extends Component {
          * Code for the BACK_SLASH key.
          * @property KEY_BACK_SLASH
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_BACK_SLASH = 220;
 
@@ -1680,7 +1680,7 @@ class Input extends Component {
          * Code for the CLOSE_BRACKET key.
          * @property KEY_CLOSE_BRACKET
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_CLOSE_BRACKET = 221;
 
@@ -1688,7 +1688,7 @@ class Input extends Component {
          * Code for the SINGLE_QUOTE key.
          * @property KEY_SINGLE_QUOTE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SINGLE_QUOTE = 222;
 
@@ -1696,7 +1696,7 @@ class Input extends Component {
          * Code for the SPACE key.
          * @property KEY_SPACE
          * @final
-         * @type Number
+         * @type {Number}
          */
         this.KEY_SPACE = 32;
 

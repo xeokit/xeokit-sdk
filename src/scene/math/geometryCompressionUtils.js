@@ -2,7 +2,7 @@
  * Private geometry compression and decompression utilities.
  */
 
-import {math} from "../math/math.js";
+import {math} from "./math.js";
 
 /**
  * @private
@@ -38,10 +38,10 @@ var compressPositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     const scale = math.mat4();
     return function (array, min, max) {
         const quantized = new Uint16Array(array.length);
-        const multiplier = new Float32Array([
-            65535 / (max[0] - min[0]),
-            65535 / (max[1] - min[1]),
-            65535 / (max[2] - min[2])
+        var multiplier = new Float32Array([
+            max[0] !== min[0] ? 65535 / (max[0] - min[0]) : 0,
+            max[1] !== min[1] ? 65535 / (max[1] - min[1]) : 0,
+            max[2] !== min[2] ? 65535 / (max[2] - min[2]) : 0
         ]);
         let i;
         for (i = 0; i < array.length; i += 3) {

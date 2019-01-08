@@ -3,7 +3,7 @@ import {LoaderPlugin} from "./../../LoaderPlugin.js";
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * For each model loaded, creates a {@link Model} within its
+ * For each model loaded, creates a {@link Node} within its
  * {@link Viewer}'s {@link Scene}.
  *
  * Note that the name of this plugin is intentionally munged to "XML3D" because a JavaScript
@@ -16,7 +16,7 @@ import {LoaderPlugin} from "./../../LoaderPlugin.js";
  * the example for how to do that. 
  *
  * See the {@link XML3DLoaderPlugin#load} method for parameters that you can configure
- * each {@link Model} with as you load it.
+ * each {@link Node} with as you load it.
  *
  * @example
  * // Create a xeokit Viewer
@@ -48,13 +48,13 @@ import {LoaderPlugin} from "./../../LoaderPlugin.js";
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * // Update properties of the model via the xeokit.Model
+ * // Update properties of the model via the xeokit.Node
  * model.highlighted = true;
  *
  * // You can unload the model via the plugin
  * plugin.unload("myModel");
  *
- * // Or unload it by calling destroy() on the xeokit.Model itself
+ * // Or unload it by calling destroy() on the xeokit.Node itself
  * model.destroy();
  *
  * @class XML3DLoaderPlugin
@@ -84,11 +84,11 @@ class XML3DLoaderPlugin extends LoaderPlugin {
     /**
      * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.
      *
-     * Creates a {@link Model} within the Viewer's {@link Scene}.
+     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.
      *
      * @param {*} params  Loading parameters.
      *
-     * @param {String} params.id ID to assign to the {@link Model},
+     * @param {String} params.id ID to assign to the {@link Node},
      * unique among all components in the Viewer's {@link Scene}.
      *
      * @param {String} [params.src] Path to a 3DXML file.
@@ -96,24 +96,24 @@ class XML3DLoaderPlugin extends LoaderPlugin {
      * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      *
      * @param {Object} [params.parent] The parent {@link Node},
-     * if we want to graft the {@link Model} into a xeokit object hierarchy.
+     * if we want to graft the {@link Node} into a xeokit object hierarchy.
      *
-     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Model} with edges emphasized.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.
      *
-     * @param {Float32Array} [params.position=[0,0,0]] The {@link Model}'s
+     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s
      * local 3D position.
      *
-     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Model}'s
+     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s
      * local scale.
      *
-     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Model}'s local
+     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
-     * {@link Model}'s local modelling transform matrix. Overrides
+     * {@link Node}'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *
-     * @param {Boolean} [params.lambertMaterials=false]  When true, gives each {@link Mesh}
+     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}
      * the same {@link LambertMaterial} and a ````colorize````
      * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and
      * will cause loading to ignore textures in the 3DXML.
@@ -124,7 +124,7 @@ class XML3DLoaderPlugin extends LoaderPlugin {
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold
      * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      *
-     * @returns {{Model}} A {@link Model} representing the loaded 3DXML model.
+     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.
      */
     load(params) {
         params.workerScriptsPath = this._workerScriptsPath;

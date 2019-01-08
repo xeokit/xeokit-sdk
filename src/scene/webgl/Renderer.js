@@ -229,7 +229,7 @@ const Renderer = function (scene, options) {
         var len;
         for (i = 0, len = lights.length; i < len; i++) {
             light = lights[i];
-            if (!light.castShadow) {
+            if (!light.castsShadow) {
                 continue;
             }
             drawShadowMap(light);
@@ -238,9 +238,9 @@ const Renderer = function (scene, options) {
 
     function drawShadowMap(light) {
 
-        const castShadow = light.castShadow;
+        const castsShadow = light.castsShadow;
 
-        if (!castShadow) {
+        if (!castsShadow) {
             return;
         }
 
@@ -273,7 +273,7 @@ const Renderer = function (scene, options) {
 
         for (i = 0; i < drawableListSortedLen; i++) {
             drawable = drawableListSorted[i];
-            if (!drawable.visible || !drawable.castShadow) {
+            if (!drawable.visible || !drawable.castsShadow) {
                 continue; // For now, culled drawables still cast shadows because they are just out of view
             }
             // if (drawable._material._state.alpha === 0) {
@@ -679,7 +679,7 @@ const Renderer = function (scene, options) {
                 return null;
             }
 
-            if (params.pickSurface) {
+            if (params.pickSurface && pickResult.mesh.isSurfacePickable()) { // VBOGeometry does not support surface picking because it has no geometry data in browser memory
                 pickTriangle(pickResult.mesh, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
             }
 

@@ -29,7 +29,7 @@ class Canvas extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -72,7 +72,7 @@ class Canvas extends Component {
         this.webgl2 = false; // Will set true in _initWebGL if WebGL is requested and we succeed in getting it.
 
         /**
-         * Indicates whether this Canvas is transparent.
+         * Indicates if this Canvas is transparent.
          *
          * @property transparent
          * @type {Boolean}
@@ -508,7 +508,7 @@ class Canvas extends Component {
      You can set this to a new color at any time.
 
      @property backgroundColor
-     @type Float32Array
+     @type {Float32Array}
      @default null
      */
     set backgroundColor(value) {
@@ -533,7 +533,7 @@ class Canvas extends Component {
      You can set this to a new file path at any time.
 
      @property backgroundImage
-     @type String
+     @type {String}
      */
     set backgroundImage(value) {
         if (!value) {

@@ -17,7 +17,7 @@ class Perspective extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -73,7 +73,7 @@ class Perspective extends Component {
 
      @property fov
      @default 60.0
-     @type Number
+     @type {Number}
      */
     set fov(value) {
         this._fov = (value !== undefined && value !== null) ? value : 60.0;
@@ -100,7 +100,7 @@ class Perspective extends Component {
 
      @property fovAxis
      @default "min"
-     @type String
+     @type {String}
      */
     set fovAxis(value) {
         value = value || "min";
@@ -133,7 +133,7 @@ class Perspective extends Component {
 
      @property near
      @default 0.1
-     @type Number
+     @type {Number}
      */
     set near(value) {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
@@ -157,7 +157,7 @@ class Perspective extends Component {
 
      @property far
      @default 10000.0
-     @type Number
+     @type {Number}
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000;

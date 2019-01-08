@@ -3,18 +3,57 @@ import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
 
 /**
- * @desc Configures the normal rendered appearance of {@link Mesh}es using the non-realistic
- * but GPU-efficient <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> model for calculating reflectance.
+ * @desc Configures the normal rendered appearance of {@link Mesh}es using the non-realistic but GPU-efficient <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> flat shading model for calculating reflectance.
  *
  * * Useful for efficiently rendering non-realistic objects for high-detail CAD.
  * * Use  {@link PhongMaterial} when you need specular highlights.
- * * Use the physically based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
- * * For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is
- * interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
- * {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and
- * the illumination calculation is performed at each texel.
+ * * Use the physically-based {@link MetallicMaterial} or {@link SpecularMaterial} when you need more realism.
+ * * For LambertMaterial, the illumination calculation is performed at each triangle vertex, and the resulting color is interpolated across the face of the triangle. For {@link PhongMaterial}, {@link MetallicMaterial} and
+ * {@link SpecularMaterial}, vertex normals are interpolated across the surface of the triangle, and the illumination calculation is performed at each texel.
  *
- * ## LambertMaterial properties
+ * ## Usage
+ *
+ * [[Run this example](/examples/#materials_LambertMaterial)]
+ *
+ * In the example below we'll create a {@link Mesh} with a shape defined by a {@link buildTorusGeometry} and normal rendering appearance configured with a LambertMaterial.
+ *
+ * ```` javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
+ * import {Geometry} from "../src/scene/geometry/Geometry.js";
+ * import {LambertMaterial} from "../src/scene/materials/LambertMaterial.js";
+ *
+ * const myViewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildTorusGeometry(Geometry, myViewer.scene, {
+ *          center: [0, 0, 0],
+ *          radius: 1.5,
+ *          tube: 0.5,
+ *          radialSegments: 12,
+ *          tubeSegments: 8,
+ *          arc: Math.PI * 2.0
+ *      }),
+ *      material: new LambertMaterial(myViewer.scene, {
+ *          ambient: [0.3, 0.3, 0.3],
+ *          color: [0.5, 0.5, 0.0],
+ *          alpha: 1.0, // Default
+ *          lineWidth: 1,
+ *          pointSize: 1,
+ *          backfaces: false,
+ *          frontFace: "ccw"
+ *      })
+ *  });
+ * ````
+ *
+ * ## LambertMaterial Properties
  *
  * The following table summarizes LambertMaterial properties:
  *
@@ -29,55 +68,35 @@ import {math} from '../math/math.js';
  *  | {@link LambertMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
  *  | {@link LambertMaterial#backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
  *
- * ## Usage
- *
- * In the example below we'll create a {@link Mesh} with a shape defined by a {@link TorusGeometry} and
- * normal rendering appearance configured with a LambertMaterial.
- *
- * ```` javascript
- * new Mesh(myViewer.scene, {
- *      material: new LambertMaterial(myViewer.scene, {
- *          ambient: [0.3, 0.3, 0.3],
- *          color: [0.5, 0.5, 0.0],
- *          alpha: 1.0 // Default
- *      }),
- *      geometry: new TorusGeometry(myViewer.scene)
- * });
- * ````
  */
 class LambertMaterial extends Material {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
+     * JavaScript class name for this Component.
+     *
+     * For example: "AmbientLight", "MetallicMaterial" etc.
+     *
+     * @type {String}
      */
     get type() {
         return "LambertMaterial";
     }
 
     /**
-     @constructor
-     @extends Material
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param {*} [cfg] The LambertMaterial configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param [cfg.meta=null] {String:Object} Metadata to attach to this LambertMaterial.
-     @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial ambient color.
-     @param [cfg.color=[ 1.0, 1.0, 1.0 ]] {Array of Number} LambertMaterial diffuse color.
-     @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} LambertMaterial emissive color.
-     @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
-     @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
-     @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
-     @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
-     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
-     @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
-     * @param owner
-     * @param cfg
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] The LambertMaterial configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {String:Object} [cfg.meta=null]  Metadata to attach to this LambertMaterial.
+     * @param {Array of Number} [cfg.ambient=[1.0, 1.0, 1.0 ]] LambertMaterial ambient color.
+     * @param {Array of Number} [cfg.color=[ 1.0, 1.0, 1.0 ]] LambertMaterial diffuse color.
+     * @param {Array of Number} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] LambertMaterial emissive color.
+     * @param {Number} [cfg.alpha=1]Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
+     * @param {Number} [cfg.reflectivity=1]Scalar in range 0-1 that controls how much {@link ReflectionMap} is reflected.
+     * @param {Number} [cfg.lineWidth=1] Scalar that controls the width of {@link Geometry} lines.
+     * @param {Number} [cfg.pointSize=1] Scalar that controls the size of points for {@link Geometry} with {@link Geometry#primitive} set to "points".
+     * @param {Boolean} [cfg.backfaces=false] Whether to render {@link Geometry} backfaces.
+     * @param {Boolean} [cfg.frontface="ccw"] The winding order for {@link Geometry} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
      */
     constructor(owner, cfg = {}) {
 
@@ -108,13 +127,12 @@ class LambertMaterial extends Material {
     }
 
     /**
-     The LambertMaterial's ambient color.
-
-     @property ambient
-     @default [0.3, 0.3, 0.3]
-     @type Float32Array
+     * Sets the LambertMaterial's ambient color.
+     *
+     * Default value is ````[0.3, 0.3, 0.3]````.
+     *
+     * @type {Float32Array}
      */
-
     set ambient(value) {
         let ambient = this._state.ambient;
         if (!ambient) {
@@ -134,16 +152,23 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the LambertMaterial's ambient color.
+     *
+     * Default value is ````[0.3, 0.3, 0.3]````.
+     *
+     * @type {Float32Array}
+     */
     get ambient() {
         return this._state.ambient;
     }
 
     /**
-     The LambertMaterial's diffuse color.
-
-     @property color
-     @default [1.0, 1.0, 1.0]
-     @type Float32Array
+     * Sets the LambertMaterial's diffuse color.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @type {Float32Array}
      */
     set color(value) {
         let color = this._state.color;
@@ -164,16 +189,23 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the LambertMaterial's diffuse color.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @type {Float32Array}
+     */
     get color() {
         return this._state.color;
     }
 
     /**
-     The LambertMaterial's emissive color.
-
-     @property emissive
-     @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     * Sets the LambertMaterial's emissive color.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     *
+     * @type {Float32Array}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -194,20 +226,26 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the LambertMaterial's emissive color.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     *
+     * @type {Float32Array}
+     */
     get emissive() {
         return this._state.emissive;
     }
 
     /**
-     Factor in the range [0..1] indicating how transparent the LambertMaterial is.
-
-     A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-
-     @property alpha
-     @default 1.0
-     @type Number
+     * Sets factor in the range ````[0..1]```` indicating how transparent the LambertMaterial is.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default value is ````1.0````
+     *
+     * @type {Number}
      */
-
     set alpha(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
         if (this._state.alpha === value) {
@@ -219,52 +257,73 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets factor in the range ````[0..1]```` indicating how transparent the LambertMaterial is.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default value is ````1.0````
+     *
+     * @type {Number}
+     */
     get alpha() {
         return this._state.alpha;
     }
 
     /**
-     The LambertMaterial's line width.
-
-     @property lineWidth
-     @default 1.0
-     @type Number
+     * Sets the LambertMaterial's line width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
-
     set lineWidth(value) {
         this._state.lineWidth = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the LambertMaterial's line width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get lineWidth() {
         return this._state.lineWidth;
     }
 
     /**
-     The LambertMaterial's point size.
-
-     @property pointSize
-     @default 1.0
-     @type Number
+     * Sets the LambertMaterial's point size.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set pointSize(value) {
         this._state.pointSize = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the LambertMaterial's point size.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get pointSize() {
         return this._state.pointSize;
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh}es.
-
-     The backfaces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh}es.
-
-     @property backfaces
-     @default false
-     @type Boolean
+     * Sets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * @type {Boolean}
      */
     set backfaces(value) {
         value = !!value;
@@ -275,19 +334,21 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * @type {Boolean}
+     */
     get backfaces() {
         return this._state.backfaces;
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh}es.
-
-     The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh}es.
-
-     @property frontface
-     @default "ccw"
-     @type String
+     * Sets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+     *
+     * Default value is ````"ccw"````.
+     *
+     * @type {String}
      */
     set frontface(value) {
         value = value !== "cw";
@@ -298,6 +359,13 @@ class LambertMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the winding direction of front faces of {@link Geometry} of attached {@link Mesh}es.
+     *
+     * Default value is ````"ccw"````.
+     *
+     * @type {String}
+     */
     get frontface() {
         return this._state.frontface ? "ccw" : "cw";
     }
@@ -306,6 +374,9 @@ class LambertMaterial extends Material {
         return this._state;
     }
 
+    /**
+     * Destroys this LambertMaterial.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

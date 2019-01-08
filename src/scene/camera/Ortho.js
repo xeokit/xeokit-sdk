@@ -20,7 +20,7 @@ class Ortho extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -95,7 +95,7 @@ class Ortho extends Component {
 
      @property scale
      @default 1.0
-     @type Number
+     @type {Number}
      */
 
     set scale(value) {
@@ -127,7 +127,7 @@ class Ortho extends Component {
 
      @property near
      @default 0.1
-     @type Number
+     @type {Number}
      */
     set near(value) {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
@@ -152,7 +152,7 @@ class Ortho extends Component {
 
      @property far
      @default 10000.0
-     @type Number
+     @type {Number}
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;

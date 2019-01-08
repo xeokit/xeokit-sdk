@@ -53,7 +53,7 @@
  @submodule lighting
  @constructor
  @extends Component
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
  @param {*} [cfg] The Shadow configuration
  @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Shadow.
@@ -71,7 +71,7 @@ class Shadow extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -124,7 +124,7 @@ class Shadow extends Component {
 
      @property intensity
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set intensity(value) {
 

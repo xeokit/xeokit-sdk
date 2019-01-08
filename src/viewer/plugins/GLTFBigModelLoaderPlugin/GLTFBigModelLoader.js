@@ -1,22 +1,23 @@
 import {math} from "./../../../scene/math/math.js";
 import {utils} from "./../../../scene/utils.js";
 import {core} from "./../../../scene/core.js";
+import {buildEdgeIndices} from './../../../scene/math/buildEdgeIndices.js';
 
 /**
  * @private
  */
 class GLTFBigModelLoader {
 
-    constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleNode etc
+    constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleNode etc
         cfg = cfg || {};
         this._handleNode = cfg.handleNode;
     }
 
-    load(bigModel, src, options, ok, error) {
+    load(plugin, bigModel, src, options, ok, error) {
         options = options || {};
         var spinner = bigModel.scene.canvas.spinner;
         spinner.processes++;
-        loadGLTF(bigModel, src, options, function () {
+        loadGLTF(plugin, bigModel, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
                     bigModel.fire("loaded", true, true);
@@ -27,7 +28,7 @@ class GLTFBigModelLoader {
             },
             function (msg) {
                 spinner.processes--;
-                bigModel.error(msg);
+                plugin.error(msg);
                 if (error) {
                     error(msg);
                 }
@@ -35,11 +36,11 @@ class GLTFBigModelLoader {
             });
     }
 
-    parse(bigModel, gltf, options, ok, error) {
+    parse(plugin, bigModel, gltf, options, ok, error) {
         options = options || {};
         var spinner = bigModel.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(gltf, "", options, bigModel, function () {
+        parseGLTF(plugin, gltf, "", options, bigModel, function () {
                 spinner.processes--;
                 bigModel.fire("loaded", true, true);
                 if (ok) {
@@ -61,10 +62,10 @@ const INSTANCE_THRESHOLD = 1;
 
 var loadGLTF = (function () {
 
-    return function (bigModel, src, options, ok, error) {
+    return function (plugin, bigModel, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, bigModel, ok, error);
+                parseGLTF(json, src, options, plugin, bigModel, ok, error);
             },
             error);
     };
@@ -96,14 +97,16 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, bigModel, ok) {
+    return function (json, src, options, plugin, bigModel, ok) {
 
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
+            handleNode: options.handleNode,
             json: json,
             scene: bigModel.scene,
+            plugin: plugin,
             bigModel: bigModel,
             numObjects: 0
         };
@@ -131,7 +134,7 @@ var parseGLTF = (function () {
                         ok();
                     }
                 }, function (msg) {
-                    ctx.bigModel.error(msg);
+                    ctx.plugin.error(msg);
                     if (--numToLoad === 0) {
                         ok();
                     }
@@ -304,34 +307,34 @@ var parseGLTF = (function () {
             return;
         }
         var json = ctx.json;
-        var nodeInfo;
+        var glTFNode;
         for (var i = 0, len = nodes.length; i < len; i++) {
-            nodeInfo = json.nodes[nodes[i]];
-            if (!nodeInfo) {
+            glTFNode = json.nodes[nodes[i]];
+            if (!glTFNode) {
                 error(ctx, "Node not found: " + i);
                 continue;
             }
-            countMeshUsage(ctx, i, nodeInfo);
+            countMeshUsage(ctx, i, glTFNode);
         }
         for (var i = 0, len = nodes.length; i < len; i++) {
-            nodeInfo = json.nodes[nodes[i]];
-            if (nodeInfo) {
-                loadNode(ctx, i, nodeInfo, null, null);
+            glTFNode = json.nodes[nodes[i]];
+            if (glTFNode) {
+                loadNode(ctx, i, glTFNode, null, null);
             }
         }
     }
 
-    function countMeshUsage(ctx, nodeIdx, nodeInfo) {
+    function countMeshUsage(ctx, nodeIdx, glTFNode) {
         var json = ctx.json;
-        var mesh = nodeInfo.mesh;
+        var mesh = glTFNode.mesh;
         if (mesh !== undefined) {
-            var meshInfo = json.meshes[nodeInfo.mesh];
+            var meshInfo = json.meshes[glTFNode.mesh];
             if (meshInfo) {
                 meshInfo.instances = meshInfo.instances ? meshInfo.instances + 1 : 1;
             }
         }
-        if (nodeInfo.children) {
-            var children = nodeInfo.children;
+        if (glTFNode.children) {
+            var children = glTFNode.children;
             var childNodeInfo;
             var childNodeIdx;
             for (var i = 0, len = children.length; i < len; i++) {
@@ -346,19 +349,18 @@ var parseGLTF = (function () {
         }
     }
 
-    function loadNode(ctx, nodeIdx, nodeInfo, matrix, parent, parentCfg) {
+    function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
 
         parent = parent || ctx.bigModel;
-
-        var createObject;
+        var createNode;
 
         if (ctx.handleNode) {
             var actions = {};
-            if (!ctx.handleNode(nodeInfo, actions)) {
+            if (!ctx.handleNode(ctx.bigModel.id, glTFNode, actions)) {
                 return;
             }
-            if (actions.createObject) {
-                createObject = actions.createObject;
+            if (actions.createNode) {
+                createNode = actions.createNode;
             }
         }
 
@@ -366,8 +368,8 @@ var parseGLTF = (function () {
         var bigModel = ctx.bigModel;
         var localMatrix;
 
-        if (nodeInfo.matrix) {
-            localMatrix = nodeInfo.matrix;
+        if (glTFNode.matrix) {
+            localMatrix = glTFNode.matrix;
             if (matrix) {
                 matrix = math.mulMat4(matrix, localMatrix, math.mat4());
             } else {
@@ -375,8 +377,8 @@ var parseGLTF = (function () {
             }
         }
 
-        if (nodeInfo.translation) {
-            localMatrix = math.translationMat4v(nodeInfo.translation);
+        if (glTFNode.translation) {
+            localMatrix = math.translationMat4v(glTFNode.translation);
             if (matrix) {
                 matrix = math.mulMat4(matrix, localMatrix, math.mat4());
             } else {
@@ -384,8 +386,8 @@ var parseGLTF = (function () {
             }
         }
 
-        if (nodeInfo.rotation) {
-            localMatrix = math.quaternionToMat4(nodeInfo.rotation);
+        if (glTFNode.rotation) {
+            localMatrix = math.quaternionToMat4(glTFNode.rotation);
             if (matrix) {
                 matrix = math.mulMat4(matrix, localMatrix, math.mat4());
             } else {
@@ -393,8 +395,8 @@ var parseGLTF = (function () {
             }
         }
 
-        if (nodeInfo.scale) {
-            localMatrix = math.scalingMat4v(nodeInfo.scale);
+        if (glTFNode.scale) {
+            localMatrix = math.scalingMat4v(glTFNode.scale);
             if (matrix) {
                 matrix = math.mulMat4(matrix, localMatrix, math.mat4());
             } else {
@@ -404,82 +406,88 @@ var parseGLTF = (function () {
 
         ctx.numObjects++;
 
-        if (nodeInfo.mesh !== undefined) {
+        if (glTFNode.mesh !== undefined) {
 
-            var meshInfo = json.meshes[nodeInfo.mesh];
+            var meshInfo = json.meshes[glTFNode.mesh];
 
-            if (meshInfo) {
+          //  if (meshInfo.instances === 1) {
 
-                const numPrimitives = meshInfo.primitives.length;
+                if (meshInfo) {
 
-                if (numPrimitives > 0) {
+                    const numPrimitives = meshInfo.primitives.length;
 
-                    var meshIds = [];
+                    if (numPrimitives > 0) {
 
-                    for (var i = 0; i < numPrimitives; i++) {
-                        const meshCfg = {
-                            id: bigModel.id + "." + ctx.numObjects, // TODO: object ID
-                            matrix: matrix
-                        };
-                        var primitiveInfo = meshInfo.primitives[i];
-                        var materialIndex = primitiveInfo.material;
-                        var materialInfo;
-                        if (materialIndex !== null && materialIndex !== undefined) {
-                            materialInfo = json.materials[materialIndex];
-                        }
-                        if (materialInfo) {
-                            meshCfg.color = materialInfo._rgbaColor;
-                            meshCfg.opacity = materialInfo._rgbaColor[3];
-                        } else {
-                            meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                            meshCfg.opacity = 1.0;
-                        }
+                        var meshIds = [];
 
-                        if (meshInfo.instances > INSTANCE_THRESHOLD) {
-
-                            //------------------------------------------------------------------
-                            // Instancing
-                            //------------------------------------------------------------------
-
-                            const geometryId = bigModel.id + "." + nodeInfo.mesh;
-
-                            if (!meshInfo.geometryId) {
-                                meshInfo.geometryId = geometryId;
-                                var geometryCfg = {
-                                    id: geometryId
-                                };
-                                loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
-                                bigModel.createGeometry(geometryCfg);
+                        for (var i = 0; i < numPrimitives; i++) {
+                            const meshCfg = {
+                                id: bigModel.id + "." + ctx.numObjects, // TODO: object ID
+                                matrix: matrix
+                            };
+                            var primitiveInfo = meshInfo.primitives[i];
+                            var materialIndex = primitiveInfo.material;
+                            var materialInfo;
+                            if (materialIndex !== null && materialIndex !== undefined) {
+                                materialInfo = json.materials[materialIndex];
                             }
+                            // if (materialInfo) {
+                            //     meshCfg.color = materialInfo._rgbaColor;
+                            //     meshCfg.opacity = materialInfo._rgbaColor[3];
+                            // } else {
+                            //     meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                            //     meshCfg.opacity = 1.0;
+                            // }
 
-                            meshCfg.geometryId = geometryId;
+                            if (meshInfo.instances > INSTANCE_THRESHOLD) {
 
-                            const mesh = bigModel.createMesh(meshCfg);
-                            meshIds.push(mesh.id);
+                                //------------------------------------------------------------------
+                                // Instancing
+                                //------------------------------------------------------------------
 
-                        } else {
+                                const geometryId = bigModel.id + "." + glTFNode.mesh;
 
-                            //------------------------------------------------------------------
-                            // Batching
-                            //------------------------------------------------------------------
+                                if (!meshInfo.geometryId) {
+                                    meshInfo.geometryId = geometryId;
+                                    var geometryCfg = {
+                                        id: geometryId
+                                    };
+                                    loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
+                                    bigModel.createGeometry(geometryCfg);
+                                }
 
-                            loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
+                                meshCfg.geometryId = geometryId;
 
-                            const mesh = bigModel.createMesh(meshCfg);
-                            meshIds.push(mesh.id);
+                                const mesh = bigModel.createMesh(meshCfg);
+                                meshIds.push(mesh.id);
+
+                            } else {
+
+                                //------------------------------------------------------------------
+                                // Batching
+                                //------------------------------------------------------------------
+
+                                loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
+
+                                const mesh = bigModel.createMesh(meshCfg);
+                                meshIds.push(mesh.id);
+                            }
                         }
+
+                        // bigModel.createNode(utils.apply(createNode, {
+                        //     meshIds: meshIds
+                        // }));
+
+                        bigModel.createNode( {
+                            meshIds: meshIds
+                        });
                     }
-
-                    bigModel.createObject({
-                        meshIds: meshIds
-                    });
-
                 }
-            }
+           // }
         }
 
-        if (nodeInfo.children) {
-            var children = nodeInfo.children;
+        if (glTFNode.children) {
+            var children = glTFNode.children;
             var childNodeInfo;
             var childNodeIdx;
             for (var i = 0, len = children.length; i < len; i++) {
@@ -524,7 +532,7 @@ var parseGLTF = (function () {
             geometryCfg.normals = loadAccessorTypedArray(ctx, accessorInfo);
         }
         if (geometryCfg.indices) {
-            geometryCfg.edgeIndices = math.buildEdgeIndices(geometryCfg.positions, geometryCfg.indices, null, 10, false);
+            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.positions, geometryCfg.indices, null, 10); // Save BigModel from building edges
         }
     }
 
@@ -535,14 +543,14 @@ var parseGLTF = (function () {
         var elementBytes = TypedArray.BYTES_PER_ELEMENT; // For VEC3: itemSize is 3, elementBytes is 4, itemBytes is 12.
         var itemBytes = elementBytes * itemSize;
         if (accessorInfo.byteStride && accessorInfo.byteStride !== itemBytes) { // The buffer is not interleaved if the stride is the item size in bytes.
-            console.error("interleaved buffer!"); // TODO
+            error("interleaved buffer!"); // TODO
         } else {
             return new TypedArray(bufferViewInfo._buffer, accessorInfo.byteOffset || 0, accessorInfo.count * itemSize);
         }
     }
 
     function error(ctx, msg) {
-        ctx.bigModel.error(msg);
+        ctx.plugin.error(msg);
     }
 })();
 

@@ -344,7 +344,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                             let ifcColor = defaultMaterials[waitingObjectData.ifcType];
 
                             bigModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createObject(objectId, geometryId, waitingObjectData.ifcType);
+                            bigModelBuilder.createNode(objectId, geometryId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -373,7 +373,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                             let ifcColor = defaultMaterials[waitingObjectData.ifcType];
 
                             bigModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createObject(objectId, geometryId, waitingObjectData.ifcType);
+                            bigModelBuilder.createNode(objectId, geometryId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -439,7 +439,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 var indices = waitingGeometryData.indices;
 
                 bigModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, matrix, ifcColor);
-                bigModelBuilder.createObject(objectId, geometryId, ifcType);
+                bigModelBuilder.createNode(objectId, geometryId, ifcType);
 
                 delete singleUseGeometryLoaded[geometryId];
 
@@ -450,7 +450,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 //------------------------------------------------------------------------------------------------------
 
                 bigModelBuilder.createMeshInstancingGeometry(geometryId, matrix, ifcColor);
-                bigModelBuilder.createObject(oid, geometryId, ifcType);
+                bigModelBuilder.createNode(oid, geometryId, ifcType);
 
             } else {
 

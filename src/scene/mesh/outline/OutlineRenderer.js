@@ -149,20 +149,6 @@ OutlineRenderer.prototype.drawMesh = function (frame, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
-    if (geometryState.combineGeometry) {
-        const vertexBufs = mesh._geometry._getVertexBufs();
-        if (vertexBufs.id !== this._lastVertexBufsId) {
-            if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
-            }
-            if (vertexBufs.normalsBuf && this._aNormal) {
-                this._aNormal.bindArrayBuffer(vertexBufs.normalsBuf, vertexBufs.compressGeometry ? gl.BYTE : gl.FLOAT);
-                frame.bindArray++;
-            }
-            this._lastVertexBufsId = vertexBufs.id;
-        }
-    }
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         if (this._uPositionsDecodeMatrix) {
@@ -171,48 +157,32 @@ OutlineRenderer.prototype.drawMesh = function (frame, mesh) {
         if (this._uUVDecodeMatrix) {
             gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometryState.uvDecodeMatrix);
         }
-        if (geometryState.combineGeometry) { // VBOs were bound by the VertexBufs logic above
-            if (geometryState.indicesBufCombined) {
-                geometryState.indicesBufCombined.bind();
-                frame.bindArray++;
-            }
-        } else {
-            if (this._aPosition) {
-                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
-            }
-            if (this._aNormal) {
-                this._aNormal.bindArrayBuffer(geometryState.normalsBuf, geometryState.compressGeometry ? gl.BYTE : gl.FLOAT);
-                frame.bindArray++;
-            }
-            if (geometryState.indicesBuf) {
-                geometryState.indicesBuf.bind();
-                frame.bindArray++;
-                // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-                // frame.drawElements++;
-            } else if (geometryState.positions) {
-                // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
-                //  frame.drawArrays++;
-            }
+
+        if (this._aPosition) {
+            this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
+            frame.bindArray++;
+        }
+        if (this._aNormal) {
+            this._aNormal.bindArrayBuffer(geometryState.normalsBuf, geometryState.compressGeometry ? gl.BYTE : gl.FLOAT);
+            frame.bindArray++;
+        }
+        if (geometryState.indicesBuf) {
+            geometryState.indicesBuf.bind();
+            frame.bindArray++;
+            // gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+            // frame.drawElements++;
+        } else if (geometryState.positions) {
+            // gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
+            //  frame.drawArrays++;
         }
         this._lastGeometryId = geometryState.id;
     }
-    // Draw (indices bound in prev step)
-    if (geometryState.combineGeometry) {
-        if (geometryState.indicesBufCombined) { // Geometry indices into portion of uber-array
-            gl.drawElements(geometryState.primitive, geometryState.indicesBufCombined.numItems, geometryState.indicesBufCombined.itemType, 0);
-            frame.drawElements++;
-        } else {
-            // TODO: drawArrays() with VertexBufs positions
-        }
-    } else {
-        if (geometryState.indicesBuf) {
-            gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
-            frame.drawElements++;
-        } else if (geometryState.positions) {
-            gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
-            frame.drawArrays++;
-        }
+    if (geometryState.indicesBuf) {
+        gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
+        frame.drawElements++;
+    } else if (geometryState.positions) {
+        gl.drawArrays(gl.TRIANGLES, 0, geometryState.positions.numItems);
+        frame.drawArrays++;
     }
 };
 

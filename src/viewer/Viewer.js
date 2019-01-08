@@ -27,7 +27,7 @@ class Viewer {
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param [cfg.passes=1] {Number} The number of times the {@link Viewer#scene} renders per frame.
-     * @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies whether to clear the
+     * @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies if to clear the
      * canvas before each pass (true) or just before the first pass (false).
      * @param [cfg.transparent=false] {Boolean} Whether or not the canvas is transparent.
      * @param [cfg.backgroundColor] {Float32Array} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.

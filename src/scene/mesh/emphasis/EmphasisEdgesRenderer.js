@@ -113,16 +113,7 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, meshState.clippable);
     }
-    if (geometryState.combineGeometry) {
-        const vertexBufs = mesh._geometry._getVertexBufs();
-        if (vertexBufs.id !== this._lastVertexBufsId) {
-            if (vertexBufs.positionsBuf && this._aPosition) {
-                this._aPosition.bindArrayBuffer(vertexBufs.positionsBuf, vertexBufs.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                frame.bindArray++;
-            }
-            this._lastVertexBufsId = vertexBufs.id;
-        }
-    }
+
     // Bind VBOs
     let indicesBuf;
     if (geometryState.primitive === gl.TRIANGLES) {
@@ -135,11 +126,9 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
             if (this._uPositionsDecodeMatrix) {
                 gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometryState.positionsDecodeMatrix);
             }
-            if (!geometryState.combineGeometry) { // VBOs were bound by the VertexBufs logic above
-                if (this._aPosition) {
-                    this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
-                    frame.bindArray++;
-                }
+            if (this._aPosition) {
+                this._aPosition.bindArrayBuffer(geometryState.positionsBuf, geometryState.compressGeometry ? gl.UNSIGNED_SHORT : gl.FLOAT);
+                frame.bindArray++;
             }
             indicesBuf.bind();
             frame.bindArray++;

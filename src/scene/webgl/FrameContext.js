@@ -104,7 +104,7 @@ class FrameContext {
         this.pass = 0;
 
         /**
-         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.
+         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.
          *
          * This sets the viewpoint to look from the point of view of each {@link DirLight}
          * or {@link PointLight} that casts a shadow.

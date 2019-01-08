@@ -113,9 +113,11 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
             const metaObjects = data.map(function (clientObject) {
                 var metaObjectCfg = {
                     objectId: clientObject.GlobalId,
-                    extId: clientObject.id,
                     name: clientObject.Name,
-                    type: clientObject._t
+                    type: clientObject._t,
+                    external: {
+                        extId: clientObject.id,
+                    }
                 };
                 if (clientObject.parent !== undefined && clientObject.parent !== null) {
                     let clientObjectParent = clientObjectMap[clientObject.parent];
@@ -124,7 +126,7 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
                     }
                 }
                 if (clientObject._rgeometry !== null && clientObject._rgeometry !== undefined) {
-                    metaObjectCfg.gid = clientObject._rgeometry._i
+                    metaObjectCfg.external.gid = clientObject._rgeometry._i
                 }
                 if (clientObject.hasChildren) {
                     metaObjectCfg.children = [];
@@ -141,7 +143,7 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
 
             var metaModel = viewer.metaScene.createMetaModel(modelId, modelMetadata);
 
-            //    console.log(JSON.stringify(modelMetadata, null, "\t"));
+            //   console.log(JSON.stringify(modelMetadata, null, "\t"));
 
             resolve(metaModel);
         });

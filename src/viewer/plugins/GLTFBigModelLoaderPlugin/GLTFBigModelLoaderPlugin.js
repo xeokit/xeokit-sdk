@@ -6,67 +6,69 @@ import {utils} from "../../../scene/utils.js";
 /**
  * {@link Viewer} plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
  *
- * * For each model loaded, creates a {@link Model} within its {@link Viewer}'s {@link Scene}.
- * * See the {@link GLTFLoaderPlugin#load} method for parameters that you can configure each {@link Model} with as you load it.
- * * Can also load metadata for each {@link Model} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
- * * Can configure each {@link Model} with a local transformation.
- * * Can attach each {@link Model} as a child of a given {@link Node}.
+ * * For each model loaded, creates a {@link BigModel} within its {@link Viewer}'s {@link Scene}.
+ * * See the {@link GLTFBigModelLoaderPlugin#load} method for parameters that you can configure each {@link BigModel} with as you load it.
+ * * Can also load metadata for each {@link BigModel} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
  *
  * @example
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {GLTFBigModelLoaderPlugin} from "../src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFLoaderPlugin.js";
+ *
  * // Create a xeokit Viewer
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  * });
  *
- * // Add a GLTFBigModelsLoader to the Viewer
- * var plugin = new GLTFBigModelsLoader(viewer, {
- *      id: "GLTFBigModelsLoader"  // Default value
+ * // Add a GLTFLoaderPlugin to the Viewer
+ * var plugin = new GLTFBigModelLoaderPlugin(viewer, {
+ *      id: "GLTFBigModelLoader"  // Default value
  * });
  *
  * // We can also get the plugin by its ID on the Viewer
- * plugin = viewer.plugins.GLTFBigModelsLoader;
+ * plugin = viewer.plugins.GLTFBigModelLoader;
  *
  * // Load the glTF model
- * // These params can include all the xeokit.GLTFModel configs
- * const model = plugin.load({
+ * const model = plugin.load({ // Model is a BigModel
  *      id: "myModel",
- *      src: "models/mygltfmodel.gltf",
+ *      src: "models/myModel.gltf",
+ *      metaModelSrc: "models/myModelMetadata.json", // Optional metadata JSON
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
  *      edges: true
  * });
  *
- * // Recall that the model is a xeokit.Model
- *
  * // When the model has loaded, fit it to view
  * model.on("loaded", function() {
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * // Update properties of the model via the xeokit.Model
- * model.translate = [200,0,0];
+ * // Update properties of the BigModel
+ * model.highlighted = true;
  *
  * // You can unload the model via the plugin
  * plugin.unload("myModel");
  *
- * // Or unload it by calling destroy() on the xeokit.Model itself
+ * // Or unload it by calling destroy() on the BigModel itself
  * model.destroy();
  *
  * @class GLTFBigModelLoader
  */
-class GLTFBigModelLoader extends Plugin {
+class GLTFBigModelLoaderPlugin extends Plugin {
 
     /**
      * @constructor
      *
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="GLTFBigModelLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.modelId="GLTFBigModelLoaderPlugin"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Function} [cfg.handleNode] Optional callback to control how {@link BigModelNode}s are created as the glTF node hierarchy is parsed. See usage examples.
      */
-    constructor(viewer, cfg) {
+    constructor(viewer, cfg = {}) {
 
         super("GLTFBigModelLoader", viewer, cfg);
+
+        this._handleNode = cfg.handleNode;
 
         /**
          * @private
@@ -87,90 +89,87 @@ class GLTFBigModelLoader extends Plugin {
     }
 
     /**
-     Loads a large-scale glTF model from the file system into the viewer.
-
-     @param params {*} Configs
-     @param [params.id] {String} Optional ID, unique among all components in the parent {@link Scene},
-     generated automatically when omitted.
-     @param [params.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
-     @param [params.meta] {String:Object} Optional map of user-defined metadata to attach to this GLTFModel.
-     @param [params.parent] The parent Object.
-     @param [params.visible=true] {Boolean}  Indicates if this GLTFModel is visible.
-     @param [params.culled=false] {Boolean}  Indicates if this GLTFModel is culled from view.
-     @param [params.pickable=true] {Boolean}  Indicates if this GLTFModel is pickable.
-     @param [params.clippable=true] {Boolean} Indicates if this GLTFModel is clippable.
-     @param [params.outlined=false] {Boolean} Whether an outline is rendered around this GLTFModel.
-     @param [params.ghosted=false] {Boolean} Whether this GLTFModel is rendered ghosted.
-     @param [params.highlighted=false] {Boolean} Whether this GLTFModel is rendered highlighted.
-     @param [params.selected=false] {Boolean} Whether this GLTFModel is rendered selected.
-     @param [params.edges=false] {Boolean} Whether this GLTFModel is rendered with edges emphasized.
-     @param [params.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
-     @param [params.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
-     @param [params.position=[0,0,0]] {Float32Array} The GLTFModel's local 3D position.
-     @param [params.scale=[1,1,1]] {Float32Array} The GLTFModel's local scale.
-     @param [params.rotation=[0,0,0]] {Float32Array} The GLTFModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     @param [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} GLTFThe Model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     @param [params.src] {String} Path to a glTF file.
-     @param  [params.metaModelSrc]{String} Path to an optional matadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     @param [params.lambertMaterials=false] {Boolean} When true, gives each {@link Mesh} the same {@link LambertMaterial} and a {@link Mesh#colorize} value set the to diffuse color extracted from the glTF material. This is typically used for CAD models with huge amounts of objects, and will ignore textures.
-     @param [params.quantizeGeometry=true] {Boolean} When true, quantizes geometry to reduce memory and GPU bus usage.
-     @param [params.combineGeometry=true] {Boolean} When true, combines geometry vertex buffers to improve rendering performance.
-     @param [params.backfaces=false] {Boolean} When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
-     @param [params.edgeThreshold=20] {Number} When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     @param [params.handleNode] {Function} Optional callback to mask which {@link Node}s are loaded. Each Object will only be loaded when this callback returns ````true``` for its ID.
+     * Loads a large-scale glTF model from a file into this GLTFBigModelLoaderPlugin's {@link Viewer}.
+     *
+     * Creates a {@link BigModel} within the Viewer's {@link Scene} that represents the model.
+     *
+     * @param {*} params  Loading parameters.
+     * @param {String} [params.model] ID to assign to the root {@link Node#modelId}, unique among all components in the Viewer's {@link Scene}.
+     * @param {String} params.src Path to a glTF file.
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model's root {@link Node} into a xeokit object hierarchy.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
+     * @param {Float32Array} [params.position=[0,0,0]] The model {@link Node}'s local 3D position.
+     * @param {Float32Array} [params.scale=[1,1,1]] The model {@link Node}'s local scale.
+     * @param {Float32Array} [params.rotation=[0,0,0]] The model root {@link Node}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link Node}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
+     * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
+     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
+     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {Function} [params.handleNode] Optional callback to control how {@link Node}s and {@link Mesh}s are created as the glTF node hierarchy is parsed. See usage examples.
+     * @returns {BigModel} A {@link BigModel} representing the loaded glTF model.
      */
     load(params) {
         const self = this;
-        const id = params.id;
-        if (!id) {
-            this.error("load() param expected: id");
-            return;
-        }
+
+        var bigModel = new BigModel(this.viewer.scene, params);
+        const modelId = params.modelId;
         const src = params.src;
+
         if (!src) {
             this.error("load() param expected: src");
             return;
         }
-        if (this.viewer.scene.components[id]) {
-            this.error(`Component with this ID already exists in viewer: ${id}`);
-            return;
-        }
-        params = utils.apply(params, {
-            modelId: id // Registers the Node on viewer.scene.models
-        });
-        var bigModel = new BigModel(this.viewer.scene, params);
-        this._modelLoadParams[id] = params;
+
+        params.handleNode = params.handleNode || this._handleNode || function(modelId, glTFNode, actions) {
+            const name = glTFNode.name;
+            if (!name) {
+                return true; // Continue descending this node subtree
+            }
+            actions.createNode = {
+                objectId: name
+            };
+            return true;
+        };
+
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
-            utils.loadJSON(metaModelSrc, function (metadata) {
-                self.viewer.createMetadata(id, metadata);
-                self._loader.load(bigModel, src, params);
+            this.viewer.scene.canvas.spinner.processes++;
+            utils.loadJSON(metaModelSrc, (modelMetadata) => {
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                self.viewer.scene.canvas.spinner.processes--;
+                self._loader.load(this, bigModel, src, params);
             }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model '${id} from  '${metaModelSrc}' - ${errMsg}`);
+                self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
+                self.viewer.scene.canvas.spinner.processes--;
             });
         } else {
-            this._loader.load(bigModel, src, params);
+            this._loader.load(this, bigModel, src, params);
         }
-        this.models[id] = bigModel;
+
+        this.models[modelId] = bigModel;
+
+
         bigModel.once("destroyed", () => {
-            delete this.models[id];
-            delete this._modelLoadParams[id];
-            this.viewer.destroyMetadata(id);
-            this.fire("unloaded", id);
+            delete this.models[modelId];
+            this.viewer.metaScene.destroyMetaModel(modelId);
+            this.fire("unloaded", modelId);
         });
+
         return bigModel;
     }
 
 
     /**
-     * Unloads a {@link Model} that was previously loaded by this Plugin.
+     * Unloads a model that was previously loaded by this Plugin.
      *
-     * @param {String} id  ID of model to unload.
+     * @param {String} modelId  ID of model to unload.
      */
-    unload(id) {
+    unload(modelId) {
         const model = this.models;
         if (!model) {
-            this.error(`unload() model with this ID not found: ${id}`);
+            this.error(`unload() model with this ID not found: ${modelId}`);
             return;
         }
         model.destroy();
@@ -187,48 +186,13 @@ class GLTFBigModelLoader extends Plugin {
         }
     }
 
-    /**
-     * @private
-     */
-    writeBookmark(bookmark) {
-        bookmark[this.id] = this._modelLoadParams;
-    }
-
-    /**
-     * @private
-     */
-    readBookmarkAsynch(bookmark, ok) {
-        this.clear();
-        var modelLoadParams = bookmark[this.id];
-        if (modelLoadParams) {
-            var modelParamsList = [];
-            for (const id in modelLoadParams) {
-                modelParamsList.push(modelLoadParams[id]);
-            }
-            if (modelParamsList.length === 0) {
-                ok();
-                return;
-            }
-            this._loadModel(modelParamsList, modelParamsList.length - 1, ok);
-        }
-    }
-
-    _loadModel(modelLoadParams, i, ok) {
-        this.load(modelLoadParams[i], () =>{
-            if (i === 0) {
-                ok();
-            } else {
-                this._loadModel(modelLoadParams, i - 1, ok);
-            }
-        });
-    }
 
     /**
      * Unloads models loaded by this plugin.
      */
     clear() {
-        for (const id in this.models) {
-            this.models[id].destroy();
+        for (const modelId in this.models) {
+            this.models[modelId].destroy();
         }
     }
 
@@ -241,4 +205,4 @@ class GLTFBigModelLoader extends Plugin {
     }
 }
 
-export {GLTFBigModelLoader}
+export {GLTFBigModelLoaderPlugin}

@@ -19,7 +19,7 @@ class CubicBezierCurve extends Curve {
 
      @property v0
      @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set v0(value) {
 
@@ -43,7 +43,7 @@ class CubicBezierCurve extends Curve {
 
      @property v1
      @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set v1(value) {
 
@@ -67,7 +67,7 @@ class CubicBezierCurve extends Curve {
 
      @property v2
      @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set v2(value) {
 
@@ -91,7 +91,7 @@ class CubicBezierCurve extends Curve {
 
      @property v3
      @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set v3(value) {
 
@@ -117,7 +117,7 @@ class CubicBezierCurve extends Curve {
 
      @property t
      @default 0
-     @type Number
+     @type {Number}
      */
 
     set t(value) {

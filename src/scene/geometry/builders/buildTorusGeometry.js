@@ -5,11 +5,28 @@ import {math} from '../../math/math.js';
  * @desc Creates a torus-shaped {@link Geometry}.
  *
  * ## Usage
- * Creating a {@link Mesh} with a torus-shaped {@link VBOGeometry} :
+ * Creating a {@link Mesh} with a torus-shaped {@link ReadableGeometry} :
  *
+ * [[Run this example](/examples/#geometry_builders_buildTorusGeometry)]
+ * 
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * viewer.camera.eye = [0, 0, 5];
+ * viewer.camera.look = [0, 0, 0];
+ * viewer.camera.up = [0, 1, 0];
+ *
  * new Mesh(myViewer.scene, {
- *      geometry: buildTorusGeometry(VBOGeometry, myViewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
  *          center: [0,0,0],
  *          radius: 1.0,
  *          tube: 0.5,
@@ -26,7 +43,7 @@ import {math} from '../../math/math.js';
  * ````
  *
  * @function buildTorusGeometry
- * @param {Class} claz {@link Geometry} subtype to instantiate.
+ * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
@@ -36,9 +53,9 @@ import {math} from '../../math/math.js';
  * @param {Number} [cfg.radialSegments=32] The number of radial segments.
  * @param {Number} [cfg.tubeSegments=24] The number of tubular segments.
  * @param {Number} [cfg.arc=Math.PI*0.5] The length of the arc in radians, where Math.PI*2 is a closed torus.
- * @returns {Geometry} The {@link Geometry} subtype indicated by claz.
+ * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildTorusGeometry(claz, owner, cfg = {}) {
+function buildTorusGeometry(geometryClass, owner, cfg = {}) {
 
     let radius = cfg.radius || 1;
     if (radius < 0) {
@@ -151,7 +168,7 @@ function buildTorusGeometry(claz, owner, cfg = {}) {
         }
     }
 
-    return new claz(owner, utils.apply(cfg, {
+    return new geometryClass(owner, utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,

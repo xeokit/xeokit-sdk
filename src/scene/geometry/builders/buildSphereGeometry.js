@@ -5,11 +5,28 @@ import {utils} from '../../utils.js';
  *
  * ## Usage
  *
- * Creating a {@link Mesh} with a sphere-shaped {@link VBOGeometry} :
+ * Creating a {@link Mesh} with a sphere-shaped {@link ReadableGeometry} :
+ *
+ * [[Run this example](/examples/#geometry_builders_buildSphereGeometry)]
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * viewer.camera.eye = [0, 0, 5];
+ * viewer.camera.look = [0, 0, 0];
+ * viewer.camera.up = [0, 1, 0];
+ *
  * new Mesh(myViewer.scene, {
- *      geometry: buildSphereGeometry(VBOGeometry, myViewer.scene, {
+ *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
  *          center: [0,0,0],
  *          radius: 1.5,
  *          heightSegments: 60,
@@ -24,7 +41,7 @@ import {utils} from '../../utils.js';
  * ````
  *
  * @function buildSphereGeometry
- * @param {Class} claz {@link Geometry} subtype to instantiate.
+ * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
@@ -32,9 +49,9 @@ import {utils} from '../../utils.js';
  * @param {Number} [cfg.radius=1]  Radius.
  * @param {Number} [cfg.heightSegments=24] Number of latitudinal bands.
  * @param  {Number} [cfg.widthSegments=18] Number of longitudinal bands.
- * @returns {Geometry} The {@link Geometry} subtype indicated by claz.
+ * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildSphereGeometry(claz, owner, cfg = {}) {
+function buildSphereGeometry(geometryClass, owner, cfg = {}) {
 
     const lod = cfg.lod || 1;
 
@@ -140,7 +157,7 @@ function buildSphereGeometry(claz, owner, cfg = {}) {
         }
     }
 
-    return new claz(owner, utils.apply(cfg, {
+    return new geometryClass(owner, utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,

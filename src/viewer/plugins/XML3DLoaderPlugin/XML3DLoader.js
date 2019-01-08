@@ -1,6 +1,6 @@
 import {Node} from "./../../../scene/nodes/Node.js";
 import {Mesh} from "./../../../scene/mesh/Mesh.js";
-import {Geometry} from "./../../../scene/geometry/Geometry.js";
+import {ReadableGeometry} from "../../../scene/geometry/ReadableGeometry.js";
 import {PhongMaterial} from "./../../../scene/materials/PhongMaterial.js";
 import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
 import {SpecularMaterial} from "./../../../scene/materials/SpecularMaterial.js";
@@ -592,7 +592,6 @@ var parse3DXML = (function () {
         }
         var meshesResult = {
             edgeThreshold: ctx.edgeThreshold || 30,
-            combineGeometry: true,
             compressGeometry: true
         };
         var children = node.children;
@@ -624,7 +623,7 @@ var parse3DXML = (function () {
             }
         }
         if (meshesResult.positions) {
-            var geometry = new Geometry(ctx.modelNode.scene, meshesResult);
+            var geometry = new ReadableGeometry(ctx.modelNode.scene, meshesResult);
             ctx.modelNode._addComponent(geometry);
             result[geometry.id] = {
                 geometry: geometry,

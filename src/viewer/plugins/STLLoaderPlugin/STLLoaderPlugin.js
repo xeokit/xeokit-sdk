@@ -44,8 +44,8 @@ import {STLLoader} from "./STLLoader.js";
  * plugin = viewer.plugins.STLModels;
  *
  * // Load the STL model
- * const model = plugin.load({
- *      modelId: "myModel",
+ * const model = plugin.load({ // Model is a Node
+ *      id: "myModel",
  *      src: "models/mySTLModel.stl",
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
@@ -67,7 +67,7 @@ import {STLLoader} from "./STLLoader.js";
  * // You can unload the model via the plugin
  * plugin.unload("myModel");
  *
- * // Or unload it by calling destroy() on the Model itself
+ * // Or unload it by calling destroy() on the Node itself
  * model.destroy();
  *
  * @class STLLoaderPlugin
@@ -91,7 +91,7 @@ class STLLoaderPlugin extends Plugin {
         this._loader = new STLLoader(this, cfg);
 
         /**
-         * {@link Model}s currently loaded by this Plugin.
+         * Models currently loaded by this Plugin.
          * @type {{String:Node}}
          */
         this.models = {};
@@ -100,10 +100,10 @@ class STLLoaderPlugin extends Plugin {
     /**
      * Loads an STL model from a file into this STLLoaderPlugin's {@link Viewer}.
      *
-     * Creates a {@link Node} representing the model within the Viewer's {@link Scene}.
+     * Creates a {@link Node} tree representing the model within the Viewer's {@link Scene}.
      *
      * @param {*} params  Loading parameters.
-     * @param {String} params.modelId ID to assign to the model's {@link Node}, unique among all components in the Viewer's {@link Scene}.
+     * @param {String} params.id ID to assign to the model's {@link Node}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to an STL file.
      * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model {@link Node} into a scene graph.
      * @param {Boolean} [params.edges=false] Whether or not xeogl renders the model with edges emphasized.
@@ -116,16 +116,16 @@ class STLLoaderPlugin extends Plugin {
      * @param {Number} [params.smoothNormalsAngleThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [params.splitMeshes=true] When true, creates a separate {@link Mesh} for each group of faces that share the same vertex colors. Only works with binary STL.
-     * @returns {Node} A {@link Node} representing the loaded STL model.
+     * @returns {Node} A {@link Node} tree representing the loaded STL model.
      */
     load(params) {
 
         var node = new Node(this.viewer.scene, params);
 
-        const modelId = params.modelId;
+        const id = params.id;
 
-        if (!modelId) {
-            this.error("load() param expected: modelId");
+        if (!id) {
+            this.error("load() param expected: id");
             return node;
         }
 
@@ -136,33 +136,33 @@ class STLLoaderPlugin extends Plugin {
             return node;
         }
 
-        if (this.viewer.scene.components[modelId]) {
-            this.error(`Component with this ID already exists in viewer: ${modelId}`);
+        if (this.viewer.scene.components[id]) {
+            this.error(`Component with this ID already exists in viewer: ${id}`);
             return;
         }
 
         this._loader.load(this, node, src, params);
 
-        this.models[modelId] = node;
+        this.models[id] = node;
 
         node.once("destroyed", () => {
-            delete this.models[modelId];
-            this.viewer.metaScene.destroyMetaModel(modelId);
-            this.fire("unloaded", modelId);
+            delete this.models[id];
+            this.viewer.metaScene.destroyMetaModel(id);
+            this.fire("unloaded", id);
         });
 
         return node;
     }
 
     /**
-     * Unloads a {@link Model} that was previously loaded by this Plugin.
+     * Unloads a model that was previously loaded by this Plugin.
      *
-     * @param {String} modelId  ID of model to unload.
+     * @param {String} id  ID of model to unload.
      */
-    unload(modelId) {
+    unload(id) {
         const model = this.models;
         if (!model) {
-            this.error(`unload() model Node with this ID not found: ${modelId}`);
+            this.error(`unload() model Node with this ID not found: ${id}`);
             return;
         }
         model.destroy();
@@ -183,8 +183,8 @@ class STLLoaderPlugin extends Plugin {
      * Unloads models loaded by this plugin.
      */
     clear() {
-        for (const modelId in this.models) {
-            this.models[modelId].destroy();
+        for (const id in this.models) {
+            this.models[id].destroy();
         }
     }
 

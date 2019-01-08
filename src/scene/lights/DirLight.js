@@ -55,7 +55,7 @@ class DirLight extends Light {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -63,7 +63,7 @@ class DirLight extends Light {
     }
 
     /**
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      @param {*} [cfg] The DirLight configuration
      @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this DirLight.
@@ -72,7 +72,7 @@ class DirLight extends Light {
      @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} The color of this DirLight.
      @param [cfg.intensity=1.0 ] {Number} The intensity of this DirLight, as a factor in range ````[0..1]````.
      @param [cfg.space="view"] {String} The coordinate system the DirLight is defined in - "view" or "space".
-     @param [cfg.castShadow=false] {Boolean} Flag which indicates if this DirLight casts a castShadow.
+     @param [cfg.castsShadow=false] {Boolean} Flag which indicates if this DirLight casts a castsShadow.
      * @param owner
      * @param cfg
      */
@@ -94,7 +94,7 @@ class DirLight extends Light {
             color: math.vec3([0.7, 0.7, 0.8]),
             intensity: 1.0,
             space: cfg.space || "view",
-            castShadow: false,
+            castsShadow: false,
             shadowDirty: true,
 
             getShadowViewMatrix: (function () {
@@ -135,7 +135,7 @@ class DirLight extends Light {
         this.dir = cfg.dir;
         this.color = cfg.color;
         this.intensity = cfg.intensity;
-        this.castShadow = cfg.castShadow;
+        this.castsShadow = cfg.castsShadow;
         this.scene._lightCreated(this);
     }
 
@@ -144,7 +144,7 @@ class DirLight extends Light {
 
      @property dir
      @default [1.0, 1.0, 1.0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set dir(value) {
         this._state.dir.set(value || [1.0, 1.0, 1.0]);
@@ -161,7 +161,7 @@ class DirLight extends Light {
 
      @property color
      @default [0.7, 0.7, 0.8]
-     @type Float32Array
+     @type {Float32Array}
      */
     set color(value) {
         this._state.color.set(value || [0.7, 0.7, 0.8]);
@@ -179,7 +179,7 @@ class DirLight extends Light {
 
      @property intensity
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set intensity(value) {
         value = value !== undefined ? value : 1.0;
@@ -194,22 +194,22 @@ class DirLight extends Light {
     /**
      Flag which indicates if this DirLight casts a shadow.
 
-     @property castShadow
+     @property castsShadow
      @default false
-     @type Boolean
+     @type {Boolean}
      */
-    set castShadow(value) {
+    set castsShadow(value) {
         value = !!value;
-        if (this._state.castShadow === value) {
+        if (this._state.castsShadow === value) {
             return;
         }
-        this._state.castShadow = value;
+        this._state.castsShadow = value;
         this._shadowViewMatrixDirty = true;
         this.glRedraw();
     }
 
-    get castShadow() {
-        return this._state.castShadow;
+    get castsShadow() {
+        return this._state.castsShadow;
     }
 
     destroy() {

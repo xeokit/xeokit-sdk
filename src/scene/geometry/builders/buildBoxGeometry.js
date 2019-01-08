@@ -5,11 +5,28 @@ import {utils} from '../../utils.js';
  *
  * ## Usage
  *
- * Creating a {@link Mesh} with a box-shaped {@link VBOGeometry}:
+ * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry}.
+ *
+ * [[Run this example](/examples/#geometry_builders_buildBoxGeometry)]
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildBoxGeometry} from "../src/scene/geometry/builders/buildBoxGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const myViewer = new Viewer({
+ *         canvasId: "myCanvas"
+ * });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
  * new Mesh(myViewer.scene, {
- *      geometry: buildBoxGeometry(VBOGeometry, myViewer.scene, {
+ *      geometry: buildBoxGeometry(ReadableGeometry, myViewer.scene, {
  *         center: [0,0,0],
  *         xSize: 1,  // Half-size on each axis
  *         ySize: 1,
@@ -24,7 +41,7 @@ import {utils} from '../../utils.js';
  * ````
  *
  * @function buildBoxGeometry
- * @param {Class} claz {@link Geometry} subtype to instantiate.
+ * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
@@ -32,9 +49,9 @@ import {utils} from '../../utils.js';
  * @param {Number} [cfg.xSize=1.0]  Half-size on the X-axis.
  * @param {Number} [cfg.ySize=1.0]  Half-size on the Y-axis.
  * @param {Number} [cfg.zSize=1.0]  Half-size on the Z-axis.
- * @returns {Geometry} The {@link Geometry} subtype indicated by claz.
+ * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildBoxGeometry(claz, owner, cfg = {}) {
+function buildBoxGeometry(geometryClass, owner, cfg = {}) {
 
     let xSize = cfg.xSize || 1;
     if (xSize < 0) {
@@ -66,7 +83,7 @@ function buildBoxGeometry(claz, owner, cfg = {}) {
     const ymax = ySize + centerY;
     const zmax = zSize + centerZ;
 
-    return new claz(owner, utils.apply(cfg, {
+    return new geometryClass(owner, utils.apply(cfg, {
 
         // The vertices - eight for our cube, each
         // one spanning three array elements for X,Y and Z

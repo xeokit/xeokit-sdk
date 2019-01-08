@@ -25,7 +25,7 @@ const PRESETS = {
 };
 
 /**
- * Defines the appearance of {@link Mesh}es when their edges are emphasised.
+ * @desc Configures the appearance of {@link Mesh}es when their edges are emphasised.
  *
  * * Emphasise edges of a {@link Mesh} by setting {@link Mesh#edges} ````true````.
  * * When {@link Mesh}es are within the subtree of a {@link Node}, then setting {@link Node#edges} ````true```` will collectively set {@link Mesh#edges} ````true```` on all those {@link Mesh}es.
@@ -36,27 +36,56 @@ const PRESETS = {
  *
  * In the example below, we'll create a {@link Mesh} with its own EdgeMaterial and set {@link Mesh#edges} ````true```` to emphasise its edges.
  *
+ * [[Run this example](/examples/#materials_EdgeMaterial)]
+ *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {EdgeMaterial} from "../src/scene/materials/EdgeMaterial.js";
+ *
+ * const myViewer = new Viewer({
+ *      canvasId: "myCanvas",
+ *      transparent: true
+ * });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
  * new Mesh(myViewer.scene, {
- *     geometry: new BoxGeometry(myViewer.scene, {
- *         edgeThreshold: 1
- *     }),
- *     material: new PhongMaterial(myViewer.scene, {
- *         diffuse: [0.2, 0.2, 1.0]
- *     }),
- *     edgeMaterial: new EdgeMaterial(myViewer.scene, {
- *         edgeColor: [0.2, 1.0, 0.2],
- *         edgeAlpha: 1.0,
- *         edgeWidth: 2
- *     }),
- *     edges: true
+ *
+ *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ *          radius: 1.5,
+ *          heightSegments: 24,
+ *          widthSegments: 16,
+ *          edgeThreshold: 2 // Default is 10
+ *      }),
+ *
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.4, 0.4, 1.0],
+ *          ambient: [0.9, 0.3, 0.9],
+ *          shininess: 30,
+ *          alpha: 0.5,
+ *          alphaMode: "blend"
+ *      }),
+ *
+ *      edgeMaterial: new EdgeMaterial(myViewer.scene, {
+ *          edgeColor: [0.0, 0.0, 1.0]
+ *          edgeAlpha: 1.0,
+ *          edgeWidth: 2
+ *      }),
+ *
+ *      edges: true
  * });
  * ````
  *
- * Note the ````edgeThreshold```` configuration for the {@link Geometry} on our {@link Mesh}.  EdgeMaterial configures
- * a wireframe representation of the {@link Geometry}, which will have inner edges (those edges between
+ * Note the ````edgeThreshold```` configuration for the {@link ReadableGeometry} on our {@link Mesh}.  EdgeMaterial configures
+ * a wireframe representation of the {@link ReadableGeometry}, which will have inner edges (those edges between
  * adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` indicates that, for
- * this particular {@link Geometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
+ * this particular {@link ReadableGeometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
  * is not greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect
  * as needed for particular Geometries.
  *
@@ -80,7 +109,7 @@ const PRESETS = {
  * edgeMaterial.edgeAlpha = 1.0;
  * edgeMaterial.edgeWidth = 2;
  * ````
-*
+ *
  *  ## Presets
  *
  * Let's switch the {@link Scene#edgeMaterial} to one of the presets in {@link EdgeMaterial#presets}:
@@ -101,46 +130,34 @@ const PRESETS = {
 class EdgeMaterial extends Material {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
+     * JavaScript class name for this Component.
+     *
+     * For example: "AmbientLight", "MetallicMaterial" etc.
+     *
+     * @type {String}
      */
     get type() {
         return "EdgeMaterial";
     }
 
     /**
-     Available EdgeMaterial presets.
-
-     @property presets
-     @type {Object}
-     @static
+     * Gets available EdgeMaterial presets.
+     *
+     * @type {Object}
      */
     get presets() {
         return PRESETS;
     };
 
     /**
-
-     @class EdgeMaterial
-     @module xeokit
-     @submodule materials
-     @constructor
-     @extends Material
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param {*} [cfg] The EdgeMaterial configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param [cfg.meta=null] {String:Object} Metadata to attach to this EdgeMaterial.
-
-     @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
-     @param [cfg.edgeAlpha=1.0] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-     @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
-
-     @param [cfg.preset] {String} Selects a preset EdgeMaterial configuration - see {@link EdgeMaterial#preset:method"}}EdgeMaterial#preset(){{/crossLink}}.
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] The EdgeMaterial configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Array of Number} [cfg.edgeColor=[0.2,0.2,0.2]] RGB edge color.
+     * @param {Number} [cfg.edgeAlpha=1.0] Edge transparency. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     * @param {Number} [cfg.edgeWidth=1] Edge width in pixels.
+     * @param {String} [cfg.preset] Selects a preset EdgeMaterial configuration - see {@link EdgeMaterial#presets}.
      */
     constructor(owner, cfg = {}) {
 
@@ -175,11 +192,11 @@ class EdgeMaterial extends Material {
 
 
     /**
-     RGB color of ghost edges.
-
-     @property edgeColor
-     @default [0.2, 0.2, 0.2]
-     @type Float32Array
+     * Sets RGB edge color.
+     *
+     * Default value is ````[0.2, 0.2, 0.2]````.
+     *
+     * @type {Float32Array}
      */
     set edgeColor(value) {
         let edgeColor = this._state.edgeColor;
@@ -200,18 +217,25 @@ class EdgeMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets RGB edge color.
+     *
+     * Default value is ````[0.2, 0.2, 0.2]````.
+     *
+     * @type {Float32Array}
+     */
     get edgeColor() {
         return this._state.edgeColor;
     }
 
     /**
-     Transparency of ghost edges.
-
-     A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-
-     @property edgeAlpha
-     @default 1.0
-     @type Number
+     * Sets edge transparency.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set edgeAlpha(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
@@ -222,43 +246,52 @@ class EdgeMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets edge transparency.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get edgeAlpha() {
         return this._state.edgeAlpha;
     }
 
     /**
-     Width of ghost edges, in pixels.
-
-     @property edgeWidth
-     @default 1.0
-     @type Number
+     * Sets edge width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0```` pixels.
+     *
+     * @type {Number}
      */
     set edgeWidth(value) {
         this._state.edgeWidth = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets edge width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0```` pixels.
+     *
+     * @type {Number}
+     */
     get edgeWidth() {
         return this._state.edgeWidth;
     }
 
     /**
-     Selects a preset EdgeMaterial configuration.
-
-     Available presets are:
-
-     * "default" - grey wireframe with translucent fill, for light backgrounds.
-     * "defaultLightBG" - grey wireframe with grey translucent fill, for light backgrounds.
-     * "defaultDarkBG" - grey wireframe with grey translucent fill, for dark backgrounds.
-     * "vectorscope" - green wireframe with glowing vertices and black translucent fill.
-     * "battlezone" - green wireframe with black opaque fill, giving a solid hidden-lines-removed effect.
-     * "sepia" - light red-grey wireframe with light sepia translucent fill - easy on the eyes.
-     * "gamegrid" - light blue wireframe with dark blue translucent fill - reminiscent of Tron.
-     * "yellowHighlight" - light yellow translucent fill - highlights while allowing underlying detail to show through.
-
-     @property preset
-     @default "default"
-     @type String
+     * Selects a preset EdgeMaterial configuration.
+     *
+     * Default value is ````"default"````.
+     *
+     * @type {String}
      */
     set preset(value) {
         value = value || "default";
@@ -276,10 +309,20 @@ class EdgeMaterial extends Material {
         this._preset = value;
     }
 
+    /**
+     * The current preset EdgeMaterial configuration.
+     *
+     * Default value is ````"default"````.
+     *
+     * @type {String}
+     */
     get preset() {
         return this._preset;
     }
 
+    /**
+     * Destroys this EdgeMaterial.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

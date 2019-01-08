@@ -101,7 +101,7 @@ class CameraPathAnimation extends Component {
      The rate at which this CameraPathAnimation plays.
 
      @property rate
-     @type Number
+     @type {Number}
      */
     set rate(value) {
         this._playingRate = value;

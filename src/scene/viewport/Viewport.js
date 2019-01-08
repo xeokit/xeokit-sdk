@@ -53,7 +53,7 @@
  @module xeokit
  @submodule rendering
  @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+ @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
  @param {*} [cfg] Viewport configuration
  @param {String} [cfg.id] Optional ID, unique among all components in the parent
  {@link Scene}, generated automatically when omitted.
@@ -61,7 +61,7 @@
  @param [cfg.boundary] {Array of Number} Canvas-space Viewport boundary, given as
  (min, max, width, height). Defaults to the size of the parent
  {@link Scene} {@link Canvas}.
- @param [cfg.autoBoundary=false] {Boolean} Indicates whether this Viewport's {@link Viewport/boundary}
+ @param [cfg.autoBoundary=false] {Boolean} Indicates if this Viewport's {@link Viewport/boundary}
  automatically synchronizes with the size of the parent {@link Scene} {@link Canvas}.
 
  @extends Component
@@ -77,7 +77,7 @@ class Viewport extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -145,7 +145,7 @@ class Viewport extends Component {
     }
 
     /**
-     Indicates whether this Viewport's {@link Viewport/boundary} automatically
+     Indicates if this Viewport's {@link Viewport/boundary} automatically
      synchronizes with the size of the parent {@link Scene} {@link Canvas}.
 
      When set true, then this Viewport will fire a {@link Viewport/boundary/event} whenever
@@ -156,7 +156,7 @@ class Viewport extends Component {
 
      @property autoBoundary
      @default false
-     @type Boolean
+     @type {Boolean}
      */
     set autoBoundary(value) {
 

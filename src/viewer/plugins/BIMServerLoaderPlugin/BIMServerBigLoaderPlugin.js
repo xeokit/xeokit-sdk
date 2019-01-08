@@ -58,7 +58,7 @@ import {defaultMaterials} from "./lib/defaultMaterials.js";
  *                 roid: roid,
  *                 schema: schema,
  *                 edges: true,                    // Render with emphasized edges
- *                 lambertMaterials: true,         // Lambertian flat-shading instead of Blinn/Phong
+ *                 lambertMaterial: true,         // Lambertian flat-shading instead of Blinn/Phong
  *                 scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
  *                 rotation: [-90, 0, 0]           // Rotate model for World +Y "up"
  *             });
@@ -195,9 +195,9 @@ class BIMServerBigLoaderPlugin extends Plugin {
                 const guidToOid = {};
 
                 const visit = metaObject => {
-                    oids[metaObject.gid] = metaObject.extId;
-                    oidToGuid[metaObject.extId] = metaObject.objectId;
-                    guidToOid[metaObject.objectId] = metaObject.extId;
+                    oids[metaObject.external.gid] = metaObject.external.extId;
+                    oidToGuid[metaObject.external.extId] = metaObject.objectId;
+                    guidToOid[metaObject.objectId] = metaObject.external.extId;
                     for (let i = 0; i < (metaObject.children || []).length; ++i) {
                         visit(metaObject.children[i]);
                     }
@@ -290,7 +290,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createObject(objectId, geometryDataId, ifcType) { // Pass in color to set transparency
+                    createNode(objectId, geometryDataId, ifcType) { // Pass in color to set transparency
                         objectId = oidToGuid[objectId];
                         const meshId = `${modelId}.${geometryDataId}.mesh`;
                         if (scene.objects[objectId]) {
@@ -302,7 +302,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
                             return;
                         }
                         const visible = !self.hiddenTypes[ifcType];
-                        xeokitBigModel.createObject({
+                        xeokitBigModel.createNode({
                             objectId: objectId,
                             meshIds: [meshId],
                             visible: visible

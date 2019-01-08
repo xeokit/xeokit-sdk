@@ -1,4 +1,3 @@
-
 import {core} from '../core.js';
 import {utils} from '../utils.js';
 import {math} from '../math/math.js';
@@ -10,7 +9,8 @@ import {Input} from '../input/Input.js';
 import {Viewport} from '../viewport/Viewport.js';
 import {Camera} from '../camera/Camera.js';
 import {DirLight} from '../lights/DirLight.js';
-import {BoxGeometry} from '../geometry/BoxGeometry.js';
+import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
+import {buildBoxGeometry} from '../geometry/builders/buildBoxGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
@@ -66,7 +66,7 @@ function getMeshIDMap(scene, meshIds) {
  * ## Creating and accessing Scene components
  *
  * As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
- * {@link TorusGeometry} and a {@link PhongMaterial}:
+ * {@link BuildTorusGeometry} and a {@link PhongMaterial}:
  *
  * ````javascript
  * var teapotMesh = new Mesh(scene, {
@@ -215,7 +215,7 @@ function getMeshIDMap(scene, meshIds) {
  * ````
  *
  * Subscribing to updates to the AABB, which occur whenever {@link Mesh}es are transformed, their
- * {@link Geometry}s have been updated, or the {@link Camera} has moved:
+ * {@link ReadableGeometry}s have been updated, or the {@link Camera} has moved:
  *
  * ````javascript
  * scene.on("boundary", function() {
@@ -331,7 +331,7 @@ class Scene extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -341,7 +341,7 @@ class Scene extends Component {
     /**
      * @constructor
      */
-    constructor(cfg={}) {
+    constructor(cfg = {}) {
 
         super(null, cfg);
 
@@ -377,70 +377,78 @@ class Scene extends Component {
         this.startTime = (new Date()).getTime();
 
         /**
-         {@link Model}s in this Scene, mapped to their IDs.
-
-         @property models
-         @final
-         @type {{String:Model}}
+         * Map of {@link Entity}s that represent a models.
+         *
+         * An {@link Entity} represents a model when it has a {@link Entity#modelId}.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#modelId}.
+         *
+         * @property models
+         * @final
+         * @type {{String:Entity}}
          */
         this.models = {};
 
         /**
-         {@link Node}s in this Scene that have {@link Node#objectId} properties, mapped to those IDs.
-
-         Each Object is registered in this map when its {@link Node#objectId} is assigned a value.
-
-         @property objects
-         @final
-         @type {{String:Object}}
+         * Map of {@link Entity}s that represents objects.
+         *
+         * An Entity represents an object when it has an {@link Entity#objectId}.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
+         *
+         * @property objects
+         * @final
+         * @type {{String:Entity}}
          */
         this.objects = {};
 
         /**
-         Visible entity {@link Node}s within this Scene, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Node/visible} property is true and its
-         {@link Node/objectId} is assigned a value.
-
-         @property visibleObjects
-         @final
-         @type {{String:Object}}
+         * Map of currently visible {@link Entity}s that represent objects.
+         *
+         * An Entity represents an object if it has an {@link Entity#objectId}, and is visible when {@link Entity#visible} is true.
+         *
+         * @property visibleObjects
+         * @final
+         * @type {{String:Object}}
          */
         this.visibleObjects = {};
 
         /**
-         Ghosted entity {@link Node}s within this Scene, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Node/ghosted} property is true and its
-         {@link Node/objectId} is assigned a value.
-
-         @property ghostedObjects
-         @final
-         @type {{String:Object}}
+         * Map of currently ghosted {@link Entity}s that represent objects.
+         *
+         * An Entity represents an object if it has an {@link Entity#objectId}, and is ghosted when {@link Entity#ghosted} is true.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
+         * 
+         * @property ghostedObjects
+         * @final
+         * @type {{String:Object}}
          */
         this.ghostedObjects = {};
 
         /**
-         Highlighted entity {@link Node}s within this Scene, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Node/highlighted} property is true and its
-         {@link Node/objectId} is assigned a value.
-
-         @property highlightedObjects
-         @final
-         @type {{String:Object}}
+         * Map of currently highlighted {@link Entity}s that represent objects.
+         *
+         * An Entity represents an object if it has an {@link Entity#objectId} is true, and is highlighted when {@link Entity#highlighted} is true.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
+         * 
+         * @property highlightedObjects
+         * @final
+         * @type {{String:Object}}
          */
         this.highlightedObjects = {};
 
         /**
-         Selected entity {@link Node}s within this Scene, mapped to their IDs.
-
-         Each Object is registered in this map when its {@link Node/selected} property is true and its
-         {@link Node/objectId} is assigned a value.
-
-         @property selectedObjects
-         @final
-         @type {{String:Object}}
+         * Map of currently selected {@link Entity}s that represent objects.
+         *
+         * An Entity represents an object if {@link Entity#isObject} is true, and is selected while {@link Entity#selected} is true.
+         *
+         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
+         * 
+         * @property selectedObjects
+         * @final
+         * @type {{String:Object}}
          */
         this.selectedObjects = {};
 
@@ -476,7 +484,7 @@ class Scene extends Component {
 
          @property components
          @final
-         @type {String:Component}
+         @type {{String:Component}}
          */
         this.components = {};
 
@@ -611,7 +619,7 @@ class Scene extends Component {
                     hashParts.push("/");
                     hashParts.push(light.type);
                     hashParts.push((light.space === "world") ? "w" : "v");
-                    if (light.castShadow) {
+                    if (light.castsShadow) {
                         hashParts.push("sh");
                     }
                 }
@@ -821,9 +829,6 @@ class Scene extends Component {
             this._renderer.addDrawable(component.id, component);
             this._collidables[component.id] = component;
         }
-        if (component.isModel) {
-            this.models[component.id] = component;
-        }
     }
 
     _removeComponent(component) {
@@ -899,58 +904,58 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _registerModel(component) {
-        this.models[component.modelId] = component;
+    _registerModel(entity) {
+        this.models[entity.modelId] = entity;
         this._modelIds = null; // Lazy regenerate
     }
 
-    _deregisterModel(component) {
-        delete this.models[component.modelId];
+    _deregisterModel(entity) {
+        delete this.models[entity.modelId];
         this._modelIds = null; // Lazy regenerate
     }
-    
-    _registerObject(component) {
-        this.objects[component.objectId] = component;
+
+    _registerObject(entity) {
+        this.objects[entity.objectId] = entity;
         this._objectIds = null; // Lazy regenerate
     }
 
-    _deregisterObject(component) {
-        delete this.objects[component.objectId];
+    _deregisterObject(entity) {
+        delete this.objects[entity.objectId];
         this._objectIds = null; // Lazy regenerate
     }
 
-    _objectVisibilityUpdated(component, visible) {
-        if (visible) {
-            this.visibleObjects[component.objectId] = component;
+    _objectVisibilityUpdated(entity) {
+        if (entity.visible) {
+            this.visibleObjects[entity.objectId] = entity;
         } else {
-            delete this.visibleObjects[component.objectId];
+            delete this.visibleObjects[entity.objectId];
         }
         this._visibleObjectIds = null; // Lazy regenerate
     }
 
-    _objectGhostedUpdated(component, ghosted) {
-        if (ghosted) {
-            this.ghostedObjects[component.objectId] = component;
+    _objectGhostedUpdated(entity) {
+        if (entity.ghosted) {
+            this.ghostedObjects[entity.objectId] = entity;
         } else {
-            delete this.ghostedObjects[component.objectId];
+            delete this.ghostedObjects[entity.objectId];
         }
         this._ghostedObjectIds = null; // Lazy regenerate
     }
 
-    _objectHighlightedUpdated(component, highlighted) {
-        if (highlighted) {
-            this.highlightedObjects[component.objectId] = component;
+    _objectHighlightedUpdated(entity) {
+        if (entity.highlighted) {
+            this.highlightedObjects[entity.objectId] = entity;
         } else {
-            delete this.highlightedObjects[component.objectId];
+            delete this.highlightedObjects[entity.objectId];
         }
         this._highlightedObjectIds = null; // Lazy regenerate
     }
 
-    _objectSelectedUpdated(component, selected) {
-        if (selected) {
-            this.selectedObjects[component.objectId] = component;
+    _objectSelectedUpdated(entity) {
+        if (entity.selected) {
+            this.selectedObjects[entity.objectId] = entity;
         } else {
-            delete this.selectedObjects[component.objectId];
+            delete this.selectedObjects[entity.objectId];
         }
         this._selectedObjectIds = null; // Lazy regenerate
     }
@@ -1087,7 +1092,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#models}.
      @property modelIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get modelIds() {
         if (!this._modelIds) {
@@ -1100,7 +1105,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#objects}.
      @property objectIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get objectIds() {
         if (!this._objectIds) {
@@ -1113,7 +1118,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#visibleObjects}.
      @property visibleObjectIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get visibleObjectIds() {
         if (!this._visibleObjectIds) {
@@ -1126,7 +1131,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#ghostedObjects}.
      @property ghostedObjectIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get ghostedObjectIds() {
         if (!this._ghostedObjectIds) {
@@ -1139,7 +1144,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#highlightedObjects}.
      @property highlightedObjectIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get highlightedObjectIds() {
         if (!this._highlightedObjectIds) {
@@ -1152,7 +1157,7 @@ class Scene extends Component {
      Convenience array of IDs in {@link Scene#selectedObjects}.
      @property selectedObjectIds
      @final
-     @type {Array of String}
+     @type {Array}
      */
     get selectedObjectIds() {
         if (!this._selectedObjectIds) {
@@ -1166,7 +1171,7 @@ class Scene extends Component {
 
      @property ticksPerRender
      @default 1
-     @type Number
+     @type {Number}
      */
     set ticksPerRender(value) {
         if (value === undefined || value === null) {
@@ -1191,7 +1196,7 @@ class Scene extends Component {
 
      @property passes
      @default 1
-     @type Number
+     @type {Number}
      */
     set passes(value) {
         if (value === undefined || value === null) {
@@ -1213,7 +1218,7 @@ class Scene extends Component {
     }
 
     /**
-     When doing multiple passes per frame, specifies whether to clear the
+     When doing multiple passes per frame, specifies if to clear the
      canvas before each pass (true) or just before the first pass (false).
 
      @property clearEachPass
@@ -1258,7 +1263,7 @@ class Scene extends Component {
 
      @property gammaOutput
      @default true
-     @type Boolean
+     @type {Boolean}
      */
     set gammaOutput(value) {
         value = value !== false;
@@ -1278,7 +1283,7 @@ class Scene extends Component {
 
      @property gammaOutput
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set gammaFactor(value) {
         value = (value === undefined || value === null) ? 2.2 : value;
@@ -1294,32 +1299,30 @@ class Scene extends Component {
     }
 
     /**
-     The default geometry for this Scene, which is a {@link BoxGeometry}.
+     The default {@link Geometry} for this Scene, which is a unit-sized box shape.
 
-     This {@link BoxGeometry} has an {@link Component#id} equal to "default.geometry".
+     Has a {@link Component#id} set to "default.geometry".
 
-     {@link Mesh}s in this Scene are attached to this {@link Geometry} by default.
+     {@link Mesh}s in this Scene are attached to this {@link ReadableGeometry} by default.
+
      @property geometry
      @final
-     @type BoxGeometry
+     @type {Geometry}
      */
     get geometry() {
-        return this.components["default.geometry"] ||
-            new BoxGeometry(this, {
-                id: "default.geometry",
-                dontClear: true
-            });
+        return this.components["default.geometry"] || buildBoxGeometry(ReadableGeometry, this, {
+            id: "default.geometry",
+            dontClear: true
+        });
     }
 
     /**
-     The default drawing material for this Scene, which is a {@link PhongMaterial"}}PhongMaterial{{/crossLink}}.
+     The default drawing material for this Scene, which is a {@link PhongMaterial}.
 
-     This {@link PhongMaterial"}}PhongMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.material", with all
-     other properties initialised to their default values.
+     Has a {@link Component#id} set to "default.material".
 
-     {@link Mesh}es in this Scene are attached to this
-     {@link PhongMaterial"}}PhongMaterial{{/crossLink}} by default.
+     {@link Mesh}es in this Scene are attached to this {@link PhongMaterial} by default.
+
      @property material
      @final
      @type PhongMaterial
@@ -1333,17 +1336,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are ghosted.
+     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are ghosted.
 
-     This {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.ghostMaterial", with all
-     other properties initialised to their default values.
+     Has a {@link Component#id} set to "default.ghostMaterial".
 
-     {@link Mesh}es in this Scene are attached to this
-     {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} by default.
+     {@link Mesh}es in this Scene are attached to this {@link EmphasisMaterial} by default.
+
      @property ghostMaterial
      @final
-     @type EmphasisMaterial
+     @type {EmphasisMaterial}
      */
     get ghostMaterial() {
         return this.components["default.ghostMaterial"] || new EmphasisMaterial(this, {
@@ -1354,17 +1355,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are highlighted.
+     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are highlighted.
 
-     This {@link HighlightMaterial"}}HighlightMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.highlightMaterial", with all
-     other properties initialised to their default values.
+     Has {@link Component#id} set to "default.highlightMaterial".
 
-     {@link Mesh}es in this Scene are attached to this
-     {@link HighlightMaterial"}}HighlightMaterial{{/crossLink}} by default.
+     {@link Mesh}es in this Scene are attached to this{@link EmphasisMaterial} by default.
+
      @property highlightMaterial
      @final
-     @type HighlightMaterial
+     @type {EmphasisMaterial}
      */
     get highlightMaterial() {
         return this.components["default.highlightMaterial"] || new EmphasisMaterial(this, {
@@ -1375,17 +1374,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when they are selected.
+     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are selected.
 
-     This {@link SelectedMaterial"}}SelectedMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.selectedMaterial", with all
-     other properties initialised to their default values.
+     Has {@link Component#id} set to "default.selectedMaterial".
 
-     {@link Mesh}es in this Scene are attached to this
-     {@link SelectedMaterial"}}SelectedMaterial{{/crossLink}} by default.
+     {@link Mesh}es in this Scene are attached to this {EmphasisMaterial} by default.
+
      @property selectedMaterial
      @final
-     @type SelectedMaterial
+     @type {EmphasisMaterial}l
      */
     get selectedMaterial() {
         return this.components["default.selectedMaterial"] || new EmphasisMaterial(this, {
@@ -1396,14 +1393,12 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EdgeMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Meshes"}}Meshes{{/crossLink}} when edges are emphasized.
+     The Scene's default {@link EdgeMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Mesh}es when edges are emphasized.
 
-     This {@link EdgeMaterial"}}EdgeMaterial{{/crossLink}} has
-     an {@link Component/id:property"}}id{{/crossLink}} equal to "default.edgeMaterial", with all
-     other properties initialised to their default values.
+     Has {@link Component#id} set to "default.edgeMaterial".
 
-     {@link Mesh}es in this Scene are attached to this
-     {@link EdgeMaterial"}}EdgeMaterial{{/crossLink}} by default.
+     {@link Mesh}es in this Scene are attached to this {@link EdgeMaterial} by default.
+
      @property edgeMaterial
      @final
      @type EdgeMaterial
@@ -1420,7 +1415,7 @@ class Scene extends Component {
     }
 
     /**
-     The {@link Viewport} belonging to this Scene.
+     The {@link Viewport} for this Scene.
 
      @property viewport
      @final
@@ -1431,7 +1426,7 @@ class Scene extends Component {
     }
 
     /**
-     The {@link Camera} belonging to this Scene.
+     The {@link Camera} for this this Scene.
 
      @property camera
      @final
@@ -1523,7 +1518,7 @@ class Scene extends Component {
         return this._aabb;
     }
 
-    _setBoundaryDirty() {
+    _setAABBDirty() {
         //if (!this._aabbDirty) {
         this._aabbDirty = true;
         this.fire("boundary");
@@ -1644,13 +1639,15 @@ class Scene extends Component {
             params.excludeMeshIds = getMeshIDMap(this, excludeMeshes);
         }
 
-        if (pickResult = this._renderer.pick(params, pickResult)) {
+        pickResult = this._renderer.pick(params, pickResult);
+
+        if (pickResult) {
             utils.apply(params, pickResult);
             pickResult.object = pickResult.mesh; // Backwards compat
             if (params.pickSurface) {
                 pickResult.mesh.getPickResult(pickResult);
             }
-            pickResult.mesh.fire("picked", pickResult); // TODO: BigModelMesh doeosn;t fire events...
+            pickResult.mesh.fire("picked", pickResult); // TODO: BigModelMesh doeosn't fire events...
             return pickResult;
         }
     }
@@ -1785,11 +1782,10 @@ class Scene extends Component {
     /**
      Shows or hides a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its visibility status in its {@link Node/visibility} property.
+     Each Object indicates its visibility status in its {@link Node#visibility} property.
 
      Each visible Object is registered in the {@link Scene}'s
-     {@link Scene#visibleObjects} map while its {@link Node/objectId}
-     is assigned a value.
+     {@link Scene#visibleObjects} map when its {@link Node#isObject} is true.
 
      @method setVisible
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
@@ -1807,7 +1803,7 @@ class Scene extends Component {
     /**
      Culls or unculls a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its culled status in its {@link Node/visibility} property.
+     Each Object indicates its culled status in its {@link Node#visibility} property.
 
      @method setVisible
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
@@ -1825,11 +1821,10 @@ class Scene extends Component {
     /**
      Selects or de-selects a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its selected status in its {@link Node/selected} property.
+     Each Object indicates its selected status in its {@link Node#selected} property.
 
      Each selected Object is registered in the {@link Scene}'s
-     {@link Scene#selectedObjects} map while its {@link Node/objectId}
-     is assigned a value.
+     {@link Scene#selectedObjects} map when its {@link Node#isObject} is true.
 
      @method setSelected
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
@@ -1847,11 +1842,10 @@ class Scene extends Component {
     /**
      Highlights or de-highlights a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its highlight status in its {@link Node/highlighted} property.
+     Each Object indicates its highlight status in its {@link Node#highlighted} property.
 
      Each highlighted Object is registered in the {@link Scene}'s
-     {@link Scene#highlightedObjects} map while its {@link Node/objectId}
-     is assigned a value.
+     {@link Scene#highlightedObjects} map when its {@link Node#isObject} is true.
 
      @method setHighlighted
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
@@ -1869,11 +1863,10 @@ class Scene extends Component {
     /**
      Ghosts or un-ghosts a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
 
-     Each Object indicates its ghosted status in its {@link Node/ghosted} property.
+     Each Object indicates its ghosted status in its {@link Node#ghosted} property.
 
      Each ghosted Object is registered in the {@link Scene}'s
-     {@link Scene#ghostedObjects} map when its {@link Node/objectId}
-     is assigned a value.
+     {@link Scene#ghostedObjects} map when its {@link Node#objectId} is assigned a value.
 
      @method setGhosted
      @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
@@ -1990,8 +1983,8 @@ class Scene extends Component {
         this.canvas.gl = null;
 
         // Memory leak prevention
-        this.models = null;
         this.components = null;
+        this.models = null;
         this.objects = null;
         this.visibleObjects = null;
         this.ghostedObjects = null;
@@ -2001,7 +1994,6 @@ class Scene extends Component {
         this.lights = null;
         this.lightMaps = null;
         this.reflectionMaps = null;
-        this._objectGUIDs = null;
         this._objectIds = null;
         this._visibleObjectIds = null;
         this._ghostedObjectIds = null;

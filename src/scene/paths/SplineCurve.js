@@ -19,7 +19,7 @@ class SplineCurve extends Curve {
 
      @property points
      @default []
-     @type Float32Array
+     @type {Float32Array}
      */
     set points(value) {
         this._points = value || [];
@@ -45,7 +45,7 @@ class SplineCurve extends Curve {
 
      @property t
      @default 0
-     @type Number
+     @type {Number}
      */
     set t(value) {
         value = value || 0;

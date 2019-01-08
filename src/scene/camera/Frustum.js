@@ -17,7 +17,7 @@ class Frustum extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -66,7 +66,7 @@ class Frustum extends Component {
 
      @property left
      @default -1.0
-     @type Number
+     @type {Number}
      */
 
     set left(value) {
@@ -92,7 +92,7 @@ class Frustum extends Component {
 
      @property right
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set right(value) {
         this._right = (value !== undefined && value !== null) ? value : 1.0;
@@ -117,7 +117,7 @@ class Frustum extends Component {
 
      @property top
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set top(value) {
         this._top = (value !== undefined && value !== null) ? value : 1.0;
@@ -142,7 +142,7 @@ class Frustum extends Component {
 
      @property bottom
      @default -1.0
-     @type Number
+     @type {Number}
      */
     set bottom(value) {
         this._bottom = (value !== undefined && value !== null) ? value : -1.0;
@@ -167,7 +167,7 @@ class Frustum extends Component {
 
      @property near
      @default 0.1
-     @type Number
+     @type {Number}
      */
     set near(value) {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
@@ -192,7 +192,7 @@ class Frustum extends Component {
 
      @property far
      @default 10000.0
-     @type Number
+     @type {Number}
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;

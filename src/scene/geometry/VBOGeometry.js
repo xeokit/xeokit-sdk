@@ -4,55 +4,51 @@ import {ArrayBuf} from '../webgl/ArrayBuf.js';
 import {math} from '../math/math.js';
 import {stats} from './../stats.js';
 import {WEBGL_INFO} from './../webglInfo.js';
-import {buildEdgeIndices} from '../math/buildEdges.js';
-import {geometryCompressionUtils} from './geometryCompressionUtils.js';
+import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
+import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
 const memoryStats = stats.memory;
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const IndexArrayType = bigIndicesSupported ? Uint32Array : Uint16Array;
-const nullVertexBufs = new RenderState({});
 const tempAABB = math.AABB3();
 
 /**
- * @desc A {@link Geometry} that only keeps its geometry data as VBOs in GPU memory, not retaining any geometry data in browser memory.
+ * @desc A {@link Geometry} that keeps its geometry data solely in GPU memory, without retaining it in browser memory.
  *
- * VBOGeometry uses less memory than {@link ReadableGeometry}, which keeps the data in browser memory and GPU VBOs. Use ReadableGeometry
- * when you need to keep the geometry arrays in browser memory.
+ * VBOGeometry uses less memory than {@link ReadableGeometry}, which keeps its geometry data in both browser and GPU memory.
  *
  * ## Usage
  *
- * Creating a {@link Mesh} with a VBOGeometry defining a single triangle and a {@link PhongMaterial} with diffuse {@link Texture}:
+ * Creating a {@link Mesh} with a VBOGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
+ *
+ * [[Run this example](/examples/#geometry_VBOGeometry)]
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {VBOGeometry} from "../src/scene/geometry/VBOGeometry.js"
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const myViewer = new Viewer({
+ *         canvasId: "myCanvas"
+ *     });
+ *
  * new Mesh(myViewer.scene, {
- *      geometry: new VBOGeometry(myViewer.scene, {
- *          primitive: "triangles",
- *          positions:  [0.0, 0.9, 0.0, -0.9,-0.9, 0.0, 0.9, -0.9, 0.0],
- *          normals:    [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
- *          uv:         [0.0, 0.0, 0.5, 0.0, 1.0, 0.0],
- *          indices:    [0, 1, 2]
- *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
- *              src: "textures/diffuse/uvGrid2.jpg"
- *          })
- *      })
- * });
- * ````
- *
- * ## Default Geometry
- *
- * A {@link Mesh} created without a Geometry will automatically inherit the
- * default {@link Scene#geometry}, which is a {@link ReadableGeometry} that describes a box of unit size.
- *
- * ````javascript
- * new Mesh(myViewer.scene, {
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
- *              src: "textures/diffuse/uvGrid2.jpg"
- *          })
- *      })
- * });
+ *         geometry: new VBOGeometry(myViewer.scene, {
+ *             primitive: "triangles",
+ *             positions: [0.0, 3, 0.0, -3, -3, 0.0, 3, -3, 0.0],
+ *             normals: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+ *             uv: [0.0, 0.0, 0.5, 1.0, 1.0, 0.0],
+ *             indices: [0, 1, 2]
+ *         }),
+ *         material: new PhongMaterial(myViewer.scene, {
+ *             diffuseMap: new Texture(myViewer.scene, {
+ *                 src: "textures/diffuse/uvGrid2.jpg"
+ *             }),
+ *             backfaces: true
+ *         })
+ *     });
  * ````
  */
 class VBOGeometry extends Geometry {
@@ -62,9 +58,7 @@ class VBOGeometry extends Geometry {
 
      For example: "AmbientLight", "MetallicMaterial" etc.
 
-     @property type
-     @type String
-     @final
+     @type {String}
      */
     get type() {
         return "VBOGeometry";
@@ -79,35 +73,23 @@ class VBOGeometry extends Geometry {
     }
 
     /**
-     *
-     @class VBOGeometry
-     @module xeokit
-     @submodule geometry
-     @constructor
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
-     @param {*} [cfg] Configs
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene},
-     generated automatically when omitted.
-     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this GeometryLite.
-     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param [cfg.positions] {Array of Number} Positions array.
-     @param [cfg.normals] {Array of Number} Vertex normal vectors array.
-     @param [cfg.uv] {Array of Number} UVs array.
-     @param [cfg.colors] {Array of Number} Vertex colors.
-     @param [cfg.indices] {Array of Number} Indices array.
-     @param [cfg.edgeThreshold=10] {Number} When a {@link Mesh} renders this GeometryLite as wireframe, this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
-     @extends Component
-     * @param owner
-     * @param cfg
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {String} [cfg.primitive="triangles"]  The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {Array} [cfg.positions]  Positions array.
+     * @param {Array} [cfg.normals]  Vertex normal vectors array.
+     * @param {Array} [cfg.uv]  UVs array.
+     * @param {Array} [cfg.colors]  Vertex colors.
+     * @param {Array} [cfg.indices]  Indices array.
+     * @param {Number} [cfg.edgeThreshold=10]  When autogenerating edges for supporting {@link Drawable#edges}, this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
-        const self = this;
-
         this._state = new RenderState({ // Arrays for emphasis effects are got from xeokit.GeometryLite friend methods
-            combineGeometry: false,
             compressGeometry: true,
             primitive: null, // WebGL enum
             primitiveName: null, // String
@@ -118,7 +100,6 @@ class VBOGeometry extends Geometry {
             colorsbuf: null,
             uvBuf: null,
             indicesBuf: null,
-            indicesBufCombined: null, // Indices into a shared VertexBufs, set when combineGeometry == true
             hash: ""
         });
 
@@ -187,7 +168,6 @@ class VBOGeometry extends Geometry {
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
             memoryStats.positions += state.positionsBuf.numItems;
             math.positions3ToAABB3(cfg.positions, this._aabb);
-            this._boundingSphere = math.positions3ToSphere3(cfg.positions);
             math.positions3ToAABB3(positions, tempAABB, state.positionsDecodeMatrix);
             math.AABB3ToOBB3(tempAABB, this._obb);
         }
@@ -223,7 +203,7 @@ class VBOGeometry extends Geometry {
             const indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new IndexArrayType(cfg.indices);
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
             memoryStats.indices += state.indicesBuf.numItems;
-            const edgeIndices = buildEdgeIndices(positions, indices, state.positionsDecodeMatrix, this._edgeThreshold, state.combineGeometry);
+            const edgeIndices = buildEdgeIndices(positions, indices, state.positionsDecodeMatrix, this._edgeThreshold);
             this._edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, edgeIndices.length, 1, gl.STATIC_DRAW);
         }
 
@@ -258,26 +238,21 @@ class VBOGeometry extends Geometry {
     }
 
     /**
-     The GeometryLite's primitive type.
-
-     Valid types are: 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-
-     @property primitive
-     @default "triangles"
-     @type String
+     * Gets the primitive type.
+     *
+     * Possible types are: 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     *
+     * @type {String}
      */
     get primitive() {
         return this._state.primitiveName;
     }
 
     /**
-     * Local-space axis-aligned 3D boundary (AABB) of this geometry.
+     * Gets the local-space axis-aligned 3D boundary (AABB).
      *
-     * The AABB is represented by a six-element Float32Array containing the min/max extents of the
-     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @property aabb
-     * @final
      * @type {Float32Array}
      */
     get aabb() {
@@ -285,30 +260,14 @@ class VBOGeometry extends Geometry {
     }
 
     /**
-     * Local-space oriented 3D boundary (OBB) of this geometry.
+     * Gets the local-space oriented 3D boundary (OBB).
      *
-     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box,
-     * where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
+     * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
      *
-     * @property obb
-     * @final
      * @type {Float32Array}
      */
     get obb() {
         return this._obb;
-    }
-
-    /**
-     * Local-space 3D bounding sphere enclosing this VBOGeometry.
-     *
-     * The Sphere is represented by a 4-element Float32Array for form [centerX, centerY, centerZ, radius].
-     *
-     * @property boundary
-     * @final
-     * @type {Float32Array}
-     */
-    get boundary() {
-        return this._boundingSphere;
     }
 
     /** @private */
@@ -316,11 +275,9 @@ class VBOGeometry extends Geometry {
         return this._state;
     }
 
-    /** @private */
-    _getVertexBufs() {
-        return nullVertexBufs;
-    }
-
+    /**
+     * Destroys this component.
+     */
     destroy() {
         super.destroy();
         const state = this._state;

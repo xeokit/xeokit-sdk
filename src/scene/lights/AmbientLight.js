@@ -4,8 +4,8 @@ import {Light} from './Light.js';
 /**
  * @desc An ambient light source of fixed color and intensity that illuminates all {@link Mesh}es equally.
  *
- * * {@link AmbientLight#color} multiplies by {@link PhongMaterial#ambient} at each position of each {@link Geometry} surface.
- * * {@link AmbientLight#color} multiplies by {@link LambertMaterial#color} uniformly across each triangle of each {@link Geometry} (ie. flat shaded).
+ * * {@link AmbientLight#color} multiplies by {@link PhongMaterial#ambient} at each position of each {@link ReadableGeometry} surface.
+ * * {@link AmbientLight#color} multiplies by {@link LambertMaterial#color} uniformly across each triangle of each {@link ReadableGeometry} (ie. flat shaded).
  * * {@link AmbientLight}s, {@link DirLight}s and {@link PointLight}s are registered by their {@link Component#id} on {@link Scene#lights}.
  *
  * ## Usage
@@ -51,7 +51,7 @@ class AmbientLight extends Light {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -59,7 +59,7 @@ class AmbientLight extends Light {
     }
 
     /**
-     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      @param {*} [cfg] AmbientLight configuration
      @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this AmbientLight.
@@ -85,7 +85,7 @@ class AmbientLight extends Light {
 
      @property color
      @default [0.7, 0.7, 0.8]
-     @type Float32Array
+     @type {Float32Array}
      */
     set color(value) {
         this._state.color.set(value || [0.7, 0.7, 0.8]);
@@ -101,7 +101,7 @@ class AmbientLight extends Light {
 
      @property intensity
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set intensity(value) {
         this._state.intensity = value !== undefined ? value : 1.0;

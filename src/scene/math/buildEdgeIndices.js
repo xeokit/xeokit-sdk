@@ -1,4 +1,4 @@
-import {math} from '../math/math.js';
+import {math} from './math.js';
 
 /**
  * @private
@@ -98,7 +98,7 @@ var buildEdgeIndices = (function () {
         }
     }
 
-    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combineGeometry = false) {
+    return function (positions, indices, positionsDecodeMatrix, edgeThreshold) {
         weldVertices(positions, indices);
         buildFaces(indices.length, positionsDecodeMatrix);
         const edgeIndices = [];
@@ -155,7 +155,7 @@ var buildEdgeIndices = (function () {
             edgeIndices.push(ia);
             edgeIndices.push(ib);
         }
-        return (largeIndex || combineGeometry) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
+        return (largeIndex) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
     };
 })();
 

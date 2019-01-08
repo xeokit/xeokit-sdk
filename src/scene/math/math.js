@@ -3054,71 +3054,6 @@ const math = {
         return angleAxis;
     },
 
-    decompressPosition(position, decodeMatrix, dest) {
-        dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
-        dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
-        dest[2] = position[2] * decodeMatrix[10] + decodeMatrix[14];
-    },
-
-    decompressPositions(positions, decodeMatrix, dest = new Float32Array(positions.length)) {
-        for (let i = 0, len = positions.length; i < len; i += 3) {
-            dest[i + 0] = positions[i + 0] * decodeMatrix[0] + decodeMatrix[12];
-            dest[i + 1] = positions[i + 1] * decodeMatrix[5] + decodeMatrix[13];
-            dest[i + 2] = positions[i + 2] * decodeMatrix[10] + decodeMatrix[14];
-        }
-        return dest;
-    },
-
-    decompressUV(uv, decodeMatrix, dest) {
-        dest[0] = uv[0] * decodeMatrix[0] + decodeMatrix[6];
-        dest[1] = uv[1] * decodeMatrix[4] + decodeMatrix[7];
-    },
-
-    decompressUVs(uvs, decodeMatrix, dest = new Float32Array(uvs.length)) {
-        for (let i = 0, len = uvs.length; i < len; i += 3) {
-            dest[i + 0] = uvs[i + 0] * decodeMatrix[0] + decodeMatrix[6];
-            dest[i + 1] = uvs[i + 1] * decodeMatrix[4] + decodeMatrix[7];
-        }
-        return dest;
-    },
-
-    octDecodeVec2(oct, result) {
-        let x = oct[0];
-        let y = oct[1];
-        x = (2 * x + 1) / 255;
-        y = (2 * y + 1) / 255;
-        const z = 1 - Math.abs(x) - Math.abs(y);
-        if (z < 0) {
-            x = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
-            y = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
-        }
-        const length = Math.sqrt(x * x + y * y + z * z);
-        result[0] = x / length;
-        result[1] = y / length;
-        result[2] = z / length;
-        return result;
-    },
-
-    octDecodeVec2s(octs, result) {
-        for (let i = 0, j = 0, len = octs.length; i < len; i += 2) {
-            let x = octs[i + 0];
-            let y = octs[i + 1];
-            x = (2 * x + 1) / 255;
-            y = (2 * y + 1) / 255;
-            const z = 1 - Math.abs(x) - Math.abs(y);
-            if (z < 0) {
-                x = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
-                y = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
-            }
-            const length = Math.sqrt(x * x + y * y + z * z);
-            result[j + 0] = x / length;
-            result[j + 1] = y / length;
-            result[j + 2] = z / length;
-            j += 3;
-        }
-        return result;
-    },
-
     //------------------------------------------------------------------------------------------------------------------
     // Boundaries
     //------------------------------------------------------------------------------------------------------------------
@@ -3159,6 +3094,10 @@ const math = {
         return new Float32Array(values || 16);
     },
 
+    /** Returns a new 3D bounding sphere */
+    Sphere3(x, y, z, r) {
+        return new Float32Array([x, y, z, r]);
+    },
 
     /**
      * Transforms an OBB3 by a 4x4 matrix.
@@ -3610,6 +3549,61 @@ const math = {
     }))(),
 
     /**
+     * Finds the minimum boundary sphere enclosing the given 3D positions.
+     *
+     * @private
+     */
+    positions3ToSphere3: ((() => {
+
+        const tempVec3a = new Float32Array(3);
+        const tempVec3b = new Float32Array(3);
+
+        return (positions, sphere) => {
+
+            sphere = sphere || math.vec4();
+
+            let x = 0;
+            let y = 0;
+            let z = 0;
+
+            let i;
+            const lenPositions = positions.length;
+            let radius = 0;
+
+            for (i = 0; i < lenPositions; i += 3) {
+                x += positions[i];
+                y += positions[i + 1];
+                z += positions[i + 2];
+            }
+
+            const numPositions = lenPositions / 3;
+
+            sphere[0] = x / numPositions;
+            sphere[1] = y / numPositions;
+            sphere[2] = z / numPositions;
+
+            let dist;
+
+            for (i = 0; i < lenPositions; i += 3) {
+
+                tempVec3a[0] = positions[i];
+                tempVec3a[1] = positions[i+1];
+                tempVec3a[2] = positions[i+2];
+
+                dist = Math.abs(math.lenVec3(math.subVec3(tempVec3a, sphere, tempVec3b)));
+
+                if (dist > radius) {
+                    radius = dist;
+                }
+            }
+
+            sphere[3] = radius;
+
+            return sphere;
+        };
+    }))(),
+
+    /**
      * Finds the minimum boundary sphere enclosing the given 3D points.
      *
      * @private
@@ -3753,7 +3747,7 @@ const math = {
         var x;
         var y;
         var z;
-        for (var i = 0, len = positions.length; i < len; i+=3) {
+        for (var i = 0, len = positions.length; i < len; i += 3) {
             x = positions[i];
             y = positions[i + 1];
             z = positions[i + 2];
@@ -4847,7 +4841,73 @@ const math = {
             }
             return buildNode(triangles, indices, positions, 0);
         };
-    }))()
+    }))(),
+
+
+    decompressPosition(position, decodeMatrix, dest) {
+        dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
+        dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
+        dest[2] = position[2] * decodeMatrix[10] + decodeMatrix[14];
+    },
+
+    decompressPositions(positions, decodeMatrix, dest = new Float32Array(positions.length)) {
+        for (let i = 0, len = positions.length; i < len; i += 3) {
+            dest[i + 0] = positions[i + 0] * decodeMatrix[0] + decodeMatrix[12];
+            dest[i + 1] = positions[i + 1] * decodeMatrix[5] + decodeMatrix[13];
+            dest[i + 2] = positions[i + 2] * decodeMatrix[10] + decodeMatrix[14];
+        }
+        return dest;
+    },
+
+    decompressUV(uv, decodeMatrix, dest) {
+        dest[0] = uv[0] * decodeMatrix[0] + decodeMatrix[6];
+        dest[1] = uv[1] * decodeMatrix[4] + decodeMatrix[7];
+    },
+
+    decompressUVs(uvs, decodeMatrix, dest = new Float32Array(uvs.length)) {
+        for (let i = 0, len = uvs.length; i < len; i += 3) {
+            dest[i + 0] = uvs[i + 0] * decodeMatrix[0] + decodeMatrix[6];
+            dest[i + 1] = uvs[i + 1] * decodeMatrix[4] + decodeMatrix[7];
+        }
+        return dest;
+    },
+
+    octDecodeVec2(oct, result) {
+        let x = oct[0];
+        let y = oct[1];
+        x = (2 * x + 1) / 255;
+        y = (2 * y + 1) / 255;
+        const z = 1 - Math.abs(x) - Math.abs(y);
+        if (z < 0) {
+            x = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
+            y = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
+        }
+        const length = Math.sqrt(x * x + y * y + z * z);
+        result[0] = x / length;
+        result[1] = y / length;
+        result[2] = z / length;
+        return result;
+    },
+
+    octDecodeVec2s(octs, result) {
+        for (let i = 0, j = 0, len = octs.length; i < len; i += 2) {
+            let x = octs[i + 0];
+            let y = octs[i + 1];
+            x = (2 * x + 1) / 255;
+            y = (2 * y + 1) / 255;
+            const z = 1 - Math.abs(x) - Math.abs(y);
+            if (z < 0) {
+                x = (1 - Math.abs(y)) * (x >= 0 ? 1 : -1);
+                y = (1 - Math.abs(x)) * (y >= 0 ? 1 : -1);
+            }
+            const length = Math.sqrt(x * x + y * y + z * z);
+            result[j + 0] = x / length;
+            result[j + 1] = y / length;
+            result[j + 2] = z / length;
+            j += 3;
+        }
+        return result;
+    }
 };
 
 math.buildEdgeIndices = (function () {
@@ -4945,7 +5005,7 @@ math.buildEdgeIndices = (function () {
         }
     }
 
-    return function (positions, indices, positionsDecodeMatrix, edgeThreshold, combineGeometry = false) {
+    return function (positions, indices, positionsDecodeMatrix, edgeThreshold) {
         weldVertices(positions, indices);
         buildFaces(indices.length, positionsDecodeMatrix);
         const edgeIndices = [];
@@ -5002,8 +5062,10 @@ math.buildEdgeIndices = (function () {
             edgeIndices.push(ia);
             edgeIndices.push(ib);
         }
-        return (largeIndex || combineGeometry) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
+        return (largeIndex) ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices);
     };
 })();
+
+
 
 export {math};

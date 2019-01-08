@@ -36,7 +36,7 @@ import {RenderState} from '../webgl/RenderState.js';
  *
  * ## Selectively enabling or disabling clipping
  *
- * {@link Node#clippable} and {@link Mesh#clippable} indicate whether or not the Node or Mesh is affected by Clip components.
+ * {@link Node#clippable} and {@link Mesh#clippable} indicate if the Node or Mesh is affected by Clip components.
  *
  * You can switch it at any time, like this:
  *
@@ -56,7 +56,7 @@ class Clip extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -87,11 +87,11 @@ class Clip extends Component {
     }
 
     /**
-     Indicates whether this Clip is active or not.
+     Indicates if this Clip is active or not.
 
      @property active
      @default true
-     @type Boolean
+     @type {Boolean}
      */
     set active(value) {
         this._state.active = value !== false;
@@ -114,7 +114,7 @@ class Clip extends Component {
 
      @property pos
      @default [0, 0, 0]
-     @type Float32Array
+     @type {Float32Array}
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
@@ -140,7 +140,7 @@ class Clip extends Component {
 
      @property dir
      @default [0, 0, -1]
-     @type Float32Array
+     @type {Float32Array}
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);

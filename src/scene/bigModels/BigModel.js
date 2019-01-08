@@ -1,10 +1,10 @@
 import {Component} from "./../Component.js";
-import {Mesh} from "../mesh/Mesh.js";
 import {math} from "../math/math.js";
+import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from './../webglInfo.js';
 
-import {BigModelMesh} from './bigModelMesh.js';
-import {BigModelObject} from './bigModelObject.js';
+import {BigModelMesh} from './BigModelMesh.js';
+import {BigModelNode} from './BigModelNode.js';
 import {getBatchingBuffer, putBatchingBuffer} from "./batching/batchingBuffer.js";
 import {BatchingLayer} from './batching/batchingLayer.js';
 import {InstancingLayer} from './instancing/instancingLayer.js';
@@ -16,8 +16,7 @@ var tempColor = new Uint8Array(3);
 var tempMat4 = math.mat4();
 
 /**
- A **BigModel** is a lightweight representation used for huge engineering models, in which the quantity of objects
- is more important than a realistic appearance or the ability to dynamically translate them.
+ @desc Represents a high-detail engineering model.
 
  * Like the rest of xeokit, is compatible with WebGL version 1.
  * Used for high-detail engineering visualizations containing millions of objects.
@@ -136,7 +135,7 @@ var tempMat4 = math.mat4();
  @param {*} [cfg] Configs
  @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
  @param {String:Object} [cfg.meta] Optional map of user-defined metadata.
- @param [cfg.objectId] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
+ @param [cfg.isObject] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
  @param [cfg.parent] {Object} The parent.
  @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
  @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
@@ -147,8 +146,8 @@ var tempMat4 = math.mat4();
  @param [cfg.pickable=true] {Boolean}       Indicates if pickable.
  @param [cfg.clippable=true] {Boolean}      Indicates if clippable.
  @param [cfg.collidable=true] {Boolean}     Indicates if included in boundary calculations.
- @param [cfg.castShadow=true] {Boolean}     Indicates if casting shadows.
- @param [cfg.receiveShadow=true] {Boolean}  Indicates if receiving shadows.
+ @param [cfg.castsShadow=true] {Boolean}     Indicates if casting shadows.
+ @param [cfg.receivesShadow=true] {Boolean}  Indicates if receiving shadows.
  @param [cfg.outlined=false] {Boolean}      Indicates if outline is rendered.
  @param [cfg.ghosted=false] {Boolean}       Indicates if rendered as ghosted.
  @param [cfg.highlighted=false] {Boolean}   Indicates if rendered as highlighted.
@@ -158,38 +157,12 @@ var tempMat4 = math.mat4();
  @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
  @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
 
- @extends Component
+ @implements {Drawable}
+ @implements {Entity}
  */
 class BigModel extends Component {
 
-    /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
-     */
-    get type() {
-        return "BigModel";
-    }
-
-    /**
-     * @private
-     */
-    get isModel() {
-        return true;
-    }
-
-    /**
-     * @private
-     */
-    get isDrawable() {
-        return true;
-    }
-
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -197,27 +170,10 @@ class BigModel extends Component {
         this._layers = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._instancingLayers = {}; // InstancingLayer for each geometry - can build many of these concurrently
         this._currentBatchingLayer = null; // Current BatchingLayer - can only build one of these at a time due to its use of global geometry buffers
-        this._objectIds = [];
         this._buffer = getBatchingBuffer(); // Each BigModel gets it's own batching buffer - allows multiple BigModels to load concurrently
 
-
-        /**
-         All contained {@link BigModelMesh"}}BigModelMesh{{/crossLink}} instances, mapped to their IDs.
-
-         @property meshes
-         @final
-         @type {{String:BigModelMesh}}
-         */
-        this.meshes = {};
-
-        /**
-         All contained {@link BigModelObject"}}BigModelObject{{/crossLink}} instances, mapped to their IDs.
-
-         @property objects
-         @final
-         @type {{String:BigModelObject}}
-         */
-        this.objects = {};
+        this._meshes = {};
+        this._nodes = [];
 
         this.numGeometries = 0; // Number of instance-able geometries created with createGeometry()
 
@@ -235,8 +191,8 @@ class BigModel extends Component {
         this.pickable = cfg.pickable;
         this.clippable = cfg.clippable;
         this.collidable = cfg.collidable;
-        this.castShadow = cfg.castShadow;
-        this.receiveShadow = cfg.receiveShadow;
+        this.castsShadow = cfg.castsShadow;
+        this.receivesShadow = cfg.receivesShadow;
         this.outlined = cfg.outlined;
         this.ghosted = cfg.ghosted;
         this.highlighted = cfg.highlighted;
@@ -261,6 +217,23 @@ class BigModel extends Component {
         this._worldNormalMatrix = math.mat4();
         math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
         math.transposeMat4(this._worldNormalMatrix);
+
+        if (cfg.modelId) {
+            this._modelId = cfg.modelId;
+            this.scene._registerModel(this);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // BigModel members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns true to indicate that this Component is a BigModel.
+     * @type {Boolean}
+     */
+    get isBigModel() {
+        return true;
     }
 
     /**
@@ -346,31 +319,15 @@ class BigModel extends Component {
         return this._worldNormalMatrix;
     }
 
-    static getGeometryBytesUsed(positions, colors, indices, normals) {
-        // var bytes = 0;
-        // bytes += positions.length * 2;
-        // if (colors != null) {
-        //     bytes += colors.length;
-        // }
-        // //bytes += positions.length * 8;
-        // if (indices.length < 65536 && useSmallIndicesIfPossible) {
-        //     bytes += indices.length * 2;
-        // } else {
-        //     bytes += indices.length * 4;
-        // }
-        // bytes += normals.length;
-        // return bytes;
-    }
-
     /**
      Creates a reusable geometry within this BigModel.
 
-     We can then call {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}} with the
+     We can then call {@link BigModel#createMesh:method"}}createMesh(){{/crossLink}} with the
      ID of the geometry to create a {@link BigModelMesh} within this BigModel that instances it.
 
      @method createGeometry
      @param {*} cfg Geometry properties.
-     @param {String|Number} cfg.id ID for the geometry, to refer to with {@link BigModel/createMesh:method"}}createMesh(){{/crossLink}}
+     @param {String|Number} cfg.id ID for the geometry, to refer to with {@link BigModel#createMesh:method"}}createMesh(){{/crossLink}}
      @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      @param {Array} cfg.positions Flat array of positions.
      @param {Array} cfg.normals Flat array of normal vectors.
@@ -401,7 +358,7 @@ class BigModel extends Component {
      Creates a {@link BigModelMesh} within this BigModel.
 
      You can provide either geometry data arrays or the ID of a geometry that was previously created
-     with {@link BigModel/createGeometry:method"}}createGeometry(){{/crossLink}}.
+     with {@link BigModel#createGeometry:method"}}createGeometry(){{/crossLink}}.
 
      When you provide arrays, then that geometry will be used solely by the BigModelObject, which will be rendered
      using geometry batching.
@@ -413,7 +370,7 @@ class BigModel extends Component {
      @param {*} cfg Object properties.
      @param {String} cfg.id ID for the new object. Must not clash with any existing components within the {@link Scene}.
      @param {String} [cfg.parentId] ID if the parent object, if any. Must resolve to a {@link BigModelMesh} that has already been created within this BigModel.
-     @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link BigModel/createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+     @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link BigModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      @param [cfg.primitive="triangles"] {String} Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      @param {Array} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
      @param {Array} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
@@ -515,7 +472,7 @@ class BigModel extends Component {
             }
             layer = this._currentBatchingLayer;
             if (!edgeIndices && indices) {
-                edgeIndices = math.buildEdgeIndices(positions, indices, null, 10, false);
+                edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
             portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
@@ -527,8 +484,7 @@ class BigModel extends Component {
         mesh._portionId = portionId;
         mesh.aabb = aabb;
 
-        this.meshes[id] = mesh;
-
+        this._meshes[id] = mesh;
 
         // console.log("mesh " + id + " = " + aabb);
 
@@ -536,16 +492,16 @@ class BigModel extends Component {
     }
 
     /**
-     Creates a {@link BigModelObject} within this BigModel, giving it one or
-     more meshes previously created with {@link BigModel/createMesh"}}createMesh(){{/crossLink}}.
+     Creates a {@link BigModelNode} within this BigModel, giving it one or
+     more meshes previously created with {@link BigModel#createMesh"}}createMesh(){{/crossLink}}.
 
      A mesh can only belong to one BigModelObject, so you'll get an error if you try to reuse a mesh among
      multiple BigModelObjects.
 
      @param cfg
-     @returns {BigModelObject}
+     @returns {BigModelNode}
      */
-    createObject(cfg) {
+    createNode(cfg) {
         // Validate or generate BigModelObject ID
         var id = cfg.id;
         if (id === undefined) {
@@ -567,7 +523,7 @@ class BigModel extends Component {
         var meshes = [];
         for (i = 0, len = meshIds.length; i < len; i++) {
             meshId = meshIds[i];
-            mesh = this.meshes[meshId];
+            mesh = this._meshes[meshId];
             if (!mesh) {
                 this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
                 continue;
@@ -580,7 +536,7 @@ class BigModel extends Component {
         }
         // Create BigModelObject flags
         var flags = 0;
-        if (this._visible && cfg.visible !== false) { // Apply flags fom xeokit.Object base class
+        if (this._visible && cfg.visible !== false) {
             flags = flags | RENDER_FLAGS.VISIBLE;
             this.numVisibleObjects++;
         }
@@ -619,11 +575,10 @@ class BigModel extends Component {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-        var object = new BigModelObject(this, cfg.objectId, id, meshes, flags, aabb); // Internally sets BigModelMesh#object to this BigModelObject
-        this.objects[id] = object;
-        this._objectIds.push(id);
-        this.numObjects++;
-        return object;
+
+        var node = new BigModelNode(this, cfg.objectId, id, meshes, flags, aabb); // Internally sets BigModelMesh#parent to this BigModelObject
+        this._nodes.push(node);
+        return node;
     }
 
     /**
@@ -649,281 +604,15 @@ class BigModel extends Component {
                 this._instancingLayers[geometryId].finalize();
             }
         }
-        for (var id in this.objects) {
-            if (this.objects.hasOwnProperty(id)) {
-                this.objects[id]._finalize();
-            }
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i]._finalize();
         }
         this.glRedraw();
-        this.scene._boundaryDirty = true;
-        console.log("[BigModel] finalize() - numObjects = " + this.numObjects + ", numGeometries = " + this.numGeometries);
+        this.scene._aabbDirty = true;
+        console.log("[BigModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
     }
 
-    /**
-     Gets the IDs of objects within this BigModel.
-
-     @method getObjectIds
-     @returns {Array}
-     */
-    getObjectIDs() {
-        return this._objectIds;
-    }
-
-    /**
-     World-space 3D axis-aligned bounding box (AABB) enclosing the objects within this BigModel.
-
-     Represented by a six-element Float32Array containing the min/max extents of the
-     axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-
-     @property aabb
-     @final
-     @type {Float32Array}
-     */
-    get aabb() {
-        return this._aabb;
-    }
-
-    /**
-     Indicates if objects in this BigModel are visible.
-
-     Only rendered when {@link BigModel/visible} is true and
-     {@link BigModel/culled} is false.
-
-     @property visible
-     @default true
-     @type Boolean
-     */
-    set visible(visible) {
-        visible = visible !== false;
-        this._visible = visible;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].visible = visible;
-        }
-        this.glRedraw();
-    }
-
-    get visible() {
-        return (this.numVisibleObjects > 0);
-    }
-
-    /**
-     Indicates if objects in this BigModel are highlighted.
-
-     Highlighted appearance for the entire BigModel is configured by the {@link Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
-
-     @property highlighted
-     @default false
-     @type Boolean
-     */
-    set highlighted(highlighted) {
-        highlighted = !!highlighted;
-        this._highlighted = highlighted;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].highlighted = highlighted;
-        }
-        this.glRedraw();
-    }
-
-    get highlighted() {
-        return (this.numHighlightedObjects > 0);
-    }
-
-    /**
-     Indicates if objects in this BigModel are selected.
-
-     Selected appearance for the entire BigModel is configured by the {@link Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
-
-     @property selected
-     @default false
-     @type Boolean
-     */
-    set selected(selected) {
-        selected = !!selected;
-        this._selected = selected;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].selected = selected;
-        }
-        this.glRedraw();
-    }
-
-    get selected() {
-        return (this.numSelectedObjects > 0);
-    }
-
-    /**
-     Indicates if objects in this BigModel are ghosted.
-
-     Ghosted appearance for the entire BigModel is configured by the {@link Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
-
-     @property ghosted
-     @default false
-     @type Boolean
-     */
-    set ghosted(ghosted) {
-        ghosted = !!ghosted;
-        this._ghosted = ghosted;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].ghosted = ghosted;
-        }
-        this.glRedraw();
-    }
-
-    get ghosted() {
-        return (this.numGhostedObjects > 0);
-    }
-
-    /**
-     Indicates if objects in BigModel are shown with emphasized edges.
-
-     Edges appearance for the entire BigModel is configured by the {@link Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
-
-     @property edges
-     @default false
-     @type Boolean
-     */
-    set edges(edges) {
-        edges = !!edges;
-        this._edges = edges;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].edges = edges;
-        }
-        this.glRedraw();
-    }
-
-    get edges() {
-        return (this.numEdgesObjects > 0);
-    }
-
-    /**
-     Indicates if this BigModel is culled from view.
-
-     The BigModel is only rendered when {@link BigModel/visible} is true and
-     {@link BigModel/culled} is false.
-
-     @property culled
-     @default false
-     @type Boolean
-     */
-    set culled(culled) {
-        culled = !!culled;
-        this._culled = culled; // Whole BigModel is culled
-        this.glRedraw();
-    }
-
-    get culled() {
-        return this._culled;
-    }
-
-    /**
-     Indicates if this BigModel is clippable.
-
-     Clipping is done by the {@link Scene}'s {@link Clips} component.
-
-     @property clippable
-     @default true
-     @type Boolean
-     */
-    set clippable(clippable) {
-        clippable = clippable !== false;
-        this._clippable = clippable;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].clippable = clippable;
-        }
-        this.glRedraw();
-    }
-
-    get clippable() {
-        return this._clippable;
-    }
-
-    /**
-     Indicates if this BigModel is included in the {@link Scene/aabb:property"}}Scene aabb{{/crossLink}}.
-
-     @property collidable
-     @default true
-     @type Boolean
-     */
-    set collidable(collidable) {
-        collidable = collidable !== false;
-        this._collidable = collidable;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].collidable = collidable;
-        }
-    }
-
-    get collidable() {
-        return this._collidable;
-    }
-
-    /**
-     Whether or not to allow picking on this BigModel.
-
-     Picking is done via calls to {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
-
-     @property pickable
-     @default true
-     @type Boolean
-     */
-    set pickable(pickable) {
-        pickable = pickable !== false;
-        this._pickable = pickable;
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]].pickable = pickable;
-        }
-    }
-
-    get pickable() {
-        return this._pickable;
-    }
-
-    /**
-     Defines the appearance of edges of objects within this BigModel.
-
-     This is the {@link Scene/edgeMaterial:property"}}Scene edgeMaterial{{/crossLink}}.
-
-     @property edgeMaterial
-     @type EdgeMaterial
-     */
-    get edgeMaterial() {
-        return this.scene.edgeMaterial;
-    }
-
-    /**
-     Defines the appearance of ghosted objects within this BigModel.
-
-     This is the {@link Scene/ghostMaterial:property"}}Scene ghostMaterial{{/crossLink}}.
-
-     @property ghostMaterial
-     @type EmphasisMaterial
-     */
-    get ghostMaterial() {
-        return this.scene.ghostMaterial;
-    }
-
-    /**
-     Defines the appearance of highlighted objects within this BigModel.
-
-     This is the {@link Scene/highlightMaterial:property"}}Scene highlightMaterial{{/crossLink}}.
-
-     @property highlightMaterial
-     @type EmphasisMaterial
-     */
-    get highlightMaterial() {
-        return this.scene.highlightMaterial;
-    }
-
-    /**
-     Defines the appearance of selected objects within this BigModel.
-
-     This is the {@link Scene/selectedMaterial:property"}}Scene selectedMaterial{{/crossLink}}.
-
-     @property selectedMaterial
-     @type EmphasisMaterial
-     */
-    get selectedMaterial() {
-        return this.scene.selectedMaterial;
-    }
-
+    /** @private */
     compile() {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].compileShaders();
@@ -931,26 +620,375 @@ class BigModel extends Component {
         this.glRedraw();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
-     * Called by the renderer to check if this drawable should be included in it's state-sorted drawables list.
-     * @private
-     * @returns {boolean}
+     * Returns true to indicate that this Component is an Entity.
+     * @type {Boolean}
      */
-    get isStateSortable() { // BigModel contains essentially a uniform rendering state, so doesn't need state sorting
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Model ID, defined if this BigModel represents a model.
+     *
+     * When this returns a value, the BigModel will be registered by {@link BigModel#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
+     *
+     * @type {Number|String}
+     */
+    get modelId() {
+        return this._modelId;
+    }
+
+    /**
+     * Returns null because BigModel can only be a model.
+     *
+     * @type {Number|String}
+     */
+    get objectId() {
+        return null;
+    }
+
+    /**
+     * Gets the BigModel's World-space 3D axis-aligned bounding box.
+     *
+     * Represented by a six-element Float32Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Float32Array}
+     */
+    get aabb() {
+        return this._aabb;
+    }
+
+    /**
+     * Sets if this BigModel is visible.
+     *
+     * The BigModel is only rendered when {@link BigModel#visible} returns true and {@link BigModel#culled} returns false.
+     **
+     * @type {Boolean}
+     */
+    set visible(visible) {
+        visible = visible !== false;
+        this._visible = visible;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].visible = visible;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any BigModelNodes in this BigModel are visible.
+     *
+     * The BigModel is only rendered when {@link BigModel#visible} returns true and {@link BigModel#culled} returns false.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return (this.numVisibleObjects > 0);
+    }
+
+    /**
+     * Sets if all BigModelNodes in this BigModel are ghosted.
+     *
+     * @type {Boolean}
+     */
+    set ghosted(ghosted) {
+        ghosted = !!ghosted;
+        this._ghosted = ghosted;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].ghosted = ghosted;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any BigModelNodes in this BigModel are ghosted.
+     *
+     * @type {Boolean}
+     */
+    get ghosted() {
+        return (this.numGhostedObjects > 0);
+    }
+
+    /**
+     * Sets if all BigModelNodes in this BigModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    set highlighted(highlighted) {
+        highlighted = !!highlighted;
+        this._highlighted = highlighted;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].highlighted = highlighted;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any BigModelNodes in this BigModel are highlighted.
+     *
+     * @type {Boolean}
+     */
+    get highlighted() {
+        return (this.numHighlightedObjects > 0);
+    }
+
+    /**
+     * Sets if all BigModelNodes in this BigModel are selected.
+     *
+     * @type {Boolean}
+     */
+    set selected(selected) {
+        selected = !!selected;
+        this._selected = selected;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].selected = selected;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any BigModelNodes in this BigModel are selected.
+     *
+     * @type {Boolean}
+     */
+    get selected() {
+        return (this.numSelectedObjects > 0);
+    }
+
+    /**
+     * Sets if all BigModelNodes in this BigModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    set edges(edges) {
+        edges = !!edges;
+        this._edges = edges;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].edges = edges;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if any BigModelNodes in this BigModel have edges emphasised.
+     *
+     * @type {Boolean}
+     */
+    get edges() {
+        return (this.numEdgesObjects > 0);
+    }
+
+    /**
+     * Sets if this BigModel is culled from view.
+     *
+     * The BigModel is only rendered when {@link BigModel#visible} is true and {@link BigModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    set culled(culled) {
+        culled = !!culled;
+        this._culled = culled; // Whole BigModel is culled
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if this BigModel is culled from view.
+     *
+     * The BigModel is only rendered when {@link BigModel#visible} is true and {@link BigModel#culled} is false.
+     *
+     * @type {Boolean}
+     */
+    get culled() {
+        return this._culled;
+    }
+
+    /**
+     * Sets if BigModelNodes in this BigModel are clippable.
+     *
+     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     *
+     * @type {Boolean}
+     */
+    set clippable(clippable) {
+        clippable = clippable !== false;
+        this._clippable = clippable;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].clippable = clippable;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if BigModelNodes in this BigModel are clippable.
+     *
+     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     *
+     * @type {Boolean}
+     */
+    get clippable() {
+        return this._clippable;
+    }
+
+    /**
+     * Sets if BigModelNodes in this BigModel are collidable.
+     *
+     * @type {Boolean}
+     */
+    set collidable(collidable) {
+        collidable = collidable !== false;
+        this._collidable = collidable;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].collidable = collidable;
+        }
+    }
+
+    /**
+     * Gets if this BigModel is collidable.
+     *
+     * @type {Boolean}
+     */
+    get collidable() {
+        return this._collidable;
+    }
+
+    /**
+     * Sets if BigModelNodes in this BigModel are pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    set pickable(pickable) {
+        pickable = pickable !== false;
+        this._pickable = pickable;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].pickable = pickable;
+        }
+    }
+
+    /**
+     * Gets if BigModelNodes in this BigModel are pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
+    get pickable() {
+        return this._pickable;
+    }
+
+    /**
+     * Sets the RGB colorize color for this BigModel.
+     *
+     * Multiplies by rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Float32Array}
+     */
+    set colorize(rgb) { // TODO
+
+    }
+
+    /**
+     * Gets the RGB colorize color for this BigModel.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Float32Array}
+     */
+    get colorize() {  // TODO
+        return new Float32Array[1, 1, 1, 1];
+    }
+
+    /**
+     * Sets the opacity factor for this BigModel.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    set opacity(opacity) { // TODO
+
+    }
+
+    /**
+     * Gets this BigModel's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
+    get opacity() { // TODO
+
+    }
+
+    /**
+     * Sets if this BigModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    set castsShadow(castsShadow) { // TODO
+    }
+
+    /**
+     * Gets if this BigModel casts a shadow.
+     *
+     * @type {Boolean}
+     */
+    get castsShadow() { // TODO
         return false;
     }
 
     /**
-     *  Called by xeokit, when about to render this BigModel Drawable, to get flags indicating what rendering effects to apply for it.
+     * Sets if this BigModel can have shadow cast upon it.
      *
-     * @method getRenderFlags
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
+     * @type {Boolean}
      */
+    set receivesShadow(receivesShadow) { // TODO
+    }
+
+    /**
+     * Sets if this BigModel can have shadow cast upon it.
+     *
+     * @type {Boolean}
+     */
+    get receivesShadow() { // TODO
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Drawable members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns true to indicate that BigModel is implements {@link Drawable}.
+     *
+     * @type {Boolean}
+     */
+    get isDrawable() {
+        return true;
+    }
+
+    /** @private */
+    get isStateSortable() {
+        return false
+    }
+
+    /** @private */
+    stateSortCompare(drawable1, drawable2) {
+    }
+
+    /** @private */
     getRenderFlags(renderFlags) {
 
-        // Unlike xeokit.Mesh, rendering modes are less mutually exclusive
-        // because a BigModel contains multiple BigModelMesh objects, which
-        // can have a mixture of rendering states.
+        // Unlike Mesh, rendering modes are less mutually exclusive because a BigModel contains multiple BigModelMesh
+        // objects, which can have a mixture of rendering states.
 
         // TODO: can we optimize to avoid tests for ghosted objects from also being
         // highlighted in shader etc?
@@ -996,7 +1034,7 @@ class BigModel extends Component {
             renderFlags.normalFillTransparent = true;
         }
 
-       renderFlags.normalFillOpaque = true;
+        renderFlags.normalFillOpaque = true;
 
         // if (this.numVisibleObjects > this.numGhostedObjects && this.numVisibleObjects > this.numHighlightedObjects && this.numVisibleObjects > this.numSelectedObjects) {
         //     if (this.numTransparentObjects < this.numVisibleObjects) {
@@ -1045,118 +1083,169 @@ class BigModel extends Component {
         }
     }
 
-    //-- NORMAL --------------------------------------------------------------------------------------------------------
+    /**
+     * Configures the appearance of ghosted objects within this BigModel.
+     *
+     * This is the {@link Scene#ghostMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get ghostMaterial() {
+        return this.scene.ghostMaterial;
+    }
 
+    /**
+     * Configures the appearance of highlighted objects within this BigModel.
+     *
+     * This is the {@link Scene#highlightMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get highlightMaterial() {
+        return this.scene.highlightMaterial;
+    }
+
+    /**
+     * Configures the appearance of selected objects within this BigModel.
+     *
+     * This is the {@link Scene#selectedMaterial}.
+     *
+     * @type {EmphasisMaterial}
+     */
+    get selectedMaterial() {
+        return this.scene.selectedMaterial;
+    }
+
+    /**
+     * Configures the appearance of edges of objects within this BigModel.
+     *
+     * This is the {@link Scene#edgeMaterial}.
+     *
+     * @type EdgeMaterial
+     */
+    get edgeMaterial() {
+        return this.scene.edgeMaterial;
+    }
+
+    /** @private */
     drawNormalFillOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalFillOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawNormalEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalEdgesOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawNormalFillTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalFillTransparent(frameCtx);
         }
     }
 
+    /** @private */
     drawNormalEdgesTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalEdgesTransparent(frameCtx);
         }
     }
 
-    //-- GHOSTED -------------------------------------------------------------------------------------------------------
-
+    /** @private */
     drawGhostedFillOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawGhostedFillOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawGhostedEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawGhostedEdgesOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawGhostedFillTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawGhostedFillTransparent(frameCtx);
         }
     }
 
+    /** @private */
     drawGhostedEdgesTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawGhostedEdgesTransparent(frameCtx);
         }
     }
 
-    //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
-
+    /** @private */
     drawHighlightedFillOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawHighlightedFillOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawHighlightedEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawHighlightedEdgesOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawHighlightedFillTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawHighlightedFillTransparent(frameCtx);
         }
     }
 
+    /** @private */
     drawHighlightedEdgesTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawHighlightedEdgesTransparent(frameCtx);
         }
     }
 
-    //-- SELECTED ------------------------------------------------------------------------------------------------------
-
+    /** @private */
     drawSelectedFillOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawSelectedFillOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawSelectedEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawSelectedEdgesOpaque(frameCtx);
         }
     }
 
+    /** @private */
     drawSelectedFillTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawSelectedFillTransparent(frameCtx);
         }
     }
 
+    /** @private */
     drawSelectedEdgesTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawSelectedEdgesTransparent(frameCtx);
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-
-    drawOutline(frameCtx) {
+    /** @private
+     */
+    isSurfacePickable() {
+        return false;
     }
 
-    drawShadow(frameCtx) {
-    }
-
+    /** @private */
     drawPickMesh(frameCtx) {
         if (this.numVisibleObjects === 0) {
             return;
@@ -1166,19 +1255,30 @@ class BigModel extends Component {
         }
     }
 
+    /** @private */
     _findPickedObject(color) {
         // TODO: map color back to an object
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Component members
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Destroys this BigModel.
+     */
     destroy() {
         super.destroy();
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].destroy();
         }
-        for (var i = 0, len = this._objectIds.length; i < len; i++) {
-            this.objects[this._objectIds[i]]._destroy();
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i]._destroy();
         }
-        this.scene._boundaryDirty = true;
+        this.scene._aabbDirty = true;
+        if (this._modelId) {
+            this.scene._deregisterModel(this);
+        }
     }
 }
 

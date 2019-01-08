@@ -17,8 +17,8 @@ const TEXTURE_DECODE_FUNCS = {
     "gamma": "gammaToLinear"
 };
 
-function receivesShadow(mesh) {
-    if (!mesh.receiveShadow) {
+function getReceivesShadow(mesh) {
+    if (!mesh.receivesShadow) {
         return false;
     }
     const lights = mesh.scene._lightsState.lights;
@@ -26,7 +26,7 @@ function receivesShadow(mesh) {
         return false;
     }
     for (let i = 0, len = lights.length; i < len; i++) {
-        if (lights[i].castShadow) {
+        if (lights[i].castsShadow) {
             return true;
         }
     }
@@ -34,7 +34,7 @@ function receivesShadow(mesh) {
 }
 
 function hasTextures(mesh) {
-    if (!mesh._geometry._state.uv) {
+    if (!mesh._geometry._state.uvBuf) {
         return false;
     }
     const material = mesh._material;
@@ -56,7 +56,7 @@ function hasTextures(mesh) {
 
 function hasNormals(mesh) {
     const primitive = mesh._geometry._state.primitiveName;
-    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normals) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
+    if ((mesh._geometry._state.autoVertexNormals || mesh._geometry._state.normalsBuf) && (primitive === "triangles" || primitive === "triangle-strip" || primitive === "triangle-fan")) {
         return true;
     }
     return false;
@@ -101,7 +101,7 @@ function buildVertexLambert(mesh) {
     }
     src.push("uniform vec4 lightAmbient;");
     src.push("uniform vec4 materialColor;");
-    if (geometryState.normals) {
+    if (geometryState.normalsBuf) {
         src.push("attribute vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
@@ -157,7 +157,7 @@ function buildVertexLambert(mesh) {
     if (quantizedGeometry) {
         src.push("localPosition = positionsDecodeMatrix * localPosition;");
     }
-    if (geometryState.normals) {
+    if (geometryState.normalsBuf) {
         if (quantizedGeometry) {
             src.push("vec4 localNormal = vec4(octDecode(normal.xy), 0.0); ");
         } else {
@@ -176,7 +176,7 @@ function buildVertexLambert(mesh) {
         src.push("billboard(modelMatrix2);");
         src.push("billboard(viewMatrix2);");
         src.push("billboard(modelViewMatrix);");
-        if (geometryState.normals) {
+        if (geometryState.normalsBuf) {
             src.push("mat4 modelViewNormalMatrix =  viewNormalMatrix2 * modelNormalMatrix2;");
             src.push("billboard(modelNormalMatrix2);");
             src.push("billboard(viewNormalMatrix2);");
@@ -188,13 +188,13 @@ function buildVertexLambert(mesh) {
         src.push("worldPosition = modelMatrix2 * localPosition;");
         src.push("vec4 viewPosition  = viewMatrix2 * worldPosition; ");
     }
-    if (geometryState.normals) {
+    if (geometryState.normalsBuf) {
         src.push("vec3 viewNormal = normalize((viewNormalMatrix2 * modelNormalMatrix2 * localNormal).xyz);");
     }
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
     src.push("float lambertian = 1.0;");
-    if (geometryState.normals) {
+    if (geometryState.normalsBuf) {
         for (i = 0, len = lightsState.lights.length; i < len; i++) {
             light = lightsState.lights[i];
             if (light.type === "ambient") {
@@ -317,7 +317,7 @@ function buildVertexDraw(mesh) {
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
     const clipping = clipsState.clips.length > 0;
-    const receiveShadow = receivesShadow(mesh);
+    const receivesShadow = getReceivesShadow(mesh);
     const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
     if (normals && material._normalMap) {
@@ -402,10 +402,10 @@ function buildVertexDraw(mesh) {
         src.push("   mat[2][2] =1.0;");
         src.push("}");
     }
-    if (receiveShadow) {
+    if (receivesShadow) {
         src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
         for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castShadow) {
+            if (lightsState.lights[i].castsShadow) {
                 src.push("uniform mat4 shadowViewMatrix" + i + ";");
                 src.push("uniform mat4 shadowProjMatrix" + i + ";");
                 src.push("varying vec4 vShadowPosFromLight" + i + ";");
@@ -499,10 +499,10 @@ function buildVertexDraw(mesh) {
     src.push("   vViewPosition = viewPosition.xyz;");
     src.push("   gl_Position = projMatrix * viewPosition;");
     src.push("const mat4 texUnitConverter = mat4(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);");
-    if (receiveShadow) {
+    if (receivesShadow) {
         src.push("vec4 tempx; ");
         for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castShadow) {
+            if (lightsState.lights[i].castsShadow) {
                 src.push("vShadowPosFromLight" + i + " = texUnitConverter * shadowProjMatrix" + i + " * (shadowViewMatrix" + i + " * worldPosition); ");
             }
         }
@@ -522,12 +522,12 @@ function buildFragmentDraw(mesh) {
     const materialState = mesh._material._state;
     const clipping = clipsState.clips.length > 0;
     const normals = hasNormals(mesh);
-    const uvs = geometryState.uv;
+    const uvs = geometryState.uvBuf;
     const solid = false && materialState.backfaces;
     const phongMaterial = (materialState.type === "PhongMaterial");
     const metallicMaterial = (materialState.type === "MetallicMaterial");
     const specularMaterial = (materialState.type === "SpecularMaterial");
-    const receiveShadow = receivesShadow(mesh);
+    const receivesShadow = getReceivesShadow(mesh);
     const gammaInput = scene.gammaInput; // If set, then it expects that all textures and colors are premultiplied gamma. Default is false.
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     var i;
@@ -543,7 +543,7 @@ function buildFragmentDraw(mesh) {
 
     src.push("precision " + getFragmentFloatPrecision(gl) + " float;");
 
-    if (receiveShadow) {
+    if (receivesShadow) {
         src.push("float unpackDepth (vec4 color) {");
         src.push("  const vec4 bitShift = vec4(1.0, 1.0/256.0, 1.0/(256.0 * 256.0), 1.0/(256.0*256.0*256.0));");
         src.push("  return dot(color, bitShift);");
@@ -1030,9 +1030,9 @@ function buildFragmentDraw(mesh) {
         }
     }
 
-    if (receiveShadow) {
+    if (receivesShadow) {
 
-        // Variance castShadow mapping filter
+        // Variance castsShadow mapping filter
 
         // src.push("float linstep(float low, float high, float v){");
         // src.push("      return clamp((v-low)/(high-low), 0.0, 1.0);");
@@ -1048,7 +1048,7 @@ function buildFragmentDraw(mesh) {
         // src.push("}");
 
         for (i = 0, len = lightsState.lights.length; i < len; i++) { // Light sources
-            if (lightsState.lights[i].castShadow) {
+            if (lightsState.lights[i].castsShadow) {
                 src.push("varying vec4 vShadowPosFromLight" + i + ";");
                 src.push("uniform sampler2D shadowMap" + i + ";");
             }
@@ -1387,7 +1387,7 @@ function buildFragmentDraw(mesh) {
 
         src.push("float shadow = 1.0;");
 
-        // if (receiveShadow) {
+        // if (receivesShadow) {
         //
         //     src.push("float lightDepth2 = clamp(length(lightPos)/40.0, 0.0, 1.0);");
         //     src.push("float illuminated = VSM(sLightDepth, lightUV, lightDepth2);");
@@ -1419,12 +1419,12 @@ function buildFragmentDraw(mesh) {
                 src.push("viewLightDir = normalize(vViewLightReverseDirAndDist" + i + ".xyz);"); // If normal mapping, the fragment->light vector will be in tangent space
             }
 
-            if (receiveShadow && light.castShadow) {
+            if (receivesShadow && light.castsShadow) {
 
                 // if (true) {
                 //     src.push('shadowCoord = (vShadowPosFromLight' + i + '.xyz/vShadowPosFromLight' + i + '.w)/2.0 + 0.5;');
                 //     src.push("lightDepth2 = clamp(length(vec3[0.0, 20.0, 20.0])/40.0, 0.0, 1.0);");
-                //     src.push("castShadow *= VSM(shadowMap' + i + ', shadowCoord, lightDepth2);");
+                //     src.push("castsShadow *= VSM(shadowMap' + i + ', shadowCoord, lightDepth2);");
                 // }
                 //
                 // if (false) {

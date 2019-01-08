@@ -3,7 +3,7 @@ import {Scene} from "./../../../scene/scene/Scene.js";
 import {AmbientLight} from "./../../../scene/lights/AmbientLight.js";
 import {DirLight} from "./../../../scene/lights/DirLight.js";
 import {Mesh} from "./../../../scene/mesh/Mesh.js";
-import {VBOGeometry} from "../../../scene/geometry/VBOGeometry.js";
+import {ReadableGeometry} from "../../../scene/geometry/ReadableGeometry.js";
 import {buildCylinderGeometry} from "../../../scene/geometry/builders/buildCylinderGeometry.js";
 import {buildSphereGeometry} from "../../../scene/geometry/builders/buildSphereGeometry.js";
 import {buildVectorTextGeometry} from "../../../scene/geometry/builders/buildVectorTextGeometry.js";
@@ -12,6 +12,31 @@ import {math} from "./../../../scene/math/math.js";
 
 /**
  * {@link Viewer} plugin that shows the axii of the World-space coordinate system.
+ *
+ * @example
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {AxisGizmoPlugin} from "../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
+ *
+ * // Create a xeokit Viewer
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * // Add an AxisGizmoPlugin to the Viewer
+ * const axisGizmo = new AxisGizmoPlugin(viewer, {
+ *     id: "AxisGizmo",
+ *     size: [250, 250]
+ * });
+ *
+ * // Add a GLTFLoaderPlugin to the Viewer
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * // Load the glTF model
+ * const model = gltfLoader.load({
+ *     id: "myModel",
+ *     src: "./models/myModel.gltf"
+ * });
  *
  * @class AxisGizmoPlugin
  */
@@ -109,7 +134,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // ----------------- Components that are shared among more than one mesh ---------------
 
-        var arrowHead = buildCylinderGeometry(VBOGeometry, scene, {
+        var arrowHead = buildCylinderGeometry(ReadableGeometry, scene, {
             radiusTop: 0.01,
             radiusBottom: 0.6,
             height: 1.7,
@@ -118,7 +143,7 @@ class AxisGizmoPlugin extends Plugin {
             openEnded: false
         });
 
-        var arrowShaft = buildCylinderGeometry(VBOGeometry, scene, {
+        var arrowShaft = buildCylinderGeometry(ReadableGeometry, scene, {
             radiusTop: 0.2,
             radiusBottom: 0.2,
             height: 4.5,
@@ -199,7 +224,7 @@ class AxisGizmoPlugin extends Plugin {
             // Sphere behind gnomon
 
             new Mesh(scene, {
-                geometry: buildSphereGeometry(VBOGeometry, scene, {
+                geometry: buildSphereGeometry(ReadableGeometry, scene, {
                     radius: 9.0,
                     heightSegments: 60,
                     widthSegments: 60
@@ -221,7 +246,7 @@ class AxisGizmoPlugin extends Plugin {
             // Ball at center of axis
 
             new Mesh(scene, {  // Arrow
-                geometry: buildSphereGeometry(VBOGeometry, scene, {
+                geometry: buildSphereGeometry(ReadableGeometry, scene, {
                     radius: 1.0
                 }),
                 material: ballMaterial,
@@ -253,7 +278,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "X", size: 1.5}),
+                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "X", size: 1.5}),
                 material: xAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -283,7 +308,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "Y", size: 1.5}),
+                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "Y", size: 1.5}),
                 material: yAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -315,7 +340,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(VBOGeometry, scene, {text: "Z", size: 1.5}),
+                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "Z", size: 1.5}),
                 material: zAxisLabelMaterial,
                 pickable: false,
                 collidable: false,

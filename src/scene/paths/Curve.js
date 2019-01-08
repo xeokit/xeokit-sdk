@@ -15,7 +15,7 @@ class Curve extends Component {
 
      @property t
      @default 0
-     @type Number
+     @type {Number}
      */
     set t(value) {
         value = value || 0;

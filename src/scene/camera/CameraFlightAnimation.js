@@ -69,7 +69,7 @@ class CameraFlightAnimation extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -489,7 +489,7 @@ class CameraFlightAnimation extends Component {
      *
      * @property duration
      * @default 0.5
-     * @type Number
+     * @type {Number}
      */
     set duration(value) {
         this._duration = value ? (value * 1000.0) : 500;
@@ -507,7 +507,7 @@ class CameraFlightAnimation extends Component {
      * When false, the eye will remain at its current distance from the look position.
      *
      * @property fit
-     * @type Boolean
+     * @type {Boolean}
      * @default true
      */
     set fit(value) {
@@ -525,7 +525,7 @@ class CameraFlightAnimation extends Component {
      *
      * @property fitFOV
      * @default 45
-     * @type Number
+     * @type {Number}
      */
     set fitFOV(value) {
         this._fitFOV = value || 45;
@@ -540,7 +540,7 @@ class CameraFlightAnimation extends Component {
      * in the direction that it is travelling.
      *
      * @property trail
-     * @type Boolean
+     * @type {Boolean}
      * @default false
      */
     set trail(value) {

@@ -1,4 +1,3 @@
-
 import {Material} from './Material.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
@@ -7,14 +6,61 @@ const alphaModes = {"opaque": 0, "mask": 1, "blend": 2};
 const alphaModeNames = ["opaque", "mask", "blend"];
 
 /**
- * @desc Configures the normal rendered appearance of {@link Mesh}es using the Blinn-Phong shading model.
+ * @desc Configures the normal rendered appearance of {@link Mesh}es using the non-physically-correct Blinn-Phong shading model.
  *
- * * Useful for non-realistic rendering.conductive materials, such as metal, but also appropriate for insulators.
+ * * Useful for non-realistic objects like gizmos.
  * * {@link SpecularMaterial} is best for insulators, such as wood, ceramics and plastic.
  * * {@link MetallicMaterial} is best for conductive materials, such as metal.
  * * {@link LambertMaterial} is appropriate for high-detail models that need to render as efficiently as possible.
  *
- * ## PhongMaterial properties
+ * ## Usage
+ *
+ * In the example below, we'll create a {@link Mesh} with a PhongMaterial with a diffuse {@link Texture} and a specular {@link Fresnel}, using a {@link buildTorusGeometry} to create the {@link Geometry}.
+ *
+ * [[Run this example](/examples/#materials_PhongMaterial)]
+ *
+ *  ```` javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {Fresnel} from "../src/scene/materials/Fresnel.js";
+ *
+ * const myViewer = new Viewer({
+ *        canvasId: "myCanvas"
+ *    });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
+ *          center: [0, 0, 0],
+ *          radius: 1.5,
+ *          tube: 0.5,
+ *          radialSegments: 32,
+ *          tubeSegments: 24,
+ *          arc: Math.PI * 2.0
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          ambient: [0.9, 0.3, 0.9],
+ *          shininess: 30,
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          }),
+ *          specularFresnel: new Fresnel(myViewer.scene, {
+ *              leftColor: [1.0, 1.0, 1.0],
+ *              rightColor: [0.0, 0.0, 0.0],
+ *              power: 4
+ *          })
+ *     })
+ * });
+ * ````
+ *
+ * ## PhongMaterial Properties
  *
  *  The following table summarizes PhongMaterial properties:
  *
@@ -42,44 +88,8 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * | {@link PhongMaterial#pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
  * | {@link PhongMaterial#alphaMode} | String | "opaque", "blend", "mask" | "blend" |  | Alpha blend mode. |
  * | {@link PhongMaterial#alphaCutoff} | Number | [0..1] | 0.5 |  | Alpha cutoff value. |
- * | {@link PhongMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
- * | {@link PhongMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
- *
- *  ## Usage
- *
- *  ```` javascript
- * import {Viewer} from "src/viewer/Viewer.js";
- * import {Mesh} from "src/scene/mesh/Mesh.js";
- * import {TorusGeometry} from "src/scene/geometry/TorusGeometry.js";
- * import {PhongMaterial} from "src/scene/materials/PhongMaterial.js";
- * import {Fresnel} from "src/scene/materials/Fresnel.js";
- * import {Texture} from "src/scene/materials/Texture.js";
- *
- * const myViewer = new Viewer({ canvasId: "myCanvas" });
- *
- * var torus = new Mesh(myViewer.scene, {
- *
- *      material: new PhongMaterial(myViewer.scene, {
- *          ambient: [0.3, 0.3, 0.3],
- *          diffuse: [0.5, 0.5, 0.0],   // Ignored, since we have assigned a Texture to diffuseMap, below
- *          specular: [1, 1, 1],
- *          shininess: 80, // Default
- *          alpha: 1.0, // Default
- *
- *          diffuseMap: new Texture(myViewer.scene, {
- *              src: "diffuseMap.jpg"
- *          }),
- *
- *          specularFresnel: new Fresnel(myViewer.scene, {
- *              leftColor: [1.0, 1.0, 1.0],
- *              rightColor: [0.0, 0.0, 0.0],
- *              power: 4
- *          })
- *      }),
- *
- *      geometry: new TorusGeometry(myViewer.scene)
- * });
- * ````
+ * | {@link PhongMaterial#backfaces} | Boolean |  | false |  | Whether to render geometry backfaces. |
+ * | {@link PhongMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for geometry frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
  */
 class PhongMaterial extends Material {
 
@@ -89,7 +99,7 @@ class PhongMaterial extends Material {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -97,39 +107,35 @@ class PhongMaterial extends Material {
     }
 
     /**
-     *  @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param {*} [cfg] The PhongMaterial configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param [cfg.meta=null] {String:Object} Metadata to attach to this PhongMaterial.
-     @param [cfg.ambient=[1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial ambient color.
-     @param [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial diffuse color.
-     @param [cfg.specular=[ 1.0, 1.0, 1.0 ]] {Array of Number} PhongMaterial specular color.
-     @param [cfg.emissive=[ 0.0, 0.0, 0.0 ]] {Array of Number} PhongMaterial emissive color.
-     @param [cfg.alpha=1] {Number} Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
-     @param [cfg.shininess=80] {Number} Scalar in range 0-128 that determines the size and sharpness of specular highlights.
-     @param [cfg.reflectivity=1] {Number} Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected.
-     @param [cfg.lineWidth=1] {Number} Scalar that controls the width of lines for {@link Geometry} with {@link Geometry/primitive} set to "lines".
-     @param [cfg.pointSize=1] {Number} Scalar that controls the size of points for {@link Geometry} with {@link Geometry/primitive} set to "points".
-     @param [cfg.ambientMap=null] {Texture} A ambient map {@link Texture}, which will multiply by the diffuse property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.diffuseMap=null] {Texture} A diffuse map {@link Texture}, which will override the effect of the diffuse property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.specularMap=null] {Texture} A specular map {@link Texture}, which will override the effect of the specular property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.emissiveMap=undefined] {Texture} An emissive map {@link Texture}, which will override the effect of the emissive property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.normalMap=undefined] {Texture} A normal map {@link Texture}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.alphaMap=undefined] {Texture} An alpha map {@link Texture}, which will override the effect of the alpha property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.reflectivityMap=undefined] {Texture} A reflectivity control map {@link Texture}, which will override the effect of the reflectivity property. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.occlusionMap=null] {Texture} An occlusion map {@link Texture}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.diffuseFresnel=undefined] {Fresnel} A diffuse {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.specularFresnel=undefined] {Fresnel} A specular {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.emissiveFresnel=undefined] {Fresnel} An emissive {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.alphaFresnel=undefined] {Fresnel} An alpha {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.reflectivityFresnel=undefined] {Fresnel} A reflectivity {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
-     @param [cfg.alphaMode="opaque"] {String} The alpha blend mode - accepted values are "opaque", "blend" and "mask".
-     See the {@link PhongMaterial#alphaMode} property for more info.
-     @param [cfg.alphaCutoff=0.5] {Number} The alpha cutoff value. See the {@link PhongMaterial#alphaCutoff} property for more info.
-     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
-     @param [cfg.frontface="ccw"] {Boolean} The winding order for {@link Geometry} front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
-     * @param owner
-     * @param cfg
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] The PhongMaterial configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Array} [cfg.ambient=[1.0, 1.0, 1.0 ]]  PhongMaterial ambient color.
+     * @param {Array} [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] PhongMaterial diffuse color.
+     * @param {Array} [cfg.specular=[ 1.0, 1.0, 1.0 ]]  PhongMaterial specular color.
+     * @param {Array} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] PhongMaterial emissive color.
+     * @param {Number} [cfg.alpha=1] Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
+     * @param {Number} [cfg.shininess=80] Scalar in range 0-128 that determines the size and sharpness of specular highlights.
+     * @param {Number} [cfg.reflectivity=1] Scalar in range 0-1 that controls how much {@link ReflectionMap} is reflected.
+     * @param {Number} [cfg.lineWidth=1] Scalar that controls the width of lines.
+     * @param {Number} [cfg.pointSize=1] Scalar that controls the size of points.
+     * @param {Texture} [cfg.ambientMap=null] A ambient map {@link Texture}, which will multiply by the diffuse property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.diffuseMap=null] A diffuse map {@link Texture}, which will override the effect of the diffuse property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.specularMap=null] A specular map {@link Texture}, which will override the effect of the specular property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.emissiveMap=undefined] An emissive map {@link Texture}, which will override the effect of the emissive property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.normalMap=undefined] A normal map {@link Texture}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.alphaMap=undefined] An alpha map {@link Texture}, which will override the effect of the alpha property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.reflectivityMap=undefined] A reflectivity control map {@link Texture}, which will override the effect of the reflectivity property. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Texture} [cfg.occlusionMap=null] An occlusion map {@link Texture}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Fresnel} [cfg.diffuseFresnel=undefined] A diffuse {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Fresnel} [cfg.specularFresnel=undefined] A specular {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Fresnel} [cfg.emissiveFresnel=undefined] An emissive {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Fresnel} [cfg.alphaFresnel=undefined] An alpha {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {Fresnel} [cfg.reflectivityFresnel=undefined] A reflectivity {@link Fresnel"}}Fresnel{{/crossLink}}. Must be within the same {@link Scene} as this PhongMaterial.
+     * @param {String} [cfg.alphaMode="opaque"] The alpha blend mode - accepted values are "opaque", "blend" and "mask". See the {@link PhongMaterial#alphaMode} property for more info.
+     * @param {Number} [cfg.alphaCutoff=0.5] The alpha cutoff value. See the {@link PhongMaterial#alphaCutoff} property for more info.
+     * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces.
+     * @param {Boolean} [cfg.frontface="ccw"] The winding order for geometry front faces - "cw" for clockwise, or "ccw" for counter-clockwise.
      */
     constructor(owner, cfg = {}) {
 
@@ -285,11 +291,11 @@ class PhongMaterial extends Material {
     }
 
     /**
-     The PhongMaterial's ambient color.
-
-     @property ambient
-     @default [0.3, 0.3, 0.3]
-     @type Float32Array
+     * Sets the PhongMaterial's ambient color.
+     *
+     * Default value is ````[0.3, 0.3, 0.3]````.
+     *
+     * @type {Float32Array}
      */
     set ambient(value) {
         let ambient = this._state.ambient;
@@ -310,18 +316,25 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's ambient color.
+     *
+     * Default value is ````[0.3, 0.3, 0.3]````.
+     *
+     * @type {Float32Array}
+     */
     get ambient() {
         return this._state.ambient;
     }
 
     /**
-     The PhongMaterial's diffuse color.
-
-     Multiplies by {@link PhongMaterial#diffuseMap}.
-
-     @property diffuse
-     @default [1.0, 1.0, 1.0]
-     @type Float32Array
+     * Sets the PhongMaterial's diffuse color.
+     *
+     * Multiplies by {@link PhongMaterial#diffuseMap}.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @type {Float32Array}
      */
     set diffuse(value) {
         let diffuse = this._state.diffuse;
@@ -342,18 +355,25 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Sets the PhongMaterial's diffuse color.
+     *
+     * Multiplies by {@link PhongMaterial#diffuseMap}.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @type {Float32Array}
+     */
     get diffuse() {
         return this._state.diffuse;
     }
 
     /**
-     The material's specular color.
-
-     Multiplies by {@link PhongMaterial#specularMap}.
-
-     @property specular
-     @default [1.0, 1.0, 1.0]
-     @type Float32Array
+     * Sets the PhongMaterial's specular color.
+     *
+     * Multiplies by {@link PhongMaterial#specularMap}.
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     * @type {Float32Array}
      */
     set specular(value) {
         let specular = this._state.specular;
@@ -374,18 +394,24 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's specular color.
+     *
+     * Multiplies by {@link PhongMaterial#specularMap}.
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     * @type {Float32Array}
+     */
     get specular() {
         return this._state.specular;
     }
 
     /**
-     The PhongMaterial's emissive color.
-
-     Multiplies by {@link PhongMaterial#emissiveMap}.
-
-     @property emissive
-     @default [0.0, 0.0, 0.0]
-     @type Float32Array
+     * Sets the PhongMaterial's emissive color.
+     *
+     * Multiplies by {@link PhongMaterial#emissiveMap}.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     * @type {Float32Array}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -406,20 +432,30 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's emissive color.
+     *
+     * Multiplies by {@link PhongMaterial#emissiveMap}.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     * @type {Float32Array}
+     */
     get emissive() {
         return this._state.emissive;
     }
 
     /**
-     Factor in the range [0..1] indicating how transparent the PhongMaterial is.
-
-     A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-
-     Multiplies by {@link PhongMaterial#alphaMap}.
-
-     @property alpha
-     @default 1.0
-     @type Number
+     * Sets the PhongMaterial alpha.
+     *
+     * This is a factor in the range [0..1] indicating how transparent the PhongMaterial is.
+     *
+     * A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
+     *
+     * Multiplies by {@link PhongMaterial#alphaMap}.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set alpha(value) {
         value = (value !== undefined && value !== null) ? value : 1.0;
@@ -430,278 +466,291 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial alpha.
+     *
+     * This is a factor in the range [0..1] indicating how transparent the PhongMaterial is.
+     *
+     * A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
+     *
+     * Multiplies by {@link PhongMaterial#alphaMap}.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get alpha() {
         return this._state.alpha;
     }
 
     /**
-     A factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.
-
-     Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
-     desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
-     highlight.
-
-     @property shininess
-     @default 80.0
-     @type Number
+     * Sets the PhongMaterial shininess.
+     *
+     * This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.
+     *
+     * Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
+     * desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
+     * highlight.
+     *
+     * Default value is ```` 80.0````.
+     *
+     * @type {Number}
      */
     set shininess(value) {
         this._state.shininess = value !== undefined ? value : 80;
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial shininess.
+     *
+     * This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.
+     *
+     * Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
+     * desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
+     * highlight.
+     *
+     * Default value is ```` 80.0````.
+     *
+     * @type {Number}
+     */
     get shininess() {
         return this._state.shininess;
     }
 
     /**
-     The PhongMaterial's line width.
-
-     @property lineWidth
-     @default 1.0
-     @type Number
+     * Sets the PhongMaterial's line width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set lineWidth(value) {
         this._state.lineWidth = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's line width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get lineWidth() {
         return this._state.lineWidth;
     }
 
     /**
-     The PhongMaterial's point size.
-
-     @property pointSize
-     @default 1.0
-     @type Number
+     * Sets the PhongMaterial's point size.
+     *
+     * Default value is 1.0.
+     *
+     * @type {Number}
      */
     set pointSize(value) {
         this._state.pointSize = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's point size.
+     *
+     * Default value is 1.0.
+     *
+     * @type {Number}
+     */
     get pointSize() {
         return this._state.pointSize;
     }
 
     /**
-     Scalar in range 0-1 that controls how much {@link CubeMap"}}CubeMap{{/crossLink}} is reflected by this PhongMaterial.
-
-     The surface will be non-reflective when this is 0, and completely mirror-like when it is 1.0.
-
-     Multiplies by {@link PhongMaterial#reflectivityMap}.
-
-     @property reflectivity
-     @default 1.0
-     @type Number
+     * Sets how much {@link ReflectionMap} is reflected by this PhongMaterial.
+     *
+     * This is a scalar in range ````[0-1]````. Default value is ````1.0````.
+     *
+     * The surface will be non-reflective when this is ````0````, and completely mirror-like when it is ````1.0````.
+     *
+     * Multiplies by {@link PhongMaterial#reflectivityMap}.
+     *
+     * @type {Number}
      */
     set reflectivity(value) {
         this._state.reflectivity = value !== undefined ? value : 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets how much {@link ReflectionMap} is reflected by this PhongMaterial.
+     *
+     * This is a scalar in range ````[0-1]````. Default value is ````1.0````.
+     *
+     * The surface will be non-reflective when this is ````0````, and completely mirror-like when it is ````1.0````.
+     *
+     * Multiplies by {@link PhongMaterial#reflectivityMap}.
+     *
+     * @type {Number}
+     */
     get reflectivity() {
         return this._state.reflectivity;
     }
 
     /**
-     Normal map.
-
-     @property normalMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's normal map {@link Texture}.
+     *
+     * @type {Texture}
      */
     get normalMap() {
         return this._normalMap;
     }
 
     /**
-     Ambient map.
-
-     Multiplies by {@link PhongMaterial#ambient}.
-
-     @property ambientMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's ambient {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#ambient}.
+     *
+     * @type {Texture}
      */
     get ambientMap() {
         return this._ambientMap;
     }
 
     /**
-     Diffuse map.
-
-     Multiplies by {@link PhongMaterial#diffuse}.
-
-     @property diffuseMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's diffuse {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#diffuse}.
+     *
+     * @type {Texture}
      */
     get diffuseMap() {
         return this._diffuseMap;
     }
 
     /**
-     Specular map.
-
-     Multiplies by {@link PhongMaterial#specular}.
-
-     @property specularMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's specular {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#specular}.
+     *
+     * @type {Texture}
      */
-
     get specularMap() {
         return this._specularMap;
     }
 
     /**
-     Emissive map.
-
-     Multiplies by {@link PhongMaterial#emissive}.
-
-     @property emissiveMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's emissive {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#emissive}.
+     *
+     * @type {Texture}
      */
     get emissiveMap() {
         return this._emissiveMap;
     }
 
     /**
-     Alpha map.
-
-     Multiplies by {@link PhongMaterial#alpha}.
-
-     @property alphaMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's alpha {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#alpha}.
+     *
+     * @type {Texture}
      */
     get alphaMap() {
         return this._alphaMap;
     }
 
     /**
-     Reflectivity map.
-
-     Multiplies by {@link PhongMaterial#reflectivity}.
-
-     @property reflectivityMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's reflectivity {@link Texture}.
+     *
+     * Multiplies by {@link PhongMaterial#reflectivity}.
+     *
+     * @type {Texture}
      */
     get reflectivityMap() {
         return this._reflectivityMap;
     }
 
     /**
-
-     Occlusion map.
-
-     @property occlusionMap
-     @default undefined
-     @type {Texture}
-     @final
+     * Gets the PhongMaterials's ambient occlusion {@link Texture}.
+     *
+     * @type {Texture}
      */
     get occlusionMap() {
         return this._occlusionMap;
     }
 
     /**
-     Diffuse Fresnel.
-
-     Applies to {@link PhongMaterial#diffuseFresnel}.
-
-     @property diffuseFresnel
-     @default undefined
-     @type {Fresnel}
-     @final
+     * Gets the PhongMaterials's diffuse {@link Fresnel}.
+     *
+     * Applies to {@link PhongMaterial#diffuse}.
+     *
+     * @type {Fresnel}
      */
     get diffuseFresnel() {
         return this._diffuseFresnel;
     }
 
     /**
-     Specular Fresnel.
-
-     Applies to {@link PhongMaterial#specular}.
-
-     @property specularFresnel
-     @default undefined
-     @type {Fresnel}
-     @final
+     * Gets the PhongMaterials's specular {@link Fresnel}.
+     *
+     * Applies to {@link PhongMaterial#specular}.
+     *
+     * @type {Fresnel}
      */
     get specularFresnel() {
         return this._specularFresnel;
     }
 
     /**
-     Emissive Fresnel.
-
-     Applies to {@link PhongMaterial#emissive}.
-
-     @property emissiveFresnel
-     @default undefined
-     @type {Fresnel}
-     @final
+     * Gets the PhongMaterials's emissive {@link Fresnel}.
+     *
+     * Applies to {@link PhongMaterial#emissive}.
+     *
+     * @type {Fresnel}
      */
     get emissiveFresnel() {
         return this._emissiveFresnel;
     }
 
     /**
-     Alpha Fresnel.
-
-     Applies to {@link PhongMaterial#alpha}.
-
-     @property alphaFresnel
-     @default undefined
-     @type {Fresnel}
-     @final
+     * Gets the PhongMaterials's alpha {@link Fresnel}.
+     *
+     * Applies to {@link PhongMaterial#alpha}.
+     *
+     * @type {Fresnel}
      */
     get alphaFresnel() {
         return this._alphaFresnel;
     }
 
     /**
-     Reflectivity Fresnel.
-
-     Applies to {@link PhongMaterial#reflectivity}.
-
-     @property reflectivityFresnel
-     @default undefined
-     @type {Fresnel}
-     @final
+     * Gets the PhongMaterials's reflectivity {@link Fresnel}.
+     *
+     * Applies to {@link PhongMaterial#reflectivity}.
+     *
+     * @type {Fresnel}
      */
     get reflectivityFresnel() {
         return this._reflectivityFresnel;
     }
 
     /**
-     The alpha rendering mode.
-
-     This governs how alpha is treated. Alpha is the combined result of the
-     {@link PhongMaterial#alpha} and
-     {@link PhongMaterial#alphaMap} properties.
-
-     * "opaque" - The alpha value is ignored and the rendered output is fully opaque.
-     * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.
-     * "blend" - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
-
-     @property alphaMode
-     @default "opaque"
-     @type {String}
+     * Sets the PhongMaterial's alpha rendering mode.
+     *
+     * This governs how alpha is treated. Alpha is the combined result of {@link PhongMaterial#alpha} and {@link PhongMaterial#alphaMap}.
+     *
+     * Supported values are:
+     *
+     * * "opaque" - The alpha value is ignored and the rendered output is fully opaque (default).
+     * * "mask" - The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.
+     * * "blend" - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).
+     *
+     *@type {String}
      */
-
     set alphaMode(alphaMode) {
         alphaMode = alphaMode || "opaque";
         let value = alphaModes[alphaMode];
@@ -716,25 +765,26 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the PhongMaterial's alpha rendering mode.
+     *
+     *@type {String}
+     */
     get alphaMode() {
         return alphaModeNames[this._state.alphaMode];
     }
 
     /**
-     The alpha cutoff value.
-
-     Specifies the cutoff threshold when {@link PhongMaterial#alphaMode}
-     equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
-     opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire
-     material as fully transparent. This value is ignored for other modes.
-
-     Alpha is the combined result of the
-     {@link PhongMaterial#alpha} and
-     {@link PhongMaterial#alphaMap} properties.
-
-     @property alphaCutoff
-     @default 0.5
-     @type {Number}
+     * Sets the PhongMaterial's alpha cutoff value.
+     *
+     * This specifies the cutoff threshold when {@link PhongMaterial#alphaMode} equals "mask". If the alpha is greater than or equal to this value then it is rendered as fully
+     * opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0 will render the entire material as fully transparent. This value is ignored for other modes.
+     *
+     * Alpha is the combined result of {@link PhongMaterial#alpha} and {@link PhongMaterial#alphaMap}.
+     *
+     * Default value is ````0.5````.
+     *
+     * @type {Number}
      */
     set alphaCutoff(alphaCutoff) {
         if (alphaCutoff === null || alphaCutoff === undefined) {
@@ -746,19 +796,23 @@ class PhongMaterial extends Material {
         this._state.alphaCutoff = alphaCutoff;
     }
 
+    /**
+     * Gets the PhongMaterial's alpha cutoff value.
+     *
+     * @type {Number}
+     */
     get alphaCutoff() {
         return this._state.alphaCutoff;
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh}es.
-
-     The backfaces will belong to {@link Geometry} compoents that are also attached to
-     the {@link Mesh}es.
-
-     @property backfaces
-     @default false
-     @type Boolean
+     * Sets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * The backfaces will belong to {@link Geometry} compoents that are also attached to the {@link Mesh}es.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
      */
     set backfaces(value) {
         value = !!value;
@@ -769,19 +823,22 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets whether backfaces are visible on attached {@link Mesh}es.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
     get backfaces() {
         return this._state.backfaces;
     }
 
     /**
-     Indicates the winding direction of front faces on attached {@link Mesh}es.
-
-     The faces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh}es.
-
-     @property frontface
-     @default "ccw"
-     @type String
+     * Sets the winding direction of geometry front faces.
+     *
+     * Default is ````"ccw"````.
+     * @type {String}
      */
     set frontface(value) {
         value = value !== "cw";
@@ -792,10 +849,19 @@ class PhongMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the winding direction of front faces on attached {@link Mesh}es.
+     *
+     * Default is ````"ccw"````.
+     * @type {String}
+     */
     get frontface() {
         return this._state.frontface ? "ccw" : "cw";
     }
 
+    /**
+     * Destroys this PhongMaterial.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

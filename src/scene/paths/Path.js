@@ -118,7 +118,7 @@ class Path extends Curve {
 
      @property t
      @default 0
-     @type Number
+     @type {Number}
      */
     set t(value) {
         value = value || 0;

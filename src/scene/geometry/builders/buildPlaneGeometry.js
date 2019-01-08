@@ -8,9 +8,26 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  *
  * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
  *
+ * [[Run this example](/examples/#geometry_builders_buildPlaneGeometry)]
+ *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildPlaneGeometry} from "../src/scene/geometry/builders/buildPlaneGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * viewer.camera.eye = [0, 0, 5];
+ * viewer.camera.look = [0, 0, 0];
+ * viewer.camera.up = [0, 1, 0];
+
  * new Mesh(myViewer.scene, {
- *     geometry: createPlaneGeometry(VBOGeometry, myViewer.scene, {
+ *     geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
  *          center: [0,0,0],
  *          xSize: 2,
  *          zSize: 2,
@@ -26,7 +43,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * ````
  *
  * @function buildPlaneGeometry
- * @param {Class} claz {@link Geometry} subtype to instantiate.
+ * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {Float32Array} [cfg.center]  3D point indicating the center position.
@@ -35,9 +52,9 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * @param {Number} [cfg.zSize=1] Dimension on the Z-axis.
  * @param {Number} [cfg.xSegments=1] Number of segments on the X-axis.
  * @param {Number} [cfg.zSegments=1] Number of segments on the Z-axis.
- * @returns {Geometry} The {@link Geometry} subtype indicated by claz.
+ * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function createPlaneGeometry(claz, owner, cfg = {}) {
+function buildPlaneGeometry(geometryClass, owner, cfg = {}) {
 
     let xSize = cfg.xSize || 1;
     if (xSize < 0) {
@@ -148,7 +165,7 @@ function createPlaneGeometry(claz, owner, cfg = {}) {
         }
     }
 
-    return new claz(owner, utils.apply(cfg, {
+    return new geometryClass(owner, utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,
@@ -156,4 +173,4 @@ function createPlaneGeometry(claz, owner, cfg = {}) {
     }));
 }
 
-export {createPlaneGeometry};
+export {buildPlaneGeometry};

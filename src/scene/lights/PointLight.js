@@ -64,7 +64,7 @@ class PointLight extends Light {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -72,7 +72,7 @@ class PointLight extends Light {
     }
 
     /**
-     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      @param {*} [cfg] The PointLight configuration
      @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this PointLight.
@@ -83,7 +83,7 @@ class PointLight extends Light {
      @param [cfg.linearAttenuation=0] {Number} Linear attenuation factor.
      @param [cfg.quadraticAttenuation=0] {Number} Quadratic attenuation factor.
      @param [cfg.space="view"] {String} The coordinate system this PointLight is defined in - "view" or "world".
-     @param [cfg.castShadow=false] {Boolean} Flag which indicates if this PointLight casts a castShadow.
+     @param [cfg.castsShadow=false] {Boolean} Flag which indicates if this PointLight casts a castsShadow.
      * @param owner
      * @param cfg
      */
@@ -105,7 +105,7 @@ class PointLight extends Light {
             color: math.vec3([0.7, 0.7, 0.8]),
             intensity: 1.0, attenuation: [0.0, 0.0, 0.0],
             space: cfg.space || "view",
-            castShadow: false,
+            castsShadow: false,
             shadowDirty: true,
 
             getShadowViewMatrix: (function () {
@@ -149,7 +149,7 @@ class PointLight extends Light {
         this.constantAttenuation = cfg.constantAttenuation;
         this.linearAttenuation = cfg.linearAttenuation;
         this.quadraticAttenuation = cfg.quadraticAttenuation;
-        this.castShadow = cfg.castShadow;
+        this.castsShadow = cfg.castsShadow;
 
         this.scene._lightCreated(this);
     }
@@ -162,7 +162,7 @@ class PointLight extends Light {
 
      @property pos
      @default [1.0, 1.0, 1.0]
-     @type Array(Number)
+     @type {Array}(Number)
      */
     set pos(value) {
         this._state.pos.set(value || [1.0, 1.0, 1.0]);
@@ -179,7 +179,7 @@ class PointLight extends Light {
 
      @property color
      @default [0.7, 0.7, 0.8]
-     @type Float32Array
+     @type {Float32Array}
      */
     set color(value) {
         this._state.color.set(value || [0.7, 0.7, 0.8]);
@@ -195,7 +195,7 @@ class PointLight extends Light {
 
      @property intensity
      @default 1.0
-     @type Number
+     @type {Number}
      */
     set intensity(value) {
         value = value !== undefined ? value : 1.0;
@@ -212,7 +212,7 @@ class PointLight extends Light {
 
      @property constantAttenuation
      @default 0
-     @type Number
+     @type {Number}
      */
     set constantAttenuation(value) {
         this._state.attenuation[0] = value || 0.0;
@@ -228,7 +228,7 @@ class PointLight extends Light {
 
      @property linearAttenuation
      @default 0
-     @type Number
+     @type {Number}
      */
     set linearAttenuation(value) {
         this._state.attenuation[1] = value || 0.0;
@@ -244,7 +244,7 @@ class PointLight extends Light {
 
      @property quadraticAttenuation
      @default 0
-     @type Number
+     @type {Number}
      */
     set quadraticAttenuation(value) {
         this._state.attenuation[2] = value || 0.0;
@@ -258,22 +258,22 @@ class PointLight extends Light {
     /**
      Flag which indicates if this PointLight casts a shadow.
 
-     @property castShadow
+     @property castsShadow
      @default false
-     @type Boolean
+     @type {Boolean}
      */
-    set castShadow(value) {
+    set castsShadow(value) {
         value = !!value;
-        if (this._state.castShadow === value) {
+        if (this._state.castsShadow === value) {
             return;
         }
-        this._state.castShadow = value;
+        this._state.castsShadow = value;
         this._shadowViewMatrixDirty = true;
         this.glRedraw();
     }
 
-    get castShadow() {
-        return this._state.castShadow;
+    get castsShadow() {
+        return this._state.castsShadow;
     }
 
     destroy() {

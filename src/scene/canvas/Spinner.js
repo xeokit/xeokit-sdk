@@ -170,7 +170,7 @@ class Spinner extends Component {
      For example: "AmbientLight", "MetallicMaterial" etc.
 
      @property type
-     @type String
+     @type {String}
      @final
      */
     get type() {
@@ -219,7 +219,7 @@ class Spinner extends Component {
 
      @property processes
      @default 0
-     @type Number
+     @type {Number}
      */
     set processes(value) {
         value = value || 0;

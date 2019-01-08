@@ -103,7 +103,7 @@ function httpRequest(args) {
         var xhr = new XMLHttpRequest();
         xhr.open(args.method || "GET", args.url, true);
         xhr.onload = function (e) {
-            console.log(args.url, xhr.readyState, xhr.status)
+            console.log(args.url, xhr.readyState, xhr.status);
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     resolve(xhr.responseXML);
@@ -188,6 +188,35 @@ function loadJSON(url, ok, err) {
     request.send(null);
 }
 
+/**
+ * @private
+ */
+function loadArraybuffer(url, ok, err) {
+    // Avoid checking ok and err on each use.
+    var defaultCallback = (_value) => undefined;
+    ok = ok || defaultCallback;
+    err = err || defaultCallback;
+    var request = new XMLHttpRequest();
+    request.responseType = "arraybuffer";
+//            request.addEventListener('progress',
+//                function (event) {
+//                    // TODO: Update the task? { type:'progress', loaded:event.loaded, total:event.total }
+//                }, false);
+    request.addEventListener('load',
+        function (event) {
+            if (event.target.response) {
+                ok(event.target.response);
+            } else {
+                err('Invalid file [' + url + ']');
+            }
+        }, false);
+    request.addEventListener('error',
+        function () {
+            err('Couldn\'t load URL [' + url + ']');
+        }, false);
+    request.open('GET', url, true);
+    request.send(null);
+}
 
 /**
  Tests if the given object is an array
@@ -388,6 +417,7 @@ const utils = {
     timeout: timeout,
     httpRequest: httpRequest,
     loadJSON: loadJSON,
+    loadArraybuffer: loadArraybuffer,
     queryString: queryString,
     isArray: isArray,
     isString: isString,

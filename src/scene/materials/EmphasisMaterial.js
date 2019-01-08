@@ -148,10 +148,10 @@ const PRESETS = {
  * });
  * ````
  *
- * Note the ````edgeThreshold```` configuration for the {@link Geometry} on our {@link Mesh}.  EmphasisMaterial configures
- * a wireframe representation of the {@link Geometry} for the selected emphasis mode, which will have inner edges (those edges between
+ * Note the ````edgeThreshold```` configuration for the {@link ReadableGeometry} on our {@link Mesh}.  EmphasisMaterial configures
+ * a wireframe representation of the {@link ReadableGeometry} for the selected emphasis mode, which will have inner edges (those edges between
  * adjacent co-planar triangles) removed for visual clarity. The ````edgeThreshold```` indicates that, for
- * this particular {@link Geometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
+ * this particular {@link ReadableGeometry}, an inner edge is one where the angle between the surface normals of adjacent triangles
  * is not greater than ````5```` degrees. That's set to ````2```` by default, but we can override it to tweak the effect
  * as needed for particular Geometries.
  *
@@ -195,47 +195,39 @@ const PRESETS = {
 class EmphasisMaterial extends Material {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type String
-     @final
+     * Gets the JavaScript class name for this Component.
+     *
+     * For example: "AmbientLight", "MetallicMaterial" etc.
+     *
+     * @type {String}
      */
     get type() {
         return "EmphasisMaterial";
     }
 
     /**
-     Available EmphasisMaterial presets.
-
-     @property presets
-     @type {Object}
-     @static
+     * Gets available EmphasisMaterial presets.
+     *
+     * @type {Object}
      */
     get presets() {
         return PRESETS;
     };
 
     /**
-     @constructor
-     @extends Material
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well. Creates this component within the default {@link Scene} when omitted.
-     @param {*} [cfg] The EmphasisMaterial configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param [cfg.meta=null] {String:Object} Metadata to attach to this EmphasisMaterial.
-     @param [cfg.fill=true] {Boolean} Indicates whether or not ghost surfaces are filled with color.
-     @param [cfg.fillColor=[0.4,0.4,0.4]] {Array of Number} EmphasisMaterial fill color.
-     @param [cfg.fillAlpha=0.2] {Number}  Transparency of filled ghost faces. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-     @param [cfg.edges=true] {Boolean} Indicates whether or not ghost edges are visible.
-     @param [cfg.edgeColor=[0.2,0.2,0.2]] {Array of Number}  RGB color of ghost edges.
-     @param [cfg.edgeAlpha=0.5] {Number} Transparency of ghost edges. A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-     @param [cfg.edgeWidth=1] {Number}  Width of ghost edges, in pixels.
-     @param [cfg.backfaces=false] {Boolean} Whether to render {@link Geometry} backfaces.
-     @param [cfg.preset] {String} Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial/preset:method"}}EmphasisMaterial#preset(){{/crossLink}}.
-     * @param owner
-     * @param cfg
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] The EmphasisMaterial configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Boolean} [cfg.fill=true] Indicates if ghost surfaces are filled with color.
+     * @param {Array of Number} [cfg.fillColor=[0.4,0.4,0.4]] EmphasisMaterial fill color.
+     * @param  {Number} [cfg.fillAlpha=0.2] Transparency of filled ghost faces. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     * @param {Boolean} [cfg.edges=true] Indicates if ghost edges are visible.
+     * @param {Array of Number} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of ghost edges.
+     * @param {Number} [cfg.edgeAlpha=0.5] Transparency of ghost edges. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     * @param {Number} [cfg.edgeWidth=1] Width of ghost edges, in pixels.
+     * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
+     * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces when emphasising.
      */
     constructor(owner, cfg = {}) {
 
@@ -294,11 +286,11 @@ class EmphasisMaterial extends Material {
     }
 
     /**
-     Indicates whether or not ghost surfaces are filled with color.
-
-     @property fill
-     @default true
-     @type Boolean
+     * Sets if surfaces are filled with color.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
      */
     set fill(value) {
         value = value !== false;
@@ -309,16 +301,23 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets if surfaces are filled with color.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
     get fill() {
         return this._state.fill;
     }
 
     /**
-     RGB color of filled ghost faces.
-
-     @property fillColor
-     @default [0.4, 0.4, 0.4]
-     @type Float32Array
+     * Sets the RGB color of filled faces.
+     *
+     * Default is ````[0.4, 0.4, 0.4]````.
+     *
+     * @type {Float32Array}
      */
     set fillColor(value) {
         let fillColor = this._state.fillColor;
@@ -339,18 +338,25 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB color of filled faces.
+     *
+     * Default is ````[0.4, 0.4, 0.4]````.
+     *
+     * @type {Float32Array}
+     */
     get fillColor() {
         return this._state.fillColor;
     }
 
     /**
-     Transparency of filled ghost faces.
-
-     A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-
-     @property fillAlpha
-     @default 0.2
-     @type Number
+     * Sets the transparency of filled faces.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default is ````0.2````.
+     *
+     * @type {Number}
      */
     set fillAlpha(value) {
         value = (value !== undefined && value !== null) ? value : 0.2;
@@ -361,16 +367,25 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the transparency of filled faces.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default is ````0.2````.
+     *
+     * @type {Number}
+     */
     get fillAlpha() {
         return this._state.fillAlpha;
     }
 
     /**
-     Indicates whether or not ghost edges are visible.
-
-     @property edges
-     @default true
-     @type Boolean
+     * Sets if edges are visible.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
      */
     set edges(value) {
         value = value !== false;
@@ -381,16 +396,23 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets if edges are visible.
+     *
+     * Default is ````true````.
+     *
+     * @type {Boolean}
+     */
     get edges() {
         return this._state.edges;
     }
 
     /**
-     RGB color of ghost edges.
-
-     @property edgeColor
-     @default [0.2, 0.2, 0.2]
-     @type Float32Array
+     * Sets the RGB color of edges.
+     *
+     * Default is ```` [0.2, 0.2, 0.2]````.
+     *
+     * @type {Float32Array}
      */
     set edgeColor(value) {
         let edgeColor = this._state.edgeColor;
@@ -411,18 +433,25 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB color of edges.
+     *
+     * Default is ```` [0.2, 0.2, 0.2]````.
+     *
+     * @type {Float32Array}
+     */
     get edgeColor() {
         return this._state.edgeColor;
     }
 
     /**
-     Transparency of ghost edges.
-
-     A value of 0.0 indicates fully transparent, 1.0 is fully opaque.
-
-     @property edgeAlpha
-     @default 0.5
-     @type Number
+     * Sets the transparency of edges.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default is ````0.2````.
+     *
+     * @type {Number}
      */
     set edgeAlpha(value) {
         value = (value !== undefined && value !== null) ? value : 0.5;
@@ -433,35 +462,52 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets the transparency of edges.
+     *
+     * A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     *
+     * Default is ````0.2````.
+     *
+     * @type {Number}
+     */
     get edgeAlpha() {
         return this._state.edgeAlpha;
     }
 
     /**
-     Width of ghost edges, in pixels.
-
-     @property edgeWidth
-     @default 1.0
-     @type Number
+     * Sets edge width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0```` pixels.
+     *
+     * @type {Number}
      */
     set edgeWidth(value) {
         this._state.edgeWidth = value || 1.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets edge width.
+     *
+     * This is not supported by WebGL implementations based on DirectX [2019].
+     *
+     * Default value is ````1.0```` pixels.
+     *
+     * @type {Number}
+     */
     get edgeWidth() {
         return this._state.edgeWidth;
     }
 
     /**
-     Whether backfaces are visible on attached {@link Mesh}es.
-
-     The backfaces will belong to {@link Geometry} components that are also attached to
-     the {@link Mesh}es.
-
-     @property backfaces
-     @default false
-     @type Boolean
+     * Sets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
      */
     set backfaces(value) {
         value = !!value;
@@ -472,27 +518,23 @@ class EmphasisMaterial extends Material {
         this.glRedraw();
     }
 
+    /**
+     * Gets whether to render backfaces when {@link EmphasisMaterial#fill} is ````true````..
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
     get backfaces() {
         return this._state.backfaces;
     }
 
     /**
-     Selects a preset EmphasisMaterial configuration.
-
-     Available presets are:
-
-     * "default" - grey wireframe with translucent fill, for light backgrounds.
-     * "defaultLightBG" - grey wireframe with grey translucent fill, for light backgrounds.
-     * "defaultDarkBG" - grey wireframe with grey translucent fill, for dark backgrounds.
-     * "vectorscope" - green wireframe and black translucent fill.
-     * "battlezone" - green wireframe with black opaque fill, giving a solid hidden-lines-removed effect.
-     * "sepia" - light red-grey wireframe with light sepia translucent fill - easy on the eyes.
-     * "gamegrid" - light blue wireframe with dark blue translucent fill - reminiscent of Tron.
-     * "yellowHighlight" - light yellow translucent fill - highlights while allowing underlying detail to show through.
-
-     @property preset
-     @default "default"
-     @type String
+     * Selects a preset EmphasisMaterial configuration.
+     *
+     * Default value is "default".
+     *
+     * @type {String}
      */
     set preset(value) {
         value = value || "default";
@@ -514,10 +556,20 @@ class EmphasisMaterial extends Material {
         this._preset = value;
     }
 
+    /**
+     * Gets the current preset EmphasisMaterial configuration.
+     *
+     * Default value is "default".
+     *
+     * @type {String}
+     */
     get preset() {
         return this._preset;
     }
 
+    /**
+     * Destroys this EmphasisMaterial.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();
