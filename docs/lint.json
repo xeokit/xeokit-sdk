@@ -4,31 +4,31 @@
     "filePath": "src/viewer/metadata/MetaScene.js",
     "lines": [
       {
-        "lineNumber": 136,
+        "lineNumber": 143,
         "line": "    /**"
       },
       {
-        "lineNumber": 137,
+        "lineNumber": 144,
         "line": "     * Loads a {@link MetaModel} from a URL."
       },
       {
-        "lineNumber": 138,
+        "lineNumber": 145,
         "line": "     *"
       },
       {
-        "lineNumber": 139,
+        "lineNumber": 146,
         "line": "     * @param src"
       },
       {
-        "lineNumber": 140,
+        "lineNumber": 147,
         "line": "     * @param ok"
       },
       {
-        "lineNumber": 141,
+        "lineNumber": 148,
         "line": "     */"
       },
       {
-        "lineNumber": 142,
+        "lineNumber": 149,
         "line": "    loadMetaModelJSON(modelId, src, ok) {"
       }
     ],

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 4397,
+  "end": 4398,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 4397,
+    "end": 4398,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 192,
-        "end": 4373,
+        "end": 4374,
         "loc": {
           "start": {
             "line": 8,
@@ -64,7 +64,7 @@
         "body": {
           "type": "ClassBody",
           "start": 211,
-          "end": 4373,
+          "end": 4374,
           "loc": {
             "start": {
               "line": 8,
@@ -235,7 +235,7 @@
             {
               "type": "ClassMethod",
               "start": 348,
-              "end": 4371,
+              "end": 4372,
               "loc": {
                 "start": {
                   "line": 18,
@@ -275,7 +275,7 @@
               "body": {
                 "type": "BlockStatement",
                 "start": 356,
-                "end": 4371,
+                "end": 4372,
                 "loc": {
                   "start": {
                     "line": 18,
@@ -1638,9 +1638,9 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+                        "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
                         "start": 3057,
-                        "end": 3413,
+                        "end": 3414,
                         "loc": {
                           "start": {
                             "line": 106,
@@ -1656,8 +1656,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3422,
-                    "end": 3451,
+                    "start": 3423,
+                    "end": 3452,
                     "loc": {
                       "start": {
                         "line": 115,
@@ -1670,8 +1670,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3422,
-                      "end": 3450,
+                      "start": 3423,
+                      "end": 3451,
                       "loc": {
                         "start": {
                           "line": 115,
@@ -1685,8 +1685,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3422,
-                        "end": 3443,
+                        "start": 3423,
+                        "end": 3444,
                         "loc": {
                           "start": {
                             "line": 115,
@@ -1699,8 +1699,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3422,
-                          "end": 3426,
+                          "start": 3423,
+                          "end": 3427,
                           "loc": {
                             "start": {
                               "line": 115,
@@ -1715,8 +1715,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3427,
-                          "end": 3443,
+                          "start": 3428,
+                          "end": 3444,
                           "loc": {
                             "start": {
                               "line": 115,
@@ -1735,8 +1735,8 @@
                       },
                       "right": {
                         "type": "NullLiteral",
-                        "start": 3446,
-                        "end": 3450,
+                        "start": 3447,
+                        "end": 3451,
                         "loc": {
                           "start": {
                             "line": 115,
@@ -1753,9 +1753,9 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+                        "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
                         "start": 3057,
-                        "end": 3413,
+                        "end": 3414,
                         "loc": {
                           "start": {
                             "line": 106,
@@ -1772,8 +1772,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 3461,
-                        "end": 3658,
+                        "start": 3462,
+                        "end": 3659,
                         "loc": {
                           "start": {
                             "line": 117,
@@ -1789,8 +1789,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3667,
-                    "end": 3696,
+                    "start": 3668,
+                    "end": 3697,
                     "loc": {
                       "start": {
                         "line": 123,
@@ -1803,8 +1803,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3667,
-                      "end": 3695,
+                      "start": 3668,
+                      "end": 3696,
                       "loc": {
                         "start": {
                           "line": 123,
@@ -1818,8 +1818,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3667,
-                        "end": 3688,
+                        "start": 3668,
+                        "end": 3689,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -1832,8 +1832,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3667,
-                          "end": 3671,
+                          "start": 3668,
+                          "end": 3672,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -1848,8 +1848,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3672,
-                          "end": 3688,
+                          "start": 3673,
+                          "end": 3689,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -1868,8 +1868,8 @@
                       },
                       "right": {
                         "type": "NullLiteral",
-                        "start": 3691,
-                        "end": 3695,
+                        "start": 3692,
+                        "end": 3696,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -1887,8 +1887,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 3461,
-                        "end": 3658,
+                        "start": 3462,
+                        "end": 3659,
                         "loc": {
                           "start": {
                             "line": 117,
@@ -1905,8 +1905,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 3706,
-                        "end": 4070,
+                        "start": 3707,
+                        "end": 4071,
                         "loc": {
                           "start": {
                             "line": 125,
@@ -1922,8 +1922,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 4079,
-                    "end": 4106,
+                    "start": 4080,
+                    "end": 4107,
                     "loc": {
                       "start": {
                         "line": 134,
@@ -1936,8 +1936,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 4079,
-                      "end": 4105,
+                      "start": 4080,
+                      "end": 4106,
                       "loc": {
                         "start": {
                           "line": 134,
@@ -1951,8 +1951,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 4079,
-                        "end": 4098,
+                        "start": 4080,
+                        "end": 4099,
                         "loc": {
                           "start": {
                             "line": 134,
@@ -1965,8 +1965,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 4079,
-                          "end": 4083,
+                          "start": 4080,
+                          "end": 4084,
                           "loc": {
                             "start": {
                               "line": 134,
@@ -1981,8 +1981,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 4084,
-                          "end": 4098,
+                          "start": 4085,
+                          "end": 4099,
                           "loc": {
                             "start": {
                               "line": 134,
@@ -2001,8 +2001,8 @@
                       },
                       "right": {
                         "type": "NullLiteral",
-                        "start": 4101,
-                        "end": 4105,
+                        "start": 4102,
+                        "end": 4106,
                         "loc": {
                           "start": {
                             "line": 134,
@@ -2020,8 +2020,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 3706,
-                        "end": 4070,
+                        "start": 3707,
+                        "end": 4071,
                         "loc": {
                           "start": {
                             "line": 125,
@@ -2038,8 +2038,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 4116,
-                        "end": 4329,
+                        "start": 4117,
+                        "end": 4330,
                         "loc": {
                           "start": {
                             "line": 136,
@@ -2055,8 +2055,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 4338,
-                    "end": 4365,
+                    "start": 4339,
+                    "end": 4366,
                     "loc": {
                       "start": {
                         "line": 142,
@@ -2069,8 +2069,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 4338,
-                      "end": 4364,
+                      "start": 4339,
+                      "end": 4365,
                       "loc": {
                         "start": {
                           "line": 142,
@@ -2084,8 +2084,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 4338,
-                        "end": 4357,
+                        "start": 4339,
+                        "end": 4358,
                         "loc": {
                           "start": {
                             "line": 142,
@@ -2098,8 +2098,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 4338,
-                          "end": 4342,
+                          "start": 4339,
+                          "end": 4343,
                           "loc": {
                             "start": {
                               "line": 142,
@@ -2114,8 +2114,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 4343,
-                          "end": 4357,
+                          "start": 4344,
+                          "end": 4358,
                           "loc": {
                             "start": {
                               "line": 142,
@@ -2134,8 +2134,8 @@
                       },
                       "right": {
                         "type": "NullLiteral",
-                        "start": 4360,
-                        "end": 4364,
+                        "start": 4361,
+                        "end": 4365,
                         "loc": {
                           "start": {
                             "line": 142,
@@ -2153,8 +2153,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-                        "start": 4116,
-                        "end": 4329,
+                        "start": 4117,
+                        "end": 4330,
                         "loc": {
                           "start": {
                             "line": 136,
@@ -2198,8 +2198,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4375,
-        "end": 4397,
+        "start": 4376,
+        "end": 4398,
         "loc": {
           "start": {
             "line": 146,
@@ -2214,8 +2214,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 4383,
-            "end": 4395,
+            "start": 4384,
+            "end": 4396,
             "loc": {
               "start": {
                 "line": 146,
@@ -2228,8 +2228,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 4383,
-              "end": 4395,
+              "start": 4384,
+              "end": 4396,
               "loc": {
                 "start": {
                   "line": 146,
@@ -2245,8 +2245,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 4383,
-              "end": 4395,
+              "start": 4384,
+              "end": 4396,
               "loc": {
                 "start": {
                   "line": 146,
@@ -2266,8 +2266,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4375,
-        "end": 4397,
+        "start": 4376,
+        "end": 4398,
         "loc": {
           "start": {
             "line": 146,
@@ -2281,7 +2281,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 192,
-          "end": 4373,
+          "end": 4374,
           "loc": {
             "start": {
               "line": 8,
@@ -2314,7 +2314,7 @@
           "body": {
             "type": "ClassBody",
             "start": 211,
-            "end": 4373,
+            "end": 4374,
             "loc": {
               "start": {
                 "line": 8,
@@ -2485,7 +2485,7 @@
               {
                 "type": "ClassMethod",
                 "start": 348,
-                "end": 4371,
+                "end": 4372,
                 "loc": {
                   "start": {
                     "line": 18,
@@ -2525,7 +2525,7 @@
                 "body": {
                   "type": "BlockStatement",
                   "start": 356,
-                  "end": 4371,
+                  "end": 4372,
                   "loc": {
                     "start": {
                       "line": 18,
@@ -3888,9 +3888,9 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+                          "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
                           "start": 3057,
-                          "end": 3413,
+                          "end": 3414,
                           "loc": {
                             "start": {
                               "line": 106,
@@ -3906,8 +3906,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3422,
-                      "end": 3451,
+                      "start": 3423,
+                      "end": 3452,
                       "loc": {
                         "start": {
                           "line": 115,
@@ -3920,8 +3920,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3422,
-                        "end": 3450,
+                        "start": 3423,
+                        "end": 3451,
                         "loc": {
                           "start": {
                             "line": 115,
@@ -3935,8 +3935,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3422,
-                          "end": 3443,
+                          "start": 3423,
+                          "end": 3444,
                           "loc": {
                             "start": {
                               "line": 115,
@@ -3949,8 +3949,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3422,
-                            "end": 3426,
+                            "start": 3423,
+                            "end": 3427,
                             "loc": {
                               "start": {
                                 "line": 115,
@@ -3965,8 +3965,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3427,
-                            "end": 3443,
+                            "start": 3428,
+                            "end": 3444,
                             "loc": {
                               "start": {
                                 "line": 115,
@@ -3985,8 +3985,8 @@
                         },
                         "right": {
                           "type": "NullLiteral",
-                          "start": 3446,
-                          "end": 3450,
+                          "start": 3447,
+                          "end": 3451,
                           "loc": {
                             "start": {
                               "line": 115,
@@ -4003,9 +4003,9 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+                          "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
                           "start": 3057,
-                          "end": 3413,
+                          "end": 3414,
                           "loc": {
                             "start": {
                               "line": 106,
@@ -4022,8 +4022,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 3461,
-                          "end": 3658,
+                          "start": 3462,
+                          "end": 3659,
                           "loc": {
                             "start": {
                               "line": 117,
@@ -4039,8 +4039,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3667,
-                      "end": 3696,
+                      "start": 3668,
+                      "end": 3697,
                       "loc": {
                         "start": {
                           "line": 123,
@@ -4053,8 +4053,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3667,
-                        "end": 3695,
+                        "start": 3668,
+                        "end": 3696,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -4068,8 +4068,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3667,
-                          "end": 3688,
+                          "start": 3668,
+                          "end": 3689,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -4082,8 +4082,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3667,
-                            "end": 3671,
+                            "start": 3668,
+                            "end": 3672,
                             "loc": {
                               "start": {
                                 "line": 123,
@@ -4098,8 +4098,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3672,
-                            "end": 3688,
+                            "start": 3673,
+                            "end": 3689,
                             "loc": {
                               "start": {
                                 "line": 123,
@@ -4118,8 +4118,8 @@
                         },
                         "right": {
                           "type": "NullLiteral",
-                          "start": 3691,
-                          "end": 3695,
+                          "start": 3692,
+                          "end": 3696,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -4137,8 +4137,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 3461,
-                          "end": 3658,
+                          "start": 3462,
+                          "end": 3659,
                           "loc": {
                             "start": {
                               "line": 117,
@@ -4155,8 +4155,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 3706,
-                          "end": 4070,
+                          "start": 3707,
+                          "end": 4071,
                           "loc": {
                             "start": {
                               "line": 125,
@@ -4172,8 +4172,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 4079,
-                      "end": 4106,
+                      "start": 4080,
+                      "end": 4107,
                       "loc": {
                         "start": {
                           "line": 134,
@@ -4186,8 +4186,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 4079,
-                        "end": 4105,
+                        "start": 4080,
+                        "end": 4106,
                         "loc": {
                           "start": {
                             "line": 134,
@@ -4201,8 +4201,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 4079,
-                          "end": 4098,
+                          "start": 4080,
+                          "end": 4099,
                           "loc": {
                             "start": {
                               "line": 134,
@@ -4215,8 +4215,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 4079,
-                            "end": 4083,
+                            "start": 4080,
+                            "end": 4084,
                             "loc": {
                               "start": {
                                 "line": 134,
@@ -4231,8 +4231,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 4084,
-                            "end": 4098,
+                            "start": 4085,
+                            "end": 4099,
                             "loc": {
                               "start": {
                                 "line": 134,
@@ -4251,8 +4251,8 @@
                         },
                         "right": {
                           "type": "NullLiteral",
-                          "start": 4101,
-                          "end": 4105,
+                          "start": 4102,
+                          "end": 4106,
                           "loc": {
                             "start": {
                               "line": 134,
@@ -4270,8 +4270,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 3706,
-                          "end": 4070,
+                          "start": 3707,
+                          "end": 4071,
                           "loc": {
                             "start": {
                               "line": 125,
@@ -4288,8 +4288,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 4116,
-                          "end": 4329,
+                          "start": 4117,
+                          "end": 4330,
                           "loc": {
                             "start": {
                               "line": 136,
@@ -4305,8 +4305,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 4338,
-                      "end": 4365,
+                      "start": 4339,
+                      "end": 4366,
                       "loc": {
                         "start": {
                           "line": 142,
@@ -4319,8 +4319,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 4338,
-                        "end": 4364,
+                        "start": 4339,
+                        "end": 4365,
                         "loc": {
                           "start": {
                             "line": 142,
@@ -4334,8 +4334,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 4338,
-                          "end": 4357,
+                          "start": 4339,
+                          "end": 4358,
                           "loc": {
                             "start": {
                               "line": 142,
@@ -4348,8 +4348,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 4338,
-                            "end": 4342,
+                            "start": 4339,
+                            "end": 4343,
                             "loc": {
                               "start": {
                                 "line": 142,
@@ -4364,8 +4364,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 4343,
-                            "end": 4357,
+                            "start": 4344,
+                            "end": 4358,
                             "loc": {
                               "start": {
                                 "line": 142,
@@ -4384,8 +4384,8 @@
                         },
                         "right": {
                           "type": "NullLiteral",
-                          "start": 4360,
-                          "end": 4364,
+                          "start": 4361,
+                          "end": 4365,
                           "loc": {
                             "start": {
                               "line": 142,
@@ -4403,8 +4403,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-                          "start": 4116,
-                          "end": 4329,
+                          "start": 4117,
+                          "end": 4330,
                           "loc": {
                             "start": {
                               "line": 136,
@@ -4665,9 +4665,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+      "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
       "start": 3057,
-      "end": 3413,
+      "end": 3414,
       "loc": {
         "start": {
           "line": 106,
@@ -4682,8 +4682,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-      "start": 3461,
-      "end": 3658,
+      "start": 3462,
+      "end": 3659,
       "loc": {
         "start": {
           "line": 117,
@@ -4698,8 +4698,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-      "start": 3706,
-      "end": 4070,
+      "start": 3707,
+      "end": 4071,
       "loc": {
         "start": {
           "line": 125,
@@ -4714,8 +4714,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-      "start": 4116,
-      "end": 4329,
+      "start": 4117,
+      "end": 4330,
       "loc": {
         "start": {
           "line": 136,
@@ -6988,9 +6988,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
+      "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering castsShadows.\n         *\n         * This sets the viewpoint to look from the point of view of each {@link DirLight}\n         * or {@link PointLight} that casts a shadow.\n         *\n         * @property shadowViewMatrix\n         * @type {Float32Array}\n         ",
       "start": 3057,
-      "end": 3413,
+      "end": 3414,
       "loc": {
         "start": {
           "line": 106,
@@ -7017,8 +7017,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3422,
-      "end": 3426,
+      "start": 3423,
+      "end": 3427,
       "loc": {
         "start": {
           "line": 115,
@@ -7043,8 +7043,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3426,
-      "end": 3427,
+      "start": 3427,
+      "end": 3428,
       "loc": {
         "start": {
           "line": 115,
@@ -7069,8 +7069,8 @@
         "binop": null
       },
       "value": "shadowViewMatrix",
-      "start": 3427,
-      "end": 3443,
+      "start": 3428,
+      "end": 3444,
       "loc": {
         "start": {
           "line": 115,
@@ -7096,8 +7096,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3444,
-      "end": 3445,
+      "start": 3445,
+      "end": 3446,
       "loc": {
         "start": {
           "line": 115,
@@ -7124,8 +7124,8 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 3446,
-      "end": 3450,
+      "start": 3447,
+      "end": 3451,
       "loc": {
         "start": {
           "line": 115,
@@ -7150,8 +7150,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3450,
-      "end": 3451,
+      "start": 3451,
+      "end": 3452,
       "loc": {
         "start": {
           "line": 115,
@@ -7166,8 +7166,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.\n         *\n         * @property shadowProjMatrix\n         * @type {Float32Array}\n         ",
-      "start": 3461,
-      "end": 3658,
+      "start": 3462,
+      "end": 3659,
       "loc": {
         "start": {
           "line": 117,
@@ -7194,8 +7194,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3667,
-      "end": 3671,
+      "start": 3668,
+      "end": 3672,
       "loc": {
         "start": {
           "line": 123,
@@ -7220,8 +7220,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3671,
-      "end": 3672,
+      "start": 3672,
+      "end": 3673,
       "loc": {
         "start": {
           "line": 123,
@@ -7246,8 +7246,8 @@
         "binop": null
       },
       "value": "shadowProjMatrix",
-      "start": 3672,
-      "end": 3688,
+      "start": 3673,
+      "end": 3689,
       "loc": {
         "start": {
           "line": 123,
@@ -7273,8 +7273,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3689,
-      "end": 3690,
+      "start": 3690,
+      "end": 3691,
       "loc": {
         "start": {
           "line": 123,
@@ -7301,8 +7301,8 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 3691,
-      "end": 3695,
+      "start": 3692,
+      "end": 3696,
       "loc": {
         "start": {
           "line": 123,
@@ -7327,8 +7327,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3695,
-      "end": 3696,
+      "start": 3696,
+      "end": 3697,
       "loc": {
         "start": {
           "line": 123,
@@ -7343,8 +7343,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 viewing transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * This sets the viewpoint to look along the ray given to {@link Scene/pick:method\"}}Scene#pick(){{/crossLink}}\n         * when picking with a ray.\n         *\n         * @property pickViewMatrix\n         * @type {Float32Array}\n         ",
-      "start": 3706,
-      "end": 4070,
+      "start": 3707,
+      "end": 4071,
       "loc": {
         "start": {
           "line": 125,
@@ -7371,8 +7371,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4079,
-      "end": 4083,
+      "start": 4080,
+      "end": 4084,
       "loc": {
         "start": {
           "line": 134,
@@ -7397,8 +7397,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4083,
-      "end": 4084,
+      "start": 4084,
+      "end": 4085,
       "loc": {
         "start": {
           "line": 134,
@@ -7423,8 +7423,8 @@
         "binop": null
       },
       "value": "pickViewMatrix",
-      "start": 4084,
-      "end": 4098,
+      "start": 4085,
+      "end": 4099,
       "loc": {
         "start": {
           "line": 134,
@@ -7450,8 +7450,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4099,
-      "end": 4100,
+      "start": 4100,
+      "end": 4101,
       "loc": {
         "start": {
           "line": 134,
@@ -7478,8 +7478,8 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 4101,
-      "end": 4105,
+      "start": 4102,
+      "end": 4106,
       "loc": {
         "start": {
           "line": 134,
@@ -7504,8 +7504,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4105,
-      "end": 4106,
+      "start": 4106,
+      "end": 4107,
       "loc": {
         "start": {
           "line": 134,
@@ -7520,8 +7520,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.\n         *\n         * @property pickProjMatrix\n         * @type {Float32Array}\n         ",
-      "start": 4116,
-      "end": 4329,
+      "start": 4117,
+      "end": 4330,
       "loc": {
         "start": {
           "line": 136,
@@ -7548,8 +7548,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4338,
-      "end": 4342,
+      "start": 4339,
+      "end": 4343,
       "loc": {
         "start": {
           "line": 142,
@@ -7574,8 +7574,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4342,
-      "end": 4343,
+      "start": 4343,
+      "end": 4344,
       "loc": {
         "start": {
           "line": 142,
@@ -7600,8 +7600,8 @@
         "binop": null
       },
       "value": "pickProjMatrix",
-      "start": 4343,
-      "end": 4357,
+      "start": 4344,
+      "end": 4358,
       "loc": {
         "start": {
           "line": 142,
@@ -7627,8 +7627,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4358,
-      "end": 4359,
+      "start": 4359,
+      "end": 4360,
       "loc": {
         "start": {
           "line": 142,
@@ -7655,8 +7655,8 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 4360,
-      "end": 4364,
+      "start": 4361,
+      "end": 4365,
       "loc": {
         "start": {
           "line": 142,
@@ -7681,8 +7681,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4364,
-      "end": 4365,
+      "start": 4365,
+      "end": 4366,
       "loc": {
         "start": {
           "line": 142,
@@ -7706,8 +7706,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4370,
-      "end": 4371,
+      "start": 4371,
+      "end": 4372,
       "loc": {
         "start": {
           "line": 143,
@@ -7731,8 +7731,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4372,
-      "end": 4373,
+      "start": 4373,
+      "end": 4374,
       "loc": {
         "start": {
           "line": 144,
@@ -7759,8 +7759,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 4375,
-      "end": 4381,
+      "start": 4376,
+      "end": 4382,
       "loc": {
         "start": {
           "line": 146,
@@ -7784,8 +7784,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4382,
-      "end": 4383,
+      "start": 4383,
+      "end": 4384,
       "loc": {
         "start": {
           "line": 146,
@@ -7810,8 +7810,8 @@
         "binop": null
       },
       "value": "FrameContext",
-      "start": 4383,
-      "end": 4395,
+      "start": 4384,
+      "end": 4396,
       "loc": {
         "start": {
           "line": 146,
@@ -7835,8 +7835,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4395,
-      "end": 4396,
+      "start": 4396,
+      "end": 4397,
       "loc": {
         "start": {
           "line": 146,
@@ -7861,8 +7861,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4396,
-      "end": 4397,
+      "start": 4397,
+      "end": 4398,
       "loc": {
         "start": {
           "line": 146,
@@ -7887,8 +7887,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4397,
-      "end": 4397,
+      "start": 4398,
+      "end": 4398,
       "loc": {
         "start": {
           "line": 146,
