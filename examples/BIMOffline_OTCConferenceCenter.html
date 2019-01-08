@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loading a BIM Model from the File System</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+    <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #structurePanel {
+            padding: 10px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            position: absolute;
+            background: RGBA(255, 255, 255, 0.4);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+        }
+
+        #myCanvas {
+            background: lightblue;
+        }
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="structurePanel" class="xeokitStructurePanel"></div>
+<div id="info">
+    <h1>Loading a BIM Model from the File System</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a>
+            - Renders simple IFC explorer tree
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/301">Model source</a>
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/xeolabs/xeokit-sdk/wiki/Loading-BIM-Models-from-the-File-System">Tutorial</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
+    import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [81.94, 18.36, -94.90];
+    viewer.camera.look = [43.10, 0.50, -26.76];
+    viewer.camera.up = [-0.10, 0.96, 0.16];
+
+    viewer.cameraFlight.fitFOV = 15;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create UI panels
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structurePanel = new StructurePanelPlugin(viewer, {
+        domElementId: "structurePanel"
+    });
+
+    structurePanel.on("clicked", e => {
+        const objectId = e.objectId;
+        const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
+        const aabb = viewer.scene.getAABB(objectIds);
+
+        viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
+        viewer.scene.setSelected(objectIds, true);
+
+        viewer.cameraFlight.flyTo(aabb);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer, {
+
+        handleNode(modelId, glTFNode, actions) {
+
+            //-------------------------------------------------------------------------------------------------------------
+            // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
+            // in the MetaModel we loaded. We'll create Node components in the Scene for all the nodes as we
+            // descend into them, but will give special treatment to those nodes that have a "name", ie. set initial
+            // visualize state for those according to the MetaModel.
+            //-------------------------------------------------------------------------------------------------------------
+
+            const name = glTFNode.name;
+
+            if (!name) {
+                return true; // Continue descending this node subtree
+            }
+
+            const objectId = name;
+            const metaObject = viewer.metaScene.metaObjects[objectId];
+            const ifcType = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
+            var colorize = ifcDefaultMaterials[ifcType];
+
+            //-------------------------------------------------------------------------------------------------------------
+            // Instruct GLTFLoaderPlugin to create an Node for this glTF scene node
+            //
+            // Assigning the Node an "objectId" causes xeokit to register it in
+            // Scene#objects, Scene#visibleObjectIds, Scene#highlightedObjectIds etc.
+            // which is just useful for easy visibility state management via those ID maps.
+            //-------------------------------------------------------------------------------------------------------------
+
+            actions.createNode = {
+                objectId: objectId,
+                visible: true,
+                colorize: colorize
+            };
+
+            //-------------------------------------------------------------------------------------------------------------
+            // Configure the initial visible state of the Node depending on its IFC type
+            //-------------------------------------------------------------------------------------------------------------
+
+            switch (ifcType) {
+                case "IfcWindow":
+                    actions.createNode.pickable = false;
+                    actions.createNode.opacity = 0.5;
+                    break;
+                case "IfcPlate":
+                    actions.createNode.pickable = false;
+                    actions.createNode.opacity = 0.5;
+                    break;
+                case "IfcSpace":
+                    actions.createNode.pickable = false;
+                    actions.createNode.visible = false;
+                    break;
+                case "IfcOpeningElement":
+                    actions.createNode.pickable = false;
+                    actions.createNode.visible = false;
+                    break;
+                default: // Unrecognized type
+                //  actions.createNode.pickable = true;
+            }
+
+            // Continue descending this glTF node subtree
+            return true;
+        }
+    });
+
+    const modelNode = gltfLoader.load({
+        modelId: "myModel",
+        src: "./models/gltf/OTCConferenceCenter/scene.gltf",
+        metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true,
+        edgeThreshold: 10,
+        lambertMaterial: true, // LambertMaterials for efficient rendering
+        readibleGeometry: false // VBOGeometries for low memory footprint (default)
+    });
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over meshes to highlight them
+    // Configure default highlight material to highlight edges yellow
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    var lastMesh = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+
+                if (lastMesh) {
+                    lastMesh.highlighted = false;
+                }
+
+                lastMesh = hit.mesh;
+                hit.mesh.highlighted = true;
+            }
+        } else {
+
+            if (lastMesh) {
+                lastMesh.highlighted = false;
+                lastMesh = null;
+            }
+        }
+    });
+
+
+    window.viewer = viewer;
+</script>
+</html>

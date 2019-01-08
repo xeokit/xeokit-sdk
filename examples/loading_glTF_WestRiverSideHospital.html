@@ -47,26 +47,36 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const structure = gltfLoader.load({
-        modelId: "structure",
-        src: "./models/gltf/WestRiverSideHospital/structure.gltf"
+        id: "structure",
+        src: "./models/gltf/WestRiverSideHospital/structure.gltf",
+        lambertMaterial: true,
+        geometryLite: true,
+        edges: true
     });
 
     const electrical = gltfLoader.load({
-        modelId: "electrical",
-        src: "./models/gltf/WestRiverSideHospital/electrical.gltf"
+        id: "electrical",
+        src: "./models/gltf/WestRiverSideHospital/electrical.gltf",
+        lambertMaterial: true,
+        geometryLite: true,
+        edges: true
     });
 
     const fireAlarms = gltfLoader.load({
-        modelId: "fireAlarms",
-        src: "./models/gltf/WestRiverSideHospital/fireAlarms.gltf"
+        id: "fireAlarms",
+        src: "./models/gltf/WestRiverSideHospital/fireAlarms.gltf",
+        lambertMaterial: true,
+        geometryLite: true,
+        edges: true
     });
 
     const sprinklers = gltfLoader.load({
-        modelId: "sprinklers",
-        src: "./models/gltf/WestRiverSideHospital/sprinklers.gltf"
+        id: "sprinklers",
+        src: "./models/gltf/WestRiverSideHospital/sprinklers.gltf",
+        lambertMaterial: true,
+        geometryLite: true,
+        edges: true
     });
-
-    viewer.camera.orbitPitch(20);
 
     structure.on("loaded", () => {
         viewer.cameraFlight.jumpTo(structure);

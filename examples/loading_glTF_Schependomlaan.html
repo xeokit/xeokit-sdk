@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <title>GLTFLoaderPlugin - Loading a Model from GLTF</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width:100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,7 +34,8 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
-        canvasId: "myCanvas"
+        canvasId: "myCanvas",
+        transparent: true
     });
 
     viewer.camera.orbitPitch(20);
@@ -37,18 +46,22 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
-        modelId: "myModel",
+    const modelNode = gltfLoader.load({
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
-        viewer.scene.on("tick", () => {
-            viewer.camera.orbitYaw(0.4);
-        })
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
+        // viewer.scene.on("tick", () => {
+        //     viewer.camera.orbitYaw(0.4);
+        // })
+    });
+
+    viewer.cameraControl.on("doublePicked", function(e) {
+        console.log("Picked: " + e);
     });
 </script>
 </html>

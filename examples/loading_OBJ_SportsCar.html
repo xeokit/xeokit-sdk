@@ -46,14 +46,14 @@
 
     const objLoader = new OBJLoaderPlugin(viewer);
 
-    const model = objLoader.load({
-        modelId: "myModel",
+    const modelNode = objLoader.load({
+        id: "myModel",
         src: "./models/obj/sportsCar/sportsCar.obj",
         edges: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })

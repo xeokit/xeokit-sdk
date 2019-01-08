@@ -45,7 +45,7 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
-        modelId: "myModel",
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true
@@ -61,7 +61,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to highlight them
+    // Mouse over meshes to select them
     //------------------------------------------------------------------------------------------------------------------
 
     var lastMesh = null;

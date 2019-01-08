@@ -40,24 +40,25 @@
 
     viewer.camera.orbitPitch(20);
 
+    viewer.cameraControl.firstPerson = true;
+
     //----------------------------------------------------------------------------------------------------------------------
     // Load model and fit it to view
     //----------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
-        modelId: "myModel",
+    const modelNode = gltfLoader.load({
+        id: "myModel",
         src: "./models/gltf/modern_office/scene.gltf",
+        lambertMaterial: true,
+        scale: [10, 10, 10],
         edges: true,
         edgeThreshold: 20
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
-        viewer.scene.on("tick", () => {
-            viewer.camera.orbitYaw(0.4);
-        })
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
     });
 
 </script>

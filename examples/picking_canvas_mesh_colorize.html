@@ -44,8 +44,8 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
-        modelId: "myModel",
+    const modelNode = gltfLoader.load({
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true
@@ -53,8 +53,8 @@
 
     viewer.camera.orbitPitch(20);
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -93,5 +93,6 @@
             }
         }
     });
+
 </script>
 </html>

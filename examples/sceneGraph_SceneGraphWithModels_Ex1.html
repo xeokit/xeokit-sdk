@@ -71,13 +71,13 @@
         children: [
 
             objLoader.load({ // Returns a Node
-                modelId: "myModel",     // <---------- Registers Node on Viewer#scene#models
+                id: "myModel",     // <---------- Registers Node on Viewer#scene#models
                 src: "./models/obj/sportsCar/sportsCar.obj",
                 position: [-5, -1, 0],
             }),
 
             gltfLoader.load({ // Returns a Node
-                modelId: "myModel2",    // <---------- Registers Node on Viewer#scene#models
+                id: "myModel2",    // <---------- Registers Node on Viewer#scene#models
                 src: "./models/gltf/schependomlaan/scene.gltf",
                 rotation: [0, 50, 0],
                 edges: true

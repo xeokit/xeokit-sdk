@@ -2,8 +2,8 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     line-height: 1.50;
-    color: white;
-    background-color: black;
+    color: #000000;
+    background-color: rgba(0, 0, 0, 0);
     text-decoration: none;
     word-spacing: normal;
     text-align: left;
@@ -31,7 +31,7 @@ body {
     width: calc(100% - 300px);
     height: 100%;
     border: 0px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 #sourceButton {
@@ -68,6 +68,8 @@ body {
     text-align: left;
     pointer-events: none;
     background: RGBA(0, 0, 0, 0.4);
+    max-width: 300px;
+    color: white;
 }
 
 #info-website {
@@ -159,7 +161,7 @@ body {
 #explorer {
     margin: 0;
     left: 0;
-    background: black;
+    background: #fdfdfd;
     width: auto;
     height: 100%;
     position: absolute;
@@ -170,7 +172,7 @@ body {
 }
 
 #menu a {
-    color: white;
+    color: #000000;
     text-decoration: none;
 
 }
@@ -182,7 +184,7 @@ body {
 }
 
 #explorer a {
-    color: white;
+    color: #000000;
     text-decoration: none;
 }
 
@@ -408,7 +410,7 @@ ul ul {
     height: calc(100% - 50px);
     /*overflow-Y: scroll;*/
     /*overflow-x: hidden;*/
-    background: black;
+    background: #fdfdfd;
     overflow: auto;
 }
 
@@ -417,7 +419,7 @@ ul ul {
 }
 
 #contents h1 {
-    color: #78ce73;
+    color: #000000;
     margin-top: 30px;
     margin-bottom: 40px;
     font-size: 25px;
@@ -426,11 +428,11 @@ ul ul {
 }
 
 #contents h1 a {
-    color: #78ce73;
+    color: #000000;
 }
 
 #contents h2 {
-    color: #78ce73;
+    color: #000000;
     font-size: 20px;
     font-weight: normal;
     padding-top: 20px;
@@ -450,7 +452,7 @@ ul ul {
     padding-top: 1px;
     text-decoration: none;
     font-weight: normal;
-    background: black;
+    background: #fdfdfd;
     cursor: pointer;
     line-height: 1.5em;
 }
@@ -470,11 +472,11 @@ ul ul {
 }
 
 #contents #list .info {
-    color: #78ce73;
+    color: #a2a2a2;
     text-decoration: none;
     font-style: italic;
     font-size: 14px;
-    background-color: black;
+    background-color: #fdfdfd;
     padding-top: 4px;
     padding-bottom: 4px;
     margin-top: 15px;
@@ -482,11 +484,11 @@ ul ul {
 }
 
 #contents #list .infoFirst {
-    color: #9a9a9a;
+    color: #a2a2a2;
     text-decoration: none;
-    /*font-style: italic;*/
+    font-style: italic;
     font-size: 14px;
-    background-color: black;
+    background-color: #fdfdfd;
     padding-top: 4px;
     padding-bottom: 4px;
     margin-top: 0;

@@ -69,7 +69,7 @@
     const bimServerAddress = "http://localhost:8082";
     const username = "admin@bimserver.org";
     const password = "admin";
-    const poid = 131073;
+    const poid = 1048577;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and position the camera
@@ -188,7 +188,7 @@
                 const schema = project.schema;
 
                 const bigModel = bimServerBigLoader.load({
-                    modelId: "myModel",
+                    id: "myModel",
                     poid: poid,
                     roid: roid,
                     schema: schema,

@@ -133,7 +133,7 @@
     // Load the glTF model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
+    const modelNode = gltfLoader.load({
         modelId: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
@@ -146,7 +146,7 @@
     // The BCF viewpoint loads the camera position, creates a clipping plane, and selects several objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    modelNode.on("loaded", () => {
         bcfViewpoints.setViewpoint(bcfViewpoint);
     });
 </script>

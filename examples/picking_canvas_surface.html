@@ -17,7 +17,11 @@
                href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads glTF model from file system
         </li>
-
+        <li>
+            Loading with the <b>readableGeometry</b> option creates a model
+            with <a target="_other" href="./../docs/class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
+            components, which are to be surface-picked
+        </li>
     </ul>
 </div>
 </body>
@@ -30,7 +34,8 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {Mesh} from "../src/scene/mesh/Mesh.js";
-    import {SphereGeometry} from "../src/scene/geometry/SphereGeometry.js";
+    import {VBOGeometry} from "../src/scene/geometry/VBOGeometry.js";
+    import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
     import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -50,9 +55,10 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const model = gltfLoader.load({
-        modelId: "myModel",
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        readableGeometry: true, // <<----------------------------- Surface picking only works with ReadableGeometry
         edges: true
     });
 
@@ -67,7 +73,7 @@
     var hitHelper = new (function () {
 
         var mesh = new Mesh(viewer.scene, {
-            geometry: new SphereGeometry(viewer.scene, {radius: .4}),
+            geometry: buildSphereGeometry(VBOGeometry, viewer.scene, {radius: .4}),
             material: new PhongMaterial(viewer.scene, {emissive: [1, 0, 0], diffuse: [0, 0, 0]}),
             position: [0, 0, 0],
             pickable: false,

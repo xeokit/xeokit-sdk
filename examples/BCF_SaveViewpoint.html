@@ -72,8 +72,8 @@
     // Load the glTF model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
-        modelId: "myModel",
+    const modelNode = gltfLoader.load({
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true // Emphasise edges
@@ -95,7 +95,7 @@
     // The BCF viewpoint JSON is written to the JavaScript developer console
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    modelNode.on("loaded", () => {
 
         var scene = viewer.scene;
         var camera = scene.camera;

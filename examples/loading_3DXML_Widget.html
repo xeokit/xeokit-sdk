@@ -52,14 +52,14 @@
 
     const xml3dLoader = new XML3DLoaderPlugin(viewer);
 
-    const model = xml3dLoader.load({
-        modelId: "myModel",
+    const modelNode = xml3dLoader.load({
+        id: "myModel",
         src: "./models/xml3d/3dpreview.3dxml",
         edges: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })

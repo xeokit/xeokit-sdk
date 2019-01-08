@@ -64,7 +64,6 @@
     import {Viewer} from "./../src/viewer/Viewer.js";
     import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
     import {StructurePanelPlugin} from "./../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
-    import {PropertiesPanelPlugin} from "./../src/viewer/plugins/PropertiesPanelPlugin/PropertiesPanelPlugin.js";
 
     const bimServerAddress = "http://localhost:8082";
     const username = "admin@bimserver.org";
@@ -187,14 +186,14 @@
                 const schema = project.schema;
 
                 const xeokitlModel = bimServerLoader.load({
-                    modelId: "myModel",
+                    id: "myModel",
                     poid: poid,
                     roid: roid,
                     schema: schema,
-                    scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
+                    // scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
                     rotation: [-90, 0, 0],          // xeoglModel has Z+ axis as "up"
                     edges: true,                    // Emphasize edges
-                    lambertMaterials: true          // Fast flat shaded rendering
+                    lambertMaterial: true          // Fast flat shaded rendering
                 });
 
             });

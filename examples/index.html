@@ -30,49 +30,103 @@
         Ps.initialize(div);
     };
     var files = {
-        "Offline BIM": [
-            "#Viewing IFC models from files",
-            "offlineBIM_Duplex",
-            "offlineBIM_Schependomlaan",
-            "offlineBIM_OTCConferenceCenter"
-        ],
-        "BIMServer": [
-            "#Viewing BIMServer models",
-            "BIMServer_Schependomlaan",
-            "#Viewing large BIMServer models",
-            "BIMServer_big_Schependomlaan"
-        ],
+
         "BCF": [
-            "#Saving and loading BCF",
+            "#Saving and loading BCF viewpoints",
             "BCF_SaveViewpoint",
             "BCF_LoadViewpoint"
         ],
+
+        "BIM Offline": [
+
+            "#Viewing IFC models from files",
+            "BIMOffline_Duplex",
+            "BIMOffline_Schependomlaan",
+            "BIMOffline_OTCConferenceCenter",
+            "BIMOffline_WestRiverSideHospital"
+        ],
+
+        "BIMServer": [
+
+            "#Viewing BIMServer models",
+            "BIMServer_Schependomlaan",
+
+            "#Viewing large BIMServer models",
+            "BIMServer_big_Schependomlaan"
+        ],
+
+        "Geometry": [
+
+            "#Geometry components",
+            "geometry_VBOGeometry",
+            "geometry_ReadableGeometry",
+
+            "#Geometry builders",
+            "geometry_builders_buildBoxGeometry",
+            "geometry_builders_buildCylinderGeometry",
+            "geometry_builders_buildSphereGeometry",
+            "geometry_builders_buildTorusGeometry",
+            "geometry_builders_buildVectorTextGeometry",
+
+            "#Geometry loaders",
+            "geometry_loaders_loadOBJGeometry",
+            "geometry_loaders_load3DSGeometry"
+        ],
+
         "Gizmos": [
             "#Gizmos",
             "gizmos_AxisGizmoPlugin"
         ],
+
         "Loading": [
-            "#Viewing models from files",
+            "#Loading models from files",
             "loading_3DXML_Widget",
-            "loading_glTF_large_ModernOffice",
             "loading_glTF_Schependomlaan",
             "loading_glTF_ModernOffice",
             "loading_glTF_WestRiverSideHospital",
             "loading_OBJ_SportsCar",
-            "loading_STL_SpurGear"
+            "loading_STL_SpurGear",
+
+            "#Large models from files",
+            "loading_glTF_big_Schependomlaan",
+            "loading_glTF_big_ModernOffice"
         ],
-        "Scene graph": [
-            "#Creating scene graphs",
-            "sceneGraph_BasicSceneGraph",
-            "sceneGraph_SceneGraphWithModels_Ex1"
+
+        "Metadata": [
+            "#Attaching information to scene content",
+            "metadata_BasicExample"
         ],
+
+        "Materials": [
+
+            "#Material components",
+            "materials_PhongMaterial",
+            "materials_MetallicMaterial",
+            "materials_LambertMaterial",
+            "materials_EdgeMaterial",
+            "materials_EmphasisMaterial",
+
+            "#Texture maps",
+            "materials_Texture",
+
+            "#Fresnel effects",
+            "materials_Fresnel",
+        ],
+
         "Picking": [
+            "#Selecting scene content",
             "picking_canvas_mesh_colorize",
             "picking_canvas_mesh_highlight",
             "picking_canvas_mesh_select",
             "picking_canvas_surface",
             "picking_ray_mesh",
             "picking_ray_surface"
+        ],
+
+        "Scene graphs": [
+            "#Creating scene graphs",
+            "sceneGraph_BasicSceneGraph",
+            "sceneGraph_SceneGraphWithModels_Ex1"
         ]
     };
 

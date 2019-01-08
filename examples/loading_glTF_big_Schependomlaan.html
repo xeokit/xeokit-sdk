@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GLTFLoaderPlugin - Loading a Model from GLTF</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width:100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas"></canvas>
+    <div id="info">
+        <h1>GLTFLoaderPlugin - Loading a model from GLTF</h1>
+    </div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFBigModelLoaderPlugin} from "../src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    // viewer.cameraControl.firstPerson = true;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFBigModelLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf"
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.flyTo(model);
+    });
+
+
+    viewer.cameraControl.on("doublePicked", function(e) {
+        console.log("Picked: " + e);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

@@ -44,14 +44,14 @@
 
     const stlLoader = new STLLoaderPlugin(viewer);
 
-    const model = stlLoader.load({
-        modelId: "myModel",
+    const modelNode = stlLoader.load({
+        id: "myModel",
         src: "./models/stl/binary/spurGear.stl",
         smoothNormals: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.flyTo(modelNode);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })
