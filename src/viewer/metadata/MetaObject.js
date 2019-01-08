@@ -99,6 +99,23 @@ class MetaObject {
             this.external = external;
         }
     }
+
+    /**
+     * Returns properties of this MeteObject as JSON.
+     *
+     * @returns {{objectId: (String|Number), type: String, name: String}}
+     */
+    getJSON() {
+        var json = {
+            objectId: this.objectId,
+            type: this.type,
+            name: this.name
+        };
+        if (this.parent) {
+            json.parent = this.parent.objectId
+        }
+        return json;
+    }
 }
 
 export {MetaObject};
