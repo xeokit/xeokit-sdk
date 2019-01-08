@@ -93,6 +93,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer, {
+
         handleNode(modelId, glTFNode, actions) {
 
             //-------------------------------------------------------------------------------------------------------------
@@ -110,6 +111,7 @@
 
             const objectId = name;
             const metaObject = viewer.metaScene.metaObjects[objectId];
+
             const ifcType = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
 
             var colorize = ifcDefaultMaterials[ifcType];
@@ -187,13 +189,13 @@
 
         if (hit) {
             var mesh = hit.mesh;
-            var metaObject = viewer.metaScene.metaObjects[mesh.id];
+            var metaObject = viewer.metaScene.metaObjects[mesh.objectId];
             if (metaObject) {
                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
             } else {
                 const parent = mesh.parent;
                 if (parent) {
-                    metaObject = viewer.metaScene.metaObjects[parent.id];
+                    metaObject = viewer.metaScene.metaObjects[parent.objectId];
                     if (metaObject) {
                         console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
                     }
