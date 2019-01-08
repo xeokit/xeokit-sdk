@@ -143,7 +143,7 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
 
             var metaModel = viewer.metaScene.createMetaModel(modelId, modelMetadata);
 
-            //   console.log(JSON.stringify(modelMetadata, null, "\t"));
+              // console.log(JSON.stringify(modelMetadata, null, "\t"));
 
             resolve(metaModel);
         });
