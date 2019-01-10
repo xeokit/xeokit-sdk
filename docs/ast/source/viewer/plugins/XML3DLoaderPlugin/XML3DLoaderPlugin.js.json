@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 5591,
+  "end": 5575,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 5591,
+    "end": 5575,
     "loc": {
       "start": {
         "line": 1,
@@ -135,7 +135,7 @@
       {
         "type": "Identifier",
         "start": 2168,
-        "end": 5563,
+        "end": 5547,
         "loc": {
           "start": {
             "line": 63,
@@ -184,7 +184,7 @@
         "body": {
           "type": "ClassBody",
           "start": 2213,
-          "end": 5563,
+          "end": 5547,
           "loc": {
             "start": {
               "line": 63,
@@ -875,9 +875,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
                   "start": 3135,
-                  "end": 5441,
+                  "end": 5425,
                   "loc": {
                     "start": {
                       "line": 84,
@@ -893,8 +893,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 5446,
-              "end": 5561,
+              "start": 5430,
+              "end": 5545,
               "loc": {
                 "start": {
                   "line": 129,
@@ -909,8 +909,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 5446,
-                "end": 5450,
+                "start": 5430,
+                "end": 5434,
                 "loc": {
                   "start": {
                     "line": 129,
@@ -933,8 +933,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 5451,
-                  "end": 5457,
+                  "start": 5435,
+                  "end": 5441,
                   "loc": {
                     "start": {
                       "line": 129,
@@ -951,8 +951,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 5459,
-                "end": 5561,
+                "start": 5443,
+                "end": 5545,
                 "loc": {
                   "start": {
                     "line": 129,
@@ -966,8 +966,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 5469,
-                    "end": 5520,
+                    "start": 5453,
+                    "end": 5504,
                     "loc": {
                       "start": {
                         "line": 130,
@@ -980,8 +980,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 5469,
-                      "end": 5519,
+                      "start": 5453,
+                      "end": 5503,
                       "loc": {
                         "start": {
                           "line": 130,
@@ -995,8 +995,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 5469,
-                        "end": 5493,
+                        "start": 5453,
+                        "end": 5477,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -1009,8 +1009,8 @@
                         },
                         "object": {
                           "type": "Identifier",
-                          "start": 5469,
-                          "end": 5475,
+                          "start": 5453,
+                          "end": 5459,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -1026,8 +1026,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 5476,
-                          "end": 5493,
+                          "start": 5460,
+                          "end": 5477,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -1045,8 +1045,8 @@
                       },
                       "right": {
                         "type": "MemberExpression",
-                        "start": 5496,
-                        "end": 5519,
+                        "start": 5480,
+                        "end": 5503,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -1059,8 +1059,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 5496,
-                          "end": 5500,
+                          "start": 5480,
+                          "end": 5484,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -1074,8 +1074,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 5501,
-                          "end": 5519,
+                          "start": 5485,
+                          "end": 5503,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -1095,8 +1095,8 @@
                   },
                   {
                     "type": "ReturnStatement",
-                    "start": 5529,
-                    "end": 5555,
+                    "start": 5513,
+                    "end": 5539,
                     "loc": {
                       "start": {
                         "line": 131,
@@ -1109,8 +1109,8 @@
                     },
                     "argument": {
                       "type": "CallExpression",
-                      "start": 5536,
-                      "end": 5554,
+                      "start": 5520,
+                      "end": 5538,
                       "loc": {
                         "start": {
                           "line": 131,
@@ -1123,8 +1123,8 @@
                       },
                       "callee": {
                         "type": "MemberExpression",
-                        "start": 5536,
-                        "end": 5546,
+                        "start": 5520,
+                        "end": 5530,
                         "loc": {
                           "start": {
                             "line": 131,
@@ -1137,8 +1137,8 @@
                         },
                         "object": {
                           "type": "Super",
-                          "start": 5536,
-                          "end": 5541,
+                          "start": 5520,
+                          "end": 5525,
                           "loc": {
                             "start": {
                               "line": 131,
@@ -1152,8 +1152,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 5542,
-                          "end": 5546,
+                          "start": 5526,
+                          "end": 5530,
                           "loc": {
                             "start": {
                               "line": 131,
@@ -1172,8 +1172,8 @@
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 5547,
-                          "end": 5553,
+                          "start": 5531,
+                          "end": 5537,
                           "loc": {
                             "start": {
                               "line": 131,
@@ -1196,9 +1196,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+                  "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
                   "start": 3135,
-                  "end": 5441,
+                  "end": 5425,
                   "loc": {
                     "start": {
                       "line": 84,
@@ -1220,8 +1220,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 5565,
-        "end": 5591,
+        "start": 5549,
+        "end": 5575,
         "loc": {
           "start": {
             "line": 135,
@@ -1236,8 +1236,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 5573,
-            "end": 5590,
+            "start": 5557,
+            "end": 5574,
             "loc": {
               "start": {
                 "line": 135,
@@ -1250,8 +1250,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 5573,
-              "end": 5590,
+              "start": 5557,
+              "end": 5574,
               "loc": {
                 "start": {
                   "line": 135,
@@ -1267,8 +1267,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 5573,
-              "end": 5590,
+              "start": 5557,
+              "end": 5574,
               "loc": {
                 "start": {
                   "line": 135,
@@ -1288,8 +1288,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 5565,
-        "end": 5591,
+        "start": 5549,
+        "end": 5575,
         "loc": {
           "start": {
             "line": 135,
@@ -1303,7 +1303,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 2168,
-          "end": 5563,
+          "end": 5547,
           "loc": {
             "start": {
               "line": 63,
@@ -1352,7 +1352,7 @@
           "body": {
             "type": "ClassBody",
             "start": 2213,
-            "end": 5563,
+            "end": 5547,
             "loc": {
               "start": {
                 "line": 63,
@@ -2043,9 +2043,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
                     "start": 3135,
-                    "end": 5441,
+                    "end": 5425,
                     "loc": {
                       "start": {
                         "line": 84,
@@ -2061,8 +2061,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 5446,
-                "end": 5561,
+                "start": 5430,
+                "end": 5545,
                 "loc": {
                   "start": {
                     "line": 129,
@@ -2077,8 +2077,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 5446,
-                  "end": 5450,
+                  "start": 5430,
+                  "end": 5434,
                   "loc": {
                     "start": {
                       "line": 129,
@@ -2101,8 +2101,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 5451,
-                    "end": 5457,
+                    "start": 5435,
+                    "end": 5441,
                     "loc": {
                       "start": {
                         "line": 129,
@@ -2119,8 +2119,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 5459,
-                  "end": 5561,
+                  "start": 5443,
+                  "end": 5545,
                   "loc": {
                     "start": {
                       "line": 129,
@@ -2134,8 +2134,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 5469,
-                      "end": 5520,
+                      "start": 5453,
+                      "end": 5504,
                       "loc": {
                         "start": {
                           "line": 130,
@@ -2148,8 +2148,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 5469,
-                        "end": 5519,
+                        "start": 5453,
+                        "end": 5503,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -2163,8 +2163,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 5469,
-                          "end": 5493,
+                          "start": 5453,
+                          "end": 5477,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -2177,8 +2177,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 5469,
-                            "end": 5475,
+                            "start": 5453,
+                            "end": 5459,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -2194,8 +2194,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 5476,
-                            "end": 5493,
+                            "start": 5460,
+                            "end": 5477,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -2213,8 +2213,8 @@
                         },
                         "right": {
                           "type": "MemberExpression",
-                          "start": 5496,
-                          "end": 5519,
+                          "start": 5480,
+                          "end": 5503,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -2227,8 +2227,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 5496,
-                            "end": 5500,
+                            "start": 5480,
+                            "end": 5484,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -2242,8 +2242,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 5501,
-                            "end": 5519,
+                            "start": 5485,
+                            "end": 5503,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -2263,8 +2263,8 @@
                     },
                     {
                       "type": "ReturnStatement",
-                      "start": 5529,
-                      "end": 5555,
+                      "start": 5513,
+                      "end": 5539,
                       "loc": {
                         "start": {
                           "line": 131,
@@ -2277,8 +2277,8 @@
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 5536,
-                        "end": 5554,
+                        "start": 5520,
+                        "end": 5538,
                         "loc": {
                           "start": {
                             "line": 131,
@@ -2291,8 +2291,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 5536,
-                          "end": 5546,
+                          "start": 5520,
+                          "end": 5530,
                           "loc": {
                             "start": {
                               "line": 131,
@@ -2305,8 +2305,8 @@
                           },
                           "object": {
                             "type": "Super",
-                            "start": 5536,
-                            "end": 5541,
+                            "start": 5520,
+                            "end": 5525,
                             "loc": {
                               "start": {
                                 "line": 131,
@@ -2320,8 +2320,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 5542,
-                            "end": 5546,
+                            "start": 5526,
+                            "end": 5530,
                             "loc": {
                               "start": {
                                 "line": 131,
@@ -2340,8 +2340,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 5547,
-                            "end": 5553,
+                            "start": 5531,
+                            "end": 5537,
                             "loc": {
                               "start": {
                                 "line": 131,
@@ -2364,9 +2364,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+                    "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
                     "start": 3135,
-                    "end": 5441,
+                    "end": 5425,
                     "loc": {
                       "start": {
                         "line": 84,
@@ -2445,9 +2445,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+      "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
       "start": 3135,
-      "end": 5441,
+      "end": 5425,
       "loc": {
         "start": {
           "line": 84,
@@ -4139,9 +4139,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
+      "value": "*\n     * Loads a 3DXML model from a file into this XML3DLoaderPlugin's {@link Viewer}.\n     *\n     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.\n     *\n     * @param {*} params  Loading parameters.\n     *\n     * @param {String} params.id ID to assign to the {@link Node},\n     * unique among all components in the Viewer's {@link Scene}.\n     *\n     * @param {String} [params.src] Path to a 3DXML file.\n     *\n     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).\n     *\n     * @param {Object} [params.parent] The parent {@link Node},\n     * if we want to graft the {@link Node} into a xeokit object hierarchy.\n     *\n     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.\n     *\n     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s\n     * local 3D position.\n     *\n     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s\n     * local scale.\n     *\n     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local\n     * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.\n     *\n     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The\n     * {@link Node}'s local modelling transform matrix. Overrides\n     * the position, scale and rotation parameters.\n     *\n     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh}\n     * the same {@link LambertMaterial} and a ````colorize````\n     * value set the to diffuse color extracted from the 3DXML material. This is typically used for large CAD models and\n     * will cause loading to ignore textures in the 3DXML.\n     *\n     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML.\n     * When false, ignores backfaces.\n     *\n     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold\n     * angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.\n     *\n     * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.\n     ",
       "start": 3135,
-      "end": 5441,
+      "end": 5425,
       "loc": {
         "start": {
           "line": 84,
@@ -4166,8 +4166,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 5446,
-      "end": 5450,
+      "start": 5430,
+      "end": 5434,
       "loc": {
         "start": {
           "line": 129,
@@ -4191,8 +4191,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5450,
-      "end": 5451,
+      "start": 5434,
+      "end": 5435,
       "loc": {
         "start": {
           "line": 129,
@@ -4217,8 +4217,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 5451,
-      "end": 5457,
+      "start": 5435,
+      "end": 5441,
       "loc": {
         "start": {
           "line": 129,
@@ -4242,8 +4242,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5457,
-      "end": 5458,
+      "start": 5441,
+      "end": 5442,
       "loc": {
         "start": {
           "line": 129,
@@ -4267,8 +4267,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5459,
-      "end": 5460,
+      "start": 5443,
+      "end": 5444,
       "loc": {
         "start": {
           "line": 129,
@@ -4293,8 +4293,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 5469,
-      "end": 5475,
+      "start": 5453,
+      "end": 5459,
       "loc": {
         "start": {
           "line": 130,
@@ -4319,8 +4319,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5475,
-      "end": 5476,
+      "start": 5459,
+      "end": 5460,
       "loc": {
         "start": {
           "line": 130,
@@ -4345,8 +4345,8 @@
         "binop": null
       },
       "value": "workerScriptsPath",
-      "start": 5476,
-      "end": 5493,
+      "start": 5460,
+      "end": 5477,
       "loc": {
         "start": {
           "line": 130,
@@ -4372,8 +4372,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 5494,
-      "end": 5495,
+      "start": 5478,
+      "end": 5479,
       "loc": {
         "start": {
           "line": 130,
@@ -4400,8 +4400,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 5496,
-      "end": 5500,
+      "start": 5480,
+      "end": 5484,
       "loc": {
         "start": {
           "line": 130,
@@ -4426,8 +4426,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5500,
-      "end": 5501,
+      "start": 5484,
+      "end": 5485,
       "loc": {
         "start": {
           "line": 130,
@@ -4452,8 +4452,8 @@
         "binop": null
       },
       "value": "_workerScriptsPath",
-      "start": 5501,
-      "end": 5519,
+      "start": 5485,
+      "end": 5503,
       "loc": {
         "start": {
           "line": 130,
@@ -4478,8 +4478,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5519,
-      "end": 5520,
+      "start": 5503,
+      "end": 5504,
       "loc": {
         "start": {
           "line": 130,
@@ -4506,8 +4506,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 5529,
-      "end": 5535,
+      "start": 5513,
+      "end": 5519,
       "loc": {
         "start": {
           "line": 131,
@@ -4534,8 +4534,8 @@
         "updateContext": null
       },
       "value": "super",
-      "start": 5536,
-      "end": 5541,
+      "start": 5520,
+      "end": 5525,
       "loc": {
         "start": {
           "line": 131,
@@ -4560,8 +4560,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5541,
-      "end": 5542,
+      "start": 5525,
+      "end": 5526,
       "loc": {
         "start": {
           "line": 131,
@@ -4586,8 +4586,8 @@
         "binop": null
       },
       "value": "load",
-      "start": 5542,
-      "end": 5546,
+      "start": 5526,
+      "end": 5530,
       "loc": {
         "start": {
           "line": 131,
@@ -4611,8 +4611,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5546,
-      "end": 5547,
+      "start": 5530,
+      "end": 5531,
       "loc": {
         "start": {
           "line": 131,
@@ -4637,8 +4637,8 @@
         "binop": null
       },
       "value": "params",
-      "start": 5547,
-      "end": 5553,
+      "start": 5531,
+      "end": 5537,
       "loc": {
         "start": {
           "line": 131,
@@ -4662,8 +4662,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5553,
-      "end": 5554,
+      "start": 5537,
+      "end": 5538,
       "loc": {
         "start": {
           "line": 131,
@@ -4688,8 +4688,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5554,
-      "end": 5555,
+      "start": 5538,
+      "end": 5539,
       "loc": {
         "start": {
           "line": 131,
@@ -4713,8 +4713,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5560,
-      "end": 5561,
+      "start": 5544,
+      "end": 5545,
       "loc": {
         "start": {
           "line": 132,
@@ -4738,8 +4738,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5562,
-      "end": 5563,
+      "start": 5546,
+      "end": 5547,
       "loc": {
         "start": {
           "line": 133,
@@ -4766,8 +4766,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 5565,
-      "end": 5571,
+      "start": 5549,
+      "end": 5555,
       "loc": {
         "start": {
           "line": 135,
@@ -4791,8 +4791,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5572,
-      "end": 5573,
+      "start": 5556,
+      "end": 5557,
       "loc": {
         "start": {
           "line": 135,
@@ -4817,8 +4817,8 @@
         "binop": null
       },
       "value": "XML3DLoaderPlugin",
-      "start": 5573,
-      "end": 5590,
+      "start": 5557,
+      "end": 5574,
       "loc": {
         "start": {
           "line": 135,
@@ -4842,8 +4842,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5590,
-      "end": 5591,
+      "start": 5574,
+      "end": 5575,
       "loc": {
         "start": {
           "line": 135,
@@ -4868,8 +4868,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 5591,
-      "end": 5591,
+      "start": 5575,
+      "end": 5575,
       "loc": {
         "start": {
           "line": 135,

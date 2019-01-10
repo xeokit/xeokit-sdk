@@ -1,48 +1,5 @@
 [
   {
-    "name": "MetaScene#loadMetaModelJSON",
-    "filePath": "src/viewer/metadata/MetaScene.js",
-    "lines": [
-      {
-        "lineNumber": 143,
-        "line": "    /**"
-      },
-      {
-        "lineNumber": 144,
-        "line": "     * Loads a {@link MetaModel} from a URL."
-      },
-      {
-        "lineNumber": 145,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 146,
-        "line": "     * @param src"
-      },
-      {
-        "lineNumber": 147,
-        "line": "     * @param ok"
-      },
-      {
-        "lineNumber": 148,
-        "line": "     */"
-      },
-      {
-        "lineNumber": 149,
-        "line": "    loadMetaModelJSON(modelId, src, ok) {"
-      }
-    ],
-    "codeParams": [
-      "modelId",
-      "src",
-      "ok"
-    ],
-    "docParams": [
-      "src",
-      "ok"
-    ]
-  },
-  {
     "name": "BIMServerBigGeometryLoader",
     "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js",
     "lines": [
