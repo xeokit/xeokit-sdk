@@ -1,5 +1,6 @@
 /**
  * xeokit runtime statistics.
+ * @private
  * @type {{components: {models: number, objects: number, scenes: number, meshes: number}, memory: {indices: number, uvs: number, textures: number, materials: number, transforms: number, positions: number, programs: number, normals: number, meshes: number, colors: number}, build: {version: string}, client: {browser: string}, frame: {frameCount: number, useProgram: number, bindTexture: number, drawElements: number, bindArray: number, tasksRun: number, fps: number, drawArrays: number, tasksScheduled: number}}}
  */
 const stats = {
@@ -10,11 +11,6 @@ const stats = {
         browser: (navigator && navigator.userAgent) ? navigator.userAgent : "n/a"
     },
 
-    // TODO: replace 'canvas' with 'pixels'
-    //canvas: {
-    //    width: 0,
-    //    height: 0
-    //},
     components: {
         scenes: 0,
         models: 0,
@@ -22,11 +18,6 @@ const stats = {
         objects: 0
     },
     memory: {
-
-        // Note that these counts will include any positions, colors,
-        // normals and indices that xeokit internally creates on-demand
-        // to support color-index triangle picking.
-
         meshes: 0,
         positions: 0,
         colors: 0,

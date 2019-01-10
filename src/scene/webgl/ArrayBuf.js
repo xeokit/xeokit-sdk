@@ -1,11 +1,7 @@
 /**
- An **ArrayBuf** represents a WebGL ArrayBuffer.
-
- @class ArrayBuf
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc Represents a WebGL ArrayBuffer.
+ *
+ * @private
  */
 class ArrayBuf {
 

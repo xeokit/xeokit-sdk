@@ -41,7 +41,7 @@ class CustomProjection extends Component {
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set matrix(matrix) {
 

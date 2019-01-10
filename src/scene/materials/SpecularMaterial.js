@@ -230,14 +230,14 @@ class SpecularMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] The SpecularMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Float32Array} [cfg.diffuse=[1,1,1]] RGB diffuse color of this SpecularMaterial. Multiplies by the RGB components of {@link SpecularMaterial#diffuseMap}.
+     * @param {Number[]} [cfg.diffuse=[1,1,1]] RGB diffuse color of this SpecularMaterial. Multiplies by the RGB components of {@link SpecularMaterial#diffuseMap}.
      * @param {Texture} [cfg.diffuseMap=undefined] RGBA {@link Texture} containing the diffuse color of this SpecularMaterial, with optional *A* component for alpha. The RGB components multiply by {@link SpecularMaterial#diffuse}, while the *A* component, if present, multiplies by {@link SpecularMaterial#alpha}.
      * @param {Number} [cfg.specular=[1,1,1]] RGB specular color of this SpecularMaterial. Multiplies by the {@link SpecularMaterial#specularMap} and the *RGB* components of {@link SpecularMaterial#specularGlossinessMap}.
      * @param {Texture} [cfg.specularMap=undefined] RGB texture containing the specular color of this SpecularMaterial. Multiplies by the {@link SpecularMaterial#specular} property. Must be within the same {@link Scene} as this SpecularMaterial.
      * @param {Number} [cfg.glossiness=1.0] Factor in the range [0..1] indicating how glossy this SpecularMaterial is. 0 is no glossiness, 1 is full glossiness. Multiplies by the *R* component of {@link SpecularMaterial#glossinessMap} and the *A* component of {@link SpecularMaterial#specularGlossinessMap}.
      * @param {Texture} [cfg.specularGlossinessMap=undefined] RGBA {@link Texture} containing this SpecularMaterial's specular color in its *RGB* component and glossiness in its *A* component. Its *RGB* components multiply by {@link SpecularMaterial#specular}, while its *A* component multiplies by {@link SpecularMaterial#glossiness}. Must be within the same {@link Scene} as this SpecularMaterial.
      * @param {Number} [cfg.specularF0=0.0] Factor in the range 0..1 indicating how reflective this SpecularMaterial is.
-     * @param {Float32Array} [cfg.emissive=[0,0,0]]  RGB emissive color of this SpecularMaterial. Multiplies by the RGB components of {@link SpecularMaterial#emissiveMap}.
+     * @param {Number[]} [cfg.emissive=[0,0,0]]  RGB emissive color of this SpecularMaterial. Multiplies by the RGB components of {@link SpecularMaterial#emissiveMap}.
      * @param {Texture} [cfg.emissiveMap=undefined] RGB {@link Texture} containing the emissive color of this SpecularMaterial. Multiplies by the {@link SpecularMaterial#emissive} property. Must be within the same {@link Scene} as this SpecularMaterial.
      * @param {Texture} [cfg.occlusionMap=undefined] RGB ambient occlusion {@link Texture}. Within shaders, multiplies by the specular and diffuse light reflected by surfaces. Must be within the same {@link Scene} as this SpecularMaterial.
      * @param {Texture} [cfg.normalMap=undefined] {Texture} RGB tangent-space normal {@link Texture}. Must be within the same {@link Scene} as this SpecularMaterial.
@@ -376,7 +376,7 @@ class SpecularMaterial extends Material {
      * Multiplies by the *RGB* components of {@link SpecularMaterial#diffuseMap}.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set diffuse(value) {
         let diffuse = this._state.diffuse;
@@ -400,7 +400,7 @@ class SpecularMaterial extends Material {
     /**
      * Gets the RGB diffuse color of this SpecularMaterial.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get diffuse() {
         return this._state.diffuse;
@@ -424,7 +424,7 @@ class SpecularMaterial extends Material {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set specular(value) {
         let specular = this._state.specular;
@@ -448,7 +448,7 @@ class SpecularMaterial extends Material {
     /**
      * Gets the RGB specular color of this SpecularMaterial.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get specular() {
         return this._state.specular;
@@ -547,7 +547,7 @@ class SpecularMaterial extends Material {
 
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -571,7 +571,7 @@ class SpecularMaterial extends Material {
     /**
      * Gets the RGB emissive color of this SpecularMaterial.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get emissive() {
         return this._state.emissive;

@@ -2,6 +2,7 @@ import {Plugin} from "./../../../viewer/Plugin.js";
 import {BigModel} from "../../../scene/bigModels/BigModel.js";
 import {GLTFBigModelLoader} from "./GLTFBigModelLoader.js";
 import {utils} from "../../../scene/utils.js";
+import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
  * {@link Viewer} plugin that loads large scale models from [glTF](https://www.khronos.org/gltf/).
@@ -29,9 +30,12 @@ import {utils} from "../../../scene/utils.js";
  *
  * // Load the glTF model
  * const model = plugin.load({ // Model is a BigModel
- *      id: "myModel",
+ *
+ *      modelId: "myModel",
+ *
  *      src: "models/myModel.gltf",
  *      metaModelSrc: "models/myModelMetadata.json", // Optional metadata JSON
+ *
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],
@@ -62,13 +66,10 @@ class GLTFBigModelLoaderPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.modelId="GLTFBigModelLoaderPlugin"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Function} [cfg.handleNode] Optional callback to control how {@link BigModelNode}s are created as the glTF node hierarchy is parsed. See usage examples.
      */
     constructor(viewer, cfg = {}) {
 
         super("GLTFBigModelLoader", viewer, cfg);
-
-        this._handleNode = cfg.handleNode;
 
         /**
          * @private
@@ -94,44 +95,42 @@ class GLTFBigModelLoaderPlugin extends Plugin {
      * Creates a {@link BigModel} within the Viewer's {@link Scene} that represents the model.
      *
      * @param {*} params  Loading parameters.
-     * @param {String} [params.model] ID to assign to the root {@link Node#modelId}, unique among all components in the Viewer's {@link Scene}.
+     * @param {String} [params.id] ID to assign to the root {@link Node#id}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to a glTF file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model's root {@link Node} into a xeokit object hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Float32Array} [params.position=[0,0,0]] The model {@link Node}'s local 3D position.
-     * @param {Float32Array} [params.scale=[1,1,1]] The model {@link Node}'s local scale.
-     * @param {Float32Array} [params.rotation=[0,0,0]] The model root {@link Node}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link Node}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.position=[0,0,0]] The model {@link Node}'s local 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model {@link Node}'s local scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model root {@link Node}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link Node}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
      * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @param {Function} [params.handleNode] Optional callback to control how {@link Node}s and {@link Mesh}s are created as the glTF node hierarchy is parsed. See usage examples.
      * @returns {BigModel} A {@link BigModel} representing the loaded glTF model.
      */
     load(params) {
         const self = this;
 
         var bigModel = new BigModel(this.viewer.scene, params);
-        const modelId = params.modelId;
+        const modelId = params.id;
         const src = params.src;
 
         if (!src) {
             this.error("load() param expected: src");
-            return;
+            return bigModel;
         }
 
-        params.handleNode = params.handleNode || this._handleNode || function(modelId, glTFNode, actions) {
-            const name = glTFNode.name;
-            if (!name) {
-                return true; // Continue descending this node subtree
-            }
-            actions.createNode = {
-                objectId: name
-            };
-            return true;
-        };
+        if (!params.modelId) {
+            this.error("load() param expected: modelId");
+            return modelNode;
+        }
+
+        if (this.viewer.scene.components[params.modelId]) {
+            this.error(`Component with this modelId already exists in viewer: ${params.modelId} - defaulting to random ID`);
+            return modelNode;
+        }
 
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
@@ -139,6 +138,53 @@ class GLTFBigModelLoaderPlugin extends Plugin {
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
                 self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
                 self.viewer.scene.canvas.spinner.processes--;
+
+                params.handleGLTFNode = function (modelId, glTFNode, actions) {
+
+                    // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
+                    // in the MetaModel we loaded. We'll create Node components in the Scene for all the nodes as we
+                    // descend into them, but will give special treatment to those nodes that have a "name", ie. set initial
+                    // visualize state for those according to the MetaModel.
+
+                    const name = glTFNode.name;
+
+                    if (!name) {
+                        return true; // Continue descending this node subtree
+                    }
+
+                    const id = name;
+                    const metaObject = self.viewer.metaScene.metaObjects[id];
+                    const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
+                    actions.createNode = { // Create a Node for this glTF scene node
+                        id: id,
+                        isObject: true // Registers the Node in Scene#objects
+                    };
+
+                    const props = IFCObjectDefaults[type];
+
+                    if (props) { // Set Node's initial rendering state for recognized type
+
+                        if (props.visible === false) {
+                            actions.createNode.visible = false;
+                        }
+
+                        if (props.colorize) {
+                            actions.createNode.colorize = props.colorize;
+                        }
+
+                        if (props.pickable === false) {
+                            actions.createNode.pickable = false;
+                        }
+
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            actions.createNode.opacity = props.opacity;
+                        }
+                    }
+
+                    return true; // Continue descending this glTF node subtree
+                };
+
                 self._loader.load(this, bigModel, src, params);
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);

@@ -114,7 +114,7 @@ class Clip extends Component {
 
      @property pos
      @default [0, 0, 0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
@@ -140,7 +140,7 @@ class Clip extends Component {
 
      @property dir
      @default [0, 0, -1]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
@@ -149,7 +149,7 @@ class Clip extends Component {
          Fired whenever this Clip's {@link Clip#dir} property changes.
 
          @event dir
-         @param value {Float32Array} The property's new value
+         @param value {Number[]} The property's new value
          */
         this.fire("dir", this._state.dir);
     }

@@ -1,9 +1,6 @@
 /**
- A **FrameContext** provides rendering context to {@link Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
-
- @class FrameContext
- @module xeokit
- @submodule webgl
+ * @desc Provides rendering context to {@link Drawable"}}Drawables{{/crossLink}} as xeokit renders them for a frame.
+ * @private
  */
 class FrameContext {
 
@@ -110,7 +107,7 @@ class FrameContext {
          * or {@link PointLight} that casts a shadow.
          *
          * @property shadowViewMatrix
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.shadowViewMatrix = null;
 
@@ -118,7 +115,7 @@ class FrameContext {
          * The 4x4 viewing projection matrix the renderer is currently using when rendering shadows.
          *
          * @property shadowProjMatrix
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.shadowProjMatrix = null;
 
@@ -129,7 +126,7 @@ class FrameContext {
          * when picking with a ray.
          *
          * @property pickViewMatrix
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.pickViewMatrix = null;
 
@@ -137,7 +134,7 @@ class FrameContext {
          * The 4x4 orthographic projection transform matrix the renderer is currently using when rendering a ray-pick.
          *
          * @property pickProjMatrix
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.pickProjMatrix = null;
     }

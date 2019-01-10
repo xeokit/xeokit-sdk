@@ -109,8 +109,8 @@
         const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
         const aabb = viewer.scene.getAABB(objectIds);
 
-        // viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
-        // viewer.scene.setSelected(objectIds, true);
+        // viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+        // viewer.scene.setObjectsSelected(objectIds, true);
 
         viewer.cameraFlight.flyTo(aabb);
     });

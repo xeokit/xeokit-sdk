@@ -35,27 +35,21 @@ function nextHighestPowerOfTwo(x) {
 class CubeTexture extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     * JavaScript class name for this Component.
+     * @returns {String}
      */
     get type() {
         return "CubeTexture";
     }
 
     /**
-     *  @constructor
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
-     @param {*} [cfg] Configs
-     @param {String} [cfg.id] Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
-     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this CubeTexture.
-     @param [cfg.src=null] {Array of String} Paths to six image files to load into this CubeTexture.
-     @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
-     @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {String[]} [cfg.src=null]  Paths to six image files to load into this CubeTexture.
+     * @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
+     * @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
      * @param owner
      * @param cfg
      */
@@ -153,6 +147,10 @@ class CubeTexture extends Component {
         }
     }
 
+    /**
+     * Destroys this CubeTexture
+     *
+     */
     destroy() {
         super.destroy();
         if (this._state.texture) {

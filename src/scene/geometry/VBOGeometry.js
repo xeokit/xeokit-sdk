@@ -78,11 +78,11 @@ class VBOGeometry extends Geometry {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {String} [cfg.primitive="triangles"]  The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     * @param {Array} [cfg.positions]  Positions array.
-     * @param {Array} [cfg.normals]  Vertex normal vectors array.
-     * @param {Array} [cfg.uv]  UVs array.
-     * @param {Array} [cfg.colors]  Vertex colors.
-     * @param {Array} [cfg.indices]  Indices array.
+     * @param {Number[]} [cfg.positions]  Positions array.
+     * @param {Number[]} [cfg.normals]  Vertex normal vectors array.
+     * @param {Number[]} [cfg.uv]  UVs array.
+     * @param {Number[]} [cfg.colors]  Vertex colors.
+     * @param {Number[]} [cfg.indices]  Indices array.
      * @param {Number} [cfg.edgeThreshold=10]  When autogenerating edges for supporting {@link Drawable#edges}, this indicates the threshold angle (in degrees) between the face normals of adjacent triangles below which the edge is discarded.
      */
     constructor(owner, cfg = {}) {
@@ -253,7 +253,7 @@ class VBOGeometry extends Geometry {
      *
      * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         return this._aabb;
@@ -264,7 +264,7 @@ class VBOGeometry extends Geometry {
      *
      * The OBB is represented by a 32-element Float32Array containing the eight vertices of the box, where each vertex is a homogeneous coordinate having [x,y,z,w] elements.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get obb() {
         return this._obb;

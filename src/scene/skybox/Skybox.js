@@ -4,9 +4,22 @@ import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {Texture} from "../materials/Texture.js";
 
+/**
+ * @desc A Skybox.
+ */
 class Skybox extends Component {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this PointLight as well.
+     * @param {*} [cfg]  Skybox configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {Scene}, generated automatically when omitted.
+     * @param {String} [cfg.src=null] Path to skybox texture
+     * @param {String} [cfg.encoding="linear"] Texture encoding format.  See the {@link Texture#encoding} property for more info.
+     * @param {Number} [cfg.size=1000] Size of this Skybox, given as the distance from the center at ````[0,0,0]```` to each face.
+     * @param {Boolean} [cfg.active=true] True when this Skybox is visible.
+     */
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -58,33 +71,46 @@ class Skybox extends Component {
 
 
     /**
-     Size of this Skybox, given as the distance from the center at [0,0,0] to each face.
-
-     @property size
-     @default 1000
-     @type {Number}
+     * Sets the size of this Skybox, given as the distance from the center at [0,0,0] to each face.
+     *
+     * Default value is ````1000````.
+     *
+     * @param {Number} value The size.
      */
     set size(value) {
         this._size = value || 1000;
         this._skyboxMesh.scale = [this._size, this._size, this._size];
     }
 
+    /**
+     * Gets the size of this Skybox, given as the distance from the center at [0,0,0] to each face.
+     *
+     * Default value is ````1000````.
+     *
+     * @returns {Number} The size.
+     */
     get size() {
         return this._size;
     }
 
-
     /**
-     Indicates if this Skybox is visible or not.
-
-     @property active
-     @default false
-     @type {Boolean}
+     * Sets whether this Skybox is visible or not.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} active Whether to make active or not.
      */
-    set active(value) {
-        this._skyboxMesh.visible = value;
+    set active(active) {
+        this._skyboxMesh.visible = active;
     }
 
+    /**
+     * Gets if this Skybox is visible or not.
+     *
+     * Default active is ````true````.
+     *
+     * @returns {Boolean} ````true```` if the Skybox is active.
+     */
     get active() {
         return this._skyboxMesh.visible;
     }

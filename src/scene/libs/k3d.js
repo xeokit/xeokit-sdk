@@ -1,4 +1,6 @@
-
+/**
+ * @private
+ */
 var K3D = {};
 
 K3D.load = function(path, resp)

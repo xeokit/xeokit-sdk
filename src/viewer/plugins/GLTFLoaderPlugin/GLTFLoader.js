@@ -16,9 +16,8 @@ import {core} from "./../../../scene/core.js";
  */
 class GLTFLoader {
 
-    constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleNode etc
+    constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
-        this._handleNode = cfg.handleNode;
     }
 
     load(plugin, modelNode, src, options, ok, error) {
@@ -108,7 +107,7 @@ var parseGLTF = (function () {
             src: src,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
-            handleNode: options.handleNode,
+            handleGLTFNode: options.handleGLTFNode,
             ignoreMaterials: !!options.ignoreMaterials,
             edgeThreshold: options.edgeThreshold,
             lambertMaterial: !!options.lambertMaterial,
@@ -235,7 +234,7 @@ var parseGLTF = (function () {
                 request.responseType = 'arraybuffer';
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
-                        if (request.status === "200") {
+                        if (request.status === 200) {
                             ok(request.response);
                         } else {
                             err('loadArrayBuffer error : ' + request.response);
@@ -756,9 +755,9 @@ var parseGLTF = (function () {
         parent = parent || ctx.modelNode;
         var createNode;
 
-        if (ctx.handleNode) {
+        if (ctx.handleGLTFNode) {
             var actions = {};
-            if (!ctx.handleNode(ctx.modelNode.id, glTFNode, actions)) {
+            if (!ctx.handleGLTFNode(ctx.modelNode.id, glTFNode, actions)) {
                 return;
             }
             if (actions.createNode) {

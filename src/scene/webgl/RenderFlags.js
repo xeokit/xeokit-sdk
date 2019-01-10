@@ -1,5 +1,6 @@
 /**
  * @desc Passed to each {@link Drawable#getRenderFlags} method as xeokit is about to render it, to query what rendering methods xeokit should call on the {@link Drawable} to render it.
+ * @private
  */
 class RenderFlags {
 

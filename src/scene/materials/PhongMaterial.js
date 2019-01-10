@@ -110,10 +110,10 @@ class PhongMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] The PhongMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Array} [cfg.ambient=[1.0, 1.0, 1.0 ]]  PhongMaterial ambient color.
-     * @param {Array} [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] PhongMaterial diffuse color.
-     * @param {Array} [cfg.specular=[ 1.0, 1.0, 1.0 ]]  PhongMaterial specular color.
-     * @param {Array} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] PhongMaterial emissive color.
+     * @param {Number[]} [cfg.ambient=[1.0, 1.0, 1.0 ]]  PhongMaterial ambient color.
+     * @param {Number[]} [cfg.diffuse=[ 1.0, 1.0, 1.0 ]] PhongMaterial diffuse color.
+     * @param {Number[]} [cfg.specular=[ 1.0, 1.0, 1.0 ]]  PhongMaterial specular color.
+     * @param {Number[]} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] PhongMaterial emissive color.
      * @param {Number} [cfg.alpha=1] Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
      * @param {Number} [cfg.shininess=80] Scalar in range 0-128 that determines the size and sharpness of specular highlights.
      * @param {Number} [cfg.reflectivity=1] Scalar in range 0-1 that controls how much {@link ReflectionMap} is reflected.
@@ -295,7 +295,7 @@ class PhongMaterial extends Material {
      *
      * Default value is ````[0.3, 0.3, 0.3]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set ambient(value) {
         let ambient = this._state.ambient;
@@ -321,7 +321,7 @@ class PhongMaterial extends Material {
      *
      * Default value is ````[0.3, 0.3, 0.3]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get ambient() {
         return this._state.ambient;
@@ -334,7 +334,7 @@ class PhongMaterial extends Material {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set diffuse(value) {
         let diffuse = this._state.diffuse;
@@ -362,7 +362,7 @@ class PhongMaterial extends Material {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get diffuse() {
         return this._state.diffuse;
@@ -373,7 +373,7 @@ class PhongMaterial extends Material {
      *
      * Multiplies by {@link PhongMaterial#specularMap}.
      * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set specular(value) {
         let specular = this._state.specular;
@@ -399,7 +399,7 @@ class PhongMaterial extends Material {
      *
      * Multiplies by {@link PhongMaterial#specularMap}.
      * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get specular() {
         return this._state.specular;
@@ -411,7 +411,7 @@ class PhongMaterial extends Material {
      * Multiplies by {@link PhongMaterial#emissiveMap}.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -438,7 +438,7 @@ class PhongMaterial extends Material {
      * Multiplies by {@link PhongMaterial#emissiveMap}.
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get emissive() {
         return this._state.emissive;

@@ -79,7 +79,6 @@
 
     const cameraControl = viewer.cameraControl;
     const scene = viewer.scene;
-    const camera = scene.camera;
     const cameraFlight = viewer.cameraFlight;
 
     cameraControl.panToPointer = true;
@@ -103,85 +102,26 @@
     // Load a model and fit it to view
     //----------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer, {
-
-        handleNode(modelId, glTFNode, actions) {
-
-            //-------------------------------------------------------------------------------------------------------------
-            // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
-            // in the MetaModel we loaded. We'll create Node components in the Scene for all the nodes as we
-            // descend into them, but will give special treatment to those nodes that have a "name", ie. set initial
-            // visualize state for those according to the MetaModel.
-            //-------------------------------------------------------------------------------------------------------------
-
-            const name = glTFNode.name;
-
-            if (!name) {
-                return true; // Continue descending this node subtree
-            }
-
-            const objectId = name;
-            const metaObject = viewer.metaScene.metaObjects[objectId];
-            const ifcType = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
-
-            var colorize = ifcDefaultMaterials[ifcType];
-
-            //-------------------------------------------------------------------------------------------------------------
-            // Instruct GLTFLoaderPlugin to create an Node for this glTF scene node
-            //
-            // Assigning the Node an "objectId" causes xeokit to register it in
-            // Scene#objects, Scene#visibleObjectIds, Scene#highlightedObjectIds etc.
-            // which is just useful for easy visibility state management via those ID maps.
-            //-------------------------------------------------------------------------------------------------------------
-
-            actions.createNode = {
-                objectId: objectId,
-                visible: true,
-                colorize: colorize
-            };
-
-            //-------------------------------------------------------------------------------------------------------------
-            // Configure the initial visible state of the Node depending on its IFC type
-            //-------------------------------------------------------------------------------------------------------------
-
-            switch (ifcType) {
-                case "IfcWindow":
-                    actions.createNode.pickable = false;
-                    actions.createNode.opacity = 0.5;
-                    break;
-                case "IfcSpace":
-                    actions.createNode.pickable = false;
-                    actions.createNode.visible = false;
-                    break;
-                case "IfcOpeningElement":
-                    actions.createNode.pickable = false;
-                    actions.createNode.visible = false;
-                    break;
-                default: // Unrecognized type
-                    actions.createNode.pickable = true;
-            }
-
-            // Continue descending this glTF node subtree
-            return true;
-        }
-    });
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const modelNode = gltfLoader.load({
-        modelId: "myModel",
+        id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        ifcDefaults: true,
         edges: true
     });
 
     modelNode.on("loaded", () => {
 
         structurePanel.on("clicked", e => {
+
             const objectId = e.objectId;
             const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
             const aabb = scene.getAABB(objectIds);
 
-            viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
-            viewer.scene.setSelected(objectIds, true);
+            viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+            viewer.scene.setObjectsSelected(objectIds, true);
 
             viewer.cameraFlight.flyTo(aabb);
         });

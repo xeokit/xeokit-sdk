@@ -124,44 +124,33 @@ var tempMat4 = math.mat4();
 
  ### Finding objects
 
- TODO
-
-
- @class BigModel
- @module xeokit
- @submodule models
- @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
- @param {*} [cfg] Configs
- @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
- @param {String:Object} [cfg.meta] Optional map of user-defined metadata.
- @param [cfg.isObject] {String} Optional entity classification when using within a semantic data model. See the {@link Node} documentation for usage.
- @param [cfg.parent] {Object} The parent.
- @param [cfg.position=[0,0,0]] {Float32Array} Local 3D position.
- @param [cfg.scale=[1,1,1]] {Float32Array} Local scale.
- @param [cfg.rotation=[0,0,0]] {Float32Array} Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
- @param [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] {Float32Array} Local modelling transform matrix. Overrides the position, scale and rotation parameters.
- @param [cfg.visible=true] {Boolean}        Indicates if visible.
- @param [cfg.culled=false] {Boolean}        Indicates if culled from view.
- @param [cfg.pickable=true] {Boolean}       Indicates if pickable.
- @param [cfg.clippable=true] {Boolean}      Indicates if clippable.
- @param [cfg.collidable=true] {Boolean}     Indicates if included in boundary calculations.
- @param [cfg.castsShadow=true] {Boolean}     Indicates if casting shadows.
- @param [cfg.receivesShadow=true] {Boolean}  Indicates if receiving shadows.
- @param [cfg.outlined=false] {Boolean}      Indicates if outline is rendered.
- @param [cfg.ghosted=false] {Boolean}       Indicates if rendered as ghosted.
- @param [cfg.highlighted=false] {Boolean}   Indicates if rendered as highlighted.
- @param [cfg.selected=false] {Boolean}      Indicates if rendered as selected.
- @param [cfg.edges=false] {Boolean}         Indicates if edges are emphasized.
- @param [cfg.aabbVisible=false] {Boolean}   Indicates if the BigModel's axis-aligned World-space bounding box is visible.
- @param [cfg.colorize=[1.0,1.0,1.0]] {Float32Array}  RGB colorize color, multiplies by the rendered fragment colors.
- @param [cfg.opacity=1.0] {Number} Opacity factor, multiplies by the rendered fragment alpha.
-
  @implements {Drawable}
  @implements {Entity}
  */
 class BigModel extends Component {
 
+    /**
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {Boolean} [cfg.isModel] Specify ````true```` if this BigModel represents a model, in which case the BigModel will be registered by {@link BigModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [cfg.visible=true] Indicates if the BigModel is initially visible.
+     * @param {Boolean} [cfg.culled=false] Indicates if the BigModel is initially culled from view.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the BigModel is initially pickable.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the BigModel is initially clippable.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the BigModel is initially included in boundary calculations.
+     * @param {Boolean} [cfg.ghosted=false] Indicates if the BigModel is initially ghosted.
+     * @param {Boolean} [cfg.highlighted=false] Indicates if the BigModel is initially highlighted.
+     * @param {Boolean} [cfg.selected=false] Indicates if the BigModel is initially selected.
+     * @param {Boolean} [cfg.edges=false] Indicates if the BigModel's edges are initially emphasized.
+     * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] BigModel's initial RGB colorize color, multiplies by the rendered fragment colors.
+     * @param {Number} [cfg.opacity=1.0] BigModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
@@ -193,13 +182,10 @@ class BigModel extends Component {
         this.collidable = cfg.collidable;
         this.castsShadow = cfg.castsShadow;
         this.receivesShadow = cfg.receivesShadow;
-        this.outlined = cfg.outlined;
         this.ghosted = cfg.ghosted;
         this.highlighted = cfg.highlighted;
         this.selected = cfg.selected;
         this.edges = cfg.edges;
-        this.aabbVisible = cfg.aabbVisible;
-        this.layer = cfg.layer;
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
 
@@ -218,8 +204,8 @@ class BigModel extends Component {
         math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
         math.transposeMat4(this._worldNormalMatrix);
 
-        if (cfg.modelId) {
-            this._modelId = cfg.modelId;
+        this._isModel = cfg.isModel;
+        if (this._isModel) {
             this.scene._registerModel(this);
         }
     }
@@ -241,7 +227,7 @@ class BigModel extends Component {
 
      @property position
      @default [0,0,0]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get position() {
@@ -253,7 +239,7 @@ class BigModel extends Component {
 
      @property rotation
      @default [0,0,0]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get rotation() {
@@ -265,7 +251,7 @@ class BigModel extends Component {
 
      @property quaternion
      @default [0,0,0, 1]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get quaternion() {
@@ -277,7 +263,7 @@ class BigModel extends Component {
 
      @property scale
      @default [1,1,1]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get scale() {
@@ -289,7 +275,7 @@ class BigModel extends Component {
      *
      * @property matrix
      * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     * @type {Float32Array}
+     * @type {Number[]}
      * @final
      */
     get matrix() {
@@ -300,7 +286,7 @@ class BigModel extends Component {
      * World matrix. Same as the Modeling matrix.
      *
      * @property worldMatrix
-     * @type {Float32Array}
+     * @type {Number[]}
      * @final
      */
     get worldMatrix() {
@@ -312,7 +298,7 @@ class BigModel extends Component {
      *
      * @property worldNormalMatrix
      * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     * @type {Float32Array}
+     * @type {Number[]}
      * @final
      */
     get worldNormalMatrix() {
@@ -329,10 +315,10 @@ class BigModel extends Component {
      @param {*} cfg Geometry properties.
      @param {String|Number} cfg.id ID for the geometry, to refer to with {@link BigModel#createMesh:method"}}createMesh(){{/crossLink}}
      @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param {Array} cfg.positions Flat array of positions.
-     @param {Array} cfg.normals Flat array of normal vectors.
-     @param {Array} cfg.indices Array of triangle indices.
-     @param {Array} cfg.edgeIndices Array of edge line indices.
+     @param {Number[]} cfg.positions Flat array of positions.
+     @param {Number[]} cfg.normals Flat array of normal vectors.
+     @param {Number[]} cfg.indices Array of triangle indices.
+     @param {Number[]} cfg.edgeIndices Array of edge line indices.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -372,11 +358,11 @@ class BigModel extends Component {
      @param {String} [cfg.parentId] ID if the parent object, if any. Must resolve to a {@link BigModelMesh} that has already been created within this BigModel.
      @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link BigModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
      @param [cfg.primitive="triangles"] {String} Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param {Array} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
-     @param {Array} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
-     @param {Array} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
-     @param {Array} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
-     @param {Array} [cfg.matrix] Modeling matrix.
+     @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
+     @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
+     @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
+     @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
+     @param {Number[]} [cfg.matrix] Modeling matrix.
 
      @returns {BigModelMesh}
      */
@@ -576,7 +562,7 @@ class BigModel extends Component {
             }
         }
 
-        var node = new BigModelNode(this, cfg.objectId, id, meshes, flags, aabb); // Internally sets BigModelMesh#parent to this BigModelObject
+        var node = new BigModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets BigModelMesh#parent to this BigModelObject
         this._nodes.push(node);
         return node;
     }
@@ -625,31 +611,32 @@ class BigModel extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns true to indicate that this Component is an Entity.
+     * Returns true to indicate that BigModel is an {@link Entity}.
      * @type {Boolean}
      */
     get isEntity() {
         return true;
     }
-
+    
     /**
-     * Model ID, defined if this BigModel represents a model.
+     * Returns ````true```` if this BigModel represents a model.
      *
-     * When this returns a value, the BigModel will be registered by {@link BigModel#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
+     * When ````true```` the BigModel will be registered by {@link BigModel#id} in
+     * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get modelId() {
-        return this._modelId;
+    get isModel() {
+        return this._isModel;
     }
 
     /**
-     * Returns null because BigModel can only be a model.
+     * Returns ````false```` to indicate that BigModel never represents an object.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get objectId() {
-        return null;
+    get isObject() {
+        return false;
     }
 
     /**
@@ -658,7 +645,7 @@ class BigModel extends Component {
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         return this._aabb;
@@ -667,7 +654,7 @@ class BigModel extends Component {
     /**
      * Sets if this BigModel is visible.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} returns true and {@link BigModel#culled} returns false.
+     * The BigModel is only rendered when {@link BigModel#visible} is ````true```` and {@link BigModel#culled} is ````false````.
      **
      * @type {Boolean}
      */
@@ -681,9 +668,9 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any BigModelNodes in this BigModel are visible.
+     * Gets if any {@link BigModelNode}s in this BigModel are visible.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} returns true and {@link BigModel#culled} returns false.
+     * The BigModel is only rendered when {@link BigModel#visible} is ````true```` and {@link BigModel#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -692,7 +679,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if all BigModelNodes in this BigModel are ghosted.
+     * Sets if all {@link BigModelNode}s in this BigModel are ghosted.
      *
      * @type {Boolean}
      */
@@ -706,7 +693,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any BigModelNodes in this BigModel are ghosted.
+     * Gets if any {@link BigModelNode}s in this BigModel are ghosted.
      *
      * @type {Boolean}
      */
@@ -715,7 +702,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if all BigModelNodes in this BigModel are highlighted.
+     * Sets if all {@link BigModelNode}s in this BigModel are highlighted.
      *
      * @type {Boolean}
      */
@@ -729,7 +716,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any BigModelNodes in this BigModel are highlighted.
+     * Gets if any {@link BigModelNode}s in this BigModel are highlighted.
      *
      * @type {Boolean}
      */
@@ -738,7 +725,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if all BigModelNodes in this BigModel are selected.
+     * Sets if all {@link BigModelNode}s in this BigModel are selected.
      *
      * @type {Boolean}
      */
@@ -752,7 +739,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any BigModelNodes in this BigModel are selected.
+     * Gets if any {@link BigModelNode}s in this BigModel are selected.
      *
      * @type {Boolean}
      */
@@ -761,7 +748,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if all BigModelNodes in this BigModel have edges emphasised.
+     * Sets if all {@link BigModelNode}s in this BigModel have edges emphasised.
      *
      * @type {Boolean}
      */
@@ -775,7 +762,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any BigModelNodes in this BigModel have edges emphasised.
+     * Gets if any {@link BigModelNode}s in this BigModel have edges emphasised.
      *
      * @type {Boolean}
      */
@@ -808,7 +795,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if BigModelNodes in this BigModel are clippable.
+     * Sets if {@link BigModelNode}s in this BigModel are clippable.
      *
      * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
      *
@@ -824,7 +811,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if BigModelNodes in this BigModel are clippable.
+     * Gets if {@link BigModelNode}s in this BigModel are clippable.
      *
      * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
      *
@@ -835,7 +822,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if BigModelNodes in this BigModel are collidable.
+     * Sets if {@link BigModelNode}s in this BigModel are collidable.
      *
      * @type {Boolean}
      */
@@ -857,7 +844,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if BigModelNodes in this BigModel are pickable.
+     * Sets if {@link BigModelNode}s in this BigModel are pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -872,7 +859,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if BigModelNodes in this BigModel are pickable.
+     * Gets if this BigModel is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -889,7 +876,7 @@ class BigModel extends Component {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set colorize(rgb) { // TODO
 
@@ -900,7 +887,7 @@ class BigModel extends Component {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get colorize() {  // TODO
         return new Float32Array[1, 1, 1, 1];
@@ -1276,7 +1263,7 @@ class BigModel extends Component {
             this._nodes[i]._destroy();
         }
         this.scene._aabbDirty = true;
-        if (this._modelId) {
+        if (this._isModel) {
             this.scene._deregisterModel(this);
         }
     }

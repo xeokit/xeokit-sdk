@@ -102,15 +102,6 @@
                 geometry: boxGeometry,
                 material: new PhongMaterial(myViewer.scene, {
                     diffuse: [1, 0.3, 0.3]
-                }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
-                    fill: true,
-                    fillColor: [1, 0, 0],
-                    fillAlpha: 0.7,
-                    edges: true,
-                    edgeColor: [1.0, 0.0, 0.0],
-                    edgeAlpha: 1.0,
-                    edgeWidth: 2
                 })
             }),
 
@@ -122,15 +113,6 @@
                 geometry: boxGeometry,
                 material: new PhongMaterial(myViewer.scene, {
                     diffuse: [0.3, 1.0, 0.3]
-                }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
-                    fill: true,
-                    fillColor: [0, 1, 0],
-                    fillAlpha: 0.7,
-                    edges: true,
-                    edgeColor: [1.0, 0.0, 0.0],
-                    edgeAlpha: 1.0,
-                    edgeWidth: 2
                 })
             }),
 
@@ -142,15 +124,6 @@
                 geometry: boxGeometry,
                 material: new PhongMaterial(myViewer.scene, {
                     diffuse: [0.3, 0.3, 1.0]
-                }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
-                    fill: true,
-                    fillColor: [0, 0, 1],
-                    fillAlpha: 0.7,
-                    edges: true,
-                    edgeColor: [1.0, 0.0, 0.0],
-                    edgeAlpha: 1.0,
-                    edgeWidth: 2
                 })
             }),
 
@@ -162,15 +135,6 @@
                 geometry: boxGeometry,
                 material: new PhongMaterial(myViewer.scene, {
                     diffuse: [1.0, 1.0, 0.0]
-                }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
-                    fill: true,
-                    fillColor: [1, 1, 0],
-                    fillAlpha: 0.7,
-                    edges: true,
-                    edgeColor: [1.0, 0.0, 0.0],
-                    edgeAlpha: 1.0,
-                    edgeWidth: 2
                 })
             }),
 
@@ -182,15 +146,6 @@
                 geometry: boxGeometry,
                 material: new PhongMaterial(myViewer.scene, {
                     diffuse: [1.0, 0.3, 1.0]
-                }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
-                    fill: true,
-                    fillColor: [1, 0, 1],
-                    fillAlpha: 0.7,
-                    edges: true,
-                    edgeColor: [1.0, 0.0, 0.0],
-                    edgeAlpha: 1.0,
-                    edgeWidth: 2
                 })
             })
         ]
@@ -212,16 +167,16 @@
     // Periodically update transforms on our scene nodes
     //------------------------------------------------------------------------------------------------------------------
 
-    // viewer.scene.on("tick", function () {
-    //
-    //     // Rotate legs
-    //     redLeg.rotateY(0.5);
-    //     greenLeg.rotateY(0.5);
-    //     blueLeg.rotateY(0.5);
-    //
-    //     // Rotate table
-    //     table.rotateY(0.5);
-    //     table.rotateX(0.3);
-    // });
+    viewer.scene.on("tick", function () {
+
+        // Rotate legs
+        redLeg.rotateY(0.5);
+        greenLeg.rotateY(0.5);
+        blueLeg.rotateY(0.5);
+
+        // Rotate table
+        table.rotateY(0.5);
+        table.rotateX(0.3);
+    });
 </script>
 </html>

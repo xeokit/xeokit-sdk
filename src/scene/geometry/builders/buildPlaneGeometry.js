@@ -46,7 +46,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
- * @param {Float32Array} [cfg.center]  3D point indicating the center position.
+ * @param {Number[]} [cfg.center]  3D point indicating the center position.
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  * @param {Number} [cfg.xSize=1] Dimension on the X-axis.
  * @param {Number} [cfg.zSize=1] Dimension on the Z-axis.

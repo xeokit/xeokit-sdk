@@ -57,13 +57,9 @@ function nextHighestPowerOfTwo(x) {
 }
 
 /**
- A **Texture2D** is a low-level component that represents a 2D WebGL texture.
-
- @class Texture
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc A low-level component that represents a 2D WebGL texture.
+ *
+ * @private
  */
 class Texture2D {
 

@@ -37,7 +37,7 @@ class XML3DLoader {
          * Default viewpoint, containing eye, look and up vectors.
          * Only defined if found in the 3DXML file.
          * @property viewpoint
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.viewpoint = null;
 

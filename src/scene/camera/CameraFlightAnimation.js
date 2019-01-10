@@ -122,9 +122,9 @@ class CameraFlightAnimation extends Component {
      * swing away from its {@link Lookat/eye:property"}}look{{/crossLink}} position as it flies to the target.
      * @param [params.component] {Number|String|Component} ID or instance of a component to fly to. Defaults to the entire {@link Scene}.
      * @param [params.aabb] {*}  World-space axis-aligned bounding box (AABB) target to fly to.
-     * @param [params.eye] {Float32Array} Position to fly the eye position to.
-     * @param [params.look] {Float32Array} Position to fly the look position to.
-     * @param [params.up] {Float32Array} Position to fly the up vector to.
+     * @param [params.eye] {Number[]} Position to fly the eye position to.
+     * @param [params.look] {Number[]} Position to fly the look position to.
+     * @param [params.up] {Number[]} Position to fly the up vector to.
      * @param [params.fit=true] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
      * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
@@ -288,9 +288,9 @@ class CameraFlightAnimation extends Component {
      * @param[params.arc=0]  {Number} Factor in range [0..1] indicating how much the {@link Camera#eye} will swing away from its {@link Camera#look} as it flies to the target.
      * @param [params.component] {Number|String|Component} ID or instance of a component to fly to.
      * @param [params.aabb] {*}  World-space axis-aligned bounding box (AABB) target to fly to.
-     * @param [params.eye] {Float32Array} Position to fly the eye position to.
-     * @param [params.look] {Float32Array} Position to fly the look position to.
-     * @param [params.up] {Float32Array} Position to fly the up vector to.
+     * @param [params.eye] {Number[]} Position to fly the eye position to.
+     * @param [params.look] {Number[]} Position to fly the look position to.
+     * @param [params.up] {Number[]} Position to fly the up vector to.
      * @param [params.fitFOV] {Number} How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
      * @param [params.fit] {Boolean} Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.

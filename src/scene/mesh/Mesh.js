@@ -30,17 +30,48 @@ const vecb = new Float32Array(3);
 const identityMat = math.identityMat4();
 
 /**
- * @desc A rendered {@link Scene} element.
+ * @desc A {@link Scene} {@link Entity} that represents a rendered 3D element.
  *
- * ## Meshes that Represent Models
+ * ## Meshes Representing Models
  *
- * A Mesh represents a model when it has a {@link Mesh#modelId}, in which case it is also registered by {@link Mesh#modelId} in {@link Scene#models}, and may also have a corresponding {@link MetaModel}.
+ * * As an {@link Entity}, a Mesh represents a model when {@link Mesh#isModel} is ````true````.
+ * * Each model-Mesh is registered by {@link Mesh#id} in {@link Scene#models}.
+ * * Each model-Mesh can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.
  *
- * ## Meshes that Represent Objects
+ * ## Meshes Representing Objects
  *
- * A Mesh represents an object when it has an {@link Mesh#objectId}, in which case it is also registered by {@link Mesh#objectId} in {@link Scene#objects}, and may also have a corresponding {@link MetaObject}.
+ * * As an {@link Entity}, a Mesh represents an object when {@link Mesh#isObject} is ````true````.
+ * * Each object-Mesh is registered by {@link Mesh#id} in {@link Scene#objects}.
+ * * Each object-Mesh can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.
+ *
+ * ## Updating Batches of Object-Meshes
+ *
+ * {@link Scene} provides the following methods for updating batches of object-Meshes using their {@link Mesh#id}s:
+ *
+ * * {@link Scene#setObjectsVisible}
+ * * {@link Scene#setObjectsCulled}
+ * * {@link Scene#setObjectsSelected}
+ * * {@link Scene#setObjectsHighlighted}
+ * * {@link Scene#setObjectsGhosted}
+ * * {@link Scene#setObjectsEdges}
+ * * {@link Scene#setObjectsColorized}
+ * * {@link Scene#setObjectsOpacity}
  *
  * ## Usage
+ *
+ * The example below is the same as the one given for {@link Node}, since the two classes work together.  In this example,
+ * we'll create a scene graph in which a root {@link Node} represents a group and the Meshes are leaves.
+ *
+ * Since {@link Node} implements {@link Entity}, we can designate the root {@link Node} as a model, causing it to be registered by ID in {@link Scene#models}.
+ *
+ * Since Mesh also implements {@link Entity}, we can designate the leaf Meshes as objects, causing them to
+ * be registered by their IDs in {@link Scene#objects}.
+ *
+ * We can then find those {@link Entity} types in {@link Scene#models} and {@link Scene#objects}.
+ *
+ * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
+ *
+ * [[Run this example](/examples/#sceneGraph_BasicSceneGraph)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -57,15 +88,17 @@ const identityMat = math.identityMat4();
  * viewer.scene.camera.up = [0.37, 0.91, -0.11];
  *
  * new Node(viewer.scene, {
- *      modelId: "table", // <---------- Node with "modelId" represents a model
+ *      id: "table",
+ *      isModel: true, // <---------- Node represents a model, so is registered by ID in viewer.scene.models
  *      rotation: [0, 50, 0],
  *      position: [0, 0, 0],
  *      scale: [1, 1, 1],
  *
  *      children: [
  *
- *           new Mesh(viewer.scene, { // Red table leg
- *              objectId: "redLeg",
+ *          new Mesh(viewer.scene, { // Red table leg
+ *              id: "redLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
  *              position: [-4, -6, -4],
  *              scale: [1, 3, 1],
  *              rotation: [0, 0, 0],
@@ -73,73 +106,85 @@ const identityMat = math.identityMat4();
  *                  diffuse: [1, 0.3, 0.3]
  *              })
  *          }),
-
-            new Mesh(viewer.scene, { // Green table leg
-                objectId: "greenLeg",
-                position: [4, -6, -4],
-                scale: [1, 3, 1],
-                rotation: [0, 0, 0],
-                material: new PhongMaterial(viewer.scene, {
-                    diffuse: [0.3, 1.0, 0.3]
-                })
-            }),
-
-            new Mesh(viewer.scene, {// Blue table leg
-                objectId: "blueLeg",
-                position: [4, -6, 4],
-                scale: [1, 3, 1],
-                rotation: [0, 0, 0],
-                material: new PhongMaterial(viewer.scene, {
-                    diffuse: [0.3, 0.3, 1.0]
-                })
-            }),
-
-            new Mesh(viewer.scene, {  // Yellow table leg
-                objectId: "yellowLeg",
-                position: [-4, -6, 4],
-                scale: [1, 3, 1],
-                rotation: [0, 0, 0],
-                material: new PhongMaterial(viewer.scene, {
-                    diffuse: [1.0, 1.0, 0.0]
-                })
-            }),
-
-            new Mesh(viewer.scene, { // Purple table top
-                objectId: "tableTop",
-                position: [0, -3, 0],
-                scale: [6, 0.5, 6],
-                rotation: [0, 0, 0],
-                material: new PhongMaterial(viewer.scene, {
-                    diffuse: [1.0, 0.3, 1.0]
-                })
-            })
-        ]
-    });
-
- //------------------------------------------------------------------------------------------------------------------
- // Find scene graph nodes by their object IDs
- //------------------------------------------------------------------------------------------------------------------
-
- var table = viewer.scene.objects["table"];
- var redLeg = viewer.scene.objects["redLeg"];
- var greenLeg = viewer.scene.objects["greenLeg"];
- var blueLeg = viewer.scene.objects["blueLeg"];
-
- //------------------------------------------------------------------------------------------------------------------
- // Periodically update transforms on our scene nodes
- //------------------------------------------------------------------------------------------------------------------
-
- viewer.scene.on("tick", function () {
-
-        // Rotate legs
-        redLeg.rotateY(0.5);
-        greenLeg.rotateY(0.5);
-        blueLeg.rotateY(0.5);
-
-        // Rotate table
-        table.rotateY(0.5);
-        table.rotateX(0.3);
-    });
+ *
+ *          new Mesh(viewer.scene, { // Green table leg
+ *              id: "greenLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [4, -6, -4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [0.3, 1.0, 0.3]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, {// Blue table leg
+ *              id: "blueLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [4, -6, 4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [0.3, 0.3, 1.0]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, {  // Yellow table leg
+ *              id: "yellowLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [-4, -6, 4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                   diffuse: [1.0, 1.0, 0.0]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, { // Purple table top
+ *              id: "tableTop",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [0, -3, 0],
+ *              scale: [6, 0.5, 6],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [1.0, 0.3, 1.0]
+ *              })
+ *          })
+ *      ]
+ *  });
+ *
+ * // Find Nodes and Meshes by their IDs
+ *
+ * var table = viewer.scene.models["table"];                // Since table Node has isModel == true
+ *
+ * var redLeg = viewer.scene.objects["redLeg"];             // Since the Meshes have isObject == true
+ * var greenLeg = viewer.scene.objects["greenLeg"];
+ * var blueLeg = viewer.scene.objects["blueLeg"];
+ *
+ * // Highlight one of the table leg Meshes
+ *
+ * viewer.scene.setObjectsHighlighted(["redLeg"], true);    // Since the Meshes have isObject == true
+ *
+ * // Periodically update transforms on our Nodes and Meshes
+ *
+ * viewer.scene.on("tick", function () {
+ *
+ *       // Rotate legs
+ *       redLeg.rotateY(0.5);
+ *       greenLeg.rotateY(0.5);
+ *       blueLeg.rotateY(0.5);
+ *
+ *       // Rotate table
+ *       table.rotateY(0.5);
+ *       table.rotateX(0.3);
+ *   });
+ * ````
+ *
+ * ## Metadata
+ *
+ * As mentioned, we can also associate {@link MetaModel}s and {@link MetaObject}s with our {@link Node}s and Meshes,
+ * within a {@link MetaScene}. See {@link MetaScene} for an example.
+ *
  * @implements {Entity}
  * @implements {Drawable}
  */
@@ -150,13 +195,13 @@ class Mesh extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
-     * @param {Number|String} [cfg.modelId] Model ID, given if this Mesh represents a model. When this property is defined, the Mesh will be registered by {@link Mesh#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
-     * @param {Number|String} [cfg.objectId] Object ID, given if this Mesh represents an object. When this property is defined, the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#objects} and may also have a corresponding {@link MetaObject}.
+     * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
+     * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Node} [cfg.parent] The parent Node.
-     * @param {Float32Array} [cfg.position=[0,0,0]] Local 3D position.
-     * @param {Float32Array} [cfg.scale=[1,1,1]] Local scale.
-     * @param {Float32Array} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Float32Array} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [cfg.visible=true] Indicates if the Mesh is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Mesh is initially culled from view.
      * @param {Boolean} [cfg.pickable=true] Indicates if the Mesh is initially pickable.
@@ -168,7 +213,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Mesh is initially highlighted.
      * @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
      * @param {Boolean} [cfg.edges=false] Indicates if the Mesh's edges are initially emphasized.
-     * @param {Float32Array} [cfg.colorize=[1.0,1.0,1.0]] Mesh's initial RGB colorize color, multiplies by the rendered fragment colors.
+     * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] Mesh's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] Mesh's initial opacity factor, multiplies by the rendered fragment alpha.
      * @param {String} [cfg.billboard="none"] Mesh's billboarding behaviour. Options are "none" for no billboarding, "spherical" to always directly face {@link Camera.eye}, rotating both vertically and horizontally, or "cylindrical" to face the {@link Camera#eye} while rotating only about its vertically axis (use that mode for things like trees on a landscape).
      * @param {Geometry} [cfg.geometry] {@link Geometry} to define the shape of this Mesh. Inherits {@link Scene#geometry} by default.
@@ -248,13 +293,13 @@ class Mesh extends Component {
             }
         }
 
-        if (cfg.objectId) {
-            this._objectId = cfg.objectId;
+        this._isObject = cfg.isObject;
+        if (this._isObject) {
             this.scene._registerObject(this);
         }
 
-        if (cfg.modelId) {
-            this._modelId = cfg.modelId;
+        this._isModel = cfg.isModel;
+        if (this._isModel) {
             this.scene._registerModel(this);
         }
 
@@ -501,7 +546,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set position(value) {
         this._position.set(value || [0, 0, 0]);
@@ -515,7 +560,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get position() {
         return this._position;
@@ -526,7 +571,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set rotation(value) {
         this._rotation.set(value || [0, 0, 0]);
@@ -541,7 +586,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get rotation() {
         return this._rotation;
@@ -552,7 +597,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set quaternion(value) {
         this._quaternion.set(value || [0, 0, 0, 1]);
@@ -567,7 +612,7 @@ class Mesh extends Component {
      *
      * Default value is ````[0,0,0,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get quaternion() {
         return this._quaternion;
@@ -578,7 +623,7 @@ class Mesh extends Component {
      *
      * Default value is ````[1,1,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set scale(value) {
         this._scale.set(value || [1, 1, 1]);
@@ -592,7 +637,7 @@ class Mesh extends Component {
      *
      * Default value is ````[1,1,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get scale() {
         return this._scale;
@@ -603,7 +648,7 @@ class Mesh extends Component {
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set matrix(value) {
         if (!this.__localMatrix) {
@@ -622,7 +667,7 @@ class Mesh extends Component {
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get matrix() {
         if (this._localMatrixDirty) {
@@ -639,7 +684,7 @@ class Mesh extends Component {
      * Gets the Mesh's World matrix.
      *
      * @property worldMatrix
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get worldMatrix() {
         if (this._worldMatrixDirty) {
@@ -651,7 +696,7 @@ class Mesh extends Component {
     /**
      * Gets the Mesh's World normal matrix.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get worldNormalMatrix() {
         if (this._worldNormalMatrixDirty) {
@@ -663,7 +708,7 @@ class Mesh extends Component {
     /**
      * Rotates the Mesh about the given local axis by the given increment.
      *
-     * @param {Float32Array} axis Local axis about which to rotate.
+     * @param {Number[]} axis Local axis about which to rotate.
      * @param {Number} angle Angle increment in degrees.
      */
     rotate(axis, angle) {
@@ -683,7 +728,7 @@ class Mesh extends Component {
     /**
      * Rotates the Mesh about the given World-space axis by the given increment.
      *
-     * @param {Float32Array} axis Local axis about which to rotate.
+     * @param {Number[]} axis Local axis about which to rotate.
      * @param {Number} angle Angle increment in degrees.
      */
     rotateOnWorldAxis(axis, angle) {
@@ -727,7 +772,7 @@ class Mesh extends Component {
     /**
      * Translates the Mesh along local space vector by the given increment.
      *
-     * @param {Float32Array} axis Normalized local space 3D vector along which to translate.
+     * @param {Number[]} axis Normalized local space 3D vector along which to translate.
      * @param {Number} distance Distance to translate along  the vector.
      */
     translate(axis, distance) {
@@ -819,25 +864,27 @@ class Mesh extends Component {
     }
 
     /**
-     * Model ID, defined if this Mesh represents a model.
+     * Returns ````true```` if this Mesh represents a model.
      *
-     * When this returns a value, the Mesh will be registered by {@link Mesh#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+     * may also have a corresponding {@link MetaModel}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get modelId() {
-        return this._modelId;
+    get isModel() {
+        return this._isModel;
     }
 
     /**
-     * Object ID, defined if this Mesh represents an object.
+     * Returns ````true```` if this Mesh represents an object.
      *
-     * When this returns a value, the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#objects} and may also have a corresponding {@link MetaObject}.
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and
+     * may also have a corresponding {@link MetaObject}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get objectId() {
-        return this._objectId;
+    get isObject() {
+        return this._isObject;
     }
 
     /**
@@ -846,7 +893,7 @@ class Mesh extends Component {
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
@@ -858,16 +905,17 @@ class Mesh extends Component {
     /**
      * Sets if this Mesh is visible.
      *
-     * Only rendered when {@link Mesh#visible} returns true and {@link Mesh#culled} returns false.
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#visible} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
     set visible(visible) {
         visible = visible !== false;
         this._state.visible = visible;
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectVisibilityUpdated(this);
         }
         this.glRedraw();
@@ -876,9 +924,10 @@ class Mesh extends Component {
     /**
      * Gets if this Mesh is visible.
      *
-     * Only rendered when {@link Mesh#visible} returns true and {@link Mesh#culled} returns false.
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#visible} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#visible} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -891,7 +940,8 @@ class Mesh extends Component {
      *
      * Ghosted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#ghostMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#ghosted} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#ghosted} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      */
@@ -901,18 +951,19 @@ class Mesh extends Component {
             return;
         }
         this._state.ghosted = ghosted;
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectGhostedUpdated(this);
         }
         this.glRedraw();
     }
 
     /**
-     * Sets if this Mesh is ghosted.
+     * Gets if this Mesh is ghosted.
      *
      * Ghosted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#ghostMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#ghosted} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#ghosted} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      */
@@ -925,7 +976,8 @@ class Mesh extends Component {
      *
      * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#highlighted} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#highlightedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -935,7 +987,7 @@ class Mesh extends Component {
             return;
         }
         this._state.highlighted = highlighted;
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectHighlightedUpdated(this);
         }
         this.glRedraw();
@@ -946,7 +998,8 @@ class Mesh extends Component {
      *
      * Highlighted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#highlightMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#highlighted} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#highlightedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#highlighted} are both ````true```` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -959,7 +1012,8 @@ class Mesh extends Component {
      *
      * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#selected} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -969,7 +1023,7 @@ class Mesh extends Component {
             return;
         }
         this._state.selected = selected;
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectSelectedUpdated(this);
         }
         this.glRedraw();
@@ -980,7 +1034,8 @@ class Mesh extends Component {
      *
      * Selected appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#selectedMaterial}.
      *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#selected} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#selected} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -1018,9 +1073,7 @@ class Mesh extends Component {
     /**
      * Sets if this Mesh is culled.
      *
-     * Only rendered when {@link Mesh#visible} returns true and {@link Mesh#culled} returns false.
-     *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#visible} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -1032,9 +1085,7 @@ class Mesh extends Component {
     /**
      * Gets if this Mesh is culled.
      *
-     * Only rendered when {@link Mesh#visible} returns true and {@link Mesh#culled} returns false.
-     *
-     * When {@link Mesh#objectId} has a value, then while {@link Mesh#visible} returns true the Mesh will be registered by {@link Mesh#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link Mesh#visible} is ````true```` and {@link Mesh#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -1123,7 +1174,7 @@ class Mesh extends Component {
     }
 
     /**
-     * Sets if this Mesh cast shadows.
+     * Sets if this Mesh casts shadows.
      *
      * @type {Boolean}
      */
@@ -1137,7 +1188,7 @@ class Mesh extends Component {
     }
 
     /**
-     * Gets if this Mesh cast shadows.
+     * Gets if this Mesh casts shadows.
      *
      * @type {Boolean}
      */
@@ -1177,7 +1228,7 @@ class Mesh extends Component {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set colorize(value) {
         let colorize = this._state.colorize;
@@ -1204,7 +1255,7 @@ class Mesh extends Component {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get colorize() {
         return this._state.colorize;
@@ -1296,9 +1347,9 @@ class Mesh extends Component {
      * Gets the Node's billboarding behaviour.
      *
      * Options are:
-     * * **"none"** -  **(default)** - No billboarding.
-     * * **"spherical"** - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
-     * * **"cylindrical"** - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
+     * * ````"none"```` -  (default) - No billboarding.
+     * * ````"spherical"```` - Mesh is billboarded to face the viewpoint, rotating both vertically and horizontally.
+     * * ````"cylindrical"```` - Mesh is billboarded to face the viewpoint, rotating only about its vertically axis. Use this mode for things like trees on a landscape.
      * @type {String}
      */
     get billboard() {
@@ -1641,7 +1692,7 @@ class Mesh extends Component {
         this._putDrawRenderers();
         this._putPickRenderers();
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeokit framework?
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._deregisterObject(this);
             if (this._visible) {
                 this.scene._objectVisibilityUpdated(this, false);
@@ -1656,7 +1707,7 @@ class Mesh extends Component {
                 this.scene._objectHighlightedUpdated(this, false);
             }
         }
-        if (this._modelId) {
+        if (this._isModel) {
             this.scene._deregisterModel(this);
         }
         this.glRedraw();

@@ -196,7 +196,7 @@ class EdgeMaterial extends Material {
      *
      * Default value is ````[0.2, 0.2, 0.2]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set edgeColor(value) {
         let edgeColor = this._state.edgeColor;
@@ -222,7 +222,7 @@ class EdgeMaterial extends Material {
      *
      * Default value is ````[0.2, 0.2, 0.2]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get edgeColor() {
         return this._state.edgeColor;

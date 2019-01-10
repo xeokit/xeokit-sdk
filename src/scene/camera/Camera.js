@@ -424,7 +424,7 @@ class Camera extends Component {
 
      @property eye
      @default [0,0,10]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set eye(value) {
         this._eye.set(value || [0, 0, 10]);
@@ -449,7 +449,7 @@ class Camera extends Component {
 
      @property look
      @default [0,0,0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set look(value) {
         this._look.set(value || [0, 0, 0]);
@@ -474,7 +474,7 @@ class Camera extends Component {
 
      @property up
      @default [0,1,0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set up(value) {
         this._up.set(value || [0, 1, 0]);
@@ -498,7 +498,7 @@ class Camera extends Component {
      This is intended to be used for stereo rendering with WebVR etc.
 
      @property deviceMatrix
-     @type {Float32Array}
+     @type {Number[]}
      */
     set deviceMatrix(matrix) {
         this._state.deviceMatrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
@@ -524,7 +524,7 @@ class Camera extends Component {
 
      @property worldAxis
      @default [1, 0, 0, 0, 1, 0, 0, 0, 1]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set worldAxis(value) {
         value = value || [1, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -560,7 +560,7 @@ class Camera extends Component {
 
      @property worldUp
      @default [0,1,0]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get worldUp() {
@@ -572,7 +572,7 @@ class Camera extends Component {
 
      @property worldRight
      @default [1,0,0]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get worldRight() {
@@ -584,7 +584,7 @@ class Camera extends Component {
 
      @property worldForward
      @default [0,0,-1]
-     @type {Float32Array}
+     @type {Number[]}
      @final
      */
     get worldForward() {
@@ -658,7 +658,7 @@ class Camera extends Component {
      Fires a {@link Camera#matrix:event} event on change.
 
      @property matrix
-     @type {Float32Array}
+     @type {Number[]}
      @final
      @deprecated
      */
@@ -676,7 +676,7 @@ class Camera extends Component {
 
      @property viewMatrix
      @final
-     @type {Float32Array}
+     @type {Number[]}
      */
     get viewMatrix() {
         if (this._updateScheduled) {
@@ -692,7 +692,7 @@ class Camera extends Component {
      Fires a {@link Camera#matrix:event} event on change.
 
      @property normalMatrix
-     @type {Float32Array}
+     @type {Number[]}
      @final
      @deprecated
      */
@@ -710,7 +710,7 @@ class Camera extends Component {
 
      @property viewNormalMatrix
      @final
-     @type {Float32Array}
+     @type {Number[]}
      */
     get viewNormalMatrix() {
         if (this._updateScheduled) {
@@ -726,7 +726,7 @@ class Camera extends Component {
 
      @property projMatrix
      @final
-     @type {Float32Array}
+     @type {Number[]}
      */
     get projMatrix() {
         return this[this.projection].matrix;

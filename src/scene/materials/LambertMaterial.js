@@ -131,7 +131,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[0.3, 0.3, 0.3]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set ambient(value) {
         let ambient = this._state.ambient;
@@ -157,7 +157,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[0.3, 0.3, 0.3]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get ambient() {
         return this._state.ambient;
@@ -168,7 +168,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set color(value) {
         let color = this._state.color;
@@ -194,7 +194,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get color() {
         return this._state.color;
@@ -205,7 +205,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -231,7 +231,7 @@ class LambertMaterial extends Material {
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get emissive() {
         return this._state.emissive;

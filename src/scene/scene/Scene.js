@@ -379,9 +379,7 @@ class Scene extends Component {
         /**
          * Map of {@link Entity}s that represent a models.
          *
-         * An {@link Entity} represents a model when it has a {@link Entity#modelId}.
-         *
-         * Each {@link Entity} is mapped here by {@link Entity#modelId}.
+         * Each {@link Entity} is mapped here by {@link Entity#id} when {@link Entity#isModel} is ````true````.
          *
          * @property models
          * @final
@@ -392,9 +390,7 @@ class Scene extends Component {
         /**
          * Map of {@link Entity}s that represents objects.
          *
-         * An Entity represents an object when it has an {@link Entity#objectId}.
-         *
-         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
+         * Each {@link Entity} is mapped here by {@link Entity#id} when {@link Entity#isObject} is ````true````.
          *
          * @property objects
          * @final
@@ -405,7 +401,7 @@ class Scene extends Component {
         /**
          * Map of currently visible {@link Entity}s that represent objects.
          *
-         * An Entity represents an object if it has an {@link Entity#objectId}, and is visible when {@link Entity#visible} is true.
+         * An Entity represents an object if {@link Entity#isObject} is ````true````, and is visible when {@link Entity#visible} is true.
          *
          * @property visibleObjects
          * @final
@@ -416,10 +412,10 @@ class Scene extends Component {
         /**
          * Map of currently ghosted {@link Entity}s that represent objects.
          *
-         * An Entity represents an object if it has an {@link Entity#objectId}, and is ghosted when {@link Entity#ghosted} is true.
+         * An Entity represents an object if {@link Entity#isObject} is ````true````, and is ghosted when {@link Entity#ghosted} is true.
          *
-         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
-         * 
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
          * @property ghostedObjects
          * @final
          * @type {{String:Object}}
@@ -429,10 +425,10 @@ class Scene extends Component {
         /**
          * Map of currently highlighted {@link Entity}s that represent objects.
          *
-         * An Entity represents an object if it has an {@link Entity#objectId} is true, and is highlighted when {@link Entity#highlighted} is true.
+         * An Entity represents an object if {@link Entity#isObject} is ````true```` is true, and is highlighted when {@link Entity#highlighted} is true.
          *
-         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
-         * 
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
          * @property highlightedObjects
          * @final
          * @type {{String:Object}}
@@ -444,8 +440,8 @@ class Scene extends Component {
          *
          * An Entity represents an object if {@link Entity#isObject} is true, and is selected while {@link Entity#selected} is true.
          *
-         * Each {@link Entity} is mapped here by {@link Entity#objectId}.
-         * 
+         * Each {@link Entity} is mapped here by {@link Entity#id}.
+         *
          * @property selectedObjects
          * @final
          * @type {{String:Object}}
@@ -470,65 +466,51 @@ class Scene extends Component {
         this._needRecompile = false;
 
         /**
-         For each {@link Component} type, a map of
-         IDs to {@link Component} instances of that type.
-
-         @property types
-         @final
-         @type {String:{String:Component}}
+         * For each {@link Component} type, a map of IDs to {@link Component} instances of that type.
+         *
+         * @type {{String:{String:Component}}}
          */
         this.types = {};
 
         /**
-         The {@link Component}s within this Scene, each mapped to its {@link Component#id}.
-
-         @property components
-         @final
-         @type {{String:Component}}
+         * The {@link Component}s within this Scene, each mapped to its {@link Component#id}.
+         *
+         * *@type {{String:Component}}
          */
         this.components = {};
 
         /**
-         The {@link Clip}s in this Scene, each mapped to its {@link Clip#id}.
-
-         @property clips
-         @final
-         @type {{String:Clip}}
+         * The {@link Clip}s in this Scene, each mapped to its {@link Clip#id}.
+         *
+         * @type {{String:Clip}}
          */
         this.clips = {};
 
         /**
-         The {@link Light}s in this Scene, each mapped to its {@link Light#id}.
-
-         @property lights
-         @final
-         @type {{String:Light}}
+         * The {@link Light}s in this Scene, each mapped to its {@link Light#id}.
+         *
+         * @type {{String:Light}}
          */
         this.lights = {};
 
         /**
-         The {@link LightMap}s in this Scene, each mapped to its its {@link LightMap#id}.
-
-         @property lightMaps
-         @final
-         @type {{String:LightMap}}
+         * The {@link LightMap}s in this Scene, each mapped to its its {@link LightMap#id}.
+         *
+         * @type {{String:LightMap}}
          */
         this.lightMaps = {};
 
         /**
-         The {@link ReflectionMap}s in this Scene, mapped to its {@link ReflectionMap#id}.
-
-         @property reflectionMaps
-         @final
-         @type {{String:ReflectionMap}}
+         * The {@link ReflectionMap}s in this Scene, each mapped to its {@link ReflectionMap#id}.
+         *
+         * @type {{String:ReflectionMap}}
          */
         this.reflectionMaps = {};
 
         /**
-         Manages the HTML5 canvas for this Scene.
-         @final
-         @property canvas
-         @type {Canvas}
+         * Manages the HTML5 canvas for this Scene.
+         *
+         * @type {Canvas}
          */
         this.canvas = new Canvas(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
@@ -709,12 +691,11 @@ class Scene extends Component {
         })();
 
         /**
-         Publishes input events that occur on this Scene's canvas.
-
-         @final
-         @property input
-         @type {Input}
-         @final
+         * Publishes input events that occur on this Scene's canvas.
+         *
+         * @property input
+         * @type {Input}
+         * @final
          */
         this.input = new Input(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
@@ -905,57 +886,57 @@ class Scene extends Component {
     }
 
     _registerModel(entity) {
-        this.models[entity.modelId] = entity;
+        this.models[entity.id] = entity;
         this._modelIds = null; // Lazy regenerate
     }
 
     _deregisterModel(entity) {
-        delete this.models[entity.modelId];
+        delete this.models[entity.id];
         this._modelIds = null; // Lazy regenerate
     }
 
     _registerObject(entity) {
-        this.objects[entity.objectId] = entity;
+        this.objects[entity.id] = entity;
         this._objectIds = null; // Lazy regenerate
     }
 
     _deregisterObject(entity) {
-        delete this.objects[entity.objectId];
+        delete this.objects[entity.id];
         this._objectIds = null; // Lazy regenerate
     }
 
     _objectVisibilityUpdated(entity) {
         if (entity.visible) {
-            this.visibleObjects[entity.objectId] = entity;
+            this.visibleObjects[entity.id] = entity;
         } else {
-            delete this.visibleObjects[entity.objectId];
+            delete this.visibleObjects[entity.id];
         }
         this._visibleObjectIds = null; // Lazy regenerate
     }
 
     _objectGhostedUpdated(entity) {
         if (entity.ghosted) {
-            this.ghostedObjects[entity.objectId] = entity;
+            this.ghostedObjects[entity.id] = entity;
         } else {
-            delete this.ghostedObjects[entity.objectId];
+            delete this.ghostedObjects[entity.id];
         }
         this._ghostedObjectIds = null; // Lazy regenerate
     }
 
     _objectHighlightedUpdated(entity) {
         if (entity.highlighted) {
-            this.highlightedObjects[entity.objectId] = entity;
+            this.highlightedObjects[entity.id] = entity;
         } else {
-            delete this.highlightedObjects[entity.objectId];
+            delete this.highlightedObjects[entity.id];
         }
         this._highlightedObjectIds = null; // Lazy regenerate
     }
 
     _objectSelectedUpdated(entity) {
         if (entity.selected) {
-            this.selectedObjects[entity.objectId] = entity;
+            this.selectedObjects[entity.id] = entity;
         } else {
-            delete this.selectedObjects[entity.objectId];
+            delete this.selectedObjects[entity.id];
         }
         this._selectedObjectIds = null; // Lazy regenerate
     }
@@ -996,7 +977,6 @@ class Scene extends Component {
      * if required. This method is typically used when we want to synchronously take a snapshot of the canvas and
      * need everything rendered right at that moment.
      *
-     * @method render
      * @param {Boolean} [forceRender=false] Forces a render when true, otherwise only renders if something has changed in this Scene
      * since the last render.
      */
@@ -1089,10 +1069,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#models}.
-     @property modelIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#models}.
+     *
+     * @type {String[]}
      */
     get modelIds() {
         if (!this._modelIds) {
@@ -1102,10 +1081,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#objects}.
-     @property objectIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#objects}.
+     *
+     * @type {String[]}
      */
     get objectIds() {
         if (!this._objectIds) {
@@ -1115,10 +1093,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#visibleObjects}.
-     @property visibleObjectIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#visibleObjects}.
+     *
+     * @type {String[]}
      */
     get visibleObjectIds() {
         if (!this._visibleObjectIds) {
@@ -1128,10 +1105,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#ghostedObjects}.
-     @property ghostedObjectIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#ghostedObjects}.
+     *
+     * @type {String[]}
      */
     get ghostedObjectIds() {
         if (!this._ghostedObjectIds) {
@@ -1141,10 +1117,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#highlightedObjects}.
-     @property highlightedObjectIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#highlightedObjects}.
+     *
+     * @type {String[]}
      */
     get highlightedObjectIds() {
         if (!this._highlightedObjectIds) {
@@ -1154,10 +1129,9 @@ class Scene extends Component {
     }
 
     /**
-     Convenience array of IDs in {@link Scene#selectedObjects}.
-     @property selectedObjectIds
-     @final
-     @type {Array}
+     * Gets the IDs of the {@link Entity}s in {@link Scene#selectedObjects}.
+     *
+     * @type {String[]}
      */
     get selectedObjectIds() {
         if (!this._selectedObjectIds) {
@@ -1167,11 +1141,11 @@ class Scene extends Component {
     }
 
     /**
-     The number of {@link Scene#tick} that happen between each render or this Scene.
-
-     @property ticksPerRender
-     @default 1
-     @type {Number}
+     * Sets the number of "ticks" that happen between each render or this Scene.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
      */
     set ticksPerRender(value) {
         if (value === undefined || value === null) {
@@ -1187,16 +1161,23 @@ class Scene extends Component {
         this._ticksPerRender = value;
     }
 
+    /**
+     * Gets the number of "ticks" that happen between each render or this Scene.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
     get ticksPerRender() {
         return this._ticksPerRender;
     }
 
     /**
-     The number of times this Scene renders per frame.
-
-     @property passes
-     @default 1
-     @type {Number}
+     * Sets the number of times this Scene renders per frame.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
      */
     set passes(value) {
         if (value === undefined || value === null) {
@@ -1213,17 +1194,23 @@ class Scene extends Component {
         this.glRedraw();
     }
 
+    /**
+     * Gets the number of times this Scene renders per frame.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
     get passes() {
         return this._passes;
     }
 
     /**
-     When doing multiple passes per frame, specifies if to clear the
-     canvas before each pass (true) or just before the first pass (false).
-
-     @property clearEachPass
-     @default false
-     @type {Boolean}
+     * When {@link Scene#passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
      */
     set clearEachPass(value) {
         value = !!value;
@@ -1234,16 +1221,23 @@ class Scene extends Component {
         this.glRedraw();
     }
 
+    /**
+     * When {@link Scene#passes} is greater than ````1````, indicates whether or not to clear the canvas before each pass (````true````) or just before the first pass (````false````).
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
     get clearEachPass() {
         return this._clearEachPass;
     }
 
     /**
-     When true, expects all textures and colors are premultiplied gamma.
-
-     @property gammaInput
-     @default false
-     @type {Boolean}
+     * Sets whether or not {@link Scene} should expect all {@link Texture}s and colors to have pre-multiplied gamma.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
      */
     set gammaInput(value) {
         value = value !== false;
@@ -1254,16 +1248,23 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    /**
+     * Gets whether or not {@link Scene} should expect all {@link Texture}s and colors to have pre-multiplied gamma.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
     get gammaInput() {
         return this._renderer.gammaInput;
     }
 
     /**
-     Whether or not to render pixels with pre-multiplied gama.
-
-     @property gammaOutput
-     @default true
-     @type {Boolean}
+     * Sets whether or not to render pixels with pre-multiplied gama.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
      */
     set gammaOutput(value) {
         value = value !== false;
@@ -1274,16 +1275,23 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    /**
+     * Gets whether or not to render pixels with pre-multiplied gama.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
     get gammaOutput() {
         return this._renderer.gammaOutput;
     }
 
     /**
-     The gamma factor to use when {@link Scene#property:gammaOutput} is set true.
-
-     @property gammaOutput
-     @default 1.0
-     @type {Number}
+     * Sets the gamma factor to use when {@link Scene#gammaOutput} is set true.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
      */
     set gammaFactor(value) {
         value = (value === undefined || value === null) ? 2.2 : value;
@@ -1294,20 +1302,25 @@ class Scene extends Component {
         this.glRedraw();
     }
 
+    /**
+     * Gets the gamma factor to use when {@link Scene#gammaOutput} is set true.
+     *
+     * Default value is ````1.0````.
+     *
+     * @type {Number}
+     */
     get gammaFactor() {
         return this._renderer.gammaFactor;
     }
 
     /**
-     The default {@link Geometry} for this Scene, which is a unit-sized box shape.
-
-     Has a {@link Component#id} set to "default.geometry".
-
-     {@link Mesh}s in this Scene are attached to this {@link ReadableGeometry} by default.
-
-     @property geometry
-     @final
-     @type {Geometry}
+     * Gets the default {@link Geometry} for this Scene, which is a {@link ReadableGeometry} with a unit-sized box shape.
+     *
+     * Has {@link ReadableGeometry#id} set to "default.geometry".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#geometry} set to this {@link ReadableGeometry} by default.
+     *
+     * @type {ReadableGeometry}
      */
     get geometry() {
         return this.components["default.geometry"] || buildBoxGeometry(ReadableGeometry, this, {
@@ -1317,15 +1330,13 @@ class Scene extends Component {
     }
 
     /**
-     The default drawing material for this Scene, which is a {@link PhongMaterial}.
-
-     Has a {@link Component#id} set to "default.material".
-
-     {@link Mesh}es in this Scene are attached to this {@link PhongMaterial} by default.
-
-     @property material
-     @final
-     @type PhongMaterial
+     * Gets the default {@link Material} for this Scene, which is a {@link PhongMaterial}.
+     *
+     * Has {@link PhongMaterial#id} set to "default.material".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#material} set to this {@link PhongMaterial} by default.
+     *
+     * @type {PhongMaterial}
      */
     get material() {
         return this.components["default.material"] || new PhongMaterial(this, {
@@ -1336,15 +1347,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are ghosted.
-
-     Has a {@link Component#id} set to "default.ghostMaterial".
-
-     {@link Mesh}es in this Scene are attached to this {@link EmphasisMaterial} by default.
-
-     @property ghostMaterial
-     @final
-     @type {EmphasisMaterial}
+     * Gets the default ghosting {@link EmphasisMaterial} for this Scene.
+     *
+     * Has {@link EmphasisMaterial#id} set to "default.ghostMaterial".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#ghostMaterial} set to this {@link EmphasisMaterial} by default.
+     *
+     * {@link Mesh}s are ghosted while {@link Mesh#ghosted} is ````true````.
+     *
+     * @type {EmphasisMaterial}
      */
     get ghostMaterial() {
         return this.components["default.ghostMaterial"] || new EmphasisMaterial(this, {
@@ -1355,15 +1366,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are highlighted.
-
-     Has {@link Component#id} set to "default.highlightMaterial".
-
-     {@link Mesh}es in this Scene are attached to this{@link EmphasisMaterial} by default.
-
-     @property highlightMaterial
-     @final
-     @type {EmphasisMaterial}
+     * Gets the default highlight {@link EmphasisMaterial} for this Scene.
+     *
+     * Has {@link EmphasisMaterial#id} set to "default.highlightMaterial".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#highlightMaterial} set to this {@link EmphasisMaterial} by default.
+     *
+     * {@link Mesh}s are highlighted while {@link Mesh#highlighted} is ````true````.
+     *
+     * @type {EmphasisMaterial}
      */
     get highlightMaterial() {
         return this.components["default.highlightMaterial"] || new EmphasisMaterial(this, {
@@ -1374,15 +1385,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EmphasisMaterial} for the appearance of {@link Mesh}es when they are selected.
-
-     Has {@link Component#id} set to "default.selectedMaterial".
-
-     {@link Mesh}es in this Scene are attached to this {EmphasisMaterial} by default.
-
-     @property selectedMaterial
-     @final
-     @type {EmphasisMaterial}l
+     * Gets the default selection {@link EmphasisMaterial} for this Scene.
+     *
+     * Has {@link EmphasisMaterial#id} set to "default.selectedMaterial".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#highlightMaterial} set to this {@link EmphasisMaterial} by default.
+     *
+     * {@link Mesh}s are highlighted while {@link Mesh#highlighted} is ````true````.
+     *
+     * @type {EmphasisMaterial}
      */
     get selectedMaterial() {
         return this.components["default.selectedMaterial"] || new EmphasisMaterial(this, {
@@ -1393,15 +1404,15 @@ class Scene extends Component {
     }
 
     /**
-     The Scene's default {@link EdgeMaterial"}}EmphasisMaterial{{/crossLink}} for the appearance of {@link Mesh}es when edges are emphasized.
-
-     Has {@link Component#id} set to "default.edgeMaterial".
-
-     {@link Mesh}es in this Scene are attached to this {@link EdgeMaterial} by default.
-
-     @property edgeMaterial
-     @final
-     @type EdgeMaterial
+     * Gets the default {@link EdgeMaterial} for this Scene.
+     *
+     * Has {@link EdgeMaterial#id} set to "default.edgeMaterial".
+     *
+     * {@link Mesh}s in this Scene have {@link Mesh#edgeMaterial} set to this {@link EdgeMaterial} by default.
+     *
+     * {@link Mesh}s have their edges emphasized while {@link Mesh#edges} is ````true````.
+     *
+     * @type {EdgeMaterial}
      */
     get edgeMaterial() {
         return this.components["default.edgeMaterial"] || new EdgeMaterial(this, {
@@ -1415,33 +1426,27 @@ class Scene extends Component {
     }
 
     /**
-     The {@link Viewport} for this Scene.
-
-     @property viewport
-     @final
-     @type Viewport
+     * Gets the {@link Viewport} for this Scene.
+     *
+     * @type Viewport
      */
     get viewport() {
         return this._viewport;
     }
 
     /**
-     The {@link Camera} for this this Scene.
-
-     @property camera
-     @final
-     @type Camera
+     * Gets the {@link Camera} for this Scene.
+     *
+     * @type {Camera}
      */
     get camera() {
         return this._camera;
     }
 
     /**
-     World-space 3D center of this Scene.
-
-     @property center
-     @final
-     @type {Float32Array}
+     * Gets the World-space 3D center of this Scene.
+     *
+     *@type {Number[]}
      */
     get center() {
         if (this._aabbDirty || !this._center) {
@@ -1457,14 +1462,11 @@ class Scene extends Component {
     }
 
     /**
-     World-space axis-aligned 3D boundary (AABB) of this Scene.
-
-     The AABB is represented by a six-element Float32Array containing the min/max extents of the
-     axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
-
-     @property aabb
-     @final
-     @type {Float32Array}
+     * Gets the World-space axis-aligned 3D boundary (AABB) of this Scene.
+     *
+     * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
+     *
+     * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
@@ -1526,93 +1528,86 @@ class Scene extends Component {
     }
 
     /**
-     Attempts to pick an {@link Mesh"}}Mesh{{/crossLink}} in this Scene.
+     * Attempts to pick an {@link Mesh} in this Scene.
+     *
+     * Ignores {@link Mesh}es with {@link Mesh#pickable} set ````false````.
+     *
+     * When a {@link Mesh} is picked, fires a "pick" event on the {@link Mesh} with the pick result as parameters.
+     *
+     * Picking the {@link Mesh} at the given canvas coordinates:
 
-     Ignores {@link Mesh}es with {@link Mesh#pickable:property"}}pickable{{/crossLink}}
-     set *false*.
-
-     When a {@link Mesh} is picked, fires a "pick" event on the {@link Mesh}
-     with the pick result as parameters.
-
-     Picking the {@link Mesh} at the given canvas coordinates:
-
-     ````javascript
-     var pickResult = scene.pick({
-              canvasPos: [23, 131]
-           });
-
-     if (pickResult) { // Picked a Mesh
-              var mesh = pickResult.mesh;
-          }
-     ````
-
-     **Usage:**
-
-     Picking, with a ray cast through the canvas, hits a {@link Mesh}:
-
-     ````javascript
-     var pickResult = scene.pick({
-              pickSurface: true,
-              canvasPos: [23, 131]
-           });
-
-     if (pickResult) { // Picked a Mesh
-
-              var mesh = pickResult.mesh;
-
-              // These properties are only on the pick result when we do a ray-pick:
-
-              var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
-              var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
-              var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
-              var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
-              var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
-              var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
-              var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
-              var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
-              var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
-          }
-     ````
-
-     Picking the {@link Mesh} that intersects an arbitrarily-aligned World-space ray:
-
-     ````javascript
-     var pickResult = scene.pick({
-              pickSurface: true,   // Picking with arbitrarily-positioned ray
-              origin: [0,0,-5],    // Ray origin
-              direction: [0,0,1]   // Ray direction
-          });
-
-     if (pickResult) { // Picked a Mesh with the ray
-
-              var mesh = pickResult.mesh;
-
-              var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
-              var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
-              var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
-              var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
-              var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
-              var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
-              var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
-              var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
-              var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
-              var origin = pickResult.origin; // Float32Array containing the World-space ray origin
-              var direction = pickResult.direction; // Float32Array containing the World-space ray direction
-          }
-     ````
-     @method pick
-
-     @param {*} params Picking parameters.
-     @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Mesh.
-     @param {Float32Array} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the
-     **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position,
-     directly along the negative View-space Z-axis.
-     @param {Float32Array} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
-     @param {Float32Array} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
-     @param {Array} [params.includeMeshes] IDs of {@link Mesh}es to restrict picking to. When given, ignores {@link Mesh}es whose IDs are not in this list.
-     @param {Array} [params.excludeMeshes] IDs of {@link Mesh}es to ignore. When given, will pick *through* these {@link Mesh}es, as if they were not there.
-     @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
-     @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
+     * ````javascript
+     * var pickResult = scene.pick({
+     *          canvasPos: [23, 131]
+     *       });
+     *
+     * if (pickResult) { // Picked a Mesh
+     *         var mesh = pickResult.mesh;
+     *     }
+     * ````
+     *
+     * Picking, with a ray cast through the canvas, hits a {@link Mesh}:
+     *
+     * ````javascript
+     * var pickResult = scene.pick({
+     *         pickSurface: true,
+     *         canvasPos: [23, 131]
+     *      });
+     *
+     * if (pickResult) { // Picked a Mesh
+     *
+     *     var mesh = pickResult.mesh;
+     *
+     *        // These properties are only on the pick result when we do a ray-pick:
+     *
+     *        var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
+     *        var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+     *        var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
+     *        var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+     *        var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+     *        var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+     *        var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+     *        var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+     *        var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+     * }
+     * ````
+     *
+     * Picking the {@link Mesh} that intersects an arbitrarily-aligned World-space ray:
+     *
+     * ````javascript
+     * var pickResult = scene.pick({
+     *       pickSurface: true,   // Picking with arbitrarily-positioned ray
+     *       origin: [0,0,-5],    // Ray origin
+     *       direction: [0,0,1]   // Ray direction
+     * });
+     *
+     * if (pickResult) { // Picked a Mesh with the ray
+     *
+     *       var mesh = pickResult.mesh;
+     *
+     *       var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
+     *       var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+     *       var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
+     *       var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
+     *       var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
+     *       var viewPos = pickResult.viewPos; // Float32Array containing the picked View-space position on the triangle
+     *       var bary = pickResult.bary; // Float32Array containing the picked barycentric position within the triangle
+     *       var normal = pickResult.normal; // Float32Array containing the interpolated normal vector at the picked position on the triangle
+     *       var uv = pickResult.uv; // Float32Array containing the interpolated UV coordinates at the picked position on the triangle
+     *       var origin = pickResult.origin; // Float32Array containing the World-space ray origin
+     *       var direction = pickResult.direction; // Float32Array containing the World-space ray direction
+     *  }
+     *  ````
+     *
+     * @param {*} params Picking parameters.
+     * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Mesh.
+     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
+     * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
+     * @param {String[]} [params.includeMeshes] IDs of {@link Mesh}es to restrict picking to. When given, ignores {@link Mesh}es whose IDs are not in this list.
+     * @param {String[]} [params.excludeMeshes] IDs of {@link Mesh}es to ignore. When given, will pick *through* these {@link Mesh}es, as if they were not there.
+     * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
+     * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
      */
     pick(params, pickResult) {
 
@@ -1653,40 +1648,66 @@ class Scene extends Component {
     }
 
     /**
-     Returns the collective axis-aligned bounding box of the {@link Node}s, specified by their IDs or objectIds.
-
-     When no arguments are given, returns the total boundary of all objects in the scene.
-
-     Only {@link Mesh}es with {@link Mesh#collidable:property"}}collidable{{/crossLink}}
-     set ````true```` are included in the boundary.
-
-     # Usage
-
-     ````JavaScript
-     scene.getAABB(); // Gets collective boundary of all objects in the scene
-     scene.getAABB("saw"); // Gets collective boundary of all objects in saw model
-     scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of all objects in saw and gearbox models
-     scene.getAABB("saw#0.1"); // Get boundary of an object in the saw model
-     scene.getAABB(["saw#0.1", "saw#0.2"]); // Get collective boundary of two objects in saw model
-     scene.getAABB(["saw#0.1", "surface", "support"]); // Get collective boundary an object, and all objects of the given two entity classes.
-     ````
-
-     @method getAABB
-     @param {String|String[]} target {Array} Array of  {@link Node} IDs of objectIds.
-     @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
+     * Destroys all non-default {@link Component}s in this Scene.
      */
-    getAABB(target) {
-        if (target === undefined) {
+    clear() {
+        var component;
+        for (const id in this.components) {
+            if (this.components.hasOwnProperty(id)) {
+                component = this.components[id];
+                if (!component._dontClear) { // Don't destroy components like Camera, Input, Viewport etc.
+                    component.destroy();
+                }
+            }
+        }
+    }
+
+    /**
+     * Destroys all {@link Light}s in this Scene..
+     */
+    clearLights() {
+        const ids = Object.keys(this.lights);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.lights[ids[i]].destroy();
+        }
+    }
+
+    /**
+     * Destroys all {@link Clip}s in this Scene.
+     */
+    clearClips() {
+        const ids = Object.keys(this.clips);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.clips[ids[i]].destroy();
+        }
+    }
+
+    /**
+     * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * Each {@link Entity} on which {@link Entity#isObject} is registered by {@link Entity#id} in {@link Scene#visibleObjects}.
+     *
+     * Each {@link Entity} is only included in the AABB when {@link Entity#collidable} is ````true````.
+     *
+     * Returns the AABB of all {@link Entity}s in {@link Scene#objects} by default, or TODO
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
+     */
+    getAABB(ids) {
+        if (ids === undefined) {
             return this.aabb;
         }
-        if (utils.isString(target)) {
-            const component = this.components[target];
-            if (component && component.aabb) { // A Component subclass with an AABB
-                return component.aabb;
+        if (utils.isString(ids)) {
+            const entity = this.objects[ids];
+            if (entity && entity.aabb) { // A Component subclass with an AABB
+                return entity.aabb;
             }
-            target = [target]; // Must be an entity type
+            ids = [ids]; // Must be an entity type
         }
-        if (target.length === 0) {
+        if (ids.length === 0) {
             return this.aabb;
         }
         let xmin = 100000;
@@ -1696,27 +1717,29 @@ class Scene extends Component {
         let ymax = -100000;
         let zmax = -100000;
         let valid;
-        this.withComponents(target, object => {
-                const aabb = object.aabb;
-                if (aabb[0] < xmin) {
-                    xmin = aabb[0];
+        this._withEntities(ids, this.objects, entity => {
+                if (entity.collidable) {
+                    const aabb = entity.aabb;
+                    if (aabb[0] < xmin) {
+                        xmin = aabb[0];
+                    }
+                    if (aabb[1] < ymin) {
+                        ymin = aabb[1];
+                    }
+                    if (aabb[2] < zmin) {
+                        zmin = aabb[2];
+                    }
+                    if (aabb[3] > xmax) {
+                        xmax = aabb[3];
+                    }
+                    if (aabb[4] > ymax) {
+                        ymax = aabb[4];
+                    }
+                    if (aabb[5] > zmax) {
+                        zmax = aabb[5];
+                    }
+                    valid = true;
                 }
-                if (aabb[1] < ymin) {
-                    ymin = aabb[1];
-                }
-                if (aabb[2] < zmin) {
-                    zmin = aabb[2];
-                }
-                if (aabb[3] > xmax) {
-                    xmax = aabb[3];
-                }
-                if (aabb[4] > ymax) {
-                    ymax = aabb[4];
-                }
-                if (aabb[5] > zmax) {
-                    zmax = aabb[5];
-                }
-                valid = true;
             }
         );
         if (valid) {
@@ -1734,242 +1757,187 @@ class Scene extends Component {
     }
 
     /**
-     Resets this Scene to its default state.
-
-     References to any components in this Scene will become invalid.
-
-     @method clear
+     * Batch-updates {@link Entity#visible} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#visible} are ````true```` is
+     * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} visible Whether or not to cull.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    clear() {
-        var component;
-        for (const id in this.components) {
-            if (this.components.hasOwnProperty(id)) {
-                component = this.components[id];
-                if (!component._dontClear) { // Don't destroy components like Camera, Input, Viewport etc.
-                    component.destroy();
-                }
-            }
-        }
-    }
-
-    /**
-     Convenience method that destroys all light sources.
-
-     Removes all {@link AmbientLight"}}AmbientLights{{/crossLink}}, {@link PointLight"}}PointLights{{/crossLink}},
-     {@link DirLight"}}DirLights{{/crossLink}} and {@link SpotLight"}}SpotLights{{/crossLink}}.
-
-     @method clearLights
-     */
-    clearLights() {
-        const ids = Object.keys(this.lights);
-        for (let i = 0, len = ids.length; i < len; i++) {
-            this.lights[ids[i]].destroy();
-        }
-    }
-
-    /**
-     Convenience method that destroys all {@link Clip"}}Clips{{/crossLink}}.
-
-     @method clearClips
-     */
-    clearClips() {
-        const ids = Object.keys(this.clips);
-        for (let i = 0, len = ids.length; i < len; i++) {
-            this.clips[ids[i]].destroy();
-        }
-    }
-
-    /**
-     Shows or hides a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its visibility status in its {@link Node#visibility} property.
-
-     Each visible Object is registered in the {@link Scene}'s
-     {@link Scene#visibleObjects} map when its {@link Node#isObject} is true.
-
-     @method setVisible
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param visible {Boolean} The new visibility state.
-     @returns {Boolean} True if any {@link Node}s changed visibility, else false if all updates were redundant and not applied.
-     */
-    setVisible(ids, visible) {
-        return this.withComponents(ids, object => {
-            const changed = (object.visible !== visible);
-            object.visible = visible;
+    setObjectsVisible(ids, visible) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.visible !== visible);
+            entity.visible = visible;
             return changed;
         });
     }
 
     /**
-     Culls or unculls a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its culled status in its {@link Node#visibility} property.
-
-     @method setVisible
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param culled {Boolean} The new cull state.
-     @returns {Boolean} True if any {@link Node}s changed culled state, else false if all updates were redundant and not applied.
+     * Batch-updates {@link Entity#culled} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} culled Whether or not to cull.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setCulled(ids, culled) {
-        return this.withComponents(ids, object => {
-            const changed = (object.culled !== culled);
-            object.culled = culled;
+    setObjectsCulled(ids, culled) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.culled !== culled);
+            entity.culled = culled;
             return changed;
         });
     }
 
     /**
-     Selects or de-selects a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its selected status in its {@link Node#selected} property.
-
-     Each selected Object is registered in the {@link Scene}'s
-     {@link Scene#selectedObjects} map when its {@link Node#isObject} is true.
-
-     @method setSelected
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param selected {Boolean} Whether to select or deselect.
-     @returns {Boolean} True if any {@link Node}s changed selection state, else false if all updates were redundant and not applied.
+     * Batch-updates {@link Entity#selected} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#selected} are ````true```` is
+     * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} selected Whether or not to highlight.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setSelected(ids, selected) {
-        return this.withComponents(ids, object => {
-            const changed = (object.selected !== selected);
-            object.selected = selected;
+    setObjectsSelected(ids, selected) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.selected !== selected);
+            entity.selected = selected;
             return changed;
         });
     }
 
     /**
-     Highlights or de-highlights a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its highlight status in its {@link Node#highlighted} property.
-
-     Each highlighted Object is registered in the {@link Scene}'s
-     {@link Scene#highlightedObjects} map when its {@link Node#isObject} is true.
-
-     @method setHighlighted
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param highlighted {Boolean} Whether to highlight or un-highlight.
-     @returns {Boolean} True if any {@link Node}s changed highlighted state, else false if all updates were redundant and not applied.
+     * Batch-updates {@link Entity#highlighted} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#highlighted} are ````true```` is
+     * registered by {@link Entity#id} in {@link Scene#highlightedObjects}.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} highlighted Whether or not to highlight.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setHighlighted(ids, highlighted) {
-        return this.withComponents(ids, object => {
-            const changed = (object.highlighted !== highlighted);
-            object.highlighted = highlighted;
+    setObjectsHighlighted(ids, highlighted) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.highlighted !== highlighted);
+            entity.highlighted = highlighted;
             return changed;
         });
     }
 
     /**
-     Ghosts or un-ghosts a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     Each Object indicates its ghosted status in its {@link Node#ghosted} property.
-
-     Each ghosted Object is registered in the {@link Scene}'s
-     {@link Scene#ghostedObjects} map when its {@link Node#objectId} is assigned a value.
-
-     @method setGhosted
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param ghosted {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {@link Node}s changed ghosted state, else false if all updates were redundant and not applied.
+     * Batch-updates {@link Entity#ghosted} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#ghosted} are ````true```` is
+     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} ghosted Whether or not to ghost.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setGhosted(ids, ghosted) {
-        return this.withComponents(ids, object => {
-            const changed = (object.ghosted !== ghosted);
-            object.ghosted = ghosted;
+    setObjectsGhosted(ids, ghosted) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.ghosted !== ghosted);
+            entity.ghosted = ghosted;
             return changed;
         });
     }
 
     /**
-     Shows or hides wireeframe edges for batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     @method setEdges
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param edges {Float32Array} Whether to show or hide edges.
-     @returns {Boolean} True if any {@link Node}s changed edges state, else false if all updates were redundant and not applied.
+     * Batch-updates {@link Entity#edges} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} edges Whether or not to show edges.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setEdges(ids, edges) {
-        return this.withComponents(ids, object => {
-            const changed = (object.edges !== edges);
-            object.edges = edges;
+    setObjectsEdges(ids, edges) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.edges !== edges);
+            entity.edges = edges;
             return changed;
         });
     }
 
     /**
-     Colorizes a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     @method setColorize
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param [colorize=(1,1,1)] Float32Array RGB colorize factors, multiplied by the rendered pixel colors.
+     * Batch-updates {@link Entity#colorize} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Number[]} [colorize=(1,1,1)] RGB colorize factors, multiplied by the rendered pixel colors.
+     * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
-    setColorize(ids, colorize) {
-        return this.withComponents(ids, object => {
-            object.colorize = colorize;
+    setObjectsColorized(ids, colorize) {
+        return this._withEntities(ids, this.objects, entity => {
+            entity.colorize = colorize;
         });
     }
 
     /**
-     Updates opacities of a batch of {@link Node}s, specified by their IDs, GUIDs and/or entity types.
-
-     @method setOpacity
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param [opacity=1] Number Opacity factor in range ````[0..1]````, multiplies by the rendered pixel alphas.
+     * Batch-updates {@link Entity#opacity} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Number} [opacity=1.0] RGB colorize factors, multiplied by the rendered pixel colors.
+     * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
-    setOpacity(ids, opacity) {
-        return this.withComponents(ids, object => {
-            object.opacity = opacity;
-        });
-    }
-
-    /**
-     Sets a batch of {@link Node}s pickable or unpickable, specified by their IDs, GUIDs and/or entity types.
-
-     Picking is done with {@link Scene#pick}.
-
-     @method setPickable
-     @param ids {Array} Array of  {@link Node} IDs, GUIDs or entity types.
-     @param pickable {Float32Array} Whether to ghost or un-ghost.
-     @returns {Boolean} True if any {@link Node}s changed pickable state, else false if all updates were redundant and not applied.
-     */
-    setPickable(ids, pickable) {
-        return this.withComponents(ids, object => {
-            const changed = (object.pickable !== pickable);
-            object.pickable = pickable;
+    setObjectsOpacity(ids, opacity) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.opacity !== opacity);
+            entity.opacity = opacity;
             return changed;
         });
     }
 
     /**
-     Iterates with a callback over {@link Component}s, specified by their IDs or objectIds.
-
-     @method withComponents
-     @param ids {String|Array} One or more {@link Component} IDs or objectIds.
-     @param callback {Function} The callback, which takes each object as its argument.
+     * Batch-updates {@link Entity#pickable} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} pickable Whether or not to enable picking.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    withComponents(ids, callback) {
+    setObjectsPickable(ids, pickable) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.pickable !== pickable);
+            entity.pickable = pickable;
+            return changed;
+        });
+    }
+
+    _withEntities(ids, entities, callback) {
         if (utils.isString(ids)) {
             ids = [ids];
         }
         let changed = false;
         for (let i = 0, len = ids.length; i < len; i++) {
             const id = ids[i];
-            let component = this.components[id];
-            if (component) {
-                changed = callback(component) || changed;
-            } else {
-                component = this.objects[id];
-                if (component) {
-                    changed = callback(component) || changed;
-                } else {
-                    this.warn("Component not found: '" + id + "'");
-                }
+            let entity = entities[id];
+            if (entity) {
+                changed = callback(entity) || changed;
             }
+            this.warn("Entity not found: '" + id + "'");
         }
         return changed;
     }
 
+    /**
+     * Destroys this Scene.
+     */
     destroy() {
 
         super.destroy();

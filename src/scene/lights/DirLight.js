@@ -14,67 +14,114 @@ import {math} from '../math/math.js';
  *
  * ## Usage
  *
- * In the example below we'll destroy the {@link Scene}'s default light sources then create an {@link AmbientLight} and a couple of DirLights:
+ * In the example below we'll replace the {@link Scene}'s default light sources with three View-space DirLights.
+ *
+ * [[Run this example](/examples/#lights_DirLight_view)]
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
+ * import {buildPlaneGeometry} from "../src/scene/geometry/builders/buildPlaneGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {DirLight} from "../src/scene/lights/DirLight.js";
+ *
+ * // Create a Viewer and arrange the camera
+ *
+ * const myViewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
+ * // Replace the Scene's default lights with three custom view-space DirLights
+ *
  * myViewer.scene.clearLights();
  *
- * new AmbientLight(myViewer.scene, {
- *     id: "myAmbientLight",
- *     color: [0.8, 0.8, 0.8],
- *     intensity: 0.5
+ * new DirLight(myViewer.scene, {
+ *      id: "keyLight",
+ *      dir: [0.8, -0.6, -0.8],
+ *      color: [1.0, 0.3, 0.3],
+ *      intensity: 1.0,
+ *      space: "view"
  * });
  *
  * new DirLight(myViewer.scene, {
- *     id: "myDirLight1",
- *     dir: [-0.8, -0.4, -0.4],
- *     color: [0.4, 0.4, 0.5],
- *     intensity: 0.5,
- *     space: "view"
+ *      id: "fillLight",
+ *      dir: [-0.8, -0.4, -0.4],
+ *      color: [0.3, 1.0, 0.3],
+ *      intensity: 1.0,
+ *      space: "view"
  * });
  *
  * new DirLight(myViewer.scene, {
- *     id: "myDirLight2",
- *     dir: [0.2, -0.8, 0.8],
- *     color: [0.8, 0.8, 0.8],
- *     intensity: 0.5,
- *     space: "view"
+ *      id: "rimLight",
+ *      dir: [0.2, -0.8, 0.8],
+ *      color: [0.6, 0.6, 0.6],
+ *      intensity: 1.0,
+ *      space: "view"
  * });
  *
- * // Adjust the color of one of our DirLights
  *
- * var dirLight1 = myViewer.scene.lights["myDirLight1"];
- * dirLight.color = [1.0, 0.8, 0.8];
+ * // Create a sphere and ground plane
+ *
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ *          radius: 2.0
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.7, 0.7, 0.7],
+ *          specular: [1.0, 1.0, 1.0],
+ *          emissive: [0, 0, 0],
+ *          alpha: 1.0,
+ *          ambient: [1, 1, 0],
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ *  });
+ *
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+ *          xSize: 30,
+ *          zSize: 30
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          }),
+ *          backfaces: true
+ *      }),
+ *      position: [0, -2.1, 0]
+ * });
  * ````
  */
 class DirLight extends Light {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     * JavaScript class name for this Component.
+     *
+     * For example: "AmbientLight", "MetallicMaterial" etc.
+     *
+     * @type {String}
      */
     get type() {
         return "DirLight";
     }
 
     /**
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
-     @param {*} [cfg] The DirLight configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this DirLight.
-     @param [cfg.dir=[1.0, 1.0, 1.0]] {Float32Array} A unit vector indicating the direction that the light is shining,
-     given in either World or View space, depending on the value of the **space** parameter.
-     @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} The color of this DirLight.
-     @param [cfg.intensity=1.0 ] {Number} The intensity of this DirLight, as a factor in range ````[0..1]````.
-     @param [cfg.space="view"] {String} The coordinate system the DirLight is defined in - "view" or "space".
-     @param [cfg.castsShadow=false] {Boolean} Flag which indicates if this DirLight casts a castsShadow.
-     * @param owner
-     * @param cfg
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this DirLight as well.
+     * @param {*} [cfg] The DirLight configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Number[]} [cfg.dir=[1.0, 1.0, 1.0]]  A unit vector indicating the direction that the light is shining,  given in either World or View space, depending on the value of the ````space```` parameter.
+     * @param {Number[]} [cfg.color=[0.7, 0.7, 0.8 ]] The color of this DirLight.
+     * @param {Number} [cfg.intensity=1.0] The intensity of this DirLight, as a factor in range ````[0..1]````.
+     * @param {String} [cfg.space="view"] The coordinate system the DirLight is defined in - ````"view"```` or ````"space"````.
+     * @param {Boolean} [cfg.castsShadow=false] Flag which indicates if this DirLight casts a castsShadow.
      */
     constructor(owner, cfg = {}) {
 
@@ -140,11 +187,11 @@ class DirLight extends Light {
     }
 
     /**
-     The direction in which the light is shining.
-
-     @property dir
-     @default [1.0, 1.0, 1.0]
-     @type {Float32Array}
+     * Sets the direction in which the DirLight is shining.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @param {Number[]} value The direction vector.
      */
     set dir(value) {
         this._state.dir.set(value || [1.0, 1.0, 1.0]);
@@ -152,66 +199,95 @@ class DirLight extends Light {
         this.glRedraw();
     }
 
+    /**
+     * Gets the direction in which the DirLight is shining.
+     *
+     * Default value is ````[1.0, 1.0, 1.0]````.
+     *
+     * @returns {Number[]} The direction vector.
+     */
     get dir() {
         return this._state.dir;
     }
 
     /**
-     The color of this DirLight.
-
-     @property color
-     @default [0.7, 0.7, 0.8]
-     @type {Float32Array}
+     * Sets the RGB color of this DirLight.
+     *
+     * Default value is ````[0.7, 0.7, 0.8]````.
+     *
+     * @param {Number[]} color The DirLight's RGB color.
      */
-    set color(value) {
-        this._state.color.set(value || [0.7, 0.7, 0.8]);
+    set color(color) {
+        this._state.color.set(color || [0.7, 0.7, 0.8]);
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB color of this DirLight.
+     *
+     * Default value is ````[0.7, 0.7, 0.8]````.
+     *
+     * @returns {Number[]} The DirLight's RGB color.
+     */
     get color() {
         return this._state.color;
     }
 
     /**
-     The intensity of this DirLight.
-
-     Fires a {@link DirLight/intensity:event} event on change.
-
-     @property intensity
-     @default 1.0
-     @type {Number}
+     * Sets the intensity of this DirLight.
+     *
+     * Default intensity is ````1.0```` for maximum intensity.
+     *
+     * @param {Number} intensity The DirLight's intensity
      */
-    set intensity(value) {
-        value = value !== undefined ? value : 1.0;
-        this._state.intensity = value;
+    set intensity(intensity) {
+        intensity = intensity !== undefined ? intensity : 1.0;
+        this._state.intensity = intensity;
         this.glRedraw();
     }
 
+    /**
+     * Gets the intensity of this DirLight.
+     *
+     * Default value is ````1.0```` for maximum intensity.
+     *
+     * @returns {Number} The DirLight's intensity.
+     */
     get intensity() {
         return this._state.intensity;
     }
 
     /**
-     Flag which indicates if this DirLight casts a shadow.
-
-     @property castsShadow
-     @default false
-     @type {Boolean}
+     * Sets if this DirLight casts a shadow.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} castsShadow Set ````true```` to cast shadows.
      */
-    set castsShadow(value) {
-        value = !!value;
-        if (this._state.castsShadow === value) {
+    set castsShadow(castsShadow) {
+        castsShadow = !!castsShadow;
+        if (this._state.castsShadow === castsShadow) {
             return;
         }
-        this._state.castsShadow = value;
+        this._state.castsShadow = castsShadow;
         this._shadowViewMatrixDirty = true;
         this.glRedraw();
     }
 
+    /**
+     * Gets if this DirLight casts a shadow.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} ````true```` if this DirLight casts shadows.
+     */
     get castsShadow() {
         return this._state.castsShadow;
     }
 
+    /**
+     * Destroys this DirLight.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

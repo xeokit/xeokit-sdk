@@ -1,20 +1,19 @@
 import {Component} from '../Component.js';
 
 /**
- A dynamic light source within a {@link Scene}.
-
- These are registered by {@link Light#id} in {@link Scene#lights}.
+ * @desc A dynamic light source within a {@link Scene}.
+ *
+ * These are registered by {@link Light#id} in {@link Scene#lights}.
  */
 class Light extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     * JavaScript class name for this Component.
+     *
+     * For example: "AmbientLight", "MetallicMaterial" etc.
+     *
+     * @type {String}
+     *
      */
     get type() {
         return "Light";
@@ -27,7 +26,7 @@ class Light extends Component {
         return true;
     }
 
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
         super(owner, cfg);
     }
 }

@@ -1,11 +1,6 @@
 /**
- A **Sampler** is a low-level component that represents a WebGL Sampler.
-
- @class Sampler
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc A low-level component that represents a WebGL Sampler.
+ * @private
  */
 class Sampler {
 

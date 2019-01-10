@@ -123,11 +123,11 @@
     });
 
     structurePanel.on("clicked", e => {
-        const objectId = e.objectId;
-        const aabb = viewer.scene.getAABB(objectId);
+        const id = e.objectId;
+        const aabb = viewer.scene.getAABB(id);
 
-        viewer.scene.setHighlighted(viewer.scene.highlightedObjectIds, false);
-        viewer.scene.setHighlighted(objectId, true);
+        viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
+        viewer.scene.setObjectsHighlighted(id, true);
 
         viewer.cameraFlight.flyTo(aabb);
     });
@@ -145,11 +145,14 @@
     });
 
     new Node(viewer.scene, {
-        modelId: "furniture", // <---------- Node with "modelId" represents a model
+        id: "furniture",
+        isModel: true, // <---------- Node represents a model
 
         children: [
             new Node(viewer.scene, {
-                objectId: "table", // <---------- Node with "objectId" represents an object
+                id: "table",
+                isObject: true, // <---------- Node represents an object
+
                 rotation: [0, 50, 0],
                 position: [0, 0, 0],
                 scale: [1, 1, 1],
@@ -157,7 +160,9 @@
                 children: [
 
                     new Mesh(viewer.scene, { // Red table leg
-                        objectId: "redLeg", // <---------- Node with "objectId" represents an object
+                        id: "redLeg",
+                        isObject: true, // <---------- Node represents an object
+
                         position: [-4, -6, -4],
                         scale: [1, 3, 1],
                         rotation: [0, 0, 0],
@@ -168,7 +173,9 @@
                     }),
 
                     new Mesh(viewer.scene, { // Green table leg
-                        objectId: "greenLeg", // <---------- Node with "objectId" represents an object
+                        id: "greenLeg",
+                        isObject: true, // <---------- Node represents an object
+
                         position: [4, -6, -4],
                         scale: [1, 3, 1],
                         rotation: [0, 0, 0],
@@ -179,7 +186,9 @@
                     }),
 
                     new Mesh(viewer.scene, {// Blue table leg
-                        objectId: "blueLeg", // <---------- Node with "objectId" represents an object
+                        id: "blueLeg",
+                        isObject: true, // <---------- Node represents an object
+
                         position: [4, -6, 4],
                         scale: [1, 3, 1],
                         rotation: [0, 0, 0],
@@ -190,7 +199,9 @@
                     }),
 
                     new Mesh(viewer.scene, {  // Yellow table leg
-                        objectId: "yellowLeg", // <---------- Node with "objectId" represents an object
+                        id: "yellowLeg",
+                        isObject: true, // <---------- Node represents an object
+
                         position: [-4, -6, 4],
                         scale: [1, 3, 1],
                         rotation: [0, 0, 0],
@@ -201,7 +212,9 @@
                     }),
 
                     new Mesh(viewer.scene, { // Purple table top
-                        objectId: "tableTop", // <---------- Node with "objectId" represents an object
+                        id: "tableTop",
+                        isObject: true, // <---------- Node represents an object
+
                         position: [0, -3, 0],
                         scale: [6, 0.5, 6],
                         rotation: [0, 0, 0],
@@ -225,7 +238,7 @@
             "revisionId": "V1.0",
             "metaObjects": [
                 {                               // Creates a MetaObject in the MetaModel
-                    "objectId": "table",
+                    "id": "table",
                     "name": "Table",
                     "type": "furniture",        // Arbitrary type, could be IFC type
                     "properties": {             // Arbitrary properties, could be IfcPropertySet
@@ -233,7 +246,7 @@
                     }
                 },
                 {
-                    "objectId": "redLeg",
+                    "id": "redLeg",
                     "name": "Red table Leg",
                     "type": "leg",
                     "parent": "table",           // References first MetaObject as parent
@@ -242,8 +255,8 @@
                     }
                 },
                 {
-                    "objectId": "greenLeg",     // Node with corresponding objectId does not need to exist
-                    "name": "Green table leg",  // and MetaObject does not need to exist for Node with an objectId
+                    "id": "greenLeg",           // Node with corresponding id does not need to exist
+                    "name": "Green table leg",  // and MetaObject does not need to exist for Node with an id
                     "type": "leg",
                     "parent": "table",
                     "properties": {
@@ -251,7 +264,7 @@
                     }
                 },
                 {
-                    "objectId": "blueLeg",
+                    "id": "blueLeg",
                     "name": "Blue table leg",
                     "type": "leg",
                     "parent": "table",
@@ -260,7 +273,7 @@
                     }
                 },
                 {
-                    "objectId": "yellowLeg",
+                    "id": "yellowLeg",
                     "name": "Yellow table leg",
                     "type": "leg",
                     "parent": "table",
@@ -269,7 +282,7 @@
                     }
                 },
                 {
-                    "objectId": "tableTop",
+                    "id": "tableTop",
                     "name": "Purple table top",
                     "type": "surface",
                     "parent": "table",

@@ -240,11 +240,11 @@ class MetallicMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this MetallicMaterial as well.
      * @param {*} [cfg] The MetallicMaterial configuration.
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Float32Array} [cfg.baseColor=[1,1,1]] RGB diffuse color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
+     * @param {Number[]} [cfg.baseColor=[1,1,1]] RGB diffuse color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
      * @param {Number} [cfg.metallic=1.0] Factor in the range ````[0..1]```` indicating how metallic this MetallicMaterial is.  ````1```` is metal, ````0```` is non-metal. Multiplies by the *R* component of {@link MetallicMaterial#metallicMap} and the *A* component of {@link MetallicMaterial#metallicRoughnessMap}.
      * @param {Number} [cfg.roughness=1.0] Factor in the range ````[0..1]```` indicating the roughness of this MetallicMaterial.  ````0```` is fully smooth, ````1```` is fully rough. Multiplies by the *R* component of {@link MetallicMaterial#roughnessMap}.
      * @param {Number} [cfg.specularF0=0.0] Factor in the range ````[0..1]```` indicating specular Fresnel.
-     * @param {Float32Array} [cfg.emissive=[0,0,0]]  RGB emissive color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#emissiveMap}.
+     * @param {Number[]} [cfg.emissive=[0,0,0]]  RGB emissive color of this MetallicMaterial. Multiplies by the RGB components of {@link MetallicMaterial#emissiveMap}.
      * @param {Number} [cfg.alpha=1.0] Factor in the range ````[0..1]```` indicating the alpha of this MetallicMaterial.  Multiplies by the *R* component of {@link MetallicMaterial#alphaMap} and the *A* component,  if present, of {@link MetallicMaterial#baseColorMap}. The value of  {@link MetallicMaterial#alphaMode} indicates how alpha is interpreted when rendering.
      * @param {Texture} [cfg.baseColorMap=undefined] RGBA {@link Texture} containing the diffuse color of this MetallicMaterial, with optional *A* component for alpha. The RGB components multiply by the {@link MetallicMaterial#baseColor} property, while the *A* component, if present, multiplies by the {@link MetallicMaterial#alpha} property.
      * @param {Texture} [cfg.alphaMap=undefined] RGB {@link Texture} containing this MetallicMaterial's alpha in its *R* component. The *R* component multiplies by the {@link MetallicMaterial#alpha} property. Must be within the same {@link Scene} as this MetallicMaterial.
@@ -388,7 +388,7 @@ class MetallicMaterial extends Material {
      * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set baseColor(value) {
         let baseColor = this._state.baseColor;
@@ -415,7 +415,7 @@ class MetallicMaterial extends Material {
      * Multiplies by the RGB components of {@link MetallicMaterial#baseColorMap}.
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get baseColor() {
         return this._state.baseColor;
@@ -558,7 +558,7 @@ class MetallicMaterial extends Material {
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set emissive(value) {
         let emissive = this._state.emissive;
@@ -582,7 +582,7 @@ class MetallicMaterial extends Material {
     /**
      * Gets the RGB emissive color.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get emissive() {
         return this._state.emissive;

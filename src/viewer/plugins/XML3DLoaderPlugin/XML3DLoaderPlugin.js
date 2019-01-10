@@ -100,16 +100,16 @@ class XML3DLoaderPlugin extends LoaderPlugin {
      *
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.
      *
-     * @param {Float32Array} [params.position=[0,0,0]] The {@link Node}'s
+     * @param {Number[]} [params.position=[0,0,0]] The {@link Node}'s
      * local 3D position.
      *
-     * @param {Float32Array} [params.scale=[1,1,1]] The {@link Node}'s
+     * @param {Number[]} [params.scale=[1,1,1]] The {@link Node}'s
      * local scale.
      *
-     * @param {Float32Array} [params.rotation=[0,0,0]] The {@link Node}'s local
+     * @param {Number[]} [params.rotation=[0,0,0]] The {@link Node}'s local
      * rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The
      * {@link Node}'s local modelling transform matrix. Overrides
      * the position, scale and rotation parameters.
      *

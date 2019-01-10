@@ -1,17 +1,22 @@
 /**
  * @desc Metadata corresponding to an {@link Entity} that represents an object.
  *
- * * Belongs to a {@link MetaModel}.
- * * Created by {@link MetaScene#createMetaModel}.
- * * Registered by {@link MetaObject#objectId} in {@link MetaScene#metaObjects}.
- * * {@link MetaModel} represents its composition structure with a tree of MetaObjects, with {@link MetaModel#rootMetaObject} referencing the root MetaObject.
- * * An {@link Entity} represents an object when it has an {@link Entity#objectId}.
+ * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````
+ *
+ * A MetaObject corresponds to an {@link Entity} by having the same {@link MetaObject#id} as the {@link Entity#id}.
+ *
+ * A MetaObject is created within {@link MetaScene#createMetaModel} and belongs to a {@link MetaModel}.
+ *
+ * Each MetaObject is registered by {@link MetaObject#id} in {@link MetaScene#metaObjects}.
+ *
+ * A {@link MetaModel} represents its object structure with a tree of MetaObjects, with {@link MetaModel#rootMetaObject} referencing
+ * the root MetaObject.
  *
  * @class MetaObject
  */
 class MetaObject {
 
-    constructor(metaModel, objectId, name, type, properties, parent, children, external) {
+    constructor(metaModel, id, name, type, properties, parent, children, external) {
 
         /**
          * Model metadata.
@@ -26,10 +31,10 @@ class MetaObject {
          *
          * MetaObject instances are registered by this ID in {@link MetaScene#metaObjects}.
          *
-         * @property objectId
+         * @property id
          * @type {String|Number}
          */
-        this.objectId = objectId;
+        this.id = id;
 
         /**
          * Human-readable name.
@@ -103,16 +108,16 @@ class MetaObject {
     /**
      * Returns properties of this MeteObject as JSON.
      *
-     * @returns {{objectId: (String|Number), type: String, name: String}}
+     * @returns {{id: (String|Number), type: String, name: String, parent: (String|Number|Undefined)}}
      */
     getJSON() {
         var json = {
-            objectId: this.objectId,
+            id: this.id,
             type: this.type,
             name: this.name
         };
         if (this.parent) {
-            json.parent = this.parent.objectId
+            json.parent = this.parent.id
         }
         return json;
     }

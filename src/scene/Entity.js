@@ -1,15 +1,47 @@
 /**
- * @desc A {@link Scene} element, possibly representing a model or an object, that can be individually shown, hidden, selected, highlighted, ghosted, culled, picked, clipped and bounded.
+ * @desc A generic visible {@link Scene} element that has an identity and can be individually shown, hidden, selected,
+ * highlighted, ghosted, culled, picked, clipped and bounded.
  *
- * * An Entity represents a model when it has a {@link Entity#modelId}, in which case it is also registered
- * by {@link Entity#modelId} in {@link Scene#models}, and may also have a corresponding {@link MetaModel}.
- * * An Entity represents an object when it has an {@link Entity#objectId}, in which case it is also registered
- * by {@link Entity#objectId} in {@link Scene#objects}, and may also have a corresponding {@link MetaObject}.
+ * An Entity can also represent a model and/or an object.
+ *
+ * ## Entities Representing Models
+ *
+ * * An Entity represents a model when {@link Entity#isModel} is ````true````.
+ * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.
+ * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.
+ *
+ * ## Entities Representing Objects
+ *
+ * * An Entity represents an object when {@link Entity#isObject} is ````true````.
+ * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.
+ * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.
+ *
+ * ## Updating Batches of Objects
+ *
+ * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:
+ *
+ * * {@link Scene#setObjectsVisible}
+ * * {@link Scene#setObjectsCulled}
+ * * {@link Scene#setObjectsSelected}
+ * * {@link Scene#setObjectsHighlighted}
+ * * {@link Scene#setObjectsGhosted}
+ * * {@link Scene#setObjectsEdges}
+ * * {@link Scene#setObjectsColorized}
+ * * {@link Scene#setObjectsOpacity}
  *
  * @interface
  * @abstract
  */
 class Entity {
+
+    /**
+     * Component ID, unique within the {@link Scene}.
+     *
+     * @type {Number|String}
+     * @abstract
+     */
+    get id() {
+    }
 
     /**
      * Returns true to indicate that this is an Entity.
@@ -21,27 +53,27 @@ class Entity {
     }
 
     /**
-     * Model ID, defined if this Entity represents a model.
+     * Returns ````true```` if this Entity represents a model.
      *
-     * When this returns a value, the Entity will be registered by {@link Entity#modelId} in {@link Scene#models} and
-     * may also have a corresponding {@link MetaObject}.
+     * When this is ````true````, the Entity will be registered by {@link Entity#id} in {@link Scene#models} and
+     * may also have a corresponding {@link MetaModel}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      * @abstract
      */
-    get modelId() {
+    get isModel() {
     }
 
     /**
-     * Object ID, defined if this Entity represents an object.
+     * Returns ````true```` if this Entity represents an object.
      *
-     * When this returns a value, the Entity will be registered by {@link Entity#objectId} in {@link Scene#objects} and
+     * When this is ````true````, the Entity will be registered by {@link Entity#id} in {@link Scene#objects} and
      * may also have a corresponding {@link MetaObject}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      * @abstract
      */
-    get objectId() {
+    get isObject() {
     }
 
     /**
@@ -50,7 +82,7 @@ class Entity {
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      * @abstract
      */
     get aabb() {
@@ -59,10 +91,10 @@ class Entity {
     /**
      * Sets if this Entity is visible.
      *
-     * Only rendered when {@link Entity#visible} returns true and {@link Entity#culled} returns false.
+     * Only rendered when {@link Entity#visible} is ````true```` and {@link Entity#culled} is ````false````.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Entity#isObject} and {@link Entity#visible} are both ````true```` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -73,10 +105,10 @@ class Entity {
     /**
      * Gets if this Entity is visible.
      *
-     * Only rendered when {@link Entity#visible} returns true and {@link Entity#culled} returns false.
+     * Only rendered when {@link Entity#visible} is ````true```` and {@link Entity#culled} is ````false````.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Entity#isObject} and {@link Entity#visible} are both ````true```` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -85,35 +117,10 @@ class Entity {
     }
 
     /**
-     * Sets if this Entity is highlighted.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#highlighted} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    set highlighted(highlighted) {
-
-    }
-
-    /**
-     * Gets if this Entity is highlighted.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#highlighted} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#highlightedObjects}.
-     *
-     * @type {Boolean}
-     * @abstract
-     */
-    get highlighted() {
-    }
-
-    /**
      * Sets if this Entity is ghosted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#ghosted} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -125,8 +132,8 @@ class Entity {
     /**
      * Gets if this Entity is ghosted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#ghosted} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -136,10 +143,35 @@ class Entity {
     }
 
     /**
+     * Sets if this Entity is highlighted.
+     *
+     * When {@link Entity#isObject} and {@link Entity#highlighted} are both ````true```` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    set highlighted(highlighted) {
+
+    }
+
+    /**
+     * Gets if this Entity is highlighted.
+     *
+     * When {@link Entity#isObject} and {@link Entity#highlighted} are both ````true```` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+    get highlighted() {
+    }
+
+    /**
      * Sets if this Entity is selected.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#selected} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#selected} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -151,8 +183,8 @@ class Entity {
     /**
      * Gets if this Entity is selected.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#selected} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#selected} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      * @abstract
@@ -184,10 +216,7 @@ class Entity {
     /**
      * Sets if this Entity is culled.
      *
-     * Only rendered when {@link Entity#visible} returns true and {@link Entity#culled} returns false.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link Entity#visible} is ````true```` and {@link Entity#culled} is ````false````.
      *
      * @type {Boolean}
      * @abstract
@@ -199,10 +228,7 @@ class Entity {
     /**
      * Gets if this Entity is culled.
      *
-     * Only rendered when {@link Entity#visible} returns true and {@link Entity#culled} returns false.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Entity will be
-     * registered by {@link Entity#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link Entity#visible} is ````true```` and {@link Entity#culled} is ````false````.
      *
      * @type {Boolean}
      * @abstract
@@ -284,7 +310,7 @@ class Entity {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      * @abstract
      */
     set colorize(rgb) {
@@ -296,7 +322,7 @@ class Entity {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      * @abstract
      */
     get colorize() {

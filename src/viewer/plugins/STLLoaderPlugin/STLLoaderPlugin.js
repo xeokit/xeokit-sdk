@@ -107,10 +107,10 @@ class STLLoaderPlugin extends Plugin {
      * @param {String} params.src Path to an STL file.
      * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model {@link Node} into a scene graph.
      * @param {Boolean} [params.edges=false] Whether or not xeogl renders the model with edges emphasized.
-     * @param {Float32Array} [params.position=[0,0,0]] The model's local 3D position.
-     * @param {Float32Array} [params.scale=[1,1,1]] The model's local scale.
-     * @param {Float32Array} [params.rotation=[0,0,0]] The model's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.position=[0,0,0]] The model's local 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's local scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the STL.  When false, ignores backfaces.
      * @param {Boolean} [params.smoothNormals=true] When true, automatically converts face-oriented normals to vertex normals for a smooth appearance.
      * @param {Number} [params.smoothNormalsAngleThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.

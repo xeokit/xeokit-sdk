@@ -6,6 +6,11 @@ import {MetaObject} from "./MetaObject.js";
  *
  * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
+ *
+ * ## Usage
+ *
+ * * [Metadata Tutorial]()
+ * * [Metadata Example](/examples/#metadata_BasicExample)
  */
 class MetaScene {
 
@@ -36,7 +41,7 @@ class MetaScene {
         this.metaModels = {};
 
         /**
-         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#objectId}.
+         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
          *
          * @type {{String:MetaObject}}
          */
@@ -92,39 +97,40 @@ class MetaScene {
      *
      * Fires a "metaModelCreated" event with the ID of the new {@link MetaModel}.
      *
-     * @param {string} modelId ID for the new {@link MetaModel}, corresponding to a {@link Node} that has a {@link Node#modelId}.
-     * @param {object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} id ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
+     * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @returns {MetaModel} The new MetaModel.
      */
-    createMetaModel(modelId, metaModelData) {
+    createMetaModel(id, metaModelData) {
 
         // TODO: validate metadata
+        // TODO: replace MetaModel if ID already used
 
         var projectId = metaModelData.projectId || "none";
         var revisionId = metaModelData.revisionId || "none";
         var newObjects = metaModelData.metaObjects;
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, null);
-        this.metaModels[modelId] = metaModel;
+
+        const metaModel = new MetaModel(this, id, projectId, revisionId, null);
+
+        this.metaModels[id] = metaModel;
+
         for (let i = 0, len = newObjects.length; i < len; i++) {
             let newObject = newObjects[i];
-
-            let objectId = newObject.objectId;
+            let id = newObject.id;
             let name = newObject.name;
             let type = newObject.type;
             let properties = newObject.properties;
             let parent = null;
             let children = null;
             let external = newObject.external;
-
-            this.metaObjects[newObject.objectId] = new MetaObject(metaModel, objectId, name, type, properties, parent, children, external);
-
-
+            this.metaObjects[id] = new MetaObject(metaModel, id, name, type, properties, parent, children, external);
         }
+
         for (let i = 0, len = newObjects.length; i < len; i++) {
 
             let newObject = newObjects[i];
-            let objectId = newObject.objectId;
-            let metaObject = this.metaObjects[objectId];
+            let id = newObject.id;
+            let metaObject = this.metaObjects[id];
 
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
@@ -136,37 +142,27 @@ class MetaScene {
             }
         }
 
-        this.fire("metaModelCreated", modelId);
+        this.fire("metaModelCreated", id);
 
         return metaModel;
     }
 
     /**
-     * Loads a {@link MetaModel} from a URL.
-     *
-     * @param src
-     * @param ok
-     */
-    loadMetaModelJSON(modelId, src, ok) {
-
-    }
-
-    /**
      * Removes a {@link MetaModel} from this MetaScene.
      *
-     * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#modelId}.
+     * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#id}.
      *
-     * @param {string} modelId ID of the target {@link MetaModel}.
+     * @param {String} id ID of the target {@link MetaModel}.
      */
-    destroyMetaModel(modelId) {
-        var metaModel = this.metaModels[modelId];
+    destroyMetaModel(id) {
+        var metaModel = this.metaModels[id];
         if (!metaModel) {
             return;
         }
         var metaObjects = this.metaObjects;
 
         function visit(metaObject) {
-            delete metaObjects[metaObject.objectId];
+            delete metaObjects[metaObject.id];
             const children = metaObject.children;
             if (children) {
                 for (let i = 0, len = children.length; i < len; i++) {
@@ -177,26 +173,25 @@ class MetaScene {
         }
 
         visit(metaModel.rootMetaObject);
-        delete this.metaModels[modelId];
-        this.fire("metaModelDestroyed", modelId);
+        delete this.metaModels[id];
+        this.fire("metaModelDestroyed", id);
     }
 
     /**
-     * Gets an array of IDs of the {@link MetaObject}s in the given subtree.
+     * Gets an array of IDs of the {@link MetaObject}s within the given subtree.
      *
-     * @param metaObjectId {string} ID of the root {@link MetaObject} in the given subtree.
-     * @returns {Array}
+     * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
+     * @returns {String[]}
      */
-    getSubObjectIDs(metaObjectId) {
-        const self = this;
+    getSubObjectIDs(id) {
         const list = [];
-        const metaObject = this.metaObjects[metaObjectId];
+        const metaObject = this.metaObjects[id];
 
         function visit(metaObject) {
             if (!metaObject) {
                 return;
             }
-            list.push(metaObject.objectId);
+            list.push(metaObject.id);
             const children = metaObject.children;
             if (children) {
                 for (var i = 0, len = children.length; i < len; i++) {
@@ -207,28 +202,6 @@ class MetaScene {
 
         visit(metaObject);
         return list;
-    }
-
-    transform(metadata) {
-        var objects = metadata.objects;
-        var map = {};
-        for (var i = 0, len = objects.length; i < len; i++) {
-            const object = objects[i];
-            map[object.objectId] = object;
-        }
-        for (var i = 0, len = objects.length; i < len; i++) {
-            const object = objects[i];
-            object.oid = object.objectId;
-            object.objectId = object.guid;
-            if (object.parent !== undefined) {
-                object.parent = map[object.parent].guid;
-            }
-        }
-
-        for (var i = 0, len = objects.length; i < len; i++) {
-            const object = objects[i];
-            delete object.guid;
-        }
     }
 }
 

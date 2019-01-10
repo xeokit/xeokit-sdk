@@ -1,3 +1,7 @@
+/**
+ * @private
+ * @type {{WEBGL: boolean, SUPPORTED_EXTENSIONS: {}}}
+ */
 const WEBGL_INFO = {
     WEBGL: false,
     SUPPORTED_EXTENSIONS: {}

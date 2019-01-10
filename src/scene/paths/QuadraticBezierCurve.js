@@ -21,7 +21,7 @@ class QuadraticBezierCurve extends Curve {
 
      @property v0
      @default [0.0, 0.0, 0.0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set v0(value) {
 
@@ -45,7 +45,7 @@ class QuadraticBezierCurve extends Curve {
 
      @property v1
      @default [0.0, 0.0, 0.0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set v1(value) {
 
@@ -69,7 +69,7 @@ class QuadraticBezierCurve extends Curve {
 
      @property v2
      @default [0.0, 0.0, 0.0]
-     @type {Float32Array}
+     @type {Number[]}
      */
     set v2(value) {
         /**

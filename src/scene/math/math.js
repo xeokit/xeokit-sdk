@@ -53,7 +53,7 @@ const math = {
      * @method vec2
      * @param [values] Initial values.
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     vec2(values) {
         return new Float32Array(values || 2);
@@ -64,7 +64,7 @@ const math = {
      * @method vec3
      * @param [values] Initial values.
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     vec3(values) {
         return new Float32Array(values || 3);
@@ -75,7 +75,7 @@ const math = {
      * @method vec4
      * @param [values] Initial values.
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     vec4(values) {
         return new Float32Array(values || 4);
@@ -86,7 +86,7 @@ const math = {
      * @method mat3
      * @param [values] Initial values.
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     mat3(values) {
         return new Float32Array(values || 9);
@@ -98,7 +98,7 @@ const math = {
      * @param mat3 3x3 matrix.
      * @param mat4 4x4 matrix
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     mat3ToMat4(mat3, mat4 = new Float32Array(16)) {
         mat4[0] = mat3[0];
@@ -125,7 +125,7 @@ const math = {
      * @method mat4
      * @param [values] Initial values.
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     mat4(values) {
         return new Float32Array(values || 16);
@@ -137,7 +137,7 @@ const math = {
      * @param mat4 4x4 matrix.
      * @param mat3 3x3 matrix
      * @static
-     * @returns {Float32Array}
+     * @returns {Number[]}
      */
     mat4ToMat3(mat4, mat3) { // TODO
         //return new Float32Array(values || 9);
@@ -1839,10 +1839,10 @@ const math = {
     /**
      * Creates a matrix from a quaternion rotation and vector translation
      *
-     * @param {Float32Array} q Rotation quaternion
-     * @param {Float32Array} v Translation vector
-     * @param {Float32Array} dest Destination matrix
-     * @returns {Float32Array} dest
+     * @param {Number[]} q Rotation quaternion
+     * @param {Number[]} v Translation vector
+     * @param {Number[]} dest Destination matrix
+     * @returns {Number[]} dest
      */
     rotationTranslationMat4(q, v, dest = math.mat4()) {
         const x = q[0];
@@ -1886,10 +1886,10 @@ const math = {
     /**
      * Gets Euler angles from a 4x4 matrix.
      *
-     * @param {Float32Array} mat The 4x4 matrix.
+     * @param {Number[]} mat The 4x4 matrix.
      * @param {String} order Desired Euler angle order: "XYZ", "YXZ", "ZXY" etc.
-     * @param {Float32Array} [dest] Destination Euler angles, created by default.
-     * @returns {Float32Array} The Euler angles.
+     * @param {Number[]} [dest] Destination Euler angles, created by default.
+     * @returns {Number[]} The Euler angles.
      */
     mat4ToEuler(mat, order, dest = math.vec4()) {
         const clamp = math.clamp;
@@ -2522,11 +2522,11 @@ const math = {
      * Rotate a 3D vector around the x-axis
      *
      * @method rotateVec3X
-     * @param {Float32Array} a The vec3 point to rotate
-     * @param {Float32Array} b The origin of the rotation
+     * @param {Number[]} a The vec3 point to rotate
+     * @param {Number[]} b The origin of the rotation
      * @param {Number} c The angle of rotation
-     * @param {Float32Array} dest The receiving vec3
-     * @returns {Float32Array} dest
+     * @param {Number[]} dest The receiving vec3
+     * @returns {Number[]} dest
      * @static
      */
     rotateVec3X(a, b, c, dest) {
@@ -2555,11 +2555,11 @@ const math = {
      * Rotate a 3D vector around the y-axis
      *
      * @method rotateVec3Y
-     * @param {Float32Array} a The vec3 point to rotate
-     * @param {Float32Array} b The origin of the rotation
+     * @param {Number[]} a The vec3 point to rotate
+     * @param {Number[]} b The origin of the rotation
      * @param {Number} c The angle of rotation
-     * @param {Float32Array} dest The receiving vec3
-     * @returns {Float32Array} dest
+     * @param {Number[]} dest The receiving vec3
+     * @returns {Number[]} dest
      * @static
      */
     rotateVec3Y(a, b, c, dest) {
@@ -2588,11 +2588,11 @@ const math = {
      * Rotate a 3D vector around the z-axis
      *
      * @method rotateVec3Z
-     * @param {Float32Array} a The vec3 point to rotate
-     * @param {Float32Array} b The origin of the rotation
+     * @param {Number[]} a The vec3 point to rotate
+     * @param {Number[]} b The origin of the rotation
      * @param {Number} c The angle of rotation
-     * @param {Float32Array} dest The receiving vec3
-     * @returns {Float32Array} dest
+     * @param {Number[]} dest The receiving vec3
+     * @returns {Number[]} dest
      * @static
      */
     rotateVec3Z(a, b, c, dest) {
@@ -2621,9 +2621,9 @@ const math = {
      * Transforms a four-element vector by a 4x4 projection matrix.
      *
      * @method projectVec4
-     * @param {Float32Array} p 3D View-space coordinate
-     * @param {Float32Array} q 2D Projected coordinate
-     * @returns {Float32Array} 2D Projected coordinate
+     * @param {Number[]} p 3D View-space coordinate
+     * @param {Number[]} q 2D Projected coordinate
+     * @returns {Number[]} 2D Projected coordinate
      * @static
      */
     projectVec4(p, q) {
@@ -2638,9 +2638,9 @@ const math = {
      * Unprojects a three-element vector.
      *
      * @method unprojectVec3
-     * @param {Float32Array} p 3D Projected coordinate
-     * @param {Float32Array} viewMat View matrix
-     * @returns {Float32Array} projMat Projection matrix
+     * @param {Number[]} p 3D Projected coordinate
+     * @param {Number[]} viewMat View matrix
+     * @returns {Number[]} projMat Projection matrix
      * @static
      */
     unprojectVec3: ((() => {
@@ -2707,10 +2707,10 @@ const math = {
     /**
      * Initializes a quaternion from Euler angles.
      *
-     * @param {Float32Array} euler The Euler angles.
+     * @param {Number[]} euler The Euler angles.
      * @param {String} order Euler angle order: "XYZ", "YXZ", "ZXY" etc.
-     * @param {Float32Array} [dest] Destination quaternion, created by default.
-     * @returns {Float32Array} The quaternion.
+     * @param {Number[]} [dest] Destination quaternion, created by default.
+     * @returns {Number[]} The quaternion.
      */
     eulerToQuaternion(euler, order, dest = math.vec4()) {
         // http://www.mathworks.com/matlabcentral/fileexchange/
@@ -4613,9 +4613,9 @@ const math = {
      @method canvasPosToWorldRay
      @static
      @param {Camera} camera The Camera.
-     @param {Float32Array} canvasPos The Canvas-space position.
-     @param {Float32Array} worldRayOrigin The World-space ray origin.
-     @param {Float32Array} worldRayDir The World-space ray direction.
+     @param {Number[]} canvasPos The Canvas-space position.
+     @param {Number[]} worldRayOrigin The World-space ray origin.
+     @param {Number[]} worldRayDir The World-space ray direction.
      */
     canvasPosToWorldRay: ((() => {
 
@@ -4677,9 +4677,9 @@ const math = {
      @static
      @param {Camera} camera The Camera.
      @param {Mesh} mesh The Mesh.
-     @param {Float32Array} canvasPos The Canvas-space position.
-     @param {Float32Array} localRayOrigin The Local-space ray origin.
-     @param {Float32Array} localRayDir The Local-space ray direction.
+     @param {Number[]} canvasPos The Canvas-space position.
+     @param {Number[]} localRayOrigin The Local-space ray origin.
+     @param {Number[]} localRayDir The Local-space ray direction.
      */
     canvasPosToLocalRay: ((() => {
 
@@ -4696,11 +4696,11 @@ const math = {
      Transforms a ray from World-space to a Mesh's Local-space coordinate system.
      @method worldRayToLocalRay
      @static
-     @param {Float32Array} worldMatrix The World transform matrix
-     @param {Float32Array} worldRayOrigin The World-space ray origin.
-     @param {Float32Array} worldRayDir The World-space ray direction.
-     @param {Float32Array} localRayOrigin The Local-space ray origin.
-     @param {Float32Array} localRayDir The Local-space ray direction.
+     @param {Number[]} worldMatrix The World transform matrix
+     @param {Number[]} worldRayOrigin The World-space ray origin.
+     @param {Number[]} worldRayDir The World-space ray direction.
+     @param {Number[]} localRayOrigin The Local-space ray origin.
+     @param {Number[]} localRayDir The Local-space ray direction.
      */
     worldRayToLocalRay: ((() => {
 

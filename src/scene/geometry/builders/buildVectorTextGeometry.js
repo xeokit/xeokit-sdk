@@ -1617,8 +1617,8 @@ const letters = {
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
- * @param {Float32Array} [cfg.center]  3D point indicating the center position.
- * @param {Float32Array} [cfg.origin] 3D point indicating the top left corner.
+ * @param {Number[]} [cfg.center]  3D point indicating the center position.
+ * @param {Number[]} [cfg.origin] 3D point indicating the top left corner.
  * @param {Number} [cfg.size=1] Size of each character.
  * @param {String} [cfg.text=""] The text.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.

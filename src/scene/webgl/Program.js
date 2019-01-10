@@ -23,13 +23,8 @@ function joinSansComments(srcLines) {
 }
 
 /**
- A **Program** represents a WebGL program.
-
- @class Program
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc Represents a WebGL program.
+ * @private
  */
 class Program {
 

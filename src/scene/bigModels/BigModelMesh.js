@@ -73,7 +73,7 @@ class BigModelMesh {
          *
          * @property aabb
          * @final
-         * @type {Float32Array}
+         * @type {Number[]}
          */
         this.aabb = math.AABB3();
 

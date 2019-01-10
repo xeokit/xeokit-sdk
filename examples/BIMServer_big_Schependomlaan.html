@@ -69,7 +69,7 @@
     const bimServerAddress = "http://localhost:8082";
     const username = "admin@bimserver.org";
     const password = "admin";
-    const poid = 1048577;
+    const poid = 131073;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and position the camera
@@ -102,8 +102,8 @@
         const aabb = viewer.scene.getAABB(objectIds);
 
         // FIXME: Selected rendering not working for BigModel yet
-        // viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
-        // viewer.scene.setSelected(objectIds, true);
+        // viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+        // viewer.scene.setObjectsSelected(objectIds, true);
 
         viewer.cameraFlight.flyTo(aabb);
     });

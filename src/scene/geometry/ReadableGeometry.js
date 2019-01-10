@@ -406,7 +406,7 @@ class ReadableGeometry extends Geometry {
 
      @property positions
      @default null
-     @type {Float32Array}
+     @type {Number[]}
      */
     get positions() {
         if (!this._state.positions) {
@@ -452,7 +452,7 @@ class ReadableGeometry extends Geometry {
 
      @property normals
      @default null
-     @type {Float32Array}
+     @type {Number[]}
      */
     get normals() {
         if (!this._state.normals) {
@@ -498,7 +498,7 @@ class ReadableGeometry extends Geometry {
 
      @property uv
      @default null
-     @type {Float32Array}
+     @type {Number[]}
      */
     get uv() {
         if (!this._state.uv) {
@@ -541,7 +541,7 @@ class ReadableGeometry extends Geometry {
 
      @property colors
      @default null
-     @type {Float32Array}
+     @type {Number[]}
      */
     get colors() {
         return this._state.colors;
@@ -592,7 +592,7 @@ class ReadableGeometry extends Geometry {
      *
      * @property aabb
      * @final
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
@@ -613,7 +613,7 @@ class ReadableGeometry extends Geometry {
      *
      * @property obb
      * @final
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get obb() {
         if (this._obbDirty) {

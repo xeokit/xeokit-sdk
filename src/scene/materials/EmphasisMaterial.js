@@ -317,7 +317,7 @@ class EmphasisMaterial extends Material {
      *
      * Default is ````[0.4, 0.4, 0.4]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set fillColor(value) {
         let fillColor = this._state.fillColor;
@@ -343,7 +343,7 @@ class EmphasisMaterial extends Material {
      *
      * Default is ````[0.4, 0.4, 0.4]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get fillColor() {
         return this._state.fillColor;
@@ -412,7 +412,7 @@ class EmphasisMaterial extends Material {
      *
      * Default is ```` [0.2, 0.2, 0.2]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set edgeColor(value) {
         let edgeColor = this._state.edgeColor;
@@ -438,7 +438,7 @@ class EmphasisMaterial extends Material {
      *
      * Default is ```` [0.2, 0.2, 0.2]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get edgeColor() {
         return this._state.edgeColor;

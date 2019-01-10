@@ -47,7 +47,7 @@ import {math} from '../../math/math.js';
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
- * @param {Float32Array} [cfg.center] 3D point indicating the center position.
+ * @param {Number[]} [cfg.center] 3D point indicating the center position.
  * @param {Number} [cfg.radius=1] The overall radius.
  * @param {Number} [cfg.tube=0.3] The tube radius.
  * @param {Number} [cfg.radialSegments=32] The number of radial segments.

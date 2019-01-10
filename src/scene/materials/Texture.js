@@ -105,8 +105,8 @@ class Texture extends Component {
      * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapS} property for more info.
      * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *S*. See the {@link Texture#wrapT} property for more info.
      * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when true.
-     * @param {Array} [cfg.translate=[0,0]] 2D translation vector that will be added to texture's *S* and *T* coordinates.
-     * @param {Array} [cfg.scale=[1,1]] 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
+     * @param {Number[]} [cfg.translate=[0,0]] 2D translation vector that will be added to texture's *S* and *T* coordinates.
+     * @param {Number[]} [cfg.scale=[1,1]] 2D scaling vector that will be applied to texture's *S* and *T* coordinates.
      * @param {Number} [cfg.rotate=0] Rotation, in degrees, that will be applied to texture's *S* and *T* coordinates.
      * @param  {String} [cfg.encoding="linear"] Encoding format.  See the {@link Texture#encoding} property for more info.
      */
@@ -327,7 +327,7 @@ class Texture extends Component {
      *
      * Default value is ````[0, 0]````.
      *
-     * @type {Array}
+     * @type {Number[]}
      */
     set translate(value) {
         this._translate.set(value || [0, 0]);
@@ -340,7 +340,7 @@ class Texture extends Component {
      *
      * Default value is ````[0, 0]````.
      *
-     * @type {Array}
+     * @type {Number[]}
      */
     get translate() {
         return this._translate;
@@ -351,7 +351,7 @@ class Texture extends Component {
      *
      * Default value is ````[1, 1]````.
      *
-     * @type {Array}
+     * @type {Number[]}
      */
     set scale(value) {
         this._scale.set(value || [1, 1]);
@@ -364,7 +364,7 @@ class Texture extends Component {
      *
      * Default value is ````[1, 1]````.
      *
-     * @type {Array}
+     * @type {Number[]}
      */
     get scale() {
         return this._scale;

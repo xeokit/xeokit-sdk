@@ -112,7 +112,7 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
 
             const metaObjects = data.map(function (clientObject) {
                 var metaObjectCfg = {
-                    objectId: clientObject.GlobalId,
+                    id: clientObject.GlobalId,
                     name: clientObject.Name,
                     type: clientObject._t,
                     external: {
@@ -135,7 +135,7 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
             });
 
             const modelMetadata = {
-                modelId: modelId,
+                id: modelId,
                 revisionId: roid,
                 projectId: poid,
                 metaObjects: metaObjects

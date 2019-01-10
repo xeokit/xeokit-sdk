@@ -15,49 +15,191 @@ const vecb = new Float32Array(3);
 const identityMat = math.identityMat4();
 
 /**
- * @desc A scene graph node within a {@link Viewer}'s {@link Scene}.
+ * @desc A {@link Scene} {@link Entity} that represents a scene graph node.
  *
- * ## Nodes that Represent Models
+ * ## Nodes Representing Models
  *
- * A Node represents a model when it has a {@link Node#modelId}, in which case it is also registered
- * by {@link Node#modelId} in {@link Scene#models}, and may also have a corresponding {@link MetaModel}.
+ * * A Node represents a model when {@link Node#isModel} is ````true````.
+ * * Each model-Node is registered by {@link Node#id} in {@link Scene#models}.
+ * * Each model-Node can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.
  *
- * ## Nodes that Represent Objects
+ * ## Nodes Representing Objects
  *
- * A Node represents an object when it has an {@link Node#objectId}, in which case it is also registered
- * by {@link Node#objectId} in {@link Scene#objects}, and may also have a corresponding {@link MetaObject}.
+ * * A Node represents an object when {@link Node#isObject} is ````true````.
+ * * Each object-Node is registered by {@link Node#id} in {@link Scene#objects}.
+ * * Each object-Node can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.
+ *
+ * ## Updating Batches of Object-Meshes
+ *
+ * {@link Scene} provides the following methods for updating batches of object-Meshes using their {@link Mesh#id}s:
+ *
+ * * {@link Scene#setObjectsVisible}
+ * * {@link Scene#setObjectsCulled}
+ * * {@link Scene#setObjectsSelected}
+ * * {@link Scene#setObjectsHighlighted}
+ * * {@link Scene#setObjectsGhosted}
+ * * {@link Scene#setObjectsEdges}
+ * * {@link Scene#setObjectsColorized}
+ * * {@link Scene#setObjectsOpacity}
+ *
+ * ## Usage
+ *
+ * The example below is the same as the one given for {@link Mesh}, since the two classes work together. In this example,
+ * we'll create a scene graph in which a root Node represents a group and the {@link Mesh}s are leaves. Since Node
+ * implements {@link Entity}, we can designate the root Node as a model, causing it to be registered by ID in {@link Scene#models}.
+ *
+ * Since {@link Mesh} also implements {@link Entity}, we can designate the leaf {@link Mesh}es as objects, causing them to
+ * be registered by their IDs in {@link Scene#objects}.
+ *
+ * We can then find those {@link Entity} types in {@link Scene#models} and {@link Scene#objects}.
+ *
+ * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
+ *
+ * [[Run this example](/examples/#sceneGraph_BasicSceneGraph)]
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {Node} from "../src/scene/nodes/Node.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+ * viewer.scene.camera.look = [0, -5.75, 0];
+ * viewer.scene.camera.up = [0.37, 0.91, -0.11];
+ *
+ * new Node(viewer.scene, {
+ *      id: "table",
+ *      isModel: true, // <---------- Node represents a model, so is registered by ID in viewer.scene.models
+ *      rotation: [0, 50, 0],
+ *      position: [0, 0, 0],
+ *      scale: [1, 1, 1],
+ *
+ *      children: [
+ *
+ *          new Mesh(viewer.scene, { // Red table leg
+ *              id: "redLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [-4, -6, -4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [1, 0.3, 0.3]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, { // Green table leg
+ *              id: "greenLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [4, -6, -4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [0.3, 1.0, 0.3]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, {// Blue table leg
+ *              id: "blueLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [4, -6, 4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [0.3, 0.3, 1.0]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, {  // Yellow table leg
+ *              id: "yellowLeg",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [-4, -6, 4],
+ *              scale: [1, 3, 1],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                   diffuse: [1.0, 1.0, 0.0]
+ *              })
+ *          }),
+ *
+ *          new Mesh(viewer.scene, { // Purple table top
+ *              id: "tableTop",
+ *              isObject: true, // <------ Node represents an object, so is registered by ID in viewer.scene.objects
+ *              position: [0, -3, 0],
+ *              scale: [6, 0.5, 6],
+ *              rotation: [0, 0, 0],
+ *              material: new PhongMaterial(viewer.scene, {
+ *                  diffuse: [1.0, 0.3, 1.0]
+ *              })
+ *          })
+ *      ]
+ *  });
+ *
+ * // Find Nodes and Meshes by their IDs
+ *
+ * var table = viewer.scene.models["table"];                // Since table Node has isModel == true
+ *
+ * var redLeg = viewer.scene.objects["redLeg"];             // Since the Meshes have isObject == true
+ * var greenLeg = viewer.scene.objects["greenLeg"];
+ * var blueLeg = viewer.scene.objects["blueLeg"];
+ *
+ * // Highlight one of the table leg Meshes
+ *
+ * viewer.scene.setObjectsHighlighted(["redLeg"], true);    // Since the Meshes have isObject == true
+ *
+ * // Periodically update transforms on our Nodes and Meshes
+ *
+ * viewer.scene.on("tick", function () {
+ *
+ *       // Rotate legs
+ *       redLeg.rotateY(0.5);
+ *       greenLeg.rotateY(0.5);
+ *       blueLeg.rotateY(0.5);
+ *
+ *       // Rotate table
+ *       table.rotateY(0.5);
+ *       table.rotateX(0.3);
+ *   });
+ * ````
+ *
+ * ## Metadata
+ *
+ * As mentioned, we can also associate {@link MetaModel}s and {@link MetaObject}s with our Nodes and {@link Mesh}es,
+ * within a {@link MetaScene}. See {@link MetaScene} for an example.
  *
  * @implements {Entity}
  */
 class Node extends Component {
 
     /**
-     @constructor
-     @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
-     @param {*} [cfg] Configs
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
-     @param {Number|String} [cfg.modelId] Model ID, given if this Node represents a model. When this property is defined, the Node will be registered by {@link Node#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
-     @param {Number|String} [cfg.objectId] Object ID, given if this Node represents an object. When this property is defined, the Node will be registered by {@link Node#objectId} in {@link Scene#objects} and may also have a corresponding {@link MetaObject}.
-     @param {Node} [cfg.parent] The parent Node.
-     @param {Float32Array} [cfg.position=[0,0,0]] Local 3D position.
-     @param {Float32Array} [cfg.scale=[1,1,1]] Local scale.
-     @param {Float32Array} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     @param {Float32Array} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     @param {Boolean} [cfg.visible=true] Indicates if the Node is initially visible.
-     @param {Boolean} [cfg.culled=false] Indicates if the Node is initially culled from view.
-     @param {Boolean} [cfg.pickable=true] Indicates if the Node is initially pickable.
-     @param {Boolean} [cfg.clippable=true] Indicates if the Node is initially clippable.
-     @param {Boolean} [cfg.collidable=true] Indicates if the Node is initially included in boundary calculations.
-     @param {Boolean} [cfg.castsShadow=true] Indicates if the Node initially casts shadows.
-     @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Node initially receives shadows.
-     @param {Boolean} [cfg.ghosted=false] Indicates if the Node is initially ghosted.
-     @param {Boolean} [cfg.highlighted=false] Indicates if the Node is initially highlighted.
-     @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
-     @param {Boolean} [cfg.edges=false] Indicates if the Node's edges are initially emphasized.
-     @param {Float32Array} [cfg.colorize=[1.0,1.0,1.0]] Node's initial RGB colorize color, multiplies by the rendered fragment colors.
-     @param {Number} [cfg.opacity=1.0] Node's initial opacity factor, multiplies by the rendered fragment alpha.
-     @param {Array} [cfg.children] Child Nodes or {@link Mesh}es to add initially. Children must be in the same {@link Scene} and will be removed first from whatever parents they may already have.
-     @param {Boolean} [cfg.inheritStates=true] Indicates if children given to this constructor should inherit rendering state from this parent as they are added. Rendering state includes {@link Node#visible}, {@link Node#culled}, {@link Node#pickable}, {@link Node#clippable}, {@link Node#castsShadow}, {@link Node#receivesShadow}, {@link Node#selected}, {@link Node#highlighted}, {@link Node#colorize} and {@link Node#opacity}.
+     * @constructor
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
+     * @param {Boolean} [cfg.isModel] Specify ````true```` if this Mesh represents a model, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
+     * @param {Boolean} [cfg.isObject] Specify ````true```` if this Mesh represents an object, in which case the Mesh will be registered by {@link Mesh#id} in {@link Scene#objects} and may also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
+     * @param {Node} [cfg.parent] The parent Node.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [cfg.visible=true] Indicates if the Node is initially visible.
+     * @param {Boolean} [cfg.culled=false] Indicates if the Node is initially culled from view.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the Node is initially pickable.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the Node is initially clippable.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the Node is initially included in boundary calculations.
+     * @param {Boolean} [cfg.castsShadow=true] Indicates if the Node initially casts shadows.
+     * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Node initially receives shadows.
+     * @param {Boolean} [cfg.ghosted=false] Indicates if the Node is initially ghosted.
+     * @param {Boolean} [cfg.highlighted=false] Indicates if the Node is initially highlighted.
+     * @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
+     * @param {Boolean} [cfg.edges=false] Indicates if the Node's edges are initially emphasized.
+     * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] Node's initial RGB colorize color, multiplies by the rendered fragment colors.
+     * @param {Number} [cfg.opacity=1.0] Node's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Array} [cfg.children] Child Nodes or {@link Mesh}es to add initially. Children must be in the same {@link Scene} and will be removed first from whatever parents they may already have.
+     * @param {Boolean} [cfg.inheritStates=true] Indicates if children given to this constructor should inherit rendering state from this parent as they are added. Rendering state includes {@link Node#visible}, {@link Node#culled}, {@link Node#pickable}, {@link Node#clippable}, {@link Node#castsShadow}, {@link Node#receivesShadow}, {@link Node#selected}, {@link Node#highlighted}, {@link Node#colorize} and {@link Node#opacity}.
      */
     constructor(owner, cfg = {}) {
 
@@ -93,13 +235,13 @@ class Node extends Component {
             }
         }
 
-        if (cfg.modelId) {
-            this._modelId = cfg.modelId;
+        this._isModel = cfg.isModel;
+        if (this._isModel) {
             this.scene._registerModel(this);
         }
 
-        if (cfg.objectId) {
-            this._objectId = cfg.objectId;
+        this._isObject = cfg.isObject;
+        if (this._isObject) {
             this.scene._registerObject(this);
         }
 
@@ -156,25 +298,28 @@ class Node extends Component {
     }
 
     /**
-     * Model ID, defined if this Node represents a model.
+     * Returns ````true```` if this Mesh represents a model.
      *
-     * When this returns a value, the Node will be registered by {@link Node#modelId} in {@link Scene#models} and may also have a corresponding {@link MetaModel}.
+     * When this returns ````true````, the Mesh will be registered by {@link Mesh#id} in {@link Scene#models} and
+     * may also have a corresponding {@link MetaModel}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get modelId() {
-        return this._modelId;
+    get isModel() {
+        return this._isModel;
     }
 
     /**
-     * Object ID, defined if this Node represents an object.
+     * Returns ````true```` if this Node represents an object.
      *
-     * When this returns a value, the Node will be registered by {@link Node#objectId} in {@link Scene#objects} and may also have a corresponding {@link MetaObject}.
+     * When ````true```` the Node will be registered by {@link Node#id} in
+     * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
+     * @abstract
      */
-    get objectId() {
-        return this._objectId;
+    get isObject() {
+        return this._isObject;
     }
 
     /**
@@ -183,7 +328,7 @@ class Node extends Component {
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
@@ -195,10 +340,10 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are visible.
      *
-     * Only rendered when {@link Node#visible} returns true and {@link Node#culled} returns false.
+     * Only rendered both {@link Node#visible} is ````true```` and {@link Node#culled} is ````false````.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Node will be
-     * registered by {@link Node#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Node#isObject} and {@link Node#visible} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -208,7 +353,7 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].visible = visible;
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectVisibilityUpdated(this, visible);
         }
     }
@@ -218,9 +363,8 @@ class Node extends Component {
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
-     * Node is only rendered when {@link Node#visible} returns true and {@link Node#culled} returns false.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#visibleObjects}.
+     * When {@link Node#isObject} and {@link Node#visible} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -231,7 +375,8 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are ghosted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#ghosted} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Node#isObject} and {@link Node#ghosted} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      */
@@ -241,7 +386,7 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].ghosted = ghosted;
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectGhostedUpdated(this, ghosted);
         }
     }
@@ -249,7 +394,8 @@ class Node extends Component {
     /**
      * Gets if this Node is ghosted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#ghosted} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#ghostedObjects}.
+     * When {@link Node#isObject} and {@link Node#ghosted} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#ghostedObjects}.
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
@@ -262,7 +408,8 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are highlighted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#highlighted} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#highlightedObjects}.
+     * When {@link Node#isObject} and {@link Node#highlighted} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -272,7 +419,7 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].highlighted = highlighted;
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectHighlightedUpdated(this, highlighted);
         }
     }
@@ -280,7 +427,8 @@ class Node extends Component {
     /**
      * Gets if this Node is highlighted.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#highlighted} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#highlightedObjects}.
+     * When {@link Node#isObject} and {@link Node#highlighted} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#highlightedObjects}.
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
@@ -293,7 +441,8 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are selected.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#selected} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Node#isObject} and {@link Node#selected} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -303,7 +452,7 @@ class Node extends Component {
         for (let i = 0, len = this._children.length; i < len; i++) {
             this._children[i].selected = selected;
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._objectSelectedUpdated(this, selected);
         }
     }
@@ -311,7 +460,8 @@ class Node extends Component {
     /**
      * Gets if this Node is selected.
      *
-     * When {@link Node#objectId} has a value, then while {@link Node#selected} returns true the Node will be registered by {@link Node#objectId} in {@link Scene#selectedObjects}.
+     * When {@link Node#isObject} and {@link Node#selected} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#selectedObjects}.
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
@@ -348,11 +498,6 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are culled.
      *
-     * Only rendered when {@link Node#visible} returns true and {@link Node#culled} returns false.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Node will be
-     * registered by {@link Node#objectId} in {@link Scene#visibleObjects}.
-     *
      * @type {Boolean}
      */
     set culled(culled) {
@@ -365,11 +510,6 @@ class Node extends Component {
 
     /**
      * Gets if this Node is culled.
-     *
-     * Only rendered when {@link Node#visible} returns true and {@link Node#culled} returns false.
-     *
-     * When {@link Node#objectId} has a value, then while {@link Node#visible} returns true the Node will be
-     * registered by {@link Node#objectId} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -464,7 +604,7 @@ class Node extends Component {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set colorize(rgb) {
         let colorize = this._colorize;
@@ -493,7 +633,7 @@ class Node extends Component {
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get colorize() {
         return this._colorize.slice(0, 3);
@@ -819,7 +959,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set position(value) {
         this._position.set(value || [0, 0, 0]);
@@ -833,7 +973,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get position() {
         return this._position;
@@ -844,7 +984,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set rotation(value) {
         this._rotation.set(value || [0, 0, 0]);
@@ -859,7 +999,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get rotation() {
         return this._rotation;
@@ -870,7 +1010,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set quaternion(value) {
         this._quaternion.set(value || [0, 0, 0, 1]);
@@ -885,7 +1025,7 @@ class Node extends Component {
      *
      * Default value is ````[0,0,0,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get quaternion() {
         return this._quaternion;
@@ -896,7 +1036,7 @@ class Node extends Component {
      *
      * Default value is ````[1,1,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set scale(value) {
         this._scale.set(value || [1, 1, 1]);
@@ -910,7 +1050,7 @@ class Node extends Component {
      *
      * Default value is ````[1,1,1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get scale() {
         return this._scale;
@@ -921,7 +1061,7 @@ class Node extends Component {
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set matrix(value) {
         if (!this._localMatrix) {
@@ -940,7 +1080,7 @@ class Node extends Component {
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get matrix() {
         if (this._localMatrixDirty) {
@@ -957,7 +1097,7 @@ class Node extends Component {
      * Gets the Node's World matrix.
      *
      * @property worldMatrix
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get worldMatrix() {
         if (this._worldMatrixDirty) {
@@ -969,7 +1109,7 @@ class Node extends Component {
     /**
      * Rotates the Node about the given local axis by the given increment.
      *
-     * @param {Float32Array} axis Local axis about which to rotate.
+     * @param {Number[]} axis Local axis about which to rotate.
      * @param {Number} angle Angle increment in degrees.
      */
     rotate(axis, angle) {
@@ -989,7 +1129,7 @@ class Node extends Component {
     /**
      * Rotates the Node about the given World-space axis by the given increment.
      *
-     * @param {Float32Array} axis Local axis about which to rotate.
+     * @param {Number[]} axis Local axis about which to rotate.
      * @param {Number} angle Angle increment in degrees.
      */
     rotateOnWorldAxis(axis, angle) {
@@ -1033,7 +1173,7 @@ class Node extends Component {
     /**
      * Translates the Node along local space vector by the given increment.
      *
-     * @param {Float32Array} axis Normalized local space 3D vector along which to translate.
+     * @param {Number[]} axis Normalized local space 3D vector along which to translate.
      * @param {Number} distance Distance to translate along  the vector.
      */
     translate(axis, distance) {
@@ -1094,7 +1234,7 @@ class Node extends Component {
         if (this._parentNode) {
             this._parentNode.removeChild(this);
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.scene._deregisterObject(this);
             if (this._visible) {
                 this.scene._objectVisibilityUpdated(this, false);
@@ -1109,7 +1249,7 @@ class Node extends Component {
                 this.scene._objectHighlightedUpdated(this, false);
             }
         }
-        if (this._modelId) {
+        if (this._isModel) {
             this.scene._deregisterModel(this);
         }
         if (this._children.length) {

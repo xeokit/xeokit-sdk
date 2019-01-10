@@ -3,8 +3,7 @@ import {BigModel} from "../../../scene/bigModels/BigModel.js";
 
 import {BIMServerBigGeometryLoader} from "./lib/BIMServerBigGeometryLoader.js";
 import {loadMetaModel} from "./lib/loadMetaModel.js";
-import {defaultMaterials} from "./lib/defaultMaterials.js";
-
+import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
  * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org) (1.5 or later).
@@ -116,29 +115,61 @@ class BIMServerBigLoaderPlugin extends Plugin {
             "IfcOpeningElement": true,
             "IfcSpace": true
         };
+
+        this.objectDefaults = cfg.objectDefaults;
     }
 
     /**
-     * Loads a {@link Model} from BIMServer into the {@link Viewer}'s {@link Scene}.
+     * Sets map of initial default states for each loaded {@link Entity} that represents an object.
      *
-     * @param {Object} params Loading parameters. As well as the parameters required by this  method, this can also include configs for the {@link Model} that this method will create.
-     * @param {String} params.id ID to assign to the model, unique among all components in the Viewer's {@link Scene}.
+     * Default value is {@link IFCObjectDefaults}.
+     *
+     * @type {{String: Object}}
+     */
+    set objectDefaults(value) {
+        this._objectDefaults = value || IFCObjectDefaults;
+    }
+
+    /**
+     * Gets map of initial default states for each loaded {@link Entity} that represents an object.
+     *
+     * Default value is {@link IFCObjectDefaults}.
+     *
+     * @type {{String: Object}}
+     */
+    get objectDefaults() {
+        return this._objectDefaults;
+    }
+
+    /**
+     * Loads a model from a BIMServer into this GLTFLoaderPlugin's {@link Viewer}.
+     *
+     * Creates a {@link BigModel} within the Viewer's {@link Scene} that represents the model.
+     *
+     * The {@link BigModel} will have {@link BigModel#isModel} set true to indicate that it represents a model, and will therefore be registered in {@link Scene#models}.
+     *
+     * @param {Object} params Loading parameters.
+     * @param {String} [params.id] ID to assign to the root {@link BigModel#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {Number} params.poid ID of the model's project within BIMServer.
      * @param {Number} params.roid ID of the model's revision within BIMServer. See the class example for how to query the latest project revision ID via the BIMServer client API.
      * @param {Number} params.schema The model's IFC schema. See the class example for how to query the project's schema via the BIMServer client API.
-     * @param {Float32Array} [params.position=[0,0,0]] Local 3D position.
-     * @param {Float32Array} [params.scale=[1,1,1]] Local scale.
-     * @param {Float32Array} [params.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Float32Array} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     * @param {Boolean} [params.edges=false] When true, will emphasise edges when rendering the model.
-     * @param {Boolean} [params.logging=false] Set this true to log some info to the console while loading.
-     * @returns {Node} A {@link Model} representing the loaded model.
+     * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link BigModelNode} that represents an object. Default value for this parameter is {@link IFCObjectDefaults}.
+     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
+     * @param {Number[]} [params.position=[0,0,0]] The {@link BigModel}'s local 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model {@link BigModel}'s local scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model root {@link BigModel}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link BigModel}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
+     * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
+     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
+     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @returns {BigModel} A {@link BigModel} representing the loaded glTF model.
      */
     load(params) {
 
         const self = this;
 
-        const modelId = params.modelId;
+        const modelId = params.id;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -149,38 +180,41 @@ class BIMServerBigLoaderPlugin extends Plugin {
             'toGuid': [],
             'toId': []
         };
+
+        if (this.viewer.scene.components[params.id]) {
+            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
+            delete params.id;
+        }
+
+        const xeokitBigModel = new BigModel(scene, params);
+        const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
+
         var onTick;
 
         if (!modelId) {
             this.error("load() param expected: modelId");
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!poid) {
             this.error("load() param expected: poid");
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!roid) {
             this.error("load() param expected: roid");
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!schema) {
             this.error("load() param expected: schema");
-            return;
-        }
-
-        if (scene.components[modelId]) {
-            this.error("Component with this ID already exists in viewer: " + modelId);
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         const logging = !!params.logging;
 
         scene.canvas.spinner.processes++;
 
-        const xeokitBigModel = new BigModel(scene, params);
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {  // TODO: Preload not necessary combined with the bruteforce tree
 
@@ -196,8 +230,8 @@ class BIMServerBigLoaderPlugin extends Plugin {
 
                 const visit = metaObject => {
                     oids[metaObject.external.gid] = metaObject.external.extId;
-                    oidToGuid[metaObject.external.extId] = metaObject.objectId;
-                    guidToOid[metaObject.objectId] = metaObject.external.extId;
+                    oidToGuid[metaObject.external.extId] = metaObject.id;
+                    guidToOid[metaObject.id] = metaObject.external.extId;
                     for (let i = 0; i < (metaObject.children || []).length; ++i) {
                         visit(metaObject.children[i]);
                     }
@@ -290,20 +324,20 @@ class BIMServerBigLoaderPlugin extends Plugin {
                         });
                     },
 
-                    createNode(objectId, geometryDataId, ifcType) { // Pass in color to set transparency
-                        objectId = oidToGuid[objectId];
+                    createNode(id, geometryDataId, ifcType) { // Pass in color to set transparency
+                        id = oidToGuid[id];
                         const meshId = `${modelId}.${geometryDataId}.mesh`;
-                        if (scene.objects[objectId]) {
-                            self.error(`Can't create object - object with id ${objectId} already exists`);
+                        if (scene.objects[id]) {
+                            self.error(`Can't create object - object with id ${id} already exists`);
                             return;
                         }
-                        if (scene.components[objectId]) {
-                            self.error(`Can't create object - scene component with this ID already exists: ${objectId}`);
+                        if (scene.components[id]) {
+                            self.error(`Can't create object - scene component with this ID already exists: ${id}`);
                             return;
                         }
                         const visible = !self.hiddenTypes[ifcType];
                         xeokitBigModel.createNode({
-                            objectId: objectId,
+                            id: id,
                             meshIds: [meshId],
                             visible: visible
                         });
@@ -340,32 +374,46 @@ class BIMServerBigLoaderPlugin extends Plugin {
         return xeokitBigModel;
     };
 
+
+    /**
+     * Unloads a model that was previously loaded by this BIMServerBigLoaderPlugin.
+     *
+     * @param {String} modelId  ID of model to unload.
+     */
+    unload(modelId) {
+        const modelNode = this.models;
+        if (!modelNode) {
+            this.error(`unload() model with this ID not found: ${modelId}`);
+            return;
+        }
+        modelNode.destroy();
+    }
+
     /**
      * @private
      */
     send(name, value) {
-        //...
+        switch (name) {
+            case "clear":
+                this.clear();
+                break;
+        }
     }
 
     /**
-     * @private
+     * Unloads models loaded by this BIMServerBigLoaderPlugin.
      */
-    writeBookmark(bookmark) {
-        //...
+    clear() {
+        for (const modelId in this.models) {
+            this.models[modelId].destroy();
+        }
     }
 
     /**
-     * @private
-     */
-    readBookmark(bookmark, done) {
-        //...
-        done();
-    }
-
-    /**
-     * Destroys this plugin.
+     * Destroys this BIMServerBigLoaderPlugin, after first unloading any models it has loaded.
      */
     destroy() {
+        this.clear();
         super.destroy();
     }
 }

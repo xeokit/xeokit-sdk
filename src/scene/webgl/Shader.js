@@ -1,11 +1,6 @@
 /**
- A **Shader** represents a vertex or fragment stage within a {@link Program}.
-
- @class Shader
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc Represents a vertex or fragment stage within a {@link Program}.
+ * @private
  */
 class Shader {
 

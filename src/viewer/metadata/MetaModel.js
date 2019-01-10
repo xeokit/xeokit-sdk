@@ -3,11 +3,16 @@ import {MetaObject} from "./MetaObject.js";
 /**
  * @desc Metadata corresponding to an {@link Entity} that represents a model.
  *
- * * Belongs to a {@link MetaScene}.
- * * Created by {@link MetaScene#createMetaModel}.
- * * Registered by {@link MetaModel#id} in {@link MetaScene#metaModels}.
- * * Contains {@link MetaObject}s, which  are connected into a hierarchy with {@link MetaModel#rootMetaObject} referencing the root.
- * * An {@link Entity} represents a model when it has a {@link Entity#modelId}.
+ * An {@link Entity} represents a model when {@link Entity#isModel} is ````true````
+ *
+ * A MetaModel corresponds to an {@link Entity} by having the same {@link MetaModel#id} as the {@link Entity#id}.
+ *
+ * A MetaModel is created by {@link MetaScene#createMetaModel} and belongs to a {@link MetaScene}.
+ *
+ * Each MetaModel is registered by {@link MetaObject#id} in {@link MetaScene#metaModels}.
+ *
+ * A {@link MetaModel} represents its object structure with a tree of {@link MetaObject}s, with {@link MetaModel#rootMetaObject} referencing
+ * the root {@link MetaObject}.
  *
  * @class MetaModel
  */
@@ -16,17 +21,19 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, modelId, projectId, revisionId, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, rootMetaObject) {
 
         /**
-         * Unique ID.
+         * Globally-unique ID.
          *
          * MetaModels are registered by ID in {@link MetaScene#metaModels}.
+         *
+         * When this MetaModel corresponds to an {@link Entity} then this ID will match the {@link Entity#id}.
          *
          * @property id
          * @type {String|Number}
          */
-        this.modelId = modelId;
+        this.id = id;
 
         /**
          * The project ID
@@ -65,13 +72,13 @@ class MetaModel {
 
         function visit(metaObject) {
             var metaObjectCfg = {
-                objectId: metaObject.objectId,
+                id: metaObject.id,
                 extId: metaObject.extId,
                 type: metaObject.type,
                 name: metaObject.name
             };
             if (metaObject.parent) {
-                metaObjectCfg.parent = metaObject.parent.objectId;
+                metaObjectCfg.parent = metaObject.parent.id;
             }
             metaObjects.push(metaObjectCfg);
             var children = metaObject.children;

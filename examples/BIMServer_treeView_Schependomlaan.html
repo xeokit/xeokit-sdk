@@ -100,23 +100,11 @@
         const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
         const aabb = viewer.scene.getAABB(objectIds);
 
-        viewer.scene.setSelected(viewer.scene.selectedObjectIds, false);
-        viewer.scene.setSelected(objectIds, true);
+        viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+        viewer.scene.setObjectsSelected(objectIds, true);
 
         viewer.cameraFlight.flyTo(aabb);
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    //
-    //------------------------------------------------------------------------------------------------------------------
-
-    // const propertiesPanel = new PropertiesPanelPlugin(viewer, {
-    //     domElementId: "propertiesPanel"
-    // });
-
-    //------------------------------------------------------------------------------------------------------------------
-    //
-    //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.input.on("mouseclicked", function (coords) {
 
@@ -185,16 +173,23 @@
                 const roid = project.lastRevisionId;
                 const schema = project.schema;
 
-                const xeokitlModel = bimServerLoader.load({
-                    id: "myModel",
+                const modelNode = bimServerLoader.load({ // Returns a Node representing the model
+
+                    id: "myModel",                  // Assigned to Node#id, and Node#isModel will also be set true
+
                     poid: poid,
                     roid: roid,
                     schema: schema,
-                    // scale: [0.001, 0.001, 0.001],   // Shrink the model a bit
-                    rotation: [-90, 0, 0],          // xeoglModel has Z+ axis as "up"
-                    edges: true,                    // Emphasize edges
-                    lambertMaterial: true          // Fast flat shaded rendering
+
+                    scale: [0.001, 0.001, 0.001],   // Assigned to Node#scale, since model boundary exceeds view volume
+                    rotation: [-90, 0, 0],          // Assigned to Node#rotation, since model "up" is +Z
+                    edges: true,                    // Assigned to Node#edges, to emphasis edges
+
+                    lambertMaterial: true,          // LambertMaterial for all Meshes, for memory and rendering performance
+
+                    readableGeometry: false
                 });
+
 
             });
         });

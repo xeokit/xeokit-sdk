@@ -1,6 +1,3 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
 
 import {FrameContext} from './FrameContext.js';
 import {RenderFlags} from './RenderFlags.js';

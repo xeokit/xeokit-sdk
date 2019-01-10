@@ -687,7 +687,7 @@ var createMeshes = (function () {
 
             var geometryCfg = {
                 primitive: "triangles",
-                compressGeometry: true
+                compressGeometry: false
             };
 
             geometryCfg.positions = geometry.positions;
@@ -729,7 +729,7 @@ var createMeshes = (function () {
 
             var mesh = new Mesh(modelNode, {
                 id: modelNode.id + "#" + object.id,
-                objectId: "default",
+                isObject: true,
                 geometry: geometry,
                 material: material,
                 pickable: true

@@ -85,9 +85,9 @@ class CameraPath extends Component {
      Adds a frame to this CameraPath, specified as values for eye, look and up vectors at a given time instant.
 
      @param {Number} t Time instant for the new frame;
-     @param {Float32Array} eye A three-element vector specifying the eye position for the new frame.
-     @param {Float32Array} look A three-element vector specifying the look position for the new frame.
-     @param {Float32Array} up A three-element vector specifying the up vector for the new frame.
+     @param {Number[]} eye A three-element vector specifying the eye position for the new frame.
+     @param {Number[]} look A three-element vector specifying the look position for the new frame.
+     @param {Number[]} up A three-element vector specifying the up vector for the new frame.
      */
     addFrame(t, eye, look, up) {
         const frame = {
@@ -137,9 +137,9 @@ class CameraPath extends Component {
      Gets eye, look and up vectors on this CameraPath at a given instant.
 
      @param {Number} t Time instant.
-     @param {Float32Array} eye The eye position to update.
-     @param {Float32Array} look The look position to update.
-     @param {Float32Array} up The up vector to update.
+     @param {Number[]} eye The eye position to update.
+     @param {Number[]} look The look position to update.
+     @param {Number[]} up The up vector to update.
      */
     sampleFrame(t, eye, look, up) {
         t = t < 0.0 ? 0.0 : (t > 1.0 ? 1.0 : t);

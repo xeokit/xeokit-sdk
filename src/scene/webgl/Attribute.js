@@ -1,11 +1,7 @@
 /**
- An **Attribute** represents a WebGL vertex attribute buffer (VBO).
-
- @class Attribute
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc Represents a WebGL vertex attribute buffer (VBO).
+ * @private
+ * @param gl {WebGLRenderingContext} The WebGL rendering context.
  */
 class Attribute {
 
@@ -14,7 +10,7 @@ class Attribute {
         this.location = location;
     }
 
-    bindArrayBuffer(arrayBuf, type, normalized=false, stride=0, offset=0) {
+    bindArrayBuffer(arrayBuf, type, normalized = false, stride = 0, offset = 0) {
         if (!arrayBuf) {
             return;
         }

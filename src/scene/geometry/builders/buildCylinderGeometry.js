@@ -49,7 +49,7 @@ import {utils} from '../../utils.js';
  * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
- * @param {Float32Array} [cfg.center]  3D point indicating the center position.
+ * @param {Number[]} [cfg.center]  3D point indicating the center position.
  * @param {Number} [cfg.radiusTop=1]  Radius of top.
  * @param {Number} [cfg.radiusBottom=1]  Radius of bottom.
  * @param {Number} [cfg.height=1] Height.

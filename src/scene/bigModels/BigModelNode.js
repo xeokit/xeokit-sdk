@@ -13,9 +13,9 @@ class BigModelNode {
     /**
      * @private
      */
-    constructor(model, objectId, id, meshes, flags, aabb) {
+    constructor(model, isObject, id, meshes, flags, aabb) {
 
-        this._objectId = objectId;
+        this._isObject = isObject;
 
         /**
          * The BigModel that contains this BigModelObject.
@@ -40,7 +40,7 @@ class BigModelNode {
         }
 
         /**
-         * ID of this BigModelObject, unique within the xeokit.Scene.
+         * ID of this BigModelObject, unique within the {@link Scene}.
          * @property id
          * @type {String|Number
          * @final}
@@ -52,30 +52,30 @@ class BigModelNode {
 
         this._aabb = aabb;
 
-        if (this._objectId) {
+        if (this._isObject) {
             model.scene._registerObject(this);
         }
     }
 
     /**
-     * Always returns false because a BigModelNode can never me a model.
+     * Always returns ````false```` because a BigModelNode can never represent a model.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get modelId() {
+    get isModel() {
         return false;
     }
 
     /**
-     * Object ID, defined if this BigModelNode represents an object.
+     * Returns ````true```` if this BigModelNode represents an object.
      *
-     * When this returns a value, the BigModelNode will be registered by {@link BigModelNode#objectId} in {@link Scene#objects} and
-     * may also have a corresponding {@link MetaObject}.
+     * When ````true```` the BigModelNode will be registered by {@link BigModelNode#id} in
+     * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
-     * @type {Number|String}
+     * @type {Boolean}
      */
-    get objectId() {
-        return this._objectId;
+    get isObject() {
+        return this._isObject;
     }
 
     /**
@@ -84,7 +84,7 @@ class BigModelNode {
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get aabb() {
         return this._aabb;
@@ -93,10 +93,10 @@ class BigModelNode {
     /**
      * Sets if this BigModelNode is visible.
      *
-     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
+     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#visible} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -114,7 +114,7 @@ class BigModelNode {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setVisible(this._flags);
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.model.scene._objectVisibilityUpdated(this);
         }
         this.model.glRedraw();
@@ -123,10 +123,10 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is visible.
      *
-     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
+     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#visible} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -141,8 +141,8 @@ class BigModelNode {
     /**
      * Sets if this BigModelNode is highlighted.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#highlighted} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#highlightedObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -160,7 +160,7 @@ class BigModelNode {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setHighlighted(this._flags);
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.model.scene._objectHighlightedUpdated(this);
         }
         this.model.glRedraw();
@@ -169,8 +169,8 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is highlighted.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#highlighted} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#highlightedObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -181,8 +181,8 @@ class BigModelNode {
     /**
      * Sets if this BigModelNode is ghosted.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#ghosted} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#ghostedObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#ghosted} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      */
@@ -200,7 +200,7 @@ class BigModelNode {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setGhosted(this._flags);
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.model.scene._objectGhostedUpdated(this);
         }
         this.model.glRedraw();
@@ -209,8 +209,8 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is ghosted.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#ghosted} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#ghostedObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -221,8 +221,8 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is selected.
      *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#selected} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#selectedObjects}.
+     * When both {@link BigModelNode#isObject} and {@link BigModelNode#selected} are ````true```` the BigModelNode will be
+     * registered by {@link BigModelNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -240,7 +240,7 @@ class BigModelNode {
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setSelected(this._flags);
         }
-        if (this._objectId) {
+        if (this._isObject) {
             this.model.scene._objectSelectedUpdated(this);
         }
         this.model.glRedraw();
@@ -289,10 +289,7 @@ class BigModelNode {
     /**
      * Sets if this BigModelNode is culled.
      *
-     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
-     *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -302,10 +299,7 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is culled.
      *
-     * Only rendered when {@link BigModelNode#visible} returns true and {@link BigModelNode#culled} returns false.
-     *
-     * When {@link BigModelNode#objectId} has a value, then while {@link BigModelNode#visible} returns true the BigModelNode will be
-     * registered by {@link BigModelNode#objectId} in {@link Scene#visibleObjects}.
+     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -411,7 +405,7 @@ class BigModelNode {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set colorize(color) {
         this._colorize[0] = Math.floor(color[0] * 255.0); // Quantize
@@ -428,7 +422,7 @@ class BigModelNode {
      *
      * Each element of the color is in range ````[0..1]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get colorize() {
         tempColor[0] = this._colorize[0] / 255.0; // Unquantize
@@ -556,7 +550,7 @@ class BigModelNode {
 
     _destroy() { // Called by BigModel
         const scene = this.model.scene;
-        if (this._objectId) {
+        if (this._isObject) {
             scene._deregisterObject(this);
             if (this.visible) {
                 scene._objectVisibilityUpdated(this, false);

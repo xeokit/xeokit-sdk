@@ -44,13 +44,13 @@ class StructurePanelPlugin extends Plugin {
         this._domElements = {};
         this.selectionState = {};
 
-        this._onLoaded = this.viewer.metaScene.on("metaModelCreated", modelId => {
-            if (this.viewer.metaScene.metaModels[modelId]) {
+        this._onLoaded = this.viewer.metaScene.on("metaModelCreated", id => {
+            if (this.viewer.metaScene.metaModels[id]) {
                 this._build();
             }
         });
 
-        this._onUnloaded = this.viewer.metaScene.on("metaModelDestroyed", modelId => { // TODO: How to only rebuild when structure deleted?
+        this._onUnloaded = this.viewer.metaScene.on("metaModelDestroyed", id => { // TODO: How to only rebuild when structure deleted?
             this._build();
         });
     }
@@ -60,14 +60,14 @@ class StructurePanelPlugin extends Plugin {
      */
     _build() {
         var metaModels = this.viewer.metaScene.metaModels;
-        for (var modelId in metaModels) { // TODO: Blow away old HTMl elements
-            if (metaModels.hasOwnProperty(modelId)) {
-                const metaModel = metaModels[modelId];
+        for (var id in metaModels) { // TODO: Blow away old HTMl elements
+            if (metaModels.hasOwnProperty(id)) {
+                const metaModel = metaModels[id];
                 var div = document.createElement("div");
                 div.className = "item";
                 if (metaModel) {
                     const rootMetaObject = metaModel.rootMetaObject;
-                    this._build2(modelId, div, rootMetaObject);
+                    this._build2(id, div, rootMetaObject);
                 }
                 this._domElement.appendChild(div);
             }
@@ -77,7 +77,7 @@ class StructurePanelPlugin extends Plugin {
     /**
      * @private
      */
-    _build2(modelId, div, metaObject) {
+    _build2(id, div, metaObject) {
         const label = document.createElement("div");
         const children = document.createElement("div");
         var name = metaObject.name;
@@ -85,20 +85,20 @@ class StructurePanelPlugin extends Plugin {
             name = name.slice(0, 30) + "..";
         }
         label.className = "label";
-        label.appendChild(document.createTextNode(name || metaObject.objectId));
+        label.appendChild(document.createTextNode(name || metaObject.id));
         div.appendChild(label);
         children.className = "children";
         div.appendChild(children);
-        this._domElements[metaObject.objectId] = label;
+        this._domElements[metaObject.id] = label;
 
         const self = this;
 
         label.onclick = function (e) {
             e.stopPropagation();
             e.preventDefault();
-            self.setSelected([metaObject.objectId], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
+            self.setSelected([metaObject.id], e.shiftKey ? self.TOGGLE : self.SELECT_EXCLUSIVE);
             self.fire("clicked", {
-                objectId: metaObject.objectId
+                objectId: metaObject.id
             });
             return false;
         };
@@ -108,7 +108,7 @@ class StructurePanelPlugin extends Plugin {
             const childDiv = document.createElement("div");
             childDiv.className = "item";
             children.appendChild(childDiv);
-            this._build2(modelId, childDiv, child);
+            this._build2(id, childDiv, child);
         }
     };
 

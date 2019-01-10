@@ -1,11 +1,6 @@
 /**
- A **RenderBuffer** represents a WebGL render buffer.
-
- @class RenderBuffer
- @module xeokit
- @submodule webgl
- @constructor
- @param gl {WebGLRenderingContext} The WebGL rendering context.
+ * @desc Represents a WebGL render buffer.
+ * @private
  */
 class RenderBuffer {
 

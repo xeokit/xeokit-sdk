@@ -30,7 +30,7 @@ class Viewer {
      * @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies if to clear the
      * canvas before each pass (true) or just before the first pass (false).
      * @param [cfg.transparent=false] {Boolean} Whether or not the canvas is transparent.
-     * @param [cfg.backgroundColor] {Float32Array} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
+     * @param [cfg.backgroundColor] {Number[]} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
      * @param [cfg.backgroundImage] {String} URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
      * @param [cfg.gammaInput=false] {Boolean} When true, expects that all textures and colors are premultiplied gamma.
      * @param [cfg.gammaOutput=true] {Boolean} Whether or not to render with pre-multiplied gama.

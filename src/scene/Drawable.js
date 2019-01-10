@@ -3,6 +3,7 @@
  *
  * @interface
  * @abstract
+ * @private
  */
 class Drawable {
 

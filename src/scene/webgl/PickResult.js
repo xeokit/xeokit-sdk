@@ -1,9 +1,7 @@
 /**
- * A **PickResult** contains the results of a pick operation attempted with {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+ * @desc Contains the results of a pick operation attempted with {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
  *
- * @class PickResult
- * @module webgl
- * @submodule webgl
+ * @private
  */
 class PickResult {
 
@@ -50,7 +48,7 @@ class PickResult {
     /**
      * World-space 3D ray origin when raypicked.
      * @property origin
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get origin() {
         return this._gotOrigin ? this._origin : null;
@@ -70,7 +68,7 @@ class PickResult {
     /**
      * World-space 3D ray direction when raypicked.
      * @property direction
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get direction() {
         return this._gotDirection ? this._direction : null;
@@ -112,7 +110,7 @@ class PickResult {
      * Picked Local-space point on surface.
      * Only defined when a mesh and a point on its surface was picked.
      * @property localPos
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get localPos() {
         return this.mesh && this._gotLocalPos ? this._localPos : null;
@@ -133,7 +131,7 @@ class PickResult {
      * Picked World-space point on surface.
      * Only defined when a mesh and a point on its surface was picked.
      * @property worldPos
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get worldPos() {
         return this.mesh && this._gotWorldPos ? this._worldPos : null;
@@ -154,7 +152,7 @@ class PickResult {
      * Picked View-space point on surface.
      * Only defined when a mesh and a point on its surface was picked.
      * @property viewPos
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get viewPos() {
         return this.mesh && this._gotViewPos ? this._viewPos : null;
@@ -175,7 +173,7 @@ class PickResult {
      * Barycentric coordinate within picked triangle.
      * Only defined when a mesh and a point on its surface was picked.
      * @property bary
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get bary() {
         return this.mesh && this._gotBary ? this._bary : null;
@@ -196,7 +194,7 @@ class PickResult {
      * Normal vector at picked position on surface.
      * Only defined when a mesh and a point on its surface was picked.
      * @property normal
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get normal() {
         return this.mesh && this._gotNormal ? this._normal : null;
@@ -217,7 +215,7 @@ class PickResult {
      * UV coordinates at picked position on surface.
      * Only defined when a mesh and a point on its surface was picked.
      * @property uv
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get uv() {
         return this.mesh && this._gotUV ? this._uv : null;

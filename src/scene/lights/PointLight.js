@@ -12,48 +12,93 @@ import {math} from '../math/math.js';
  * {@link PointLight#pos} is relative to the View coordinate system, and will behave as if fixed to the viewer's head.
  * * Has {@link PointLight#constantAttenuation}, {@link PointLight#linearAttenuation} and {@link PointLight#quadraticAttenuation}
  * factors, which indicate how intensity attenuates over distance.
- * * {@link AmbientLight}s, {@link DirLight}s and {@link PointLight}s are registered by their {@link Component#id} on {@link Scene#lights}.
+ * * {@link AmbientLight}s, {@link PointLight}s and {@link PointLight}s are registered by their {@link Component#id} on {@link Scene#lights}.
  *
  * ## Usage
  *
- * In the example below we'll destroy the {@link Scene}'s default light sources then create an {@link AmbientLight}
- * and a couple of PointLights positioned within the View-space coordinate system:
+ * In the example below we'll replace the {@link Scene}'s default light sources with three World-space PointLights.
+ *
+ * [[Run this example](/examples/#lights_PointLight_world)]
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
+ * import {buildPlaneGeometry} from "../src/scene/geometry/builders/buildPlaneGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {PointLight} from "../src/scene/lights/PointLight.js";
+ *
+ * // Create a Viewer and arrange the camera
+ *
+ * const myViewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * myViewer.scene.camera.eye = [0, 0, 5];
+ * myViewer.scene.camera.look = [0, 0, 0];
+ * myViewer.scene.camera.up = [0, 1, 0];
+ *
+ * // Replace the Scene's default lights with three custom world-space PointLights
+ *
  * myViewer.scene.clearLights();
  *
- * new AmbientLight({
- *      id: "myAmbientLight",
- *      color: [0.8, 0.8, 0.8],
- *      intensity: 0.5
+ * new PointLight(myViewer.scene,{
+ *      id: "keyLight",
+ *      pos: [-80, 60, 80],
+ *      color: [1.0, 0.3, 0.3],
+ *      intensity: 1.0,
+ *      space: "world"
  * });
  *
- * new PointLight({
- *      id: "myPointLight1",
- *      pos: [-100, 0, 100],
- *      color: [0.3, 0.3, 0.5],
- *      intensity: .7
- *      constantAttenuation: 0,
- *      linearAttenuation: 0,
- *      quadraticAttenuation: 0,
- *      space: "view"
+ * new PointLight(myViewer.scene,{
+ *      id: "fillLight",
+ *      pos: [80, 40, 40],
+ *      color: [0.3, 1.0, 0.3],
+ *      intensity: 1.0,
+ *      space: "world"
  * });
  *
- * new PointLight({
- *      id: "myPointLight2",
- *      pos: [0, 100, 100],
- *      color: [0.5, 0.7, 0.5],
- *      intensity: 1
- *      constantAttenuation: 0,
- *      linearAttenuation: 0,
- *      quadraticAttenuation: 0,
- *      space: "view"
+ * new PointLight(myViewer.scene,{
+ *      id: "rimLight",
+ *      pos: [-20, 80, -80],
+ *      color: [0.6, 0.6, 0.6],
+ *      intensity: 1.0,
+ *      space: "world"
  * });
  *
- * // Adjust the position of one of our PointLights
+ * // Create a sphere and ground plane
  *
- * var pointLight1 = myViewer.scene.lights["myPointLight1"];
- * dirLight.pos = [-150.0, 0.0, 100.0];
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ *          radius: 1.3
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuse: [0.7, 0.7, 0.7],
+ *          specular: [1.0, 1.0, 1.0],
+ *          emissive: [0, 0, 0],
+ *          alpha: 1.0,
+ *          ambient: [1, 1, 0],
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          })
+ *      })
+ * });
+ *
+ * new Mesh(myViewer.scene, {
+ *      geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+ *          xSize: 30,
+ *          zSize: 30
+ *      }),
+ *      material: new PhongMaterial(myViewer.scene, {
+ *          diffuseMap: new Texture(myViewer.scene, {
+ *               src: "textures/diffuse/uvGrid2.jpg"
+ *          }),
+ *          backfaces: true
+ *      }),
+ *      position: [0, -2.1, 0]
+ * });
  * ````
  */
 class PointLight extends Light {
@@ -72,20 +117,17 @@ class PointLight extends Light {
     }
 
     /**
-     * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
-     @param {*} [cfg] The PointLight configuration
-     @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this PointLight.
-     @param [cfg.pos=[ 1.0, 1.0, 1.0 ]] {Float32Array} Position, in either World or View space, depending on the value of the **space** parameter.
-     @param [cfg.color=[0.7, 0.7, 0.8 ]] {Float32Array} Color of this PointLight.
-     @param [cfg.intensity=1.0] {Number} Intensity of this PointLight, as a factor in range ````[0..1]````.
-     @param [cfg.constantAttenuation=0] {Number} Constant attenuation factor.
-     @param [cfg.linearAttenuation=0] {Number} Linear attenuation factor.
-     @param [cfg.quadraticAttenuation=0] {Number} Quadratic attenuation factor.
-     @param [cfg.space="view"] {String} The coordinate system this PointLight is defined in - "view" or "world".
-     @param [cfg.castsShadow=false] {Boolean} Flag which indicates if this PointLight casts a castsShadow.
-     * @param owner
-     * @param cfg
+     * @param {Component} owner Owner component. When destroyed, the owner will destroy this PointLight as well.
+     * @param {*} [cfg] The PointLight configuration
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Number[]} [cfg.pos=[ 1.0, 1.0, 1.0 ]] Position, in either World or View space, depending on the value of the **space** parameter.
+     * @param {Number[]} [cfg.color=[0.7, 0.7, 0.8 ]] Color of this PointLight.
+     * @param {Number} [cfg.intensity=1.0] Intensity of this PointLight, as a factor in range ````[0..1]````.
+     * @param {Number} [cfg.constantAttenuation=0] Constant attenuation factor.
+     * @param {Number} [cfg.linearAttenuation=0] Linear attenuation factor.
+     * @param {Number} [cfg.quadraticAttenuation=0]Quadratic attenuation factor.
+     * @param {String} [cfg.space="view"]The coordinate system this PointLight is defined in - "view" or "world".
+     * @param {Boolean} [cfg.castsShadow=false] Flag which indicates if this PointLight casts a castsShadow.
      */
     constructor(owner, cfg = {}) {
 
@@ -154,128 +196,181 @@ class PointLight extends Light {
         this.scene._lightCreated(this);
     }
 
-
     /**
-     The position of this PointLight.
-
-     This will be either World- or View-space, depending on the value of {@link PointLight#space}.
-
-     @property pos
-     @default [1.0, 1.0, 1.0]
-     @type {Array}(Number)
+     * Sets the position of this PointLight.
+     *
+     * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     *
+     * @param {Number[]} pos The position.
      */
-    set pos(value) {
-        this._state.pos.set(value || [1.0, 1.0, 1.0]);
+    set pos(pos) {
+        this._state.pos.set(pos || [1.0, 1.0, 1.0]);
         this._shadowViewMatrixDirty = true;
         this.glRedraw();
     }
 
+    /**
+     * Gets the position of this PointLight.
+     *
+     * This will be either World- or View-space, depending on the value of {@link PointLight#space}.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````.
+     *
+     * @returns {Number[]} The position.
+     */
     get pos() {
         return this._state.pos;
     }
 
     /**
-     The color of this PointLight.
-
-     @property color
-     @default [0.7, 0.7, 0.8]
-     @type {Float32Array}
+     * Sets the RGB color of this PointLight.
+     *
+     * Default value is ````[0.7, 0.7, 0.8]````.
+     *
+     * @param {Number[]} color The PointLight's RGB color.
      */
-    set color(value) {
-        this._state.color.set(value || [0.7, 0.7, 0.8]);
+    set color(color) {
+        this._state.color.set(color || [0.7, 0.7, 0.8]);
         this.glRedraw();
     }
 
+    /**
+     * Gets the RGB color of this PointLight.
+     *
+     * Default value is ````[0.7, 0.7, 0.8]````.
+     *
+     * @returns {Number[]} The PointLight's RGB color.
+     */
     get color() {
         return this._state.color;
     }
 
     /**
-     The intensity of this PointLight.
-
-     @property intensity
-     @default 1.0
-     @type {Number}
+     * Sets the intensity of this PointLight.
+     *
+     * Default intensity is ````1.0```` for maximum intensity.
+     *
+     * @param {Number} intensity The PointLight's intensity
      */
-    set intensity(value) {
-        value = value !== undefined ? value : 1.0;
-        this._state.intensity = value;
+    set intensity(intensity) {
+        intensity = intensity !== undefined ? intensity : 1.0;
+        this._state.intensity = intensity;
         this.glRedraw();
     }
 
+    /**
+     * Gets the intensity of this PointLight.
+     *
+     * Default value is ````1.0```` for maximum intensity.
+     *
+     * @returns {Number} The PointLight's intensity.
+     */
     get intensity() {
         return this._state.intensity;
     }
 
     /**
-     The constant attenuation factor for this PointLight.
-
-     @property constantAttenuation
-     @default 0
-     @type {Number}
+     * Sets the constant attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The constant attenuation factor.
      */
     set constantAttenuation(value) {
         this._state.attenuation[0] = value || 0.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the constant attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number} The constant attenuation factor.
+     */
     get constantAttenuation() {
         return this._state.attenuation[0];
     }
 
     /**
-     The linear attenuation factor for this PointLight.
-
-     @property linearAttenuation
-     @default 0
-     @type {Number}
+     * Sets the linear attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The linear attenuation factor.
      */
     set linearAttenuation(value) {
         this._state.attenuation[1] = value || 0.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the linear attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number} The linear attenuation factor.
+     */
     get linearAttenuation() {
         return this._state.attenuation[1];
     }
 
     /**
-     The quadratic attenuation factor for this Pointlight.
-
-     @property quadraticAttenuation
-     @default 0
-     @type {Number}
+     * Sets the quadratic attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The quadratic attenuation factor.
      */
     set quadraticAttenuation(value) {
         this._state.attenuation[2] = value || 0.0;
         this.glRedraw();
     }
 
+    /**
+     * Gets the quadratic attenuation factor for this PointLight.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number} The quadratic attenuation factor.
+     */
     get quadraticAttenuation() {
         return this._state.attenuation[2];
     }
 
     /**
-     Flag which indicates if this PointLight casts a shadow.
-
-     @property castsShadow
-     @default false
-     @type {Boolean}
+     * Sets if this PointLight casts a shadow.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} castsShadow Set ````true```` to cast shadows.
      */
-    set castsShadow(value) {
-        value = !!value;
-        if (this._state.castsShadow === value) {
+    set castsShadow(castsShadow) {
+        castsShadow = !!castsShadow;
+        if (this._state.castsShadow === castsShadow) {
             return;
         }
-        this._state.castsShadow = value;
+        this._state.castsShadow = castsShadow;
         this._shadowViewMatrixDirty = true;
         this.glRedraw();
     }
 
+    /**
+     * Gets if this PointLight casts a shadow.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} ````true```` if this PointLight casts shadows.
+     */
     get castsShadow() {
         return this._state.castsShadow;
     }
 
+    /**
+     * Destroys this PointLight.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

@@ -177,7 +177,7 @@ class Ortho extends Component {
 
      @property matrix
      @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Float32Array}
+     @type {Number[]}
      */
     get matrix() {
         if (this._updateScheduled) {

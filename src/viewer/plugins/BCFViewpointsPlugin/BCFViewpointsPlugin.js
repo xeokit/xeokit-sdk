@@ -280,19 +280,19 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.components) {
             if (!bcfViewpoint.components.visibility.default_visibility) {
-                scene.setVisible(scene.objectIds, false);
-                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(x.ifc_guid, true));
+                scene.setObjectsVisible(scene.objectIds, false);
+                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
             } else {
-                scene.setVisible(scene.objectIds, true);
-                scene.setVisible("space", false);
-                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setVisible(x.ifc_guid, false));
+                scene.setObjectsVisible(scene.objectIds, true);
+                scene.setObjectsVisible("space", false);
+                bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
             }
         }
 
         if (bcfViewpoint.components.selection) {
-            scene.setSelected(scene.selectedObjects, false);
+            scene.setObjectsSelected(scene.selectedObjects, false);
             Object.keys(scene.models).forEach(id => {
-                bcfViewpoint.components.selection.forEach(x => scene.setSelected(x.ifc_guid, true));
+                bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
             });
         }
     }

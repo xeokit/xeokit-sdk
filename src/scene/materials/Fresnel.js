@@ -75,7 +75,7 @@ class Fresnel extends Component {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this Fresnel as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
-     * @param {Array} [cfg.edgeColor=[ 0.0, 0.0, 0.0 ]]  Color used on edges.
+     * @param {Number[]} [cfg.edgeColor=[ 0.0, 0.0, 0.0 ]]  Color used on edges.
      * @param {Array of Number} [cfg.centerColor=[ 1.0, 1.0, 1.0 ]]  Color used on center.
      * @param {Number} [cfg.edgeBias=0]  Bias at the edge.
      * @param {Number} [cfg.centerBias=1]  Bias at the center.
@@ -105,7 +105,7 @@ class Fresnel extends Component {
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set edgeColor(value) {
         this._state.edgeColor.set(value || [0.0, 0.0, 0.0]);
@@ -117,7 +117,7 @@ class Fresnel extends Component {
      *
      * Default value is ````[0.0, 0.0, 0.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get edgeColor() {
         return this._state.edgeColor;
@@ -128,7 +128,7 @@ class Fresnel extends Component {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     set centerColor(value) {
         this._state.centerColor.set(value || [1.0, 1.0, 1.0]);
@@ -140,7 +140,7 @@ class Fresnel extends Component {
      *
      * Default value is ````[1.0, 1.0, 1.0]````.
      *
-     * @type {Float32Array}
+     * @type {Number[]}
      */
     get centerColor() {
         return this._state.centerColor;

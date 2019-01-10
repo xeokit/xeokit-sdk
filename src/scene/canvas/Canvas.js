@@ -484,8 +484,8 @@ class Canvas extends Component {
 
      Then the r,g,b components of the colors will be set to the colors at those pixels.
 
-     @param {Float32Array} pixels
-     @param {Float32Array} colors
+     @param {Number[]} pixels
+     @param {Number[]} colors
      @param {Number} size
      @param {Boolean} opaqueOnly
      */
@@ -508,7 +508,7 @@ class Canvas extends Component {
      You can set this to a new color at any time.
 
      @property backgroundColor
-     @type {Float32Array}
+     @type {Number[]}
      @default null
      */
     set backgroundColor(value) {
