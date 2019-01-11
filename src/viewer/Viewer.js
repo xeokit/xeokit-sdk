@@ -48,7 +48,7 @@ class Viewer {
             canvasId: cfg.canvasId,
             webgl2: false,
             contextAttr: {preserveDrawingBuffer: false},
-            transparent: !!cfg.transparent,
+            transparent: cfg.transparent !== false,
             gammaInput: true,
             gammaOutput: true
         });

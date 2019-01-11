@@ -71,14 +71,17 @@
         children: [
 
             objLoader.load({ // Returns a Node
-                id: "myModel",     // <---------- Registers Node on Viewer#scene#models
+                id: "myModel",
+                isModel: true, // <---------- Registers Node on Viewer#scene#models
                 src: "./models/obj/sportsCar/sportsCar.obj",
                 position: [-5, -1, 0],
             }),
 
             gltfLoader.load({ // Returns a Node
-                id: "myModel2",    // <---------- Registers Node on Viewer#scene#models
+                id: "myModel2",
+                isModel: true, // <---------- Registers Node on Viewer#scene#models
                 src: "./models/gltf/schependomlaan/scene.gltf",
+                metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
                 rotation: [0, 50, 0],
                 edges: true
             })

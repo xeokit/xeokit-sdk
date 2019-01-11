@@ -110,7 +110,7 @@ var parseGLTF = (function () {
             handleGLTFNode: options.handleGLTFNode,
             ignoreMaterials: !!options.ignoreMaterials,
             edgeThreshold: options.edgeThreshold,
-            lambertMaterial: !!options.lambertMaterial,
+            lambertMaterial: options.lambertMaterial !== false,
             readableGeometry: !!options.readableGeometry,
             json: json,
             scene: modelNode.scene,

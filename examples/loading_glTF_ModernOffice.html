@@ -51,9 +51,9 @@
     const modelNode = gltfLoader.load({
         id: "myModel",
         src: "./models/gltf/modern_office/scene.gltf",
-        scale: [1, 1, 1],
         edges: true,
-        edgeThreshold: 20
+        edgeThreshold: 20,
+        lambertMaterial: false
     });
 
     modelNode.on("loaded", () => {

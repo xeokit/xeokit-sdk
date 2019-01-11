@@ -51,32 +51,10 @@
     const model = gltfLoader.load({
         id: "myModel",
         src: "./models/gltf/modern_office/scene.gltf",
-        lambertMaterial: true,
         scale: [10, 10, 10],
         edges: true,
         edgeThreshold: 20
     });
-
-   // gltfLoader.load({
-   //      id: "myModel2",
-   //      src: "./models/gltf/modern_office/scene.gltf",
-   //      lambertMaterial: true,
-   //     position: [0,200,0],
-   //      scale: [10, 10, 10],
-   //      edges: true,
-   //      edgeThreshold: 20
-   //  });
-   //
-   //  gltfLoader.load({
-   //      id: "myModel3",
-   //      src: "./models/gltf/modern_office/scene.gltf",
-   //      lambertMaterial: true,
-   //      position: [0,400,0],
-   //      scale: [10, 10, 10],
-   //      edges: true,
-   //      edgeThreshold: 20
-   //  });
-
 
     model.on("loaded", () => {
         viewer.cameraFlight.flyTo(model);
