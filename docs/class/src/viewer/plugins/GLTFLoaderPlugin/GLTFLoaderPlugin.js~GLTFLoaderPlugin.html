@@ -147,8 +147,8 @@
 <li>Can attach each <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span> as a child of a given <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span>.</li>
 <li>Can also load a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding to the <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span> into <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-metaScene">Viewer#metaScene</a></span> - more info: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>.</li>
 </ul>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="/examples/models/gltf/schependomlaan/">glTF file</a>, along
-with an accompanying JSON <a href="/examples/metaModels/schependomlaan/">IFC metadata file</a>.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/">glTF file</a>, along
+with an accompanying JSON <a href="http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/">IFC metadata file</a>.</p>
 <p>This will create a <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span> that represents the model, which is the root of a tree of <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s (<span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span>s
 and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es) that represent the model objects.</p>
 <p>This will also load a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>, which contains a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> for each <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>. The <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> will
@@ -160,7 +160,7 @@ object ID to a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject
 for the <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> in the lookup map provided by <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>, which specifies the default initial
 visible states of IFC objects. For example, an &quot;IfcWindow&quot; is transparent and unpickable, while an &quot;IfcSpace&quot; is invisible.</p>
 <p>You can override that map with your own if needed (see <span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-objectDefaults">GLTFLoaderPlugin#objectDefaults</a></span>.</p>
-<p>[<a href="/examples/#BIMOffline_metadata_Schependomlaan">Run this example</a>]</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 
@@ -1179,7 +1179,7 @@ therefore be registered in <span><a href="class/src/scene/scene/Scene.js~Scene.h
       <td data-ice="name" class="code" data-depth="1">params.lambertMaterial</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
+<li>default: true</li></ul></td>
       <td data-ice="description"><p>When true, gives each <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> the same <span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span> and a <code>colorize</code>
 value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.</p>
 </td>

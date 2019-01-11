@@ -130,8 +130,8 @@ import {IFCObjectDefaults} from &quot;./../../../viewer/metadata/IFCObjectDefaul
  *
  * ## Usage
  *
- * In the example below we&apos;ll load the Schependomlaan model from a [glTF file](/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](/examples/metaModels/schependomlaan/).
+ * In the example below we&apos;ll load the Schependomlaan model from a [glTF file](http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/), along
+ * with an accompanying JSON [IFC metadata file](http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/).
  *
  * This will create a {@link Node} that represents the model, which is the root of a tree of {@link Entity}s ({@link Node}s
  * and {@link Mesh}es) that represent the model objects.
@@ -149,7 +149,7 @@ import {IFCObjectDefaults} from &quot;./../../../viewer/metadata/IFCObjectDefaul
  *
  * You can override that map with your own if needed (see {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * [[Run this example](/examples/#BIMOffline_metadata_Schependomlaan)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
@@ -298,7 +298,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Number[]} [params.scale=[1,1,1]] The model {@link Node}&apos;s local scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model root {@link Node}&apos;s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link Node}&apos;s local modeling transform matrix. Overrides the position, scale and rotation parameters.
-     * @param {Boolean} [params.lambertMaterial=false]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
+     * @param {Boolean} [params.lambertMaterial=true]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
      * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.

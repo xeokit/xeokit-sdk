@@ -284,7 +284,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
 
         const self = this;
 
-        const modelId = params.modelId;
+        const modelId = params.id;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -295,38 +295,41 @@ class BIMServerBigLoaderPlugin extends Plugin {
             &apos;toGuid&apos;: [],
             &apos;toId&apos;: []
         };
+
+        if (this.viewer.scene.components[params.id]) {
+            this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);
+            delete params.id;
+        }
+
+        const xeokitBigModel = new BigModel(scene, params);
+        const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
+
         var onTick;
 
         if (!modelId) {
             this.error(&quot;load() param expected: modelId&quot;);
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!poid) {
             this.error(&quot;load() param expected: poid&quot;);
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!roid) {
             this.error(&quot;load() param expected: roid&quot;);
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         if (!schema) {
             this.error(&quot;load() param expected: schema&quot;);
-            return;
-        }
-
-        if (scene.components[modelId]) {
-            this.error(&quot;Component with this ID already exists in viewer: &quot; + modelId);
-            return;
+            return xeokitBigModel; // TODO: Finalize?
         }
 
         const logging = !!params.logging;
 
         scene.canvas.spinner.processes++;
 
-        const xeokitBigModel = new BigModel(scene, params);
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel =&gt; {  // TODO: Preload not necessary combined with the bruteforce tree
 
@@ -488,7 +491,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
 
 
     /**
-     * Unloads a model that was previously loaded by this Plugin.
+     * Unloads a model that was previously loaded by this BIMServerBigLoaderPlugin.
      *
      * @param {String} modelId  ID of model to unload.
      */
@@ -513,7 +516,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
     }
 
     /**
-     * Unloads models loaded by this plugin.
+     * Unloads models loaded by this BIMServerBigLoaderPlugin.
      */
     clear() {
         for (const modelId in this.models) {
@@ -522,7 +525,7 @@ class BIMServerBigLoaderPlugin extends Plugin {
     }
 
     /**
-     * Destroys this plugin, after first unloading any models it has loaded.
+     * Destroys this BIMServerBigLoaderPlugin, after first unloading any models it has loaded.
      */
     destroy() {
         this.clear();
