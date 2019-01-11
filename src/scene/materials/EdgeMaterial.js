@@ -36,7 +36,7 @@ const PRESETS = {
  *
  * In the example below, we'll create a {@link Mesh} with its own EdgeMaterial and set {@link Mesh#edges} ````true```` to emphasise its edges.
  *
- * [[Run this example](/examples/#materials_EdgeMaterial)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_EdgeMaterial)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

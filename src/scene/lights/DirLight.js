@@ -16,7 +16,7 @@ import {math} from '../math/math.js';
  *
  * In the example below we'll replace the {@link Scene}'s default light sources with three View-space DirLights.
  *
- * [[Run this example](/examples/#lights_DirLight_view)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#lights_DirLight_view)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

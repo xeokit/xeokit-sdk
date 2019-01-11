@@ -11,7 +11,7 @@ import {math} from '../math/math.js';
  *
  * In the example below we'll create a {@link Mesh} with a {@link PhongMaterial} that applies a Fresnel to its alpha channel to give a glasss-like effect.
  *
- * [[Run this example](/examples/#materials_Fresnel)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_Fresnel)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

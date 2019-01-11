@@ -10,7 +10,7 @@ import {MetaObject} from "./MetaObject.js";
  * ## Usage
  *
  * * [Metadata Tutorial]()
- * * [Metadata Example](/examples/#metadata_BasicExample)
+ * * [Metadata Example](http://xeolabs.com/xeokit-sdk/examples/#metadata_BasicExample)
  */
 class MetaScene {
 

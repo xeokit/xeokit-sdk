@@ -8,7 +8,7 @@ import {K3D} from '../../libs/k3d.js';
  *
  * In the example below we'll create a {@link Mesh} with {@link MetallicMaterial} and {@link ReadableGeometry} loaded from OBJ.
  * 
- * [[Run this example](/examples/#geometry_loaders_OBJ)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_loaders_OBJ)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

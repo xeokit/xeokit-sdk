@@ -13,7 +13,7 @@ import {math} from '../math/math.js';
  *
  * ## Usage
  *
- * [[Run this example](/examples/#materials_LambertMaterial)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_LambertMaterial)]
  *
  * In the example below we'll create a {@link Mesh} with a shape defined by a {@link buildTorusGeometry} and normal rendering appearance configured with a LambertMaterial.
  *

@@ -17,7 +17,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *
  * In the example below, we'll create a {@link Mesh} with a PhongMaterial with a diffuse {@link Texture} and a specular {@link Fresnel}, using a {@link buildTorusGeometry} to create the {@link Geometry}.
  *
- * [[Run this example](/examples/#materials_PhongMaterial)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_PhongMaterial)]
  *
  *  ```` javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

@@ -15,8 +15,8 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [glTF file](/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](/examples/metaModels/schependomlaan/).
+ * In the example below we'll load the Schependomlaan model from a [glTF file](http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/), along
+ * with an accompanying JSON [IFC metadata file](http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/).
  *
  * This will create a {@link Node} that represents the model, which is the root of a tree of {@link Entity}s ({@link Node}s
  * and {@link Mesh}es) that represent the model objects.
@@ -34,7 +34,7 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * You can override that map with your own if needed (see {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * [[Run this example](/examples/#BIMOffline_metadata_Schependomlaan)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
