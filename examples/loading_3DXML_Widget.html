@@ -28,6 +28,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
+    import {ReflectionMap} from "../src/scene/lights/ReflectionMap.js";
     import {XML3DLoaderPlugin} from "../src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -39,6 +40,22 @@
     });
 
     viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ReflectionMap
+    //------------------------------------------------------------------------------------------------------------------
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load 3DXML model and fit it to view, then start orbiting the camera
