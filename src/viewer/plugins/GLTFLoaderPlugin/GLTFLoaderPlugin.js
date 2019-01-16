@@ -197,7 +197,7 @@ class GLTFLoaderPlugin extends Plugin {
 
         const self = this;
 
-        if (this.viewer.scene.components[params.id]) {
+        if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
             delete params.id;
         }
@@ -225,7 +225,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 self.viewer.metaScene.createMetaModel(modelId, modelMetadata, {
                     includeTypes: params.includeTypes,
-                    excludeTypes: params.excludeTypes,
+                    excludeTypes: params.excludeTypes
                 });
 
                 self.viewer.scene.canvas.spinner.processes--;
