@@ -111,20 +111,22 @@ class GLTFBigModelLoaderPlugin extends Plugin {
      * @returns {BigModel} A {@link BigModel} representing the loaded glTF model.
      */
     load(params) {
+
         const self = this;
 
+        if (params.id && this.viewer.scene.components[params.id]) {
+            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
+            delete params.id;
+        }
+
         var bigModel = new BigModel(this.viewer.scene, params);
-        const modelId = params.id;
+
+        const modelId = params.id; // In case ID was auto-generated
         const src = params.src;
 
         if (!src) {
             this.error("load() param expected: src");
             return bigModel;
-        }
-
-        if (!params.modelId) {
-            this.error("load() param expected: modelId");
-            return modelNode;
         }
 
         if (this.viewer.scene.components[params.modelId]) {
@@ -133,11 +135,35 @@ class GLTFBigModelLoaderPlugin extends Plugin {
         }
 
         if (params.metaModelSrc) {
+
             const metaModelSrc = params.metaModelSrc;
+
             this.viewer.scene.canvas.spinner.processes++;
+
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata, {
+                    includeTypes: params.includeTypes,
+                    excludeTypes: params.excludeTypes
+                });
+
                 self.viewer.scene.canvas.spinner.processes--;
+
+                var includeTypes;
+                if (params.includeTypes) {
+                    includeTypes = {};
+                    for (let i = 0, len = params.includeTypes.length; i < len; i++) {
+                        includeTypes[params.includeTypes[i]] = true;
+                    }
+                }
+
+                var excludeTypes;
+                if (params.excludeTypes) {
+                    excludeTypes = {};
+                    for (let i = 0, len = params.excludeTypes.length; i < len; i++) {
+                        includeTypes[params.excludeTypes[i]] = true;
+                    }
+                }
 
                 params.handleGLTFNode = function (modelId, glTFNode, actions) {
 
@@ -155,6 +181,20 @@ class GLTFBigModelLoaderPlugin extends Plugin {
                     const id = name;
                     const metaObject = self.viewer.metaScene.metaObjects[id];
                     const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
+                    if (metaObject) {
+                        if (excludeTypes) {
+                            if (excludeTypes[type]) {
+                                return false;
+                            }
+                        }
+
+                        if (includeTypes) {
+                            if (!includeTypes[type]) {
+                                return false;
+                            }
+                        }
+                    }
 
                     actions.createNode = { // Create a Node for this glTF scene node
                         id: id,
@@ -186,6 +226,7 @@ class GLTFBigModelLoaderPlugin extends Plugin {
                 };
 
                 self._loader.load(this, bigModel, src, params);
+
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 self.viewer.scene.canvas.spinner.processes--;
@@ -205,7 +246,6 @@ class GLTFBigModelLoaderPlugin extends Plugin {
 
         return bigModel;
     }
-
 
     /**
      * Unloads a model that was previously loaded by this Plugin.
