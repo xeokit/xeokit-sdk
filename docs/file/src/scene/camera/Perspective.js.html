@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -127,13 +129,7 @@ import {RenderState} from &apos;../webgl/RenderState.js&apos;;
 class Perspective extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return &quot;Perspective&quot;;
@@ -182,13 +178,13 @@ class Perspective extends Component {
     }
 
     /**
-     The field-of-view angle (FOV).
+     * Sets the Perspective&apos;s field-of-view angle (FOV).
+     *
+     * Fires a {@link Perspective/fov:event} event on change.
 
-     Fires a {@link Perspective/fov:event} event on change.
-
-     @property fov
-     @default 60.0
-     @type {Number}
+     * default value is ````60.0````.
+     *
+     * @param {Number} value New field-of-view.
      */
     set fov(value) {
         this._fov = (value !== undefined &amp;&amp; value !== null) ? value : 60.0;
@@ -202,20 +198,29 @@ class Perspective extends Component {
         this.fire(&quot;fov&quot;, this._fov);
     }
 
+    /**
+     * Gets the Perspective&apos;s field-of-view angle (FOV).
+     *
+     * Fires a {@link Perspective/fov:event} event on change.
+
+     * default value is ````60.0````.
+     *
+     * @returns {Number} Current field-of-view.
+     */
     get fov() {
         return this._fov;
     }
 
     /**
-     The FOV axis.
+     * Sets the Perspective&apos;s FOV axis.
+     *
+     * Options are ````&quot;x&quot;````, ````&quot;y&quot;```` or ````&quot;min&quot;````, to use the minimum axis.
+     *
+     * Fires a {@link Perspective/fov:event} event on change.
 
-     Options are &quot;x&quot;, &quot;y&quot; or &quot;min&quot;, to use the minimum axis.
-
-     Fires a {@link Perspective/fov:event} event on change.
-
-     @property fovAxis
-     @default &quot;min&quot;
-     @type {String}
+     * Default value ````&quot;min&quot;````.
+     *
+     * @param {String} value New FOV axis value.
      */
     set fovAxis(value) {
         value = value || &quot;min&quot;;
@@ -237,18 +242,29 @@ class Perspective extends Component {
         this.fire(&quot;fovAxis&quot;, this._fovAxis);
     }
 
+    /**
+     * Gets the Perspective&apos;s FOV axis.
+     *
+     * Options are ````&quot;x&quot;````, ````&quot;y&quot;```` or ````&quot;min&quot;````, to use the minimum axis.
+     *
+     * Fires a {@link Perspective/fov:event} event on change.
+
+     * Default value is ````&quot;min&quot;````.
+     *
+     * @returns {String} The current FOV axis value.
+     */
     get fovAxis() {
         return this._fovAxis;
     }
 
     /**
-     Position of this Perspective&apos;s near plane on the positive View-space Z-axis.
-
-     Fires a {@link Perspective/near:event} event on change.
-
-     @property near
-     @default 0.1
-     @type {Number}
+     * Sets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Perspective#near:emits} emits on change.
+     *
+     * Default value is ````0.1````.
+     *
+     * @param {Number} value New Perspective near plane position.
      */
     set near(value) {
         this._near = (value !== undefined &amp;&amp; value !== null) ? value : 0.1;
@@ -261,6 +277,15 @@ class Perspective extends Component {
         this.fire(&quot;near&quot;, this._near);
     }
 
+    /**
+     * Gets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Perspective#near:emits} emits on change.
+     *
+     * Default value is ````0.1````.
+     *
+     * @return {Number} Near frustum plane position.
+     */
     get near() {
         return this._near;
     }
@@ -291,13 +316,13 @@ class Perspective extends Component {
     }
 
     /**
-     The Perspective&apos;s projection transform matrix.
-
-     Fires a {@link Perspective/matrix:event} event on change.
-
-     @property matrix
-     @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Number[]}
+     * Gets the Perspective&apos;s projection transform matrix.
+     *
+     * Fires a {@link Perspective#matrix:emits} emits on change.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @returns {Number[]} The Perspective&apos;s projection matrix.
      */
     get matrix() {
         if (this._updateScheduled) {
@@ -306,6 +331,9 @@ class Perspective extends Component {
         return this._state.matrix;
     }
 
+    /**
+     * Destroys this Perspective.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

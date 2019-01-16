@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -631,6 +633,35 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMode">alphaMode</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the PhongMaterial&apos;s alpha rendering mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -655,35 +686,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
 <li>&quot;mask&quot; - The rendered output is either fully opaque or fully transparent depending on the alpha value and the specified alpha cutoff value.</li>
 <li>&quot;blend&quot; - The alpha value is used to composite the source and destination areas. The rendered output is combined with the background using the normal painting operation (i.e. the Porter and Duff over operator).</li>
 </ul>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaMode">alphaMode</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the PhongMaterial&apos;s alpha rendering mode.</p>
 </div>
       </div>
     </td>
@@ -786,35 +788,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-backfaces">backfaces</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -832,6 +805,35 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
         
         
         <div data-ice="description"><p>Gets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-backfaces">backfaces</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
 </div>
       </div>
     </td>
@@ -966,37 +968,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive">emissive</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the PhongMaterial&apos;s emissive color.</p>
-<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
-<p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -1014,6 +985,37 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
         
         
         <div data-ice="description"><p>Sets the PhongMaterial&apos;s emissive color.</p>
+<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive">emissive</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the PhongMaterial&apos;s emissive color.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
 <p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
 </div>
@@ -1146,37 +1148,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth">lineWidth</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the PhongMaterial&apos;s line width.</p>
-<p>This is not supported by WebGL implementations based on DirectX [2019].</p>
-<p>Default value is <code>1.0</code>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1194,6 +1165,37 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
         
         
         <div data-ice="description"><p>Gets the PhongMaterial&apos;s line width.</p>
+<p>This is not supported by WebGL implementations based on DirectX [2019].</p>
+<p>Default value is <code>1.0</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-lineWidth">lineWidth</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the PhongMaterial&apos;s line width.</p>
 <p>This is not supported by WebGL implementations based on DirectX [2019].</p>
 <p>Default value is <code>1.0</code>.</p>
 </div>
@@ -1266,36 +1268,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize">pointSize</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the PhongMaterial&apos;s point size.</p>
-<p>Default value is 1.0.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -1336,13 +1308,14 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivity">reflectivity</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize">pointSize</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
+        <div data-ice="description"><p>Gets the PhongMaterial&apos;s point size.</p>
+<p>Default value is 1.0.</p>
 </div>
       </div>
     </td>
@@ -1372,6 +1345,35 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
         
         
         <div data-ice="description"><p>Sets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivity">reflectivity</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
 </div>
       </div>
     </td>
@@ -1444,35 +1446,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess">shininess</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the PhongMaterial shininess.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -1512,15 +1485,13 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular">specular</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess">shininess</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the PhongMaterial&apos;s specular color.</p>
-<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
-Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
+        <div data-ice="description"><p>Gets the PhongMaterial shininess.</p>
 </div>
       </div>
     </td>
@@ -1550,6 +1521,37 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
         
         
         <div data-ice="description"><p>Sets the PhongMaterial&apos;s specular color.</p>
+<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
+Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular">specular</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the PhongMaterial&apos;s specular color.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
 Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
 </div>
@@ -1612,35 +1614,6 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
         
         <div data-ice="description"><p>Gets the PhongMaterials&apos;s specular <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular">PhongMaterial#specular</a></span>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1714,35 +1687,6 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -2226,35 +2170,6 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Material.js~Material.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       
       
       <span class="override" data-ice="override"></span>
@@ -2299,7 +2214,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 
@@ -2584,7 +2499,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber460">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber454">source</a></span></span>
     </span>
   </h3>
 
@@ -2632,7 +2547,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber476">source</a></span></span>
     </span>
   </h3>
 
@@ -2680,7 +2595,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber804">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber798">source</a></span></span>
     </span>
   </h3>
 
@@ -2724,7 +2639,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber789">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber783">source</a></span></span>
     </span>
   </h3>
 
@@ -2772,7 +2687,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber726">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber720">source</a></span></span>
     </span>
   </h3>
 
@@ -2817,7 +2732,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber662">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber656">source</a></span></span>
     </span>
   </h3>
 
@@ -2826,6 +2741,50 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   <div data-ice="description"><p>Gets the PhongMaterials&apos;s alpha <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alpha">PhongMaterial#alpha</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-alphaMode">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">alphaMode</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber767">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the PhongMaterial&apos;s alpha rendering mode.</p>
 </div>
 
   
@@ -2862,7 +2821,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber754">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber748">source</a></span></span>
     </span>
   </h3>
 
@@ -2902,50 +2861,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-alphaMode">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">alphaMode</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber773">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the PhongMaterial&apos;s alpha rendering mode.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-ambient">
     <span class="access" data-ice="access">public</span>
     
@@ -2957,7 +2872,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber300">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber294">source</a></span></span>
     </span>
   </h3>
 
@@ -3002,7 +2917,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
@@ -3047,7 +2962,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber618">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber612">source</a></span></span>
     </span>
   </h3>
 
@@ -3056,52 +2971,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   <div data-ice="description"><p>Gets the PhongMaterials&apos;s ambient <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient">PhongMaterial#ambient</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-backfaces">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">backfaces</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber817">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
-<p>The backfaces will belong to <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> compoents that are also attached to the <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
-<p>Default is <code>false</code>.</p>
 </div>
 
   
@@ -3138,7 +3007,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber833">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber827">source</a></span></span>
     </span>
   </h3>
 
@@ -3146,6 +3015,52 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   
   <div data-ice="description"><p>Gets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
+<p>Default is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-backfaces">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">backfaces</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber811">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether backfaces are visible on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
+<p>The backfaces will belong to <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> compoents that are also attached to the <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
 <p>Default is <code>false</code>.</p>
 </div>
 
@@ -3183,7 +3098,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -3229,7 +3144,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber339">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber333">source</a></span></span>
     </span>
   </h3>
 
@@ -3275,7 +3190,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber693">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber687">source</a></span></span>
     </span>
   </h3>
 
@@ -3320,7 +3235,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber629">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber623">source</a></span></span>
     </span>
   </h3>
 
@@ -3329,52 +3244,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   <div data-ice="description"><p>Gets the PhongMaterials&apos;s diffuse <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-diffuse">PhongMaterial#diffuse</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-emissive">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">emissive</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber443">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the PhongMaterial&apos;s emissive color.</p>
-<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
-<p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
 </div>
 
   
@@ -3411,7 +3280,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
@@ -3419,6 +3288,52 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   
   <div data-ice="description"><p>Sets the PhongMaterial&apos;s emissive color.</p>
+<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-emissive">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">emissive</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber437">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the PhongMaterial&apos;s emissive color.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissiveMap">PhongMaterial#emissiveMap</a></span>.</p>
 <p>Default value is <code>[0.0, 0.0, 0.0]</code>.</p>
 </div>
@@ -3457,7 +3372,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber715">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber709">source</a></span></span>
     </span>
   </h3>
 
@@ -3502,7 +3417,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber651">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber645">source</a></span></span>
     </span>
   </h3>
 
@@ -3547,7 +3462,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber843">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber837">source</a></span></span>
     </span>
   </h3>
 
@@ -3592,7 +3507,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber858">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber852">source</a></span></span>
     </span>
   </h3>
 
@@ -3601,52 +3516,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   <div data-ice="description"><p>Gets the winding direction of front faces on attached <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es.</p>
 <p>Default is <code>&quot;ccw&quot;</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-lineWidth">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">lineWidth</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber530">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the PhongMaterial&apos;s line width.</p>
-<p>This is not supported by WebGL implementations based on DirectX [2019].</p>
-<p>Default value is <code>1.0</code>.</p>
 </div>
 
   
@@ -3683,7 +3552,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber544">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber538">source</a></span></span>
     </span>
   </h3>
 
@@ -3691,6 +3560,52 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   
   <div data-ice="description"><p>Gets the PhongMaterial&apos;s line width.</p>
+<p>This is not supported by WebGL implementations based on DirectX [2019].</p>
+<p>Default value is <code>1.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-lineWidth">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">lineWidth</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber524">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the PhongMaterial&apos;s line width.</p>
 <p>This is not supported by WebGL implementations based on DirectX [2019].</p>
 <p>Default value is <code>1.0</code>.</p>
 </div>
@@ -3729,7 +3644,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber607">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber601">source</a></span></span>
     </span>
   </h3>
 
@@ -3773,7 +3688,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber682">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber676">source</a></span></span>
     </span>
   </h3>
 
@@ -3781,51 +3696,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   
   <div data-ice="description"><p>Gets the PhongMaterials&apos;s ambient occlusion <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-pointSize">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">pointSize</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber567">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the PhongMaterial&apos;s point size.</p>
-<p>Default value is 1.0.</p>
 </div>
 
   
@@ -3862,7 +3732,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber555">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber549">source</a></span></span>
     </span>
   </h3>
 
@@ -3896,28 +3766,26 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-reflectivity">
+  <h3 data-ice="anchor" id="instance-get-pointSize">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">reflectivity</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">pointSize</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber598">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber561">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
-<p>This is a scalar in range <code>[0-1]</code>. Default value is <code>1.0</code>.</p>
-<p>The surface will be non-reflective when this is <code>0</code>, and completely mirror-like when it is <code>1.0</code>.</p>
-<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityMap">PhongMaterial#reflectivityMap</a></span>.</p>
+  <div data-ice="description"><p>Gets the PhongMaterial&apos;s point size.</p>
+<p>Default value is 1.0.</p>
 </div>
 
   
@@ -3954,7 +3822,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber582">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber576">source</a></span></span>
     </span>
   </h3>
 
@@ -3962,6 +3830,53 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   
   <div data-ice="description"><p>Sets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
+<p>This is a scalar in range <code>[0-1]</code>. Default value is <code>1.0</code>.</p>
+<p>The surface will be non-reflective when this is <code>0</code>, and completely mirror-like when it is <code>1.0</code>.</p>
+<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityMap">PhongMaterial#reflectivityMap</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-reflectivity">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">reflectivity</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber592">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets how much <span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span> is reflected by this PhongMaterial.</p>
 <p>This is a scalar in range <code>[0-1]</code>. Default value is <code>1.0</code>.</p>
 <p>The surface will be non-reflective when this is <code>0</code>, and completely mirror-like when it is <code>1.0</code>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-reflectivityMap">PhongMaterial#reflectivityMap</a></span>.</p>
@@ -4001,7 +3916,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber737">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber731">source</a></span></span>
     </span>
   </h3>
 
@@ -4046,7 +3961,7 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber673">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber667">source</a></span></span>
     </span>
   </h3>
 
@@ -4055,55 +3970,6 @@ opaque, otherwise, it is rendered as fully transparent. A value greater than 1.0
   
   <div data-ice="description"><p>Gets the PhongMaterials&apos;s reflectivity <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-reflectivity">PhongMaterial#reflectivity</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-shininess">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">shininess</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber517">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the PhongMaterial shininess.</p>
-<p>This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.</p>
-<p>Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
-desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
-highlight.</p>
-<p>Default value is <code>80.0</code>.</p>
 </div>
 
   
@@ -4140,7 +4006,7 @@ highlight.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber499">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber493">source</a></span></span>
     </span>
   </h3>
 
@@ -4178,27 +4044,30 @@ highlight.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-specular">
+  <h3 data-ice="anchor" id="instance-get-shininess">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">specular</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">shininess</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber511">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the PhongMaterial&apos;s specular color.</p>
-<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
-Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
+  <div data-ice="description"><p>Gets the PhongMaterial shininess.</p>
+<p>This is a factor in range [0..128] that determines the size and sharpness of the specular highlights create by this PhongMaterial.</p>
+<p>Larger values produce smaller, sharper highlights. A value of 0.0 gives very large highlights that are almost never
+desirable. Try values close to 10 for a larger, fuzzier highlight and values of 100 or more for a small, sharp
+highlight.</p>
+<p>Default value is <code>80.0</code>.</p>
 </div>
 
   
@@ -4235,7 +4104,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber372">source</a></span></span>
     </span>
   </h3>
 
@@ -4243,6 +4112,52 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
   
   
   <div data-ice="description"><p>Sets the PhongMaterial&apos;s specular color.</p>
+<p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
+Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-specular">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">specular</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber398">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the PhongMaterial&apos;s specular color.</p>
 <p>Multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specularMap">PhongMaterial#specularMap</a></span>.
 Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
 </div>
@@ -4281,7 +4196,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber704">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber698">source</a></span></span>
     </span>
   </h3>
 
@@ -4326,7 +4241,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber640">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber634">source</a></span></span>
     </span>
   </h3>
 
@@ -4340,67 +4255,6 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
   
 
   <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber105">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/materials/Material.js~Material.html#instance-get-type">Material#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
 </div>
 
   
@@ -4435,7 +4289,7 @@ Default value is <code>[1.0, 1.0, 1.0]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber865">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/PhongMaterial.js.html#lineNumber859">source</a></span></span>
     </span>
   </h3>
 

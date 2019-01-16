@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -1123,7 +1125,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -1133,7 +1135,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html#instance-set-parent">parent</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html#instance-get-parent">parent</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span>
         </p>
       </div>
       <div>
@@ -1152,7 +1154,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
+      <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -1162,7 +1164,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html#instance-get-parent">parent</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html#instance-set-parent">parent</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span>
         </p>
       </div>
       <div>
@@ -1583,35 +1585,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>Sets if this Node and all child Nodes and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es are selected.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -2120,35 +2093,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -4097,10 +4041,10 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-parent">
+  <h3 data-ice="anchor" id="instance-get-parent">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -4108,7 +4052,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber924">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber953">source</a></span></span>
     </span>
   </h3>
 
@@ -4116,7 +4060,6 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
   
   
   <div data-ice="description"><p>The parent Node.</p>
-<p>The parent Node may also be set by passing the Node to the parent&apos;s <span><a href="class/src/scene/nodes/Node.js~Node.html#instance-method-addChild">Node#addChild</a></span> method.</p>
 </div>
 
   
@@ -4142,10 +4085,10 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-parent">
+  <h3 data-ice="anchor" id="instance-set-parent">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
@@ -4153,7 +4096,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber953">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber924">source</a></span></span>
     </span>
   </h3>
 
@@ -4161,6 +4104,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
   
   
   <div data-ice="description"><p>The parent Node.</p>
+<p>The parent Node may also be set by passing the Node to the parent&apos;s <span><a href="class/src/scene/nodes/Node.js~Node.html#instance-method-addChild">Node#addChild</a></span> method.</p>
 </div>
 
   
@@ -4819,50 +4763,6 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber1225">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-visible">
     <span class="access" data-ice="access">public</span>
     
@@ -5116,7 +5016,7 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber1232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/nodes/Node.js.html#lineNumber1230">source</a></span></span>
     </span>
   </h3>
 

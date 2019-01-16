@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -236,13 +238,15 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fov">fov</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fov">fov</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The field-of-view angle (FOV).</p>
+        <div data-ice="description"><p>Sets the Perspective&apos;s field-of-view angle (FOV).</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>default value is <code>60.0</code>.</p>
 </div>
       </div>
     </td>
@@ -265,99 +269,15 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fov">fov</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fov">fov</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis">fovAxis</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The FOV axis.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fovAxis">fovAxis</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The Perspective&apos;s projection transform matrix.</p>
-<p>Fires a <span>Perspective/matrix:event</span> event on change.</p>
+        <div data-ice="description"><p>Gets the Perspective&apos;s field-of-view angle (FOV).</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>default value is <code>60.0</code>.</p>
 </div>
       </div>
     </td>
@@ -380,14 +300,16 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fovAxis">fovAxis</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Perspective&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Perspective/near:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the Perspective&apos;s FOV axis.</p>
+<p>Options are <code>&quot;x&quot;</code>, <code>&quot;y&quot;</code> or <code>&quot;min&quot;</code>, to use the minimum axis.</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>Default value <code>&quot;min&quot;</code>.</p>
 </div>
       </div>
     </td>
@@ -410,13 +332,17 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fovAxis">fovAxis</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the Perspective&apos;s FOV axis.</p>
+<p>Options are <code>&quot;x&quot;</code>, <code>&quot;y&quot;</code> or <code>&quot;min&quot;</code>, to use the minimum axis.</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>Default value is <code>&quot;min&quot;</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -438,13 +364,77 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets the Perspective&apos;s projection transform matrix.</p>
+<p>Fires a <span>Perspective#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Perspective#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Perspective#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
       </div>
     </td>
@@ -480,7 +470,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Destroys this Perspective.</p>
+</div>
       </div>
     </td>
     <td>
@@ -517,35 +508,6 @@
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1039,7 +1001,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -1100,7 +1062,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
@@ -1139,40 +1101,25 @@
     
     
     
-    <span class="code" data-ice="name">fov</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">fov</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The field-of-view angle (FOV).</p>
+  <div data-ice="description"><p>Sets the Perspective&apos;s field-of-view angle (FOV).</p>
 <p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>default value is <code>60.0</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">fov</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1200,25 +1147,41 @@
     
     
     
-    <span class="code" data-ice="name">fov</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">fov</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the Perspective&apos;s field-of-view angle (FOV).</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>default value is <code>60.0</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Current field-of-view.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1243,41 +1206,26 @@
     
     
     
-    <span class="code" data-ice="name">fovAxis</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="code" data-ice="name">fovAxis</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The FOV axis.</p>
-<p>Options are &quot;x&quot;, &quot;y&quot; or &quot;min&quot;, to use the minimum axis.</p>
+  <div data-ice="description"><p>Sets the Perspective&apos;s FOV axis.</p>
+<p>Options are <code>&quot;x&quot;</code>, <code>&quot;y&quot;</code> or <code>&quot;min&quot;</code>, to use the minimum axis.</p>
 <p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>Default value <code>&quot;min&quot;</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">fovAxis</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1305,25 +1253,42 @@
     
     
     
-    <span class="code" data-ice="name">fovAxis</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">fovAxis</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber139">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the Perspective&apos;s FOV axis.</p>
+<p>Options are <code>&quot;x&quot;</code>, <code>&quot;y&quot;</code> or <code>&quot;min&quot;</code>, to use the minimum axis.</p>
+<p>Fires a <span>Perspective/fov:event</span> event on change.</p>
+<p>Default value is <code>&quot;min&quot;</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current FOV axis value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1348,43 +1313,41 @@
     
     
     
-    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber210">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The Perspective&apos;s projection transform matrix.</p>
-<p>Fires a <span>Perspective/matrix:event</span> event on change.</p>
+  <div data-ice="description"><p>Gets the Perspective&apos;s projection transform matrix.</p>
+<p>Fires a <span>Perspective#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">matrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Perspective&apos;s projection matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1409,40 +1372,25 @@
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Perspective&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Perspective/near:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Perspective#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">near</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1470,86 +1418,41 @@
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Perspective&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Perspective#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Near frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber23">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -1581,14 +1484,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Perspective.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this component.</p>
+  <div data-ice="description"><p>Destroys this Perspective.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-method-destroy">Component#destroy</a></span></div>

@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber52">xeokit-sdk/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber91">xeokit-sdk/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber52">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber91">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -144,50 +146,78 @@
 the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.</p>
 <p>In the example below, we&apos;ll use a <span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model from a glTF file, then once that model
 has loaded, we&apos;ll arrange the camera</p>
-</div>
-  
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load a glTF model into it using a <span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>,
+slice the model in half using a <span><a href="class/src/viewer/plugins/ClipsPlugin/ClipsPlugin.js~ClipsPlugin.html">ClipsPlugin</a></span>, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
+which we&apos;ll log to the JavaScript developer console.</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
+import {ClipsPlugin} from &quot;../src/viewer/plugins/ClipsPlugin/ClipsPlugin.js&quot;;
+import {BCFViewpointsPlugin} from &quot;../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js&quot;;
 
-  
-
-  <div data-ice="exampleDocs">
-    <h4>Example:</h4>
-    
-  <div class="example-doc" data-ice="exampleDoc">
-      
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">import {Viewer} from &quot;../../../src/viewer/Viewer.js&quot;;
-import {GLTFModelsPlugin} from &quot;../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js&quot;;
-import {BCFViewpointsPlugin} from &quot;../../../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js&quot;;
-
-// Create a xeokit Viewer
+// Create a Viewer
 const viewer = new Viewer({
-   canvasId: &quot;myCanvas&quot;
+     canvasId: &quot;myCanvas&quot;,
+     transparent: true
 });
 
-// Add a GLTFModelsPlugin
-const gltfLoader = new GLTFModelsPlugin(viewer);
+// Add a GLTFLoaderPlugin
+const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+// Add a ClipsPlugin
+const clips = new ClipsPlugin(viewer);
 
 // Add a BCFViewpointsPlugin
 const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
 // Load a glTF model
-const model = gltfLoader.load({
-   id: &quot;myModel&quot;,
-   src: &quot;./../../models/gltf/schependomlaan/schependomlaan.gltf&quot;,
-   edges: true
+const modelNode = gltfLoader.load({
+     id: &quot;myModel&quot;,
+     src: &quot;./models/gltf/schependomlaan/scene.gltf&quot;,
+     metaModelSrc: &quot;./metaModels/schependomlaan/metaModel.json&quot;, // Creates a MetaObject instances in scene.metaScene.metaObjects
+     lambertMaterial: true,
+     edges: true // Emphasise edges
 });
 
-// When the model has loaded, arrange the camera and save a BCF viewpoint
-model.on(&quot;loaded&quot;, () =&gt; {
+// Slice it in half
+clips.createClip({
+     id: &quot;myClip&quot;,
+     pos: [0, 0, 0],
+     dir: [0.5, 0.0, 0.5]
+});
 
-    viewer.scene.camera.orbitPitch(20);
-    viewer.cameraFlight.flyTo(model);
+// When model is loaded, set camera, select some objects and capture a BCF viewpoint to the console
+modelNode.on(&quot;loaded&quot;, () =&gt; {
 
-    const viewpoint = bcfViewpoints.getViewpoint();
+     var scene = viewer.scene;
+     var camera = scene.camera;
 
-    console.log(JSON.stringify(viewpoint, null, &quot;\t&quot;));
-});</code></pre>
-    </div>
+camera.eye = [-2.37, 18.97, -26.12];
+     camera.look = [10.97, 5.82, -11.22];
+     camera.up = [0.36, 0.83, 0.40];
+
+     scene.setObjectsSelected([
+         &quot;3b2U496P5Ebhz5FROhTwFH&quot;,
+         &quot;2MGtJUm9nD$Re1_MDIv0g2&quot;,
+         &quot;3IbuwYOm5EV9Q6cXmwVWqd&quot;,
+         &quot;3lhisrBxL8xgLCRdxNG$2v&quot;,
+         &quot;1uDn0xT8LBkP15zQc9MVDW&quot;
+     ], true);
+
+     const viewpoint = bcfViewpoints.getViewpoint();
+     const viewpointStr = JSON.stringify(viewpoint, null, 4);
+
+     console.log(viewpointStr);
+});</code>
+</code></pre>
+<pre><code class="lang-javascript"><code class="source-code prettyprint"></code>
+</code></pre>
 </div>
+  
+
+  
+
+  
 
   
 
@@ -647,7 +677,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber101">source</a></span></span>
     </span>
   </h3>
 
@@ -740,7 +770,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -800,7 +830,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -863,7 +893,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber342">source</a></span></span>
     </span>
   </h3>
 
@@ -907,7 +937,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber188">source</a></span></span>
     </span>
   </h3>
 
@@ -1032,7 +1062,7 @@ const viewpoint = bcfPlugin.getViewpoint();
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber239">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 

@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -298,35 +300,6 @@ new Mesh(viewer.scene, {
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-image">image</a></span></span><span class="code" data-ice="signature">: <span>HTMLImageElement</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets HTML DOM Image object this Texture is sourced from, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -344,6 +317,35 @@ new Mesh(viewer.scene, {
         
         
         <div data-ice="description"><p>Sets an HTML DOM Image object to source this Texture from.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-image">image</a></span></span><span class="code" data-ice="signature">: <span>HTMLImageElement</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets HTML DOM Image object this Texture is sourced from, if any.</p>
 </div>
       </div>
     </td>
@@ -414,36 +416,6 @@ new Mesh(viewer.scene, {
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-rotate">rotate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
-<p>Default value is <code>0</code>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -461,6 +433,36 @@ new Mesh(viewer.scene, {
         
         
         <div data-ice="description"><p>Sets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+<p>Default value is <code>0</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-rotate">rotate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
 <p>Default value is <code>0</code>.</p>
 </div>
       </div>
@@ -662,35 +664,6 @@ new Mesh(viewer.scene, {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the JavaScript class name for this Component.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-get-wrapS">wrapS</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -822,35 +795,6 @@ fractional part, thereby creating a repeating pattern.</li>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1343,7 +1287,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -1508,7 +1452,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber511">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber509">source</a></span></span>
     </span>
   </h3>
 
@@ -1552,7 +1496,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber502">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 
@@ -1560,51 +1504,6 @@ fractional part, thereby creating a repeating pattern.</li>
   
   
   <div data-ice="description"><p>Gets if this Texture&apos;s source data is flipped along its vertical axis.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-image">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">image</span><span class="code" data-ice="signature">: <span>HTMLImageElement</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber284">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets HTML DOM Image object this Texture is sourced from, if any.</p>
-<p>Returns null if not set.</p>
 </div>
 
   
@@ -1641,7 +1540,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -1650,6 +1549,51 @@ fractional part, thereby creating a repeating pattern.</li>
   
   <div data-ice="description"><p>Sets an HTML DOM Image object to source this Texture from.</p>
 <p>Sets <span><a href="class/src/scene/materials/Texture.js~Texture.html#instance-set-src">Texture#src</a></span> null.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-image">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">image</span><span class="code" data-ice="signature">: <span>HTMLImageElement</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber282">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets HTML DOM Image object this Texture is sourced from, if any.</p>
+<p>Returns null if not set.</p>
 </div>
 
   
@@ -1686,7 +1630,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber451">source</a></span></span>
     </span>
   </h3>
 
@@ -1737,7 +1681,7 @@ closest to the center of the pixel being textured.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber437">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber435">source</a></span></span>
     </span>
   </h3>
 
@@ -1801,10 +1745,10 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-rotate">
+  <h3 data-ice="anchor" id="instance-set-rotate">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
@@ -1812,14 +1756,14 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber378">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+  <div data-ice="description"><p>Sets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
 <p>Default value is <code>0</code>.</p>
 </div>
 
@@ -1846,10 +1790,10 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-rotate">
+  <h3 data-ice="anchor" id="instance-get-rotate">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -1857,14 +1801,14 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber395">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
+  <div data-ice="description"><p>Gets the rotation angles, in degrees, that will be applied to this Texture&apos;s <em>S</em> and <em>T</em> UV coordinates.</p>
 <p>Default value is <code>0</code>.</p>
 </div>
 
@@ -1902,7 +1846,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -1947,7 +1891,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber356">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber354">source</a></span></span>
     </span>
   </h3>
 
@@ -1992,7 +1936,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber321">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -2037,7 +1981,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
@@ -2082,7 +2026,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber343">source</a></span></span>
     </span>
   </h3>
 
@@ -2127,7 +2071,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber330">source</a></span></span>
     </span>
   </h3>
 
@@ -2161,50 +2105,6 @@ average of those two values.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber92">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the JavaScript class name for this Component.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-wrapS">
     <span class="access" data-ice="access">public</span>
     
@@ -2216,7 +2116,7 @@ average of those two values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber473">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber471">source</a></span></span>
     </span>
   </h3>
 
@@ -2270,7 +2170,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber493">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber491">source</a></span></span>
     </span>
   </h3>
 
@@ -2329,7 +2229,7 @@ fractional part, thereby creating a repeating pattern.</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber518">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/Texture.js.html#lineNumber516">source</a></span></span>
     </span>
   </h3>
 

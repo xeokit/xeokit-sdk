@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Camera} from &apos;<span><a href="file/src/scene/camera/Camera.js.html#lineNumber188">xeokit-sdk/src/scene/camera/Camera.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Camera} from &apos;<span><a href="file/src/scene/camera/Camera.js.html#lineNumber211">xeokit-sdk/src/scene/camera/Camera.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/camera/Camera.js.html#lineNumber188">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/camera/Camera.js.html#lineNumber211">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -142,93 +144,103 @@
   <div class="description" data-ice="description"><p>Manages viewing and projection transforms for its <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
 <ul>
 <li>One Camera per <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></li>
-<li>Located at <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-camera">Scene#camera</a></span></li>
-<li>Also located for convenience at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-camera">Viewer#camera</a></span></li>
+<li>Scene is located at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-scene">Viewer#scene</a></span> and Camera is located at <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-camera">Scene#camera</a></span></li>
 <li>Controls viewing and projection transforms</li>
 <li>Has methods to pan, zoom and orbit (or first-person rotation)</li>
-<li>Dynamically configurable World-space &quot;up&quot; direction</li>
-<li>Switchable between perspective, frustum and orthographic projections</li>
+<li>Dynamically configurable World-space axis</li>
+<li>Has <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span>, <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span> and <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span> and <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>, which you can dynamically switch it between</li>
 <li>Switchable gimbal lock</li>
 <li>Can be &quot;flown&quot; to look at targets using a <span><a href="class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></li>
 <li>Can be animated along a path using a <span><a href="class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></li>
 </ul>
 <h2 id="getting-the-camera">Getting the Camera</h2><p>There is exactly one Camera per <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var camera = myViewer.scene.camera;</code>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+
+var camera = myViewer.scene.camera;
+</code>
 </code></pre>
-<p>Can also be found on the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> for convenience:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var camera = myViewer.scene.camera;</code>
-</code></pre>
-<h2 id="moving-around">Moving around</h2><p>Get and set the Camera&apos;s absolute position at any time via its <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>, <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> properties:</p>
+<h2 id="setting-the-camera-position">Setting the Camera Position</h2><p>Get and set the Camera&apos;s absolute position via <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>, <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.eye = [-10,0,0];
 camera.look = [-10,0,0];
 camera.up = [0,1,0];</code>
 </code></pre>
-<p>Get the view matrix:</p>
+<h2 id="camera-view-and-projection-matrices">Camera View and Projection Matrices</h2><p>The Camera&apos;s view matrix transforms coordinates from World-space to View-space.</p>
+<p>Getting the view matrix:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">var viewMatrix = camera.viewMatrix;
 var viewNormalMatrix = camera.normalMatrix;</code>
 </code></pre>
-<p>Listen for view matrix updates:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">camera.on(&quot;matrix&quot;, function(matrix) { ... });</code>
+<p>The Camera&apos;s view normal matrix transforms normal vectors from World-space to View-space.</p>
+<p>Getting the view normal matrix:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var viewNormalMatrix = camera.normalMatrix;</code>
 </code></pre>
-<p>Orbiting the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> position:</p>
+<p>The Camera fires a <code>&quot;viewMatrix&quot;</code> event whenever the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewMatrix">Camera#viewMatrix</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewNormalMatrix">Camera#viewNormalMatrix</a></span> updates.</p>
+<p>Listen for view matrix updates:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">camera.on(&quot;viewMatrix&quot;, function(matrix) { ... });</code>
+</code></pre>
+<h2 id="rotating-the-camera">Rotating the Camera</h2><p>Orbiting the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> position:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.orbitYaw(20.0);
 camera.orbitPitch(10.0);</code>
 </code></pre>
-<p>First-person rotation, rotates <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>
-and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> about <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>:</p>
+<p>First-person rotation, rotates <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> about <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.yaw(5.0);
 camera.pitch(-10.0);</code>
 </code></pre>
-<p>Panning along the Camera&apos;s local axis (ie. left/right, up/down, forward/backward):</p>
+<h2 id="panning-the-camera">Panning the Camera</h2><p>Panning along the Camera&apos;s local axis (ie. left/right, up/down, forward/backward):</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.pan([-20, 0, 10]);</code>
 </code></pre>
-<p>Zoom to vary distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>:</p>
+<h2 id="zooming-the-camera">Zooming the Camera</h2><p>Zoom to vary distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.zoom(-5); // Move five units closer</code>
 </code></pre>
 <p>Get the current distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">var distance = camera.eyeLookDist;</code>
 </code></pre>
-<h2 id="projection">Projection</h2><p>For each projection type, the Camera has a Component to manage that projection&apos;s configuration. You can hot-switch the Camera
-between those projection types, while updating the properties of each projection component at any time.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">camera.perspective.near = 0.4;
+<h2 id="projection">Projection</h2><p>The Camera has a Component to manage each projection type, which are: <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span>, <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span>
+and <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span> and <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>.</p>
+<p>You can configure those components at any time, regardless of which is currently active:</p>
+<p>The Camera has a <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span> to manage perspective</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+// Set some properties on Perspective
+camera.perspective.near = 0.4;
 camera.perspective.fov = 45;
-//...
 
+// Set some properties on Ortho
 camera.ortho.near = 0.8;
 camera.ortho.far = 1000;
-//...
 
+// Set some properties on Frustum
 camera.frustum.left = -1.0;
 camera.frustum.right = 1.0;
 camera.frustum.far = 1000.0;
-//...
 
+// Set the matrix property on CustomProjection
 camera.customProjection.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
+// Switch between the projection types
 camera.projection = &quot;perspective&quot;; // Switch to perspective
 camera.projection = &quot;frustum&quot;; // Switch to frustum
 camera.projection = &quot;ortho&quot;; // Switch to ortho
 camera.projection = &quot;customProjection&quot;; // Switch to custom</code>
 </code></pre>
+<p>Camera provides the projection matrix for the currently active projection in <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-projMatrix">Camera#projMatrix</a></span>.</p>
 <p>Get the projection matrix:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">var projMatrix = camera.projMatrix;</code>
 </code></pre>
 <p>Listen for projection matrix updates:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.on(&quot;projMatrix&quot;, function(matrix) { ... });</code>
 </code></pre>
-<h2 id="configuring-world-up-direction">Configuring World up direction</h2><p>We can dynamically configure the direction that we consider to be &quot;up&quot; in the World-space coordinate system.</p>
-<p>Set the +Y axis as World &quot;up&quot; (convention in some modeling software):</p>
+<h2 id="configuring-world-up-direction">Configuring World up direction</h2><p>We can dynamically configure the directions of the World-space coordinate system.</p>
+<p>Setting the +Y axis as World &quot;up&quot;, +X as right and -Z as forwards (convention in some modeling software):</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.worldAxis = [
- 1, 0, 0,    // Right
- 0, 1, 0,    // Up
- 0, 0,-1     // Forward
+    1, 0, 0,    // Right
+    0, 1, 0,    // Up
+    0, 0,-1     // Forward
 ];</code>
 </code></pre>
-<p>Set the +Z axis as World &quot;up&quot; (convention in most CAD and BIM viewers):</p>
+<p>Setting the +Z axis as World &quot;up&quot;, +X as right and -Y as &quot;up&quot; (convention in most CAD and BIM viewers):</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">camera.worldAxis = [
- 1, 0, 0, // Right
- 0, 0, 1, // Up
- 0,-1, 0  // Forward
+    1, 0, 0, // Right
+    0, 0, 1, // Up
+    0,-1, 0  // Forward
 ];</code>
 </code></pre>
 <p>The Camera has read-only convenience properties that provide each axis individually:</p>
@@ -274,13 +286,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-constrainPitch">constrainPitch</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-constrainPitch">constrainPitch</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Whether to prevent camera from being pitched upside down.</p>
+        <div data-ice="description"><p>Sets whether to prevent camera from being pitched upside down.</p>
 </div>
       </div>
     </td>
@@ -303,41 +315,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-constrainPitch">constrainPitch</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-customProjection">customProjection</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-customProjection">customProjection</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A custom projection transform, given as a 4x4 matrix.</p>
+        <div data-ice="description"><p>Gets the Camera&apos;s custom projection.</p>
+<p>This is used while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals &quot;customProjection&quot;.</p>
 </div>
       </div>
     </td>
@@ -360,7 +345,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix">deviceMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix">deviceMatrix</a></span></span><span class="code" data-ice="signature">(matrix: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
@@ -389,13 +374,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix">deviceMatrix</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix">deviceMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets an optional matrix to premultiply into <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-matrix">Camera#matrix</a></span> matrix.</p>
+</div>
       </div>
     </td>
     <td>
@@ -423,8 +409,8 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
       <div>
         
         
-        <div data-ice="description"><p>Position of this Camera&apos;s eye.</p>
-<p>Fires an <span>Camera#eye:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Camera&apos;s eye.</p>
+<p>Default value is <code>[0,0,10]</code>.</p>
 </div>
       </div>
     </td>
@@ -447,41 +433,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-eye">eye</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-eye">eye</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-eyeLookDist">eyeLookDist</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Distance from &quot;look&quot; to &quot;eye&quot;.</p>
+        <div data-ice="description"><p>Gets the position of the Camera&apos;s eye.</p>
+<p>Default vale is <code>[0,0,10]</code>.</p>
 </div>
       </div>
     </td>
@@ -504,13 +463,72 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-frustum">frustum</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-eyeLookDist">eyeLookDist</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The frustum projection transform for this Camera.</p>
+        <div data-ice="description"><p>Gets whether to prevent camera from being pitched upside down.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-frustum">frustum</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the Camera&apos;s frustum projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>frustum</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock">gimbalLock</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
 </div>
       </div>
     </td>
@@ -533,70 +551,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock">gimbalLock</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock">gimbalLock</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
+        <div data-ice="description"><p>Sets whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock">gimbalLock</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-look">look</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -618,14 +580,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">look</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">look</a></span></span><span class="code" data-ice="signature">(look: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Camera&apos;s point-of-interest.</p>
-<p>Fires a <span>Camera#look:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of this Camera&apos;s point-of-interest.</p>
+<p>Default value is <code>[0,0,0]</code>.</p>
 </div>
       </div>
     </td>
@@ -648,13 +610,43 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-look">look</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
         
-        <div data-ice="description"><p>The Camera&apos;s viewing transformation matrix.</p>
+        
+        <div data-ice="description"><p>Gets the position of this Camera&apos;s point-of-interest.</p>
+<p>Default value is <code>[0,0,0]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the Camera&apos;s viewing transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
 </div>
       </div>
@@ -678,11 +670,11 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-normalMatrix">normalMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-normalMatrix">normalMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+        
         
         <div data-ice="description"><p>The Camera&apos;s viewing normal transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
@@ -708,13 +700,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-ortho">ortho</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-ortho">ortho</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The orthographic projection transform for this Camera.</p>
+        <div data-ice="description"><p>Gets the Camera&apos;s orthographic projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>ortho</code>.</p>
 </div>
       </div>
     </td>
@@ -737,13 +730,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-perspective">perspective</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-perspective">perspective</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The perspective projection transform for this Camera.</p>
+        <div data-ice="description"><p>Gets the Camera&apos;s perspective projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>perspective</code>.</p>
 </div>
       </div>
     </td>
@@ -766,13 +760,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-projMatrix">projMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-projMatrix">projMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Camera&apos;s projection transformation projMatrix.</p>
+        <div data-ice="description"><p>Gets the Camera&apos;s projection transformation projMatrix.</p>
 <p>Fires a <span>Camera#projMatrix:event</span> event on change.</p>
 </div>
       </div>
@@ -796,13 +790,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-project">project</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-project">project</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span> | <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span> | <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span> | <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The active projection transform for this Camera.</p>
+        <div data-ice="description"><p>Gets the currently active projection for this Camera.</p>
 </div>
       </div>
     </td>
@@ -825,13 +819,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-projection">projection</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-projection">projection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the active projection type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -853,71 +848,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">projection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">projection</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The active projection type.</p>
+        <div data-ice="description"><p>Sets the active projection type.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-up">up</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -939,14 +877,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">up</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">up</a></span></span><span class="code" data-ice="signature">(up: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
-<p>Fires an <span>Camera#up:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
 </div>
       </div>
     </td>
@@ -969,13 +906,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-view">view</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-up">up</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
+</div>
       </div>
     </td>
     <td>
@@ -997,13 +935,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewMatrix">viewMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewMatrix">viewMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The Camera&apos;s viewing transformation matrix.</p>
+        <div data-ice="description"><p>Gets the Camera&apos;s viewing transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
 </div>
       </div>
@@ -1027,7 +965,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewNormalMatrix">viewNormalMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-viewNormalMatrix">viewNormalMatrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -1057,13 +995,14 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the up, right and forward axis of the World coordinate system.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1085,13 +1024,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">(axis: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates the up, right and forward axis of the World coordinate system.</p>
+        <div data-ice="description"><p>Sets the up, right and forward axis of the World coordinate system.</p>
 </div>
       </div>
     </td>
@@ -1114,13 +1053,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldForward">worldForward</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldForward">worldForward</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Direction of World-space &quot;forwards&quot;.</p>
+        <div data-ice="description"><p>Gets the direction of World-space &quot;forwards&quot;.</p>
 </div>
       </div>
     </td>
@@ -1143,13 +1082,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldRight">worldRight</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldRight">worldRight</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Direction of World-space &quot;right&quot;.</p>
+        <div data-ice="description"><p>Gets the direction of World-space &quot;right&quot;.</p>
 </div>
       </div>
     </td>
@@ -1172,13 +1111,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp">worldUp</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp">worldUp</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Direction of World-space &quot;up&quot;.</p>
+        <div data-ice="description"><p>Gets the direction of World-space &quot;up&quot;.</p>
 </div>
       </div>
     </td>
@@ -1214,7 +1153,8 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
       <div>
         
         
-        
+        <div data-ice="description"><p>Destroys this Camera.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1236,7 +1176,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitPitch">orbitPitch</a></span></span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitPitch">orbitPitch</a></span></span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1265,7 +1205,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitYaw">orbitYaw</a></span></span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-orbitYaw">orbitYaw</a></span></span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1300,7 +1240,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
       <div>
         
         
-        <div data-ice="description"><p>Pans the camera along the camera&apos;s local X, Y and Z axis.</p>
+        <div data-ice="description"><p>Pans the Camera along its local X, Y and Z axis.</p>
 </div>
       </div>
     </td>
@@ -1323,7 +1263,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-pitch">pitch</a></span></span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-pitch">pitch</a></span></span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1352,7 +1292,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-yaw">yaw</a></span></span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-yaw">yaw</a></span></span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1381,13 +1321,13 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-zoom">zoom</a></span></span><span class="code" data-ice="signature">(delta: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-method-zoom">zoom</a></span></span><span class="code" data-ice="signature">(delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Increments/decrements zoom factor, ie.</p>
+        <div data-ice="description"><p>Increments/decrements the Camera&apos;s zoom factor, which is the distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
 </div>
       </div>
     </td>
@@ -1425,35 +1365,6 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1943,81 +1854,22 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     
     
     
-    <span class="code" data-ice="name">constrainPitch</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">constrainPitch</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber630">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber656">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Whether to prevent camera from being pitched upside down.</p>
-<p>The camera is upside down when the angle
-between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp">Camera#worldUp</a></span> is less than one degree.</p>
+  <div data-ice="description"><p>Sets whether to prevent camera from being pitched upside down.</p>
+<p>The camera is upside down when the angle between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp">Camera#worldUp</a></span> is less than one degree.</p>
 <p>Fires a <span>Camera#constrainPitch:event</span> event on change.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">constrainPitch</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-constrainPitch">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">constrainPitch</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber641">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -2049,43 +1901,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">customProjection</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">customProjection</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber796">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A custom projection transform, given as a 4x4 matrix.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s custom projection.</p>
 <p>This is used while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals &quot;customProjection&quot;.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">customProjection</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The custom projection.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2110,11 +1959,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">deviceMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">deviceMatrix</span><span class="code" data-ice="signature">(matrix: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber507">source</a></span></span>
     </span>
   </h3>
 
@@ -2127,23 +1976,7 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">deviceMatrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -2171,25 +2004,39 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">deviceMatrix</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">deviceMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber516">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber526">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets an optional matrix to premultiply into <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-matrix">Camera#matrix</a></span> matrix.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2218,41 +2065,37 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber429">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber435">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Camera&apos;s eye.</p>
-<p>Fires an <span>Camera#eye:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Camera&apos;s eye.</p>
+<p>Default value is <code>[0,0,10]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">eye</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
+  <div data-ice="properties">
+</div>
+
+  
+
+  <div data-ice="emitWrap">
+    <h4>Emit:</h4>
+    <table>
+      <tbody>
+      
+      <tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>*</span></p></td>
+        <td data-ice="emitDesc"><p>&quot;eye&quot; event on change, with the value of this property.</p>
+</td>
+      </tr>
 </tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
+    </table>
+  </div>
 
   
 
@@ -2275,18 +2118,20 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">eye</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">eye</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber441">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber448">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Camera&apos;s eye.</p>
+<p>Default vale is <code>[0,0,10]</code>.</p>
+</div>
 
   
 
@@ -2318,42 +2163,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">eyeLookDist</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">eyeLookDist</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber651">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber685">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Distance from &quot;look&quot; to &quot;eye&quot;.</p>
+  <div data-ice="description"><p>Gets whether to prevent camera from being pitched upside down.</p>
+<p>The camera is upside down when the angle between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-worldUp">Camera#worldUp</a></span> is less than one degree.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">eyeLookDist</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The distance.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2378,104 +2222,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">frustum</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">frustum</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber772">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber785">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The frustum projection transform for this Camera.</p>
-<p>This is used while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals &quot;frustum&quot;.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s frustum projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>frustum</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">frustum</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Ortho component.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-gimbalLock">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">gimbalLock</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber603">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
-<p>Fires a <span>Camera#gimbalLock:event</span> event on change.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">gimbalLock</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -2500,25 +2280,39 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">gimbalLock</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">gimbalLock</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber614">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber641">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if gimbal is locked.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2536,25 +2330,27 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-look">
+  <h3 data-ice="anchor" id="instance-set-gimbalLock">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">look</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">gimbalLock</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber624">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Sets whether to lock yaw rotation to pivot about the World-space &quot;up&quot; axis.</p>
+<p>Fires a <span>Camera#gimbalLock:event</span> event on change.</p>
+</div>
 
   
 
@@ -2586,43 +2382,97 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">look</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">look</span><span class="code" data-ice="signature">(look: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber461">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Camera&apos;s point-of-interest.</p>
-<p>Fires a <span>Camera#look:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of this Camera&apos;s point-of-interest.</p>
+<p>Default value is <code>[0,0,0]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">look</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
+  <div data-ice="properties">
+</div>
+
+  
+
+  <div data-ice="emitWrap">
+    <h4>Emit:</h4>
+    <table>
+      <tbody>
+      
+      <tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>*</span></p></td>
+        <td data-ice="emitDesc"><p>&quot;look&quot; event on change, with the value of this property.</p>
+</td>
+      </tr>
 </tbody>
-  </table>
+    </table>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-look">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">look</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber474">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the position of this Camera&apos;s point-of-interest.</p>
+<p>Default value is <code>[0,0,0]</code>.</p>
 </div>
 
   
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Camera look position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2647,43 +2497,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber665">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber696">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
   
-  <div data-ice="description"><p>The Camera&apos;s viewing transformation matrix.</p>
+  
+  <div data-ice="description"><p>Gets the Camera&apos;s viewing transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">matrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The viewing transform matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2708,16 +2555,16 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">normalMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">normalMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber699">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber724">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this get was deprecated.</div>
+  
   
   <div data-ice="description"><p>The Camera&apos;s viewing normal transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
@@ -2725,26 +2572,23 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">normalMatrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The viewing normal transform matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2769,43 +2613,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">ortho</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">ortho</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber758">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber774">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The orthographic projection transform for this Camera.</p>
-<p>This is used while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals &quot;ortho&quot;.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s orthographic projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>ortho</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">ortho</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Ortho component.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2830,43 +2671,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">perspective</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">perspective</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber745">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber763">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The perspective projection transform for this Camera.</p>
-<p>This is used while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals &quot;perspective&quot;.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s perspective projection.</p>
+<p>The Camera uses this while <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> equals <code>perspective</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">perspective</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Perspective component.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2891,43 +2729,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">projMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">projMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber731">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber752">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Camera&apos;s projection transformation projMatrix.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s projection transformation projMatrix.</p>
 <p>Fires a <span>Camera#projMatrix:event</span> event on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">projMatrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The projection matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2952,42 +2787,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">project</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">project</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span> | <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span> | <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span> | <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber833">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber853">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The active projection transform for this Camera.</p>
+  <div data-ice="description"><p>Gets the currently active projection for this Camera.</p>
+<p>The currently active project is selected with <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">project</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span> | <span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span> | <span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span> | <span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The currently active projection is active.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3012,25 +2845,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">projection</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">projection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber822">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber842">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the active projection type.</p>
+<p>Possible values are <code>&quot;perspective&quot;</code>, <code>&quot;ortho&quot;</code>, <code>&quot;frustum&quot;</code> and <code>&quot;customProjection&quot;</code>.</p>
+<p>Default value is <code>&quot;perspective&quot;</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Identifies the active projection type.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3055,140 +2904,21 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">projection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="code" data-ice="name">projection</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber798">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber809">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The active projection type.</p>
-<p>Accepted values are &quot;perspective&quot;, &quot;ortho&quot;, &quot;frustum&quot; and &quot;customProjection&quot;.</p>
+  <div data-ice="description"><p>Sets the active projection type.</p>
+<p>Accepted values are <code>&quot;perspective&quot;</code>, <code>&quot;ortho&quot;</code>, <code>&quot;frustum&quot;</code> and <code>&quot;customProjection&quot;</code>.</p>
+<p>Default value is <code>&quot;perspective&quot;</code>.</p>
 </div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">projection</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber199">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-up">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber491">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -3220,45 +2950,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">(up: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber479">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber485">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
-<p>Fires an <span>Camera#up:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">up</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
+  <div data-ice="properties">
+</div>
+
+  
+
+  <div data-ice="emitWrap">
+    <h4>Emit:</h4>
+    <table>
+      <tbody>
+      
+      <tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>*</span></p></td>
+        <td data-ice="emitDesc"><p>&quot;up&quot; event on change, with the value of this property.</p>
+</td>
+      </tr>
 </tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
+    </table>
+  </div>
 
   
 
@@ -3274,32 +2999,46 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-view">
+  <h3 data-ice="anchor" id="instance-get-up">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">view</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber837">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the direction of this Camera&apos;s <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Direction of &quot;up&quot;.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3324,43 +3063,40 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">viewMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">viewMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber681">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber710">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The Camera&apos;s viewing transformation matrix.</p>
+  <div data-ice="description"><p>Gets the Camera&apos;s viewing transformation matrix.</p>
 <p>Fires a <span>Camera#matrix:event</span> event on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">viewMatrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The viewing transform matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3385,11 +3121,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">viewNormalMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">viewNormalMatrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber715">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber738">source</a></span></span>
     </span>
   </h3>
 
@@ -3402,26 +3138,23 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">viewNormalMatrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The viewing normal transform matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3446,25 +3179,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber554">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber574">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the up, right and forward axis of the World coordinate system.</p>
+<p>Has format: <code>[rightX, rightY, rightZ, upX, upY, upZ, forwardX, forwardY, forwardZ]</code></p>
+<p>Default axis is <code>[1, 0, 0, 0, 1, 0, 0, 0, 1]</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current World coordinate axis.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3489,40 +3238,25 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">(axis: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber529">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber539">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates the up, right and forward axis of the World coordinate system.</p>
+  <div data-ice="description"><p>Sets the up, right and forward axis of the World coordinate system.</p>
 <p>Has format: <code>[rightX, rightY, rightZ, upX, upY, upZ, forwardX, forwardY, forwardZ]</code></p>
+<p>Default axis is <code>[1, 0, 0, 0, 1, 0, 0, 0, 1]</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">worldAxis</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -3550,42 +3284,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">worldForward</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">worldForward</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber590">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber613">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Direction of World-space &quot;forwards&quot;.</p>
+  <div data-ice="description"><p>Gets the direction of World-space &quot;forwards&quot;.</p>
+<p>This is set by <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis">Camera#worldAxis</a></span>.</p>
+<p>Default value is <code>[0,0,1]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">worldForward</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The &quot;up&quot; vector.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3610,42 +3343,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">worldRight</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">worldRight</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber578">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber600">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Direction of World-space &quot;right&quot;.</p>
+  <div data-ice="description"><p>Gets the direction of World-space &quot;right&quot;.</p>
+<p>This is set by <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis">Camera#worldAxis</a></span>.</p>
+<p>Default value is <code>[1,0,0]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">worldRight</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The &quot;up&quot; vector.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3670,42 +3402,41 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">worldUp</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">worldUp</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber566">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber587">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Direction of World-space &quot;up&quot;.</p>
+  <div data-ice="description"><p>Gets the direction of World-space &quot;up&quot;.</p>
+<p>This is set by <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis">Camera#worldAxis</a></span>.</p>
+<p>Default value is <code>[0,1,0]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">worldUp</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The &quot;up&quot; vector.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3737,14 +3468,14 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber841">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber860">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this component.</p>
+  <div data-ice="description"><p>Destroys this Camera.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-method-destroy">Component#destroy</a></span></div>
@@ -3777,11 +3508,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">orbitPitch</span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">orbitPitch</span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -3802,7 +3533,7 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">angle</td>
+      <td data-ice="name" class="code" data-depth="0">angleInc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Angle of rotation in degrees</p>
@@ -3838,11 +3569,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">orbitYaw</span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">orbitYaw</span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber300">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -3863,7 +3594,7 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">angle</td>
+      <td data-ice="name" class="code" data-depth="0">angleInc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Angle of rotation in degrees</p>
@@ -3903,14 +3634,14 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber384">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Pans the camera along the camera&apos;s local X, Y and Z axis.</p>
+  <div data-ice="description"><p>Pans the Camera along its local X, Y and Z axis.</p>
 </div>
 
   
@@ -3960,11 +3691,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">pitch</span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">pitch</span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber352">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber364">source</a></span></span>
     </span>
   </h3>
 
@@ -3985,7 +3716,7 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">angle</td>
+      <td data-ice="name" class="code" data-depth="0">angleInc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Angle of rotation in degrees</p>
@@ -4021,11 +3752,11 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">yaw</span><span class="code" data-ice="signature">(angle: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">yaw</span><span class="code" data-ice="signature">(angleInc: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber336">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -4046,7 +3777,7 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">angle</td>
+      <td data-ice="name" class="code" data-depth="0">angleInc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Angle of rotation in degrees</p>
@@ -4082,19 +3813,18 @@ between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set
     
     
     
-    <span class="code" data-ice="name">zoom</span><span class="code" data-ice="signature">(delta: <span>*</span>)</span>
+    <span class="code" data-ice="name">zoom</span><span class="code" data-ice="signature">(delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber408">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Camera.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Increments/decrements zoom factor, ie. distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>
-and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
+  <div data-ice="description"><p>Increments/decrements the Camera&apos;s zoom factor, which is the distance between <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
 </div>
 
   
@@ -4109,9 +3839,10 @@ and <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-loo
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">delta</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Zoom factor increment.</p>
+</td>
     </tr>
 </tbody>
   </table>

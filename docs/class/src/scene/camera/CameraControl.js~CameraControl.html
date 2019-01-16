@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -142,18 +144,6 @@
   <div class="description" data-ice="description"><p>Controls a <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> with keyboard, mouse and touch input.</p>
 <p>Located for convenience at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraControl">Viewer#cameraControl</a></span>.</p>
 <p>Fires these events:</p>
-<ul>
-<li>&quot;hover&quot; - Hover enters a new object</li>
-<li>&quot;hoverSurface&quot; - Hover continues over an object surface - fired continuously as mouse moves over an object</li>
-<li>&quot;hoverLeave&quot;  - Hover has left the last object we were hovering over</li>
-<li>&quot;hoverOff&quot; - Hover continues over empty space - fired continuously as mouse moves over nothing</li>
-<li>&quot;picked&quot; - Clicked or tapped object</li>
-<li>&quot;pickedSurface&quot; -  Clicked or tapped object, with event containing surface intersection details</li>
-<li>&quot;doublePicked&quot; - Double-clicked or double-tapped object</li>
-<li>&quot;doublePickedSurface&quot; - Double-clicked or double-tapped object, with event containing surface intersection details</li>
-<li>&quot;pickedNothing&quot; - Clicked or tapped, but not on any objects</li>
-<li>&quot;doublePickedNothing&quot; - Double-clicked or double-tapped, but not on any objects</li>
-</ul>
 </div>
   
 
@@ -177,34 +167,6 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-active">active</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -215,13 +177,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-active">active</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-active">active</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates if this CameraControl is active or not.</p>
+        <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
 </div>
       </div>
     </td>
@@ -244,13 +206,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-active">active</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
+</div>
       </div>
     </td>
     <td>
@@ -262,7 +225,7 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -272,13 +235,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>TODO</p>
+        <div data-ice="description"><p>Gets whether double-picking an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
 </div>
       </div>
     </td>
@@ -301,13 +264,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo">doublePickFlyTo</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates if this CameraControl is in &quot;first person&quot; mode.</p>
+        <div data-ice="description"><p>Sets whether double-picking an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
 </div>
       </div>
     </td>
@@ -330,330 +293,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-inertia">inertia</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia">inertia</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Factor in range [0..1] indicating how much the camera keeps moving after you finish
-panning or rotating it.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-keyboardLayout">keyboardLayout</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-keyboardLayout">keyboardLayout</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>TODO</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>When true, mouse wheel when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> will zoom
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>When true, mouse wheel when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> will zoom
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>When true, clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
 </div>
       </div>
     </td>
@@ -676,13 +322,42 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-walking">walking</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-firstPerson">firstPerson</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates if this CameraControl is in &quot;walking&quot; mode.</p>
+        <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-inertia">inertia</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
 </div>
       </div>
     </td>
@@ -705,13 +380,250 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-walking">walking</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-inertia">inertia</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Gets the inertia factor.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPivot">panToPivot</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether scrolling the mouse wheel, when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether scrolling the mouse wheel, when the mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPointer">panToPointer</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when the mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting">pivoting</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-walking">walking</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether this CameraControl is in walking mode.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-walking">walking</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether this CameraControl is in walking mode.</p>
+</div>
       </div>
     </td>
     <td>
@@ -783,35 +695,6 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1294,25 +1177,27 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-active">
+  <h3 data-ice="anchor" id="instance-set-active">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber216">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p> Sets if this CameraControl is active or not.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
 
   
 
@@ -1337,49 +1222,47 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-active">
+  <h3 data-ice="anchor" id="instance-get-active">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates if this CameraControl is active or not.</p>
+  <div data-ice="description"><p>Gets if this CameraControl is active or not.</p>
+<p>Default value is <code>true</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">active</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if this CameraControl is active.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1404,25 +1287,40 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber325">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber369">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether double-picking an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when double-pick-fly-to mode is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1447,101 +1345,24 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">doublePickFlyTo</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber321">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>TODO</p>
+  <div data-ice="description"><p>Sets whether double-picking an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> causes the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to fly to its boundary.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">doublePickFlyTo</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-firstPerson">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber284">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Indicates if this CameraControl is in &quot;first person&quot; mode.</p>
-<p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,
-the eye rotates about the look.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">firstPerson</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1569,25 +1390,41 @@ the eye rotates about the look.</p>
     
     
     
-    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber288">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether this CameraControl is in first-person mode.</p>
+<p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> rotates about <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if first-person mode is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1605,25 +1442,28 @@ the eye rotates about the look.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-inertia">
+  <h3 data-ice="anchor" id="instance-set-firstPerson">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">firstPerson</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber348">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber302">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Sets whether this CameraControl is in first-person mode.</p>
+<p>In &quot;first person&quot; mode (disabled by default) the look position rotates about the eye position. Otherwise,  <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> rotates about <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
@@ -1655,84 +1495,25 @@ the eye rotates about the look.</p>
     
     
     
-    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Factor in range [0..1] indicating how much the camera keeps moving after you finish
-panning or rotating it.</p>
-<p>A value of 0.0 causes it to immediately stop, 0.5 causes its movement to decay 50% on each tick,
-while 1.0 causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
+  <div data-ice="description"><p>Sets a factor in range <code>[0..1]</code> indicating how much the camera keeps moving after you finish panning or rotating it.</p>
+<p>A value of <code>0.0</code> causes it to immediately stop, <code>0.5</code> causes its movement to decay 50% on each tick,
+while <code>1.0</code> causes no decay, allowing it continue moving, by the current rate of pan or rotation.</p>
 <p>You may choose an inertia of zero when you want be able to precisely position or rotate the camera,
 without interference from inertia. ero inertia can also mean that less frames are rendered while
 you are positioning the camera.</p>
+<p>Default value is <code>0.5</code>.</p>
 </div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">inertia</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-keyboardLayout">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">keyboardLayout</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber363">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1757,46 +1538,89 @@ you are positioning the camera.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-keyboardLayout">
+  <h3 data-ice="anchor" id="instance-get-inertia">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">keyboardLayout</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="code" data-ice="name">inertia</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber359">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber398">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>TODO</p>
+  <div data-ice="description"><p>Gets the inertia factor.</p>
+<p>Default value is <code>0.5</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">keyboardLayout</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
+  <div data-ice="properties">
 </div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The inertia factor.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-panToPivot">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber275">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
 </div>
 
   
@@ -1824,86 +1648,40 @@ you are positioning the camera.</p>
     
     
     
-    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber270">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber289">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether scrolling the mouse wheel, when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if enable pan-to-pivot behaviour is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-panToPivot">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">panToPivot</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber263">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>When true, mouse wheel when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> will zoom
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the pivot point.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">panToPivot</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -1928,25 +1706,40 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber251">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber264">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether scrolling the mouse wheel, when the mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if pan-to-pointer behaviour is enabled.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1971,40 +1764,24 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">panToPointer</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber250">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>When true, mouse wheel when mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> will zoom
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
+  <div data-ice="description"><p>Sets whether scrolling the mouse wheel, when the mouse is over a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>, will zoom the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> towards the hovered point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">panToPointer</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -2032,25 +1809,40 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> to enable pivoting.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2075,7 +1867,7 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">pivoting</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
@@ -2086,90 +1878,13 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
   
   
   
-  <div data-ice="description"><p>When true, clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot
-the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
+  <div data-ice="description"><p>Sets whether clicking on a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> and dragging will pivot the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> about the picked point on the Mesh&apos;s surface.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">pivoting</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber35">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -2197,43 +1912,27 @@ the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></spa
     
     
     
-    <span class="code" data-ice="name">walking</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">walking</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber331">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates if this CameraControl is in &quot;walking&quot; mode.</p>
-<p>When set true, this constrains eye movement to the horizontal X-Z plane. When doing a walkthrough,
-this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the
-horizontal plane.</p>
-<p>This only has an effect when also in &quot;first person&quot; mode.</p>
+  <div data-ice="description"><p>Sets whether this CameraControl is in walking mode.</p>
+<p>When set <code>true</code>, this constrains <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> movement to the horizontal X-Z plane. When doing a walkthrough,
+this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+<p>This only has an effect when {@link CameraControl#firstPerson is <code>true</code>.</p>
+<p>Default value is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">walking</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -2261,25 +1960,43 @@ horizontal plane.</p>
     
     
     
-    <span class="code" data-ice="name">walking</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">walking</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets whether this CameraControl is in walking mode.</p>
+<p>When set <code>true</code>, this constrains <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> movement to the horizontal X-Z plane. When doing a walkthrough,
+this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.</p>
+<p>This only has an effect when {@link CameraControl#firstPerson is <code>true</code>.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when in walking mode.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2311,7 +2028,7 @@ horizontal plane.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber1721">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraControl.js.html#lineNumber1770">source</a></span></span>
     </span>
   </h3>
 

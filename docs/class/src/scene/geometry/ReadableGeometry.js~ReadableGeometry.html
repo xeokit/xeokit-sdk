@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -263,34 +265,6 @@ const indices = myMesh.geometry.indices;
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-colors">colors</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -309,6 +283,34 @@ const indices = myMesh.geometry.indices;
         
         <div data-ice="description"><p>The Geometry&apos;s vertex colors.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-colors">colors</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -380,6 +382,35 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-normals">normals</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The Geometry&apos;s vertex normals.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -418,13 +449,13 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-normals">normals</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-obb">obb</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The Geometry&apos;s vertex normals.</p>
+        <div data-ice="description"><p>Local-space oriented 3D boundary (OBB) of this geometry.</p>
 </div>
       </div>
     </td>
@@ -447,13 +478,13 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-obb">obb</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions">positions</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Local-space oriented 3D boundary (OBB) of this geometry.</p>
+        <div data-ice="description"><p>The Geometry&apos;s vertex positions.</p>
 </div>
       </div>
     </td>
@@ -504,35 +535,6 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions">positions</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The Geometry&apos;s vertex positions.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-primitive">primitive</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -541,35 +543,6 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
         
         <div data-ice="description"><p>Gets the Geometry&apos;s primitive type.</p>
 <p>Valid types are: &apos;points&apos;, &apos;lines&apos;, &apos;line-loop&apos;, &apos;line-strip&apos;, &apos;triangles&apos;, &apos;triangle-strip&apos; and &apos;triangle-fan&apos;.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -700,35 +673,6 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1256,7 +1200,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -1316,35 +1260,35 @@ generated automatically when omitted.</p>
       <td data-ice="name" class="code" data-depth="1">cfg.positions</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>{Array of Number} Positions array.</p>
+      <td data-ice="description"><p>{Number[]} Positions array.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.normals</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>{Array of Number} Vertex normal vectors array.</p>
+      <td data-ice="description"><p>{Number[]} Vertex normal vectors array.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.uv</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>{Array of Number} UVs array.</p>
+      <td data-ice="description"><p>{Number[]} UVs array.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.colors</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>{Array of Number} Vertex colors.</p>
+      <td data-ice="description"><p>{Number[]} Vertex colors.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.indices</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>{Array of Number} Indices array.</p>
+      <td data-ice="description"><p>{Number[]} Indices array.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1423,7 +1367,7 @@ this indicates the threshold angle (in degrees) between the face normals of adja
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber597">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber591">source</a></span></span>
     </span>
   </h3>
 
@@ -1474,49 +1418,6 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-colors">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">colors</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber550">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-colors">
     <span class="access" data-ice="access">public</span>
     
@@ -1528,7 +1429,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber546">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -1577,6 +1478,49 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-colors">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">colors</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber544">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-compressGeometry">
     <span class="access" data-ice="access">public</span>
     
@@ -1588,7 +1532,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber400">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
@@ -1651,7 +1595,7 @@ in quantized and oct-encoded formats for reduced memory footprint and GPU bus us
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber583">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber577">source</a></span></span>
     </span>
   </h3>
 
@@ -1702,49 +1646,6 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-normals">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">normals</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber473">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-normals">
     <span class="access" data-ice="access">public</span>
     
@@ -1756,7 +1657,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber451">source</a></span></span>
     </span>
   </h3>
 
@@ -1805,6 +1706,49 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-normals">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">normals</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber467">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-obb">
     <span class="access" data-ice="access">public</span>
     
@@ -1816,7 +1760,7 @@ a <code>Uint32Array</code>, otherwise it needs to be a <code>Uint16Array</code>.
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber618">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber612">source</a></span></span>
     </span>
   </h3>
 
@@ -1867,49 +1811,6 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-positions">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">positions</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber425">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-positions">
     <span class="access" data-ice="access">public</span>
     
@@ -1921,7 +1822,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber405">source</a></span></span>
     </span>
   </h3>
 
@@ -1970,6 +1871,49 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-positions">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">positions</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber419">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-primitive">
     <span class="access" data-ice="access">public</span>
     
@@ -1981,7 +1925,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber383">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
@@ -2031,67 +1975,6 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber73">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-uv">
     <span class="access" data-ice="access">public</span>
     
@@ -2103,7 +1986,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber511">source</a></span></span>
     </span>
   </h3>
 
@@ -2146,7 +2029,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber497">source</a></span></span>
     </span>
   </h3>
 
@@ -2209,7 +2092,7 @@ where each vertex is a homogeneous coordinate having [x,y,z,w] elements.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber646">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/geometry/ReadableGeometry.js.html#lineNumber640">source</a></span></span>
     </span>
   </h3>
 

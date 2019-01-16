@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -178,14 +180,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-bottom">bottom</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-bottom">bottom</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Frustum&apos;s bottom plane on the View-space Y-axis.</p>
-<p>Fires a <span>Frustum/bottom:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s bottom plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#bottom:emits</span> emits on change.</p>
 </div>
       </div>
     </td>
@@ -208,70 +210,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-bottom">bottom</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-bottom">bottom</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-far">far</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-far">far</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Position of this Frustum&apos;s far plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Frustum/far:event</span> event on change.</p>
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s bottom plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#bottom:emits</span> emits on change.</p>
 </div>
       </div>
     </td>
@@ -294,72 +240,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-left">left</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-far">far</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-left">left</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Position of this Frustum&apos;s left plane on the View-space X-axis.</p>
-<p>Fires a <span>Frustum/left:event</span> event on change.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The Frustum&apos;s projection transform matrix.</p>
-<p>Fires a <span>Frustum/matrix:event</span> event on change.</p>
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>10000.0</code>.</p>
 </div>
       </div>
     </td>
@@ -382,71 +270,16 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-far">far</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Frustum&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Frustum/near:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#far:emits</span> emits on change.</p>
+<p>Default value is <code>10000.0</code>.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-right">right</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -468,14 +301,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-right">right</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-left">left</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Frustum&apos;s right plane on the View-space X-axis.</p>
-<p>Fires a <span>Frustum/right:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s left plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#left:emits</span> emits on change.</p>
 </div>
       </div>
     </td>
@@ -498,13 +331,45 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-top">top</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-left">left</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s left plane on the View-space X-axis.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Gets the Frustum&apos;s projection transform matrix.</p>
+<p>Fires a <span>Frustum#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -526,14 +391,15 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-top">top</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Frustum&apos;s top plane on the View-space Y-axis.</p>
-<p>Fires a <span>Frustum/top:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
       </div>
     </td>
@@ -556,13 +422,135 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-right">right</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s right plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#right:emits</span> emits on change.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-right">right</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s right plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#right:emits</span> emits on change.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-get-top">top</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the position of the Frustum&apos;s top plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#top:emits</span> emits on change.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html#instance-set-top">top</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the position of the Frustum&apos;s top plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#top:emits</span> emits on change.</p>
 </div>
       </div>
     </td>
@@ -598,7 +586,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Destroys this Frustum.</p>
+</div>
       </div>
     </td>
     <td>
@@ -635,35 +624,6 @@
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1153,45 +1113,41 @@
     
     
     
-    <span class="code" data-ice="name">bottom</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">bottom</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s bottom plane on the View-space Y-axis.</p>
-<p>Fires a <span>Frustum/bottom:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s bottom plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#bottom:emits</span> emits on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">bottom</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
+  <div data-ice="properties">
+</div>
+
+  
+
+  <div data-ice="emitWrap">
+    <h4>Emit:</h4>
+    <table>
+      <tbody>
+      
+      <tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>&quot;bottom&quot;</span></p></td>
+        <td data-ice="emitDesc"><p>event with the value of this property whenever it changes.</p>
+</td>
+      </tr>
 </tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
+    </table>
+  </div>
 
   
 
@@ -1214,25 +1170,40 @@
     
     
     
-    <span class="code" data-ice="name">bottom</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">bottom</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s bottom plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#bottom:emits</span> emits on change.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Bottom frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1257,25 +1228,40 @@
     
     
     
-    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>10000.0</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Far frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1300,79 +1286,21 @@
     
     
     
-    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber218">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s far plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Frustum/far:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#far:emits</span> emits on change.</p>
+<p>Default value is <code>10000.0</code>.</p>
 </div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">far</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-left">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">left</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber84">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1404,43 +1332,84 @@
     
     
     
-    <span class="code" data-ice="name">left</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">left</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s left plane on the View-space X-axis.</p>
-<p>Fires a <span>Frustum/left:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s left plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#left:emits</span> emits on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-left">
+    <span class="access" data-ice="access">public</span>
     
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">left</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">left</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber81">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s left plane on the View-space X-axis.</p>
 </div>
 
   
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Left frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1465,43 +1434,41 @@
     
     
     
-    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber251">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The Frustum&apos;s projection transform matrix.</p>
-<p>Fires a <span>Frustum/matrix:event</span> event on change.</p>
+  <div data-ice="description"><p>Gets the Frustum&apos;s projection transform matrix.</p>
+<p>Fires a <span>Frustum#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">matrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Frustum&apos;s projection matrix matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1526,40 +1493,25 @@
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Frustum/near:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">near</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1587,25 +1539,41 @@
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Frustum#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Near frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1630,25 +1598,40 @@
     
     
     
-    <span class="code" data-ice="name">right</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">right</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s right plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#right:emits</span> emits on change.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Right frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1673,40 +1656,24 @@
     
     
     
-    <span class="code" data-ice="name">right</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">right</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s right plane on the View-space X-axis.</p>
-<p>Fires a <span>Frustum/right:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s right plane on the View-space X-axis.</p>
+<p>Fires a <span>Frustum#right:emits</span> emits on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">right</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1734,25 +1701,40 @@
     
     
     
-    <span class="code" data-ice="name">top</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">top</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Frustum&apos;s top plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#top:emits</span> emits on change.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Top frustum plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1777,101 +1759,24 @@
     
     
     
-    <span class="code" data-ice="name">top</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">top</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Frustum&apos;s top plane on the View-space Y-axis.</p>
-<p>Fires a <span>Frustum/top:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Frustum&apos;s top plane on the View-space Y-axis.</p>
+<p>Fires a <span>Frustum#top:emits</span> emits on change.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">top</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber23">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1906,14 +1811,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Frustum.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this component.</p>
+  <div data-ice="description"><p>Destroys this Frustum.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-method-destroy">Component#destroy</a></span></div>

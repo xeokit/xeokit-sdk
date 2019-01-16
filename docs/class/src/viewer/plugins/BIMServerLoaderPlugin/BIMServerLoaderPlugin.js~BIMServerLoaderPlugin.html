@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerLoaderPlugin} from &apos;<span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber113">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerLoaderPlugin} from &apos;<span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber117">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber113">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber117">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -157,17 +159,9 @@ model 90 degrees about the X-axis as we load it. Note that we could also instead
 <p>Read more about this example, as well as how to set up the BIMServer instance and load a model, in the
 <a href="https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer">Loading IFC Models from BIMServer</a> tutorial
 in the xeokit SDK wiki.</p>
-</div>
-  
-
-  
-
-  <div data-ice="exampleDocs">
-    <h4>Example:</h4>
-    
-  <div class="example-doc" data-ice="exampleDoc">
-      
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">import BimServerClient from &quot;http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js&quot;;
+<p>#Usage</p>
+<p> [<a href="http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import BimServerClient from &quot;http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js&quot;;
 import {Viewer} from &quot;../../../src/viewer/Viewer.js&quot;;
 import {BIMServerLoaderPlugin} from &quot;../../../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js&quot;;
 
@@ -231,9 +225,14 @@ bimServerClient.init(() =&gt; {
             });
         });
     });
-});</code></pre>
-    </div>
+});</code>
+</code></pre>
 </div>
+  
+
+  
+
+  
 
   
 
@@ -897,7 +896,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -990,7 +989,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber137">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
@@ -1034,7 +1033,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 
@@ -1094,7 +1093,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -1143,7 +1142,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -1192,7 +1191,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber160">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1237,7 +1236,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber171">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1295,7 +1294,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -1340,7 +1339,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber191">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber195">source</a></span></span>
     </span>
   </h3>
 
@@ -1400,7 +1399,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber545">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber549">source</a></span></span>
     </span>
   </h3>
 
@@ -1444,7 +1443,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber554">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber558">source</a></span></span>
     </span>
   </h3>
 
@@ -1488,7 +1487,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
@@ -1679,7 +1678,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber522">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber526">source</a></span></span>
     </span>
   </h3>
 

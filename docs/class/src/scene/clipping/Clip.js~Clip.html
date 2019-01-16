@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -207,7 +209,7 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span>*</span>, cfg: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -242,13 +244,13 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-active">active</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-active">active</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates if this Clip is active or not.</p>
+        <div data-ice="description"><p>Sets if this Clip is active or not.</p>
 </div>
       </div>
     </td>
@@ -271,13 +273,14 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-active">active</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-active">active</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets if this Clip is active or not.</p>
+</div>
       </div>
     </td>
     <td>
@@ -299,13 +302,14 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-dir">dir</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-dir">dir</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Vector indicating the orientation of this Clip plane.</p>
+        <div data-ice="description"><p>Sets the direction of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, -1]</code>.</p>
 </div>
       </div>
     </td>
@@ -328,13 +332,15 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-dir">dir</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-dir">dir</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the direction of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, -1]</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -356,13 +362,14 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-pos">pos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-pos">pos</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The World-space position of this Clip&apos;s plane.</p>
+        <div data-ice="description"><p>Sets the World-space position of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, 0]</code>.</p>
 </div>
       </div>
     </td>
@@ -385,41 +392,14 @@ mesh.clippable = true;</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-pos">pos</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-pos">pos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets the World-space position of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, 0]</code>.</p>
 </div>
       </div>
     </td>
@@ -492,35 +472,6 @@ mesh.clippable = true;</code>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1009,11 +960,11 @@ mesh.clippable = true;</code>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(owner: <span>*</span>, cfg: <span>*</span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
@@ -1034,15 +985,48 @@ mesh.clippable = true;</code>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">owner</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Owner component. When destroyed, the owner will destroy this Clip as well.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">cfg</td>
       <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Clip configuration</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.active</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Indicates whether or not this Clip is active.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.pos</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>World-space position of the clipping plane.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.dir</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0 -1]</li></ul></td>
+      <td data-ice="description"><p>Vector perpendicular to the plane surface, indicating the Clip plane orientation.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1077,39 +1061,24 @@ mesh.clippable = true;</code>
     
     
     
-    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates if this Clip is active or not.</p>
+  <div data-ice="description"><p>Sets if this Clip is active or not.</p>
+<p>Default value is <code>true</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">active</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1137,25 +1106,40 @@ mesh.clippable = true;</code>
     
     
     
-    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">active</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets if this Clip is active or not.</p>
+<p>Default value is <code>true</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> if active.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1180,41 +1164,24 @@ mesh.clippable = true;</code>
     
     
     
-    <span class="code" data-ice="name">dir</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">dir</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Vector indicating the orientation of this Clip plane.</p>
-<p>The vector originates at <span><a href="class/src/scene/clipping/Clip.js~Clip.html#instance-set-pos">Clip#pos</a></span>. Elements on the
-same side of the vector are clipped.</p>
+  <div data-ice="description"><p>Sets the direction of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, -1]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">dir</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1242,25 +1209,40 @@ same side of the vector are clipped.</p>
     
     
     
-    <span class="code" data-ice="name">dir</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">dir</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the direction of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, -1]</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>value Current direction.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1285,39 +1267,24 @@ same side of the vector are clipped.</p>
     
     
     
-    <span class="code" data-ice="name">pos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">pos</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The World-space position of this Clip&apos;s plane.</p>
+  <div data-ice="description"><p>Sets the World-space position of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, 0]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">pos</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1345,86 +1312,40 @@ same side of the vector are clipped.</p>
     
     
     
-    <span class="code" data-ice="name">pos</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">pos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the World-space position of this Clip&apos;s plane.</p>
+<p>Default value is <code>[0, 0, 0]</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Current position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber62">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -1456,7 +1377,7 @@ same side of the vector are clipped.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber161">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/clipping/Clip.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 

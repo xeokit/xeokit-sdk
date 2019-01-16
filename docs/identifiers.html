@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -457,7 +459,7 @@ highlighted, ghosted, culled, picked, clipped and bounded.</p>
       <div>
         
         
-        <div data-ice="description"><p>Defines a projection for a <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> as a custom 4x4 matrix..</p>
+        <div data-ice="description"><p>Defines a custom projection for a <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> as a custom 4x4 matrix..</p>
 </div>
       </div>
     </td>
@@ -522,7 +524,7 @@ highlighted, ghosted, culled, picked, clipped and bounded.</p>
         
         <div data-ice="description"><p>Defines its <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span>&apos;s orthographic projection as a box-shaped view volume.</p>
 <ul>
-<li>Located at <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-frustum">Camera#frustum</a></span>.</li>
+<li>Located at <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-ortho">Camera#ortho</a></span>.</li>
 <li>Works like Blender&apos;s orthographic projection, where the positions of the left, right, top and bottom planes are implicitly
 indicated with a single <span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">Ortho#scale</a></span> property, which causes the frustum to be symmetrical on X and Y axis, large enough to
 contain the number of units given by <span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">Ortho#scale</a></span>.</li>
@@ -1685,7 +1687,8 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
       <div>
         
         
-        
+        <div data-ice="description"><p>A <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> along which a 3D position can be animated.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1713,7 +1716,8 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
       <div>
         
         
-        
+        <div data-ice="description"><p>Abstract base class for curve classes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1741,7 +1745,66 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
       <div>
         
         
+        <div data-ice="description"><p>A complex curved path constructed from various <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> subtypes.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>A <strong>QuadraticBezierCurve</strong> is a <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> along which a 3D position can be animated.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> along which a 3D position can be animated.</p>
+</div>
       </div>
     </td>
     <td>

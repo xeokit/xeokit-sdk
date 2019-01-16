@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Curve} from &apos;<span><a href="file/src/scene/paths/Curve.js.html#lineNumber4">xeokit-sdk/src/scene/paths/Curve.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Curve} from &apos;<span><a href="file/src/scene/paths/Curve.js.html#lineNumber7">xeokit-sdk/src/scene/paths/Curve.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/paths/Curve.js.html#lineNumber4">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/paths/Curve.js.html#lineNumber7">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -130,7 +132,7 @@
   
   
   <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/scene/Component.js~Component.html">Component</a></span> &#x2192; Curve</div></div>
-  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span>, <span>src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve</span>, <span>src/scene/paths/SplineCurve.js~SplineCurve</span></div></div>
+  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span>, <span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span>, <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></div></div>
   
   
   
@@ -139,7 +141,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>Abstract base class for curve classes.</p>
+</div>
   
 
   
@@ -171,7 +174,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -234,13 +237,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Length of this Curve.</p>
+        <div data-ice="description"><p>Gets the length of this Curve.</p>
 </div>
       </div>
     </td>
@@ -291,13 +294,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Progress along this Curve.</p>
+        <div data-ice="description"><p>Sets the progress along this Curve.</p>
 </div>
       </div>
     </td>
@@ -320,13 +323,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the progress along this Curve.</p>
+</div>
       </div>
     </td>
     <td>
@@ -348,13 +352,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">tangent</a></span></span><span class="code" data-ice="signature">: *</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">tangent</a></span></span><span class="code" data-ice="signature">: *: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Tangent on this Curve at position <span>Curve/t</span>.</p>
+        <div data-ice="description"><p>Gets the tangent on this Curve at position <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span>.</p>
 </div>
       </div>
     </td>
@@ -412,7 +416,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints">getPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>Array of Array</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints">getPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
         </p>
       </div>
       <div>
@@ -420,34 +424,6 @@
         
         <div data-ice="description"><p>Samples points on this Curve, at the given number of equally-spaced divisions.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getSpacedPoints">getSpacedPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span>*</span>): <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -541,35 +517,6 @@
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1058,11 +1005,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>, cfg: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber6">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber17">source</a></span></span>
     </span>
   </h3>
 
@@ -1073,7 +1020,53 @@
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-constructor-constructor">Component#constructor</a></span></div>
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Owner component. When destroyed, the owner will destroy this Curve as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs for this Curve.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.t</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Current position on this Curve, in range between <code>0..1</code>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -1108,7 +1101,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber128">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1147,42 +1140,39 @@
     
     
     
-    <span class="code" data-ice="name">length</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">length</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Length of this Curve.</p>
+  <div data-ice="description"><p>Gets the length of this Curve.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">length</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Curve length.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1211,7 +1201,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -1250,40 +1240,25 @@
     
     
     
-    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Progress along this Curve.</p>
-<p>Automatically clamps to range [0..1].</p>
+  <div data-ice="description"><p>Sets the progress along this Curve.</p>
+<p>Automatically clamps to range <code>[0..1]</code>.</p>
+<p>Default value is <code>0</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">t</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1311,25 +1286,39 @@
     
     
     
-    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the progress along this Curve.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The progress value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1354,42 +1343,39 @@
     
     
     
-    <span class="code" data-ice="name">tangent</span><span class="code" data-ice="signature">: *</span>
+    <span class="code" data-ice="name">tangent</span><span class="code" data-ice="signature">: *: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Tangent on this Curve at position <span>Curve/t</span>.</p>
+  <div data-ice="description"><p>Gets the tangent on this Curve at position <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">tangent</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>The tangent.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1421,7 +1407,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -1488,11 +1474,11 @@
     
     
     
-    <span class="code" data-ice="name">getPoints</span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>Array of Array</span></span>
+    <span class="code" data-ice="name">getPoints</span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -1529,80 +1515,9 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>Array of Array</span></td>
+          <td class="return-type code" data-ice="returnType">*</td>
           <td class="return-desc" data-ice="returnDescription"><p>Array of sampled 3D points.</p>
 </td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-getSpacedPoints">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">getSpacedPoints</span><span class="code" data-ice="signature">(divisions: <span>*</span>): <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber96">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">divisions</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
         </tr>
       </tbody>
     </table>
@@ -1637,7 +1552,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
@@ -1711,7 +1626,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/Curve.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 

@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewport} from &apos;<span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber72">xeokit-sdk/src/scene/viewport/Viewport.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewport} from &apos;<span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber62">xeokit-sdk/src/scene/viewport/Viewport.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber72">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber62">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -153,41 +155,7 @@
 
 
 
-<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+
 <div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
   <tbody>
@@ -206,18 +174,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary">autoBoundary</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary">autoBoundary</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates if this Viewport&apos;s <span>Viewport/boundary</span> automatically
-synchronizes with the size of the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>.</p>
-<p>When set true, then this Viewport will fire a <span>Viewport/boundary/event</span> whenever
-the <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span> resizes. Also fires that event as soon as this <code>autoBoundary</code>
-property is changed.</p>
-<p>Fires a <span>Viewport/autoBoundary:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets if <span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">Viewport#boundary</a></span> automatically synchronizes with <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary">Canvas#boundary</a></span>.</p>
 </div>
       </div>
     </td>
@@ -240,13 +203,14 @@ property is changed.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary">autoBoundary</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary">autoBoundary</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets if <span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">Viewport#boundary</a></span> automatically synchronizes with <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary">Canvas#boundary</a></span>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -268,13 +232,13 @@ property is changed.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">boundary</a></span></span><span class="code" data-ice="signature">: <span>Array of Number</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">boundary</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The canvas-space boundary of this Viewport, indicated as [min, max, width, height].</p>
+        <div data-ice="description"><p>Sets the canvas-space boundary of this Viewport, indicated as <code>[min, max, width, height]</code>.</p>
 </div>
       </div>
     </td>
@@ -297,41 +261,13 @@ property is changed.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary">boundary</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary">boundary</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets the canvas-space boundary of this Viewport, indicated as <code>[min, max, width, height]</code>.</p>
 </div>
       </div>
     </td>
@@ -343,41 +279,7 @@ property is changed.</p>
 </tbody>
 </table>
 </div>
-<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-method-destroy">destroy</a></span></span><span class="code" data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+
 
 <div class="inherited-summary" data-ice="inheritedSummary"><h2>Inherited Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td></tr></thead>
@@ -404,35 +306,6 @@ property is changed.</p>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -911,52 +784,7 @@ property is changed.</p>
 
 
 
-<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
 
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-constructor-constructor">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber87">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-constructor-constructor">Component#constructor</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-</div>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
@@ -967,44 +795,24 @@ property is changed.</p>
     
     
     
-    <span class="code" data-ice="name">autoBoundary</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">autoBoundary</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber161">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates if this Viewport&apos;s <span>Viewport/boundary</span> automatically
-synchronizes with the size of the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>.</p>
-<p>When set true, then this Viewport will fire a <span>Viewport/boundary/event</span> whenever
-the <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span> resizes. Also fires that event as soon as this <code>autoBoundary</code>
-property is changed.</p>
-<p>Fires a <span>Viewport/autoBoundary:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets if <span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">Viewport#boundary</a></span> automatically synchronizes with <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary">Canvas#boundary</a></span>.</p>
+<p>Default is <code>false</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">autoBoundary</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1032,25 +840,40 @@ property is changed.</p>
     
     
     
-    <span class="code" data-ice="name">autoBoundary</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">autoBoundary</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber195">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets if <span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary">Viewport#boundary</a></span> automatically synchronizes with <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary">Canvas#boundary</a></span>.</p>
+<p>Default is <code>false</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Returns <code>true</code> when automatically sycnhronizing.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1075,43 +898,26 @@ property is changed.</p>
     
     
     
-    <span class="code" data-ice="name">boundary</span><span class="code" data-ice="signature">: <span>Array of Number</span></span>
+    <span class="code" data-ice="name">boundary</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The canvas-space boundary of this Viewport, indicated as [min, max, width, height].</p>
-<p>Defaults to the size of the parent
-<span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>.</p>
-<p>Ignores attempts to set value when <span>Viewport/autoBoundary</span> is <code>true</code>.</p>
-<p>Fires a <span>Viewport/boundary:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the canvas-space boundary of this Viewport, indicated as <code>[min, max, width, height]</code>.</p>
+<p>When <span><a href="class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary">Viewport#autoBoundary</a></span> is <code>true</code>, ignores calls to this method and automatically synchronizes with <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html#instance-member-boundary">Canvas#boundary</a></span>.</p>
+<p>Fires a <span>Viewport#boundary:event</span> event on change.</p>
+<p>Defaults to the <span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span> extents.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">boundary</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1139,86 +945,39 @@ property is changed.</p>
     
     
     
-    <span class="code" data-ice="name">boundary</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">boundary</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber143">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the canvas-space boundary of this Viewport, indicated as <code>[min, max, width, height]</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Viewport extents.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber83">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -1236,53 +995,7 @@ property is changed.</p>
   
 </div>
 </div>
-<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-destroy">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">destroy</span><span class="code" data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/viewport/Viewport.js.html#lineNumber214">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Destroys this component.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-method-destroy">Component#destroy</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-</div>
 </div>
 
 <footer class="footer">

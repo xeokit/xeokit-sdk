@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -206,13 +208,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-eyeCurve">eyeCurve</a></span></span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-eyeCurve">eyeCurve</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> travels.</p>
+        <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> travels.</p>
 </div>
       </div>
     </td>
@@ -235,13 +237,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-frames">frames</a></span></span><span class="code" data-ice="signature">: <span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-frames">frames</a></span></span><span class="code" data-ice="signature">: <span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The frames set on the constructor and added with <span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrame">CameraPath#addFrame</a></span>.</p>
+        <div data-ice="description"><p>Gets the camera frames in this CameraPath.</p>
 </div>
       </div>
     </td>
@@ -264,13 +266,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-lookCurve">lookCurve</a></span></span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-lookCurve">lookCurve</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> travels.</p>
+        <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> travels.</p>
 </div>
       </div>
     </td>
@@ -293,14 +295,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-upCurve">upCurve</a></span></span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-get-upCurve">upCurve</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the {@link Camera#up&quot;} travels.</p>
-<p>This property is read-only and is internally created and destroyed by this CameraPath.</p>
+        <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> travels.</p>
 </div>
       </div>
     </td>
@@ -365,8 +366,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up
-vectors at a given time instant.</p>
+        <div data-ice="description"><p>Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up vectors at a given time instant.</p>
 </div>
       </div>
     </td>
@@ -424,8 +424,7 @@ vectors at a given time instant.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the position of the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to a position interpolated within this CameraPath
-at the given time instant.</p>
+        <div data-ice="description"><p>Sets the position of the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to a position interpolated within this CameraPath at the given time instant.</p>
 </div>
       </div>
     </td>
@@ -521,35 +520,6 @@ at the given time instant.</p>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1084,43 +1054,39 @@ at the given time instant.</p>
     
     
     
-    <span class="code" data-ice="name">eyeCurve</span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+    <span class="code" data-ice="name">eyeCurve</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> travels.</p>
-<p>This property is read-only and is internally created and destroyed by this CameraPath.</p>
+  <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> travels.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">eyeCurve</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The SplineCurve for <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1145,42 +1111,39 @@ at the given time instant.</p>
     
     
     
-    <span class="code" data-ice="name">frames</span><span class="code" data-ice="signature">: <span><span>[]</span></span></span>
+    <span class="code" data-ice="name">frames</span><span class="code" data-ice="signature">: <span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The frames set on the constructor and added with <span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html#instance-method-addFrame">CameraPath#addFrame</a></span>.</p>
+  <div data-ice="description"><p>Gets the camera frames in this CameraPath.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">frames</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The camera paths.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1205,43 +1168,39 @@ at the given time instant.</p>
     
     
     
-    <span class="code" data-ice="name">lookCurve</span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+    <span class="code" data-ice="name">lookCurve</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> travels.</p>
-<p>This property is read-only and is internally created and destroyed by this CameraPath.</p>
+  <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> travels.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">lookCurve</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The SplineCurve for <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1266,43 +1225,39 @@ at the given time instant.</p>
     
     
     
-    <span class="code" data-ice="name">upCurve</span><span class="code" data-ice="signature">: <span>SplineCurve</span></span>
+    <span class="code" data-ice="name">upCurve</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The <span>SplineCurve</span> which defines the path along which the {@link Camera#up&quot;} travels.</p>
-<p>This property is read-only and is internally created and destroyed by this CameraPath.</p>
+  <div data-ice="description"><p>Gets the <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span> along which <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> travels.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">upCurve</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The SplineCurve for <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1334,7 +1289,7 @@ at the given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
@@ -1416,15 +1371,14 @@ at the given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up
-vectors at a given time instant.</p>
+  <div data-ice="description"><p>Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up vectors at a given time instant.</p>
 </div>
 
   
@@ -1478,7 +1432,7 @@ vectors at a given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -1522,15 +1476,14 @@ vectors at a given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the position of the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to a position interpolated within this CameraPath
-at the given time instant.</p>
+  <div data-ice="description"><p>Sets the position of the <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span> to a position interpolated within this CameraPath at the given time instant.</p>
 </div>
 
   
@@ -1584,7 +1537,7 @@ at the given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber144">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1666,7 +1619,7 @@ at the given time instant.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/CameraPath.js.html#lineNumber62">source</a></span></span>
     </span>
   </h3>
 

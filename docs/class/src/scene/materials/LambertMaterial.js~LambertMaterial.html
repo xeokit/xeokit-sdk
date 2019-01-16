@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -319,35 +321,6 @@ new Mesh(myViewer.scene, {
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-alpha">alpha</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets factor in the range <code>[0..1]</code> indicating how transparent the LambertMaterial is.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -387,14 +360,13 @@ new Mesh(myViewer.scene, {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient">ambient</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-alpha">alpha</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the LambertMaterial&apos;s ambient color.</p>
-<p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
+        <div data-ice="description"><p>Gets factor in the range <code>[0..1]</code> indicating how transparent the LambertMaterial is.</p>
 </div>
       </div>
     </td>
@@ -424,6 +396,36 @@ new Mesh(myViewer.scene, {
         
         
         <div data-ice="description"><p>Sets the LambertMaterial&apos;s ambient color.</p>
+<p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-ambient">ambient</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the LambertMaterial&apos;s ambient color.</p>
 <p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
 </div>
       </div>
@@ -791,35 +793,6 @@ new Mesh(myViewer.scene, {
       
     </td>
   </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
 </tbody>
 </table>
 </div>
@@ -885,35 +858,6 @@ new Mesh(myViewer.scene, {
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1397,35 +1341,6 @@ new Mesh(myViewer.scene, {
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/materials/Material.js~Material.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       
       
       <span class="override" data-ice="override"></span>
@@ -1470,7 +1385,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber97">source</a></span></span>
     </span>
   </h3>
 
@@ -1520,7 +1435,7 @@ new Mesh(myViewer.scene, {
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.ambient</td>
-      <td data-ice="type" class="code"><span>Array of Number</span></td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1.0, 1.0, 1.0 ]</li></ul></td>
       <td data-ice="description"><p>LambertMaterial ambient color.</p>
@@ -1528,7 +1443,7 @@ new Mesh(myViewer.scene, {
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.color</td>
-      <td data-ice="type" class="code"><span>Array of Number</span></td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [ 1.0, 1.0, 1.0 ]</li></ul></td>
       <td data-ice="description"><p>LambertMaterial diffuse color.</p>
@@ -1536,7 +1451,7 @@ new Mesh(myViewer.scene, {
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.emissive</td>
-      <td data-ice="type" class="code"><span>Array of Number</span></td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [ 0.0, 0.0, 0.0 ]</li></ul></td>
       <td data-ice="description"><p>LambertMaterial emissive color.</p>
@@ -1616,52 +1531,6 @@ new Mesh(myViewer.scene, {
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-alpha">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">alpha</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber269">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets factor in the range <code>[0..1]</code> indicating how transparent the LambertMaterial is.</p>
-<p>A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
-<p>Default value is <code>1.0</code></p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-alpha">
     <span class="access" data-ice="access">public</span>
     
@@ -1673,7 +1542,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber249">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber245">source</a></span></span>
     </span>
   </h3>
 
@@ -1708,26 +1577,27 @@ new Mesh(myViewer.scene, {
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-ambient">
+  <h3 data-ice="anchor" id="instance-get-alpha">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">ambient</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">alpha</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber265">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the LambertMaterial&apos;s ambient color.</p>
-<p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
+  <div data-ice="description"><p>Gets factor in the range <code>[0..1]</code> indicating how transparent the LambertMaterial is.</p>
+<p>A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
+<p>Default value is <code>1.0</code></p>
 </div>
 
   
@@ -1764,7 +1634,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1772,6 +1642,51 @@ new Mesh(myViewer.scene, {
   
   
   <div data-ice="description"><p>Sets the LambertMaterial&apos;s ambient color.</p>
+<p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-ambient">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">ambient</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber158">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the LambertMaterial&apos;s ambient color.</p>
 <p>Default value is <code>[0.3, 0.3, 0.3]</code>.</p>
 </div>
 
@@ -1809,7 +1724,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber338">source</a></span></span>
     </span>
   </h3>
 
@@ -1853,7 +1768,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber328">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber324">source</a></span></span>
     </span>
   </h3>
 
@@ -1897,7 +1812,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber169">source</a></span></span>
     </span>
   </h3>
 
@@ -1942,7 +1857,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber199">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber195">source</a></span></span>
     </span>
   </h3>
 
@@ -1987,7 +1902,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber210">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -2032,7 +1947,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
@@ -2077,7 +1992,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber365">source</a></span></span>
     </span>
   </h3>
 
@@ -2122,7 +2037,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -2167,7 +2082,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber292">source</a></span></span>
     </span>
   </h3>
 
@@ -2213,7 +2128,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber282">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -2259,7 +2174,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -2304,7 +2219,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber303">source</a></span></span>
     </span>
   </h3>
 
@@ -2316,51 +2231,6 @@ new Mesh(myViewer.scene, {
 </div>
 
   
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber81">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/materials/Material.js~Material.html#instance-get-type">Material#type</a></span></div>
 
   <div data-ice="properties">
 </div>
@@ -2397,7 +2267,7 @@ new Mesh(myViewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/materials/LambertMaterial.js.html#lineNumber376">source</a></span></span>
     </span>
   </h3>
 

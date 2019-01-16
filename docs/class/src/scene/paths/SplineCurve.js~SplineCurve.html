@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">AmbientLight | xeokit-sdk</title>
+  <title data-ice="title">SplineCurve | xeokit-sdk</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -115,23 +115,23 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AmbientLight} from &apos;<span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber95">xeokit-sdk/src/scene/lights/AmbientLight.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SplineCurve} from &apos;<span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber17">xeokit-sdk/src/scene/paths/SplineCurve.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber95">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber17">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
-  <h1 data-ice="name">AmbientLight</h1>
+  <h1 data-ice="name">SplineCurve</h1>
 
   
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/scene/Component.js~Component.html">Component</a></span> &#x2192; <span><a href="class/src/scene/lights/Light.js~Light.html">Light</a></span> &#x2192; AmbientLight</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/scene/Component.js~Component.html">Component</a></span> &#x2192; <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> &#x2192; SplineCurve</div></div>
   
   
   
@@ -141,90 +141,19 @@
 
   
   
-  <div class="description" data-ice="description"><p>An ambient light source of fixed color and intensity that illuminates all <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>es equally.</p>
+  <div class="description" data-ice="description"><p>A <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> along which a 3D position can be animated.</p>
 <ul>
-<li><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color">AmbientLight#color</a></span> multiplies by <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient">PhongMaterial#ambient</a></span> at each position of each <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> surface.</li>
-<li><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color">AmbientLight#color</a></span> multiplies by <span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-color">LambertMaterial#color</a></span> uniformly across each triangle of each <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> (ie. flat shaded).</li>
-<li><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span>s, <span><a href="class/src/scene/lights/DirLight.js~DirLight.html">DirLight</a></span>s and <span><a href="class/src/scene/lights/PointLight.js~PointLight.html">PointLight</a></span>s are registered by their <span><a href="class/src/scene/Component.js~Component.html#instance-member-id">Component#id</a></span> on <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-lights">Scene#lights</a></span>.</li>
+<li>As shown in the diagram below, a SplineCurve is defined by three or more control points.</li>
+<li>You can sample a {{#crossLink &quot;SplineCurve#point:property&quot;}}{{/crossLink}} and a {{#crossLink &quot;Curve/tangent:property&quot;}}{{/crossLink}}
+vector on a SplineCurve for any given value of {{#crossLink &quot;SplineCurve#t:property&quot;}}{{/crossLink}} in the range [0..1].</li>
+<li>When you set {{#crossLink &quot;SplineCurve#t:property&quot;}}{{/crossLink}} on a SplineCurve, its {{#crossLink &quot;SplineCurve#point:property&quot;}}{{/crossLink}} and {{#crossLink &quot;Curve/tangent:property&quot;}}{{/crossLink}} properties will update accordingly.</li>
+<li><p>To build a complex path, you can combine an unlimited combination of SplineCurves, {{#crossLink &quot;CubicBezierCurve&quot;}}CubicBezierCurves{{/crossLink}} and {{#crossLink &quot;QuadraticBezierCurve&quot;}}QuadraticBezierCurves{{/crossLink}} into a {{#crossLink &quot;Path&quot;}}{{/crossLink}}.
+<br>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Quadratic_spline_six_segments.svg/200px-Quadratic_spline_six_segments.svg.png"><br></p>
+</li>
+<li><p><a href="https://en.wikipedia.org/wiki/Spline_(mathematics)">Spline Curve from Wikipedia</a>*</p>
+</li>
 </ul>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll destroy the <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s default light sources then create an AmbientLight and a couple of {@link @DirLight}s:</p>
-<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#lights_AmbientLight">Run this example</a>]</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
-import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
-import {buildTorusGeometry} from &quot;../src/scene/geometry/builders/buildTorusGeometry.js&quot;;
-import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
-import {AmbientLight} from &quot;../src/scene/lights/AmbientLight.js&quot;;
-
-// Create a Viewer and arrange the camera
-
-const myViewer = new Viewer({
-    canvasId: &quot;myCanvas&quot;
-});
-
-myViewer.scene.camera.eye = [0, 0, 5];
-myViewer.scene.camera.look = [0, 0, 0];
-myViewer.scene.camera.up = [0, 1, 0];
-
-// Replace the Scene&apos;s default lights with a single custom AmbientLight
-
-myViewer.scene.clearLights();
-
-new AmbientLight(myViewer.scene, {
-     color: [0.0, 0.3, 0.7],
-     intensity: 1.0
-});
-
-new DirLight(myViewer.scene, {
-     id: &quot;keyLight&quot;,
-     dir: [0.8, -0.6, -0.8],
-     color: [1.0, 0.3, 0.3],
-     intensity: 1.0,
-     space: &quot;view&quot;
-});
-
-new DirLight(myViewer.scene, {
-     id: &quot;fillLight&quot;,
-     dir: [-0.8, -0.4, -0.4],
-     color: [0.3, 1.0, 0.3],
-     intensity: 1.0,
-     space: &quot;view&quot;
-});
-
-new DirLight(myViewer.scene, {
-     id: &quot;rimLight&quot;,
-     dir: [0.2, -0.8, 0.8],
-     color: [0.6, 0.6, 0.6],
-     intensity: 1.0,
-     space: &quot;view&quot;
-});
-
-// Create a mesh with torus shape and PhongMaterial
-
-new Mesh(myViewer.scene, {
-     geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
-         center: [0, 0, 0],
-         radius: 1.5,
-         tube: 0.5,
-         radialSegments: 32,
-         tubeSegments: 24,
-         arc: Math.PI * 2.0
-     }),
-     material: new PhongMaterial(myViewer.scene, {
-         ambient: [1.0, 1.0, 1.0],
-         shininess: 30,
-         diffuseMap: new Texture(myViewer.scene, {
-             src: &quot;textures/diffuse/uvGrid2.jpg&quot;
-         })
-     })
-});
-
-// Adjust the color of our AmbientLight
-
-var ambientLight = myViewer.scene.lights[&quot;myAmbientLight&quot;];
-ambientLight.color = [1.0, 0.8, 0.8];</code>
-</code></pre>
 </div>
   
 
@@ -257,7 +186,7 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -282,35 +211,6 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color">color</a></span></span><span class="code" data-ice="signature">(color: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the RGB color of this AmbientLight.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -321,13 +221,13 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-color">color</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-point">point</a></span></span><span class="code" data-ice="signature">: *: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the RGB color of this AmbientLight.</p>
+        <div data-ice="description"><p>Gets the point on this SplineCurve at position <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t">SplineCurve#t</a></span>.</p>
 </div>
       </div>
     </td>
@@ -350,13 +250,13 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-intensity">intensity</a></span></span><span class="code" data-ice="signature">(intensity: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-points">points</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the intensity of this AmbientLight.</p>
+        <div data-ice="description"><p>Sets the control points on this SplineCurve.</p>
 </div>
       </div>
     </td>
@@ -379,13 +279,71 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-intensity">intensity</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-points">points</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the intensity of this AmbientLight.</p>
+        <div data-ice="description"><p>Gets the control points on this SplineCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the progress along this SplineCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the progress along this SplineCurve.</p>
 </div>
       </div>
     </td>
@@ -415,13 +373,41 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-method-destroy">destroy</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-method-getJSON">getJSON</a></span></span><span class="code" data-ice="signature">(): {&quot;points&quot;: <span>*</span>, &quot;t&quot;: <span>*</span>}</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Destroys this AmbientLight.</p>
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-method-getPoint">getPoint</a></span></span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns point on this SplineCurve at the given position.</p>
 </div>
       </div>
     </td>
@@ -933,6 +919,299 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
   </tr>
 </tbody>
 </table>
+
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the length of this Curve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the progress along this Curve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the progress along this Curve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">tangent</a></span></span><span class="code" data-ice="signature">: *: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the tangent on this Curve at position <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-member-cacheArcLengths">cacheArcLengths</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-member-needsUpdate">needsUpdate</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPointAt">getPointAt</a></span></span><span class="code" data-ice="signature">(u: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints">getPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Samples points on this Curve, at the given number of equally-spaced divisions.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getTangent">getTangent</a></span></span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns a normalized tangent vector on this Curve at the given position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getUToTMapping">getUToTMapping</a></span></span><span class="code" data-ice="signature">(u: <span>*</span>, distance: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
 </div>
 
 
@@ -951,7 +1230,7 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -960,7 +1239,7 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
   
   
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/lights/Light.js~Light.html#instance-constructor-constructor">Light#constructor</a></span></div>
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-constructor-constructor">Curve#constructor</a></span></div>
 
   <div data-ice="properties"><div data-ice="properties">
   <h4 data-ice="title">Params:</h4>
@@ -973,15 +1252,15 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">owner</td>
       <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Owner component. When destroyed, the owner will destroy this AmbientLight as well.</p>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Owner component. When destroyed, the owner will destroy this SplineCurve as well.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">cfg</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>AmbientLight configuration</p>
+      <td data-ice="description"><p>Configs</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -992,19 +1271,27 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.color</td>
-      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="name" class="code" data-depth="1">cfg.points</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [0.7, 0.7, 0.8]</li></ul></td>
-      <td data-ice="description"><p>The color of this AmbientLight.</p>
+<li>default: []</li></ul></td>
+      <td data-ice="description"><p>Control points on this SplineCurve.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.intensity</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.t</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [1.0]</li></ul></td>
-      <td data-ice="description"><p>The intensity of this AmbientLight, as a factor in range <code>[0..1]</code>.</p>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Current position on this SplineCurve, in range between 0..1.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.t</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Current position on this CubicBezierCurve, in range between 0..1.</p>
 </td>
     </tr>
 </tbody>
@@ -1033,71 +1320,25 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-color">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">color</span><span class="code" data-ice="signature">(color: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber130">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the RGB color of this AmbientLight.</p>
-<p>Default value is <code>[0.7, 0.7, 0.8]</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-color">
+  <h3 data-ice="anchor" id="instance-get-point">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">color</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="code" data-ice="name">point</span><span class="code" data-ice="signature">: *: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber142">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the RGB color of this AmbientLight.</p>
-<p>Default value is <code>[0.7, 0.7, 0.8]</code>.</p>
+  <div data-ice="description"><p>Gets the point on this SplineCurve at position <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t">SplineCurve#t</a></span>.</p>
 </div>
 
   
@@ -1110,8 +1351,8 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The AmbientLight&apos;s RGB color.</p>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>The point at <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t">SplineCurve#t</a></span>.</p>
 </td>
         </tr>
       </tbody>
@@ -1136,26 +1377,26 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-intensity">
+  <h3 data-ice="anchor" id="instance-set-points">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">intensity</span><span class="code" data-ice="signature">(intensity: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">points</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the intensity of this AmbientLight.</p>
-<p>Default value is <code>1.0</code> for maximum intensity.</p>
+  <div data-ice="description"><p>Sets the control points on this SplineCurve.</p>
+<p>Default value is <code>[]</code>.</p>
 </div>
 
   
@@ -1181,26 +1422,26 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-intensity">
+  <h3 data-ice="anchor" id="instance-get-points">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">intensity</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="code" data-ice="name">points</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the intensity of this AmbientLight.</p>
-<p>Default value is <code>1.0</code> for maximum intensity.</p>
+  <div data-ice="description"><p>Gets the control points on this SplineCurve.</p>
+<p>Default value is <code>[]</code>.</p>
 </div>
 
   
@@ -1213,8 +1454,113 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
     <table>
       <tbody>
         <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The control points.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-t">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber65">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the progress along this SplineCurve.</p>
+<p>Automatically clamps to range <code>[0..1]</code>.</p>
+<p>Default value is <code>0</code>.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-t">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber79">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the progress along this SplineCurve.</p>
+<p>Automatically clamps to range <code>[0..1]</code>.</p>
+<p>Default value is <code>0</code>.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The AmbientLight&apos;s intensity.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The new progress.</p>
 </td>
         </tr>
       </tbody>
@@ -1242,33 +1588,118 @@ ambientLight.color = [1.0, 0.8, 0.8];</code>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-destroy">
+  <h3 data-ice="anchor" id="instance-method-getJSON">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">destroy</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">getJSON</span><span class="code" data-ice="signature">(): {&quot;points&quot;: <span>*</span>, &quot;t&quot;: <span>*</span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/lights/AmbientLight.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this AmbientLight.</p>
-</div>
+  
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-method-destroy">Component#destroy</a></span></div>
+  
 
   <div data-ice="properties">
 </div>
 
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">{&quot;points&quot;: <span>*</span>, &quot;t&quot;: <span>*</span>}</td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getPoint">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getPoint</span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/paths/SplineCurve.js.html#lineNumber98">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns point on this SplineCurve at the given position.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">t</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Position to get point at.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>Point at the given position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

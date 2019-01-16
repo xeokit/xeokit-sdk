@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -503,7 +505,7 @@ leave that enabled:</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
+      <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -513,7 +515,7 @@ leave that enabled:</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass">clearEachPass</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass">clearEachPass</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -532,7 +534,7 @@ leave that enabled:</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -542,7 +544,7 @@ leave that enabled:</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass">clearEachPass</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass">clearEachPass</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -706,35 +708,6 @@ leave that enabled:</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-gammaInput">gammaInput</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -752,6 +725,35 @@ leave that enabled:</p>
         
         
         <div data-ice="description"><p>Sets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-gammaInput">gammaInput</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
 </div>
       </div>
     </td>
@@ -1286,35 +1288,6 @@ leave that enabled:</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-passes">passes</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the number of times this Scene renders per frame.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -1332,6 +1305,35 @@ leave that enabled:</p>
         
         
         <div data-ice="description"><p>Gets the number of times this Scene renders per frame.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-passes">passes</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the number of times this Scene renders per frame.</p>
 </div>
       </div>
     </td>
@@ -1535,35 +1537,6 @@ leave that enabled:</p>
         
         
         <div data-ice="description"><p>Sets the number of &quot;ticks&quot; that happen between each render or this Scene.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1912,6 +1885,35 @@ leave that enabled:</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsCollidable">setObjectsCollidable</a></span></span><span class="code" data-ice="signature">(ids: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>, collidable: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Batch-updates <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-collidable">Entity#collidable</a></span> on <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s that represent objects.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsColorized">setObjectsColorized</a></span></span><span class="code" data-ice="signature">(ids: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>, colorize: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
@@ -2188,35 +2190,6 @@ leave that enabled:</p>
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -2709,7 +2682,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber338">source</a></span></span>
     </span>
   </h3>
 
@@ -2755,7 +2728,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1465">source</a></span></span>
     </span>
   </h3>
 
@@ -2800,7 +2773,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1442">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1436">source</a></span></span>
     </span>
   </h3>
 
@@ -2844,7 +2817,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber509">source</a></span></span>
     </span>
   </h3>
 
@@ -2888,7 +2861,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1451">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1445">source</a></span></span>
     </span>
   </h3>
 
@@ -2896,51 +2869,6 @@ leave that enabled:</p>
   
   
   <div data-ice="description"><p>Gets the World-space 3D center of this Scene.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-clearEachPass">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">clearEachPass</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1231">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>When <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-passes">Scene#passes</a></span> is greater than <code>1</code>, indicates whether or not to clear the canvas before each pass (<code>true</code>) or just before the first pass (<code>false</code>).</p>
-<p>Default value is <code>false</code>.</p>
 </div>
 
   
@@ -2977,7 +2905,52 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1215">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1209">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>When <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-passes">Scene#passes</a></span> is greater than <code>1</code>, indicates whether or not to clear the canvas before each pass (<code>true</code>) or just before the first pass (<code>false</code>).</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-clearEachPass">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">clearEachPass</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1225">source</a></span></span>
     </span>
   </h3>
 
@@ -3022,7 +2995,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber487">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -3066,7 +3039,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber474">source</a></span></span>
     </span>
   </h3>
 
@@ -3111,7 +3084,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1417">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1411">source</a></span></span>
     </span>
   </h3>
 
@@ -3158,7 +3131,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1306">source</a></span></span>
     </span>
   </h3>
 
@@ -3203,7 +3176,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1290">source</a></span></span>
     </span>
   </h3>
 
@@ -3212,51 +3185,6 @@ leave that enabled:</p>
   
   <div data-ice="description"><p>Sets the gamma factor to use when <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-set-gammaOutput">Scene#gammaOutput</a></span> is set true.</p>
 <p>Default value is <code>1.0</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-gammaInput">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">gammaInput</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1258">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
-<p>Default value is <code>false</code>.</p>
 </div>
 
   
@@ -3293,7 +3221,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1236">source</a></span></span>
     </span>
   </h3>
 
@@ -3301,6 +3229,51 @@ leave that enabled:</p>
   
   
   <div data-ice="description"><p>Sets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
+<p>Default value is <code>false</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-gammaInput">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">gammaInput</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1252">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether or not <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> should expect all <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>s and colors to have pre-multiplied gamma.</p>
 <p>Default value is <code>false</code>.</p>
 </div>
 
@@ -3338,7 +3311,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1269">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1263">source</a></span></span>
     </span>
   </h3>
 
@@ -3383,7 +3356,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1279">source</a></span></span>
     </span>
   </h3>
 
@@ -3428,7 +3401,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1325">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1319">source</a></span></span>
     </span>
   </h3>
 
@@ -3474,7 +3447,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1360">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1354">source</a></span></span>
     </span>
   </h3>
 
@@ -3521,7 +3494,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1106">source</a></span></span>
     </span>
   </h3>
 
@@ -3565,7 +3538,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber423">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -3627,7 +3600,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1379">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1373">source</a></span></span>
     </span>
   </h3>
 
@@ -3674,7 +3647,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1118">source</a></span></span>
     </span>
   </h3>
 
@@ -3718,7 +3691,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber436">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber430">source</a></span></span>
     </span>
   </h3>
 
@@ -3780,7 +3753,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber700">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber694">source</a></span></span>
     </span>
   </h3>
 
@@ -3840,7 +3813,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber501">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber495">source</a></span></span>
     </span>
   </h3>
 
@@ -3884,7 +3857,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber494">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -3928,7 +3901,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber368">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber362">source</a></span></span>
     </span>
   </h3>
 
@@ -3988,7 +3961,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1341">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1335">source</a></span></span>
     </span>
   </h3>
 
@@ -4034,7 +4007,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1076">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1070">source</a></span></span>
     </span>
   </h3>
 
@@ -4078,7 +4051,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber388">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -4139,7 +4112,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1088">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1082">source</a></span></span>
     </span>
   </h3>
 
@@ -4183,7 +4156,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber399">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber393">source</a></span></span>
     </span>
   </h3>
 
@@ -4233,10 +4206,10 @@ leave that enabled:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-passes">
+  <h3 data-ice="anchor" id="instance-get-passes">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -4244,14 +4217,14 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1198">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the number of times this Scene renders per frame.</p>
+  <div data-ice="description"><p>Gets the number of times this Scene renders per frame.</p>
 <p>Default value is <code>1</code>.</p>
 </div>
 
@@ -4278,10 +4251,10 @@ leave that enabled:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-passes">
+  <h3 data-ice="anchor" id="instance-set-passes">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
@@ -4289,14 +4262,14 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1176">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the number of times this Scene renders per frame.</p>
+  <div data-ice="description"><p>Sets the number of times this Scene renders per frame.</p>
 <p>Default value is <code>1</code>.</p>
 </div>
 
@@ -4334,7 +4307,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber508">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber502">source</a></span></span>
     </span>
   </h3>
 
@@ -4378,7 +4351,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1392">source</a></span></span>
     </span>
   </h3>
 
@@ -4425,7 +4398,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1130">source</a></span></span>
     </span>
   </h3>
 
@@ -4469,7 +4442,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber443">source</a></span></span>
     </span>
   </h3>
 
@@ -4531,7 +4504,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber377">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -4591,7 +4564,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1171">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1165">source</a></span></span>
     </span>
   </h3>
 
@@ -4636,7 +4609,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1144">source</a></span></span>
     </span>
   </h3>
 
@@ -4670,67 +4643,6 @@ leave that enabled:</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber337">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-types">
     <span class="access" data-ice="access">public</span>
     
@@ -4742,7 +4654,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber473">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber467">source</a></span></span>
     </span>
   </h3>
 
@@ -4786,7 +4698,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1433">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1427">source</a></span></span>
     </span>
   </h3>
 
@@ -4830,7 +4742,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1100">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1094">source</a></span></span>
     </span>
   </h3>
 
@@ -4874,7 +4786,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber410">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -4938,7 +4850,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1653">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1647">source</a></span></span>
     </span>
   </h3>
 
@@ -4982,7 +4894,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1678">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1672">source</a></span></span>
     </span>
   </h3>
 
@@ -5026,7 +4938,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1668">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1662">source</a></span></span>
     </span>
   </h3>
 
@@ -5070,7 +4982,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1941">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1952">source</a></span></span>
     </span>
   </h3>
 
@@ -5114,7 +5026,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1699">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1693">source</a></span></span>
     </span>
   </h3>
 
@@ -5192,7 +5104,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1612">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1606">source</a></span></span>
     </span>
   </h3>
 
@@ -5374,7 +5286,7 @@ if (pickResult) { // Picked a Mesh with the ray
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber983">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber977">source</a></span></span>
     </span>
   </h3>
 
@@ -5429,6 +5341,88 @@ since the last render.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setObjectsCollidable">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setObjectsCollidable</span><span class="code" data-ice="signature">(ids: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span>, collidable: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1782">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Batch-updates <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-collidable">Entity#collidable</a></span> on <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s that represent objects.</p>
+<p>An <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> represents an object when <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> is <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">ids</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Array of <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> values.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">collidable</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Whether or not to cull.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>True if any <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s were updated, else false if all updates were redundant and not applied.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setObjectsColorized">
     <span class="access" data-ice="access">public</span>
     
@@ -5440,7 +5434,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1882">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1893">source</a></span></span>
     </span>
   </h3>
 
@@ -5523,7 +5517,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1788">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1799">source</a></span></span>
     </span>
   </h3>
 
@@ -5605,7 +5599,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1865">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1876">source</a></span></span>
     </span>
   </h3>
 
@@ -5687,7 +5681,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1848">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1859">source</a></span></span>
     </span>
   </h3>
 
@@ -5771,7 +5765,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1828">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1839">source</a></span></span>
     </span>
   </h3>
 
@@ -5855,7 +5849,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1897">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1908">source</a></span></span>
     </span>
   </h3>
 
@@ -5938,7 +5932,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1914">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1925">source</a></span></span>
     </span>
   </h3>
 
@@ -6020,7 +6014,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1808">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1819">source</a></span></span>
     </span>
   </h3>
 
@@ -6104,7 +6098,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1771">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/scene/Scene.js.html#lineNumber1765">source</a></span></span>
     </span>
   </h3>
 

@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CubicBezierCurve} from &apos;<span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber4">xeokit-sdk/src/scene/paths/CubicBezierCurve.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {CubicBezierCurve} from &apos;<span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber17">xeokit-sdk/src/scene/paths/CubicBezierCurve.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber4">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber17">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -139,7 +141,18 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>A <span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span> along which a 3D position can be animated.</p>
+<ul>
+<li>As shown in the diagram below, a CubicBezierCurve is defined by four control points.</li>
+<li>You can sample a <span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point">CubicBezierCurve#point</a></span> and a <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">CubicBezierCurve#tangent</a></span> vector on a CubicBezierCurve for any given value of <span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t">CubicBezierCurve#t</a></span> in the range [0..1].</li>
+<li>When you set <span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t">CubicBezierCurve#t</a></span> on a CubicBezierCurve, its <span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point">CubicBezierCurve#point</a></span> and <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">CubicBezierCurve#tangent</a></span> properties will update accordingly.</li>
+<li>To build a complex path, you can combine an unlimited combination of CubicBezierCurves, <span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span>s and <span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span>s into a <span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span>.</li>
+</ul>
+<p><br>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/B%C3%A9zier_3_big.gif/240px-B%C3%A9zier_3_big.gif">
+<br>
+<a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">Cubic Bezier Curve from WikiPedia</a></p>
+</div>
   
 
   
@@ -171,7 +184,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -206,13 +219,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point">point</a></span></span><span class="code" data-ice="signature">: *</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-point">point</a></span></span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Point on this CubicBezierCurve at position <span>CubicBezierCurve/t</span>.</p>
+        <div data-ice="description"><p>Returns point on this CubicBezierCurve at the given position.</p>
 </div>
       </div>
     </td>
@@ -235,41 +248,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Current position of progress along this CubicBezierCurve.</p>
+        <div data-ice="description"><p>Gets the current position of progress along this CubicBezierCurve.</p>
 </div>
       </div>
     </td>
@@ -292,98 +277,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v0">v0</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Starting point on this CubicBezierCurve.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0">v0</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1">v1</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1">v1</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>First control point on this CubicBezierCurve.</p>
+        <div data-ice="description"><p>Sets the current position of progress along this CubicBezierCurve.</p>
 </div>
       </div>
     </td>
@@ -406,13 +306,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v2">v2</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v0">v0</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Second control point on this CubicBezierCurve.</p>
+        <div data-ice="description"><p>Sets the starting point on this CubicBezierCurve.</p>
 </div>
       </div>
     </td>
@@ -435,41 +335,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2">v2</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0">v0</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3">v3</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>End point on this CubicBezierCurve.</p>
+        <div data-ice="description"><p>Gets the starting point on this CubicBezierCurve.</p>
 </div>
       </div>
     </td>
@@ -492,13 +364,159 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v3">v3</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1">v1</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Gets the first control point on this CubicBezierCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1">v1</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Sets the first control point on this CubicBezierCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v2">v2</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the second control point on this CubicBezierCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v2">v2</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the second control point on this CubicBezierCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v3">v3</a></span></span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the end point on this CubicBezierCurve.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v3">v3</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the end point on this CubicBezierCurve.</p>
+</div>
       </div>
     </td>
     <td>
@@ -599,35 +617,6 @@
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -1121,13 +1110,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Length of this Curve.</p>
+        <div data-ice="description"><p>Gets the length of this Curve.</p>
 </div>
       </div>
     </td>
@@ -1150,13 +1139,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the progress along this Curve.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1178,13 +1168,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">t</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Progress along this Curve.</p>
+        <div data-ice="description"><p>Sets the progress along this Curve.</p>
 </div>
       </div>
     </td>
@@ -1207,13 +1197,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">tangent</a></span></span><span class="code" data-ice="signature">: *</span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-get-tangent">tangent</a></span></span><span class="code" data-ice="signature">: *: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Tangent on this Curve at position <span>Curve/t</span>.</p>
+        <div data-ice="description"><p>Gets the tangent on this Curve at position <span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span>.</p>
 </div>
       </div>
     </td>
@@ -1320,7 +1310,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints">getPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>Array of Array</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getPoints">getPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *</span>
         </p>
       </div>
       <div>
@@ -1328,34 +1318,6 @@
         
         <div data-ice="description"><p>Samples points on this Curve, at the given number of equally-spaced divisions.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-method-getSpacedPoints">getSpacedPoints</a></span></span><span class="code" data-ice="signature">(divisions: <span>*</span>): <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -1436,11 +1398,11 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber6">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
@@ -1451,7 +1413,78 @@
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-constructor-constructor">Curve#constructor</a></span></div>
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Owner component. When destroyed, the owner will destroy this CubicBezierCurve as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.v0</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The starting point.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.v1</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The first control point.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.v2</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The middle control point.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.v3</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>The ending point.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.t</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Current position on this CubicBezierCurve, in range between 0..1.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   
@@ -1482,42 +1515,39 @@
     
     
     
-    <span class="code" data-ice="name">point</span><span class="code" data-ice="signature">: *</span>
+    <span class="code" data-ice="name">point</span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): *: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Point on this CubicBezierCurve at position <span>CubicBezierCurve/t</span>.</p>
+  <div data-ice="description"><p>Returns point on this CubicBezierCurve at the given position.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">point</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">*</td>
+          <td class="return-desc" data-ice="returnDescription"><p>The point at the given position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1542,19 +1572,18 @@
     
     
     
-    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Progress along this Curve.</p>
-<p>Automatically clamps to range [0..1].</p>
+  <div data-ice="description"><p>Gets the current position of progress along this CubicBezierCurve.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span></div>
@@ -1562,7 +1591,20 @@
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Current progress time value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1587,41 +1629,24 @@
     
     
     
-    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">t</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Current position of progress along this CubicBezierCurve.</p>
-<p>Automatically clamps to range [0..1].</p>
-<p>Fires a <span>CubicBezierCurve/t:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the current position of progress along this CubicBezierCurve.</p>
+<p>Automatically clamps to range <code>[0..1]</code>.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/paths/Curve.js~Curve.html#instance-set-t">Curve#t</a></span></div>
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">t</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1649,40 +1674,24 @@
     
     
     
-    <span class="code" data-ice="name">v0</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">v0</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Starting point on this CubicBezierCurve.</p>
-<p>Fires a <span>CubicBezierCurve/v0:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the starting point on this CubicBezierCurve.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">v0</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1710,25 +1719,40 @@
     
     
     
-    <span class="code" data-ice="name">v0</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">v0</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the starting point on this CubicBezierCurve.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The starting point.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1753,25 +1777,41 @@
     
     
     
-    <span class="code" data-ice="name">v1</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">v1</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber59">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the first control point on this CubicBezierCurve.</p>
+<p>Fires a <span>CubicBezierCurve#v1:event</span> event on change.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The first control point.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1796,40 +1836,24 @@
     
     
     
-    <span class="code" data-ice="name">v1</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">v1</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>First control point on this CubicBezierCurve.</p>
-<p>Fires a <span>CubicBezierCurve/v1:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the first control point on this CubicBezierCurve.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">v1</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1857,40 +1881,24 @@
     
     
     
-    <span class="code" data-ice="name">v2</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">v2</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Second control point on this CubicBezierCurve.</p>
-<p>Fires a <span>CubicBezierCurve/v2:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the second control point on this CubicBezierCurve.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">v2</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1918,25 +1926,40 @@
     
     
     
-    <span class="code" data-ice="name">v2</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">v2</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber103">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the second control point on this CubicBezierCurve.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The second control point.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1961,40 +1984,25 @@
     
     
     
-    <span class="code" data-ice="name">v3</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">v3</span><span class="code" data-ice="signature">(value: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>End point on this CubicBezierCurve.</p>
-<p>Fires a <span>CubicBezierCurve/v3:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the end point on this CubicBezierCurve.</p>
+<p>Fires a <span>CubicBezierCurve#v3:event</span> event on change.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">v3</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -2022,25 +2030,41 @@
     
     
     
-    <span class="code" data-ice="name">v3</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">v3</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber129">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the end point on this CubicBezierCurve.</p>
+<p>Fires a <span>CubicBezierCurve#v3:event</span> event on change.</p>
+<p>Default value is <code>[0.0, 0.0, 0.0]</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The end point.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2072,7 +2096,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -2127,7 +2151,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/paths/CubicBezierCurve.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
@@ -2165,7 +2189,8 @@
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType">*</td>
-          
+          <td class="return-desc" data-ice="returnDescription"><p>The point at the given position.</p>
+</td>
         </tr>
       </tbody>
     </table>

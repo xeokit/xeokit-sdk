@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -116,9 +118,33 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Curve} from &quot;./Curve.js&quot;
 import {math} from &quot;../math/math.js&quot;;
 
+/**
+ * @desc A {@link Curve} along which a 3D position can be animated.
+ *
+ * * As shown in the diagram below, a CubicBezierCurve is defined by four control points.
+ * * You can sample a {@link CubicBezierCurve#point} and a {@link CubicBezierCurve#tangent} vector on a CubicBezierCurve for any given value of {@link CubicBezierCurve#t} in the range [0..1].
+ * * When you set {@link CubicBezierCurve#t} on a CubicBezierCurve, its {@link CubicBezierCurve#point} and {@link CubicBezierCurve#tangent} properties will update accordingly.
+ * * To build a complex path, you can combine an unlimited combination of CubicBezierCurves, {@link QuadraticBezierCurve}s and {@link SplineCurve}s into a {@link Path}.
+ *
+ * &lt;br&gt;
+ * &lt;img style=&quot;border:1px solid;&quot; src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/B%C3%A9zier_3_big.gif/240px-B%C3%A9zier_3_big.gif&quot;/&gt;
+ * &lt;br&gt;
+ * [Cubic Bezier Curve from WikiPedia](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+ */
 class CubicBezierCurve extends Curve {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this CubicBezierCurve as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Number[]} [cfg.v0=[0,0,0]] The starting point.
+     * @param {Number[]} [cfg.v1=[0,0,0]] The first control point.
+     * @param {Number[]} [cfg.v2=[0,0,0]] The middle control point.
+     * @param {Number[]} [cfg.v3=[0,0,0]] The ending point.
+     * @param {Number} [cfg.t=0] Current position on this CubicBezierCurve, in range between 0..1.
+     */
+    constructor(owner, cfg = {}) {
         super(owner, cfg);
         this.v0 = cfg.v0;
         this.v1 = cfg.v1;
@@ -128,137 +154,126 @@ class CubicBezierCurve extends Curve {
     }
 
     /**
-     Starting point on this CubicBezierCurve.
-
-     Fires a {@link CubicBezierCurve/v0:event} event on change.
-
-     @property v0
-     @default [0.0, 0.0, 0.0]
-     @type {Number[]}
+     * Sets the starting point on this CubicBezierCurve.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @param {Number[]} value The starting point.
      */
     set v0(value) {
-
-        /**
-         * Fired whenever this CubicBezierCurve&apos;s
-         * {@link CubicBezierCurve/v0} property changes.
-         * @event v0
-         * @param value The property&apos;s new value
-         */
-        this.fire(&quot;v0&quot;, this._v0 = value || math.vec3([0, 0, 0]));
+        this._v0 = value || math.vec3([0, 0, 0]);
     }
 
+    /**
+     * Gets the starting point on this CubicBezierCurve.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @returns {Number[]} The starting point.
+     */
     get v0() {
         return this._v0;
     }
 
     /**
-     First control point on this CubicBezierCurve.
-
-     Fires a {@link CubicBezierCurve/v1:event} event on change.
-
-     @property v1
-     @default [0.0, 0.0, 0.0]
-     @type {Number[]}
+     * Sets the first control point on this CubicBezierCurve.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @param {Number[]} value The first control point.
      */
     set v1(value) {
-
-        /**
-         * Fired whenever this CubicBezierCurve&apos;s
-         * {@link CubicBezierCurve/v1} property changes.
-         * @event v1
-         * @param value The property&apos;s new value
-         */
-        this.fire(&quot;v1&quot;, this._v1 = value || math.vec3([0, 0, 0]));
+        this._v1 = value || math.vec3([0, 0, 0]);
     }
 
+    /**
+     * Gets the first control point on this CubicBezierCurve.
+     *
+     * Fires a {@link CubicBezierCurve#v1:event} event on change.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @returns {Number[]} The first control point.
+     */
     get v1() {
         return this._v1;
     }
 
     /**
-     Second control point on this CubicBezierCurve.
-
-     Fires a {@link CubicBezierCurve/v2:event} event on change.
-
-     @property v2
-     @default [0.0, 0.0, 0.0]
-     @type {Number[]}
+     * Sets the second control point on this CubicBezierCurve.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @param {Number[]} value The second control point.
      */
     set v2(value) {
-
-        /**
-         * Fired whenever this CubicBezierCurve&apos;s
-         * {@link CubicBezierCurve/v2} property changes.
-         * @event v2
-         * @param value The property&apos;s new value
-         */
-        this.fire(&quot;v2&quot;, this._v2 = value || math.vec3([0, 0, 0]));
+        this._v2 = value || math.vec3([0, 0, 0]);
     }
 
+    /**
+     * Gets the second control point on this CubicBezierCurve.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @returns {Number[]} The second control point.
+     */
     get v2() {
         return this._v2;
     }
 
     /**
-     End point on this CubicBezierCurve.
-
-     Fires a {@link CubicBezierCurve/v3:event} event on change.
-
-     @property v3
-     @default [0.0, 0.0, 0.0]
-     @type {Number[]}
+     * Sets the end point on this CubicBezierCurve.
+     *
+     * Fires a {@link CubicBezierCurve#v3:event} event on change.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @param {Number[]} value The end point.
      */
     set v3(value) {
-
-        /**
-         * Fired whenever this CubicBezierCurve&apos;s
-         * {@link CubicBezierCurve/v3} property changes.
-         * @event v3
-         * @param value The property&apos;s new value
-         */
         this.fire(&quot;v3&quot;, this._v3 = value || math.vec3([0, 0, 0]));
     }
 
+    /**
+     * Gets the end point on this CubicBezierCurve.
+     *
+     * Fires a {@link CubicBezierCurve#v3:event} event on change.
+     *
+     * Default value is ````[0.0, 0.0, 0.0]````
+     *
+     * @returns {Number[]} The end point.
+     */
     get v3() {
         return this._v3;
     }
 
     /**
-     Current position of progress along this CubicBezierCurve.
-
-     Automatically clamps to range [0..1].
-
-     Fires a {@link CubicBezierCurve/t:event} event on change.
-
-     @property t
-     @default 0
-     @type {Number}
+     * Sets the current position of progress along this CubicBezierCurve.
+     *
+     * Automatically clamps to range ````[0..1]````.
+     *
+     * @param {Number} value New progress time value.
      */
-
     set t(value) {
-
         value = value || 0;
-
         this._t = value &lt; 0.0 ? 0.0 : (value &gt; 1.0 ? 1.0 : value);
-
-        /**
-         * Fired whenever this CubicBezierCurve&apos;s
-         * {@link CubicBezierCurve/t} property changes.
-         * @event t
-         * @param value The property&apos;s new value
-         */
-        this.fire(&quot;t&quot;, this._t);
     }
 
+    /**
+     * Gets the current position of progress along this CubicBezierCurve.
+     *
+     * @returns {Number} Current progress time value.
+     */
     get t() {
         return this._t;
     }
 
     /**
-     Point on this CubicBezierCurve at position {@link CubicBezierCurve/t}.
-
-     @property point
-     @type {{Array of Number}}
+     * Returns point on this CubicBezierCurve at the given position.
+     *
+     * @param {Number} t Position to get point at.
+     *
+     * @returns {{Number[]}} The point at the given position.
      */
     get point() {
         return this.getPoint(this._t);
@@ -266,9 +281,10 @@ class CubicBezierCurve extends Curve {
 
     /**
      * Returns point on this CubicBezierCurve at the given position.
-     * @method getPoint
+     *
      * @param {Number} t Position to get point at.
-     * @returns {{Array of Number}}
+     *
+     * @returns {{Number[]}} The point at the given position.
      */
     getPoint(t) {
 
@@ -292,7 +308,8 @@ class CubicBezierCurve extends Curve {
     }
 }
 
-export {CubicBezierCurve}</code></pre>
+export {CubicBezierCurve}
+</code></pre>
 
 </div>
 

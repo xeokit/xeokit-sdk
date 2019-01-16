@@ -80,6 +80,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
@@ -113,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Ortho} from &apos;<span><a href="file/src/scene/camera/Ortho.js.html#lineNumber15">xeokit-sdk/src/scene/camera/Ortho.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Ortho} from &apos;<span><a href="file/src/scene/camera/Ortho.js.html#lineNumber14">xeokit-sdk/src/scene/camera/Ortho.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/camera/Ortho.js.html#lineNumber15">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/camera/Ortho.js.html#lineNumber14">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -141,7 +143,7 @@
   
   <div class="description" data-ice="description"><p>Defines its <span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span>&apos;s orthographic projection as a box-shaped view volume.</p>
 <ul>
-<li>Located at <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-frustum">Camera#frustum</a></span>.</li>
+<li>Located at <span><a href="class/src/scene/camera/Camera.js~Camera.html#instance-get-ortho">Camera#ortho</a></span>.</li>
 <li>Works like Blender&apos;s orthographic projection, where the positions of the left, right, top and bottom planes are implicitly
 indicated with a single <span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">Ortho#scale</a></span> property, which causes the frustum to be symmetrical on X and Y axis, large enough to
 contain the number of units given by <span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">Ortho#scale</a></span>.</li>
@@ -180,14 +182,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-far">far</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-far">far</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Ortho&apos;s far plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Ortho#far:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Ortho&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Ortho#far:emits</span> emits on change.</p>
+<p>Default value is <code>10000.0</code>.</p>
 </div>
       </div>
     </td>
@@ -210,13 +213,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-far">far</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-far">far</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the position of the Ortho&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>10000.0</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -238,14 +243,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-matrix">matrix</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The Ortho&apos;s projection transform matrix.</p>
-<p>Fires a <span>Ortho#matrix:event</span> event on change.</p>
+        <div data-ice="description"><p>Gets the Ortho&apos;s projection transform matrix.</p>
+<p>Fires a <span>Ortho#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
 </div>
       </div>
     </td>
@@ -268,14 +274,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-near">near</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Position of this Ortho&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Ortho#near:event</span> event on change.</p>
+        <div data-ice="description"><p>Sets the position of the Ortho&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Ortho#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
       </div>
     </td>
@@ -298,13 +305,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-near">near</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Gets the position of the Ortho&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -326,15 +335,16 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-set-scale">scale</a></span></span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Scale factor for this Ortho&apos;s extents on X and Y axis.</p>
+        <div data-ice="description"><p>Sets scale factor for this Ortho&apos;s extents on X and Y axis.</p>
 <p>Clamps to minimum value of <code>`0.01</code>.</p>
 <p>Fires a <span>Ortho#scale:event</span> event on change.</p>
+<p>Default value is <code>1.0</code></p>
 </div>
       </div>
     </td>
@@ -357,41 +367,15 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-scale">scale</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
+        <div data-ice="description"><p>Gets scale factor for this Ortho&apos;s extents on X and Y axis.</p>
+<p>Clamps to minimum value of <code>`0.01</code>.</p>
+<p>Default value is <code>1.0</code></p>
 </div>
       </div>
     </td>
@@ -464,35 +448,6 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
         
         
         <div data-ice="description"><p>The <span><a href="class/src/scene/Component.js~Component.html">Component</a></span> that owns the lifecycle of this Component, if any.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">type</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>JavaScript class name for this Component.</p>
 </div>
       </div>
     </td>
@@ -982,40 +937,25 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Position of this Ortho&apos;s far plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Ortho#far:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Ortho&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Ortho#far:emits</span> emits on change.</p>
+<p>Default value is <code>10000.0</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">far</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1043,25 +983,40 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">far</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Ortho&apos;s far plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>10000.0</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>New far ortho plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1086,43 +1041,41 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">matrix</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The Ortho&apos;s projection transform matrix.</p>
-<p>Fires a <span>Ortho#matrix:event</span> event on change.</p>
+  <div data-ice="description"><p>Gets the Ortho&apos;s projection transform matrix.</p>
+<p>Fires a <span>Ortho#matrix:emits</span> emits on change.</p>
+<p>Default value is <code>[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">matrix</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The Ortho&apos;s projection matrix.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1147,7 +1100,7 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
@@ -1158,29 +1111,14 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
   
   
   
-  <div data-ice="description"><p>Position of this Ortho&apos;s near plane on the positive View-space Z-axis.</p>
-<p>Fires a <span>Ortho#near:event</span> event on change.</p>
+  <div data-ice="description"><p>Sets the position of the Ortho&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Fires a <span>Ortho#near:emits</span> emits on change.</p>
+<p>Default value is <code>0.1</code>.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">near</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1208,25 +1146,40 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">near</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber144">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the position of the Ortho&apos;s near plane on the positive View-space Z-axis.</p>
+<p>Default value is <code>0.1</code>.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>New Ortho near plane position.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1251,41 +1204,26 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Scale factor for this Ortho&apos;s extents on X and Y axis.</p>
+  <div data-ice="description"><p>Sets scale factor for this Ortho&apos;s extents on X and Y axis.</p>
 <p>Clamps to minimum value of <code>`0.01</code>.</p>
 <p>Fires a <span>Ortho#scale:event</span> event on change.</p>
+<p>Default value is <code>1.0</code></p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">scale</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
   
@@ -1313,7 +1251,7 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     
     
     
-    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>: <span>*</span></span>
     <span class="right-info">
       
       
@@ -1324,75 +1262,30 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
   
   
   
-  
+  <div data-ice="description"><p>Gets scale factor for this Ortho&apos;s extents on X and Y axis.</p>
+<p>Clamps to minimum value of <code>`0.01</code>.</p>
+<p>Default value is <code>1.0</code></p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>New Ortho scale value.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-type">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">type</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber26">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>JavaScript class name for this Component.</p>
-<p>For example: &quot;AmbientLight&quot;, &quot;MetallicMaterial&quot; etc.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/scene/Component.js~Component.html#instance-get-type">Component#type</a></span></div>
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">type</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
+  </div>
 
   
 
@@ -1424,7 +1317,7 @@ contain the number of units given by <span><a href="class/src/scene/camera/Ortho
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/camera/Ortho.js.html#lineNumber203">source</a></span></span>
     </span>
   </h3>
 
