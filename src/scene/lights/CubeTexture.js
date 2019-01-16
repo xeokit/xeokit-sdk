@@ -35,8 +35,7 @@ function nextHighestPowerOfTwo(x) {
 class CubeTexture extends Component {
 
     /**
-     * JavaScript class name for this Component.
-     * @returns {String}
+     @private
      */
     get type() {
         return "CubeTexture";

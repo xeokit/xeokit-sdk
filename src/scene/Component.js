@@ -221,13 +221,7 @@ import {Map} from "./utils/Map.js";
 class Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Component";

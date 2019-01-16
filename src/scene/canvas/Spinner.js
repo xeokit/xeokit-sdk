@@ -165,18 +165,15 @@ const spinnerCSS = ".sk-fading-circle {\
 class Spinner extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Spinner";
     }
 
+    /**
+     @private
+     */
     constructor(owner, cfg = {}) {
         super(owner, cfg);
         this._canvas = cfg.canvas;
@@ -206,20 +203,19 @@ class Spinner extends Component {
     }
 
     /**
-     The number of processes this Spinner represents.
+     * Sets the number of processes this Spinner represents.
+     *
+     * The Spinner is visible while this property is greater than zero.
+     *
+     * Increment this property whenever you commence some process during which you want the Spinner to be visible, then decrement it again when the process is complete.
+     *
+     * Clamps to zero if you attempt to set to to a negative value.
+     *
+     * Fires a {@link Spinner#processes:event} event on change.
 
-     The Spinner is visible while this property is greater than zero.
-
-     Increment this property whenever you commence some process during which you want
-     the Spinner to be visible, then decrement it again when the process is complete.
-
-     Clamps to zero if you attempt to set to to a negative value.
-
-     Fires a {@link Spinner#processes:event} event on change.
-
-     @property processes
-     @default 0
-     @type {Number}
+     * Default value is ````0````.
+     *
+     * @param {Number} value New processes count.
      */
     set processes(value) {
         value = value || 0;
@@ -249,10 +245,20 @@ class Spinner extends Component {
         }
     }
 
+    /**
+     * Gets the number of processes this Spinner represents.
+     *
+     * The Spinner is visible while this property is greater than zero.
+     *
+     * @returns {Number} Current processes count.
+     */
     get processes() {
         return this._processes;
     }
 
+    /**
+     * @private
+     */
     _adjustPosition() { // (Re)positions spinner DIV over the center of the canvas
         if (!this._canvas || !this._element) {
             return;
@@ -264,6 +270,9 @@ class Spinner extends Component {
         spinnerStyle["top"] = (canvas.offsetTop + (canvas.clientHeight * 0.5) - (spinner.clientHeight * 0.5)) + "px";
     }
 
+    /**
+     * @private
+     */
     _injectSpinnerCSS() {
         if (spinnerCSSInjected) {
             return;

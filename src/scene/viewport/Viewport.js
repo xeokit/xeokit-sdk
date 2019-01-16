@@ -1,26 +1,16 @@
 /**
- A **Viewport** controls the canvas viewport for a {@link Scene}.
-
- <a href="../../examples/#effects_stereo_custom"><img src="../../../assets/images/screenshots/StereoEffect.png"></img></a>
-
- ## Overview
-
- * One Viewport per scene.
- * You can configure a Scene to render multiple times per frame, while setting the Viewport to different extents on each render.
- * Make a Viewport automatically size to its {@link Scene} {@link Canvas}
- by setting its {@link Viewport/autoBoundary} property ````true```` (default is ````false````).
-
- ## Examples
-
- * [Stereo effect using alternating viewports](../../examples/#effects_stereo_custom)
-
- ## Usage
-
- Configuring the Scene to render twice on each frame, each time to a separate viewport:
-
- ````Javascript
- // Load glTF model
- var model = new xeokit.GLTFModel({
+ * @desc controls the canvas viewport for a {@link Scene}.
+ *
+ * * One Viewport per scene.
+ * * You can configure a Scene to render multiple times per frame, while setting the Viewport to different extents on each render.
+ * * Make a Viewport automatically size to its {@link Scene} {@link Canvas} by setting its {@link Viewport#autoBoundary} ````true````.
+ *
+ *
+ * Configuring the Scene to render twice on each frame, each time to a separate viewport:
+ *
+ * ````Javascript
+ * // Load glTF model
+ * var model = new xeokit.GLTFModel({
     src: "models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf"
  });
 
@@ -58,10 +48,10 @@
  @param {String} [cfg.id] Optional ID, unique among all components in the parent
  {@link Scene}, generated automatically when omitted.
  @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Viewport.
- @param [cfg.boundary] {Array of Number} Canvas-space Viewport boundary, given as
+ @param [cfg.boundary] {Number[]} Canvas-space Viewport boundary, given as
  (min, max, width, height). Defaults to the size of the parent
  {@link Scene} {@link Canvas}.
- @param [cfg.autoBoundary=false] {Boolean} Indicates if this Viewport's {@link Viewport/boundary}
+ @param [cfg.autoBoundary=false] {Boolean} Indicates if this Viewport's {@link Viewport#boundary}
  automatically synchronizes with the size of the parent {@link Scene} {@link Canvas}.
 
  @extends Component
@@ -72,19 +62,16 @@ import {RenderState} from '../webgl/RenderState.js';
 class Viewport extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Viewport";
     }
 
-    constructor(owner, cfg={}) {
+    /**
+     @private
+     */
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -98,18 +85,15 @@ class Viewport extends Component {
 
 
     /**
-     The canvas-space boundary of this Viewport, indicated as [min, max, width, height].
-
-     Defaults to the size of the parent
-     {@link Scene} {@link Canvas}.
-
-     Ignores attempts to set value when {@link Viewport/autoBoundary} is ````true````.
-
-     Fires a {@link Viewport/boundary:event} event on change.
-
-     @property boundary
-     @default [size of Scene Canvas]
-     @type {Array of Number}
+     * Sets the canvas-space boundary of this Viewport, indicated as ````[min, max, width, height]````.
+     *
+     * When {@link Viewport#autoBoundary} is ````true````, ignores calls to this method and automatically synchronizes with {@link Canvas#boundary}.
+     *
+     * Fires a {@link Viewport#boundary:event} event on change.
+     *
+     * Defaults to the {@link Canvas} extents.
+     *
+     * @param {Number[]} value New Viewport extents.
      */
     set boundary(value) {
 
@@ -132,7 +116,7 @@ class Viewport extends Component {
         this.glRedraw();
 
         /**
-         Fired whenever this Viewport's {@link Viewport/boundary} property changes.
+         Fired whenever this Viewport's {@link Viewport#boundary} property changes.
 
          @event boundary
          @param value {Boolean} The property's new value
@@ -140,23 +124,21 @@ class Viewport extends Component {
         this.fire("boundary", this._state.boundary);
     }
 
+    /**
+     * Gets the canvas-space boundary of this Viewport, indicated as ````[min, max, width, height]````.
+     *
+     * @returns {Number[]} The Viewport extents.
+     */
     get boundary() {
         return this._state.boundary;
     }
 
     /**
-     Indicates if this Viewport's {@link Viewport/boundary} automatically
-     synchronizes with the size of the parent {@link Scene} {@link Canvas}.
-
-     When set true, then this Viewport will fire a {@link Viewport/boundary/event} whenever
-     the {@link Canvas} resizes. Also fires that event as soon as this ````autoBoundary````
-     property is changed.
-
-     Fires a {@link Viewport/autoBoundary:event} event on change.
-
-     @property autoBoundary
-     @default false
-     @type {Boolean}
+     * Sets if {@link Viewport#boundary} automatically synchronizes with {@link Canvas#boundary}.
+     *
+     * Default is ````false````.
+     *
+     * @param {Boolean} value Set true to automatically sycnhronize.
      */
     set autoBoundary(value) {
 
@@ -180,7 +162,7 @@ class Viewport extends Component {
                     this.glRedraw();
 
                     /**
-                     Fired whenever this Viewport's {@link Viewport/boundary} property changes.
+                     Fired whenever this Viewport's {@link Viewport#boundary} property changes.
 
                      @event boundary
                      @param value {Boolean} The property's new value
@@ -203,6 +185,13 @@ class Viewport extends Component {
         this.fire("autoBoundary", this._autoBoundary);
     }
 
+    /**
+     * Gets if {@link Viewport#boundary} automatically synchronizes with {@link Canvas#boundary}.
+     *
+     * Default is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` when automatically sycnhronizing.
+     */
     get autoBoundary() {
         return this._autoBoundary;
     }
@@ -211,6 +200,9 @@ class Viewport extends Component {
         return this._state;
     }
 
+    /**
+     * @private
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

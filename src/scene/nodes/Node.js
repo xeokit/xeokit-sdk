@@ -1218,9 +1218,7 @@ class Node extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * JavaScript class name for this Component.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "Node";

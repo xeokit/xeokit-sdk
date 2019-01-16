@@ -104,13 +104,7 @@ import {math} from '../math/math.js';
 class PointLight extends Light {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "PointLight";

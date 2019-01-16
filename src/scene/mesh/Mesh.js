@@ -1107,9 +1107,6 @@ class Mesh extends Component {
         }
         this._state.clippable = value;
         this.glRedraw();
-        if (this._state.castsShadow) {
-            this.glRedraw();
-        }
     }
 
     /**
@@ -1134,6 +1131,9 @@ class Mesh extends Component {
             return;
         }
         this._state.collidable = value;
+        this._setAABBDirty();
+        this.scene._aabbDirty = true;
+
     }
 
     /**

@@ -223,13 +223,7 @@ const modeNames = ["opaque", "mask", "blend"];
 class MetallicMaterial extends Material {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "MetallicMaterial";

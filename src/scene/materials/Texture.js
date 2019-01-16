@@ -85,9 +85,7 @@ function nextHighestPowerOfTwo(x) {
 class Texture extends Component {
 
     /**
-     * Gets the JavaScript class name for this Component.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "Texture";

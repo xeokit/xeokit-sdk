@@ -1,9 +1,24 @@
 import {utils} from "../utils.js";
 import {Curve} from "./curve.js"
 
+/**
+ * @desc A complex curved path constructed from various {@link Curve} subtypes.
+ *
+ * * A Path can be constructed from these {@link Curve} subtypes: {@link SplineCurve}, {@link CubicBezierCurve} and {@link QuadraticBezierCurve}.
+ * * You can sample a {@link Path#point} and a {@link Curve#tangent} vector on a Path for any given value of {@link Path#t} in the range ````[0..1]````.
+ * * When you set {@link Path#t} on a Path, its {@link Path#point} and {@link Curve#tangent} properties will update accordingly.
+ */
 class Path extends Curve {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Clip as well.
+     * @param {*} [cfg]  Path configuration
+     * @param {String} [cfg.id]  Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {String []} [cfg.paths=[]] IDs or instances of {{#crossLink "path"}}{{/crossLink}} subtypes to add to this Path.
+     * @param {Number} [cfg.t=0] Current position on this Path, in range between 0..1.
+     */
+    constructor(owner, cfg = {}) {
         super(owner, cfg);
         this._cachedLengths = [];
         this._dirty = true;
@@ -26,11 +41,11 @@ class Path extends Curve {
     }
 
     /**
-     The {@link Curve"}}Curves{{/crossLink}} in this Path.
-
-     @property curves
-     @default []
-     @type {{Array of Spline, Path, QuadraticBezierCurve or CubicBezierCurve}}
+     * Sets the {@link Curve}s in this Path.
+     *
+     * Default value is ````[]````.
+     *
+     * @param {{Array of Spline, Path, QuadraticBezierCurve or CubicBezierCurve}} value.
      */
     set curves(value) {
 
@@ -64,7 +79,6 @@ class Path extends Curve {
                     self._dirtySubs = self._dirtySubs.slice(i, i + 1);
                     self._destroyedSubs = self._destroyedSubs.slice(i, i + 1);
                     self._dirty = true;
-                    self.fire("curves", self._curves);
                     return;
                 }
             }
@@ -101,57 +115,55 @@ class Path extends Curve {
         }
 
         this._dirty = true;
-
-        this.fire("curves", this._curves);
     }
 
+    /**
+     * Gets the {@link Curve}s in this Path.
+     *
+     * @returns {{Array of Spline, Path, QuadraticBezierCurve or CubicBezierCurve}} the {@link Curve}s in this path.
+     */
     get curves() {
         return this._curves;
     }
 
     /**
-     Current point of progress along this Path.
-
-     Automatically clamps to range [0..1].
-
-     Fires a {@link Path/t:event} event on change.
-
-     @property t
-     @default 0
-     @type {Number}
+     * Sets the current point of progress along this Path.
+     *
+     * Automatically clamps to range ````[0..1]````.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The current point of progress.
      */
     set t(value) {
         value = value || 0;
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
-        /**
-         * Fired whenever this Path's
-         * {@link Path/t} property changes.
-         * @event t
-         * @param value The property's new value
-         */
-        this.fire("t", this._t);
     }
 
+    /**
+     * Gets the current point of progress along this Path.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number} The current point of progress.
+     */
     get t() {
         return this._t;
     }
 
     /**
-     Point on this Path corresponding to the current value of {@link Path/t}.
-
-     @property point
-     @type {{Array of Number}}
+     * Gets point on this Path corresponding to the current value of {@link Path#t}.
+     *
+     * @returns {{Number[]}} The point.
      */
     get point() {
         return this.getPoint(this._t);
     }
 
     /**
-     Length of this Path, which is the cumulative length of all {@link Curve/t:property"}}Curves{{/crossLink}}
-     currently in {@link Path/curves}.
-
-     @property length
-     @type {Number}
+     * Length of this Path, which is the cumulative length of all {@link Curve}s currently in {@link Path#curves}.
+     *
+     * @return {Number} Length of this path.
      */
     get length() {
         var lens = this._getCurveLengths();
@@ -160,8 +172,9 @@ class Path extends Curve {
 
     /**
      * Gets a point on this Path corresponding to the given progress position.
+     *
      * @param {Number} t Indicates point of progress along this curve, in the range [0..1].
-     * @returns {{Array of Number}}
+     * @returns {{Number[]}}
      */
     getPoint(t) {
         var d = t * this.length;
@@ -207,6 +220,9 @@ class Path extends Curve {
         };
     }
 
+    /**
+     * Destroys this Path.
+     */
     destroy() {
         super.destroy();
         var i;

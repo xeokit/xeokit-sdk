@@ -54,11 +54,7 @@ const tempAABB = math.AABB3();
 class VBOGeometry extends Geometry {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @type {String}
+     @private
      */
     get type() {
         return "VBOGeometry";

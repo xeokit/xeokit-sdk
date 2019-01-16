@@ -6,7 +6,16 @@ const tempVec3a = math.vec3();
 
 class CameraPath extends Component {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this CameraPath as well.
+     * @param [cfg] {*} Configuration
+     * @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraPath.
+     * @param [cfg.eyeCurve] {String|SplineCurve} ID or instance of a {@link SplineCurve} to animate the {{#crossLink "Camera/eye:property"}}Camera's eye{{/crossLink}} property along.
+     * @param [cfg.lookCurve] {String|SplineCurve} ID or instance of a {@link SplineCurve} to animate the {{#crossLink "Camera/look:property"}}Camera's look{{/crossLink}} property along.
+     */
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -22,59 +31,42 @@ class CameraPath extends Component {
     }
 
     /**
-     The frames set on the constructor and added with {@link CameraPath#addFrame}.
-
-     @property frames
-     @type {[]}
-     @final
+     * Gets the camera frames in this CameraPath.
+     *
+     * @returns {[]} The camera paths.
      */
     get frames() {
         return this._frames;
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which the {@link Camera#eye} travels.
-
-     This property is read-only and is internally created and destroyed by this CameraPath.
-
-     @property eyeCurve
-     @type {SplineCurve}
-     @final
+     * Gets the {@link SplineCurve} along which {@link Camera#eye} travels.
+     * @returns {SplineCurve} The SplineCurve for {@link Camera#eye}.
      */
     get eyeCurve() {
         return this._eyeCurve;
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which the {@link Camera#look} travels.
-
-     This property is read-only and is internally created and destroyed by this CameraPath.
-
-     @property lookCurve
-     @type {SplineCurve}
-     @final
+     * Gets the {@link SplineCurve} along which {@link Camera#look} travels.
+     * @returns {SplineCurve} The SplineCurve for {@link Camera#look}.
      */
     get lookCurve() {
         return this._lookCurve;
     }
 
     /**
-     The {@link SplineCurve} which defines the path along which the {@link Camera#up"} travels.
-
-     This property is read-only and is internally created and destroyed by this CameraPath.
-
-     @property upCurve
-     @type {SplineCurve}
-     @final
+     * Gets the {@link SplineCurve} along which {@link Camera#up} travels.
+     * @returns {SplineCurve} The SplineCurve for {@link Camera#up}.
      */
     get upCurve() {
         return this._upCurve;
     }
 
     /**
-     Adds a frame to this CameraPath, given as the current position of the {@link Camera}.
-
-     @param {Number} t Time instant for the new frame.
+     * Adds a frame to this CameraPath, given as the current position of the {@link Camera}.
+     *
+     * @param {Number} t Time instant for the new frame.
      */
     saveFrame(t) {
         const camera = this.scene.camera;
@@ -82,12 +74,12 @@ class CameraPath extends Component {
     }
 
     /**
-     Adds a frame to this CameraPath, specified as values for eye, look and up vectors at a given time instant.
-
-     @param {Number} t Time instant for the new frame;
-     @param {Number[]} eye A three-element vector specifying the eye position for the new frame.
-     @param {Number[]} look A three-element vector specifying the look position for the new frame.
-     @param {Number[]} up A three-element vector specifying the up vector for the new frame.
+     * Adds a frame to this CameraPath, specified as values for eye, look and up vectors at a given time instant.
+     *
+     * @param {Number} t Time instant for the new frame;
+     * @param {Number[]} eye A three-element vector specifying the eye position for the new frame.
+     * @param {Number[]} look A three-element vector specifying the look position for the new frame.
+     * @param {Number[]} up A three-element vector specifying the up vector for the new frame.
      */
     addFrame(t, eye, look, up) {
         const frame = {
@@ -103,10 +95,9 @@ class CameraPath extends Component {
     }
 
     /**
-     Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up
-     vectors at a given time instant.
-
-     @param {Array} frames An array of frames.
+     * Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up vectors at a given time instant.
+     *
+     * @param {Array} frames An array of frames.
      */
     addFrames(frames) {
         let frame;
@@ -117,10 +108,9 @@ class CameraPath extends Component {
     }
 
     /**
-     Sets the position of the {@link Camera} to a position interpolated within this CameraPath
-     at the given time instant.
-
-     @param {Number} t Time instant.
+     * Sets the position of the {@link Camera} to a position interpolated within this CameraPath at the given time instant.
+     *
+     * @param {Number} t Time instant.
      */
     loadFrame(t) {
 
@@ -134,12 +124,12 @@ class CameraPath extends Component {
     }
 
     /**
-     Gets eye, look and up vectors on this CameraPath at a given instant.
-
-     @param {Number} t Time instant.
-     @param {Number[]} eye The eye position to update.
-     @param {Number[]} look The look position to update.
-     @param {Number[]} up The up vector to update.
+     * Gets eye, look and up vectors on this CameraPath at a given instant.
+     *
+     * @param {Number} t Time instant.
+     * @param {Number[]} eye The eye position to update.
+     * @param {Number[]} look The look position to update.
+     * @param {Number[]} up The up vector to update.
      */
     sampleFrame(t, eye, look, up) {
         t = t < 0.0 ? 0.0 : (t > 1.0 ? 1.0 : t);
@@ -149,7 +139,7 @@ class CameraPath extends Component {
     }
 
     /**
-     Removes all frames from this CameraPath.
+     * Removes all frames from this CameraPath.
      */
     clearFrames() {
         this._frames = [];

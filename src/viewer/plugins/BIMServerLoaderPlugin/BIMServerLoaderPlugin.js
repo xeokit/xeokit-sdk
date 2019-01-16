@@ -41,7 +41,11 @@ import {utils} from "../../../scene/utils.js";
  * [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial
  * in the xeokit SDK wiki.
  *
- * @example
+ * #Usage
+ *
+ *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan)]
+ *
+ * ````javascript
  * import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
  * import {Viewer} from "../../../src/viewer/Viewer.js";
  * import {BIMServerLoaderPlugin} from "../../../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
@@ -107,7 +111,7 @@ import {utils} from "../../../scene/utils.js";
  *         });
  *     });
  * });
- *
+ * ````
  * @class BIMServerLoaderPlugin
  */
 class BIMServerLoaderPlugin extends Plugin {

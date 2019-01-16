@@ -103,11 +103,7 @@ import {math} from '../math/math.js';
 class DirLight extends Light {
 
     /**
-     * JavaScript class name for this Component.
-     *
-     * For example: "AmbientLight", "MetallicMaterial" etc.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "DirLight";

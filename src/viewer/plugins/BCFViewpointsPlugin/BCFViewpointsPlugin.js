@@ -13,41 +13,80 @@ const tempVec3 = math.vec3();
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model from a glTF file, then once that model
  * has loaded, we'll arrange the camera
  *
- * @example
- * import {Viewer} from "../../../src/viewer/Viewer.js";
- * import {GLTFModelsPlugin} from "../../../src/viewer/plugins/GLTFModelsPlugin/GLTFModelsPlugin.js";
- * import {BCFViewpointsPlugin} from "../../../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+ * ## Usage
  *
- * // Create a xeokit Viewer
+ * In the example below we'll create a {@link Viewer}, load a glTF model into it using a {@link GLTFLoaderPlugin},
+ * slice the model in half using a {@link ClipsPlugin}, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
+ * which we'll log to the JavaScript developer console.
+ *
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {ClipsPlugin} from "../src/viewer/plugins/ClipsPlugin/ClipsPlugin.js";
+ * import {BCFViewpointsPlugin} from "../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+ *
+ * // Create a Viewer
  * const viewer = new Viewer({
- *    canvasId: "myCanvas"
+ *      canvasId: "myCanvas",
+ *      transparent: true
  * });
  *
- * // Add a GLTFModelsPlugin
- * const gltfLoader = new GLTFModelsPlugin(viewer);
+ * // Add a GLTFLoaderPlugin
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * // Add a ClipsPlugin
+ * const clips = new ClipsPlugin(viewer);
  *
  * // Add a BCFViewpointsPlugin
  * const bcfViewpoints = new BCFViewpointsPlugin(viewer);
  *
  * // Load a glTF model
- * const model = gltfLoader.load({
- *    id: "myModel",
- *    src: "./../../models/gltf/schependomlaan/schependomlaan.gltf",
- *    edges: true
+ * const modelNode = gltfLoader.load({
+ *      id: "myModel",
+ *      src: "./models/gltf/schependomlaan/scene.gltf",
+ *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+ *      lambertMaterial: true,
+ *      edges: true // Emphasise edges
  * });
  *
- * // When the model has loaded, arrange the camera and save a BCF viewpoint
- * model.on("loaded", () => {
- *
- *     viewer.scene.camera.orbitPitch(20);
- *     viewer.cameraFlight.flyTo(model);
- *
- *     const viewpoint = bcfViewpoints.getViewpoint();
- *
- *     console.log(JSON.stringify(viewpoint, null, "\t"));
+ * // Slice it in half
+ * clips.createClip({
+ *      id: "myClip",
+ *      pos: [0, 0, 0],
+ *      dir: [0.5, 0.0, 0.5]
  * });
  *
- *  @class BCFViewpointsPlugin
+ * // When model is loaded, set camera, select some objects and capture a BCF viewpoint to the console
+ * modelNode.on("loaded", () => {
+ *
+ *      var scene = viewer.scene;
+ *      var camera = scene.camera;
+ *
+ * camera.eye = [-2.37, 18.97, -26.12];
+ *      camera.look = [10.97, 5.82, -11.22];
+ *      camera.up = [0.36, 0.83, 0.40];
+ *
+ *      scene.setObjectsSelected([
+ *          "3b2U496P5Ebhz5FROhTwFH",
+ *          "2MGtJUm9nD$Re1_MDIv0g2",
+ *          "3IbuwYOm5EV9Q6cXmwVWqd",
+ *          "3lhisrBxL8xgLCRdxNG$2v",
+ *          "1uDn0xT8LBkP15zQc9MVDW"
+ *      ], true);
+ *
+ *      const viewpoint = bcfViewpoints.getViewpoint();
+ *      const viewpointStr = JSON.stringify(viewpoint, null, 4);
+ *
+ *      console.log(viewpointStr);
+ * });
+ * ````
+ *
+ * ````javascript
+ * ````
+ *
+ * @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {
 

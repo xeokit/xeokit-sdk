@@ -62,13 +62,7 @@ const tempAABB = math.AABB3();
 class ReadableGeometry extends Geometry {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "ReadableGeometry";
@@ -94,11 +88,11 @@ class ReadableGeometry extends Geometry {
      generated automatically when omitted.
      @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Geometry.
      @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param [cfg.positions] {Array of Number} Positions array.
-     @param [cfg.normals] {Array of Number} Vertex normal vectors array.
-     @param [cfg.uv] {Array of Number} UVs array.
-     @param [cfg.colors] {Array of Number} Vertex colors.
-     @param [cfg.indices] {Array of Number} Indices array.
+     @param [cfg.positions] {Number[]} Positions array.
+     @param [cfg.normals] {Number[]} Vertex normal vectors array.
+     @param [cfg.uv] {Number[]} UVs array.
+     @param [cfg.colors] {Number[]} Vertex colors.
+     @param [cfg.indices] {Number[]} Indices array.
      @param [cfg.autoVertexNormals=false] {Boolean} Set true to automatically generate normal vectors from the positions and
      indices, if those are supplied.
      @param [cfg.compressGeometry=false] {Boolean} Stores positions, colors, normals and UVs in compressGeometry and oct-encoded formats

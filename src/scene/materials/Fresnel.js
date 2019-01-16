@@ -76,7 +76,7 @@ class Fresnel extends Component {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
      * @param {Number[]} [cfg.edgeColor=[ 0.0, 0.0, 0.0 ]]  Color used on edges.
-     * @param {Array of Number} [cfg.centerColor=[ 1.0, 1.0, 1.0 ]]  Color used on center.
+     * @param {Number[]} [cfg.centerColor=[ 1.0, 1.0, 1.0 ]]  Color used on center.
      * @param {Number} [cfg.edgeBias=0]  Bias at the edge.
      * @param {Number} [cfg.centerBias=1]  Bias at the center.
      * @param {Number} [cfg.power=0]  The power.

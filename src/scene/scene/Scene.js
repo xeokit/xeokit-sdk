@@ -326,13 +326,7 @@ function getMeshIDMap(scene, meshIds) {
 class Scene extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Scene";
@@ -1777,6 +1771,23 @@ class Scene extends Component {
     }
 
     /**
+     * Batch-updates {@link Entity#collidable} on {@link Entity}s that represent objects.
+     *
+     * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
+     *
+     * @param {String[]} ids Array of {@link Entity#id} values.
+     * @param {Boolean} collidable Whether or not to cull.
+     * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
+     */
+    setObjectsCollidable(ids, collidable) {
+        return this._withEntities(ids, this.objects, entity => {
+            const changed = (entity.collidable !== collidable);
+            entity.collidable = collidable;
+            return changed;
+        });
+    }
+    
+    /**
      * Batch-updates {@link Entity#culled} on {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
@@ -1930,7 +1941,7 @@ class Scene extends Component {
             if (entity) {
                 changed = callback(entity) || changed;
             }
-            this.warn("Entity not found: '" + id + "'");
+         //   this.warn("Entity not found: '" + id + "'");
         }
         return changed;
     }

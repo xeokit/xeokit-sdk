@@ -24,13 +24,7 @@ const WEBGL_CONTEXT_NAMES = [
 class Canvas extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Canvas";
@@ -119,7 +113,7 @@ class Canvas extends Component {
          * ````
          *
          * @property boundary
-         * @type {{Array of Number}}
+         * @type {{Number[]}}
          * @final
          */
         this.boundary = [

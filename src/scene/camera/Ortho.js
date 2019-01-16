@@ -1,4 +1,3 @@
-
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from '../math/math.js';
@@ -6,7 +5,7 @@ import {math} from '../math/math.js';
 /**
  * @desc Defines its {@link Camera}'s orthographic projection as a box-shaped view volume.
  *
- * * Located at {@link Camera#frustum}.
+ * * Located at {@link Camera#ortho}.
  * * Works like Blender's orthographic projection, where the positions of the left, right, top and bottom planes are implicitly
  * indicated with a single {@link Ortho#scale} property, which causes the frustum to be symmetrical on X and Y axis, large enough to
  * contain the number of units given by {@link Ortho#scale}.
@@ -15,13 +14,7 @@ import {math} from '../math/math.js';
 class Ortho extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Ortho";
@@ -31,7 +24,7 @@ class Ortho extends Component {
      * @constructor
      * @private
      */
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -87,17 +80,15 @@ class Ortho extends Component {
 
 
     /**
-     Scale factor for this Ortho's extents on X and Y axis.
-
-     Clamps to minimum value of ````0.01```.
-
-     Fires a {@link Ortho#scale:event} event on change.
-
-     @property scale
-     @default 1.0
-     @type {Number}
+     * Sets scale factor for this Ortho's extents on X and Y axis.
+     *
+     * Clamps to minimum value of ````0.01```.
+     *
+     * Fires a {@link Ortho#scale:event} event on change.
+     *
+     * Default value is ````1.0````
+     * @param {Number} value New scale value.
      */
-
     set scale(value) {
         if (value === undefined || value === null) {
             value = 1.0;
@@ -116,18 +107,27 @@ class Ortho extends Component {
         this.fire("scale", this._scale);
     }
 
+    /**
+     * Gets scale factor for this Ortho's extents on X and Y axis.
+     *
+     * Clamps to minimum value of ````0.01```.
+     *
+     * Default value is ````1.0````
+     *
+     * @returns {Number} New Ortho scale value.
+     */
     get scale() {
         return this._scale;
     }
 
     /**
-     Position of this Ortho's near plane on the positive View-space Z-axis.
-
-     Fires a {@link Ortho#near:event} event on change.
-
-     @property near
-     @default 0.1
-     @type {Number}
+     * Sets the position of the Ortho's near plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Ortho#near:emits} emits on change.
+     *
+     * Default value is ````0.1````.
+     *
+     * @param {Number} value New Ortho near plane position.
      */
     set near(value) {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
@@ -141,18 +141,25 @@ class Ortho extends Component {
         this.fire("near", this._near);
     }
 
+    /**
+     * Gets the position of the Ortho's near plane on the positive View-space Z-axis.
+     *
+     * Default value is ````0.1````.
+     *
+     * @returns {Number} New Ortho near plane position.
+     */
     get near() {
         return this._near;
     }
 
     /**
-     Position of this Ortho's far plane on the positive View-space Z-axis.
-
-     Fires a {@link Ortho#far:event} event on change.
-
-     @property far
-     @default 10000.0
-     @type {Number}
+     * Sets the position of the Ortho's far plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Ortho#far:emits} emits on change.
+     *
+     * Default value is ````10000.0````.
+     *
+     * @param {Number} value New far ortho plane position.
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;
@@ -166,18 +173,25 @@ class Ortho extends Component {
         this.fire("far", this._far);
     }
 
+    /**
+     * Gets the position of the Ortho's far plane on the positive View-space Z-axis.
+     *
+     * Default value is ````10000.0````.
+     *
+     * @returns {Number} New far ortho plane position.
+     */
     get far() {
         return this._far;
     }
 
     /**
-     The Ortho's projection transform matrix.
-
-     Fires a {@link Ortho#matrix:event} event on change.
-
-     @property matrix
-     @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Number[]}
+     * Gets the Ortho's projection transform matrix.
+     *
+     * Fires a {@link Ortho#matrix:emits} emits on change.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @returns {Number[]} The Ortho's projection matrix.
      */
     get matrix() {
         if (this._updateScheduled) {

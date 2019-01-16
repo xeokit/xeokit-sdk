@@ -51,13 +51,7 @@ import {RenderState} from '../webgl/RenderState.js';
 class Clip extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Clip";
@@ -65,9 +59,12 @@ class Clip extends Component {
 
     /**
      * @constructor
-     *
-     * @param owner
-     * @param cfg
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Clip as well.
+     * @param {*} [cfg]  Clip configuration
+     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Boolean} [cfg.active=true] Indicates whether or not this Clip is active.
+     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the clipping plane.
+     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the Clip plane orientation.
      */
     constructor(owner, cfg = {}) {
 
@@ -87,11 +84,11 @@ class Clip extends Component {
     }
 
     /**
-     Indicates if this Clip is active or not.
-
-     @property active
-     @default true
-     @type {Boolean}
+     * Sets if this Clip is active or not.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````true```` to activate else ````false```` to deactivate.
      */
     set active(value) {
         this._state.active = value !== false;
@@ -105,16 +102,23 @@ class Clip extends Component {
         this.fire("active", this._state.active);
     }
 
+    /**
+     * Gets if this Clip is active or not.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` if active.
+     */
     get active() {
         return this._state.active;
     }
 
     /**
-     The World-space position of this Clip's plane.
-
-     @property pos
-     @default [0, 0, 0]
-     @type {Number[]}
+     * Sets the World-space position of this Clip's plane.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * @param {Number[]} value New position.
      */
     set pos(value) {
         this._state.pos.set(value || [0, 0, 0]);
@@ -128,19 +132,23 @@ class Clip extends Component {
         this.fire("pos", this._state.pos);
     }
 
+    /**
+     * Gets the World-space position of this Clip's plane.
+     *
+     * Default value is ````[0, 0, 0]````.
+     *
+     * @returns {Number[]} Current position.
+     */
     get pos() {
         return this._state.pos;
     }
 
     /**
-     Vector indicating the orientation of this Clip plane.
-
-     The vector originates at {@link Clip#pos}. Elements on the
-     same side of the vector are clipped.
-
-     @property dir
-     @default [0, 0, -1]
-     @type {Number[]}
+     * Sets the direction of this Clip's plane.
+     *
+     * Default value is ````[0, 0, -1]````.
+     *
+     * @param {Number[]} value New direction.
      */
     set dir(value) {
         this._state.dir.set(value || [0, 0, -1]);
@@ -154,10 +162,20 @@ class Clip extends Component {
         this.fire("dir", this._state.dir);
     }
 
+    /**
+     * Gets the direction of this Clip's plane.
+     *
+     * Default value is ````[0, 0, -1]````.
+     *
+     * @returns {Number[]} value Current direction.
+     */
     get dir() {
         return this._state.dir;
     }
 
+    /**
+     * @destroy
+     */
     destroy() {
         this._state.destroy();
         this.scene._clipDestroyed(this);

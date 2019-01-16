@@ -1,45 +1,60 @@
 import {Component} from "./../Component.js"
 import {math} from "../math/math.js";
 
+/**
+ * @desc Abstract base class for curve classes.
+ */
 class Curve extends Component {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Curve as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Curve}, generated automatically when omitted.
+     * @param {Object} [cfg] Configs for this Curve.
+     * @param {Number} [cfg.t=0] Current position on this Curve, in range between ````0..1````.
+     */
+    constructor(owner, cfg = {}) {
         super(owner, cfg);
         this.t = cfg.t;
     }
 
     /**
-     Progress along this Curve.
-
-     Automatically clamps to range [0..1].
-
-     @property t
-     @default 0
-     @type {Number}
+     * Sets the progress along this Curve.
+     *
+     * Automatically clamps to range ````[0..1]````.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The progress value.
      */
     set t(value) {
         value = value || 0;
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
     }
 
+    /**
+     * Gets the progress along this Curve.
+     *
+     * @returns {Number} The progress value.
+     */
     get t() {
         return this._t;
     }
 
     /**
-     Tangent on this Curve at position {@link Curve/t}.
-
-     @property tangent
-     @type {{Array of Number}}
+     * Gets the tangent on this Curve at position {@link Curve#t}.
+     *
+     * @returns {{Number[]}} The tangent.
      */
     get tangent() {
         return this.getTangent(this._t);
     }
 
     /**
-     Length of this Curve.
-     @property length
-     @type {Number}
+     * Gets the length of this Curve.
+     *
+     * @returns {Number} The Curve length.
      */
     get length() {
         var lengths = this._getLengths();
@@ -48,9 +63,9 @@ class Curve extends Component {
 
     /**
      * Returns a normalized tangent vector on this Curve at the given position.
-     * @method getTangent
+     *
      * @param {Number} t Position to get tangent at.
-     * @returns {{Array of Number}} Normalized tangent vector
+     * @returns {{Number[]}} Normalized tangent vector
      */
     getTangent(t) {
         var delta = 0.0001;
@@ -78,9 +93,9 @@ class Curve extends Component {
 
     /**
      * Samples points on this Curve, at the given number of equally-spaced divisions.
-     * @method getPoints
+     *
      * @param {Number} divisions The number of divisions.
-     * @returns {Array of Array} Array of sampled 3D points.
+     * @returns {{Array of Array}} Array of sampled 3D points.
      */
     getPoints(divisions) {
         if (!divisions) {
@@ -93,22 +108,11 @@ class Curve extends Component {
         return pts;
     }
 
-    getSpacedPoints(divisions) {
-        if (!divisions) {
-            divisions = 5;
-        }
-        var d, pts = [];
-        for (d = 0; d <= divisions; d++) {
-            pts.push(this.getPointAt(d / divisions));
-        }
-        return pts;
-    }
-
     _getLengths(divisions) {
         if (!divisions) {
             divisions = (this.__arcLengthDivisions) ? (this.__arcLengthDivisions) : 200;
         }
-        if (this.cacheArcLengths && ( this.cacheArcLengths.length === divisions + 1 ) && !this.needsUpdate) {
+        if (this.cacheArcLengths && (this.cacheArcLengths.length === divisions + 1) && !this.needsUpdate) {
             return this.cacheArcLengths;
 
         }
@@ -150,7 +154,7 @@ class Curve extends Component {
         //var time = Date.now();
         var low = 0, high = il - 1, comparison;
         while (low <= high) {
-            i = Math.floor(low + ( high - low ) / 2); // less likely to overflow, though probably not issue here, JS doesn't really have integers, all numbers are floats
+            i = Math.floor(low + (high - low) / 2); // less likely to overflow, though probably not issue here, JS doesn't really have integers, all numbers are floats
             comparison = arcLengths[i] - targetArcLength;
             if (comparison < 0) {
                 low = i + 1;
@@ -164,14 +168,14 @@ class Curve extends Component {
         }
         i = high;
         if (arcLengths[i] === targetArcLength) {
-            t = i / ( il - 1 );
+            t = i / (il - 1);
             return t;
         }
         var lengthBefore = arcLengths[i];
         var lengthAfter = arcLengths[i + 1];
         var segmentLength = lengthAfter - lengthBefore;
-        var segmentFraction = ( targetArcLength - lengthBefore ) / segmentLength;
-        t = ( i + segmentFraction ) / ( il - 1 );
+        var segmentFraction = (targetArcLength - lengthBefore) / segmentLength;
+        t = (i + segmentFraction) / (il - 1);
         return t;
     }
 }

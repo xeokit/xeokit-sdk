@@ -48,6 +48,19 @@ class MetaScene {
         this.metaObjects = {};
 
         /**
+         * The {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#type}.
+         *
+         * @type {{String:MetaObject}}
+         */
+        this.metaObjectsByType = {};
+
+        /**
+         * Tracks number of MetaObjects of each type.
+         * @private
+         */
+        this._typeCounts = {};
+
+        /**
          * Subscriptions to events sent with {@link fire}.
          * @private
          */
@@ -95,43 +108,75 @@ class MetaScene {
     /**
      * Creates a {@link MetaModel} in this MetaScene.
      *
-     * Fires a "metaModelCreated" event with the ID of the new {@link MetaModel}.
-     *
      * @param {String} id ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel} - (see [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {Object} [options] Options for creating the {@link MetaModel}.
+     * @param {Object} [options.includeTypes] When provided, only {@link MetaObject}s with types in this list.
+     * @param {Object} [options.includeTypes] When provided, never {@link MetaObject}s with types in this list.
+     * @param {Object} [options.excludeTypes]
      * @returns {MetaModel} The new MetaModel.
      */
-    createMetaModel(id, metaModelData) {
+    createMetaModel(id, metaModelData, options = {}) {
 
         // TODO: validate metadata
         // TODO: replace MetaModel if ID already used
 
-        var projectId = metaModelData.projectId || "none";
-        var revisionId = metaModelData.revisionId || "none";
-        var newObjects = metaModelData.metaObjects;
+        const projectId = metaModelData.projectId || "none";
+        const revisionId = metaModelData.revisionId || "none";
+        const newObjects = metaModelData.metaObjects;
+
+        var includeTypes;
+        // if (options.includeTypes) {
+        //     includeTypes = {};
+        //     for (let i = 0, len = options.includeTypes.length; i < len; i++) {
+        //         includeTypes[options.includeTypes[i]] = true;
+        //     }
+        // }
+        //
+        var excludeTypes;
+        // if (options.excludeTypes) {
+        //     excludeTypes = {};
+        //     for (let i = 0, len = options.excludeTypes.length; i < len; i++) {
+        //         includeTypes[options.excludeTypes[i]] = true;
+        //     }
+        // }
 
         const metaModel = new MetaModel(this, id, projectId, revisionId, null);
 
         this.metaModels[id] = metaModel;
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
-            let newObject = newObjects[i];
-            let id = newObject.id;
-            let name = newObject.name;
-            let type = newObject.type;
-            let properties = newObject.properties;
-            let parent = null;
-            let children = null;
-            let external = newObject.external;
-            this.metaObjects[id] = new MetaObject(metaModel, id, name, type, properties, parent, children, external);
+            const newObject = newObjects[i];
+            const type = newObject.type;
+            if (excludeTypes && excludeTypes[type]) {
+                continue;
+            }
+            if (includeTypes && !includeTypes[type]) {
+                continue;
+            }
+            const id = newObject.id;
+            const name = newObject.name;
+            const properties = newObject.properties;
+            const parent = null;
+            const children = null;
+            const external = newObject.external;
+            const metaObject = new MetaObject(metaModel, id, name, type, properties, parent, children, external);
+            this.metaObjects[id] = metaObject;
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[id] = metaObject;
+            if (this._typeCounts[type] === undefined) {
+                this._typeCounts[type] = 1;
+            } else {
+                this._typeCounts[type]++;
+            }
         }
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
-
-            let newObject = newObjects[i];
-            let id = newObject.id;
-            let metaObject = this.metaObjects[id];
-
+            const newObject = newObjects[i];
+            const id = newObject.id;
+            const metaObject = this.metaObjects[id];
+            if (!metaObject) {
+                continue;
+            }
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
             } else {
@@ -141,8 +186,6 @@ class MetaScene {
                 parentMetaObject.children.push(metaObject);
             }
         }
-
-        this.fire("metaModelCreated", id);
 
         return metaModel;
     }
@@ -155,14 +198,22 @@ class MetaScene {
      * @param {String} id ID of the target {@link MetaModel}.
      */
     destroyMetaModel(id) {
-        var metaModel = this.metaModels[id];
+        const metaModel = this.metaModels[id];
         if (!metaModel) {
             return;
         }
-        var metaObjects = this.metaObjects;
+        const metaObjects = this.metaObjects;
+        const metaObjectsByType = this.metaObjectsByType;
 
         function visit(metaObject) {
             delete metaObjects[metaObject.id];
+            const types = metaObjectsByType[metaObject.type];
+            if (types && types[metaObject.id]) {
+                delete types[metaObject.id];
+                if (--this._typeCounts[metaObject.type] === 0) {
+                    delete this._typeCounts[metaObject.type];
+                }
+            }
             const children = metaObject.children;
             if (children) {
                 for (let i = 0, len = children.length; i < len; i++) {

@@ -8,12 +8,7 @@ import {Component} from '../Component.js';
 class Light extends Component {
 
     /**
-     * JavaScript class name for this Component.
-     *
-     * For example: "AmbientLight", "MetallicMaterial" etc.
-     *
-     * @type {String}
-     *
+     @private
      */
     get type() {
         return "Light";

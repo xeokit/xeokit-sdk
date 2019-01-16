@@ -94,13 +94,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
 class PhongMaterial extends Material {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "PhongMaterial";

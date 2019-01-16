@@ -130,11 +130,7 @@ const PRESETS = {
 class EdgeMaterial extends Material {
 
     /**
-     * JavaScript class name for this Component.
-     *
-     * For example: "AmbientLight", "MetallicMaterial" etc.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "EdgeMaterial";
@@ -154,7 +150,7 @@ class EdgeMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] The EdgeMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Array of Number} [cfg.edgeColor=[0.2,0.2,0.2]] RGB edge color.
+     * @param {Number[]} [cfg.edgeColor=[0.2,0.2,0.2]] RGB edge color.
      * @param {Number} [cfg.edgeAlpha=1.0] Edge transparency. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
      * @param {Number} [cfg.edgeWidth=1] Edge width in pixels.
      * @param {String} [cfg.preset] Selects a preset EdgeMaterial configuration - see {@link EdgeMaterial#presets}.

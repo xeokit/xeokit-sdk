@@ -72,11 +72,7 @@ import {math} from '../math/math.js';
 class LambertMaterial extends Material {
 
     /**
-     * JavaScript class name for this Component.
-     *
-     * For example: "AmbientLight", "MetallicMaterial" etc.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "LambertMaterial";
@@ -88,9 +84,9 @@ class LambertMaterial extends Material {
      * @param {*} [cfg] The LambertMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {String:Object} [cfg.meta=null]  Metadata to attach to this LambertMaterial.
-     * @param {Array of Number} [cfg.ambient=[1.0, 1.0, 1.0 ]] LambertMaterial ambient color.
-     * @param {Array of Number} [cfg.color=[ 1.0, 1.0, 1.0 ]] LambertMaterial diffuse color.
-     * @param {Array of Number} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] LambertMaterial emissive color.
+     * @param {Number[]} [cfg.ambient=[1.0, 1.0, 1.0 ]] LambertMaterial ambient color.
+     * @param {Number[]} [cfg.color=[ 1.0, 1.0, 1.0 ]] LambertMaterial diffuse color.
+     * @param {Number[]} [cfg.emissive=[ 0.0, 0.0, 0.0 ]] LambertMaterial emissive color.
      * @param {Number} [cfg.alpha=1]Scalar in range 0-1 that controls alpha, where 0 is completely transparent and 1 is completely opaque.
      * @param {Number} [cfg.reflectivity=1]Scalar in range 0-1 that controls how much {@link ReflectionMap} is reflected.
      * @param {Number} [cfg.lineWidth=1] Scalar that controls the width of {@link Geometry} lines.

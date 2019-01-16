@@ -10,27 +10,21 @@ import {CameraFlightAnimation} from './CameraFlightAnimation.js';
  *
  * Fires these events:
  *
- * * "hover" - Hover enters a new object
- * * "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
- * * "hoverLeave"  - Hover has left the last object we were hovering over
- * * "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
- * * "picked" - Clicked or tapped object
- * * "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
- * * "doublePicked" - Double-clicked or double-tapped object
- * * "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
- * * "pickedNothing" - Clicked or tapped, but not on any objects
- * * "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
+ * @emits "hover" - pointer hovers over a new object
+ * @emits "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
+ * @emits "hoverLeave"  - Hover has left the last object we were hovering over
+ * @emits "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
+ * @emits "picked" - Clicked or tapped object
+ * @emits "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
+ * @emits "doublePicked" - Double-clicked or double-tapped object
+ * @emits "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
+ * @emits "pickedNothing" - Clicked or tapped, but not on any objects
+ * @emits "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
  */
 class CameraControl extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     * @private
      */
     get type() {
         return "CameraControl";
@@ -203,43 +197,55 @@ class CameraControl extends Component {
     }
 
     /**
-     Indicates if this CameraControl is active or not.
-
-     @property active
-     @default true
-     @type {Boolean}
+     *  Sets if this CameraControl is active or not.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````true```` to activate this CameraControl.
      */
     set active(value) {
         this._active = value !== false;
     }
 
+    /**
+     * Gets if this CameraControl is active or not.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` if this CameraControl is active.
+     */
     get active() {
         return this._active;
     }
 
     /**
-     When true, clicking on a {@link Mesh} and dragging will pivot
-     the {@link Camera} about the picked point on the Mesh's surface.
-
-     @property pivoting
-     @default false
-     @type {Boolean}
+     * Sets whether clicking on a {@link Mesh} and dragging will pivot the {@link Camera} about the picked point on the Mesh's surface.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable pivoting.
      */
     set pivoting(value) {
         this._pivoting = !!value;
     }
 
+    /**
+     * Gets whether clicking on a {@link Mesh} and dragging will pivot the {@link Camera} about the picked point on the Mesh's surface.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` to enable pivoting.
+     */
     get pivoting() {
         return this._pivoting;
     }
 
     /**
-     When true, mouse wheel when mouse is over a {@link Mesh} will zoom
-     the {@link Camera} towards the hovered point on the Mesh's surface.
-
-     @property panToPointer
-     @default false
-     @type {Boolean}
+     * Sets whether scrolling the mouse wheel, when the mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the hovered point on the Mesh's surface.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable pan-to-pointer behaviour.
      */
     set panToPointer(value) {
         this._panToPointer = !!value;
@@ -248,17 +254,23 @@ class CameraControl extends Component {
         }
     }
 
+    /**
+     * Gets whether scrolling the mouse wheel, when the mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the hovered point on the Mesh's surface.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if pan-to-pointer behaviour is enabled.
+     */
     get panToPointer() {
         return this._panToPointer;
     }
 
     /**
-     When true, mouse wheel when mouse is over a {@link Mesh} will zoom
-     the {@link Camera} towards the pivot point.
-
-     @property panToPivot
-     @default false
-     @type {Boolean}
+     * Sets whether scrolling the mouse wheel, when mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the pivot point.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable pan-to-pivot behaviour.
      */
     set panToPivot(value) {
         this._panToPivot = !!value;
@@ -267,99 +279,136 @@ class CameraControl extends Component {
         }
     }
 
+    /**
+     * Gets whether scrolling the mouse wheel, when mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the pivot point.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if enable pan-to-pivot behaviour is enabled.
+     */
     get panToPivot() {
         return this._panToPivot;
     }
 
     /**
-     Indicates if this CameraControl is in "first person" mode.
-
-     In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,
-     the eye rotates about the look.
-
-     @property firstPerson
-     @default false
-     @type {Boolean}
+     * Sets whether this CameraControl is in first-person mode.
+     *
+     * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable first-person mode.
      */
     set firstPerson(value) {
         this._firstPerson = !!value;
     }
 
+    /**
+     * Gets whether this CameraControl is in first-person mode.
+     *
+     * In "first person" mode (disabled by default) the look position rotates about the eye position. Otherwise,  {@link Camera#eye} rotates about {@link Camera#look}.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if first-person mode is enabled.
+     */
     get firstPerson() {
         return this._firstPerson;
     }
 
     /**
-     Indicates if this CameraControl is in "walking" mode.
-
-     When set true, this constrains eye movement to the horizontal X-Z plane. When doing a walkthrough,
-     this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the
-     horizontal plane.
-
-     This only has an effect when also in "first person" mode.
-
-     @property walking
-     @default false
-     @type {Boolean}
+     * Sets whether this CameraControl is in walking mode.
+     *
+     * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
+     * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
+     *
+     * This only has an effect when {@link CameraControl#firstPerson is ````true````.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable walking mode.
      */
     set walking(value) {
         this._walking = !!value;
     }
 
+    /**
+     * Gets whether this CameraControl is in walking mode.
+     *
+     * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
+     * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
+     *
+     * This only has an effect when {@link CameraControl#firstPerson is ````true````.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` when in walking mode.
+     */
     get walking() {
         return this._walking;
     }
 
     /**
-     * TODO
+     * Sets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
+     * Default value is ````false````.
      *
-     * @property doublePickFlyTo
-     * @default true
-     * @type {Boolean}
+     * @param {Boolean} value Set ````true```` to enable double-pick-fly-to mode.
      */
     set doublePickFlyTo(value) {
         this._doublePickFlyTo = value !== false;
     }
 
+    /**
+     * Gets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` when double-pick-fly-to mode is enabled.
+     */
     get doublePickFlyTo() {
         return this._doublePickFlyTo;
     }
 
     /**
-     Factor in range [0..1] indicating how much the camera keeps moving after you finish
-     panning or rotating it.
-
-     A value of 0.0 causes it to immediately stop, 0.5 causes its movement to decay 50% on each tick,
-     while 1.0 causes no decay, allowing it continue moving, by the current rate of pan or rotation.
-
-     You may choose an inertia of zero when you want be able to precisely position or rotate the camera,
-     without interference from inertia. ero inertia can also mean that less frames are rendered while
-     you are positioning the camera.
-
-     @property inertia
-     @default 0.5
-     @type {Number}
+     * Sets a factor in range ````[0..1]```` indicating how much the camera keeps moving after you finish panning or rotating it.
+     *
+     * A value of ````0.0```` causes it to immediately stop, ````0.5```` causes its movement to decay 50% on each tick,
+     * while ````1.0```` causes no decay, allowing it continue moving, by the current rate of pan or rotation.
+     *
+     * You may choose an inertia of zero when you want be able to precisely position or rotate the camera,
+     * without interference from inertia. ero inertia can also mean that less frames are rendered while
+     * you are positioning the camera.
+     *
+     * Default value is ````0.5````.
+     *
+     * @param {Number} value New inertial factor.
      */
     set inertia(value) {
         this._inertia = value === undefined ? 0.5 : value;
     }
 
+    /**
+     * Gets the inertia factor.
+     *
+     * Default value is ````0.5````.
+     *
+     * @returns {Number} The inertia factor.
+     */
     get inertia() {
         return this._inertia;
     }
 
     /**
-     * TODO
-     *
-     * @property keyboardLayout
-     * @default "qwerty"
-     * @type {String}
+     * @private
      */
     set keyboardLayout(value) {
         this._keyboardLayout = value || "qwerty";
     }
 
+    /**
+     * @private
+     */
     get keyboardLayout() {
         return this._keyboardLayout;
     }
@@ -1700,11 +1749,11 @@ class CameraControl extends Component {
             const diff = math.subVec3(camera.eye, camera.look, []);
 
             this._cameraFlight.flyTo({
-                    // look: pos,
-                    // eye: xeokit.math.addVec3(pos, diff, []),
-                    // up: camera.up,
-                    aabb: aabb
-                });
+                // look: pos,
+                // eye: xeokit.math.addVec3(pos, diff, []),
+                // up: camera.up,
+                aabb: aabb
+            });
 
             // TODO: Option to back off to fit AABB in view
 
@@ -1713,8 +1762,8 @@ class CameraControl extends Component {
             // Fly to fit target boundary in view
 
             this._cameraFlight.flyTo({
-                    aabb: aabb
-                });
+                aabb: aabb
+            });
         }
     }
 

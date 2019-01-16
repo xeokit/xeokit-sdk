@@ -3,20 +3,14 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 
 /**
- * @desc Defines a projection for a {@link Camera} as a custom 4x4 matrix..
+ * @desc Defines a custom projection for a {@link Camera} as a custom 4x4 matrix..
  *
  * Located at {@link Camera#customProjection}.
  */
 class CustomProjection extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     * @private
      */
     get type() {
         return "CustomProjection";
@@ -35,13 +29,13 @@ class CustomProjection extends Component {
     }
 
     /**
-     The CustomProjection's projection transform matrix.
+     * Sets the CustomProjection's projection transform matrix.
+     *
+     * Fires a {@link CustomProjection/matrix:event} event on change.
 
-     Fires a {@link CustomProjection/matrix:event} event on change.
-
-     @property matrix
-     @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Number[]}
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @param {Number[]} matrix New value for the CustomProjection's matrix.
      */
     set matrix(matrix) {
 
@@ -56,10 +50,20 @@ class CustomProjection extends Component {
         this.fire("far", this._state.matrix);
     }
 
+    /**
+     * Gets the CustomProjection's projection transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @return {Number[]} New value for the CustomProjection's matrix.
+     */
     get matrix() {
         return this._state.matrix;
     }
 
+    /**
+     * Destroys this CustomProjection.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

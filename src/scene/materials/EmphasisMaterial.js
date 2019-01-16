@@ -195,11 +195,7 @@ const PRESETS = {
 class EmphasisMaterial extends Material {
 
     /**
-     * Gets the JavaScript class name for this Component.
-     *
-     * For example: "AmbientLight", "MetallicMaterial" etc.
-     *
-     * @type {String}
+     @private
      */
     get type() {
         return "EmphasisMaterial";
@@ -220,10 +216,10 @@ class EmphasisMaterial extends Material {
      * @param {*} [cfg] The EmphasisMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {Boolean} [cfg.fill=true] Indicates if ghost surfaces are filled with color.
-     * @param {Array of Number} [cfg.fillColor=[0.4,0.4,0.4]] EmphasisMaterial fill color.
+     * @param {Number[]} [cfg.fillColor=[0.4,0.4,0.4]] EmphasisMaterial fill color.
      * @param  {Number} [cfg.fillAlpha=0.2] Transparency of filled ghost faces. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
      * @param {Boolean} [cfg.edges=true] Indicates if ghost edges are visible.
-     * @param {Array of Number} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of ghost edges.
+     * @param {Number[]} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of ghost edges.
      * @param {Number} [cfg.edgeAlpha=0.5] Transparency of ghost edges. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
      * @param {Number} [cfg.edgeWidth=1] Width of ghost edges, in pixels.
      * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.

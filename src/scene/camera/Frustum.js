@@ -12,13 +12,7 @@ import {math} from '../math/math.js';
 class Frustum extends Component {
 
     /**
-     JavaScript class name for this Component.
-
-     For example: "AmbientLight", "MetallicMaterial" etc.
-
-     @property type
-     @type {String}
-     @final
+     @private
      */
     get type() {
         return "Frustum";
@@ -60,164 +54,199 @@ class Frustum extends Component {
     }
 
     /**
-     Position of this Frustum's left plane on the View-space X-axis.
-
-     Fires a {@link Frustum/left:event} event on change.
-
-     @property left
-     @default -1.0
-     @type {Number}
+     * Sets the position of the Frustum's left plane on the View-space X-axis.
+     *
+     * Fires a {@link Frustum#left:emits} emits on change.
+     *
+     * @param {Number} value New left frustum plane position.
      */
-
     set left(value) {
         this._left = (value !== undefined && value !== null) ? value : -1.0;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's {@link Frustum/left} property changes.
 
-         @event left
-         @param value The property's new value
+        /**
+         Fired whenever the Frustum's {@link Frustum#left} property changes.
+
+         @emits left
+         @param value New left frustum plane position.
          */
         this.fire("left", this._left);
     }
 
+    /**
+     * Gets the position of the Frustum's left plane on the View-space X-axis.
+     *
+     * @return {Number} Left frustum plane position.
+     */
     get left() {
         return this._left;
     }
 
     /**
-     Position of this Frustum's right plane on the View-space X-axis.
-
-     Fires a {@link Frustum/right:event} event on change.
-
-     @property right
-     @default 1.0
-     @type {Number}
+     * Sets the position of the Frustum's right plane on the View-space X-axis.
+     *
+     * Fires a {@link Frustum#right:emits} emits on change.
+     *
+     * @param {Number} value New right frustum plane position.
      */
     set right(value) {
         this._right = (value !== undefined && value !== null) ? value : 1.0;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's {@link Frustum/right} property changes.
 
-         @event right
-         @param value The property's new value
+        /**
+         Fired whenever the Frustum's {@link Frustum#right} property changes.
+
+         @emits right
+         @param value New frustum right plane position.
          */
         this.fire("right", this._right);
     }
 
+    /**
+     * Gets the position of the Frustum's right plane on the View-space X-axis.
+     *
+     * Fires a {@link Frustum#right:emits} emits on change.
+     *
+     * @return {Number} Right frustum plane position.
+     */
     get right() {
         return this._right;
     }
 
     /**
-     Position of this Frustum's top plane on the View-space Y-axis.
-
-     Fires a {@link Frustum/top:event} event on change.
-
-     @property top
-     @default 1.0
-     @type {Number}
+     * Sets the position of the Frustum's top plane on the View-space Y-axis.
+     *
+     * Fires a {@link Frustum#top:emits} emits on change.
+     *
+     * @param {Number} value New top frustum plane position.
      */
     set top(value) {
         this._top = (value !== undefined && value !== null) ? value : 1.0;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's   {@link Frustum/top} property changes.
 
-         @event top
-         @param value The property's new value
+        /**
+         Fired whenever the Frustum's   {@link Frustum#top} property changes.
+
+         @emits top
+         @param value New top frustum plane position.
          */
         this.fire("top", this._top);
     }
 
+    /**
+     * Gets the position of the Frustum's top plane on the View-space Y-axis.
+     *
+     * Fires a {@link Frustum#top:emits} emits on change.
+     *
+     * @return {Number} Top frustum plane position.
+     */
     get top() {
         return this._top;
     }
 
     /**
-     Position of this Frustum's bottom plane on the View-space Y-axis.
-
-     Fires a {@link Frustum/bottom:event} event on change.
-
-     @property bottom
-     @default -1.0
-     @type {Number}
+     * Sets the position of the Frustum's bottom plane on the View-space Y-axis.
+     *
+     * Fires a {@link Frustum#bottom:emits} emits on change.
+     *
+     * @emits {"bottom"} event with the value of this property whenever it changes.
+     *
+     * @param {Number} value New bottom frustum plane position.
      */
     set bottom(value) {
         this._bottom = (value !== undefined && value !== null) ? value : -1.0;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's   {@link Frustum/bottom} property changes.
 
-         @event bottom
-         @param value The property's new value
-         */
         this.fire("bottom", this._bottom);
     }
 
+    /**
+     * Gets the position of the Frustum's bottom plane on the View-space Y-axis.
+     *
+     * Fires a {@link Frustum#bottom:emits} emits on change.
+     *
+     * @return {Number} Bottom frustum plane position.
+     */
     get bottom() {
         return this._bottom;
     }
 
     /**
-     Position of this Frustum's near plane on the positive View-space Z-axis.
-
-     Fires a {@link Frustum/near:event} event on change.
-
-     @property near
-     @default 0.1
-     @type {Number}
+     * Sets the position of the Frustum's near plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Frustum#near:emits} emits on change.
+     *
+     * Default value is ````0.1````.
+     *
+     * @param {Number} value New Frustum near plane position.
      */
     set near(value) {
         this._near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's {@link Frustum#near} property changes.
 
-         @event near
+        /**
+         Fired whenever the Frustum's {@link Frustum#near} property changes.
+
+         @emits near
          @param value The property's new value
          */
         this.fire("near", this._near);
     }
 
+    /**
+     * Gets the position of the Frustum's near plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Frustum#near:emits} emits on change.
+     *
+     * Default value is ````0.1````.
+     *
+     * @return {Number} Near frustum plane position.
+     */
     get near() {
         return this._near;
     }
 
     /**
-     Position of this Frustum's far plane on the positive View-space Z-axis.
-
-     Fires a {@link Frustum/far:event} event on change.
-
-     @property far
-     @default 10000.0
-     @type {Number}
+     * Sets the position of the Frustum's far plane on the positive View-space Z-axis.
+     *
+     * Fires a {@link Frustum#far:emits} emits on change.
+     *
+     * Default value is ````10000.0````.
+     *
+     * @param {Number} value New far frustum plane position.
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
-        /**
-         Fired whenever this Frustum's  {@link Frustum#far} property changes.
 
-         @event far
+        /**
+         Fired whenever the Frustum's  {@link Frustum#far} property changes.
+
+         @emits far
          @param value The property's new value
          */
         this.fire("far", this._far);
     }
 
+    /**
+     * Gets the position of the Frustum's far plane on the positive View-space Z-axis.
+     *
+     * Default value is ````10000.0````.
+     *
+     * @return {Number} Far frustum plane position.
+     */
     get far() {
         return this._far;
     }
 
     /**
-     The Frustum's projection transform matrix.
-
-     Fires a {@link Frustum/matrix:event} event on change.
-
-     @property matrix
-     @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-     @type {Number[]}
+     * Gets the Frustum's projection transform matrix.
+     *
+     * Fires a {@link Frustum#matrix:emits} emits on change.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @returns {Number[]} The Frustum's projection matrix matrix.
      */
     get matrix() {
         if (this._updateScheduled) {
@@ -226,6 +255,9 @@ class Frustum extends Component {
         return this._state.matrix;
     }
 
+    /**
+     * Destroys this Frustum.
+     */
     destroy() {
         super.destroy();
         this._state.destroy();

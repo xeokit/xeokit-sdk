@@ -177,6 +177,10 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {String} params.src Path to a glTF file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file (see tutorial: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
+     *
+     * @params {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
+     * @params {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
+     *
      * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model's root {@link Node} into a scene graph hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
      * @param {Number[]} [params.position=[0,0,0]] The model {@link Node}'s local 3D position.
@@ -219,9 +223,28 @@ class GLTFLoaderPlugin extends Plugin {
 
             utils.loadJSON(metaModelSrc, (modelMetadata) => {
 
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                self.viewer.metaScene.createMetaModel(modelId, modelMetadata, {
+                    includeTypes: params.includeTypes,
+                    excludeTypes: params.excludeTypes,
+                });
 
                 self.viewer.scene.canvas.spinner.processes--;
+
+                var includeTypes;
+                if (params.includeTypes) {
+                    includeTypes = {};
+                    for (let i = 0, len = params.includeTypes.length; i < len; i++) {
+                        includeTypes[params.includeTypes[i]] = true;
+                    }
+                }
+
+                var excludeTypes;
+                if (params.excludeTypes) {
+                    excludeTypes = {};
+                    for (let i = 0, len = params.excludeTypes.length; i < len; i++) {
+                        includeTypes[params.excludeTypes[i]] = true;
+                    }
+                }
 
                 params.handleGLTFNode = function (modelId, glTFNode, actions) {
 
@@ -239,6 +262,20 @@ class GLTFLoaderPlugin extends Plugin {
                     const nodeId = name;
                     const metaObject = self.viewer.metaScene.metaObjects[nodeId];
                     const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
+                    if (metaObject) {
+                        if (excludeTypes) {
+                            if (excludeTypes[type]) {
+                                return false;
+                            }
+                        }
+
+                        if (includeTypes) {
+                            if (!includeTypes[type]) {
+                                return false;
+                            }
+                        }
+                    }
 
                     actions.createNode = { // Create a Node for this glTF scene node
                         id: nodeId,

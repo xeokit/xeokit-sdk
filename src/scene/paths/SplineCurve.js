@@ -2,72 +2,88 @@ import {Curve} from "./Curve.js"
 import {math} from "../math/math.js";
 
 /**
- * @private
+ * @desc A {@link Curve} along which a 3D position can be animated.
+ *
+ * * As shown in the diagram below, a SplineCurve is defined by three or more control points.
+ * * You can sample a {{#crossLink "SplineCurve#point:property"}}{{/crossLink}} and a {{#crossLink "Curve/tangent:property"}}{{/crossLink}}
+ * vector on a SplineCurve for any given value of {{#crossLink "SplineCurve#t:property"}}{{/crossLink}} in the range [0..1].
+ * * When you set {{#crossLink "SplineCurve#t:property"}}{{/crossLink}} on a SplineCurve, its {{#crossLink "SplineCurve#point:property"}}{{/crossLink}} and {{#crossLink "Curve/tangent:property"}}{{/crossLink}} properties will update accordingly.
+ * * To build a complex path, you can combine an unlimited combination of SplineCurves, {{#crossLink "CubicBezierCurve"}}CubicBezierCurves{{/crossLink}} and {{#crossLink "QuadraticBezierCurve"}}QuadraticBezierCurves{{/crossLink}} into a {{#crossLink "Path"}}{{/crossLink}}.
+ * <br>
+ * <img style="border:1px solid; background: white;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Quadratic_spline_six_segments.svg/200px-Quadratic_spline_six_segments.svg.png"/><br>
+ *
+ * * <a href="https://en.wikipedia.org/wiki/Spline_(mathematics)">Spline Curve from Wikipedia</a>*
  */
 class SplineCurve extends Curve {
 
-    constructor(owner, cfg={}) {
+    /**
+     * @constructor
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SplineCurve as well.
+     * @param {*} [cfg] Configs
+     * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {Array} [cfg.points=[]] Control points on this SplineCurve.
+     * @param {Number} [cfg.t=0] Current position on this SplineCurve, in range between 0..1.
+     * @param {Number} [cfg.t=0] Current position on this CubicBezierCurve, in range between 0..1.
+     */
+    constructor(owner, cfg = {}) {
         super(owner, cfg);
         this.points = cfg.points;
         this.t = cfg.t;
     }
 
     /**
-     Control points on this SplineCurve.
-
-     Fires a {@link SplineCurve/points:event} event on change.
-
-     @property points
-     @default []
-     @type {Number[]}
+     * Sets the control points on this SplineCurve.
+     *
+     * Default value is ````[]````.
+     *
+     * @param {Number[]} value New control points.
      */
     set points(value) {
         this._points = value || [];
-        /**
-         * Fired whenever this SplineCurve's
-         * {@link SplineCurve/points} property changes.
-         * @event points
-         * @param value The property's new value
-         */
-        this.fire("points", this._points);
     }
 
+    /**
+     * Gets the control points on this SplineCurve.
+     *
+     * Default value is ````[]````.
+     *
+     * @returns {Number[]} The control points.
+     */
     get points() {
         return this._points;
     }
 
     /**
-     Progress along this SplineCurve.
-
-     Automatically clamps to range [0..1].
-
-     Fires a {@link SplineCurve/t:event} event on change.
-
-     @property t
-     @default 0
-     @type {Number}
+     * Sets the progress along this SplineCurve.
+     *
+     * Automatically clamps to range ````[0..1]````.
+     *
+     * Default value is ````0````.
+     *
+     * @param {Number} value The new progress.
      */
     set t(value) {
         value = value || 0;
         this._t = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
-        /**
-         * Fired whenever this SplineCurve's
-         * {@link SplineCurve/t} property changes.
-         * @event t
-         * @param value The property's new value
-         */
-        this.fire("t", this._t);
     }
 
+    /**
+     * Gets the progress along this SplineCurve.
+     *
+     * Automatically clamps to range ````[0..1]````.
+     *
+     * Default value is ````0````.
+     *
+     * @returns {Number} The new progress.
+     */
     get t() {
         return this._t;
     }
 
     /**
-     Point on this SplineCurve at position {@link SplineCurve/t}.
-
-     @property point
-     @type {{Array of Number}}
+     * Gets the point on this SplineCurve at position {@link SplineCurve#t}.
+     *
+     * @returns {{Number[]}} The point at {@link SplineCurve#t}.
      */
     get point() {
         return this.getPoint(this._t);
@@ -75,9 +91,9 @@ class SplineCurve extends Curve {
 
     /**
      * Returns point on this SplineCurve at the given position.
-     * @method getPoint
+     *
      * @param {Number} t Position to get point at.
-     * @returns {{Array of Number}}
+     * @returns {{Number[]}} Point at the given position.
      */
     getPoint(t) {
 
@@ -88,7 +104,7 @@ class SplineCurve extends Curve {
             return;
         }
 
-        var point = ( points.length - 1 ) * t;
+        var point = (points.length - 1) * t;
 
         var intPoint = Math.floor(point);
         var weight = point - intPoint;
