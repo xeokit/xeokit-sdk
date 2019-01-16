@@ -28,15 +28,17 @@ rendering overhead.  The engine is derived from xeogl and is extensively reworke
 
 Engine features include:
 
-* Scene graph
-* Load glTF models with accompanying IFC metadata to assist model navigation
-* Load models and IFC metadata from BIMServer
-* Load multiple models into the same scene, from formats including glTF, OBJ & 3DXML
-* Physically-based materials, as well as Phong and Lambert materials for performance
-* Quantized GPU-resident geometry (not stored in browser memory, for lower memory footprint)
-* Support for large models (using hardware instancing and geometry batching)
-* Emphasis effects to assist model navigation (xray, highlight, edge enhance etc)
-* Canvas and ray-picking
+| Feature | Demo | Docs |
+|:--------------------------- | :-------- | :-------- |
+| Scene graph | Demo | Docs |
+| Load glTF models with accompanying IFC metadata to assist model navigation | Demo | Docs
+| Load models and IFC metadata from BIMServer | Demo | Docs
+| Load multiple models into the same scene, from formats including glTF, OBJ & 3DXML | Demo | Docs
+| Physically-based materials, as well as Phong and Lambert materials for performance | Demo | Docs
+| Quantized GPU-resident geometry (not stored in browser memory, for lower memory footprint) | Demo | Docs
+| Support for large models (using hardware instancing and geometry batching) | Demo | Docs
+| Emphasis effects to assist model navigation (xray, highlight, edge enhance etc) | Demo | Docs
+| Canvas and ray-picking | Demo | Docs
 
 ## Viewer
 
@@ -45,7 +47,7 @@ is container for plugins to support application functionality on top of the engi
 
 So far, xeokit-sdk has the following plugins:
 
-| Plugin | Description | Example | Docs
+| Plugin | Description | Demo | Docs |
 |:--------------------------- | :------------- | :-------- | :-------- |
 | BCFViewPointsPlugin   | Saves and loads BCF viewpoints | [Demo](http://xeolabs.com/xeokit-sdk/examples/#BCF_LoadViewpoint) | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html) |
 | BIMServerLoaderPlugin | Loads models and metadata from BIMServer | - | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html) |
