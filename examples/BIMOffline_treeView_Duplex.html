@@ -8,31 +8,44 @@
     <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
 
     <style>
-        #structurePanel {
-            padding: 10px;
+        #treePanel {
+            /*padding: 5px;*/
+            padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             position: absolute;
-            background: RGBA(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.86);
             color: black;
             top: 0;
             z-index: 200000;
             float: left;
             left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
         }
 
         #myCanvas {
-            background: lightblue;
+            background: #ffffff;
         }
     </style>
+
+    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
+    <script src="./libs/lodash.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
 
 </head>
 <body>
 
 <canvas id="myCanvas"></canvas>
 
-<div id="structurePanel" class="xeokitStructurePanel"></div>
+<div id="treePanel" class="treePanel"></div>
 <div id="info">
     <h1>Loading a BIM Model from the File System</h1>
     <ul>
@@ -43,11 +56,11 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js~StructurePanelPlugin.html">StructurePanelPlugin</a>
-            - Renders simple IFC explorer tree
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Loading-BIM-Models-from-the-File-System">Tutorial</a>
+            <a target="_other"
+               href="https://github.com/xeolabs/xeokit-sdk/wiki/Loading-BIM-Models-from-the-File-System">Tutorial</a>
         </li>
     </ul>
 </div>
@@ -66,7 +79,7 @@
     import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer and arrange the camera
+    // Create a Viewer, arrange the camera, tweak ghosting material
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -80,13 +93,10 @@
 
     viewer.cameraFlight.fitFOV = 15;
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Create UI panels
-    //------------------------------------------------------------------------------------------------------------------
-
-    const structurePanel = new StructurePanelPlugin(viewer, {
-        domElementId: "structurePanel"
-    });
+    viewer.scene.ghostMaterial.fillAlpha = 0.1;
+    viewer.scene.ghostMaterial.fillColor = [0, 0, 0];
+    viewer.scene.ghostMaterial.edgeAlpha = 0.4;
+    viewer.scene.ghostMaterial.edgeColor = [0, 0, 0];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -101,17 +111,79 @@
         edges: true
     });
 
-    model.on("loaded", () => {
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, create a tree view that toggles object ghosting
+    //------------------------------------------------------------------------------------------------------------------
 
-        structurePanel.on("clicked", e => {
-            const objectId = e.objectId;
-            const objectIds = viewer.metaScene.getSubObjectIDs(objectId);
-            const aabb = viewer.scene.getAABB(objectIds);
+    model.on("loaded", function () {
 
-            viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
-            viewer.scene.setObjectsSelected(objectIds, true);
+        // Builds tree view data from MetaModel
+        var createData = function (metaModel) {
+            const data = [];
 
-            viewer.cameraFlight.flyTo(aabb);
+            function visit(expand, data, metaObject) {
+                if (!metaObject) {
+                    return;
+                }
+                var child = {
+                    id: metaObject.id,
+                    text: metaObject.name
+                };
+                data.push(child);
+                const children = metaObject.children;
+                if (children) {
+                    child.children = [];
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        visit(true, child.children, children[i]);
+                    }
+                }
+            }
+
+            visit(true, data, metaModel.rootMetaObject);
+            return data;
+        };
+
+        // Get MetaModel we loaded for our model
+        const modelId = model.id;
+        const metaModel = viewer.metaScene.metaModels[modelId];
+
+        // Create the tree view
+        var treeView = new InspireTree({
+            selection: {
+                autoSelectChildren: true,
+                autoDeselect: true,
+                mode: 'checkbox'
+            },
+            checkbox: {
+                autoCheckChildren: true
+            },
+            data: createData(metaModel)
+        });
+
+        new InspireTreeDOM(treeView, {
+            target: document.getElementById("treePanel")
+        });
+
+        // Initialize the tree view once loaded
+        treeView.on('model.loaded', function () {
+
+            treeView.select();
+
+            treeView.model.expand();
+
+            treeView.on('node.selected', function (event, node) {
+                const objectId = event.id;
+                viewer.scene.setObjectsGhosted(objectId, false);
+                viewer.scene.setObjectsCollidable(objectId, true);
+            });
+
+            treeView.on('node.deselected', function (event, node) {
+                const objectId = event.id;
+                viewer.scene.setObjectsGhosted(objectId, true);
+                viewer.scene.setObjectsCollidable(objectId, false);
+            });
+
+
         });
     });
 
