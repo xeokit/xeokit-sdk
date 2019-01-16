@@ -110,7 +110,7 @@
         viewer.scene.setObjectsSelected(objectIds, true);
 
         // 3
-        viewer.cameraFlight.flyTo(aabb);
+        viewer.cameraFlight.jumpTo(aabb);
     });
 
     viewer.cameraControl.on("doublePicked", function (e) {

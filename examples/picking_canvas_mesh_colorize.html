@@ -55,7 +55,7 @@
     viewer.camera.orbitPitch(20);
 
     modelNode.on("loaded", () => {
-        viewer.cameraFlight.flyTo(modelNode);
+        viewer.cameraFlight.jumpTo(modelNode);
     });
 
     //------------------------------------------------------------------------------------------------------------------

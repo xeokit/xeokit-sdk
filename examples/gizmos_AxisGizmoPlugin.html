@@ -52,7 +52,7 @@
     camera.orbitPitch(20);
 
     modelNode.on("loaded", () => {
-        viewer.cameraFlight.flyTo(modelNode);
+        viewer.cameraFlight.jumpTo(modelNode);
         scene.on("tick", () => {
             camera.orbitYaw(0.4);
         })
