@@ -78,7 +78,7 @@
     import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak ghosting material
+    // Create a Viewer, arrange the camera, tweak ghosting and highlight materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -98,8 +98,11 @@
     viewer.scene.ghostMaterial.edgeAlpha = 0.3;
     viewer.scene.ghostMaterial.edgeColor = [0,0,0];
 
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
     //------------------------------------------------------------------------------------------------------------------
-    // Load a model and fit it to view
+    // Load model
     //------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -115,14 +118,9 @@
         readibleGeometry: false // VBOGeometries for low memory footprint (default)
     });
 
-
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over meshes to highlight them
-    // Configure default highlight material to highlight edges yellow
     //------------------------------------------------------------------------------------------------------------------
-
-    viewer.scene.highlightMaterial.fill = false;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     var lastMesh = null;
 
@@ -218,12 +216,14 @@
                 const objectId = event.id;
                 viewer.scene.setObjectsGhosted(objectId, false);
                 viewer.scene.setObjectsCollidable(objectId, true);
+                viewer.scene.setObjectsPickable(objectId, true);
             });
 
             treeView.on('node.deselected', function (event, node) {
                 const objectId = event.id;
                 viewer.scene.setObjectsGhosted(objectId, true);
                 viewer.scene.setObjectsCollidable(objectId, false);
+                viewer.scene.setObjectsPickable(objectId, false);
             });
 
 
