@@ -1,14 +1,17 @@
 # xeokit-sdk
 
-The **xeokit-sdk** is a [GPL3-licensed](https://github.com/xeolabs/xeokit.io/wiki/License) software development kit
-from [xeolabs](http://xeolabs.com) for building Web-based 3D viewers for BIM and engineering. The SDK provides
-a 3D viewer framework on the open source [xeogl](http://xeogl.org) WebGL library, with a collection bundled of
-plugins focused on BIM and CAD.
+The **xeokit-sdk** is a WebGL-based toolkit from [xeolabs](http://xeolabs.com) for the development of high-performance
+Web-based 3D viewers for BIM and engineering.
 
-The SDK uses advanced rendering techniques to view and interact with high-detail
-models in most major browsers, on both desktop and mobile platforms.
+xeokit-sdk is the product of ten years experience developing WebGL platforms
+for medical, BIM and CAD visualization.
 
-### Links
+The SDK is released under a [GPL V3](https://github.com/xeolabs/xeokit.io/wiki/License) dual-license, which allows free
+use for non-commercial purposes, with the option to buy a licence for commercial use.
+
+![](https://xeokit.io/images/officePlan300x200.png)
+
+## Links
 
 * [Website](https://xeokit.io/)
 * [Examples](http://xeolabs.com/xeokit-sdk/examples/)
@@ -18,4 +21,38 @@ models in most major browsers, on both desktop and mobile platforms.
 * [License](https://github.com/xeolabs/xeokit.io/wiki/License)
 * [Contact](http://xeolabs.com/)
 
-![](https://xeokit.io/images/officePlan300x200.png)
+## WebGL Engine
+
+xeokit-sdk is built around a general-purpose WebGL engine that’s optimized to view large engineering models with low memory and
+rendering overhead.  The engine is derived from xeogl and is extensively reworked and optimized to focus on performance for BIM and engineering.
+
+Engine features include:
+
+* Scene graph
+* Load glTF models with accompanying IFC metadata to assist model navigation
+* Load models and IFC metadata from BIMServer
+* Load multiple models into the same scene, from formats including glTF, OBJ & 3DXML
+* Physically-based materials, as well as Phong and Lambert materials for performance
+* Quantized GPU-resident geometry (not stored in browser memory, for lower memory footprint)
+* Support for large models (using hardware instancing and geometry batching)
+* Emphasis effects to assist model navigation (xray, highlight, edge enhance etc)
+* Canvas and ray-picking
+
+## Viewer
+
+A xeogl-sdk Viewer is built around a WebGL engine instance. A Viewer
+is container for plugins to support application functionality on top of the engine.
+
+So far, xeokit-sdk has the following plugins:
+
+| Plugin | Description | Example | Docs
+|:--------------------------- | :------------- | :-------- | :-------- |
+| BCFViewPointsPlugin   | Saves and loads BCF viewpoints | [Demo](http://xeolabs.com/xeokit-sdk/examples/#BCF_LoadViewpoint) | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html) |
+| BIMServerLoaderPlugin | Loads models and metadata from BIMServer | - | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html) |
+| GLTFLoaderPlugin      | Loads models from glTF, with accompanying IFC metadata| [Demo](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_treeView_OTCConferenceCenter) | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html) |
+| OBJLoaderPlugin       | Loads models from OBJ | [Demo](http://xeolabs.com/xeokit-sdk/examples/#loading_OBJ_SportsCar) | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html) |
+| XML3DLoaderPlugin     | Loads models from 3DXML | [Demo](http://xeolabs.com/xeokit-sdk/examples/#loading_3DXML_Widget) |  [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html) |
+| STLLoaderPlugin       | Loads models from STL | [Demo](http://xeolabs.com/xeokit-sdk/examples/#loading_STL_SpurGear) |  [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html) |
+| AxisGizmoPlugin       | A gizmo that shows the coordinate system axis | [Demo](http://xeolabs.com/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin) | [Docs](http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html) |
+
+
