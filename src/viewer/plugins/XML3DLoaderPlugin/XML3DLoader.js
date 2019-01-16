@@ -5,7 +5,6 @@ import {PhongMaterial} from "./../../../scene/materials/PhongMaterial.js";
 import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
 import {SpecularMaterial} from "./../../../scene/materials/SpecularMaterial.js";
 import {LambertMaterial} from "./../../../scene/materials/LambertMaterial.js";
-import {Node} from "./../../../scene/nodes/Node.js";
 import {utils} from "./../../../scene/utils.js";
 import {math} from "./../../../scene/math/math.js";
 
@@ -14,6 +13,8 @@ import {zipExt} from "./zipjs/zip-ext.js";
 
 const zip = zipLib.zip;
 zipExt(zip);
+
+const supportedSchemas = ["4.2"];
 
 /**
  * @private
@@ -27,7 +28,7 @@ class XML3DLoader {
          * @property supportedSchemas
          * @type {string[]}
          */
-        this.supportedSchemas = ["4.2"];
+        this.supportedSchemas = supportedSchemas;
 
         this._ghostOpacity = 0.7;
         this._src = null;
@@ -52,7 +53,7 @@ class XML3DLoader {
         this.displayEffect = cfg.displayEffect;
     }
 
-    load(modelNode, src, options, ok, error) {
+    load(plugin, modelNode, src, options, ok, error) {
 
         modelNode._defaultMaterial = new MetallicMaterial(modelNode, {
             baseColor: [1, 1, 1],
@@ -70,7 +71,7 @@ class XML3DLoader {
         var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
 
-        load3DXML(modelNode, src, options, function () {
+        load3DXML(plugin, modelNode, src, options, function () {
                 spinner.processes--;
                 if (ok) {
                     ok();
@@ -98,17 +99,18 @@ class XML3DLoader {
 }
 
 var load3DXML = (function () {
-    return function (modelNode, src, options, ok, error) {
+    return function (plugin, modelNode, src, options, ok, error) {
         loadZIP(src, function (zip) { // OK
-                parse3DXML(zip, options, modelNode, ok, error);
+                parse3DXML(plugin, zip, options, modelNode, ok, error);
             },
             error);
     };
 })();
 
 var parse3DXML = (function () {
-    return function (zip, options, modelNode, ok) {
+    return function (plugin, zip, options, modelNode, ok) {
         var ctx = {
+            plugin: plugin,
             zip: zip,
             edgeThreshold: 30, // Guess at degrees of normal deviation between adjacent tris below which we remove edge between them
             materialWorkflow: options.materialWorkflow,
@@ -200,9 +202,9 @@ var parse3DXML = (function () {
                 case "SchemaVersion":
                     metaData.schemaVersion = child.children[0];
                     if (!isSchemaVersionSupported(ctx, metaData.schemaVersion)) {
-                        ctx.modelNode.error("Schema version not supported: " + metaData.schemaVersion + " - supported versions are: " + ctx.modelNode.supportedSchemas.join(","));
+                        ctx.plugin.error("Schema version not supported: " + metaData.schemaVersion + " - supported versions are: " + ctx.modelNode.supportedSchemas.join(","));
                     } else {
-                        //ctx.modelNode.log("Parsing schema version: " + metaData.schemaVersion);
+                        //ctx.plugin.log("Parsing schema version: " + metaData.schemaVersion);
                     }
                     break;
                 case "Title":
@@ -220,7 +222,6 @@ var parse3DXML = (function () {
     }
 
     function isSchemaVersionSupported(ctx, schemaVersion) {
-        var supportedSchemas = ctx.modelNode.supportedSchemas;
         for (var i = 0, len = supportedSchemas.length; i < len; i++) {
             if (schemaVersion === supportedSchemas[i]) {
                 return true;
@@ -359,7 +360,7 @@ var parse3DXML = (function () {
             }
 
             function parseReference3D(ctx, reference3D, group) {
-                //ctx.modelNode.log("parseReference3D( " + reference3D.id + " )");
+                //ctx.plugin.log("parseReference3D( " + reference3D.id + " )");
                 for (var id in reference3D.instance3Ds) {
                     parseInstance3D(ctx, reference3D.instance3Ds[id], group);
                 }
@@ -369,14 +370,14 @@ var parse3DXML = (function () {
             }
 
             function parseInstance3D(ctx, instance3D, group) {
-                //ctx.modelNode.log("parseInstance3D( " + instance3D.id + " )");
+                //ctx.plugin.log("parseInstance3D( " + instance3D.id + " )");
 
                 if (instance3D.relativeMatrix) {
                     var matrix = parseFloatArray(instance3D.relativeMatrix, 12);
                     var translate = [matrix[9], matrix[10], matrix[11]];
                     var mat3 = matrix.slice(0, 9); // Rotation matrix
                     var mat4 = math.mat3ToMat4(mat3, math.identityMat4()); // Convert rotation matrix to 4x4
-                    var childGroup = new Node(ctx.modelNode.scene, {
+                    var childGroup = new Node(ctx.modelNode, {
                         position: translate
                     });
                     if (group) {
@@ -385,13 +386,13 @@ var parse3DXML = (function () {
                         ctx.modelNode.addChild(childGroup, true);
                     }
                     group = childGroup;
-                    childGroup = new Node(ctx.modelNode.scene, {
+                    childGroup = new Node(ctx.modelNode, {
                         matrix: mat4
                     });
                     group.addChild(childGroup, true);
                     group = childGroup;
                 } else {
-                    var childGroup = new Node(ctx.modelNode.scene, {});
+                    var childGroup = new Node(ctx.modelNode, {});
                     if (group) {
                         group.addChild(childGroup, true);
                     } else {
@@ -405,7 +406,7 @@ var parse3DXML = (function () {
             }
 
             function parseInstanceRep(ctx, instanceRep, group) {
-                //ctx.modelNode.log("parseInstanceRep( " + instanceRep.id + " )");
+                //ctx.plugin.log("parseInstanceRep( " + instanceRep.id + " )");
                 if (instanceRep.referenceReps) {
                     for (var id in instanceRep.referenceReps) {
                         var referenceRep = instanceRep.referenceReps[id];
@@ -417,13 +418,12 @@ var parse3DXML = (function () {
                             var lines = meshCfg.geometry.primitive === "lines";
                             var material = lines ? ctx.modelNode._wireframeMaterial : (meshCfg.materialId ? ctx.materials[meshCfg.materialId] : null);
                             var colorize = meshCfg.color;
-                            var mesh = new Mesh(ctx.modelNode.scene, {
+                            var mesh = new Mesh(ctx.modelNode, {
                                 geometry: meshCfg.geometry,
                                 material: material || ctx.modelNode._defaultMaterial,
                                 colorize: colorize,
                                 backfaces: false
                             });
-                            ctx.modelNode._addComponent(mesh);
                             if (group) {
                                 group.addChild(mesh, true);
                             } else {
@@ -485,7 +485,7 @@ var parse3DXML = (function () {
 
                                     loadCATMaterialRefDocuments(ctx, materialIds, function () {
 
-                                        // ctx.modelNode.log("reference loaded: " + src);
+                                        // ctx.plugin.log("reference loaded: " + src);
                                         var referenceRep = {
                                             id: childId
                                         };
@@ -508,7 +508,7 @@ var parse3DXML = (function () {
 
 
     function parseDefaultView(ctx, node) {
-        // ctx.modelNode.log("parseDefaultView");
+        // ctx.plugin.log("parseDefaultView");
         var children = node.children;
         for (var i = 0, len = children.length; i < len; i++) {
             var child = children[i];
@@ -538,7 +538,7 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepDocument(ctx, node, result) {
-        // ctx.modelNode.log("parse3DRepDocument");
+        // ctx.plugin.log("parse3DRepDocument");
         var children = node.children;
         for (var i = 0, len = children.length; i < len; i++) {
             var child = children[i];
@@ -551,7 +551,7 @@ var parse3DXML = (function () {
     }
 
     function parseXMLRepresentation(ctx, node, result) {
-        // ctx.modelNode.log("parseXMLRepresentation");
+        // ctx.plugin.log("parseXMLRepresentation");
         var children = node.children;
         for (var i = 0, len = children.length; i < len; i++) {
             var child = children[i];
@@ -564,7 +564,7 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepRoot(ctx, node, result) {
-        // ctx.modelNode.log("parse3DRepRoot");
+        // ctx.plugin.log("parse3DRepRoot");
         switch (node["xsi:type"]) {
             case "BagRepType":
                 break;
@@ -583,7 +583,7 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepRep(ctx, node, result) {
-        // ctx.modelNode.log("parse3DRep");
+        // ctx.plugin.log("parse3DRep");
         switch (node["xsi:type"]) {
             case "BagRepType":
                 break;
@@ -623,8 +623,7 @@ var parse3DXML = (function () {
             }
         }
         if (meshesResult.positions) {
-            var geometry = new ReadableGeometry(ctx.modelNode.scene, meshesResult);
-            ctx.modelNode._addComponent(geometry);
+            var geometry = new ReadableGeometry(ctx.modelNode, meshesResult);
             result[geometry.id] = {
                 geometry: geometry,
                 color: meshesResult.color || [1.0, 1.0, 1.0, 1.0],
@@ -634,7 +633,7 @@ var parse3DXML = (function () {
     }
 
     function parseEdges(ctx, node, result) {
-        // ctx.modelNode.log("parseEdges");
+        // ctx.plugin.log("parseEdges");
         result.positions = [];
         result.indices = [];
         var children = node.children;
@@ -649,7 +648,7 @@ var parse3DXML = (function () {
     }
 
     function parsePolyline(ctx, node, result) {
-        //ctx.modelNode.log("parsePolyline");
+        //ctx.plugin.log("parsePolyline");
         var vertices = node.vertices;
         if (vertices) {
             var positions = parseFloatArray(vertices, 3);
@@ -667,7 +666,7 @@ var parse3DXML = (function () {
     }
 
     function parseFaces(ctx, node, result) {
-        // ctx.modelNode.log("parseFaces");
+        // ctx.plugin.log("parseFaces");
         var children = node.children;
         for (var i = 0, len = children.length; i < len; i++) {
             var child = children[i];
@@ -680,7 +679,7 @@ var parse3DXML = (function () {
     }
 
     function parseFace(ctx, node, result) {
-        // ctx.modelNode.log("parseFace");
+        // ctx.plugin.log("parseFace");
 
         var strips = node.strips;
         if (strips) {
@@ -838,7 +837,7 @@ var parse3DXML = (function () {
                                 var materialId = getIDFromURI(child2.id);
                                 var material = ctx.materials[materialId];
                                 if (!material) {
-                                    ctx.modelNode.error("material  not found: " + materialId);
+                                    ctx.plugin.error("material  not found: " + materialId);
                                 }
                                 result.materialId = materialId;
                                 break;
@@ -894,7 +893,7 @@ loadCATMaterialRefDocument(ctx, src, ok) { // Loads CATMaterialRef.3dxml
 }
 
 function parseCATMaterialRefDocument(ctx, node, ok) { // Parse CATMaterialRef.3dxml
-    // ctx.modelNode.log("parseCATMaterialRefDocument");
+    // ctx.plugin.log("parseCATMaterialRefDocument");
     var children = node.children;
     var child;
     for (var i = 0, len = children.length; i < len; i++) {
@@ -906,7 +905,7 @@ function parseCATMaterialRefDocument(ctx, node, ok) { // Parse CATMaterialRef.3d
 }
 
 function parseModel_3dxml(ctx, node, ok) { // Parse CATMaterialRef.3dxml
-    // ctx.modelNode.log("parseModel_3dxml");
+    // ctx.plugin.log("parseModel_3dxml");
     var children = node.children;
     var child;
     for (var i = 0, len = children.length; i < len; i++) {
@@ -919,7 +918,7 @@ function parseModel_3dxml(ctx, node, ok) { // Parse CATMaterialRef.3dxml
 
 function parseCATMaterialRef(ctx, node, ok) {
 
-    // ctx.modelNode.log("parseCATMaterialRef");
+    // ctx.plugin.log("parseCATMaterialRef");
 
     var domainToReferenceMap = {};
     var materials = {};
@@ -971,7 +970,7 @@ function parseCATMaterialRef(ctx, node, ok) {
                         var childId = child2.id;
                         var src = stripURN(child2.associatedFile);
                         ctx.zip.getFile(src, function (xmlDoc, json) {
-                                // ctx.modelNode.log("Material def loaded: " + src);
+                                // ctx.plugin.log("Material def loaded: " + src);
                                 ctx.materials[domainToReferenceMap[childId]] = parseMaterialDefDocument(ctx, json);
 
                                 if (--numToLoad === 0) {
@@ -990,7 +989,7 @@ function parseCATMaterialRef(ctx, node, ok) {
 }
 
 function parseMaterialDefDocument(ctx, node) {
-    // ctx.modelNode.log("parseMaterialDefDocumentOsm");
+    // ctx.plugin.log("parseMaterialDefDocumentOsm");
     var children = node.children;
     for (var i = 0, len = children.length; i < len; i++) {
         var child = children[i];

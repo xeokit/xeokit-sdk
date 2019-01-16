@@ -41,16 +41,12 @@
     viewer.camera.orbitPitch(20);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create an AxisGizmo to show the World-space coordinate axis
-    //------------------------------------------------------------------------------------------------------------------
-
-    new AxisGizmoPlugin(viewer, {size: [250, 250]});
-
-    //------------------------------------------------------------------------------------------------------------------
     // Load 3DXML model and fit it to view, then start orbiting the camera
     //------------------------------------------------------------------------------------------------------------------
 
-    const xml3dLoader = new XML3DLoaderPlugin(viewer);
+    const xml3dLoader = new XML3DLoaderPlugin(viewer, {
+        workerScriptsPath: "../src/viewer/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
+    });
 
     const modelNode = xml3dLoader.load({
         id: "myModel",

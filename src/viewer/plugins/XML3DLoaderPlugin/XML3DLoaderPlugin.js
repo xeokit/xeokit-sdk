@@ -1,4 +1,7 @@
-import {LoaderPlugin} from "./../../LoaderPlugin.js";
+import {utils} from "./../../../scene/utils.js"
+import {Node} from "./../../../scene/nodes/Node.js";
+import {Plugin} from "./../../Plugin.js";
+import {XML3DLoader} from "./XML3DLoader.js";
 
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
@@ -12,8 +15,8 @@ import {LoaderPlugin} from "./../../LoaderPlugin.js";
  * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DLoaderPlugin uses the
  * [zip.js](https://gildas-lormeau.github.io/zip.js/) library to unzip them before loading. The zip.js library uses
  * [Web workers](https://www.w3.org/TR/workers/) for fast unzipping, so XML3DLoaderPlugin requires that we configure it
- * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See 
- * the example for how to do that. 
+ * with a ````workerScriptsPath```` property specifying the directory where zip.js keeps its Web worker script. See
+ * the example for how to do that.
  *
  * See the {@link XML3DLoaderPlugin#load} method for parameters that you can configure
  * each {@link Node} with as you load it.
@@ -60,7 +63,7 @@ import {LoaderPlugin} from "./../../LoaderPlugin.js";
  * @class XML3DLoaderPlugin
  */
 
-class XML3DLoaderPlugin extends LoaderPlugin {
+class XML3DLoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -71,14 +74,34 @@ class XML3DLoaderPlugin extends LoaderPlugin {
      * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
      * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.
      */
-    constructor(viewer, cfg) {
-        super("XML3DLoader", viewer, XML3DModel, cfg);
-        cfg = cfg || {};
+    constructor(viewer, cfg = {}) {
+
+        super("XML3DLoader", viewer, cfg);
+
         if (!cfg.workerScriptsPath) {
             this.error("Config expected: workerScriptsPath");
             return
         }
+
         this._workerScriptsPath = cfg.workerScriptsPath;
+
+        /**
+         * @private
+         */
+        this._loader = new XML3DLoader(this, cfg);
+
+        /**
+         * Models currently loaded by this Plugin.
+         * @type {{String:Node}}
+         */
+        this.models = {};
+
+        /**
+         * Supported 3DXML schema versions
+         * @property supportedSchemas
+         * @type {string[]}
+         */
+        this.supportedSchemas = this._loader.supportedSchemas;
     }
 
     /**
@@ -126,9 +149,73 @@ class XML3DLoaderPlugin extends LoaderPlugin {
      *
      * @returns {{Node}} A {@link Node} representing the loaded 3DXML model.
      */
-    load(params) {
+    load(params = {}) {
+
         params.workerScriptsPath = this._workerScriptsPath;
-        return super.load(params);
+
+        const self = this;
+
+        if (params.id && this.viewer.scene.components[params.id]) {
+            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
+            delete params.id;
+        }
+
+        const modelNode = new Node(this.viewer.scene, utils.apply(params, {
+            isModel: true
+        }));
+
+        const src = params.src;
+
+        if (!src) {
+            this.error("load() param expected: src");
+            return modelNode; // Return new empty model
+        }
+
+        this._loader.load(this, modelNode, src, params);
+
+        return modelNode;
+    }
+
+    /**
+     * Unloads a model that was loaded by this GLTFLoaderPlugin.
+     *
+     * @param {String} modelId  ID of model to unload.
+     */
+    unload(modelId) {
+        const modelNode = this.models;
+        if (!modelNode) {
+            this.error(`unload() model with this ID not found: ${modelId}`);
+            return;
+        }
+        modelNode.destroy();
+    }
+
+    /**
+     * @private
+     */
+    send(name, value) {
+        switch (name) {
+            case "clear":
+                this.clear();
+                break;
+        }
+    }
+
+    /**
+     * Unloads models loaded by this GLTFLoaderPlugin.
+     */
+    clear() {
+        for (const modelId in this.models) {
+            this.models[modelId].destroy();
+        }
+    }
+
+    /**
+     * Destroys this BIMServerLoaderPlugin, after first unloading any models it has loaded.
+     */
+    destroy() {
+        this.clear();
+        super.destroy();
     }
 }
 
