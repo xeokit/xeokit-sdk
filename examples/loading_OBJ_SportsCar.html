@@ -62,7 +62,7 @@
     });
 
     modelNode.on("loaded", () => {
-        viewer.cameraFlight.flyTo(modelNode);
+        viewer.cameraFlight.jumpTo(modelNode);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })

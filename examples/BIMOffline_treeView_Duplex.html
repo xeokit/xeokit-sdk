@@ -9,7 +9,6 @@
 
     <style>
         #treePanel {
-            /*padding: 5px;*/
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
@@ -46,6 +45,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="treePanel" class="treePanel"></div>
+
 <div id="info">
     <h1>Loading a BIM Model from the File System</h1>
     <ul>
@@ -75,8 +75,6 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
-    import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak ghosting and highlight materials
@@ -102,7 +100,7 @@
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Load model
+    // Load model and metadata
     //------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
