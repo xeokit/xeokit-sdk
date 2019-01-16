@@ -81,7 +81,7 @@
         edges: true,
         edgeThreshold: 20,
         lambertMaterial: true,
-        ghosted: true
+        ghosted: false
     });
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -233,7 +233,7 @@
 
     var cameraPathAnimation = new CameraPathAnimation(viewer.scene, {
         cameraPath: cameraPath,
-        playingRate: 0.3
+        playingRate: 0.2
     });
 
     model.on("loaded", function () {
