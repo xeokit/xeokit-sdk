@@ -1,6 +1,7 @@
 import {Node} from "./../../../scene/nodes/Node.js";
 import {Plugin} from "./../../Plugin.js";
 import {STLLoader} from "./STLLoader.js";
+import {utils} from "../../../scene/utils.js";
 
 /**
  * {@link Viewer} plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
@@ -120,38 +121,36 @@ class STLLoaderPlugin extends Plugin {
      */
     load(params) {
 
-        var node = new Node(this.viewer.scene, params);
+        const self = this;
 
-        const id = params.id;
-
-        if (!id) {
-            this.error("load() param expected: id");
-            return node;
+        if (params.id && this.viewer.scene.components[params.id]) {
+            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
+            delete params.id;
         }
 
+        var modelNode = new Node(this.viewer.scene, utils.apply(params, {
+            isModel: true
+        }));
+
+        const modelId = modelNode.id;  // In case ID was auto-generated
         const src = params.src;
 
         if (!src) {
             this.error("load() param expected: src");
-            return node;
+            return modelNode;
         }
 
-        if (this.viewer.scene.components[id]) {
-            this.error(`Component with this ID already exists in viewer: ${id}`);
-            return;
-        }
+        this._loader.load(this, modelNode, src, params);
 
-        this._loader.load(this, node, src, params);
+        this.models[modelId] = modelNode;
 
-        this.models[id] = node;
-
-        node.once("destroyed", () => {
-            delete this.models[id];
-            this.viewer.metaScene.destroyMetaModel(id);
-            this.fire("unloaded", id);
+        modelNode.once("destroyed", () => {
+            delete this.models[modelId];
+            this.viewer.metaScene.destroyMetaModel(modelId);
+            this.fire("unloaded", modelId);
         });
 
-        return node;
+        return modelNode;
     }
 
     /**
