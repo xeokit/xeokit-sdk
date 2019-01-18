@@ -204,7 +204,7 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
         }
         protocolVersion = data.readByte();
         modelBuilder.log("BIMServer protocol version = " + protocolVersion);
-        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16) {
+        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 && protocolVersion !== 17) {
             modelBuilder.error("Unimplemented protocol version");
             return false;
         }
@@ -306,7 +306,7 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
 
             geometriesLoaded[geometryDataId] = true;
 
-            if (objectsWaitingForGeometryData[geometryDataId] !== null) {
+            if (objectsWaitingForGeometryData[geometryDataId] !== null && objectsWaitingForGeometryData[geometryDataId] !== undefined) {
 
                 // Object(s) waiting for this geometry
 
@@ -337,8 +337,8 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
             let geometryDataOidFound = geometryDataId;
             oid = infoToOid[geometryInfoOid];
 
-            if (oid === null) {
-                modelBuilder.error("Not found", infoToOid, geometryInfoOid);
+            if (oid === null || oid === undefined) {
+                modelBuilder.error("Not found: " + infoToOid + ", " + geometryInfoOid);
                 return;
             }
 
