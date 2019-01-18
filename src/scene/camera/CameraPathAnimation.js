@@ -4,121 +4,99 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
 
 
 /**
- * @desc Animates the {{#crossLink "Scene"}}{{/crossLink}}'s {@link Camera} along a {@link CameraPath}.
+ * @desc Animates the {@link Scene}'s's {@link Camera} along a {@link CameraPath}.
  *
- * ## Interpolating the Camera along a path
+ * ## Usage
  *
+ * In the example below, we'll load a model using a {@link GLTFLoaderPlugin}, then animate a {@link Camera}
+ * through the frames in a {@link CameraPath}.
+ *
+ *  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#camera_CameraPathAnimation)]
  *
  * ````Javascript
- *  // Load a model from glTF
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {CameraPath} from "../src/scene/camera/CameraPath.js";
+ * import {CameraPathAnimation} from "../src/scene/camera/CameraPathAnimation.js";
  *
- * var gearbox = new xeogl.GLTFModel({
- *          src: "models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf"
+ * // Create a Viewer and arrange camera
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
  * });
  *
- * // Define a CameraPath
+ * viewer.camera.eye = [124.86756896972656, -93.50288391113281, 173.2632598876953];
+ * viewer.camera.look = [102.14186096191406, -90.24193572998047, 173.4224395751953];
+ * viewer.camera.up = [0.23516440391540527, 0.9719591736793518, -0.0016466031083837152];
  *
- * var cameraPath = new xeogl.CameraPath({
- *      frames: [
- *          {t: 0, eye: [184.21, 10.54, -7.03], look: [159.2, 17.02, 3.21], up: [-0.15, 0.97, 0.13]},
- *          {t: 1, eye: [184.91, 10.10, -11.26], look: [171.03, 13.69, -5.57], up: [-0.15, 0.97, 0.12]},
- *          {t: 2, eye: [181.37, 12.35, -16.93], look: [171.03, 13.69, -5.57], up: [-0.17, 0.93, 0.28]},
- *          {t: 2, eye: [174.01, 13.55, -20.70], look: [171.03, 13.69, -5.57], up: [-0.01, 0.90, 0.40]},
- *          {t: 4, eye: [166.48, 14.36, -20.30], look: [171.03, 13.69, -5.57], up: [0.19, 0.88, 0.40]},
- *          {t: 5, eye: [160.32, 14.69, -16.63], look: [171.03, 13.69, -5.57], up: [0.36, 0.87, 0.29]},
- *          {t: 6, eye: [156.67, 17.97, -4.77], look: [162.53, 17.42, 1.28], up: [0.36, 0.87, 0.29]},
- *          {t: 7, eye: [151.14, 16.68, -10.04], look: [158.94, 15.95, -1.99], up: [0.36, 0.87, 0.29]},
- *          {t: 8, eye: [146.26, 17.56, -4.77], look: [152.13, 17.05, 1.28], up: [0.36, 0.87, 0.28]},
- *          {t: 9, eye: [137.26, 18.36, -9.65], look: [149.76, 17.27, 3.24], up: [0.36, 0.87, 0.28]},
- *          {t: 10, eye: [139.04, 18.29, -11.17], look: [149.76, 17.27, 3.24], up: [0.32, 0.87, 0.33]},
- *          {t: 11, eye: [140.66, 18.13, -12.26], look: [149.76, 17.27, 3.24], up: [0.28, 0.87, 0.35]},
- *          {t: 12, eye: [147.18, 17.66, -14.56], look: [149.76, 17.27, 3.24], up: [0.12, 0.89, 0.41]},
- *          {t: 13, eye: [158.05, 16.33, -12.69], look: [149.76, 17.27, 3.24], up: [-0.11, 0.91, 0.34]},
- *          {t: 14, eye: [150.11, 13.26, -6.69], look: [147.95, 13.50, -2.52], up: [-0.11, 0.91, 0.34]},
- *          {t: 15, eye: [149.27, 13.00, -3.34], look: [148.72, 13.05, -2.29], up: [-0.11, 0.91, 0.35]},
- *          {t: 16, eye: [152.62, 11.65, -4.87], look: [148.47, 12.08, 3.08], up: [-0.11, 0.91, 0.35]},
- *          {t: 17, eye: [153.35, 12.24, -1.84], look: [148.69, 12.72, 7.01], up: [-0.11, 0.91, 0.35]},
- *          {t: 18, eye: [156.49, 12.11, 0.74], look: [148.69, 12.72, 7.012], up: [-0.23, 0.92, 0.26]},
- *          {t: 19, eye: [158.52, 11.98, 5.21], look: [148.69, 12.72, 7.01], up: [-0.32, 0.92, 0.12]},
- *          {t: 20, eye: [158.60, 11.50, 7.91], look: [148.69, 12.72, 7.01], up: [-0.30, 0.94, 0.035]},
- *          {t: 21, eye: [157.60, 11.76, 11.51], look: [148.69, 12.72, 7.01], up: [-0.31, 0.93, -0.089]},
- *          {t: 22, eye: [152.67, 18.35, 14.29], look: [148.69, 12.72, 7.01], up: [-0.46, 0.51, -0.70]},
- *          {t: 23, eye: [148.79, 21.67, 11.52], look: [148.69, 12.72, 7.01], up: [-0.15, 0.036, -0.97]},
- *          {t: 24, eye: [147.11, 22.40, 9.07], look: [148.69, 12.72, 7.01], up: [0.38, -0.16, -0.89]},
- *          {t: 25, eye: [144.80, 21.92, 6.23], look: [148.69, 12.72, 7.01], up: [0.98, -0.02, 0.03]},
- *          {t: 26, eye: [144.11, 20.18, 2.13], look: [148.69, 12.72, 7.01], up: [0.71, 0.29, 0.62]},
- *          {t: 27, eye: [145.87, 17.37, -1.40], look: [148.69, 12.72, 7.01], up: [0.31, 0.60, 0.71]},
- *          {t: 28, eye: [144.37, 19.17, -7.33], look: [146.13, 16.27, -2.08], up: [0.31, 0.60, 0.71]},
- *          {t: 29, eye: [142.54, 21.91, -17.26], look: [146.89, 14.81, -4.28], up: [0.31, 0.60, 0.71]}
- *      ]
+ * // Load model
+ *
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * const model = gltfLoader.load({
+ *     id: "myModel",
+ *     src: "./models/gltf/modern_office/scene.gltf",
+ *     edges: true,
+ *     edgeThreshold: 20,
+ *      lambertMaterial: false,
+ *     ghosted: false
  * });
  *
- * // Once the model has loaded, animate the
- * // (default Scene's default Camera) along the CameraPath
+ * // Create a CameraPath
  *
- * var cameraPathAnimation = new xeogl.CameraPathAnimation({
- *      cameraPath: cameraPath
+ * var cameraPath = new CameraPath(viewer.scene, {
+ *     frames: [
+ *         {
+ *             t:    0,
+ *             eye:  [124.86, -93.50, 173.26],
+ *             look: [102.14, -90.24, 173.42],
+ *             up:   [0.23, 0.97, -0.00]
+ *         },
+ *         {
+ *             t:    1,
+ *             eye:  [79.75, -85.98, 226.57],
+ *             look: [99.24, -84.11, 238.56],
+ *             up:   [-0.14, 0.98, -0.09]
+ *         },
+ *         // Rest of the frames omitted for brevity
+ *     ]
  * });
  *
- * gearbox.on("loaded", function () {
- *      cameraPathAnimation.play();
+ * // Create a CameraPathAnimation to play our CameraPath
+ *
+ * var cameraPathAnimation = new CameraPathAnimation(viewer.scene, {
+ *     cameraPath: cameraPath,
+ *     playingRate: 0.2 // Playing 0.2 time units per second
  * });
- * ````
  *
- * <br>
- * ### Flying directly to each frame on a path
+ * // Once model loaded, start playing after a couple of seconds delay
  *
- * In this example, we'll use the CameraPathAnimation's {{#crossLink "CameraPathAnimation/flyToFrame"}}{{/crossLink}} method
- * to <b>fly</b> the {@link Camera} directly to each frame on the {@link CameraPath}:
- *
- *
- * ````javascript
- * var i = 0;
- * var dir = 1;
- *
- * gearbox.on("loaded", function () {
- *      function nextFrame() {
- *          cameraPathAnimation.flyToFrame(i += dir, function() { setTimeout(nextFrame, 1000); });
- *
- *          if (i <= 0 || i >= 29) {
- *              dir = -dir;
- *          }
- *      }
- *      nextFrame();
- * });
- * ````
- * <br>
- * ## Jumping directly to each frame on a path
- *
- * In this example, we'll use the CameraPathAnimation's {{#crossLink "CameraPathAnimation/scrubToFrame"}}{{/crossLink}} method
- * to <b>jump</b> the {@link Camera} directly to each frame on the {@link CameraPath}:
- *
- * ````javascript
- * var i = 0;
- * var dir = 1;
- *
- * gearbox.on("loaded", function () {
- *      function nextFrame() {
- *          cameraPathAnimation.scrubToFrame(i += dir);
- *
- *          if (i <= 0 || i >= 29) {
- *              dir = -dir;
- *          }
- *          setTimeout(nextFrame, 1000);
- *      }
- *      nextFrame();
+ * model.on("loaded", function () {
+ *     setTimeout(function () {
+ *         cameraPathAnimation.play(0); // Play from the beginning of the CameraPath
+ *     }, 2000);
  * });
  * ````
  */
 class CameraPathAnimation extends Component {
 
     /**
+     * Returns "CameraPathAnimation".
+     *
+     * @private
+     * @returns {string} "CameraPathAnimation"
+     */
+    get type() {
+        return "CameraPathAnimation"
+    }
+
+    /**
      * @constructor
      * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this CameraPathAnimation as well.
      * @param {*} [cfg] Configuration
      * @param {String} [cfg.id]  Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {String|SplineCurve} [cfg.eyeCurve] ID or instance of a {@link SplineCurve} to animate the {@link Camera#eye} property along.
-     * @param {String|SplineCurve} [cfg.lookCurve] ID or instance of a {@link SplineCurve} to animate the {@link Camera#look} property along.
+     * @param {CameraPath} [cfg.eyeCurve] A {@link CameraPath} that defines the path of a {@link Camera}.
      */
     constructor(owner, cfg = {}) {
 
@@ -190,45 +168,52 @@ class CameraPathAnimation extends Component {
         }
     }
 
-    // Quadratic easing out - decelerating to zero velocity
-    // http://gizma.com/easing
-
+    /*
+    * @private
+     */
     _ease(t, b, c, d) {
         t /= d;
         return -c * t * (t - 2) + b;
     }
 
     /**
-     The {@link CameraPath} for this CameraPathAnimation.
-
-     @property cameraPath
-     @type CameraPath
+     * Sets the {@link CameraPath} animated by this CameraPathAnimation.
+     *
+     @param {CameraPath} value The new CameraPath.
      */
     set cameraPath(value) {
         this._cameraPath = value;
     }
 
+    /**
+     * Gets the {@link CameraPath} animated by this CameraPathAnimation.
+     *
+     @returns {CameraPath} The CameraPath.
+     */
     get cameraPath() {
         return this._cameraPath;
     }
 
     /**
-     The rate at which this CameraPathAnimation plays.
-
-     @property rate
-     @type {Number}
+     * Sets the rate at which the CameraPathAnimation animates the {@link Camera} along the {@link CameraPath}.
+     *
+     *  @param {Number} value The amount of progress per second.
      */
     set rate(value) {
         this._playingRate = value;
     }
 
+    /**
+     * Gets the rate at which the CameraPathAnimation animates the {@link Camera} along the {@link CameraPath}.
+     *
+     * @returns {*|number} The current playing rate.
+     */
     get rate() {
         return this._playingRate;
     }
 
     /**
-     * Begins playing this CameraPathAnimation from the current time.
-     * @method play
+     * Begins animating the {@link Camera} along CameraPathAnimation's {@link CameraPath} from the beginning.
      */
     play() {
         if (!this._cameraPath) {
@@ -238,9 +223,8 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Begins playing this CameraPathAnimation from the current time to the given time.
+     * Begins animating the {@link Camera} along CameraPathAnimation's {@link CameraPath} from the given time.
      *
-     * @method playToT
      * @param {Number} t Time instant.
      */
     playToT(t) {
@@ -255,9 +239,8 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Begins playing this CameraPathAnimation from the current time to the time at the given frame.
+     * Animates the {@link Camera} along CameraPathAnimation's {@link CameraPath} to the given frame.
      *
-     * @method playToFrame
      * @param {Number} frameIdx Index of the frame to play to.
      */
     playToFrame(frameIdx) {
@@ -275,9 +258,8 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Flies this CameraPathAnimation's {@link Camera} to the time at the given frame.
+     * Flies the {@link Camera} directly to the given frame on the CameraPathAnimation's {@link CameraPath}.
      *
-     * @method flyToFrame
      * @param {Number} frameIdx Index of the frame to play to.
      * @param {Function} [ok] Callback to fire when playing is complete.
      */
@@ -296,9 +278,8 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Scrubs (sets) this CameraPathAnimation to the the given time.
+     * Scrubs the {@link Camera} to the given time on the CameraPathAnimation's {@link CameraPath}.
      *
-     * @method scrubToT
      * @param {Number} t Time instant.
      */
     scrubToT(t) {
@@ -316,9 +297,8 @@ class CameraPathAnimation extends Component {
     }
 
     /**
-     * Scrubs this CameraPathAnimation to the given frame.
+     * Scrubs the {@link Camera} to the given frame on the CameraPathAnimation's {@link CameraPath}.
      *
-     * @method scrubToFrame
      * @param {Number} frameIdx Index of the frame to scrub to.
      */
     scrubToFrame(frameIdx) {
@@ -342,8 +322,6 @@ class CameraPathAnimation extends Component {
 
     /**
      * Stops playing this CameraPathAnimation.
-     *
-     * @method stop
      */
     stop() {
         this.state = CameraPathAnimation.SCRUBBING;

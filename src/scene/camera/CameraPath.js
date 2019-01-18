@@ -4,16 +4,30 @@ import {math} from "../math/math.js";
 
 const tempVec3a = math.vec3();
 
+/**
+ * @desc Defines a sequence of frames along which a {@link CameraPathAnimation} can animate a {@link Camera}.
+ *
+ * See {@link CameraPathAnimation} for usage.
+ */
 class CameraPath extends Component {
+
+    /**
+     * Returns "CameraPath".
+     *
+     * @private
+     *
+     * @returns {string} "CameraPath"
+     */
+    get type() {
+        return "CameraPath"
+    }
 
     /**
      * @constructor
      * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this CameraPath as well.
      * @param [cfg] {*} Configuration
-     * @param [cfg.id] {String} Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param [cfg.meta] {String:Object} Optional map of user-defined metadata to attach to this CameraPath.
-     * @param [cfg.eyeCurve] {String|SplineCurve} ID or instance of a {@link SplineCurve} to animate the {{#crossLink "Camera/eye:property"}}Camera's eye{{/crossLink}} property along.
-     * @param [cfg.lookCurve] {String|SplineCurve} ID or instance of a {@link SplineCurve} to animate the {{#crossLink "Camera/look:property"}}Camera's look{{/crossLink}} property along.
+     * @param {String} [cfg.id]  Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+     * @param {{t:Number, eye:Object, look:Object, up: Object}[]} [cfg.frames] Initial sequence of frames.
      */
     constructor(owner, cfg = {}) {
 
@@ -33,7 +47,7 @@ class CameraPath extends Component {
     /**
      * Gets the camera frames in this CameraPath.
      *
-     * @returns {[]} The camera paths.
+     * @returns {{t:Number, eye:Object, look:Object, up: Object}[]} The frames on this CameraPath.
      */
     get frames() {
         return this._frames;
@@ -76,7 +90,7 @@ class CameraPath extends Component {
     /**
      * Adds a frame to this CameraPath, specified as values for eye, look and up vectors at a given time instant.
      *
-     * @param {Number} t Time instant for the new frame;
+     * @param {Number} t Time instant for the new frame.
      * @param {Number[]} eye A three-element vector specifying the eye position for the new frame.
      * @param {Number[]} look A three-element vector specifying the look position for the new frame.
      * @param {Number[]} up A three-element vector specifying the up vector for the new frame.
@@ -97,7 +111,7 @@ class CameraPath extends Component {
     /**
      * Adds multiple frames to this CameraPath, each frame specified as a set of values for eye, look and up vectors at a given time instant.
      *
-     * @param {Array} frames An array of frames.
+     * @param {{t:Number, eye:Object, look:Object, up: Object}[]} frames Frames to add to this CameraPath.
      */
     addFrames(frames) {
         let frame;
