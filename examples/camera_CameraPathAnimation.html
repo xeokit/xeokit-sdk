@@ -80,7 +80,7 @@
         src: "./models/gltf/modern_office/scene.gltf",
         edges: true,
         edgeThreshold: 20,
-         lambertMaterial: false,
+         lambertMaterial: true,
         ghosted: false
     });
 
@@ -233,7 +233,7 @@
 
     var cameraPathAnimation = new CameraPathAnimation(viewer.scene, {
         cameraPath: cameraPath,
-        playingRate: 0.2
+        playingRate: 0.3
     });
 
     model.on("loaded", function () {
