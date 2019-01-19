@@ -210,14 +210,14 @@
             treeView.model[0].children[0].expand();
             treeView.model[0].children[0].children[0].expand();
 
-            treeView.on('node.selected', function (event, node) {
+            treeView.on('node.checked', function (event, node) {
                 const objectId = event.id;
                 viewer.scene.setObjectsGhosted(objectId, false);
                 viewer.scene.setObjectsCollidable(objectId, true);
                 viewer.scene.setObjectsPickable(objectId, true);
             });
 
-            treeView.on('node.deselected', function (event, node) {
+            treeView.on('node.unchecked', function (event, node) {
                 const objectId = event.id;
                 viewer.scene.setObjectsGhosted(objectId, true);
                 viewer.scene.setObjectsCollidable(objectId, false);

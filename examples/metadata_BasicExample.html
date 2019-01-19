@@ -5,34 +5,46 @@
     <title>Basic Scene Graph with Metadata</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
-    <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
-
     <style>
-        #structurePanel {
-            padding: 10px;
+        #treePanel {
+            /*padding: 5px;*/
+            padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
             position: absolute;
-            background: RGBA(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.86);
             color: black;
             top: 0;
             z-index: 200000;
             float: left;
             left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
         }
 
         #myCanvas {
-            background: lightblue;
+            background: #ffffff;
         }
     </style>
+
+    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
+    <script src="./libs/lodash.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
+
 </head>
 
 <body>
 
 <canvas id="myCanvas"></canvas>
 
-<div id="structurePanel" class="xeokitStructurePanel"></div>
+<div id="treePanel" class="treePanel"></div>
 
 <div id="info">
     <h1>Basic Scene Graph with Metadata</h1>
@@ -96,7 +108,6 @@
     import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
     import {buildBoxGeometry} from "../src/scene/geometry/builders/buildBoxGeometry.js";
     import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
-    import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -112,25 +123,6 @@
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
     viewer.cameraFlight.fitFOV = 35;
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create structure panel to navigate our model using metadata
-    // Will fly camera to each object and highlight it
-    //------------------------------------------------------------------------------------------------------------------
-
-    const structurePanel = new StructurePanelPlugin(viewer, {
-        domElementId: "structurePanel"
-    });
-
-    structurePanel.on("clicked", e => {
-        const id = e.objectId;
-        const aabb = viewer.scene.getAABB(id);
-
-        viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
-        viewer.scene.setObjectsHighlighted(id, true);
-
-        viewer.cameraFlight.flyTo(aabb);
-    });
 
     viewer.scene.highlightMaterial.edgeColor = [0, 0, 0];
 
@@ -307,6 +299,91 @@
     var redLegObject = viewer.scene.objects["redLeg"];
     var greenLegObject = viewer.scene.objects["greenLeg"];
     var blueLegObject = viewer.scene.objects["blueLeg"];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a tree view that toggles object visibilities
+    //------------------------------------------------------------------------------------------------------------------
+
+
+    // Builds tree view data from MetaModel
+    var createData = function (metaModel) {
+        const data = [];
+
+        function visit(expand, data, metaObject) {
+            if (!metaObject) {
+                return;
+            }
+            var child = {
+                id: metaObject.id,
+                text: metaObject.name
+            };
+            data.push(child);
+            const children = metaObject.children;
+            if (children) {
+                child.children = [];
+                for (var i = 0, len = children.length; i < len; i++) {
+                    visit(true, child.children, children[i]);
+                }
+            }
+        }
+
+        visit(true, data, metaModel.rootMetaObject);
+        return data;
+    };
+
+    // Get MetaModel we loaded for our model
+    const modelId = tableModel.id;
+    const metaModel = viewer.metaScene.metaModels[modelId];
+
+    // Create the tree view
+    var treeView = new InspireTree({
+        selection: {
+            autoSelectChildren: true,
+            autoDeselect: true,
+            mode: 'checkbox'
+        },
+        checkbox: {
+            autoCheckChildren: true
+        },
+        showCheckboxes: true,
+        data: createData(metaModel)
+    });
+
+    new InspireTreeDOM(treeView, {
+        target: document.getElementById("treePanel")
+    });
+
+    // Initialize the tree view once loaded
+    treeView.on('model.loaded', function () {
+
+        treeView.select();
+
+        treeView.model.expand();
+        treeView.model[0].children[0].expand();
+
+
+        treeView.on('node.selected', function (event, node) {
+            const objectId = event.id;
+            viewer.scene.setObjectsVisible(objectId, true);
+        });
+
+        treeView.on('node.deselected', function (event, node) {
+            const objectId = event.id;
+            viewer.scene.setObjectsVisible(objectId, false);
+        });
+
+    });
+
+    const slabs = viewer.metaScene.metaObjectsByType["IfcWallStandardCase"];
+    if (slabs) {
+        const slabObjectIds = Object.keys(slabs);
+        viewer.scene.setObjectsColorized(slabObjectIds, [0, 0, 0]);
+    }
+
+  //  viewer.cameraFlight.jumpTo(model);
+
+    //  window.treeView = treeView;
+
 
 </script>
 </html>

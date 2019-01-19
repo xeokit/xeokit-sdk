@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Loading a BIM Model from the File System</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-    <!--<link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>-->
 
     <style>
         #treePanel {
@@ -46,6 +45,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="treePanel" class="treePanel"></div>
+
 <div id="info">
     <h1>BIM Plan View</h1>
     <br>
@@ -83,8 +83,6 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {StructurePanelPlugin} from "../src/viewer/plugins/StructurePanelPlugin/StructurePanelPlugin.js";
-    import {ifcDefaultMaterials} from "./js/ifcDefaults.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
