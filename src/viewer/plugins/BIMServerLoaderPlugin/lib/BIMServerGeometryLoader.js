@@ -323,8 +323,10 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
             // Object
             //-----------------------------------------------------------------------------
 
+            var inPreparedBuffer = stream.readByte() === 1;
             var oid = stream.readLong();
             let ifcType = stream.readUTF8();
+            var nrColors = stream.readInt();
 
             stream.align8();
 
@@ -357,6 +359,52 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
                 }
                 list.push(oid);
             }
+        } else if (geometryType === 9) {
+
+            //--------------------------------------------------------------------------
+            // Minimal object
+            //--------------------------------------------------------------------------
+
+            var oid = stream.readLong();
+            var type = stream.readUTF8();
+            var nrColors = stream.readInt();
+            var roid = stream.readLong();
+            var geometryInfoOid = stream.readLong();
+            var hasTransparency = stream.readLong() == 1;
+
+            stream.align8();
+            var objectBounds = stream.readDoubleArrayCopy(6);
+
+            var geometryDataOid = stream.readLong();
+            var geometryDataOidFound = geometryDataOid;
+            if (hasTransparency) {
+            //     this.createdTransparentObjects.set(oid, {
+            //         nrColors: nrColors,
+            //         type: type
+            //     });
+            // } else {
+            //     this.createdOpaqueObjects.set(oid, {
+            //         nrColors: nrColors,
+            //         type: type
+            //     });
+             }
+
+            this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
+        } else if (geometryType === 7) {
+            this.processPreparedBuffer(stream, true);
+
+        } else if (geometryType === 8) {
+            this.processPreparedBuffer(stream, false);
+
+        } else if (geometryType === 10) {
+            this.processPreparedBufferInit(stream, true);
+
+        } else if (geometryType === 11) {
+            this.processPreparedBufferInit(stream, false);
+
+        } else {
+            console.error("Unsupported geometry type: " + geometryType);
+
         }
 
         currentState.nrObjectsRead++;
