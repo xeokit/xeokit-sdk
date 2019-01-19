@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BIMServerLoaderPlugin - Loading a model from BIMServer</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
-    <link href="css/xeokitStructurePanel.css" type="text/css" rel="stylesheet"/>
     <script src="libs/perfect-scrollbar.min.js"></script>
 
     <style>
@@ -73,18 +72,13 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-
-
-
     import {Viewer} from "./../src/viewer/Viewer.js";
     import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
 
-    //import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
-
-    import BimServerClient from "http://app-4ece8c36-519d-4592-9a5e-705b2e24e007.cleverapps.io:8082/apps/bimserverjavascriptapi/bimserverclient.js";
-    const bimServerAddress = "http://app-4ece8c36-519d-4592-9a5e-705b2e24e007.cleverapps.io:8082";
-    const username = "admin@bimserver.org";
-    const password = "admin";
+    import BimServerClient from "http://app-df16aa03-7577-4513-8f16-b8519e971a9e.cleverapps.io/apps/bimserverjavascriptapi/bimserverclient.js";
+    const bimServerAddress = "http://app-df16aa03-7577-4513-8f16-b8519e971a9e.cleverapps.io/";
+    const username = "lindsay@biodigital.com";
+    const password = "password";
     const poid = 131073;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -220,7 +214,7 @@
                     roid: roid,
                     schema: schema,
 
-                    scale: [0.001, 0.001, 0.001],   // Assigned to Node#scale, since model boundary exceeds view volume
+                  //  scale: [0.001, 0.001, 0.001],   // Assigned to Node#scale, since model boundary exceeds view volume
                     rotation: [-90, 0, 0],          // Assigned to Node#rotation, since model "up" is +Z
                     edges: true,                    // Assigned to Node#edges, to emphasis edges
 
@@ -308,6 +302,8 @@
             });
         });
     });
+
+    window.viewer = viewer;
 
 </script>
 
