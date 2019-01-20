@@ -233,6 +233,9 @@
 
                 model.on("loaded", function () {
 
+                    // Fit model to view
+                    viewer.cameraFlight.jumpTo(model);
+
                     // Builds tree view data from MetaModel
                     var createData = function (metaModel) {
                         const data = [];

@@ -60,7 +60,8 @@
             - Renders simple IFC explorer tree
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">User Guide</a>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">User
+                Guide</a>
         </li>
     </ul>
 </div>
@@ -234,9 +235,7 @@
                 model.on("loaded", function () {
 
                     // Fit model to view
-                    model.on("loaded", () => {
-                        viewer.cameraFlight.jumpTo(model);
-                    });
+                    viewer.cameraFlight.jumpTo(model);
 
                     // Builds tree view data from MetaModel
                     var createData = function (metaModel) {
@@ -311,7 +310,7 @@
                 });
 
             });
-        }, function(error) {
+        }, function (error) {
             console.log(error);
         });
     });
