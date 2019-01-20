@@ -1,7 +1,7 @@
 [
   {
     "name": "BimServerClient#call",
-    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerClient/bimserverclient.js",
+    "filePath": "src/viewer/utils/BIMServerClient/bimserverclient.js",
     "lines": [
       {
         "lineNumber": 928,
