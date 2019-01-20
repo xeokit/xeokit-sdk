@@ -1816,10 +1816,10 @@
       "expectCount": 19,
       "actualCount": 15,
       "undocumentLines": [
-        165,
-        187,
-        212,
-        225
+        163,
+        185,
+        210,
+        223
       ]
     },
     "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js": {
@@ -1960,7 +1960,7 @@
       "expectCount": 12,
       "actualCount": 11,
       "undocumentLines": [
-        153
+        155
       ]
     },
     "src/viewer/plugins/LightsPlugin/LightsPlugin.js": {
