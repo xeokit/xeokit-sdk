@@ -43,7 +43,7 @@ import {utils} from "../../../scene/utils.js";
  *
  * #Usage
  *
- *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan)]
+ *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
  *
  * ````javascript
  * import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
