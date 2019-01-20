@@ -120,138 +120,29 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="xeokit-sdk">xeokit-sdk</h1><p>The <strong>xeokit-sdk</strong> is a WebGL-based toolkit from <a href="http://xeolabs.com">xeolabs</a> for the development of high-performance
-Web-based 3D viewers for BIM and engineering.</p>
-<p>xeokit-sdk is the product of ten years experience developing WebGL platforms
-for medical, BIM and CAD visualization.</p>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><p><a href="http://xeokit-sdk">xeokit</a> is a software development kit from <a href="http://xeolabs.com">xeolabs</a> for building Web-based 3D viewers for BIM and engineering.</p>
 <p>The SDK is released under a <a href="https://github.com/xeolabs/xeokit.io/wiki/License">GPL V3</a> dual-license, which allows free
 use for non-commercial purposes, with the option to buy a licence for commercial use.</p>
-<p><img src="https://xeokit.io/images/officePlan300x200.png" alt=""></p>
-<h2 id="links">Links</h2><ul>
+<p><img src="http://xeokit.io/img/splash-slim.png" alt=""></p>
+<h2 id="user-guides">User Guides</h2><ul>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Features">Features</a> - details on the features and capabilities of the xeokit SDK.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">Viewing BIM Models Offline</a> - how to view models loaded from your server&apos;s file system.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">Viewing Models from BIMServer</a> - how to view models streamed from BIMServer.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Importing-Models">Importing Models</a> - how to import models from various file formats.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Core-3D-Engine">Core 3D Engine</a> - details on the WebGL engine at the core of xeokit.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Material-Workflows">Material-Workflows</a> - details on the physically-based and non-realistic material workflows.</li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewer-Plugins">Viewer Plugins</a> - details on bundled viewer plugins.</li>
+</ul>
+<h2 id="resources">Resources</h2><ul>
 <li><a href="https://xeokit.io/">Website</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Features">Features</a></li>
 <li><a href="http://xeolabs.com/xeokit-sdk/examples/">Examples</a></li>
-<li><a href="http://xeolabs.com/xeokit-sdk/docs/">Docs</a></li>
-<li><a href="https://github.com/xeolabs/xeokit-sdk">Source code</a></li>
-<li><a href="https://github.com/xeolabs/xeokit.io/wiki">Wiki</a></li>
-<li><a href="https://github.com/xeolabs/xeokit.io/wiki/License">License</a></li>
+<li><a href="http://xeolabs.com/xeokit-sdk/docs/">API Documentation</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/Roadmap">Roadmap</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/License">License</a></li>
+<li><a href="https://github.com/xeolabs/xeokit-sdk/wiki/FAQ">FAQ</a></li>
 <li><a href="http://xeolabs.com/">Contact</a></li>
 </ul>
-<h2 id="webgl-engine">WebGL Engine</h2><p>xeokit-sdk is built around a general-purpose WebGL engine that&#x2019;s optimized to view large engineering models with low memory and
-rendering overhead.  The engine is derived from xeogl and is extensively reworked and optimized to focus on performance for BIM and engineering.</p>
-<p>Engine features include:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Feature</th>
-<th style="text-align:left">Demo</th>
-<th style="text-align:left">Docs</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Scene graph</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Load glTF models and IFC metadata</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Load models and IFC metadata from BIMServer</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Load multiple models into the same scene, from formats including glTF, OBJ &amp; 3DXML</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Physically-based materials, as well as Phong and Lambert materials for performance</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Quantized GPU-resident geometry (not stored in browser memory, for lower memory footprint)</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Support for large models (using hardware instancing and geometry batching)</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Emphasis effects to assist model navigation (xray, highlight, edge enhance etc)</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-<tr>
-<td style="text-align:left">Canvas and ray-picking</td>
-<td style="text-align:left">Demo</td>
-<td style="text-align:left">Docs</td>
-</tr>
-</tbody>
-</table>
-<h2 id="viewer">Viewer</h2><p>A xeogl-sdk Viewer is built around a WebGL engine instance. A Viewer
-is container for plugins to support application functionality on top of the engine.</p>
-<p>So far, xeokit-sdk has the following plugins:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Plugin</th>
-<th style="text-align:left">Description</th>
-<th style="text-align:left">Demo</th>
-<th style="text-align:left">Docs</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">BCFViewPointsPlugin</td>
-<td style="text-align:left">Saves and loads BCF viewpoints</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#BCF_LoadViewpoint">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">BIMServerLoaderPlugin</td>
-<td style="text-align:left">Loads models and metadata from BIMServer</td>
-<td style="text-align:left">-</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">GLTFLoaderPlugin</td>
-<td style="text-align:left">Loads models from glTF, with accompanying IFC metadata</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_treeView_OTCConferenceCenter">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">OBJLoaderPlugin</td>
-<td style="text-align:left">Loads models from OBJ</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#loading_OBJ_SportsCar">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">XML3DLoaderPlugin</td>
-<td style="text-align:left">Loads models from 3DXML</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#loading_3DXML_Widget">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">STLLoaderPlugin</td>
-<td style="text-align:left">Loads models from STL</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#loading_STL_SpurGear">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">Docs</a></td>
-</tr>
-<tr>
-<td style="text-align:left">AxisGizmoPlugin</td>
-<td style="text-align:left">A gizmo that shows the coordinate system axis</td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin">Demo</a></td>
-<td style="text-align:left"><a href="http://xeolabs.com/xeokit-sdk/docs/class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">Docs</a></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 
