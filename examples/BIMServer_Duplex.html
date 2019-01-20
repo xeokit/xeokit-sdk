@@ -50,9 +50,7 @@
     <h1>Loading a BIM Model from BIMServer</h1>
     <ul>
         <li>
-            <a target="_other"
-               href="./../docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
-            - Loads model and IFC data from BIMServer
+            <a target="_other" href="./../docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
         </li>
         <li>
             <a target="_other"
@@ -76,7 +74,7 @@
     import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Parameters for this example
+    // BIMServer parameters for this example
     //------------------------------------------------------------------------------------------------------------------
 
     const bimServerAddress = "https://xeokit.cleverapps.io/";
@@ -85,7 +83,9 @@
     const poid = 131073;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer and position the camera
+    // Create a Viewer,
+    // position the camera and
+    // tweak the default ghosting and highlighting materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -185,23 +185,24 @@
 
     bimServerClient.init(() => {
 
-        //------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
         // Login to the BIMServerClient
-        //------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
 
         bimServerClient.login(username, password, () => {
 
-            //------------------------------------------------------------------------------------------------------------------
-            //
-            //------------------------------------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------------------------
+            // Login to BIMServer
+            //----------------------------------------------------------------------------------------------------------
 
             bimServerClient.call("ServiceInterface", "getProjectByPoid", {
                 poid: poid
             }, (project) => {
 
-                //------------------------------------------------------------------------------------------------------------------
-                //
-                //------------------------------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------------------
+                // Load the latest revision of the project using the BIMServerLoaderPlugin.
+                // The BIMServerLoaderPlugin uses the BIMServerClient to load the model and IFC metadata.
+                //------------------------------------------------------------------------------------------------------
 
                 // Load the latest revision of the project
                 // Use whatever IFC schema that's for
@@ -226,9 +227,15 @@
                     readableGeometry: false
                 });
 
-                //------------------------------------------------------------------------------------------------------------------
-                // When model loaded, create a tree view that toggles object ghosting
-                //------------------------------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------------------
+                // When model loaded, create a tree view to navigate the objects in our model.
+                //
+                // The BIMServerLoaderPlugin created a MetaModel, with MetaObjects, from the IFC data it loaded
+                // from BIMServer.
+                //
+                // We'll use the Inspire Tree UI tree component (https://github.com/helion3/inspire-tree) to create a
+                // tree view from the MetaModel, with which we'll navigate the model's objects.
+                //------------------------------------------------------------------------------------------------------
 
                 model.on("loaded", function () {
 
@@ -261,7 +268,7 @@
                         return data;
                     };
 
-                    // Get MetaModel we loaded for our model
+                    // Get the MetaModel thet BIMServerLoaderPlugin loaded for our model
                     const modelId = model.id;
                     const metaModel = viewer.metaScene.metaModels[modelId];
 
