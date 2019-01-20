@@ -1,3 +1,5 @@
+# xeokit-sdk
+
 [xeokit](http://xeokit-sdk) is a software development kit from [xeolabs](http://xeolabs.com) for building Web-based 3D viewers for BIM and engineering.
 
 The SDK is released under a [GPL V3](https://github.com/xeolabs/xeokit.io/wiki/License) dual-license, which allows free
