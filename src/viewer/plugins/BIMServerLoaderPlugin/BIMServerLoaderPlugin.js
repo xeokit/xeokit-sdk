@@ -44,14 +44,14 @@ import {utils} from "../../../scene/utils.js";
  *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
  *
  * ````javascript
- * import BimServerClient from "http://localhost:8082/apps/bimserverjavascriptapi/bimserverclient.js";
- * import {Viewer} from "../../../src/viewer/Viewer.js";
- * import {BIMServerLoaderPlugin} from "../../../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+ * import {Viewer} from "./../src/viewer/Viewer.js";
+ * import BimServerClient from "./../src/viewer/utils/BIMServerClient/bimserverclient.js"
+ * import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
  *
- * const bimServerAddress = "http://localhost:8082";
- * const username = "admin@bimserver.org";
- * const password = "admin";
- * const poid = 131073;     // Project ID
+ * const bimServerAddress = "http://app-df16aa03-7577-4513-8f16-b8519e971a9e.cleverapps.io/";
+ * const username = "lindsay@biodigital.com";
+ * const password = "password";
+ * const poid = 131073;
  *
  * // Create a xeokit Viewer
  * const viewer = new Viewer({
