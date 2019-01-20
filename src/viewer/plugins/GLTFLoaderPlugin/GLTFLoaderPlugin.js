@@ -34,7 +34,7 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * You can override that map with your own if needed (see {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_metadata_Schependomlaan)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -71,8 +71,8 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  * // 2
  * const model = gltfLoader.load({                                     // Creates a Node representing the model
  *      id: "myModel",
- *      src: "./models/gltf/schependomlaan/scene.gltf",
- *      metaModelSrc: "./metaModels/schependomlaan/metaModel.json",     // Creates a MetaModel (see below)
+ *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
+ *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
  *      edges: true,
  *      lambertMaterial: true
  * });
