@@ -35,11 +35,9 @@ import {utils} from "../../../scene/utils.js";
  * Since xeokit's default World "up" direction is +Y, while the model's "up" is +Z, we'll rotate the
  * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeokit to use +Z as "up".
  *
- * Note that BIMServerLoaderPlugin works with BIMServer V1.5 or later.
+ * Note that BIMServerLoaderPlugin works with BIMServer V1.5.120 or later.
  *
- * Read more about this example, as well as how to set up the BIMServer instance and load a model, in the
- * [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial
- * in the xeokit SDK wiki.
+ * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
  *
  * ## Usage
  *

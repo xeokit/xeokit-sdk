@@ -34,6 +34,8 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * You can override that map with your own if needed (see {@link GLTFLoaderPlugin#objectDefaults}.
  *
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
  *
  * ````javascript
