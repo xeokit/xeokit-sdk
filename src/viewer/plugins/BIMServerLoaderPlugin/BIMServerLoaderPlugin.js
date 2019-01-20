@@ -315,35 +315,41 @@ class BIMServerLoaderPlugin extends Plugin {
 
         scene.canvas.spinner.processes++;
 
-        const modelNode = new Node(scene, params);
+        const modelNode = new Node(scene, utils.apply(params, {
+            isModel: true
+        }));
 
         const modelId = modelNode.id; // In case ID was auto-generated
 
         var singletonMaterial;
 
-        switch (materialWorkflow) {
+        // switch (materialWorkflow) {
+        //
+        //     case "lambert":
+        //         singletonMaterial = new LambertMaterial(modelNode, {
+        //             backfaces: false
+        //         });
+        //         break;
+        //
+        //     case "phong":
+        //         singletonMaterial = new PhongMaterial(modelNode, {
+        //             backfaces: false
+        //         });
+        //         break;
+        //
+        //     case "pbr":
+        //         singletonMaterial = new LambertMaterial(modelNode, {
+        //             backfaces: false
+        //         });
+        //         break;
+        //
+        //     default:
+        //         this.error("load() param expected: schema");
+        // }
 
-            case "lambert":
-                singletonMaterial = new LambertMaterial(modelNode, {
-                    backfaces: false
-                });
-                break;
-
-            case "phong":
-                singletonMaterial = new PhongMaterial(modelNode, {
-                    backfaces: false
-                });
-                break;
-
-            case "pbr":
-                singletonMaterial = new LambertMaterial(modelNode, {
-                    backfaces: false
-                });
-                break;
-
-            default:
-                this.error("load() param expected: schema");
-        }
+        singletonMaterial = new LambertMaterial(modelNode, {
+            backfaces: false
+        });
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {
 

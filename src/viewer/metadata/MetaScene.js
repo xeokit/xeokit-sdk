@@ -212,6 +212,7 @@ class MetaScene {
                 delete types[metaObject.id];
                 if (--this._typeCounts[metaObject.type] === 0) {
                     delete this._typeCounts[metaObject.type];
+                    delete metaObjectsByType[metaObject.type];
                 }
             }
             const children = metaObject.children;
@@ -229,10 +230,21 @@ class MetaScene {
     }
 
     /**
-     * Gets an array of IDs of the {@link MetaObject}s within the given subtree.
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s that have the given {@link MetaObject#type}.
+     *
+     * @param {String} type The type.
+     * @returns {String[]} Array of {@link MetaObject#id}s.
+     */
+    getObjectIDsByType(type) {
+        const metaObjects = this.metaObjectsByType[type];
+        return metaObjects ? Object.keys(metaObjects) : [];
+    }
+
+    /**
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the given subtree.
      *
      * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
-     * @returns {String[]}
+     * @returns {String[]} Array of {@link MetaObject#id}s.
      */
     getSubObjectIDs(id) {
         const list = [];

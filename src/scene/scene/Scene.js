@@ -1465,7 +1465,7 @@ class Scene extends Component {
     get aabb() {
         if (this._aabbDirty) {
             if (!this._aabb) {
-                this._aabb = math.AABB3();
+                this._aabb = math.AABB3(); // FIXME: return useful AABB when there are no collidables
             }
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;

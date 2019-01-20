@@ -45,7 +45,7 @@ const IFCObjectDefaults = {
     IfcWindow: {
         colorize: [0.137255, 0.403922, 0.870588],
         pickable: false,
-        opacity: 0.5
+        opacity: 0.4
     },
     IfcOpeningElement: {
         colorize: [0.137255, 0.403922, 0.870588],

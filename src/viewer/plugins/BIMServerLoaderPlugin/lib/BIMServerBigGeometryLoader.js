@@ -216,7 +216,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
         }
         protocolVersion = data.readByte();
         bigModelBuilder.log("BIMServer protocol version = " + protocolVersion);
-        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16) {
+        if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 &&  && protocolVersion !== 17) {
             bigModelBuilder.error("Unimplemented protocol version");
             return false;
         }
