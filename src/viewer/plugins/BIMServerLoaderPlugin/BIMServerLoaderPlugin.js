@@ -41,7 +41,7 @@ import {utils} from "../../../scene/utils.js";
  * [Loading IFC Models from BIMServer](https://github.com/xeolabs/xeokit.io/wiki/Loading-IFC-Models-from-BIMServer) tutorial
  * in the xeokit SDK wiki.
  *
- * #Usage
+ * ## Usage
  *
  *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
  *
