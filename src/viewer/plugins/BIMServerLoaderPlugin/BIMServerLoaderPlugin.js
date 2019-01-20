@@ -48,7 +48,7 @@ import {utils} from "../../../scene/utils.js";
  * import BimServerClient from "./../src/viewer/utils/BIMServerClient/bimserverclient.js"
  * import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
  *
- * const bimServerAddress = "http://app-df16aa03-7577-4513-8f16-b8519e971a9e.cleverapps.io/";
+ * const bimServerAddress = "https://xeokit.cleverapps.io/";
  * const username = "lindsay@biodigital.com";
  * const password = "password";
  * const poid = 131073;
