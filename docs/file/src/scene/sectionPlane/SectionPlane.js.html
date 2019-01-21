@@ -136,6 +136,22 @@ import {RenderState} from &apos;../webgl/RenderState.js&apos;;
  * ## Usage
  *
  * ````javascript
+ * * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+ * * import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *      canvasId: &quot;myCanvas&quot;
+ * });
+ *
+ * const gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
+ *      id: &quot;GLTFModels&quot;
+ * });
+ *
+ * const model = gltfLoaderPlugin.load({
+ *      id: &quot;myModel&quot;,
+ *      src: &quot;./models/gltf/mygltfmodel.gltf&quot;
+ * });
+ *
  * // Create a SectionPlane on negative diagonal
  * const sectionPlane1 = new SectionPlane(myViewer.scene, {
  *     pos: [1.0, 1.0, 1.0],
@@ -149,26 +165,6 @@ import {RenderState} from &apos;../webgl/RenderState.js&apos;;
  *     dir: [1.0, 1.0, 1.0],
  *     active: true
  * });
- *
- * // Create a Mesh that clipped by our Clips
- * var mesh = new Mesh(myViewer.scene, {
- *      geometry: new SphereGeometry(),
- *      clippable: true // Enable clipping (default)
- * });
- * ````
- *
- * ## Selectively enabling or disabling clipping
- *
- * {@link Node#clippable} and {@link Mesh#clippable} indicate if the Node or Mesh is affected by SectionPlane components.
- *
- * You can switch it at any time, like this:
- *
- * ```` javascript
- * // Disable clipping for the Mesh
- * mesh.clippable = false;
- *
- * // Enable clipping for the Mesh
- * mesh.clippable = true;
  * ````
  */
 class SectionPlane extends Component {
@@ -203,7 +199,7 @@ class SectionPlane extends Component {
         this.pos = cfg.pos;
         this.dir = cfg.dir;
 
-        this.scene._clipCreated(this);
+        this.scene._sectionPlaneCreated(this);
     }
 
     /**
@@ -301,7 +297,7 @@ class SectionPlane extends Component {
      */
     destroy() {
         this._state.destroy();
-        this.scene._clipDestroyed(this);
+        this.scene._sectionPlaneDestroyed(this);
         super.destroy();
     }
 }

@@ -163,8 +163,8 @@ const gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
 });
 
 // Add a SectionPlanesPlugin
-const clipsPlugin = new SectionPlanesPlugin(viewer, {
-     id: &quot;Clips&quot;
+const sectionPlanesPlugin = new SectionPlanesPlugin(viewer, {
+     id: &quot;SectionPlanes&quot;
 });
 
 // Load a glTF model
@@ -176,13 +176,13 @@ const model = gltfLoaderPlugin.load({
 // When the model has loaded, create some cross-sections
 model.on(&quot;loaded&quot;, function() {
 
-    const clip1 = clipsPlugin.createSectionPlane({
+    const sectionPlane1 = sectionPlanesPlugin.createSectionPlane({
         id: &quot;myClip&quot;,
         pos: [0,0,0],
         dir: [0.5, 0.5, 0.5]
     });
 
-    const clip2 = clipsPlugin.createSectionPlane({
+    const sectionPlane2 = sectionPlanesPlugin.createSectionPlane({
         id: &quot;myClip2&quot;,
         pos: [0,0,0],
         dir: [0.5, -0.5, 0.5]
@@ -691,7 +691,7 @@ model.on(&quot;loaded&quot;, function() {
       <td data-ice="name" class="code" data-depth="1">cfg.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;Clips&quot;</li></ul></td>
+<li>default: &quot;SectionPlanes&quot;</li></ul></td>
       <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
 </td>
     </tr>

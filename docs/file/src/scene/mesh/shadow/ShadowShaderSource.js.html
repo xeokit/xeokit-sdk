@@ -206,9 +206,9 @@ function buildFragment(mesh) {
         src.push(&quot;uniform bool clippable;&quot;);
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
         for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
-            src.push(&quot;uniform bool clipActive&quot; + i + &quot;;&quot;);
-            src.push(&quot;uniform vec3 clipPos&quot; + i + &quot;;&quot;);
-            src.push(&quot;uniform vec3 clipDir&quot; + i + &quot;;&quot;);
+            src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
+            src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
+            src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
         }
     }
     src.push(&quot;vec4 packDepth (float depth) {&quot;);
@@ -224,8 +224,8 @@ function buildFragment(mesh) {
         src.push(&quot;if (clippable) {&quot;);
         src.push(&quot;  float dist = 0.0;&quot;);
         for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
-            src.push(&quot;if (clipActive&quot; + i + &quot;) {&quot;);
-            src.push(&quot;   dist += clamp(dot(-clipDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - clipPos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
+            src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
+            src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
             src.push(&quot;}&quot;);
         }
         src.push(&quot;  if (dist &gt; 0.0) { discard; }&quot;);

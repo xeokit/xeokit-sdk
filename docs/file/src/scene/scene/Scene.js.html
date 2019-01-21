@@ -954,7 +954,7 @@ class Scene extends Component {
     // Scene. Violates Hollywood Principle, where we could just filter on type in _addComponent,
     // but this is faster than checking the type of each component in such a filter.
 
-    _clipCreated(sectionPlane) {
+    _sectionPlaneCreated(sectionPlane) {
         this.sectionPlanes[sectionPlane.id] = sectionPlane;
         this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);
         this._needRecompile = true;
@@ -978,7 +978,7 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _clipDestroyed(sectionPlane) {
+    _sectionPlaneDestroyed(sectionPlane) {
         delete this.sectionPlanes[sectionPlane.id];
         this.scene._sectionPlanesState.removeSectionPlane(sectionPlane._state);
         this._needRecompile = true;
