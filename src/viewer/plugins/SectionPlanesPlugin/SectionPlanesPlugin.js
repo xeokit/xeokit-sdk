@@ -7,8 +7,9 @@ import {SectionPlane} from "../../../scene/sectionPlane/SectionPlane.js";
  * TODO:
  *
  * ````JavaScript
- * * import {Viewer} from "../src/viewer/Viewer.js";
- * * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  *
  * // Create a viewer
  * const viewer = new Viewer({
