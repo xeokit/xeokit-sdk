@@ -148,13 +148,13 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from a <a href="http://bimserver.org">BIMServer</a>.</p>
-<p>Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.</p>
+<p>Tested with BIMServer v1.5.120 and IFC schema ifc2x3tc1.</p>
 <p>For each model loaded, BIMServerLoaderPlugin creates a <span><a href="class/src/viewer/utils/BIMServerClient/model.js~Model.html">Model</a></span> within its
 <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>. You can load multiple models into the same
 Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.</p>
-<p>A BIMServerLoaderPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
-API that provides a client interface through which you can query BIMServer and download models. We use that class to
-query BIMServer&apos;s database, while BIMServerLoaderPlugin uses it to download models.</p>
+<p>A BIMServerLoaderPlugin is configured with a BIMServerClient, which provides a client-side facade through which
+we can issue RPC calls to the BIMServer Service Interface. The BIMServerLoaderPlugin maakes RPC calls through that
+to download the model and it&apos;s IFC metadata..</p>
 <p>In the example below, we&apos;ll load the latest revision of a project&apos;s model. We&apos;ll assume that we have a BIMServer
 instance running and serving requests on port 8082, with a model loaded for project ID <code>131073</code>. We&apos;ll get
 the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
@@ -899,7 +899,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -945,7 +945,8 @@ bimServerClient.init(() =&gt; {
       <td data-ice="name" class="code" data-depth="1">cfg.bimServerClient</td>
       <td data-ice="type" class="code"><span><a href="class/src/viewer/utils/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>A BIMServer client API instance.</p>
+      <td data-ice="description"><p>A BIMServer client API instance through which the BIMServerLoaderPlugin
+issues RPC calls to BIMServer&apos;s BIMServer Service Interface to download models.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -992,7 +993,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
@@ -1036,7 +1037,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber148">source</a></span></span>
     </span>
   </h3>
 
@@ -1096,7 +1097,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
@@ -1145,7 +1146,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -1194,7 +1195,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber163">source</a></span></span>
     </span>
   </h3>
 
@@ -1239,7 +1240,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 
@@ -1297,7 +1298,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -1342,7 +1343,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
@@ -1402,7 +1403,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber553">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber554">source</a></span></span>
     </span>
   </h3>
 
@@ -1446,7 +1447,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber563">source</a></span></span>
     </span>
   </h3>
 
@@ -1490,7 +1491,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
@@ -1681,7 +1682,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber530">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber531">source</a></span></span>
     </span>
   </h3>
 
