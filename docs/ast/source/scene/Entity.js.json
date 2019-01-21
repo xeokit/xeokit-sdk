@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 9127,
+  "end": 9159,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 9127,
+    "end": 9159,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 1464,
-        "end": 9109,
+        "end": 9141,
         "loc": {
           "start": {
             "line": 35,
@@ -64,7 +64,7 @@
         "body": {
           "type": "ClassBody",
           "start": 1477,
-          "end": 9109,
+          "end": 9141,
           "loc": {
             "start": {
               "line": 35,
@@ -1814,9 +1814,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 6351,
-                  "end": 6526,
+                  "end": 6542,
                   "loc": {
                     "start": {
                       "line": 240,
@@ -1832,8 +1832,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6531,
-              "end": 6564,
+              "start": 6547,
+              "end": 6580,
               "loc": {
                 "start": {
                   "line": 248,
@@ -1848,8 +1848,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6535,
-                "end": 6544,
+                "start": 6551,
+                "end": 6560,
                 "loc": {
                   "start": {
                     "line": 248,
@@ -1871,8 +1871,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6545,
-                  "end": 6554,
+                  "start": 6561,
+                  "end": 6570,
                   "loc": {
                     "start": {
                       "line": 248,
@@ -1889,8 +1889,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6556,
-                "end": 6564,
+                "start": 6572,
+                "end": 6580,
                 "loc": {
                   "start": {
                     "line": 248,
@@ -1909,9 +1909,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 6351,
-                  "end": 6526,
+                  "end": 6542,
                   "loc": {
                     "start": {
                       "line": 240,
@@ -1927,9 +1927,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6570,
-                  "end": 6745,
+                  "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "start": 6586,
+                  "end": 6777,
                   "loc": {
                     "start": {
                       "line": 252,
@@ -1945,8 +1945,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6750,
-              "end": 6774,
+              "start": 6782,
+              "end": 6806,
               "loc": {
                 "start": {
                   "line": 260,
@@ -1961,8 +1961,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6754,
-                "end": 6763,
+                "start": 6786,
+                "end": 6795,
                 "loc": {
                   "start": {
                     "line": 260,
@@ -1984,8 +1984,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 6766,
-                "end": 6774,
+                "start": 6798,
+                "end": 6806,
                 "loc": {
                   "start": {
                     "line": 260,
@@ -2004,9 +2004,9 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6570,
-                  "end": 6745,
+                  "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "start": 6586,
+                  "end": 6777,
                   "loc": {
                     "start": {
                       "line": 252,
@@ -2023,8 +2023,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6780,
-                  "end": 6903,
+                  "start": 6812,
+                  "end": 6935,
                   "loc": {
                     "start": {
                       "line": 264,
@@ -2040,8 +2040,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 6908,
-              "end": 6943,
+              "start": 6940,
+              "end": 6975,
               "loc": {
                 "start": {
                   "line": 270,
@@ -2056,8 +2056,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 6912,
-                "end": 6922,
+                "start": 6944,
+                "end": 6954,
                 "loc": {
                   "start": {
                     "line": 270,
@@ -2079,8 +2079,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 6923,
-                  "end": 6933,
+                  "start": 6955,
+                  "end": 6965,
                   "loc": {
                     "start": {
                       "line": 270,
@@ -2097,8 +2097,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 6935,
-                "end": 6943,
+                "start": 6967,
+                "end": 6975,
                 "loc": {
                   "start": {
                     "line": 270,
@@ -2118,8 +2118,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6780,
-                  "end": 6903,
+                  "start": 6812,
+                  "end": 6935,
                   "loc": {
                     "start": {
                       "line": 264,
@@ -2136,8 +2136,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6949,
-                  "end": 7072,
+                  "start": 6981,
+                  "end": 7104,
                   "loc": {
                     "start": {
                       "line": 274,
@@ -2153,8 +2153,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7077,
-              "end": 7102,
+              "start": 7109,
+              "end": 7134,
               "loc": {
                 "start": {
                   "line": 280,
@@ -2169,8 +2169,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7081,
-                "end": 7091,
+                "start": 7113,
+                "end": 7123,
                 "loc": {
                   "start": {
                     "line": 280,
@@ -2192,8 +2192,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 7094,
-                "end": 7102,
+                "start": 7126,
+                "end": 7134,
                 "loc": {
                   "start": {
                     "line": 280,
@@ -2213,8 +2213,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 6949,
-                  "end": 7072,
+                  "start": 6981,
+                  "end": 7104,
                   "loc": {
                     "start": {
                       "line": 274,
@@ -2231,8 +2231,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 7108,
-                  "end": 7269,
+                  "start": 7140,
+                  "end": 7301,
                   "loc": {
                     "start": {
                       "line": 284,
@@ -2248,8 +2248,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7274,
-              "end": 7305,
+              "start": 7306,
+              "end": 7337,
               "loc": {
                 "start": {
                   "line": 292,
@@ -2264,8 +2264,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7278,
-                "end": 7286,
+                "start": 7310,
+                "end": 7318,
                 "loc": {
                   "start": {
                     "line": 292,
@@ -2287,8 +2287,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 7287,
-                  "end": 7295,
+                  "start": 7319,
+                  "end": 7327,
                   "loc": {
                     "start": {
                       "line": 292,
@@ -2305,8 +2305,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 7297,
-                "end": 7305,
+                "start": 7329,
+                "end": 7337,
                 "loc": {
                   "start": {
                     "line": 292,
@@ -2326,8 +2326,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 7108,
-                  "end": 7269,
+                  "start": 7140,
+                  "end": 7301,
                   "loc": {
                     "start": {
                       "line": 284,
@@ -2344,8 +2344,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 7311,
-                  "end": 7472,
+                  "start": 7343,
+                  "end": 7504,
                   "loc": {
                     "start": {
                       "line": 296,
@@ -2361,8 +2361,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7477,
-              "end": 7500,
+              "start": 7509,
+              "end": 7532,
               "loc": {
                 "start": {
                   "line": 304,
@@ -2377,8 +2377,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7481,
-                "end": 7489,
+                "start": 7513,
+                "end": 7521,
                 "loc": {
                   "start": {
                     "line": 304,
@@ -2400,8 +2400,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 7492,
-                "end": 7500,
+                "start": 7524,
+                "end": 7532,
                 "loc": {
                   "start": {
                     "line": 304,
@@ -2421,8 +2421,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 7311,
-                  "end": 7472,
+                  "start": 7343,
+                  "end": 7504,
                   "loc": {
                     "start": {
                       "line": 296,
@@ -2439,8 +2439,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                  "start": 7506,
-                  "end": 7731,
+                  "start": 7538,
+                  "end": 7763,
                   "loc": {
                     "start": {
                       "line": 308,
@@ -2456,8 +2456,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7736,
-              "end": 7762,
+              "start": 7768,
+              "end": 7794,
               "loc": {
                 "start": {
                   "line": 316,
@@ -2472,8 +2472,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 7740,
-                "end": 7748,
+                "start": 7772,
+                "end": 7780,
                 "loc": {
                   "start": {
                     "line": 316,
@@ -2495,8 +2495,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 7749,
-                  "end": 7752,
+                  "start": 7781,
+                  "end": 7784,
                   "loc": {
                     "start": {
                       "line": 316,
@@ -2513,8 +2513,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 7754,
-                "end": 7762,
+                "start": 7786,
+                "end": 7794,
                 "loc": {
                   "start": {
                     "line": 316,
@@ -2534,8 +2534,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                  "start": 7506,
-                  "end": 7731,
+                  "start": 7538,
+                  "end": 7763,
                   "loc": {
                     "start": {
                       "line": 308,
@@ -2552,8 +2552,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                  "start": 7768,
-                  "end": 7993,
+                  "start": 7800,
+                  "end": 8025,
                   "loc": {
                     "start": {
                       "line": 320,
@@ -2569,8 +2569,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 7998,
-              "end": 8021,
+              "start": 8030,
+              "end": 8053,
               "loc": {
                 "start": {
                   "line": 328,
@@ -2585,8 +2585,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8002,
-                "end": 8010,
+                "start": 8034,
+                "end": 8042,
                 "loc": {
                   "start": {
                     "line": 328,
@@ -2608,8 +2608,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 8013,
-                "end": 8021,
+                "start": 8045,
+                "end": 8053,
                 "loc": {
                   "start": {
                     "line": 328,
@@ -2629,8 +2629,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                  "start": 7768,
-                  "end": 7993,
+                  "start": 7800,
+                  "end": 8025,
                   "loc": {
                     "start": {
                       "line": 320,
@@ -2647,8 +2647,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 8027,
-                  "end": 8234,
+                  "start": 8059,
+                  "end": 8266,
                   "loc": {
                     "start": {
                       "line": 332,
@@ -2664,8 +2664,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 8239,
-              "end": 8268,
+              "start": 8271,
+              "end": 8300,
               "loc": {
                 "start": {
                   "line": 340,
@@ -2680,8 +2680,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8243,
-                "end": 8250,
+                "start": 8275,
+                "end": 8282,
                 "loc": {
                   "start": {
                     "line": 340,
@@ -2703,8 +2703,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 8251,
-                  "end": 8258,
+                  "start": 8283,
+                  "end": 8290,
                   "loc": {
                     "start": {
                       "line": 340,
@@ -2721,8 +2721,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 8260,
-                "end": 8268,
+                "start": 8292,
+                "end": 8300,
                 "loc": {
                   "start": {
                     "line": 340,
@@ -2742,8 +2742,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 8027,
-                  "end": 8234,
+                  "start": 8059,
+                  "end": 8266,
                   "loc": {
                     "start": {
                       "line": 332,
@@ -2760,8 +2760,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 8274,
-                  "end": 8477,
+                  "start": 8306,
+                  "end": 8509,
                   "loc": {
                     "start": {
                       "line": 344,
@@ -2777,8 +2777,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 8482,
-              "end": 8504,
+              "start": 8514,
+              "end": 8536,
               "loc": {
                 "start": {
                   "line": 352,
@@ -2793,8 +2793,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8486,
-                "end": 8493,
+                "start": 8518,
+                "end": 8525,
                 "loc": {
                   "start": {
                     "line": 352,
@@ -2816,8 +2816,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 8496,
-                "end": 8504,
+                "start": 8528,
+                "end": 8536,
                 "loc": {
                   "start": {
                     "line": 352,
@@ -2837,8 +2837,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 8274,
-                  "end": 8477,
+                  "start": 8306,
+                  "end": 8509,
                   "loc": {
                     "start": {
                       "line": 344,
@@ -2855,8 +2855,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8510,
-                  "end": 8610,
+                  "start": 8542,
+                  "end": 8642,
                   "loc": {
                     "start": {
                       "line": 356,
@@ -2872,8 +2872,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 8615,
-              "end": 8649,
+              "start": 8647,
+              "end": 8681,
               "loc": {
                 "start": {
                   "line": 362,
@@ -2888,8 +2888,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8619,
-                "end": 8630,
+                "start": 8651,
+                "end": 8662,
                 "loc": {
                   "start": {
                     "line": 362,
@@ -2911,8 +2911,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 8631,
-                  "end": 8639,
+                  "start": 8663,
+                  "end": 8671,
                   "loc": {
                     "start": {
                       "line": 362,
@@ -2929,8 +2929,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 8641,
-                "end": 8649,
+                "start": 8673,
+                "end": 8681,
                 "loc": {
                   "start": {
                     "line": 362,
@@ -2950,8 +2950,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8510,
-                  "end": 8610,
+                  "start": 8542,
+                  "end": 8642,
                   "loc": {
                     "start": {
                       "line": 356,
@@ -2968,8 +2968,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8655,
-                  "end": 8755,
+                  "start": 8687,
+                  "end": 8787,
                   "loc": {
                     "start": {
                       "line": 366,
@@ -2985,8 +2985,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 8760,
-              "end": 8786,
+              "start": 8792,
+              "end": 8818,
               "loc": {
                 "start": {
                   "line": 372,
@@ -3001,8 +3001,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8764,
-                "end": 8775,
+                "start": 8796,
+                "end": 8807,
                 "loc": {
                   "start": {
                     "line": 372,
@@ -3024,8 +3024,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 8778,
-                "end": 8786,
+                "start": 8810,
+                "end": 8818,
                 "loc": {
                   "start": {
                     "line": 372,
@@ -3045,8 +3045,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8655,
-                  "end": 8755,
+                  "start": 8687,
+                  "end": 8787,
                   "loc": {
                     "start": {
                       "line": 366,
@@ -3063,8 +3063,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8792,
-                  "end": 8910,
+                  "start": 8824,
+                  "end": 8942,
                   "loc": {
                     "start": {
                       "line": 376,
@@ -3080,8 +3080,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 8915,
-              "end": 8952,
+              "start": 8947,
+              "end": 8984,
               "loc": {
                 "start": {
                   "line": 382,
@@ -3096,8 +3096,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 8919,
-                "end": 8933,
+                "start": 8951,
+                "end": 8965,
                 "loc": {
                   "start": {
                     "line": 382,
@@ -3119,8 +3119,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 8934,
-                  "end": 8942,
+                  "start": 8966,
+                  "end": 8974,
                   "loc": {
                     "start": {
                       "line": 382,
@@ -3137,8 +3137,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 8944,
-                "end": 8952,
+                "start": 8976,
+                "end": 8984,
                 "loc": {
                   "start": {
                     "line": 382,
@@ -3158,8 +3158,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8792,
-                  "end": 8910,
+                  "start": 8824,
+                  "end": 8942,
                   "loc": {
                     "start": {
                       "line": 376,
@@ -3176,8 +3176,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8958,
-                  "end": 9073,
+                  "start": 8990,
+                  "end": 9105,
                   "loc": {
                     "start": {
                       "line": 386,
@@ -3193,8 +3193,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 9078,
-              "end": 9107,
+              "start": 9110,
+              "end": 9139,
               "loc": {
                 "start": {
                   "line": 392,
@@ -3209,8 +3209,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 9082,
-                "end": 9096,
+                "start": 9114,
+                "end": 9128,
                 "loc": {
                   "start": {
                     "line": 392,
@@ -3232,8 +3232,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 9099,
-                "end": 9107,
+                "start": 9131,
+                "end": 9139,
                 "loc": {
                   "start": {
                     "line": 392,
@@ -3251,8 +3251,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 8958,
-                  "end": 9073,
+                  "start": 8990,
+                  "end": 9105,
                   "loc": {
                     "start": {
                       "line": 386,
@@ -3274,8 +3274,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9111,
-        "end": 9127,
+        "start": 9143,
+        "end": 9159,
         "loc": {
           "start": {
             "line": 397,
@@ -3290,8 +3290,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 9119,
-            "end": 9125,
+            "start": 9151,
+            "end": 9157,
             "loc": {
               "start": {
                 "line": 397,
@@ -3304,8 +3304,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 9119,
-              "end": 9125,
+              "start": 9151,
+              "end": 9157,
               "loc": {
                 "start": {
                   "line": 397,
@@ -3321,8 +3321,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 9119,
-              "end": 9125,
+              "start": 9151,
+              "end": 9157,
               "loc": {
                 "start": {
                   "line": 397,
@@ -3342,8 +3342,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 9111,
-        "end": 9127,
+        "start": 9143,
+        "end": 9159,
         "loc": {
           "start": {
             "line": 397,
@@ -3357,7 +3357,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 1464,
-          "end": 9109,
+          "end": 9141,
           "loc": {
             "start": {
               "line": 35,
@@ -3390,7 +3390,7 @@
           "body": {
             "type": "ClassBody",
             "start": 1477,
-            "end": 9109,
+            "end": 9141,
             "loc": {
               "start": {
                 "line": 35,
@@ -5140,9 +5140,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 6351,
-                    "end": 6526,
+                    "end": 6542,
                     "loc": {
                       "start": {
                         "line": 240,
@@ -5158,8 +5158,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6531,
-                "end": 6564,
+                "start": 6547,
+                "end": 6580,
                 "loc": {
                   "start": {
                     "line": 248,
@@ -5174,8 +5174,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6535,
-                  "end": 6544,
+                  "start": 6551,
+                  "end": 6560,
                   "loc": {
                     "start": {
                       "line": 248,
@@ -5197,8 +5197,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6545,
-                    "end": 6554,
+                    "start": 6561,
+                    "end": 6570,
                     "loc": {
                       "start": {
                         "line": 248,
@@ -5215,8 +5215,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6556,
-                  "end": 6564,
+                  "start": 6572,
+                  "end": 6580,
                   "loc": {
                     "start": {
                       "line": 248,
@@ -5235,9 +5235,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 6351,
-                    "end": 6526,
+                    "end": 6542,
                     "loc": {
                       "start": {
                         "line": 240,
@@ -5253,9 +5253,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6570,
-                    "end": 6745,
+                    "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "start": 6586,
+                    "end": 6777,
                     "loc": {
                       "start": {
                         "line": 252,
@@ -5271,8 +5271,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6750,
-                "end": 6774,
+                "start": 6782,
+                "end": 6806,
                 "loc": {
                   "start": {
                     "line": 260,
@@ -5287,8 +5287,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6754,
-                  "end": 6763,
+                  "start": 6786,
+                  "end": 6795,
                   "loc": {
                     "start": {
                       "line": 260,
@@ -5310,8 +5310,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6766,
-                  "end": 6774,
+                  "start": 6798,
+                  "end": 6806,
                   "loc": {
                     "start": {
                       "line": 260,
@@ -5330,9 +5330,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6570,
-                    "end": 6745,
+                    "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "start": 6586,
+                    "end": 6777,
                     "loc": {
                       "start": {
                         "line": 252,
@@ -5349,8 +5349,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6780,
-                    "end": 6903,
+                    "start": 6812,
+                    "end": 6935,
                     "loc": {
                       "start": {
                         "line": 264,
@@ -5366,8 +5366,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6908,
-                "end": 6943,
+                "start": 6940,
+                "end": 6975,
                 "loc": {
                   "start": {
                     "line": 270,
@@ -5382,8 +5382,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6912,
-                  "end": 6922,
+                  "start": 6944,
+                  "end": 6954,
                   "loc": {
                     "start": {
                       "line": 270,
@@ -5405,8 +5405,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 6923,
-                    "end": 6933,
+                    "start": 6955,
+                    "end": 6965,
                     "loc": {
                       "start": {
                         "line": 270,
@@ -5423,8 +5423,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 6935,
-                  "end": 6943,
+                  "start": 6967,
+                  "end": 6975,
                   "loc": {
                     "start": {
                       "line": 270,
@@ -5444,8 +5444,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6780,
-                    "end": 6903,
+                    "start": 6812,
+                    "end": 6935,
                     "loc": {
                       "start": {
                         "line": 264,
@@ -5462,8 +5462,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6949,
-                    "end": 7072,
+                    "start": 6981,
+                    "end": 7104,
                     "loc": {
                       "start": {
                         "line": 274,
@@ -5479,8 +5479,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7077,
-                "end": 7102,
+                "start": 7109,
+                "end": 7134,
                 "loc": {
                   "start": {
                     "line": 280,
@@ -5495,8 +5495,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7081,
-                  "end": 7091,
+                  "start": 7113,
+                  "end": 7123,
                   "loc": {
                     "start": {
                       "line": 280,
@@ -5518,8 +5518,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7094,
-                  "end": 7102,
+                  "start": 7126,
+                  "end": 7134,
                   "loc": {
                     "start": {
                       "line": 280,
@@ -5539,8 +5539,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 6949,
-                    "end": 7072,
+                    "start": 6981,
+                    "end": 7104,
                     "loc": {
                       "start": {
                         "line": 274,
@@ -5557,8 +5557,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 7108,
-                    "end": 7269,
+                    "start": 7140,
+                    "end": 7301,
                     "loc": {
                       "start": {
                         "line": 284,
@@ -5574,8 +5574,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7274,
-                "end": 7305,
+                "start": 7306,
+                "end": 7337,
                 "loc": {
                   "start": {
                     "line": 292,
@@ -5590,8 +5590,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7278,
-                  "end": 7286,
+                  "start": 7310,
+                  "end": 7318,
                   "loc": {
                     "start": {
                       "line": 292,
@@ -5613,8 +5613,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 7287,
-                    "end": 7295,
+                    "start": 7319,
+                    "end": 7327,
                     "loc": {
                       "start": {
                         "line": 292,
@@ -5631,8 +5631,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7297,
-                  "end": 7305,
+                  "start": 7329,
+                  "end": 7337,
                   "loc": {
                     "start": {
                       "line": 292,
@@ -5652,8 +5652,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 7108,
-                    "end": 7269,
+                    "start": 7140,
+                    "end": 7301,
                     "loc": {
                       "start": {
                         "line": 284,
@@ -5670,8 +5670,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 7311,
-                    "end": 7472,
+                    "start": 7343,
+                    "end": 7504,
                     "loc": {
                       "start": {
                         "line": 296,
@@ -5687,8 +5687,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7477,
-                "end": 7500,
+                "start": 7509,
+                "end": 7532,
                 "loc": {
                   "start": {
                     "line": 304,
@@ -5703,8 +5703,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7481,
-                  "end": 7489,
+                  "start": 7513,
+                  "end": 7521,
                   "loc": {
                     "start": {
                       "line": 304,
@@ -5726,8 +5726,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7492,
-                  "end": 7500,
+                  "start": 7524,
+                  "end": 7532,
                   "loc": {
                     "start": {
                       "line": 304,
@@ -5747,8 +5747,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 7311,
-                    "end": 7472,
+                    "start": 7343,
+                    "end": 7504,
                     "loc": {
                       "start": {
                         "line": 296,
@@ -5765,8 +5765,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                    "start": 7506,
-                    "end": 7731,
+                    "start": 7538,
+                    "end": 7763,
                     "loc": {
                       "start": {
                         "line": 308,
@@ -5782,8 +5782,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7736,
-                "end": 7762,
+                "start": 7768,
+                "end": 7794,
                 "loc": {
                   "start": {
                     "line": 316,
@@ -5798,8 +5798,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 7740,
-                  "end": 7748,
+                  "start": 7772,
+                  "end": 7780,
                   "loc": {
                     "start": {
                       "line": 316,
@@ -5821,8 +5821,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 7749,
-                    "end": 7752,
+                    "start": 7781,
+                    "end": 7784,
                     "loc": {
                       "start": {
                         "line": 316,
@@ -5839,8 +5839,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7754,
-                  "end": 7762,
+                  "start": 7786,
+                  "end": 7794,
                   "loc": {
                     "start": {
                       "line": 316,
@@ -5860,8 +5860,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                    "start": 7506,
-                    "end": 7731,
+                    "start": 7538,
+                    "end": 7763,
                     "loc": {
                       "start": {
                         "line": 308,
@@ -5878,8 +5878,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                    "start": 7768,
-                    "end": 7993,
+                    "start": 7800,
+                    "end": 8025,
                     "loc": {
                       "start": {
                         "line": 320,
@@ -5895,8 +5895,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 7998,
-                "end": 8021,
+                "start": 8030,
+                "end": 8053,
                 "loc": {
                   "start": {
                     "line": 328,
@@ -5911,8 +5911,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8002,
-                  "end": 8010,
+                  "start": 8034,
+                  "end": 8042,
                   "loc": {
                     "start": {
                       "line": 328,
@@ -5934,8 +5934,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8013,
-                  "end": 8021,
+                  "start": 8045,
+                  "end": 8053,
                   "loc": {
                     "start": {
                       "line": 328,
@@ -5955,8 +5955,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-                    "start": 7768,
-                    "end": 7993,
+                    "start": 7800,
+                    "end": 8025,
                     "loc": {
                       "start": {
                         "line": 320,
@@ -5973,8 +5973,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 8027,
-                    "end": 8234,
+                    "start": 8059,
+                    "end": 8266,
                     "loc": {
                       "start": {
                         "line": 332,
@@ -5990,8 +5990,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8239,
-                "end": 8268,
+                "start": 8271,
+                "end": 8300,
                 "loc": {
                   "start": {
                     "line": 340,
@@ -6006,8 +6006,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8243,
-                  "end": 8250,
+                  "start": 8275,
+                  "end": 8282,
                   "loc": {
                     "start": {
                       "line": 340,
@@ -6029,8 +6029,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 8251,
-                    "end": 8258,
+                    "start": 8283,
+                    "end": 8290,
                     "loc": {
                       "start": {
                         "line": 340,
@@ -6047,8 +6047,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8260,
-                  "end": 8268,
+                  "start": 8292,
+                  "end": 8300,
                   "loc": {
                     "start": {
                       "line": 340,
@@ -6068,8 +6068,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 8027,
-                    "end": 8234,
+                    "start": 8059,
+                    "end": 8266,
                     "loc": {
                       "start": {
                         "line": 332,
@@ -6086,8 +6086,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 8274,
-                    "end": 8477,
+                    "start": 8306,
+                    "end": 8509,
                     "loc": {
                       "start": {
                         "line": 344,
@@ -6103,8 +6103,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8482,
-                "end": 8504,
+                "start": 8514,
+                "end": 8536,
                 "loc": {
                   "start": {
                     "line": 352,
@@ -6119,8 +6119,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8486,
-                  "end": 8493,
+                  "start": 8518,
+                  "end": 8525,
                   "loc": {
                     "start": {
                       "line": 352,
@@ -6142,8 +6142,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8496,
-                  "end": 8504,
+                  "start": 8528,
+                  "end": 8536,
                   "loc": {
                     "start": {
                       "line": 352,
@@ -6163,8 +6163,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 8274,
-                    "end": 8477,
+                    "start": 8306,
+                    "end": 8509,
                     "loc": {
                       "start": {
                         "line": 344,
@@ -6181,8 +6181,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8510,
-                    "end": 8610,
+                    "start": 8542,
+                    "end": 8642,
                     "loc": {
                       "start": {
                         "line": 356,
@@ -6198,8 +6198,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8615,
-                "end": 8649,
+                "start": 8647,
+                "end": 8681,
                 "loc": {
                   "start": {
                     "line": 362,
@@ -6214,8 +6214,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8619,
-                  "end": 8630,
+                  "start": 8651,
+                  "end": 8662,
                   "loc": {
                     "start": {
                       "line": 362,
@@ -6237,8 +6237,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 8631,
-                    "end": 8639,
+                    "start": 8663,
+                    "end": 8671,
                     "loc": {
                       "start": {
                         "line": 362,
@@ -6255,8 +6255,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8641,
-                  "end": 8649,
+                  "start": 8673,
+                  "end": 8681,
                   "loc": {
                     "start": {
                       "line": 362,
@@ -6276,8 +6276,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8510,
-                    "end": 8610,
+                    "start": 8542,
+                    "end": 8642,
                     "loc": {
                       "start": {
                         "line": 356,
@@ -6294,8 +6294,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8655,
-                    "end": 8755,
+                    "start": 8687,
+                    "end": 8787,
                     "loc": {
                       "start": {
                         "line": 366,
@@ -6311,8 +6311,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8760,
-                "end": 8786,
+                "start": 8792,
+                "end": 8818,
                 "loc": {
                   "start": {
                     "line": 372,
@@ -6327,8 +6327,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8764,
-                  "end": 8775,
+                  "start": 8796,
+                  "end": 8807,
                   "loc": {
                     "start": {
                       "line": 372,
@@ -6350,8 +6350,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8778,
-                  "end": 8786,
+                  "start": 8810,
+                  "end": 8818,
                   "loc": {
                     "start": {
                       "line": 372,
@@ -6371,8 +6371,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8655,
-                    "end": 8755,
+                    "start": 8687,
+                    "end": 8787,
                     "loc": {
                       "start": {
                         "line": 366,
@@ -6389,8 +6389,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8792,
-                    "end": 8910,
+                    "start": 8824,
+                    "end": 8942,
                     "loc": {
                       "start": {
                         "line": 376,
@@ -6406,8 +6406,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8915,
-                "end": 8952,
+                "start": 8947,
+                "end": 8984,
                 "loc": {
                   "start": {
                     "line": 382,
@@ -6422,8 +6422,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8919,
-                  "end": 8933,
+                  "start": 8951,
+                  "end": 8965,
                   "loc": {
                     "start": {
                       "line": 382,
@@ -6445,8 +6445,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 8934,
-                    "end": 8942,
+                    "start": 8966,
+                    "end": 8974,
                     "loc": {
                       "start": {
                         "line": 382,
@@ -6463,8 +6463,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8944,
-                  "end": 8952,
+                  "start": 8976,
+                  "end": 8984,
                   "loc": {
                     "start": {
                       "line": 382,
@@ -6484,8 +6484,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8792,
-                    "end": 8910,
+                    "start": 8824,
+                    "end": 8942,
                     "loc": {
                       "start": {
                         "line": 376,
@@ -6502,8 +6502,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8958,
-                    "end": 9073,
+                    "start": 8990,
+                    "end": 9105,
                     "loc": {
                       "start": {
                         "line": 386,
@@ -6519,8 +6519,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 9078,
-                "end": 9107,
+                "start": 9110,
+                "end": 9139,
                 "loc": {
                   "start": {
                     "line": 392,
@@ -6535,8 +6535,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 9082,
-                  "end": 9096,
+                  "start": 9114,
+                  "end": 9128,
                   "loc": {
                     "start": {
                       "line": 392,
@@ -6558,8 +6558,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 9099,
-                  "end": 9107,
+                  "start": 9131,
+                  "end": 9139,
                   "loc": {
                     "start": {
                       "line": 392,
@@ -6577,8 +6577,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 8958,
-                    "end": 9073,
+                    "start": 8990,
+                    "end": 9105,
                     "loc": {
                       "start": {
                         "line": 386,
@@ -6913,9 +6913,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 6351,
-      "end": 6526,
+      "end": 6542,
       "loc": {
         "start": {
           "line": 240,
@@ -6929,9 +6929,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6570,
-      "end": 6745,
+      "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "start": 6586,
+      "end": 6777,
       "loc": {
         "start": {
           "line": 252,
@@ -6946,8 +6946,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6780,
-      "end": 6903,
+      "start": 6812,
+      "end": 6935,
       "loc": {
         "start": {
           "line": 264,
@@ -6962,8 +6962,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6949,
-      "end": 7072,
+      "start": 6981,
+      "end": 7104,
       "loc": {
         "start": {
           "line": 274,
@@ -6978,8 +6978,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 7108,
-      "end": 7269,
+      "start": 7140,
+      "end": 7301,
       "loc": {
         "start": {
           "line": 284,
@@ -6994,8 +6994,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 7311,
-      "end": 7472,
+      "start": 7343,
+      "end": 7504,
       "loc": {
         "start": {
           "line": 296,
@@ -7010,8 +7010,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-      "start": 7506,
-      "end": 7731,
+      "start": 7538,
+      "end": 7763,
       "loc": {
         "start": {
           "line": 308,
@@ -7026,8 +7026,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-      "start": 7768,
-      "end": 7993,
+      "start": 7800,
+      "end": 8025,
       "loc": {
         "start": {
           "line": 320,
@@ -7042,8 +7042,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 8027,
-      "end": 8234,
+      "start": 8059,
+      "end": 8266,
       "loc": {
         "start": {
           "line": 332,
@@ -7058,8 +7058,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 8274,
-      "end": 8477,
+      "start": 8306,
+      "end": 8509,
       "loc": {
         "start": {
           "line": 344,
@@ -7074,8 +7074,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8510,
-      "end": 8610,
+      "start": 8542,
+      "end": 8642,
       "loc": {
         "start": {
           "line": 356,
@@ -7090,8 +7090,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8655,
-      "end": 8755,
+      "start": 8687,
+      "end": 8787,
       "loc": {
         "start": {
           "line": 366,
@@ -7106,8 +7106,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8792,
-      "end": 8910,
+      "start": 8824,
+      "end": 8942,
       "loc": {
         "start": {
           "line": 376,
@@ -7122,8 +7122,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8958,
-      "end": 9073,
+      "start": 8990,
+      "end": 9105,
       "loc": {
         "start": {
           "line": 386,
@@ -10328,9 +10328,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Sets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 6351,
-      "end": 6526,
+      "end": 6542,
       "loc": {
         "start": {
           "line": 240,
@@ -10355,8 +10355,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 6531,
-      "end": 6534,
+      "start": 6547,
+      "end": 6550,
       "loc": {
         "start": {
           "line": 248,
@@ -10381,8 +10381,8 @@
         "binop": null
       },
       "value": "clippable",
-      "start": 6535,
-      "end": 6544,
+      "start": 6551,
+      "end": 6560,
       "loc": {
         "start": {
           "line": 248,
@@ -10406,8 +10406,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6544,
-      "end": 6545,
+      "start": 6560,
+      "end": 6561,
       "loc": {
         "start": {
           "line": 248,
@@ -10432,8 +10432,8 @@
         "binop": null
       },
       "value": "clippable",
-      "start": 6545,
-      "end": 6554,
+      "start": 6561,
+      "end": 6570,
       "loc": {
         "start": {
           "line": 248,
@@ -10457,8 +10457,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6554,
-      "end": 6555,
+      "start": 6570,
+      "end": 6571,
       "loc": {
         "start": {
           "line": 248,
@@ -10482,8 +10482,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6556,
-      "end": 6557,
+      "start": 6572,
+      "end": 6573,
       "loc": {
         "start": {
           "line": 248,
@@ -10507,8 +10507,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6563,
-      "end": 6564,
+      "start": 6579,
+      "end": 6580,
       "loc": {
         "start": {
           "line": 250,
@@ -10522,9 +10522,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6570,
-      "end": 6745,
+      "value": "*\n     * Gets if this Entity is clippable.\n     *\n     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "start": 6586,
+      "end": 6777,
       "loc": {
         "start": {
           "line": 252,
@@ -10549,8 +10549,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 6750,
-      "end": 6753,
+      "start": 6782,
+      "end": 6785,
       "loc": {
         "start": {
           "line": 260,
@@ -10575,8 +10575,8 @@
         "binop": null
       },
       "value": "clippable",
-      "start": 6754,
-      "end": 6763,
+      "start": 6786,
+      "end": 6795,
       "loc": {
         "start": {
           "line": 260,
@@ -10600,8 +10600,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6763,
-      "end": 6764,
+      "start": 6795,
+      "end": 6796,
       "loc": {
         "start": {
           "line": 260,
@@ -10625,8 +10625,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6764,
-      "end": 6765,
+      "start": 6796,
+      "end": 6797,
       "loc": {
         "start": {
           "line": 260,
@@ -10650,8 +10650,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6766,
-      "end": 6767,
+      "start": 6798,
+      "end": 6799,
       "loc": {
         "start": {
           "line": 260,
@@ -10675,8 +10675,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6773,
-      "end": 6774,
+      "start": 6805,
+      "end": 6806,
       "loc": {
         "start": {
           "line": 262,
@@ -10691,8 +10691,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6780,
-      "end": 6903,
+      "start": 6812,
+      "end": 6935,
       "loc": {
         "start": {
           "line": 264,
@@ -10717,8 +10717,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 6908,
-      "end": 6911,
+      "start": 6940,
+      "end": 6943,
       "loc": {
         "start": {
           "line": 270,
@@ -10743,8 +10743,8 @@
         "binop": null
       },
       "value": "collidable",
-      "start": 6912,
-      "end": 6922,
+      "start": 6944,
+      "end": 6954,
       "loc": {
         "start": {
           "line": 270,
@@ -10768,8 +10768,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6922,
-      "end": 6923,
+      "start": 6954,
+      "end": 6955,
       "loc": {
         "start": {
           "line": 270,
@@ -10794,8 +10794,8 @@
         "binop": null
       },
       "value": "collidable",
-      "start": 6923,
-      "end": 6933,
+      "start": 6955,
+      "end": 6965,
       "loc": {
         "start": {
           "line": 270,
@@ -10819,8 +10819,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6933,
-      "end": 6934,
+      "start": 6965,
+      "end": 6966,
       "loc": {
         "start": {
           "line": 270,
@@ -10844,8 +10844,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6935,
-      "end": 6936,
+      "start": 6967,
+      "end": 6968,
       "loc": {
         "start": {
           "line": 270,
@@ -10869,8 +10869,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6942,
-      "end": 6943,
+      "start": 6974,
+      "end": 6975,
       "loc": {
         "start": {
           "line": 272,
@@ -10885,8 +10885,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity is included in boundary calculations.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 6949,
-      "end": 7072,
+      "start": 6981,
+      "end": 7104,
       "loc": {
         "start": {
           "line": 274,
@@ -10911,8 +10911,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 7077,
-      "end": 7080,
+      "start": 7109,
+      "end": 7112,
       "loc": {
         "start": {
           "line": 280,
@@ -10937,8 +10937,8 @@
         "binop": null
       },
       "value": "collidable",
-      "start": 7081,
-      "end": 7091,
+      "start": 7113,
+      "end": 7123,
       "loc": {
         "start": {
           "line": 280,
@@ -10962,8 +10962,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7091,
-      "end": 7092,
+      "start": 7123,
+      "end": 7124,
       "loc": {
         "start": {
           "line": 280,
@@ -10987,8 +10987,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7092,
-      "end": 7093,
+      "start": 7124,
+      "end": 7125,
       "loc": {
         "start": {
           "line": 280,
@@ -11012,8 +11012,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7094,
-      "end": 7095,
+      "start": 7126,
+      "end": 7127,
       "loc": {
         "start": {
           "line": 280,
@@ -11037,8 +11037,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7101,
-      "end": 7102,
+      "start": 7133,
+      "end": 7134,
       "loc": {
         "start": {
           "line": 282,
@@ -11053,8 +11053,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 7108,
-      "end": 7269,
+      "start": 7140,
+      "end": 7301,
       "loc": {
         "start": {
           "line": 284,
@@ -11079,8 +11079,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 7274,
-      "end": 7277,
+      "start": 7306,
+      "end": 7309,
       "loc": {
         "start": {
           "line": 292,
@@ -11105,8 +11105,8 @@
         "binop": null
       },
       "value": "pickable",
-      "start": 7278,
-      "end": 7286,
+      "start": 7310,
+      "end": 7318,
       "loc": {
         "start": {
           "line": 292,
@@ -11130,8 +11130,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7286,
-      "end": 7287,
+      "start": 7318,
+      "end": 7319,
       "loc": {
         "start": {
           "line": 292,
@@ -11156,8 +11156,8 @@
         "binop": null
       },
       "value": "pickable",
-      "start": 7287,
-      "end": 7295,
+      "start": 7319,
+      "end": 7327,
       "loc": {
         "start": {
           "line": 292,
@@ -11181,8 +11181,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7295,
-      "end": 7296,
+      "start": 7327,
+      "end": 7328,
       "loc": {
         "start": {
           "line": 292,
@@ -11206,8 +11206,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7297,
-      "end": 7298,
+      "start": 7329,
+      "end": 7330,
       "loc": {
         "start": {
           "line": 292,
@@ -11231,8 +11231,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7304,
-      "end": 7305,
+      "start": 7336,
+      "end": 7337,
       "loc": {
         "start": {
           "line": 294,
@@ -11247,8 +11247,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity is pickable.\n     *\n     * Picking is done via calls to {@link Scene#pick}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 7311,
-      "end": 7472,
+      "start": 7343,
+      "end": 7504,
       "loc": {
         "start": {
           "line": 296,
@@ -11273,8 +11273,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 7477,
-      "end": 7480,
+      "start": 7509,
+      "end": 7512,
       "loc": {
         "start": {
           "line": 304,
@@ -11299,8 +11299,8 @@
         "binop": null
       },
       "value": "pickable",
-      "start": 7481,
-      "end": 7489,
+      "start": 7513,
+      "end": 7521,
       "loc": {
         "start": {
           "line": 304,
@@ -11324,8 +11324,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7489,
-      "end": 7490,
+      "start": 7521,
+      "end": 7522,
       "loc": {
         "start": {
           "line": 304,
@@ -11349,8 +11349,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7490,
-      "end": 7491,
+      "start": 7522,
+      "end": 7523,
       "loc": {
         "start": {
           "line": 304,
@@ -11374,8 +11374,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7492,
-      "end": 7493,
+      "start": 7524,
+      "end": 7525,
       "loc": {
         "start": {
           "line": 304,
@@ -11399,8 +11399,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7499,
-      "end": 7500,
+      "start": 7531,
+      "end": 7532,
       "loc": {
         "start": {
           "line": 306,
@@ -11415,8 +11415,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-      "start": 7506,
-      "end": 7731,
+      "start": 7538,
+      "end": 7763,
       "loc": {
         "start": {
           "line": 308,
@@ -11441,8 +11441,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 7736,
-      "end": 7739,
+      "start": 7768,
+      "end": 7771,
       "loc": {
         "start": {
           "line": 316,
@@ -11467,8 +11467,8 @@
         "binop": null
       },
       "value": "colorize",
-      "start": 7740,
-      "end": 7748,
+      "start": 7772,
+      "end": 7780,
       "loc": {
         "start": {
           "line": 316,
@@ -11492,8 +11492,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7748,
-      "end": 7749,
+      "start": 7780,
+      "end": 7781,
       "loc": {
         "start": {
           "line": 316,
@@ -11518,8 +11518,8 @@
         "binop": null
       },
       "value": "rgb",
-      "start": 7749,
-      "end": 7752,
+      "start": 7781,
+      "end": 7784,
       "loc": {
         "start": {
           "line": 316,
@@ -11543,8 +11543,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7752,
-      "end": 7753,
+      "start": 7784,
+      "end": 7785,
       "loc": {
         "start": {
           "line": 316,
@@ -11568,8 +11568,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7754,
-      "end": 7755,
+      "start": 7786,
+      "end": 7787,
       "loc": {
         "start": {
           "line": 316,
@@ -11593,8 +11593,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7761,
-      "end": 7762,
+      "start": 7793,
+      "end": 7794,
       "loc": {
         "start": {
           "line": 318,
@@ -11609,8 +11609,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the Entity's RGB colorize color, multiplies by the Entity's rendered fragment colors.\n     *\n     * Each element of the color is in range ````[0..1]````.\n     *\n     * @type {Number[]}\n     * @abstract\n     ",
-      "start": 7768,
-      "end": 7993,
+      "start": 7800,
+      "end": 8025,
       "loc": {
         "start": {
           "line": 320,
@@ -11635,8 +11635,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 7998,
-      "end": 8001,
+      "start": 8030,
+      "end": 8033,
       "loc": {
         "start": {
           "line": 328,
@@ -11661,8 +11661,8 @@
         "binop": null
       },
       "value": "colorize",
-      "start": 8002,
-      "end": 8010,
+      "start": 8034,
+      "end": 8042,
       "loc": {
         "start": {
           "line": 328,
@@ -11686,8 +11686,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8010,
-      "end": 8011,
+      "start": 8042,
+      "end": 8043,
       "loc": {
         "start": {
           "line": 328,
@@ -11711,8 +11711,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8011,
-      "end": 8012,
+      "start": 8043,
+      "end": 8044,
       "loc": {
         "start": {
           "line": 328,
@@ -11736,8 +11736,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8013,
-      "end": 8014,
+      "start": 8045,
+      "end": 8046,
       "loc": {
         "start": {
           "line": 328,
@@ -11761,8 +11761,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8020,
-      "end": 8021,
+      "start": 8052,
+      "end": 8053,
       "loc": {
         "start": {
           "line": 330,
@@ -11777,8 +11777,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the Entity's opacity factor, multiplies by the Entity's rendered fragment alphas.\n     *\n     * This is a factor in range ````[0..1]````.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 8027,
-      "end": 8234,
+      "start": 8059,
+      "end": 8266,
       "loc": {
         "start": {
           "line": 332,
@@ -11803,8 +11803,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 8239,
-      "end": 8242,
+      "start": 8271,
+      "end": 8274,
       "loc": {
         "start": {
           "line": 340,
@@ -11829,8 +11829,8 @@
         "binop": null
       },
       "value": "opacity",
-      "start": 8243,
-      "end": 8250,
+      "start": 8275,
+      "end": 8282,
       "loc": {
         "start": {
           "line": 340,
@@ -11854,8 +11854,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8250,
-      "end": 8251,
+      "start": 8282,
+      "end": 8283,
       "loc": {
         "start": {
           "line": 340,
@@ -11880,8 +11880,8 @@
         "binop": null
       },
       "value": "opacity",
-      "start": 8251,
-      "end": 8258,
+      "start": 8283,
+      "end": 8290,
       "loc": {
         "start": {
           "line": 340,
@@ -11905,8 +11905,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8258,
-      "end": 8259,
+      "start": 8290,
+      "end": 8291,
       "loc": {
         "start": {
           "line": 340,
@@ -11930,8 +11930,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8260,
-      "end": 8261,
+      "start": 8292,
+      "end": 8293,
       "loc": {
         "start": {
           "line": 340,
@@ -11955,8 +11955,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8267,
-      "end": 8268,
+      "start": 8299,
+      "end": 8300,
       "loc": {
         "start": {
           "line": 342,
@@ -11971,8 +11971,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the Entity's opacity factor.\n     *\n     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 8274,
-      "end": 8477,
+      "start": 8306,
+      "end": 8509,
       "loc": {
         "start": {
           "line": 344,
@@ -11997,8 +11997,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 8482,
-      "end": 8485,
+      "start": 8514,
+      "end": 8517,
       "loc": {
         "start": {
           "line": 352,
@@ -12023,8 +12023,8 @@
         "binop": null
       },
       "value": "opacity",
-      "start": 8486,
-      "end": 8493,
+      "start": 8518,
+      "end": 8525,
       "loc": {
         "start": {
           "line": 352,
@@ -12048,8 +12048,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8493,
-      "end": 8494,
+      "start": 8525,
+      "end": 8526,
       "loc": {
         "start": {
           "line": 352,
@@ -12073,8 +12073,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8494,
-      "end": 8495,
+      "start": 8526,
+      "end": 8527,
       "loc": {
         "start": {
           "line": 352,
@@ -12098,8 +12098,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8496,
-      "end": 8497,
+      "start": 8528,
+      "end": 8529,
       "loc": {
         "start": {
           "line": 352,
@@ -12123,8 +12123,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8503,
-      "end": 8504,
+      "start": 8535,
+      "end": 8536,
       "loc": {
         "start": {
           "line": 354,
@@ -12139,8 +12139,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8510,
-      "end": 8610,
+      "start": 8542,
+      "end": 8642,
       "loc": {
         "start": {
           "line": 356,
@@ -12165,8 +12165,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 8615,
-      "end": 8618,
+      "start": 8647,
+      "end": 8650,
       "loc": {
         "start": {
           "line": 362,
@@ -12191,8 +12191,8 @@
         "binop": null
       },
       "value": "castsShadow",
-      "start": 8619,
-      "end": 8630,
+      "start": 8651,
+      "end": 8662,
       "loc": {
         "start": {
           "line": 362,
@@ -12216,8 +12216,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8630,
-      "end": 8631,
+      "start": 8662,
+      "end": 8663,
       "loc": {
         "start": {
           "line": 362,
@@ -12242,8 +12242,8 @@
         "binop": null
       },
       "value": "pickable",
-      "start": 8631,
-      "end": 8639,
+      "start": 8663,
+      "end": 8671,
       "loc": {
         "start": {
           "line": 362,
@@ -12267,8 +12267,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8639,
-      "end": 8640,
+      "start": 8671,
+      "end": 8672,
       "loc": {
         "start": {
           "line": 362,
@@ -12292,8 +12292,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8641,
-      "end": 8642,
+      "start": 8673,
+      "end": 8674,
       "loc": {
         "start": {
           "line": 362,
@@ -12317,8 +12317,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8648,
-      "end": 8649,
+      "start": 8680,
+      "end": 8681,
       "loc": {
         "start": {
           "line": 364,
@@ -12333,8 +12333,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity casts shadows.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8655,
-      "end": 8755,
+      "start": 8687,
+      "end": 8787,
       "loc": {
         "start": {
           "line": 366,
@@ -12359,8 +12359,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 8760,
-      "end": 8763,
+      "start": 8792,
+      "end": 8795,
       "loc": {
         "start": {
           "line": 372,
@@ -12385,8 +12385,8 @@
         "binop": null
       },
       "value": "castsShadow",
-      "start": 8764,
-      "end": 8775,
+      "start": 8796,
+      "end": 8807,
       "loc": {
         "start": {
           "line": 372,
@@ -12410,8 +12410,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8775,
-      "end": 8776,
+      "start": 8807,
+      "end": 8808,
       "loc": {
         "start": {
           "line": 372,
@@ -12435,8 +12435,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8776,
-      "end": 8777,
+      "start": 8808,
+      "end": 8809,
       "loc": {
         "start": {
           "line": 372,
@@ -12460,8 +12460,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8778,
-      "end": 8779,
+      "start": 8810,
+      "end": 8811,
       "loc": {
         "start": {
           "line": 372,
@@ -12485,8 +12485,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8785,
-      "end": 8786,
+      "start": 8817,
+      "end": 8818,
       "loc": {
         "start": {
           "line": 374,
@@ -12501,8 +12501,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets if to this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8792,
-      "end": 8910,
+      "start": 8824,
+      "end": 8942,
       "loc": {
         "start": {
           "line": 376,
@@ -12527,8 +12527,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 8915,
-      "end": 8918,
+      "start": 8947,
+      "end": 8950,
       "loc": {
         "start": {
           "line": 382,
@@ -12553,8 +12553,8 @@
         "binop": null
       },
       "value": "receivesShadow",
-      "start": 8919,
-      "end": 8933,
+      "start": 8951,
+      "end": 8965,
       "loc": {
         "start": {
           "line": 382,
@@ -12578,8 +12578,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8933,
-      "end": 8934,
+      "start": 8965,
+      "end": 8966,
       "loc": {
         "start": {
           "line": 382,
@@ -12604,8 +12604,8 @@
         "binop": null
       },
       "value": "pickable",
-      "start": 8934,
-      "end": 8942,
+      "start": 8966,
+      "end": 8974,
       "loc": {
         "start": {
           "line": 382,
@@ -12629,8 +12629,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8942,
-      "end": 8943,
+      "start": 8974,
+      "end": 8975,
       "loc": {
         "start": {
           "line": 382,
@@ -12654,8 +12654,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8944,
-      "end": 8945,
+      "start": 8976,
+      "end": 8977,
       "loc": {
         "start": {
           "line": 382,
@@ -12679,8 +12679,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8951,
-      "end": 8952,
+      "start": 8983,
+      "end": 8984,
       "loc": {
         "start": {
           "line": 384,
@@ -12695,8 +12695,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this Entity can have shadows cast upon it\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 8958,
-      "end": 9073,
+      "start": 8990,
+      "end": 9105,
       "loc": {
         "start": {
           "line": 386,
@@ -12721,8 +12721,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 9078,
-      "end": 9081,
+      "start": 9110,
+      "end": 9113,
       "loc": {
         "start": {
           "line": 392,
@@ -12747,8 +12747,8 @@
         "binop": null
       },
       "value": "receivesShadow",
-      "start": 9082,
-      "end": 9096,
+      "start": 9114,
+      "end": 9128,
       "loc": {
         "start": {
           "line": 392,
@@ -12772,8 +12772,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9096,
-      "end": 9097,
+      "start": 9128,
+      "end": 9129,
       "loc": {
         "start": {
           "line": 392,
@@ -12797,8 +12797,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9097,
-      "end": 9098,
+      "start": 9129,
+      "end": 9130,
       "loc": {
         "start": {
           "line": 392,
@@ -12822,8 +12822,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9099,
-      "end": 9100,
+      "start": 9131,
+      "end": 9132,
       "loc": {
         "start": {
           "line": 392,
@@ -12847,8 +12847,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9106,
-      "end": 9107,
+      "start": 9138,
+      "end": 9139,
       "loc": {
         "start": {
           "line": 394,
@@ -12872,8 +12872,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9108,
-      "end": 9109,
+      "start": 9140,
+      "end": 9141,
       "loc": {
         "start": {
           "line": 395,
@@ -12900,8 +12900,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 9111,
-      "end": 9117,
+      "start": 9143,
+      "end": 9149,
       "loc": {
         "start": {
           "line": 397,
@@ -12925,8 +12925,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9118,
-      "end": 9119,
+      "start": 9150,
+      "end": 9151,
       "loc": {
         "start": {
           "line": 397,
@@ -12951,8 +12951,8 @@
         "binop": null
       },
       "value": "Entity",
-      "start": 9119,
-      "end": 9125,
+      "start": 9151,
+      "end": 9157,
       "loc": {
         "start": {
           "line": 397,
@@ -12976,8 +12976,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 9125,
-      "end": 9126,
+      "start": 9157,
+      "end": 9158,
       "loc": {
         "start": {
           "line": 397,
@@ -13002,8 +13002,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9126,
-      "end": 9127,
+      "start": 9158,
+      "end": 9159,
       "loc": {
         "start": {
           "line": 397,
@@ -13028,8 +13028,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 9127,
-      "end": 9127,
+      "start": 9159,
+      "end": 9159,
       "loc": {
         "start": {
           "line": 397,

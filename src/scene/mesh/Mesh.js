@@ -474,7 +474,7 @@ class Mesh extends Component {
             scene.canvas.canvas.id,
             (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
             scene._lightsState.getHash(),
-            scene._clipsState.getHash(),
+            scene._sectionPlanesState.getHash(),
         ];
         const state = this._state;
         if (state.stationary) {
@@ -1096,7 +1096,7 @@ class Mesh extends Component {
     /**
      * Sets if this Mesh is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      */
@@ -1112,7 +1112,7 @@ class Mesh extends Component {
     /**
      * Gets if this Mesh is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      */

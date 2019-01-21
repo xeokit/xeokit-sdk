@@ -240,7 +240,7 @@ class Entity {
     /**
      * Sets if this Entity is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      * @abstract
@@ -252,7 +252,7 @@ class Entity {
     /**
      * Gets if this Entity is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      * @abstract

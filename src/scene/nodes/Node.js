@@ -520,7 +520,7 @@ class Node extends Component {
     /**
      * Sets if this Node and all child Nodes and {@link Mesh}es are clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#clips}.
      *
      * @type {Boolean}
      */
@@ -535,7 +535,7 @@ class Node extends Component {
     /**
      * Gets if this Node is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#clips}.
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *

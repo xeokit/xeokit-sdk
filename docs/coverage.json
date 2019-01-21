@@ -1,7 +1,7 @@
 {
-  "coverage": "49.04%",
-  "expectCount": 2918,
-  "actualCount": 1431,
+  "coverage": "49.02%",
+  "expectCount": 2917,
+  "actualCount": 1430,
   "files": {
     "src/scene/Component.js": {
       "expectCount": 43,
@@ -625,13 +625,6 @@
         179,
         200,
         229
-      ]
-    },
-    "src/scene/clipping/Clip.js": {
-      "expectCount": 11,
-      "actualCount": 10,
-      "undocumentLines": [
-        73
       ]
     },
     "src/scene/core.js": {
@@ -1488,6 +1481,13 @@
         1933
       ]
     },
+    "src/scene/sectionPlane/SectionPlane.js": {
+      "expectCount": 11,
+      "actualCount": 10,
+      "undocumentLines": [
+        73
+      ]
+    },
     "src/scene/skybox/Skybox.js": {
       "expectCount": 8,
       "actualCount": 6,
@@ -1921,13 +1921,6 @@
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/viewer/plugins/ClipsPlugin/ClipsPlugin.js": {
-      "expectCount": 10,
-      "actualCount": 9,
-      "undocumentLines": [
-        59
-      ]
-    },
     "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoader.js": {
       "expectCount": 7,
       "actualCount": 1,
@@ -1990,8 +1983,8 @@
       "undocumentLines": []
     },
     "src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js": {
-      "expectCount": 2,
-      "actualCount": 1,
+      "expectCount": 3,
+      "actualCount": 2,
       "undocumentLines": [
         3
       ]
@@ -2009,6 +2002,13 @@
       "expectCount": 9,
       "actualCount": 9,
       "undocumentLines": []
+    },
+    "src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js": {
+      "expectCount": 8,
+      "actualCount": 7,
+      "undocumentLines": [
+        61
+      ]
     },
     "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
       "expectCount": 10,

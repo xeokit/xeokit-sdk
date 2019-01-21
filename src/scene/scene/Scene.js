@@ -474,11 +474,11 @@ class Scene extends Component {
         this.components = {};
 
         /**
-         * The {@link Clip}s in this Scene, each mapped to its {@link Clip#id}.
+         * The {@link SectionPlane}s in this Scene, each mapped to its {@link SectionPlane#id}.
          *
-         * @type {{String:Clip}}
+         * @type {{String:SectionPlane}}
          */
-        this.clips = {};
+        this.sectionPlanes = {};
 
         /**
          * The {@link Light}s in this Scene, each mapped to its {@link Light#id}.
@@ -530,9 +530,9 @@ class Scene extends Component {
             transparent: transparent
         });
 
-        this._clipsState = new (function () {
+        this._sectionPlanesState = new (function () {
 
-            this.clips = [];
+            this.sectionPlanes = [];
 
             let hash = null;
 
@@ -540,14 +540,14 @@ class Scene extends Component {
                 if (hash) {
                     return hash;
                 }
-                const clips = this.clips;
-                if (clips.length === 0) {
+                const sectionPlanes = this.sectionPlanes;
+                if (sectionPlanes.length === 0) {
                     return this.hash = ";";
                 }
-                let clip;
+                let sectionPlane;
                 const hashParts = [];
-                for (let i = 0, len = clips.length; i < len; i++) {
-                    clip = clips[i];
+                for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+                    sectionPlane = sectionPlanes[i];
                     hashParts.push("cp");
                 }
                 hashParts.push(";");
@@ -555,15 +555,15 @@ class Scene extends Component {
                 return hash;
             };
 
-            this.addClip = function (clip) {
-                this.clips.push(clip);
+            this.addSectionPlane = function (sectionPlane) {
+                this.sectionPlanes.push(sectionPlane);
                 hash = null;
             };
 
-            this.removeClip = function (clip) {
-                for (let i = 0, len = this.clips.length; i < len; i++) {
-                    if (this.clips[i].id === clip.id) {
-                        this.clips.splice(i, 1);
+            this.removeSectionPlane = function (sectionPlane) {
+                for (let i = 0, len = this.sectionPlanes.length; i < len; i++) {
+                    if (this.sectionPlanes[i].id === sectionPlane.id) {
+                        this.sectionPlanes.splice(i, 1);
                         hash = null;
                         return;
                     }
@@ -831,9 +831,9 @@ class Scene extends Component {
     // Scene. Violates Hollywood Principle, where we could just filter on type in _addComponent,
     // but this is faster than checking the type of each component in such a filter.
 
-    _clipCreated(clip) {
-        this.clips[clip.id] = clip;
-        this.scene._clipsState.addClip(clip._state);
+    _sectionPlaneCreated(sectionPlane) {
+        this.sectionPlanes[sectionPlane.id] = sectionPlane;
+        this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);
         this._needRecompile = true;
     }
 
@@ -855,9 +855,9 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
-    _clipDestroyed(clip) {
-        delete this.clips[clip.id];
-        this.scene._clipsState.removeClip(clip._state);
+    _sectionPlaneDestroyed(sectionPlane) {
+        delete this.sectionPlanes[sectionPlane.id];
+        this.scene._sectionPlanesState.removeSectionPlane(sectionPlane._state);
         this._needRecompile = true;
     }
 
@@ -1667,12 +1667,12 @@ class Scene extends Component {
     }
 
     /**
-     * Destroys all {@link Clip}s in this Scene.
+     * Destroys all {@link SectionPlane}s in this Scene.
      */
     clearClips() {
-        const ids = Object.keys(this.clips);
+        const ids = Object.keys(this.sectionPlanes);
         for (let i = 0, len = ids.length; i < len; i++) {
-            this.clips[ids[i]].destroy();
+            this.sectionPlanes[ids[i]].destroy();
         }
     }
 
@@ -1969,7 +1969,7 @@ class Scene extends Component {
         this.ghostedObjects = null;
         this.highlightedObjects = null;
         this.selectedObjects = null;
-        this.clips = null;
+        this.sectionPlanes = null;
         this.lights = null;
         this.lightMaps = null;
         this.reflectionMaps = null;

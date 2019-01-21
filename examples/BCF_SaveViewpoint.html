@@ -30,6 +30,11 @@
                href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads model and IFC data from file system
         </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
+            - Creates section planes
+        </li>
         <li>See source code to examine the BCF JSON record</li>
         <li>
             <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Saving-and-Loading-BCF-Viewpoints">Tutorial</a>
@@ -48,7 +53,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {ClipsPlugin} from "../src/viewer/plugins/ClipsPlugin/ClipsPlugin.js";
+    import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
     import {BCFViewpointsPlugin} from "../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -67,10 +72,10 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a ClipsPlugin - we'll use this to create cross-section planes
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
     //------------------------------------------------------------------------------------------------------------------
 
-    const clips = new ClipsPlugin(viewer);
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a BCFViewpointsPlugin - we'll use this to save the BCF viewpoint
@@ -94,7 +99,7 @@
     // Create a cross-section plane
     //------------------------------------------------------------------------------------------------------------------
 
-    clips.createClip({
+    sectionPlanes.createSectionPlane({
         id: "myClip",
         pos: [0, 0, 0],
         dir: [0.5, 0.0, 0.5]

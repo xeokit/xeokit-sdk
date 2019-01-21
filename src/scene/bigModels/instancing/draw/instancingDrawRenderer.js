@@ -39,7 +39,7 @@ InstancingDrawRenderer.get = function (layer) {
 };
 
 function getHash(scene) {
-    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._clipsState.getHash()].join(";")
+    return [scene.canvas.canvas.id, "", scene._lightsState.getHash(), scene._sectionPlanesState.getHash()].join(";")
 }
 
 InstancingDrawRenderer.prototype.getValid = function () {
@@ -154,7 +154,7 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const lightsState = scene._lightsState;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
 
     this._program = new Program(gl, this._shaderSource);
 
@@ -209,13 +209,13 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
         }
     }
 
-    this._uClips = [];
-    const clips = clipsState.clips;
+    this._uSectionPlanes = [];
+    const clips = sectionPlanesState.sectionPlanes;
     for (var i = 0, len = clips.length; i < len; i++) {
-        this._uClips.push({
-            active: program.getLocation("clipActive" + i),
-            pos: program.getLocation("clipPos" + i),
-            dir: program.getLocation("clipDir" + i)
+        this._uSectionPlanes.push({
+            active: program.getLocation("sectionPlaneActive" + i),
+            pos: program.getLocation("sectionPlanePos" + i),
+            dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
 
@@ -239,7 +239,7 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const gl = scene.canvas.gl;
     const program = this._program;
     const lightsState = scene._lightsState;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const lights = lightsState.lights;
     let light;
     program.bind();
@@ -268,27 +268,27 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
             }
         }
     }
-    if (clipsState.clips.length > 0) {
-        const clips = scene._clipsState.clips;
-        let clipUniforms;
-        let uClipActive;
-        let clip;
-        let uClipPos;
-        let uClipDir;
-        for (var i = 0, len = this._uClips.length; i < len; i++) {
-            clipUniforms = this._uClips[i];
-            uClipActive = clipUniforms.active;
-            clip = clips[i];
-            if (uClipActive) {
-                gl.uniform1i(uClipActive, clip.active);
+    if (sectionPlanesState.sectionPlanes.length > 0) {
+        const clips = scene._sectionPlanesState.sectionPlanes;
+        let sectionPlaneUniforms;
+        let uSectionPlaneActive;
+        let sectionPlane;
+        let uSectionPlanePos;
+        let uSectionPlaneDir;
+        for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
+            sectionPlaneUniforms = this._uSectionPlanes[i];
+            uSectionPlaneActive = sectionPlaneUniforms.active;
+            sectionPlane = clips[i];
+            if (uSectionPlaneActive) {
+                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
             }
-            uClipPos = clipUniforms.pos;
-            if (uClipPos) {
-                gl.uniform3fv(clipUniforms.pos, clip.pos);
+            uSectionPlanePos = sectionPlaneUniforms.pos;
+            if (uSectionPlanePos) {
+                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
             }
-            uClipDir = clipUniforms.dir;
-            if (uClipDir) {
-                gl.uniform3fv(clipUniforms.dir, clip.dir);
+            uSectionPlaneDir = sectionPlaneUniforms.dir;
+            if (uSectionPlaneDir) {
+                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
             }
         }
     }

@@ -24,7 +24,7 @@ const renderers = {};
 PickMeshRenderer.get = function (mesh) {
     const hash = [
         mesh.scene.canvas.canvas.id,
-        mesh.scene._clipsState.getHash(),
+        mesh.scene._sectionPlanesState.getHash(),
         mesh._geometry._state.hash,
         mesh._state.hash
     ].join(";");
@@ -143,13 +143,13 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    this._uClips = [];
-    const clips = mesh.scene._clipsState.clips;
+    this._uSectionPlanes = [];
+    const clips = mesh.scene._sectionPlanesState.sectionPlanes;
     for (let i = 0, len = clips.length; i < len; i++) {
-        this._uClips.push({
-            active: program.getLocation("clipActive" + i),
-            pos: program.getLocation("clipPos" + i),
-            dir: program.getLocation("clipDir" + i)
+        this._uSectionPlanes.push({
+            active: program.getLocation("sectionPlaneActive" + i),
+            pos: program.getLocation("sectionPlanePos" + i),
+            dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
     this._aPosition = program.getAttribute("position");
@@ -166,7 +166,7 @@ PickMeshRenderer.prototype._bindProgram = function (frame) {
     }
     const scene = this._scene;
     const gl = scene.canvas.gl;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const camera = scene.camera;
     const cameraState = camera._state;
     this._program.bind();
@@ -176,26 +176,26 @@ PickMeshRenderer.prototype._bindProgram = function (frame) {
     this._lastGeometryId = null;
     gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix || cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix || camera.project._state.matrix);
-    if (clipsState.clips.length > 0) {
-        let clipUniforms;
-        let uClipActive;
-        let clip;
-        let uClipPos;
-        let uClipDir;
-        for (let i = 0, len = this._uClips.length; i < len; i++) {
-            clipUniforms = this._uClips[i];
-            uClipActive = clipUniforms.active;
-            clip = clipsState.clips[i];
-            if (uClipActive) {
-                gl.uniform1i(uClipActive, clip.active);
+    if (sectionPlanesState.sectionPlanes.length > 0) {
+        let sectionPlaneUniforms;
+        let uSectionPlaneActive;
+        let sectionPlane;
+        let uSectionPlanePos;
+        let uSectionPlaneDir;
+        for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
+            sectionPlaneUniforms = this._uSectionPlanes[i];
+            uSectionPlaneActive = sectionPlaneUniforms.active;
+            sectionPlane = sectionPlanesState.sectionPlanes[i];
+            if (uSectionPlaneActive) {
+                gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
             }
-            uClipPos = clipUniforms.pos;
-            if (uClipPos) {
-                gl.uniform3fv(clipUniforms.pos, clip.pos);
+            uSectionPlanePos = sectionPlaneUniforms.pos;
+            if (uSectionPlanePos) {
+                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
             }
-            uClipDir = clipUniforms.dir;
-            if (uClipDir) {
-                gl.uniform3fv(clipUniforms.dir, clip.dir);
+            uSectionPlaneDir = sectionPlaneUniforms.dir;
+            if (uSectionPlaneDir) {
+                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
             }
         }
     }

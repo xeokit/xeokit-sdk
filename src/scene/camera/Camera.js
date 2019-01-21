@@ -281,7 +281,7 @@ class Camera extends Component {
     _update() {
         const state = this._state;
         // In ortho mode, build the view matrix with an eye position that's translated
-        // well back from look, so that the front clip plane doesn't unexpectedly cut
+        // well back from look, so that the front sectionPlane plane doesn't unexpectedly cut
         // the front off the view (not a problem with perspective, since objects close enough
         // to be clipped by the front plane are usually too big to see anything of their cross-sections).
         let eye;

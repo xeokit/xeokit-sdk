@@ -76,12 +76,12 @@ function getFragmentFloatPrecision(gl) {
 }
 
 function buildVertexLambert(mesh) {
-    const clipsState = mesh.scene._clipsState;
+    const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const geometryState = mesh._geometry._state;
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!geometryState.compressGeometry;
     let i;
     let len;
@@ -240,12 +240,12 @@ function buildVertexLambert(mesh) {
 
 function buildFragmentLambert(mesh) {
     const scene = mesh.scene;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
     let i;
     let len;
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const solid = false && materialState.backfaces;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
@@ -254,10 +254,10 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (i = 0, len = clipsState.clips.length; i < len; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
+        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            src.push("uniform bool sectionPlaneActive" + i + ";");
+            src.push("uniform vec3 sectionPlanePos" + i + ";");
+            src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
     src.push("varying vec4 vColor;");
@@ -271,9 +271,9 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = clipsState.clips.length; i < len; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
+        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            src.push("if (sectionPlaneActive" + i + ") {");
+            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
@@ -306,7 +306,7 @@ function buildVertexDraw(mesh) {
     const scene = mesh.scene;
     const material = mesh._material;
     const meshState = mesh._state;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const geometryState = mesh._geometry._state;
     const lightsState = scene._lightsState;
     let i;
@@ -316,7 +316,7 @@ function buildVertexDraw(mesh) {
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const receivesShadow = getReceivesShadow(mesh);
     const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
@@ -517,10 +517,10 @@ function buildFragmentDraw(mesh) {
     const gl = scene.canvas.gl;
     const material = mesh._material;
     const geometryState = mesh._geometry._state;
-    const clipsState = mesh.scene._clipsState;
+    const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const materialState = mesh._material._state;
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const normals = hasNormals(mesh);
     const uvs = geometryState.uvBuf;
     const solid = false && materialState.backfaces;
@@ -577,10 +577,10 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("uniform bool sectionPlaneActive" + i + ";");
+            src.push("uniform vec3 sectionPlanePos" + i + ";");
+            src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
 
@@ -1066,9 +1066,9 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("if (sectionPlaneActive" + i + ") {");
+            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");

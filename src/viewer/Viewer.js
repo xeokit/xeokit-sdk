@@ -232,7 +232,7 @@ class Viewer {
     resetView() {
         this.sendToPlugins("resetView");
 
-        // Clear clips at xeokit level
+        // Clear sectionPlanes at xeokit level
 
         // TODO
         // this.show();

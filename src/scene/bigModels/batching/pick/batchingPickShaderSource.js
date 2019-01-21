@@ -10,7 +10,7 @@ class BatchingPickShaderSource {
 
 function buildVertex(layer) {
     const scene = layer.model.scene;
-    const clipping = scene._clipsState.clips.length > 0;
+    const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!layer._state.compressGeometry;
     const src = [];
 
@@ -49,18 +49,18 @@ function buildVertex(layer) {
 
 function buildFragment(layer) {
     const scene = layer.model.scene;
-    const clipsState = scene._clipsState;
-    const clipping = clipsState.clips.length > 0;
+    const sectionPlanesState = scene._sectionPlanesState;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Batched geometry picking fragment shader");
     src.push("precision mediump float;");
     if (clipping) {
         src.push("uniform bool clippable;");
         src.push("varying vec4 vWorldPosition;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("uniform bool sectionPlaneActive" + i + ";");
+            src.push("uniform vec3 sectionPlanePos" + i + ";");
+            src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
     src.push("varying vec4 vPickColor;");
@@ -68,9 +68,9 @@ function buildFragment(layer) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("if (sectionPlaneActive" + i + ") {");
+            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");

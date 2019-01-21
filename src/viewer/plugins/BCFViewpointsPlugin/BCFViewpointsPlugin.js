@@ -1,5 +1,5 @@
 import {Plugin} from "./../../../viewer/Plugin.js";
-import {Clip} from "../../../scene/clipping/Clip.js";
+import {SectionPlane} from "../../../scene/sectionPlane/SectionPlane.js";
 import {math} from "../../../scene/math/math.js";
 
 const tempVec3 = math.vec3();
@@ -16,7 +16,7 @@ const tempVec3 = math.vec3();
  * ## Usage
  *
  * In the example below we'll create a {@link Viewer}, load a glTF model into it using a {@link GLTFLoaderPlugin},
- * slice the model in half using a {@link ClipsPlugin}, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
+ * slice the model in half using a {@link SectionPlanesPlugin}, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
  * which we'll log to the JavaScript developer console.
  *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BCF_SaveViewpoint)]
@@ -24,7 +24,7 @@ const tempVec3 = math.vec3();
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {ClipsPlugin} from "../src/viewer/plugins/ClipsPlugin/ClipsPlugin.js";
+ * import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  * import {BCFViewpointsPlugin} from "../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
  *
  * // Create a Viewer
@@ -36,8 +36,8 @@ const tempVec3 = math.vec3();
  * // Add a GLTFLoaderPlugin
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
- * // Add a ClipsPlugin
- * const clips = new ClipsPlugin(viewer);
+ * // Add a SectionPlanesPlugin
+ * const sectionPlanes = new SectionPlanesPlugin(viewer);
  *
  * // Add a BCFViewpointsPlugin
  * const bcfViewpoints = new BCFViewpointsPlugin(viewer);
@@ -52,7 +52,7 @@ const tempVec3 = math.vec3();
  * });
  *
  * // Slice it in half
- * clips.createClip({
+ * sectionPlanes.createSectionPlane({
  *      id: "myClip",
  *      pos: [0, 0, 0],
  *      dir: [0.5, 0.0, 0.5]
@@ -214,13 +214,13 @@ class BCFViewpointsPlugin extends Plugin {
         // Clipping planes
 
         bcfViewpoint.clipping_planes = [];
-        const clips = scene.clips;
-        for (let id in clips) {
-            if (clips.hasOwnProperty(id)) {
-                let clip = clips[id];
+        const sectionPlanes = scene.sectionPlanes;
+        for (let id in sectionPlanes) {
+            if (sectionPlanes.hasOwnProperty(id)) {
+                let sectionPlane = sectionPlanes[id];
                 bcfViewpoint.clipping_planes.push({
-                    location: xyzArrayToObject(clip.pos),
-                    direction: xyzArrayToObject(clip.dir)
+                    location: xyzArrayToObject(sectionPlane.pos),
+                    direction: xyzArrayToObject(sectionPlane.dir)
                 });
             }
         }
@@ -272,7 +272,7 @@ class BCFViewpointsPlugin extends Plugin {
     /**
      * Sets viewer state to the given BCF viewpoint.
      *
-     * @param bcfViewpoint {*} BCF JSON viewpoint object or "reset" / "RESET" to reset the viewer, which clears clipping planes,
+     * @param bcfViewpoint {*} BCF JSON viewpoint object or "reset" / "RESET" to reset the viewer, which clears SectionPlanes,
      * shows default visible entities and restores camera to initial default position.
      */
     setViewpoint(bcfViewpoint) {
@@ -310,7 +310,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.clipping_planes) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
-                new Clip(viewer.scene, {
+                new SectionPlane(viewer.scene, {
                     pos: xyzObjectToArray(e.location, tempVec3),
                     dir: xyzObjectToArray(e.direction, tempVec3)
                 });

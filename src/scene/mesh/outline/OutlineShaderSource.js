@@ -22,7 +22,7 @@ function hasNormals(mesh) {
 
 function buildVertex(mesh) {
     const scene = mesh.scene;
-    const clipping = scene._clipsState.clips.length > 0;
+    const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const normals = hasNormals(mesh);
     const billboard = mesh._state.billboard;
@@ -108,27 +108,27 @@ function buildVertex(mesh) {
 
 function buildFragment(mesh) {
     const scene = mesh.scene;
-    const clipsState = scene._clipsState;
-    const clipping = clipsState.clips.length > 0;
+    const sectionPlanesState = scene._sectionPlanesState;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("precision lowp float;");
     src.push("uniform vec4  color;");
     if (clipping) {
         src.push("uniform bool clippable;");
         src.push("varying vec4 vWorldPosition;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("uniform bool sectionPlaneActive" + i + ";");
+            src.push("uniform vec3 sectionPlanePos" + i + ";");
+            src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
     src.push("void main(void) {");
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (var i = 0; i < clipsState.clips.length; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
+        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("if (sectionPlaneActive" + i + ") {");
+            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");

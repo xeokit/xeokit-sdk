@@ -310,7 +310,7 @@ class BigModelNode {
     /**
      * Sets if this BigModelNode is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      */
@@ -332,7 +332,7 @@ class BigModelNode {
     /**
      * Gets if this BigModelNode is clippable.
      *
-     * Clipping is done by the {@link Clip}s in {@link Scene#clips}.
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
      * @type {Boolean}
      */

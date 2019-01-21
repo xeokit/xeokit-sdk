@@ -12,7 +12,7 @@ class Path extends Curve {
 
     /**
      * @constructor
-     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Clip as well.
+     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.
      * @param {*} [cfg]  Path configuration
      * @param {String} [cfg.id]  Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {String []} [cfg.paths=[]] IDs or instances of {{#crossLink "path"}}{{/crossLink}} subtypes to add to this Path.

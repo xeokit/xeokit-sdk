@@ -14,9 +14,9 @@ const InstancingDrawShaderSource = function (layer) {
 
 function buildVertex(layer) {
     var scene = layer.model.scene;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     const lightsState = scene._lightsState;
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     let i;
     let len;
     let light;
@@ -155,10 +155,10 @@ function buildVertex(layer) {
 
 function buildFragment(layer) {
     const scene = layer.model.scene;
-    const clipsState = scene._clipsState;
+    const sectionPlanesState = scene._sectionPlanesState;
     let i;
     let len;
-    const clipping = clipsState.clips.length > 0;
+    const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
     src.push("// Instancing geometry drawing fragment shader");
     src.push("precision mediump float;");
@@ -166,10 +166,10 @@ function buildFragment(layer) {
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (i = 0, len = clipsState.clips.length; i < len; i++) {
-            src.push("uniform bool clipActive" + i + ";");
-            src.push("uniform vec3 clipPos" + i + ";");
-            src.push("uniform vec3 clipDir" + i + ";");
+        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            src.push("uniform bool sectionPlaneActive" + i + ";");
+            src.push("uniform vec3 sectionPlanePos" + i + ";");
+            src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
     src.push("varying vec4 vColor;");
@@ -177,9 +177,9 @@ function buildFragment(layer) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (i = 0, len = clipsState.clips.length; i < len; i++) {
-            src.push("if (clipActive" + i + ") {");
-            src.push("   dist += clamp(dot(-clipDir" + i + ".xyz, vWorldPosition.xyz - clipPos" + i + ".xyz), 0.0, 1000.0);");
+        for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            src.push("if (sectionPlaneActive" + i + ") {");
+            src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
