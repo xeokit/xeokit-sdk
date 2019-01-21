@@ -136,9 +136,10 @@ import {RenderState} from &apos;../webgl/RenderState.js&apos;;
  * ## Usage
  *
  * ````javascript
- * * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
- * * import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
- *
+ * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+ * import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
+ * import {SectionPlane} from &quot;../src/sectionPlane/SectionPlane.js&quot;;
+ * 
  * const viewer = new Viewer({
  *      canvasId: &quot;myCanvas&quot;
  * });
@@ -153,14 +154,14 @@ import {RenderState} from &apos;../webgl/RenderState.js&apos;;
  * });
  *
  * // Create a SectionPlane on negative diagonal
- * const sectionPlane1 = new SectionPlane(myViewer.scene, {
+ * const sectionPlane1 = new SectionPlane(viewer.scene, {
  *     pos: [1.0, 1.0, 1.0],
  *     dir: [-1.0, -1.0, -1.0],
  *     active: true
  * }),
  *
  * // Create a SectionPlane on positive diagonal
- * const sectionPlane2 = new SectionPlane(myViewer.scene, {
+ * const sectionPlane2 = new SectionPlane(viewer.scene, {
  *     pos: [-1.0, -1.0, -1.0],
  *     dir: [1.0, 1.0, 1.0],
  *     active: true

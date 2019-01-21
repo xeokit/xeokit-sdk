@@ -1485,7 +1485,7 @@
       "expectCount": 11,
       "actualCount": 10,
       "undocumentLines": [
-        69
+        70
       ]
     },
     "src/scene/skybox/Skybox.js": {
@@ -2007,7 +2007,7 @@
       "expectCount": 8,
       "actualCount": 7,
       "undocumentLines": [
-        61
+        62
       ]
     },
     "src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
