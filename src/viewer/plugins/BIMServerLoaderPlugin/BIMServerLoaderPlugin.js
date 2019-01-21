@@ -17,15 +17,15 @@ import {utils} from "../../../scene/utils.js";
 /**
  * {@link Viewer} plugin that loads models from a [BIMServer](http://bimserver.org).
  *
- * Tested with bimserverjar-1.5.117.jar and IFC schema ifc2x3tc1.
+ * Tested with BIMServer v1.5.120 and IFC schema ifc2x3tc1.
  *
  * For each model loaded, BIMServerLoaderPlugin creates a {@link Model} within its
  * {@link Viewer}'s {@link Scene}. You can load multiple models into the same
  * Viewer, giving each its own position, scale and orientation. You can also load multiple copies of the same model.
  *
- * A BIMServerLoaderPlugin is configured with a BIMServerClient, which is a class provided by the BIMServer JavaScript
- * API that provides a client interface through which you can query BIMServer and download models. We use that class to
- * query BIMServer's database, while BIMServerLoaderPlugin uses it to download models.
+ * A BIMServerLoaderPlugin is configured with a BIMServerClient, which provides a client-side facade through which
+ * we can issue RPC calls to the BIMServer Service Interface. The BIMServerLoaderPlugin maakes RPC calls through that
+ * to download the model and it's IFC metadata..
  *
  * In the example below, we'll load the latest revision of a project's model. We'll assume that we have a BIMServer
  * instance running and serving requests on port 8082, with a model loaded for project ID ````131073````. We'll get
@@ -119,7 +119,8 @@ class BIMServerLoaderPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="BIMServerLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {BimServerClient} cfg.bimServerClient A BIMServer client API instance.
+     * @param {BimServerClient} cfg.bimServerClient A BIMServer client API instance through which the BIMServerLoaderPlugin
+     * issues RPC calls to BIMServer's BIMServer Service Interface to download models.
      * @param {Object} [cfg.objectDefaults] Map of initial default properties for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
      */
     constructor(viewer, cfg) {
