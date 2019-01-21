@@ -112,19 +112,14 @@
     var lastMesh = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
-
         var hit = viewer.scene.pick({
             canvasPos: coords
         });
-
         if (hit) {
-
             if (!lastMesh || hit.mesh.id !== lastMesh.id) {
-
                 if (lastMesh) {
                     lastMesh.highlighted = false;
                 }
-
                 lastMesh = hit.mesh;
                 hit.mesh.highlighted = true;
             }
