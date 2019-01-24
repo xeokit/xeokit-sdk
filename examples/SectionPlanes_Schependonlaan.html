@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>SectionPlanesPlugin</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Section planes</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
+            - Creates section planes
+        </li>
+        <li>See source code to examine the BCF JSON record</li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Saving-and-Loading-BCF-Viewpoints">Tutorial</a>
+        </li>
+
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+    viewer.scene.camera.look = [10.97, 5.82, -11.22];
+    viewer.scene.camera.up = [0.36, 0.83, 0.40];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a GLTFModelsPlugin - we'll use this to load the model geometry and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the glTF model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const modelNode = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        lambertMaterial: true,
+        edges: true // Emphasise edges
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a cross-section plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    sectionPlanes.createSectionPlane({
+        id: "myClip",
+        pos: [0, 0, 0],
+        dir: [0.5, 0.0, 0.5]
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Minimial OBJ Viewer Demo</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Loading an OBJ Model</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a>
+            - Loads OBJ model from file system
+        </li>
+
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {OBJLoaderPlugin} from "../src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load OBJ model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const objLoader = new OBJLoaderPlugin(viewer);
+
+    const modelNode = objLoader.load({
+        id: "myModel",
+        src: "./models/obj/sportsCar/sportsCar.obj",
+        edges: true
+    });
+
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(modelNode);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+
+</script>
+</html>

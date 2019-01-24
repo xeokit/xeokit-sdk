@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Mesh Picking with a Ray</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Mesh Picking with a Ray</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {Mesh} from "../src/scene/mesh/Mesh.js";
+    import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+    import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and tilt the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Display a red line segment to show the picking ray 
+    //------------------------------------------------------------------------------------------------------------------
+
+    var rayHelper = new (function () {
+
+        var mesh = new Mesh(viewer.scene, {
+            geometry: new ReadableGeometry(viewer.scene, {
+                primitive: "lines",
+                positions: [0, 0, 0, 0, 0, 0],
+                indices: [0, 1]
+            }),
+            material: new PhongMaterial(viewer.scene, {
+                emissive: [1, 0.3, 0.3],
+                diffuse: [0, 0, 0],
+                ambient: [0, 0, 0],
+                lineWidth: 2
+            }),
+            pickable: false
+        });
+
+        var positions = new Float32Array(6);
+
+        this.setRay = function (pos, dir) {
+            positions[0] = pos[0]; // Origin
+            positions[1] = pos[1];
+            positions[2] = pos[2];
+            positions[3] = pos[0] + dir[0]; // Direction
+            positions[4] = pos[1] + dir[1];
+            positions[5] = pos[2] + dir[2];
+            mesh.geometry.positions = positions;
+        };
+
+        this.setHighlighted = function (highlighted) {
+            mesh.material.emissive = highlighted ? [0.5, 1.0, 0.5] : [0.5, 0.3, 0.3];
+            mesh.material.lineWidth = highlighted ? 6 : 2;
+        };
+    })();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Dynamically pick surfaces of model with the ray, show ray with helper, highlight picked meshes
+    //------------------------------------------------------------------------------------------------------------------
+
+    var rayOrigin = new Float32Array([0.20, 0.02, -0.0]);
+    var rayDirection = new Float32Array([0, 10, 30]);
+
+    var xinc = 0.1;
+    var i = 0;
+
+    var lastMesh = null;
+    var lastColorize = null;
+
+    model.on("loaded", function () {
+
+        viewer.scene.on("tick", function () {
+
+            rayOrigin[0] += xinc;
+            rayOrigin[1] = 12 - Math.sin(rayOrigin[0] * 2.0) * 5;
+
+            i++;
+
+            if (i < 0 || i > 100) {
+                xinc = -xinc;
+                i = 0;
+            }
+
+            rayHelper.setRay(rayOrigin, rayDirection);
+
+            var hit = viewer.scene.pick({
+                pickSurface: false,  // <<------ Default, pick whole mesh
+                origin: rayOrigin,
+                direction: rayDirection
+            });
+
+            if (hit) {
+
+                if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+
+                    if (lastMesh) {
+                        lastMesh.colorize = lastColorize;
+                    }
+
+                    lastMesh = hit.mesh;
+                    lastColorize = hit.mesh.colorize.slice();
+
+                    hit.mesh.colorize = [0.0, 1.0, 0.0, 1.0];
+
+                    rayHelper.setHighlighted(true);
+                }
+
+            } else {
+
+                if (lastMesh) {
+                    lastMesh.colorize = lastColorize;
+                    lastMesh = null;
+                }
+
+                rayHelper.setHighlighted(false);
+            }
+        });
+    });
+
+</script>
+</html>

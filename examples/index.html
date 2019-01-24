@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>xeokit - Examples</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
+          rel='stylesheet' type='text/css'>
+
+    <link href="css/styles.css" rel="stylesheet"/>
+    <link href="libs/perfect-scrollbar.css" rel="stylesheet"/>
+    <script src="libs/perfect-scrollbar.min.js"></script>
+
+</head>
+<body>
+
+<div id="contents" class="container">
+    <div id="list" class="content">
+        <h1><a href="http://xeokit.io">xeokit</a> / Examples</h1>
+    </div>
+</div>
+
+<iframe id="viewer"></iframe>
+
+<script>
+
+    window.onload = function () {
+        var div = document.getElementById('contents');
+        Ps.initialize(div);
+    };
+    var files = {
+
+        "BIM Offline": [
+
+            "#Loading BIM models from file system",
+
+            "BIMOffline_Duplex",
+            "BIMOffline_Schependomlaan",
+            "BIMOffline_OTCConferenceCenter",
+
+            "#Load masking",
+
+            "BIMOffline_includeTypes_PlanView",
+
+            "#Custom initial object states",
+
+            "BIMOffline_objectDefaults",
+
+            // "#Huge model support",
+            // "BIMOffline_big_treeView_WestRiverSideHospital",
+
+            "#Using the metadata API",
+
+            "BIMOffline_metadata_Schependomlaan",
+        ],
+
+        "BIMServer": [
+
+            "#Loading models from the xeolabs BIMServer v1.5.120 instance",
+
+            "BIMServer_Duplex",
+            "BIMServer_Schependomlaan",
+
+            "#Custom initial object states",
+
+            "BIMServer_objectDefaults"
+        ],
+
+        "BCF": [
+            "#Saving and loading BCF viewpoints",
+            "BCF_SaveViewpoint",
+            "BCF_LoadViewpoint"
+        ],
+
+        "Camera": [
+            "camera_CameraPathAnimation"
+        ],
+
+        "Geometry": [
+
+            "#Geometry components",
+            "geometry_VBOGeometry",
+            "geometry_ReadableGeometry",
+
+            "#Geometry builders",
+            "geometry_builders_buildBoxGeometry",
+            "geometry_builders_buildCylinderGeometry",
+            "geometry_builders_buildSphereGeometry",
+            "geometry_builders_buildTorusGeometry",
+            "geometry_builders_buildVectorTextGeometry",
+
+            "#Geometry loaders",
+            "geometry_loaders_loadOBJGeometry",
+            "geometry_loaders_load3DSGeometry"
+        ],
+
+        "Gizmos": [
+            "#Gizmos",
+            "gizmos_AxisGizmoPlugin"
+        ],
+
+        "Lights": [
+            "#Light sources",
+            "lights_AmbientLight",
+
+            "lights_DirLight_view",
+            "lights_DirLight_world",
+
+            "lights_PointLight_view",
+            "lights_PointLight_world"
+        ],
+
+        "Loaders": [
+            "#Loading 3DXML models from files",
+            "loading_3DXML_Widget",
+
+            "#Loading glTF from files",
+            "loading_glTF_Schependomlaan",
+
+            "#Loading OBJ from files",
+            "loading_OBJ_SportsCar",
+
+            "#Loading STL from files",
+            "loading_STL_SpurGear"
+            // ,
+            //
+            // "#Large models from files",
+            // "loading_glTF_big_Schependomlaan",
+            // "loading_glTF_big_ModernOffice"
+        ],
+
+        "Metadata": [
+            "#Attaching information to scene content",
+            "metadata_BasicExample"
+        ],
+
+        "Materials": [
+
+            "#Material components",
+            "materials_PhongMaterial",
+            "materials_MetallicMaterial",
+            "materials_LambertMaterial",
+            "materials_EdgeMaterial",
+            "materials_EmphasisMaterial",
+
+            "#Texture maps",
+            "materials_Texture",
+
+            "#Fresnel effects",
+            "materials_Fresnel",
+        ],
+
+        "Picking": [
+            "#Selecting scene content",
+            "picking_canvas_mesh_colorize",
+            "picking_canvas_mesh_highlight",
+            "picking_canvas_mesh_select",
+            "picking_canvas_surface"
+            // ,
+            // "picking_ray_mesh",
+            // "picking_ray_surface"
+        ],
+
+        "Scene graphs": [
+            "#Creating scene graphs",
+            "sceneGraph_BasicSceneGraph",
+            "sceneGraph_SceneGraphWithModels"
+        ],
+
+        "Section planes": [
+            "#Creating cross-sectional views",
+            "SectionPlanes_Schependomlaan"
+        ]
+    };
+
+    //
+
+    var list = document.getElementById('list');
+    var viewer = document.getElementById('viewer');
+
+    var container = document.createElement('div');
+    list.appendChild(container);
+
+    var sourceButton = document.createElement('div');
+    sourceButton.id = 'sourceButton';
+    sourceButton.textContent = 'View source';
+
+    sourceButton.addEventListener('click', function (event) {
+        window.open('https://github.com/xeolabs/xeokit-sdk/blob/master/examples/' + selected + '.html');
+    }, false);
+
+    sourceButton.style.display = 'none';
+    document.body.appendChild(sourceButton);
+
+    var catDivs = {};
+    var divs = {};
+    var selected = null;
+    var index = 1;
+    var indexStr;
+
+    // Table of contents
+    var div = document.createElement('h2');
+    div.textContent = "Contents";
+
+    container.appendChild(div);
+    container.appendChild(document.createElement('hr'));
+
+    for (var key in files) {
+        var section = files[key];
+        var div = document.createElement('div');
+        div.className = 'link';
+        indexStr = "" + index++ + ".";
+        for (var i = indexStr.length, len = 5; i < len; i++) {
+            indexStr += ".";
+        }
+        div.textContent = indexStr + key;
+        div.addEventListener('click', (function () {
+            var k = key;
+            return function () {
+                catDivs[k].scrollIntoView();
+            }
+        })());
+        container.appendChild(div);
+    }
+
+    container.appendChild(document.createElement('hr'));
+
+    _index = 1;
+
+    var clickedFile = null;
+
+    for (var key in files) {
+        var section = files[key];
+        var div = document.createElement('h2');
+        div.textContent = _index++ + ". " + key;
+        container.appendChild(div);
+        catDivs[key] = div;
+        for (var i = 0; i < section.length; i++) {
+            var file = section[i];
+            if (file.charAt(0) == "#") {
+                var div = document.createElement('div');
+                div.textContent = "// " + file.substring(1);
+                //div.textContent = "";
+                div.className = (i == 0 ? 'infoFirst' : 'info');
+                container.appendChild(div);
+                continue;
+            }
+            (function (file) {
+                var name = file.split('_');
+                name.shift();
+                name = name.join(' / ');
+                var div = document.createElement('div');
+                div.className = 'link';
+                div.textContent = name; // expandCamel(name);
+                div.addEventListener('click', function () {
+                    clickedFile = file;
+                    window.location.hash = "#" + file;
+                });
+                container.appendChild(div);
+                divs[file] = div;
+            })(file);
+        }
+    }
+
+    function expandCamel(str) {
+        return str.replace(/([A-Z])/g, function ($1) {
+            return " " + $1.toLowerCase();
+        });
+    }
+
+    var load = function (file) {
+
+        if (file.indexOf(".html", file.length - 5) !== -1) {
+            window.location = "./" + file + ".html";
+            return;
+        }
+
+        if (selected !== null) divs[selected].className = 'link';
+        divs[file].className = 'link selected';
+        window.location.hash = file;
+        viewer.src = file + '.html';
+        viewer.focus();
+        sourceButton.style.display = '';
+        selected = file;
+        if (clickedFile !== file) {
+            scrollIntoView(divs[file]);
+        }
+        clickedFile = null;
+    };
+
+    if (window.location.hash !== '') {
+        load(window.location.hash.substring(1));
+    }
+
+    var hash = window.location.hash;
+
+    window.setInterval(function () {
+        if (window.location.hash != hash) {
+            load(window.location.hash.substring(1));
+            hash = window.location.hash;
+        }
+    }, 200);
+
+    function scrollIntoView(div) {
+        document.getElementById("contents").scrollTop = documentOffsetTop(div) - (window.innerHeight / 6);
+    }
+
+    function documentOffsetTop(div) {
+        return div.offsetTop + (div.offsetParent ? documentOffsetTop(div.offsetParent) : 0);
+    }
+
+</script>
+
+</body>
+</html>

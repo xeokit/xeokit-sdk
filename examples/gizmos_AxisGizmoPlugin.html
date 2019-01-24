@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Axis Gizmo</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Axis Gizmo</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a>
+            - Shows World coordinate axis
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+
+    </ul>
+</div>
+</body>
+<script type="module">
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {AxisGizmoPlugin} from "../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    new AxisGizmoPlugin(viewer, {size: [250, 250]});
+
+    const modelNode = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    const scene = viewer.scene;
+    const camera = scene.camera;
+
+    camera.orbitPitch(20);
+
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(modelNode);
+        scene.on("tick", () => {
+            camera.orbitYaw(0.4);
+        })
+    });
+</script>
+</html>

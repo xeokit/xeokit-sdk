@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Function | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene">scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-bigmodels">scene/bigModels</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/BigModel.js~BigModel.html">BigModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html">BigModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/bigModels/BigModelNode.js~BigModelNode.html">BigModelNode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-camera">scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-canvas">scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-geometry">scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-geometry-builders">scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-geometry-loaders">scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-input">scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-lights">scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-materials">scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-mesh">scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-nodes">scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-paths">scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-scene">scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-sectionplane">scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-skybox">scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-utils">scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Map.js~Map.html">Map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/utils/Queue.js~Queue.html">Queue</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scene-viewport">scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-axisgizmoplugin">viewer/plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bcfviewpointsplugin">viewer/plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin">viewer/plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html">BIMServerBigLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin-lib">viewer/plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadMetaModel">loadMetaModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-gltfbigmodelloaderplugin">viewer/plugins/GLTFBigModelLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html">GLTFBigModelLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-gltfloaderplugin">viewer/plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-lightsplugin">viewer/plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-objloaderplugin">viewer/plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-planviewplugin">viewer/plugins/PlanViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js~PlanViewPlugin.html">PlanViewPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-stlloaderplugin">viewer/plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-sectionplanesplugin">viewer/plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-skyboxesplugin">viewer/plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-webvrplugin">viewer/plugins/WebVRPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/WebVRPlugin/WebVRPlugin.js~WebVRPlugin.html">WebVRPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-xml3dloaderplugin">viewer/plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils-bimserverclient">viewer/utils/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/utils/BIMServerClient/bimserverapipromise.js~BimServerApiPromise.html">BimServerApiPromise</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/utils/BIMServerClient/bimserverapiwebsocket.js~BimServerApiWebSocket.html">BimServerApiWebSocket</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/utils/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/utils/BIMServerClient/model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-geometry">geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ifc2x3tc1">ifc2x3tc1</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ifc4">ifc4</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-translations">translations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">Function</h1>
+<div data-ice="summaries"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Static Public Summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates a box-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates a cylinder-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates a plane-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates a sphere-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates a torus-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Creates wireframe vector text <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Loads <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from 3DS.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-loadMetaModel">loadMetaModel</a></span></span><span class="code" data-ice="signature">(viewer: <span>*</span>, modelId: <span>*</span>, poid: <span>*</span>, roid: <span>*</span>, bimServerClientModel: <span>*</span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Loads <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from OBJ.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="details"><h2 data-ice="title">Static Public </h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildBoxGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildBoxGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber54">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildBoxGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildBoxGeometry.js.html#lineNumber54">xeokit-sdk/src/scene/geometry/builders/buildBoxGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates a box-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a box-shaped <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span>.</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildBoxGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildBoxGeometry} from &quot;../src/scene/geometry/builders/buildBoxGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const myViewer = new Viewer({
+        canvasId: &quot;myCanvas&quot;
+});
+
+myViewer.scene.camera.eye = [0, 0, 5];
+myViewer.scene.camera.look = [0, 0, 0];
+myViewer.scene.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+     geometry: buildBoxGeometry(ReadableGeometry, myViewer.scene, {
+        center: [0,0,0],
+        xSize: 1,  // Half-size on each axis
+        ySize: 1,
+        zSize: 1
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+        diffuseMap: new Texture(myViewer.scene, {
+            src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+        })
+     })
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.xSize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>Half-size on the X-axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.ySize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>Half-size on the Y-axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.zSize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>Half-size on the Z-axis.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildCylinderGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildCylinderGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber61">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildCylinderGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildCylinderGeometry.js.html#lineNumber61">xeokit-sdk/src/scene/geometry/builders/buildCylinderGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates a cylinder-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a cylinder-shaped <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildCylinderGeometry} from &quot;../src/scene/geometry/builders/buildCylinderGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+ });
+
+viewer.camera.eye = [0, 0, 5];
+viewer.camera.look = [0, 0, 0];
+viewer.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+     geometry: buildCylinderGeometry(ReadableGeometry, myViewer.scene, {
+         center: [0,0,0],
+         radiusTop: 2.0,
+         radiusBottom: 2.0,
+         height: 5.0,
+         radialSegments: 20,
+         heightSegments: 1,
+         openEnded: false
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+        diffuseMap: new Texture(myViewer.scene, {
+            src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+        })
+     })
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID for the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radiusTop</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Radius of top.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radiusBottom</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Radius of bottom.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Height.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radialSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 60</li></ul></td>
+      <td data-ice="description"><p>Number of horizontal segments.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.heightSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Number of vertical segments.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.openEnded</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Whether or not the cylinder has solid caps on the ends.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildPlaneGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildPlaneGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber57">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildPlaneGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildPlaneGeometry.js.html#lineNumber57">xeokit-sdk/src/scene/geometry/builders/buildPlaneGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates a plane-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a PlaneGeometry and a <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span> with diffuse <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span>:</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildPlaneGeometry} from &quot;../src/scene/geometry/builders/buildPlaneGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+viewer.camera.eye = [0, 0, 5];
+viewer.camera.look = [0, 0, 0];
+viewer.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+    geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+         center: [0,0,0],
+         xSize: 2,
+         zSize: 2,
+         xSegments: 10,
+         zSegments: 10
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+         diffuseMap: new Texture(myViewer.scene, {
+             src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+         })
+     })
+ });</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID for the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.xSize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Dimension on the X-axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.zSize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Dimension on the Z-axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.xSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Number of segments on the X-axis.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.zSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Number of segments on the Z-axis.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildSphereGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildSphereGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber54">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildSphereGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildSphereGeometry.js.html#lineNumber54">xeokit-sdk/src/scene/geometry/builders/buildSphereGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates a sphere-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a sphere-shaped <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildSphereGeometry} from &quot;../src/scene/geometry/builders/buildSphereGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;
+});
+
+viewer.camera.eye = [0, 0, 5];
+viewer.camera.look = [0, 0, 0];
+viewer.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+     geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+         center: [0,0,0],
+         radius: 1.5,
+         heightSegments: 60,
+         widthSegments: 60
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+        diffuseMap: new Texture(myViewer.scene, {
+            src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+        })
+     })
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID for the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radius</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Radius.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.heightSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 24</li></ul></td>
+      <td data-ice="description"><p>Number of latitudinal bands.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.widthSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 18</li></ul></td>
+      <td data-ice="description"><p>Number of longitudinal bands.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildTorusGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildTorusGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber58">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildTorusGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildTorusGeometry.js.html#lineNumber58">xeokit-sdk/src/scene/geometry/builders/buildTorusGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates a torus-shaped <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with a torus-shaped <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildTorusGeometry} from &quot;../src/scene/geometry/builders/buildTorusGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+viewer.camera.eye = [0, 0, 5];
+viewer.camera.look = [0, 0, 0];
+viewer.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+     geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
+         center: [0,0,0],
+         radius: 1.0,
+         tube: 0.5,
+         radialSegments: 32,
+         tubeSegments: 24,
+         arc: Math.PI * 2.0
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+        diffuseMap: new Texture(myViewer.scene, {
+            src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+        })
+     })
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID for the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radius</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>The overall radius.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.tube</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.3</li></ul></td>
+      <td data-ice="description"><p>The tube radius.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.radialSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 32</li></ul></td>
+      <td data-ice="description"><p>The number of radial segments.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.tubeSegments</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 24</li></ul></td>
+      <td data-ice="description"><p>The number of tubular segments.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.arc</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Math.PI*0.5</li></ul></td>
+      <td data-ice="description"><p>The length of the arc in radians, where Math.PI*2 is a closed torus.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-buildVectorTextGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">buildVectorTextGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1626">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {buildVectorTextGeometry} from &apos;<span><a href="file/src/scene/geometry/builders/buildVectorTextGeometry.js.html#lineNumber1626">xeokit-sdk/src/scene/geometry/builders/buildVectorTextGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Creates wireframe vector text <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>.</p>
+<h2 id="usage">Usage</h2><p>Creating a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with vector text <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> :</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {buildVectorTextGeometry} from &quot;../src/scene/geometry/builders/buildVectorTextGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+
+const viewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+viewer.camera.eye = [0, 0, 100];
+viewer.camera.look = [0, 0, 0];
+viewer.camera.up = [0, 1, 0];
+
+new Mesh(myViewer.scene, {
+     geometry: buildVectorTextGeometry(ReadableGeometry, myViewer.scene, {
+         origin: [0,0,0],
+         text: &quot;On the other side of the screen, it all looked so easy&quot;
+     }),
+     material: new PhongMaterial(myViewer.scene, {
+        diffuseMap: new Texture(myViewer.scene, {
+            src: &quot;textures/diffuse/uvGrid2.jpg&quot;
+        })
+     })
+});</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.center</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the center position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.origin</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>3D point indicating the top left corner.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.size</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1</li></ul></td>
+      <td data-ice="description"><p>Size of each character.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.text</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;&quot;</li></ul></td>
+      <td data-ice="description"><p>The text.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-load3DSGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">load3DSGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber66">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {load3DSGeometry} from &apos;<span><a href="file/src/scene/geometry/loaders/load3DSGeometry.js.html#lineNumber66">xeokit-sdk/src/scene/geometry/loaders/load3DSGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Loads <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from 3DS.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with <span><a href="class/src/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>, <span><a href="class/src/scene/materials/Texture.js~Texture.html">Texture</a></span> and a <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> loaded from 3DS.</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_loaders_3DS">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {load3DSGeometry} from &quot;../src/scene/geometry/loaders/load3DSGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../src/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const myViewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+
+myViewer.scene.camera.eye = [40.04, 23.46, 79.06];
+myViewer.scene.camera.look = [-6.48, 13.92, -0.56];
+myViewer.scene.camera.up = [-0.04, 0.98, -0.08];
+
+load3DSGeometry(ReadableGeometry, myViewer.scene, {
+
+     src: &quot;models/3ds/lexus.3ds&quot;,
+     compressGeometry: false
+
+ }).then(function (geometry) {
+
+     // Success
+
+     new Mesh(myViewer.scene, {
+
+         geometry: geometry,
+
+         material: new PhongMaterial(myViewer.scene, {
+
+             emissive: [1, 1, 1],
+             emissiveMap: new Texture({  // .3DS has no normals so relies on emissive illumination
+                 src: &quot;models/3ds/lexus.jpg&quot;
+             })
+         }),
+
+         rotation: [-90, 0, 0] // +Z is up for this particular 3DS
+     });
+ }, function () {
+     // Error
+ });</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs, also passed into <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype constructor.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.src</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to 3DS file.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-loadMetaModel">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">loadMetaModel</span><span class="code" data-ice="signature">(viewer: <span>*</span>, modelId: <span>*</span>, poid: <span>*</span>, roid: <span>*</span>, bimServerClientModel: <span>*</span>): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js.html#lineNumber1">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {loadMetaModel} from &apos;<span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js.html#lineNumber1">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">viewer</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">modelId</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">poid</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">roid</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">bimServerClientModel</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-function-loadOBJGeometry">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">loadOBJGeometry</span><span class="code" data-ice="signature">(geometryClass: <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span>, owner: <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>, cfg: <span>*</span>): <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber81">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {loadOBJGeometry} from &apos;<span><a href="file/src/scene/geometry/loaders/loadOBJGeometry.js.html#lineNumber81">xeokit-sdk/src/scene/geometry/loaders/loadOBJGeometry.js</a></span>&apos;</code></pre></div>
+  
+  
+  <div data-ice="description"><p>Loads <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> from OBJ.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with <span><a href="class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span> and <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> loaded from OBJ.</p>
+<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#geometry_loaders_OBJ">Run this example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {Mesh} from &quot;../src/scene/mesh/Mesh.js&quot;;
+import {loadOBJGeometry} from &quot;../src/scene/geometry/loaders/loadOBJGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../src/scene/geometry/ReadableGeometry.js&quot;;
+import {MetallicMaterial} from &quot;../src/scene/materials/MetallicMaterial.js&quot;;
+import {Texture} from &quot;../src/scene/materials/Texture.js&quot;;
+
+const myViewer = new Viewer({
+     canvasId: &quot;myCanvas&quot;
+});
+
+myViewer.scene.camera.eye = [0.57, 1.37, 1.14];
+myViewer.scene.camera.look = [0.04, 0.58, 0.00];
+myViewer.scene.camera.up = [-0.22, 0.84, -0.48];
+
+loadOBJGeometry(ReadableGeometry, myViewer.scene, {
+
+     src: &quot;models/obj/fireHydrant/FireHydrantMesh.obj&quot;,
+     compressGeometry: false
+
+ }).then(function (geometry) {
+
+     // Success
+
+     new Mesh(myViewer.scene, {
+
+         geometry: geometry,
+
+         material: new MetallicMaterial(myViewer.scene, {
+
+             baseColor: [1, 1, 1],
+             metallic: 1.0,
+             roughness: 1.0,
+
+             baseColorMap: new Texture(myViewer.scene, {
+                 src: &quot;models/obj/fireHydrant/fire_hydrant_Base_Color.png&quot;,
+                 encoding: &quot;sRGB&quot;
+             }),
+             normalMap: new Texture(myViewer.scene, {
+                 src: &quot;models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png&quot;
+             }),
+             roughnessMap: new Texture(myViewer.scene, {
+                 src: &quot;models/obj/fireHydrant/fire_hydrant_Roughness.png&quot;
+             }),
+             metallicMap: new Texture(myViewer.scene, {
+                 src: &quot;models/obj/fireHydrant/fire_hydrant_Metallic.png&quot;
+             }),
+             occlusionMap: new Texture(myViewer.scene, {
+                 src: &quot;models/obj/fireHydrant/fire_hydrant_Mixed_AO.png&quot;
+             }),
+
+             specularF0: 0.7
+         })
+     });
+ }, function () {
+     // Error
+ });</code>
+</code></pre>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">geometryClass</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype to instantiate.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">owner</td>
+      <td data-ice="type" class="code"><span><a href="class/src/scene/Component.js~Component.html">Component</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Owner <span><a href="class/src/scene/Component.js~Component.html">Component</a></span>. When destroyed, the owner will destroy the <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> as well.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cfg</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Configs, also passed into <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype constructor.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional ID, unique among all components in the parent <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span>, generated automatically when omitted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.src</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to OBJ file.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span><a href="class/src/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span> subtype indicated by geometryClass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

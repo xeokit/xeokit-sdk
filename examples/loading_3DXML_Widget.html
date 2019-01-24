@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XML3DLoaderPlugin - Loading a Model from 3DXML</title>
+    <link href="./css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>Loading a Model from 3DXML</h1>
+    <li>
+        <a target="_other"
+           href="./../docs/class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a>
+        - Loads a 3DXML model from file system
+    </li>
+    <li>
+        <a target="_other"
+           href="./../docs/class/src/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a>
+        - Creates reflections
+    </li>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {ReflectionMap} from "../src/scene/lights/ReflectionMap.js";
+    import {XML3DLoaderPlugin} from "../src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ReflectionMap
+    //------------------------------------------------------------------------------------------------------------------
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load 3DXML model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xml3dLoader = new XML3DLoaderPlugin(viewer, {
+        workerScriptsPath: "../src/viewer/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
+    });
+
+    const modelNode = xml3dLoader.load({
+        id: "myModel",
+        src: "./models/xml3d/3dpreview.3dxml",
+        edges: true
+    });
+
+    modelNode.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(modelNode);
+        viewer.scene.on("tick", () => {
+            viewer.camera.orbitYaw(0.4);
+        })
+    });
+
+</script>
+</html>

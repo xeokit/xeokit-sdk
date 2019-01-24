@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minimal BIM Viewer for glTF Models</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #treePanel {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
+        }
+
+        #myCanvas {
+            background: #ffffff;
+        }
+    </style>
+
+    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
+    <script src="./libs/lodash.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="treePanel" class="treePanel"></div>
+
+<div id="info">
+    <h1>Offline BIM - custom initial object states</h1>
+    <p>Using our own map of initial default states for IFC elements</p>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak ghosting and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-5.787334442138672, 4.160038948059082, 27.20277976989746];
+    viewer.camera.look = [11.977849960327148, -1.2180767059326172, 3.56645131111145];
+    viewer.camera.up = [0.10751853883266449, 0.9838587045669556, -0.14305178821086884];
+
+    viewer.cameraFlight.fitFOV = 15;
+
+    viewer.scene.ghostMaterial.fillAlpha = 0.1;
+    viewer.scene.ghostMaterial.fillColor = [0, 0, 0];
+    viewer.scene.ghostMaterial.edgeAlpha = 0.4;
+    viewer.scene.ghostMaterial.edgeColor = [0, 0, 0];
+
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata using a GLTFLoaderPlugin
+    //
+    // Use our own map of initial default states for each Entity that represents an object in glTF
+    // models loaded by our GLTFLoaderPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    const myObjectDefaults = {
+        IfcSpace: {
+            colorize: [0.137255, 0.403922, 0.870588],
+            pickable: false,
+            visible: false,
+            opacity: 0.5
+        },
+        IfcRoof: {
+            colorize: [0.337255, 0.803922, 0.270588]
+        },
+        IfcSlab: {
+            colorize: [0.837255, 0.603922, 0.670588]
+        },
+        IfcWall: {
+            colorize: [ 0.537255, 0.537255, 0.837255]
+        },
+        IfcWallStandardCase: {
+            colorize: [0.537255, 0.337255, 0.237255]
+        },
+        IfcDoor: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcWindow: {
+            colorize: [0.137255, 0.803922, 0.470588],
+            pickable: false,
+            opacity: 0.5
+        },
+        IfcOpeningElement: {
+            colorize: [0.137255, 0.403922, 0.870588],
+            pickable: false,
+            visible: false
+        },
+        IfcRailing: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcColumn: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcBeam: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFurnishingElement: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcCurtainWall: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcStair: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcStairFlight: {
+            colorize: [0.637255, 0.603922, 0.670588]
+        },
+        IfcBuildingElementProxy: {
+            colorize: [0.5, 0.5, 0.5]
+        },
+        IfcFlowSegment: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFlowitting: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcFlowTerminal: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcProxy: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcSite: {
+            colorize: [0.137255, 0.403922, 0.870588]
+        },
+        IfcLightFixture: {
+            colorize: [0.8470588235, 0.8470588235, 0.870588]
+        },
+        IfcDuctSegment: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDistributionFlowElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcDuctFitting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcPlate: {
+            colorize: [0.8470588235, 0.427450980392, 0, 0.5],
+            opacity: 0.5
+        },
+        IfcAirTerminal: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcMember: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcCovering: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcTransportElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFlowController: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFlowFitting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcRamp: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcFurniture: {
+            colorize: [0.8470588235, 0.227450980392, 0]
+        },
+        IfcFooting: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        IfcSystemFurnitureElement: {
+            colorize: [0.8470588235, 0.427450980392, 0]
+        },
+        DEFAULT: {
+            colorize: [0.5, 0.5, 0.5]
+        }
+    };
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+
+        objectDefaults: myObjectDefaults, // Use our custom initial default states for object Entities
+
+        edges: true,
+        lambertMaterial: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over meshes to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastMesh = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+
+                if (lastMesh) {
+                    lastMesh.highlighted = false;
+                }
+
+                lastMesh = hit.mesh;
+                hit.mesh.highlighted = true;
+            }
+        } else {
+
+            if (lastMesh) {
+                lastMesh.highlighted = false;
+                lastMesh = null;
+            }
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, create a tree view that toggles object ghosting
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", function () {
+
+        // Fit model to view
+        model.on("loaded", () => {
+            viewer.cameraFlight.jumpTo(model);
+        });
+
+        // Builds tree view data from MetaModel
+        var createData = function (metaModel) {
+            const data = [];
+
+            function visit(expand, data, metaObject) {
+                if (!metaObject) {
+                    return;
+                }
+                var child = {
+                    id: metaObject.id,
+                    text: metaObject.name
+                };
+                data.push(child);
+                const children = metaObject.children;
+                if (children) {
+                    child.children = [];
+                    for (var i = 0, len = children.length; i < len; i++) {
+                        visit(true, child.children, children[i]);
+                    }
+                }
+            }
+
+            visit(true, data, metaModel.rootMetaObject);
+            return data;
+        };
+
+        // Get MetaModel we loaded for our model
+        const modelId = model.id;
+        const metaModel = viewer.metaScene.metaModels[modelId];
+
+        // Create the tree view
+        var treeView = new InspireTree({
+            selection: {
+                autoSelectChildren: true,
+                autoDeselect: true,
+                mode: 'checkbox'
+            },
+            checkbox: {
+                autoCheckChildren: true
+            },
+            data: createData(metaModel)
+        });
+
+        new InspireTreeDOM(treeView, {
+            target: document.getElementById("treePanel")
+        });
+
+        // Initialize the tree view once loaded
+        treeView.on('model.loaded', function () {
+
+            treeView.select();
+
+            treeView.model.expand();
+
+            treeView.on('node.selected', function (event, node) {
+                const objectId = event.id;
+                viewer.scene.setObjectsGhosted(objectId, false);
+                viewer.scene.setObjectsCollidable(objectId, true);
+                viewer.scene.setObjectsPickable(objectId, true);
+            });
+
+            treeView.on('node.deselected', function (event, node) {
+                const objectId = event.id;
+                viewer.scene.setObjectsGhosted(objectId, true);
+                viewer.scene.setObjectsCollidable(objectId, false);
+                viewer.scene.setObjectsPickable(objectId, false);
+            });
+        });
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    //
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.input.on("mouseclicked", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+            var mesh = hit.mesh;
+            var metaObject = viewer.metaScene.metaObjects[mesh.objectId];
+            if (metaObject) {
+                console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+            } else {
+                const parent = mesh.parent;
+                if (parent) {
+                    metaObject = viewer.metaScene.metaObjects[parent.objectId];
+                    if (metaObject) {
+                        console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
+                    }
+                }
+            }
+        }
+    });
+</script>
+</html>
