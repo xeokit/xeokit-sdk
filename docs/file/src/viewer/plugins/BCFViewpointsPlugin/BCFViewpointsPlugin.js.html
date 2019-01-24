@@ -12,7 +12,7 @@
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
-  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
@@ -206,9 +206,6 @@ const tempVec3 = math.vec3();
  * });
  * ````
  *
- * ````javascript
- * ````
- *
  * @class BCFViewpointsPlugin
  */
 class BCFViewpointsPlugin extends Plugin {
@@ -400,20 +397,12 @@ class BCFViewpointsPlugin extends Plugin {
      */
     setViewpoint(bcfViewpoint) {
 
-        var self = this;
-
         if (!bcfViewpoint) {
             return;
         }
 
         const viewer = this.viewer;
-
-        if (bcfViewpoint.length &amp;&amp; bcfViewpoint.toUpperCase() === &apos;RESET&apos;) {
-            viewer.resetView();
-            return;
-        }
-
-        const scene = this.viewer.scene;
+        const scene = viewer.scene;
         const camera = scene.camera;
 
 

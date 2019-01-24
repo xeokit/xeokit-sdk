@@ -1,7 +1,7 @@
 {
-  "coverage": "49.02%",
-  "expectCount": 2917,
-  "actualCount": 1430,
+  "coverage": "49.04%",
+  "expectCount": 2918,
+  "actualCount": 1431,
   "files": {
     "src/scene/Component.js": {
       "expectCount": 43,
@@ -709,9 +709,9 @@
         102,
         103,
         104,
-        203,
-        211,
-        232
+        214,
+        222,
+        243
       ]
     },
     "src/scene/geometry/builders/buildBoxGeometry.js": {
@@ -1800,9 +1800,9 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        347,
-        351,
-        264
+        336,
+        340,
+        261
       ]
     },
     "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js": {
@@ -1821,6 +1821,11 @@
         211,
         224
       ]
+    },
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js": {
       "expectCount": 1,

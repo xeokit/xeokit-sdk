@@ -12,7 +12,7 @@
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
-  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
@@ -122,6 +122,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {DataInputStreamReader} from &quot;./DataInputStreamReader.js&quot;;
+import {defaultMaterials} from &quot;./defaultMaterials.js&quot;;
 
 /**
  * @private
@@ -371,6 +372,7 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
 
             let reused = stream.readInt();
             let ifcType = stream.readUTF8();
+            let ifcColor = defaultMaterials[ifcType];
 
             stream.align8();
 
@@ -493,7 +495,7 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
             var nrColors = stream.readInt();
             var roid = stream.readLong();
             var geometryInfoOid = stream.readLong();
-            var hasTransparency = stream.readLong() == 1;
+            var hasTransparency = stream.readLong() === 1;
 
             stream.align8();
             var objectBounds = stream.readDoubleArrayCopy(6);
@@ -501,29 +503,29 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
             var geometryDataOid = stream.readLong();
             var geometryDataOidFound = geometryDataOid;
             if (hasTransparency) {
-            //     this.createdTransparentObjects.set(oid, {
-            //         nrColors: nrColors,
-            //         type: type
-            //     });
-            // } else {
-            //     this.createdOpaqueObjects.set(oid, {
-            //         nrColors: nrColors,
-            //         type: type
-            //     });
-             }
+                //     this.createdTransparentObjects.set(oid, {
+                //         nrColors: nrColors,
+                //         type: type
+                //     });
+                // } else {
+                //     this.createdOpaqueObjects.set(oid, {
+                //         nrColors: nrColors,
+                //         type: type
+                //     });
+            }
 
             this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
         } else if (geometryType === 7) {
-            this.processPreparedBuffer(stream, true);
+         //   this.processPreparedBuffer(stream, true);
 
         } else if (geometryType === 8) {
-            this.processPreparedBuffer(stream, false);
+        //    this.processPreparedBuffer(stream, false);
 
         } else if (geometryType === 10) {
-            this.processPreparedBufferInit(stream, true);
+        //    this.processPreparedBufferInit(stream, true);
 
         } else if (geometryType === 11) {
-            this.processPreparedBufferInit(stream, false);
+        //    this.processPreparedBufferInit(stream, false);
 
         } else {
             console.error(&quot;Unsupported geometry type: &quot; + geometryType);

@@ -12,7 +12,7 @@
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
-  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.gif" style="width:34px;"></a>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
@@ -280,15 +280,26 @@ class VBOGeometry extends Geometry {
         var positions;
 
         {
-            const bounds = geometryCompressionUtils.getPositionsBounds(cfg.positions);
-            const result = geometryCompressionUtils.compressPositions(cfg.positions, bounds.min, bounds.max);
-            positions = result.quantized;
-            state.positionsDecodeMatrix = result.decodeMatrix;
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
-            memoryStats.positions += state.positionsBuf.numItems;
-            math.positions3ToAABB3(cfg.positions, this._aabb);
-            math.positions3ToAABB3(positions, tempAABB, state.positionsDecodeMatrix);
-            math.AABB3ToOBB3(tempAABB, this._obb);
+            const positionsDecodeMatrix = cfg.positionsDecodeMatrix;
+
+            if (positionsDecodeMatrix) {
+
+                // Compressed positions
+
+            } else {
+
+                // Uncompressed positions
+
+                const bounds = geometryCompressionUtils.getPositionsBounds(cfg.positions);
+                const result = geometryCompressionUtils.compressPositions(cfg.positions, bounds.min, bounds.max);
+                positions = result.quantized;
+                state.positionsDecodeMatrix = result.decodeMatrix;
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
+                memoryStats.positions += state.positionsBuf.numItems;
+                math.positions3ToAABB3(cfg.positions, this._aabb);
+                math.positions3ToAABB3(positions, tempAABB, state.positionsDecodeMatrix);
+                math.AABB3ToOBB3(tempAABB, this._obb);
+            }
         }
 
         if (cfg.colors) {
