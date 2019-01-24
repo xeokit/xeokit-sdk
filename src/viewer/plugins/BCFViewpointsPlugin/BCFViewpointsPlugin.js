@@ -274,20 +274,12 @@ class BCFViewpointsPlugin extends Plugin {
      */
     setViewpoint(bcfViewpoint) {
 
-        var self = this;
-
         if (!bcfViewpoint) {
             return;
         }
 
         const viewer = this.viewer;
-
-        if (bcfViewpoint.length && bcfViewpoint.toUpperCase() === 'RESET') {
-            viewer.resetView();
-            return;
-        }
-
-        const scene = this.viewer.scene;
+        const scene = viewer.scene;
         const camera = scene.camera;
 
 
