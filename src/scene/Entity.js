@@ -1,8 +1,12 @@
 /**
- * @desc A generic visible {@link Scene} element that has an identity and can be individually shown, hidden, selected,
+ * @desc An abstract 3D scene element that can be individually shown, hidden, selected,
  * highlighted, ghosted, culled, picked, clipped and bounded.
  *
- * An Entity can also represent a model and/or an object.
+ * An Entity can also represent a model or an object.
+ *
+ * Entity provides a uniform, abstract interface through which different types of model representations can be accessed
+ * and manipulated. implements {@link Entity}s as {@link PerformanceModel}s for performance, or {@link Node}s and
+ * {@link Mesh}s for realism.
  *
  * ## Entities Representing Models
  *

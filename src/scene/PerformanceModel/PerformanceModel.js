@@ -22,11 +22,9 @@ const defaultRotation = math.vec3([0, 0, 0]);
 const defaultQuaternion = math.identityQuaternion();
 
 /**
- * @desc A performance-oriented model representation for high-detail visualization.
+ * @desc An {@link Entity} that is a high-performance model representation designed for efficient rendering and low memory usage.
  *
  * ## PerformanceModel Structure
- *
- * A PerformanceModel is structured to support low-memory usage and optimized rendering techniques.
  *
  * * A PerformanceModel represents each of its elements with an {@link Entity}.
  * * Each {@link Entity} has one or more meshes that define its shape.
@@ -34,7 +32,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## Geometry Batching and Instancing
  *
- * At the WebGL layer, PerformanceModel uses geometry batching to efficiently render unique geometries, combining them
+ * PerformanceModel uses geometry batching to render unique geometries, combining them
  * into a single set of VBOs that it renders in one draw call. The VBOs also contain additional per-vertex attribute arrays to
  * feed rendering state (visibility, color, effects etc) for each unique geometry's mesh into the vertex shader.
  *
@@ -45,13 +43,17 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## Static Transforms
  *
- * The transforms of a PerformanceModel and its Entitys are static, ie. they cannot be dynamically
+ * Transforms within a PerformanceModel are static, ie. they cannot be dynamically
  * translated, rotated and scaled the way {@link Node}s and {@link Mesh}es can.
  *
  * ## GPU-Resident Geometry
  *
- * For a low memory footprint, PerformanceModel does not retain geometry data in CPU memory, keeping it solely in GPU
- * memory, which unfortunately cannot be read back by JavaScript code.
+ * For low memory footprint, PerformanceModel stores its geometries in GPU only. GPU-resident geometry is
+ * not readable by JavaScript.
+ *
+ * ## Picking
+ *
+ * PerformanceModel supports picking of entire {@link Entity}s, but does not yet support picking of 3D positions on their surfaces.
  *
  * ## Emphasis Effects
  *
@@ -60,8 +62,12 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## Examples
  *
- * * [PerformanceModel with Entities having unique geometries](../../examples/#sceneRepresentation_PerformanceModel_batching)
- * * [PerformanceModel with Entities reusing the same geometries](../../examples/#sceneRepresentation_PerformanceModel_instancing)
+ * * [PerformanceModel using geometry batching](../../examples/#sceneRepresentation_PerformanceModel_batching)
+ * * [PerformanceModel using geometry instancing](../../examples/#sceneRepresentation_PerformanceModel_instancing)
+ *
+ * ## User Guide
+ *
+ * * [High Performance Models](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance_Models.html)
  *
  * @implements {Drawable}
  * @implements {Entity}
@@ -459,6 +465,7 @@ class PerformanceModel extends Component {
      * A mesh can only belong to one {@link Entity}, so you'll get an error if you try to reuse a mesh among multiple {@link Entity}s.
      *
      * @param {Object} cfg Entity configuration.
+     * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
      * @param {Boolean} [cfg.pickable=true] Indicates if the Entity is initially pickable.
@@ -574,7 +581,7 @@ class PerformanceModel extends Component {
         }
         this.glRedraw();
         this.scene._aabbDirty = true;
-        console.log("[PerformanceModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
+        //console.log("[PerformanceModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
     }
 
     /** @private */

@@ -14,7 +14,7 @@
         "typeInference": {"enable": true},
 
         "brand": {
-          "logo": "./images/logo.gif",
+          "logo": "./images/logo.jpg",
           "title": "xeokit-sdk",
           "description": "SDK for developing custom 3D viewers on xeogl",
           "repository": "https://github.com/xeolabs/xeokit-sdk",
