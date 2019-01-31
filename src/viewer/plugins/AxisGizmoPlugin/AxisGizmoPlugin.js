@@ -134,23 +134,23 @@ class AxisGizmoPlugin extends Plugin {
 
         // ----------------- Components that are shared among more than one mesh ---------------
 
-        var arrowHead = buildCylinderGeometry(ReadableGeometry, scene, {
+        var arrowHead = new ReadableGeometry(scene, buildCylinderGeometry({
             radiusTop: 0.01,
             radiusBottom: 0.6,
             height: 1.7,
             radialSegments: 20,
             heightSegments: 1,
             openEnded: false
-        });
+        }));
 
-        var arrowShaft = buildCylinderGeometry(ReadableGeometry, scene, {
+        var arrowShaft = new ReadableGeometry(scene, buildCylinderGeometry({
             radiusTop: 0.2,
             radiusBottom: 0.2,
             height: 4.5,
             radialSegments: 20,
             heightSegments: 1,
             openEnded: false
-        });
+        }));
 
         var axisMaterial = new PhongMaterial(scene, { // Red by convention
             ambient: [0.0, 0.0, 0.0],
@@ -224,11 +224,11 @@ class AxisGizmoPlugin extends Plugin {
             // Sphere behind gnomon
 
             new Mesh(scene, {
-                geometry: buildSphereGeometry(ReadableGeometry, scene, {
+                geometry: new ReadableGeometry(scene, buildSphereGeometry({
                     radius: 9.0,
                     heightSegments: 60,
                     widthSegments: 60
-                }),
+                })),
                 material: new PhongMaterial(scene, {
                     diffuse: [0.0, 0.0, 0.0],
                     emissive: [0.1, 0.1, 0.1],
@@ -246,9 +246,9 @@ class AxisGizmoPlugin extends Plugin {
             // Ball at center of axis
 
             new Mesh(scene, {  // Arrow
-                geometry: buildSphereGeometry(ReadableGeometry, scene, {
+                geometry: new ReadableGeometry(scene, buildSphereGeometry({
                     radius: 1.0
-                }),
+                })),
                 material: ballMaterial,
                 pickable: false,
                 collidable: false,
@@ -278,7 +278,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "X", size: 1.5}),
+                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "X", size: 1.5})),
                 material: xAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -308,7 +308,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "Y", size: 1.5}),
+                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "Y", size: 1.5})),
                 material: yAxisLabelMaterial,
                 pickable: false,
                 collidable: false,
@@ -340,7 +340,7 @@ class AxisGizmoPlugin extends Plugin {
             }),
 
             new Mesh(scene, {  // Label
-                geometry: buildVectorTextGeometry(ReadableGeometry, scene, {text: "Z", size: 1.5}),
+                geometry: new ReadableGeometry(scene, buildVectorTextGeometry({text: "Z", size: 1.5})),
                 material: zAxisLabelMaterial,
                 pickable: false,
                 collidable: false,

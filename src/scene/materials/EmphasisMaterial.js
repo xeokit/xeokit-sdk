@@ -112,13 +112,13 @@ const PRESETS = {
 };
 
 /**
- * Configures the appearance of {@link Mesh}es when ghosted, highlighted or selected.
+ * Configures the appearance of {@link Entity}s when they are ghosted, highlighted or selected.
  *
- * * Ghost a {@link Mesh} by setting {@link Mesh#ghosted} ````true````.
- * * Highlight a {@link Mesh} by setting {@link Mesh#highlighted} ````true````.
- * * Select a {@link Mesh} by setting {@link Mesh#selected} ````true````.
- * * When {@link Mesh}es are within the subtree of a {@link Node}, then setting {@link Node#ghosted}, {@link Node#highlighted} or {@link Node#selected}
- * will collectively set {@link Mesh#ghosted}, {@link Mesh#highlighted} or {@link Mesh#selected} on all those {@link Mesh}es.
+ * * Ghost an {@link Entity} by setting {@link Entity#ghosted} ````true````.
+ * * Highlight an {@link Entity} by setting {@link Entity#highlighted} ````true````.
+ * * Select an {@link Entity} by setting {@link Entity#selected} ````true````.
+ * * When {@link Entity}s are within the subtree of a root {@link Entity}, then setting {@link Entity#ghosted}, {@link Entity#highlighted} or {@link Entity#selected}
+ * on the root will collectively set those properties on all sub-{@link Entity}s.
  * * EmphasisMaterial provides several presets. Select a preset by setting {@link EmphasisMaterial#preset} to the ID of a preset in {@link EmphasisMaterial#presets}.
  * * By default, a {@link Mesh} uses the default EmphasisMaterials in {@link Scene#ghostMaterial}, {@link Scene#highlightMaterial} and {@link Scene#selectedMaterial}
  * but you can assign each {@link Mesh#ghostMaterial}, {@link Mesh#highlightMaterial} or {@link Mesh#selectedMaterial} to a custom EmphasisMaterial, if required.
@@ -127,15 +127,17 @@ const PRESETS = {
  *
  * In the example below, we'll create a {@link Mesh} with its own GhostMaterial and set {@link Mesh#ghosted} ````true```` to ghost it.
  *
+ * Recall that {@link Mesh} is a concrete subtype of the abstract {@link Entity} base class.
+ *
  * ````javascript
- * new Mesh(myViewer.scene, {
- *     geometry: new BoxGeometry(myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *     geometry: new BoxGeometry(viewer.scene, {
  *         edgeThreshold: 1
  *     }),
- *     material: new PhongMaterial(myViewer.scene, {
+ *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
- *     ghostMaterial: new EdgeMaterial(myViewer.scene, {
+ *     ghostMaterial: new EdgeMaterial(viewer.scene, {
  *         fill: true,
  *         fillColor: [0, 0, 0],
  *         fillAlpha: 0.7,
@@ -160,16 +162,16 @@ const PRESETS = {
  *
  * ````javascript
  * new Mesh({
- *     geometry: new TeapotGeometry(myViewer.scene, {
+ *     geometry: new TeapotGeometry(viewer.scene, {
  *         edgeThreshold: 5
  *     }),
- *     material: new PhongMaterial(myViewer.scene, {
+ *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
  *     ghosted: true
  * });
  *
- * var ghostMaterial = myViewer.scene.ghostMaterial;
+ * var ghostMaterial = viewer.scene.ghostMaterial;
  *
  * ghostMaterial.fillColor = [0.2, 1.0, 0.2];
  * ghostMaterial.fillAlpha = 1.0;
@@ -180,13 +182,13 @@ const PRESETS = {
  * Let's switch the {@link Scene#ghostMaterial} to one of the presets in {@link EmphasisMaterial#presets}:
  *
  * ````javascript
- * myViewer.ghostMaterial.preset = EmphasisMaterial.presets["sepia"];
+ * viewer.ghostMaterial.preset = EmphasisMaterial.presets["sepia"];
  * ````
  *
  * We can also create an EmphasisMaterial from a preset, while overriding properties of the preset as required:
  *
  * ````javascript
- * var myEmphasisMaterial = new EMphasisMaterial(myViewer.scene, {
+ * var myEmphasisMaterial = new EMphasisMaterial(viewer.scene, {
  *      preset: "sepia",
  *      fillColor = [1.0, 0.5, 0.5]
  * });

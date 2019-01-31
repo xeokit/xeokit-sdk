@@ -39,7 +39,7 @@ const offsetEye = math.vec3();
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
  *
- * var camera = myViewer.scene.camera;
+ * var camera = viewer.scene.camera;
  *
  * ````
  *

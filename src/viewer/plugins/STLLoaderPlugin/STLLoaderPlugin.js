@@ -6,7 +6,9 @@ import {utils} from "../../../scene/utils.js";
 /**
  * {@link Viewer} plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
  *
- * For each model loaded, creates a {@link Node} within its {@link Viewer}'s {@link Scene}.
+ * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+ * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
+ * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
  *
  * Supports both binary and ASCII formats.
  *
@@ -23,14 +25,17 @@ import {utils} from "../../../scene/utils.js";
  * whose direction deviates from the direction of the vertice's triangle by a threshold given in
  * the ````smoothNormalsAngleThreshold```` loading parameter. This makes smoothing robust for hard edges.
  *
- * ## Creating Separate Meshes
+ * ## Creating Entities for Objects
  *
  * An STL model is normally one single mesh, however providing a ````splitMeshes```` parameter when loading
- * will create a separate {@link Mesh} for each group of faces that share the same vertex colors. This option only works with binary STL files.
+ * will create a separate object {@link Entity} for each group of faces that share the same vertex colors. This option
+ * only works with binary STL files.
  *
  * See the {@link STLLoaderPlugin#load} method for more info on loading options.
  *
- * @example
+ * ## Usage
+ *
+ * ````javascript
  * // Create a xeokit Viewer
  * const viewer = new Viewer({
  *      canvasId: "myCanvas"
@@ -45,7 +50,7 @@ import {utils} from "../../../scene/utils.js";
  * plugin = viewer.plugins.STLModels;
  *
  * // Load the STL model
- * const model = plugin.load({ // Model is a Node
+ * var model = plugin.load({ // Model is an Entity
  *      id: "myModel",
  *      src: "models/mySTLModel.stl",
  *      scale: [0.1, 0.1, 0.1],
@@ -58,18 +63,19 @@ import {utils} from "../../../scene/utils.js";
  * });
  *
  * // When the model has loaded, fit it to view
- * model.on("loaded", function() {
+ * model.on("loaded", function() { // Model is an Entity
  *      viewer.cameraFlight.flyTo(model);
  * });
  *
- * // Update properties of the model
- * model.translate = [200,0,0];
+ * // Find the model Entity by ID
+ * model = viewer.scene.models["myModel"];
  *
- * // You can unload the model via the plugin
- * plugin.unload("myModel");
+ * // Update properties of the model Entity
+ * model.highlight = [1,0,0];
  *
- * // Or unload it by calling destroy() on the Node itself
+ * // Destroy the model Entity
  * model.destroy();
+ * ````
  *
  * @class STLLoaderPlugin
  */
@@ -90,38 +96,27 @@ class STLLoaderPlugin extends Plugin {
          * @private
          */
         this._loader = new STLLoader(this, cfg);
-
-        /**
-         * Models currently loaded by this Plugin.
-         * @type {{String:Node}}
-         */
-        this.models = {};
     }
 
     /**
      * Loads an STL model from a file into this STLLoaderPlugin's {@link Viewer}.
      *
-     * Creates a {@link Node} tree representing the model within the Viewer's {@link Scene}.
-     *
-     * @param {*} params  Loading parameters.
-     * @param {String} params.id ID to assign to the model's {@link Node}, unique among all components in the Viewer's {@link Scene}.
+     * @param {*} params Loading parameters.
+     * @param {String} params.id ID to assign to the model's root {@link Entity}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to an STL file.
-     * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model {@link Node} into a scene graph.
      * @param {Boolean} [params.edges=false] Whether or not xeogl renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model's local 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model's local scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's local modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the STL.  When false, ignores backfaces.
      * @param {Boolean} [params.smoothNormals=true] When true, automatically converts face-oriented normals to vertex normals for a smooth appearance.
      * @param {Number} [params.smoothNormalsAngleThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [params.splitMeshes=true] When true, creates a separate {@link Mesh} for each group of faces that share the same vertex colors. Only works with binary STL.
-     * @returns {Node} A {@link Node} tree representing the loaded STL model.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params) {
-
-        const self = this;
 
         if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
@@ -132,7 +127,6 @@ class STLLoaderPlugin extends Plugin {
             isModel: true
         }));
 
-        const modelId = modelNode.id;  // In case ID was auto-generated
         const src = params.src;
 
         if (!src) {
@@ -142,57 +136,7 @@ class STLLoaderPlugin extends Plugin {
 
         this._loader.load(this, modelNode, src, params);
 
-        this.models[modelId] = modelNode;
-
-        modelNode.once("destroyed", () => {
-            delete this.models[modelId];
-            this.viewer.metaScene.destroyMetaModel(modelId);
-            this.fire("unloaded", modelId);
-        });
-
         return modelNode;
-    }
-
-    /**
-     * Unloads a model that was previously loaded by this Plugin.
-     *
-     * @param {String} id  ID of model to unload.
-     */
-    unload(id) {
-        const model = this.models;
-        if (!model) {
-            this.error(`unload() model Node with this ID not found: ${id}`);
-            return;
-        }
-        model.destroy();
-    }
-
-    /**
-     * @private
-     */
-    send(name, value) {
-        switch (name) {
-            case "clear":
-                this.clear();
-                break;
-        }
-    }
-
-    /**
-     * Unloads models loaded by this plugin.
-     */
-    clear() {
-        for (const id in this.models) {
-            this.models[id].destroy();
-        }
-    }
-
-    /**
-     * Destroys this plugin, after first destroying any models it has loaded.
-     */
-    destroy() {
-        this.clear();
-        super.destroy();
     }
 }
 

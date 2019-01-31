@@ -1,25 +1,25 @@
-import {math} from "./../../../scene/math/math.js";
-import {utils} from "./../../../scene/utils.js";
-import {core} from "./../../../scene/core.js";
-import {buildEdgeIndices} from './../../../scene/math/buildEdgeIndices.js';
+import {math} from "../../../scene/math/math.js";
+import {utils} from "../../../scene/utils.js";
+import {core} from "../../../scene/core.js";
+import {buildEdgeIndices} from '../../../scene/math/buildEdgeIndices.js';
 
 /**
  * @private
  */
-class GLTFBigModelLoader {
+class GLTFPerformanceLoader {
 
     constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
     }
 
-    load(plugin, bigModel, src, options, ok, error) {
+    load(plugin, detailModel, src, options, ok, error) {
         options = options || {};
-        var spinner = bigModel.scene.canvas.spinner;
+        var spinner = detailModel.scene.canvas.spinner;
         spinner.processes++;
-        loadGLTF(plugin, bigModel, src, options, function () {
+        loadGLTF(plugin, detailModel, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
-                    bigModel.fire("loaded", true, true);
+                    detailModel.fire("loaded", true, true);
                 });
                 if (ok) {
                     ok();
@@ -31,25 +31,25 @@ class GLTFBigModelLoader {
                 if (error) {
                     error(msg);
                 }
-                bigModel.fire("error", msg);
+                detailModel.fire("error", msg);
             });
     }
 
-    parse(plugin, bigModel, gltf, options, ok, error) {
+    parse(plugin, detailModel, gltf, options, ok, error) {
         options = options || {};
-        var spinner = bigModel.scene.canvas.spinner;
+        var spinner = detailModel.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, "", options, bigModel, function () {
+        parseGLTF(plugin, gltf, "", options, detailModel, function () {
                 spinner.processes--;
-                bigModel.fire("loaded", true, true);
+                detailModel.fire("loaded", true, true);
                 if (ok) {
                     ok();
                 }
             },
             function (msg) {
                 spinner.processes--;
-                bigModel.error(msg);
-                bigModel.fire("error", msg);
+                detailModel.error(msg);
+                detailModel.fire("error", msg);
                 if (error) {
                     error(msg);
                 }
@@ -61,10 +61,10 @@ const INSTANCE_THRESHOLD = 1;
 
 var loadGLTF = (function () {
 
-    return function (plugin, bigModel, src, options, ok, error) {
+    return function (plugin, detailModel, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, bigModel, ok, error);
+                parseGLTF(json, src, options, plugin, detailModel, ok, error);
             },
             error);
     };
@@ -96,7 +96,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, bigModel, ok) {
+    return function (json, src, options, plugin, detailModel, ok) {
 
         var ctx = {
             src: src,
@@ -104,21 +104,21 @@ var parseGLTF = (function () {
             basePath: options.basePath,
             handleGLTFNode: options.handleGLTFNode,
             json: json,
-            scene: bigModel.scene,
+            scene: detailModel.scene,
             plugin: plugin,
-            bigModel: bigModel,
+            detailModel: detailModel,
             numObjects: 0
         };
 
-        bigModel.scene.loading++; // Disables (re)compilation
+        detailModel.scene.loading++; // Disables (re)compilation
 
         loadBuffers(ctx, function () {
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
             loadMaterials(ctx);
             loadDefaultScene(ctx);
-            bigModel.scene.loading--; // Re-enables (re)compilation
-            bigModel.finalize();
+            detailModel.scene.loading--; // Re-enables (re)compilation
+            detailModel.finalize();
             ok();
         });
     };
@@ -152,8 +152,7 @@ var parseGLTF = (function () {
                     ok();
                 },
                 err);
-        }
-        else {
+        } else {
             err('gltf/handleBuffer missing uri in ' + JSON.stringify(bufferInfo));
         }
     }
@@ -350,21 +349,21 @@ var parseGLTF = (function () {
 
     function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
 
-        parent = parent || ctx.bigModel;
-        var createNode;
+        parent = parent || ctx.detailModel;
+        var createEntity;
 
         if (ctx.handleGLTFNode) {
             var actions = {};
-            if (!ctx.handleGLTFNode(ctx.bigModel.id, glTFNode, actions)) {
+            if (!ctx.handleGLTFNode(ctx.detailModel.id, glTFNode, actions)) {
                 return;
             }
-            if (actions.createNode) {
-                createNode = actions.createNode;
+            if (actions.createEntity) {
+                createEntity = actions.createEntity;
             }
         }
 
         var json = ctx.json;
-        var bigModel = ctx.bigModel;
+        var detailModel = ctx.detailModel;
         var localMatrix;
 
         if (glTFNode.matrix) {
@@ -403,86 +402,94 @@ var parseGLTF = (function () {
             }
         }
 
-        ctx.numObjects++;
-
         if (glTFNode.mesh !== undefined) {
 
             var meshInfo = json.meshes[glTFNode.mesh];
 
-          //  if (meshInfo.instances === 1) {
+            if (meshInfo) {
 
-                if (meshInfo) {
+                const numPrimitives = meshInfo.primitives.length;
 
-                    const numPrimitives = meshInfo.primitives.length;
+                if (numPrimitives > 0) {
 
-                    if (numPrimitives > 0) {
+                    var meshIds = [];
 
-                        var meshIds = [];
+                    for (var i = 0; i < numPrimitives; i++) {
+                        const meshCfg = {
+                            id: detailModel.id + "." + ctx.numObjects++,
+                            matrix: matrix
+                        };
+                        var primitiveInfo = meshInfo.primitives[i];
 
-                        for (var i = 0; i < numPrimitives; i++) {
-                            const meshCfg = {
-                                id: bigModel.id + "." + ctx.numObjects, // TODO: object ID
-                                matrix: matrix
-                            };
-                            var primitiveInfo = meshInfo.primitives[i];
-                            var materialIndex = primitiveInfo.material;
-                            var materialInfo;
-                            if (materialIndex !== null && materialIndex !== undefined) {
-                                materialInfo = json.materials[materialIndex];
+                        var materialIndex = primitiveInfo.material;
+                        var materialInfo;
+                        if (materialIndex !== null && materialIndex !== undefined) {
+                            materialInfo = json.materials[materialIndex];
+                        }
+                        if (materialInfo) {
+                            meshCfg.color = materialInfo._rgbaColor;
+                            meshCfg.opacity = materialInfo._rgbaColor[3];
+
+                        } else {
+                            meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                            meshCfg.opacity = 1.0;
+                        }
+
+                        if (createEntity) {
+                            if (createEntity.colorize) {
+                                meshCfg.color = createEntity.colorize;
                             }
-                            // if (materialInfo) {
-                            //     meshCfg.color = materialInfo._rgbaColor;
-                            //     meshCfg.opacity = materialInfo._rgbaColor[3];
-                            // } else {
-                            //     meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                            //     meshCfg.opacity = 1.0;
-                            // }
-
-                            if (meshInfo.instances > INSTANCE_THRESHOLD) {
-
-                                //------------------------------------------------------------------
-                                // Instancing
-                                //------------------------------------------------------------------
-
-                                const geometryId = bigModel.id + "." + glTFNode.mesh;
-
-                                if (!meshInfo.geometryId) {
-                                    meshInfo.geometryId = geometryId;
-                                    var geometryCfg = {
-                                        id: geometryId
-                                    };
-                                    loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
-                                    bigModel.createGeometry(geometryCfg);
-                                }
-
-                                meshCfg.geometryId = geometryId;
-
-                                const mesh = bigModel.createMesh(meshCfg);
-                                meshIds.push(mesh.id);
-
-                            } else {
-
-                                //------------------------------------------------------------------
-                                // Batching
-                                //------------------------------------------------------------------
-
-                                loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
-
-                                const mesh = bigModel.createMesh(meshCfg);
-                                meshIds.push(mesh.id);
+                            if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
+                                meshCfg.opacity = createEntity.opacity;
                             }
                         }
 
-                        // bigModel.createNode(utils.apply(createNode, {
-                        //     meshIds: meshIds
-                        // }));
+                        if (meshInfo.instances > INSTANCE_THRESHOLD) {
 
-                        bigModel.createNode( {
+                            //------------------------------------------------------------------
+                            // Instancing
+                            //------------------------------------------------------------------
+
+                            const geometryId = detailModel.id + "." + glTFNode.mesh;
+
+                            if (!meshInfo.geometryId) {
+                                meshInfo.geometryId = geometryId;
+                                var geometryCfg = {
+                                    id: geometryId
+                                };
+                                loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
+                                detailModel.createGeometry(geometryCfg);
+                            }
+
+                            meshCfg.geometryId = geometryId;
+
+                            const mesh = detailModel.createMesh(meshCfg);
+                            meshIds.push(meshCfg.id);
+
+                        } else {
+
+                            //------------------------------------------------------------------
+                            // Batching
+                            //------------------------------------------------------------------
+
+                            loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
+
+                            const mesh = detailModel.createMesh(meshCfg);
+                            meshIds.push(meshCfg.id);
+                        }
+                    }
+
+                    if (createEntity) {
+                        detailModel.createEntity(utils.apply(createEntity, {
                             meshIds: meshIds
-                        });
+                        }));
+                    } else {
+                        // PerformanceModel.createEntity({
+                        //     meshIds: meshIds
+                        // });
                     }
                 }
-           // }
+            }
         }
 
         if (glTFNode.children) {
@@ -524,6 +531,7 @@ var parseGLTF = (function () {
         if (positionsIndex !== null && positionsIndex !== undefined) {
             const accessorInfo = ctx.json.accessors[positionsIndex];
             geometryCfg.positions = loadAccessorTypedArray(ctx, accessorInfo);
+          //  scalePositionsArray(geometryCfg.positions);
         }
         var normalsIndex = attributes.NORMAL;
         if (normalsIndex !== null && normalsIndex !== undefined) {
@@ -531,7 +539,7 @@ var parseGLTF = (function () {
             geometryCfg.normals = loadAccessorTypedArray(ctx, accessorInfo);
         }
         if (geometryCfg.indices) {
-            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.positions, geometryCfg.indices, null, 10); // Save BigModel from building edges
+            geometryCfg.edgeIndices = buildEdgeIndices(geometryCfg.positions, geometryCfg.indices, null, 10); // Save PerformanceModel from building edges
         }
     }
 
@@ -548,9 +556,18 @@ var parseGLTF = (function () {
         }
     }
 
+    function scalePositionsArray(positions) {
+        for (var i =0, len = positions.length; i < len; i+=3) {
+            positions[i+0] *= 1000;
+            positions[i+1] *= 1000;
+            positions[i+2] *= 1000;
+        }
+
+    }
+
     function error(ctx, msg) {
         ctx.plugin.error(msg);
     }
 })();
 
-export {GLTFBigModelLoader}
+export {GLTFPerformanceLoader}

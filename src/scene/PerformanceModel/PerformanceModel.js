@@ -3,8 +3,8 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from './../webglInfo.js';
 
-import {BigModelMesh} from './BigModelMesh.js';
-import {BigModelNode} from './BigModelNode.js';
+import {PerformanceMesh} from './PerformanceMesh.js';
+import {PerformanceNode} from './PerformanceNode.js';
 import {getBatchingBuffer, putBatchingBuffer} from "./batching/batchingBuffer.js";
 import {BatchingLayer} from './batching/batchingLayer.js';
 import {InstancingLayer} from './instancing/instancingLayer.js';
@@ -14,142 +14,81 @@ const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instance
 
 var tempColor = new Uint8Array(3);
 var tempMat4 = math.mat4();
+var tempMat4b = math.mat4();
+
+const defaultScale = math.vec3([1, 1, 1]);
+const defaultPosition = math.vec3([0, 0, 0]);
+const defaultRotation = math.vec3([0, 0, 0]);
+const defaultQuaternion = math.identityQuaternion();
 
 /**
- @desc Represents a high-detail engineering model.
-
- * Like the rest of xeokit, is compatible with WebGL version 1.
- * Used for high-detail engineering visualizations containing millions of objects.
- * Represents each of its objects with a {@link BigModelMesh}, which is a lightweight alternative to {@link Node}.
- * Renders flat-shaded, without textures. Each object has simply a color and an opacity to describe its surface appearance.
- * Objects can be individually visible, clippable, collidable, ghosted, highlighted, selected, edge-enhanced etc.
- * The transforms of a BigModel and its BigModelObjects are static, ie. they cannot be dynamically translated, rotated and scaled.
- * For a low memory footprint, does not retain geometry data in CPU memory. Keeps geometry only in GPU memory (which cannot be read).
- * Rendered using a combination of WebGL instancing and geometry batching. Instances objects that share geometries, while batching objects that have unique geometries.
- * Uses the {@link Scene}'s {@link Scene/ghostMaterial}, {@link Scene/highlightMaterial},
- {@link Scene/selectedMaterial} and {@link Scene/edgeMaterial} to define appearance when emphasised.
-
- ## Examples
-
- * [BigModel with objects having unique geometries](../../examples/#models_BigModel_batching)
- * [BigModel with objects reusing the same geometries](../../examples/#models_BigModel_instancing)
-
- ## Usage
-
- xeokit renders BigModels using a combination of [geometry batching]() and WebGL [hardware instancing]().
-
- For objects that share geometries, xeokit batches their geometries into uber-vertex buffers, which enables those objects
- to be rendered collectively with a single draw call. For objects that do share geometries, xeokit uses instancing to render
- each of those geometry's objects with a single draw call.
-
- The BigModel API gives you the ability to select which technique to apply for each object, as described below. Its BigGLTFModel
- subclass, which loads glTF, will automatically determine which technique to apply for each object, by tracking the amount of
- reuse of geometries within the glTF.
-
- ### Creating objects with unique geometries
-
- To create objects that each have their own unique geometry, specify the geometry as you create those objects:
-
- ````javascript
- var bigModel = new xeokit.BigModel();
-
- // Create a red box object
-
- var object1 = bigModel.createMesh({
-     id: "myObject1",
-     primitive: "triangles",
-     positions: [2, 2, 2, -2, 2, 2, -2, -2, ... ],
-     normals: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, ... ],
-     indices: [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, ... ],
-     color: [1, 0, 0],
-     matrix: xeokit.math.translationMat4c(-7, 0, 0)
- });
-
- // Create a green box object
-
- var object2 = bigModel.createMesh({
-     id: "myObject2",
-     primitive: "triangles",
-     positions: [2, 2, 2, -2, 2, 2, -2, -2, ... ],
-     normals: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, ... ],
-     indices: [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, ... ],
-     color: [0, 1, 0],
-     matrix: xeokit.math.translationMat4c(0, 0, 0)
- });
- ````
-
- ### Creating objects with shared geometries
-
- To create multiple objects that share the same geometry, create the geometry first then reference it by ID within each of those objects:
-
- ```` javascript
-
- // Create a box-shaped geometry
-
- bigModel.createGeometry({
-     id: "myGeometry",
-     primitive: "triangles",
-     positions: [2, 2, 2, -2, 2, 2, -2, -2, ... ],
-     normals: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, ... ],
-     indices: [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, ... ],
- });
-
- // Create a blue object that instances the geometry
-
- var object3 = bigModel.createMesh({
-     id: "myObject3",
-     geometryId: "mGeometry",
-     color: [0, 0, 1],
-     matrix: xeokit.math.translationMat4c(-7, -7, 0)
- });
-
- // Create a yellow object that instances the geometry
-
- var object4 = bigModel.createMesh({
-     id: "myObject4",
-     geometryId: "mGeometry",
-     color: [1, 1, 0],
-     matrix: xeokit.math.translationMat4c(0, -7, 0)
- });
- ````
-
- ### Finalizing
-
- Once we've created all our objects, we need to finalize the BigModel before it will render. Once finalized, we can no longer
- create objects within it.
-
- ```` javascript
- bigModel.finalize();
- ````
-
- ### Finding objects
-
- @implements {Drawable}
- @implements {Entity}
+ * @desc A performance-oriented model representation for high-detail visualization.
+ *
+ * ## PerformanceModel Structure
+ *
+ * A PerformanceModel is structured to support low-memory usage and optimized rendering techniques.
+ *
+ * * A PerformanceModel represents each of its elements with an {@link Entity}.
+ * * Each {@link Entity} has one or more meshes that define its shape.
+ * * Each mesh has either its own unique geometry, or shares a geometry with other meshes.
+ *
+ * ## Geometry Batching and Instancing
+ *
+ * At the WebGL layer, PerformanceModel uses geometry batching to efficiently render unique geometries, combining them
+ * into a single set of VBOs that it renders in one draw call. The VBOs also contain additional per-vertex attribute arrays to
+ * feed rendering state (visibility, color, effects etc) for each unique geometry's mesh into the vertex shader.
+ *
+ * PerformanceModel uses geometry instancing to render shared geometries. For each shared geometry, PerformanceModel combines per-instance
+ * rendering state in the same set of instanced attribute arrays, to render all instances of each shared geometry in one
+ * draw call. Because batching duplicates the rendering state for each vertex, instancing is much more efficient in terms of
+ * memory and GPU bandwidth usage.
+ *
+ * ## Static Transforms
+ *
+ * The transforms of a PerformanceModel and its Entitys are static, ie. they cannot be dynamically
+ * translated, rotated and scaled the way {@link Node}s and {@link Mesh}es can.
+ *
+ * ## GPU-Resident Geometry
+ *
+ * For a low memory footprint, PerformanceModel does not retain geometry data in CPU memory, keeping it solely in GPU
+ * memory, which unfortunately cannot be read back by JavaScript code.
+ *
+ * ## Emphasis Effects
+ *
+ * PerformanceModel uses the {@link Scene}'s {@link Scene#ghostMaterial}, {@link Scene#highlightMaterial},
+ * {@link Scene#selectedMaterial} and {@link Scene#edgeMaterial} to define the appearance of their {@link Entity}s when emphasised.
+ *
+ * ## Examples
+ *
+ * * [PerformanceModel with Entities having unique geometries](../../examples/#sceneRepresentation_PerformanceModel_batching)
+ * * [PerformanceModel with Entities reusing the same geometries](../../examples/#sceneRepresentation_PerformanceModel_instancing)
+ *
+ * @implements {Drawable}
+ * @implements {Entity}
  */
-class BigModel extends Component {
+class PerformanceModel extends Component {
 
     /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent scene, generated automatically when omitted.
-     * @param {Boolean} [cfg.isModel] Specify ````true```` if this BigModel represents a model, in which case the BigModel will be registered by {@link BigModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
+     * @param {Boolean} [cfg.isModel] Specify ````true```` if this PerformanceModel represents a model, in which case the PerformanceModel will be registered by {@link PerformanceModel#id} in {@link Scene#models} and may also have a corresponding {@link MetaModel} with matching {@link MetaModel#id}, registered by that ID in {@link MetaScene#metaModels}.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position.
      * @param {Number[]} [cfg.scale=[1,1,1]] Local scale.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Local modelling transform matrix. Overrides the position, scale and rotation parameters.
-     * @param {Boolean} [cfg.visible=true] Indicates if the BigModel is initially visible.
-     * @param {Boolean} [cfg.culled=false] Indicates if the BigModel is initially culled from view.
-     * @param {Boolean} [cfg.pickable=true] Indicates if the BigModel is initially pickable.
-     * @param {Boolean} [cfg.clippable=true] Indicates if the BigModel is initially clippable.
-     * @param {Boolean} [cfg.collidable=true] Indicates if the BigModel is initially included in boundary calculations.
-     * @param {Boolean} [cfg.ghosted=false] Indicates if the BigModel is initially ghosted.
-     * @param {Boolean} [cfg.highlighted=false] Indicates if the BigModel is initially highlighted.
-     * @param {Boolean} [cfg.selected=false] Indicates if the BigModel is initially selected.
-     * @param {Boolean} [cfg.edges=false] Indicates if the BigModel's edges are initially emphasized.
-     * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] BigModel's initial RGB colorize color, multiplies by the rendered fragment colors.
-     * @param {Number} [cfg.opacity=1.0] BigModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Boolean} [cfg.visible=true] Indicates if the PerformanceModel is initially visible.
+     * @param {Boolean} [cfg.culled=false] Indicates if the PerformanceModel is initially culled from view.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the PerformanceModel is initially pickable.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the PerformanceModel is initially clippable.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the PerformanceModel is initially included in boundary calculations.
+     * @param {Boolean} [cfg.ghosted=false] Indicates if the PerformanceModel is initially ghosted.
+     * @param {Boolean} [cfg.highlighted=false] Indicates if the PerformanceModel is initially highlighted.
+     * @param {Boolean} [cfg.selected=false] Indicates if the PerformanceModel is initially selected.
+     * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
+     * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
+     * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
      */
     constructor(owner, cfg = {}) {
 
@@ -159,21 +98,52 @@ class BigModel extends Component {
         this._layers = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._instancingLayers = {}; // InstancingLayer for each geometry - can build many of these concurrently
         this._currentBatchingLayer = null; // Current BatchingLayer - can only build one of these at a time due to its use of global geometry buffers
-        this._buffer = getBatchingBuffer(); // Each BigModel gets it's own batching buffer - allows multiple BigModels to load concurrently
+        this._buffer = getBatchingBuffer(); // Each PerformanceModel gets it's own batching buffer - allows multiple PerformanceModels to load concurrently
 
         this._meshes = {};
         this._nodes = [];
 
+        /**
+         * @private
+         */
         this.numGeometries = 0; // Number of instance-able geometries created with createGeometry()
 
         // These counts are used to avoid unnecessary render passes
-        this.numObjects = 0;
-        this.numVisibleObjects = 0;
-        this.numTransparentObjects = 0;
-        this.numGhostedObjects = 0;
-        this.numHighlightedObjects = 0;
-        this.numSelectedObjects = 0;
-        this.numEdgesObjects = 0;
+        // They are incremented or decremented exclusively by BatchingLayer and InstancingLayer
+        /**
+         * @private
+         */
+        this.numPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numVisibleLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numTransparentLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numGhostedLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numHighlightedLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numSelectedLayerPortions = 0;
+
+        /**
+         * @private
+         */
+        this.numEdgesLayerPortions = 0;
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -211,114 +181,105 @@ class BigModel extends Component {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // BigModel members
+    // PerformanceModel members
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns true to indicate that this Component is a BigModel.
+     * Returns true to indicate that this Component is a PerformanceModel.
      * @type {Boolean}
      */
-    get isBigModel() {
+    get isPerformanceModel() {
         return true;
     }
 
     /**
-     Translation offsets.
-
-     @property position
-     @default [0,0,0]
-     @type {Number[]}
-     @final
+     * Gets the PerformanceModel's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
      */
     get position() {
         return this._position;
     }
 
     /**
-     Rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-
-     @property rotation
-     @default [0,0,0]
-     @type {Number[]}
-     @final
+     * Gets the PerformanceModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
      */
     get rotation() {
         return this._rotation;
     }
 
     /**
-     Rotation quaternion.
-
-     @property quaternion
-     @default [0,0,0, 1]
-     @type {Number[]}
-     @final
+     * Gets the PerformanceModels's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
      */
     get quaternion() {
         return this._quaternion;
     }
 
     /**
-     Scale factors.
-
-     @property scale
-     @default [1,1,1]
-     @type {Number[]}
-     @final
+     * Gets the PerformanceModel's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
      */
     get scale() {
         return this._scale;
     }
 
     /**
-     * Modeling matrix. Same as the World matrix.
+     * Gets the PerformanceModel's local modeling transform matrix.
      *
-     * @property matrix
-     * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
      * @type {Number[]}
-     * @final
      */
     get matrix() {
         return this._worldMatrix;
     }
 
     /**
-     * World matrix. Same as the Modeling matrix.
+     * Gets the PerformanceModel's World matrix.
      *
      * @property worldMatrix
      * @type {Number[]}
-     * @final
      */
     get worldMatrix() {
         return this._worldMatrix;
     }
 
     /**
-     * World normal matrix.
+     * Gets the PerformanceModel's World normal matrix.
      *
-     * @property worldNormalMatrix
-     * @default [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
      * @type {Number[]}
-     * @final
      */
     get worldNormalMatrix() {
         return this._worldNormalMatrix;
     }
 
     /**
-     Creates a reusable geometry within this BigModel.
-
-     We can then call {@link BigModel#createMesh:method"}}createMesh(){{/crossLink}} with the
-     ID of the geometry to create a {@link BigModelMesh} within this BigModel that instances it.
-
-     @method createGeometry
-     @param {*} cfg Geometry properties.
-     @param {String|Number} cfg.id ID for the geometry, to refer to with {@link BigModel#createMesh:method"}}createMesh(){{/crossLink}}
-     @param [cfg.primitive="triangles"] {String} The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param {Number[]} cfg.positions Flat array of positions.
-     @param {Number[]} cfg.normals Flat array of normal vectors.
-     @param {Number[]} cfg.indices Array of triangle indices.
-     @param {Number[]} cfg.edgeIndices Array of edge line indices.
+     * Creates a reusable geometry within this PerformanceModel.
+     *
+     * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
+     *
+     * Note that positions, normals and indices are all required in geometry data.
+     *
+     * @param {*} cfg Geometry properties.
+     * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
+     * @param {String} [cfg.primitive="triangles"] The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {Number[]} cfg.positions Flat array of positions.
+     * @param {Number[]} cfg.normals Flat array of normal vectors.
+     * @param {Number[]} cfg.indices Array of triangle indices.
+     * @param {Number[]} cfg.edgeIndices Array of edge line indices.
      */
     createGeometry(cfg) {
         if (!instancedArraysSupported) {
@@ -341,30 +302,31 @@ class BigModel extends Component {
     }
 
     /**
-     Creates a {@link BigModelMesh} within this BigModel.
-
-     You can provide either geometry data arrays or the ID of a geometry that was previously created
-     with {@link BigModel#createGeometry:method"}}createGeometry(){{/crossLink}}.
-
-     When you provide arrays, then that geometry will be used solely by the BigModelObject, which will be rendered
-     using geometry batching.
-
-     When you provide a geometry ID, then the BigModelMesh will instance that geometry, and will be
-     rendered using WebGL instancing.
-
-     @method createMesh
-     @param {*} cfg Object properties.
-     @param {String} cfg.id ID for the new object. Must not clash with any existing components within the {@link Scene}.
-     @param {String} [cfg.parentId] ID if the parent object, if any. Must resolve to a {@link BigModelMesh} that has already been created within this BigModel.
-     @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link BigModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
-     @param [cfg.primitive="triangles"] {String} Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
-     @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
-     @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
-     @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
-     @param {Number[]} [cfg.matrix] Modeling matrix.
-
-     @returns {BigModelMesh}
+     * Creates a mesh within this PerformanceModel.
+     *
+     * A mesh has a geometry, given either as the ID of a shared geometry created with {@link PerformanceModel#createGeometry}, or as
+     * geometr data arrays to create a unique geometry belong to the mesh.
+     *
+     * When you provide a geometry ID, then the PerformanceModelMesh will instance the shared geometry for the mesh.
+     *
+     * When you provide arrays, then PerformanceModel will combine the geometry in a batch with the other non-shared unique geometries in the model.
+     *
+     * Note that positions, normals and indices are all required in geometry data.
+     *
+     * @param {object} cfg Object properties.
+     * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
+     * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
+     * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1] Mesh modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````.
+     * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
 
@@ -390,36 +352,47 @@ class BigModel extends Component {
         }
 
         var flags = 0;
-        var matrix = cfg.matrix ? math.mulMat4(this._worldMatrix, cfg.matrix, tempMat4) : this._worldMatrix;
+
         var layer;
         var portionId;
         var aabb = math.collapseAABB3();
 
-        var color = cfg.color;
-        color = new Uint8Array([ // Quantize color
-            color ? Math.floor(color[0] * 255) : 255,
-            color ? Math.floor(color[1] * 255) : 255,
-            color ? Math.floor(color[2] * 255) : 255,
-            (cfg.opacity !== undefined) ? (cfg.opacity * 255) : (color ? Math.floor(color[3] * 255) : 255)
-        ]);
-        if (color[3] < 255) {
-            this.numTransparentObjects++;
+        var matrix;
+
+        if (cfg.matrix) {
+            matrix = cfg.matrix;
+        } else {
+            const scale = cfg.scale || defaultScale;
+            const position = cfg.position || defaultPosition;
+            const rotation = cfg.rotation || defaultRotation;
+            math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
+            matrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
         }
 
-        // TODO: A small hack where BigModelMesh gets it's pickId from xeokit Renderer, which gets fed into its layer portion on instantiation, meaning that we need to attach the later and portionId to mesh afterwards.
+        matrix = math.mulMat4(this._worldMatrix, matrix, tempMat4b);
 
-        var mesh = new BigModelMesh(this, id);
+        const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
+        const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
+
+        if (opacity < 255) {
+            this.numTransparentLayerPortions++;
+        }
+
+        var mesh = new PerformanceMesh(this, id);
+
         var pickId = mesh.pickId;
+
         const a = pickId >> 24 & 0xFF;
         const b = pickId >> 16 & 0xFF;
         const g = pickId >> 8 & 0xFF;
         const r = pickId & 0xFF;
-        const pickColor = new Uint8Array([r, g, b, a]); // Quantized color
+
+        const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
 
         if (instancing) {
             var instancingLayer = this._instancingLayers[geometryId];
             layer = instancingLayer;
-            portionId = instancingLayer.createPortion(flags, color, matrix, aabb, pickColor);
+            portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
 
         } else {
@@ -430,6 +403,7 @@ class BigModel extends Component {
                 this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
                 primitive = "triangles";
             }
+
             var indices = cfg.indices;
             var edgeIndices = cfg.edgeIndices;
             var positions = cfg.positions;
@@ -437,58 +411,69 @@ class BigModel extends Component {
                 this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
+
             var normals = cfg.normals;
             if (!normals) {
                 this.error("Config missing: normals (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
+
             if (!edgeIndices && !indices) {
                 this.error("Config missing: must have one or both of indices and edgeIndices  (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
+
             if (this._currentBatchingLayer) {
                 if (!this._currentBatchingLayer.canCreatePortion(cfg.positions.length)) {
                     this._currentBatchingLayer.finalize();
                     this._currentBatchingLayer = null;
                 }
             }
+
             if (!this._currentBatchingLayer) {
                 this._currentBatchingLayer = new BatchingLayer(this, {primitive: "triangles", buffer: this._buffer});
                 this._layers.push(this._currentBatchingLayer); // For efficient GL state sorting, instancing layers rendered before batching layers
             }
+
             layer = this._currentBatchingLayer;
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
-            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, matrix, aabb, pickColor);
+
+            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
             this.numGeometries++;
         }
 
-        mesh.object = null; // Will be set within BigModelObject constructor
+        mesh.parent = null; // Will be set within PerformanceModelNode constructor
         mesh._layer = layer;
         mesh._portionId = portionId;
         mesh.aabb = aabb;
 
         this._meshes[id] = mesh;
-
-        // console.log("mesh " + id + " = " + aabb);
-
-        return mesh;
     }
 
     /**
-     Creates a {@link BigModelNode} within this BigModel, giving it one or
-     more meshes previously created with {@link BigModel#createMesh"}}createMesh(){{/crossLink}}.
-
-     A mesh can only belong to one BigModelObject, so you'll get an error if you try to reuse a mesh among
-     multiple BigModelObjects.
-
-     @param cfg
-     @returns {BigModelNode}
+     * Creates an {@link Entity} within this PerformanceModel, giving it one or more meshes previously created with {@link PerformanceModel#createMesh}.
+     *
+     * A mesh can only belong to one {@link Entity}, so you'll get an error if you try to reuse a mesh among multiple {@link Entity}s.
+     *
+     * @param {Object} cfg Entity configuration.
+     * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
+     * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the Entity is initially pickable.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the Entity is initially clippable.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the Entity is initially included in boundary calculations.
+     * @param {Boolean} [cfg.castsShadow=true] Indicates if the Entity initially casts shadows.
+     * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Entity initially receives shadows.
+     * @param {Boolean} [cfg.ghosted=false] Indicates if the Entity is initially ghosted. Ghosted appearance is configured by {@link PerformanceModel#ghostMaterial}.
+     * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link PerformanceModel#highlightMaterial}.
+     * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link PerformanceModel#selectedMaterial}.
+     * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link PerformanceModel#edgeMaterial}.
+     * @returns {Entity}
      */
-    createNode(cfg) {
-        // Validate or generate BigModelObject ID
+    createEntity(cfg) {
+        // Validate or generate Entity ID
         var id = cfg.id;
         if (id === undefined) {
             id = math.createUUID();
@@ -496,7 +481,7 @@ class BigModel extends Component {
             this.error("Scene already has a Component with this ID: " + id + " - will assign random ID");
             id = math.createUUID();
         }
-        // Collect BigModelObject's BigModelMeshes
+        // Collect PerformanceModelNode's PerformanceModelMeshes
         var meshIds = cfg.meshIds;
         if (meshIds === undefined) {
             this.error("Config missing: meshIds");
@@ -514,17 +499,16 @@ class BigModel extends Component {
                 this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
                 continue;
             }
-            if (mesh.object) {
-                this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.object.id + " - ignoring this mesh");
+            if (mesh.parent) {
+                this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
                 continue;
             }
             meshes.push(mesh);
         }
-        // Create BigModelObject flags
+        // Create PerformanceModelNode flags
         var flags = 0;
         if (this._visible && cfg.visible !== false) {
             flags = flags | RENDER_FLAGS.VISIBLE;
-            this.numVisibleObjects++;
         }
         if (this._pickable && cfg.pickable !== false) {
             flags = flags | RENDER_FLAGS.PICKABLE;
@@ -537,21 +521,18 @@ class BigModel extends Component {
         }
         if (this._edges && cfg.edges !== false) {
             flags = flags | RENDER_FLAGS.EDGES;
-            this.numEdgesObjects++;
         }
         if (this._ghosted && cfg.ghosted !== false) {
             flags = flags | RENDER_FLAGS.GHOSTED;
-            this.numGhostedObjects++;
         }
         if (this._highlighted && cfg.highlighted !== false) {
             flags = flags | RENDER_FLAGS.HIGHLIGHTED;
-            this.numHighlightedObjects++;
         }
         if (this._selected && cfg.selected !== false) {
             flags = flags | RENDER_FLAGS.SELECTED;
-            this.numSelectedObjects++;
         }
-        // Create BigModelObject AABB
+
+        // Create PerformanceModelNode AABB
         var aabb;
         if (meshes.length === 1) {
             aabb = meshes[0].aabb;
@@ -562,19 +543,17 @@ class BigModel extends Component {
             }
         }
 
-        var node = new BigModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets BigModelMesh#parent to this BigModelObject
+        var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodes.push(node);
         return node;
     }
 
     /**
-     Finalizes this BigModel.
-
-     Internally, this builds any geometry batches or instanced arrays that are currently under construction.
-
-     Once finalized, you can't create any more objects within this BigModel.
-
-     @method finalize
+     * Finalizes this PerformanceModel.
+     *
+     * Internally, this builds any geometry batches or instanced arrays that are currently under construction.
+     *
+     * Once finalized, you can't add anything more to this PerformanceModel.
      */
     finalize() {
         if (this._currentBatchingLayer) {
@@ -595,7 +574,7 @@ class BigModel extends Component {
         }
         this.glRedraw();
         this.scene._aabbDirty = true;
-        console.log("[BigModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
+        console.log("[PerformanceModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
     }
 
     /** @private */
@@ -611,17 +590,17 @@ class BigModel extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns true to indicate that BigModel is an {@link Entity}.
+     * Returns true to indicate that PerformanceModel is an {@link Entity}.
      * @type {Boolean}
      */
     get isEntity() {
         return true;
     }
-    
+
     /**
-     * Returns ````true```` if this BigModel represents a model.
+     * Returns ````true```` if this PerformanceModel represents a model.
      *
-     * When ````true```` the BigModel will be registered by {@link BigModel#id} in
+     * When ````true```` the PerformanceModel will be registered by {@link PerformanceModel#id} in
      * {@link Scene#models} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
      * @type {Boolean}
@@ -631,7 +610,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Returns ````false```` to indicate that BigModel never represents an object.
+     * Returns ````false```` to indicate that PerformanceModel never represents an object.
      *
      * @type {Boolean}
      */
@@ -640,7 +619,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets the BigModel's World-space 3D axis-aligned bounding box.
+     * Gets the PerformanceModel's World-space 3D axis-aligned bounding box.
      *
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
@@ -652,9 +631,9 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if this BigModel is visible.
+     * Sets if this PerformanceModel is visible.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} is ````true```` and {@link BigModel#culled} is ````false````.
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
      **
      * @type {Boolean}
      */
@@ -668,18 +647,18 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any {@link BigModelNode}s in this BigModel are visible.
+     * Gets if any {@link Entity}s in this PerformanceModel are visible.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} is ````true```` and {@link BigModel#culled} is ````false````.
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is ````true```` and {@link PerformanceModel#culled} is ````false````.
      *
      * @type {Boolean}
      */
     get visible() {
-        return (this.numVisibleObjects > 0);
+        return (this.numVisibleLayerPortions > 0);
     }
 
     /**
-     * Sets if all {@link BigModelNode}s in this BigModel are ghosted.
+     * Sets if all {@link Entity}s in this PerformanceModel are ghosted.
      *
      * @type {Boolean}
      */
@@ -693,16 +672,16 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any {@link BigModelNode}s in this BigModel are ghosted.
+     * Gets if any {@link Entity}s in this PerformanceModel are ghosted.
      *
      * @type {Boolean}
      */
     get ghosted() {
-        return (this.numGhostedObjects > 0);
+        return (this.numGhostedLayerPortions > 0);
     }
 
     /**
-     * Sets if all {@link BigModelNode}s in this BigModel are highlighted.
+     * Sets if all {@link Entity}s in this PerformanceModel are highlighted.
      *
      * @type {Boolean}
      */
@@ -716,16 +695,16 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any {@link BigModelNode}s in this BigModel are highlighted.
+     * Gets if any {@link Entity}s in this PerformanceModel are highlighted.
      *
      * @type {Boolean}
      */
     get highlighted() {
-        return (this.numHighlightedObjects > 0);
+        return (this.numHighlightedLayerPortions > 0);
     }
 
     /**
-     * Sets if all {@link BigModelNode}s in this BigModel are selected.
+     * Sets if all {@link Entity}s in this PerformanceModel are selected.
      *
      * @type {Boolean}
      */
@@ -739,16 +718,16 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any {@link BigModelNode}s in this BigModel are selected.
+     * Gets if any {@link Entity}s in this PerformanceModel are selected.
      *
      * @type {Boolean}
      */
     get selected() {
-        return (this.numSelectedObjects > 0);
+        return (this.numSelectedLayerPortions > 0);
     }
 
     /**
-     * Sets if all {@link BigModelNode}s in this BigModel have edges emphasised.
+     * Sets if all {@link Entity}s in this PerformanceModel have edges emphasised.
      *
      * @type {Boolean}
      */
@@ -762,31 +741,31 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if any {@link BigModelNode}s in this BigModel have edges emphasised.
+     * Gets if any {@link Entity}s in this PerformanceModel have edges emphasised.
      *
      * @type {Boolean}
      */
     get edges() {
-        return (this.numEdgesObjects > 0);
+        return (this.numEdgesLayerPortions > 0);
     }
 
     /**
-     * Sets if this BigModel is culled from view.
+     * Sets if this PerformanceModel is culled from view.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} is true and {@link BigModel#culled} is false.
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
      *
      * @type {Boolean}
      */
     set culled(culled) {
         culled = !!culled;
-        this._culled = culled; // Whole BigModel is culled
+        this._culled = culled; // Whole PerformanceModel is culled
         this.glRedraw();
     }
 
     /**
-     * Gets if this BigModel is culled from view.
+     * Gets if this PerformanceModel is culled from view.
      *
-     * The BigModel is only rendered when {@link BigModel#visible} is true and {@link BigModel#culled} is false.
+     * The PerformanceModel is only rendered when {@link PerformanceModel#visible} is true and {@link PerformanceModel#culled} is false.
      *
      * @type {Boolean}
      */
@@ -795,7 +774,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if {@link BigModelNode}s in this BigModel are clippable.
+     * Sets if {@link Entity}s in this PerformanceModel are clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -811,7 +790,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if {@link BigModelNode}s in this BigModel are clippable.
+     * Gets if {@link Entity}s in this PerformanceModel are clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -822,7 +801,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if {@link BigModelNode}s in this BigModel are collidable.
+     * Sets if {@link Entity}s in this PerformanceModel are collidable.
      *
      * @type {Boolean}
      */
@@ -835,7 +814,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if this BigModel is collidable.
+     * Gets if this PerformanceModel is collidable.
      *
      * @type {Boolean}
      */
@@ -844,7 +823,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if {@link BigModelNode}s in this BigModel are pickable.
+     * Sets if {@link Entity}s in this PerformanceModel are pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -859,7 +838,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if this BigModel is pickable.
+     * Gets if this PerformanceModel is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -870,7 +849,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets the RGB colorize color for this BigModel.
+     * Sets the RGB colorize color for this PerformanceModel.
      *
      * Multiplies by rendered fragment colors.
      *
@@ -883,7 +862,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets the RGB colorize color for this BigModel.
+     * Gets the RGB colorize color for this PerformanceModel.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -894,7 +873,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets the opacity factor for this BigModel.
+     * Sets the opacity factor for this PerformanceModel.
      *
      * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
@@ -905,7 +884,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets this BigModel's opacity factor.
+     * Gets this PerformanceModel's opacity factor.
      *
      * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
@@ -916,7 +895,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if this BigModel casts a shadow.
+     * Sets if this PerformanceModel casts a shadow.
      *
      * @type {Boolean}
      */
@@ -924,7 +903,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Gets if this BigModel casts a shadow.
+     * Gets if this PerformanceModel casts a shadow.
      *
      * @type {Boolean}
      */
@@ -933,7 +912,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if this BigModel can have shadow cast upon it.
+     * Sets if this PerformanceModel can have shadow cast upon it.
      *
      * @type {Boolean}
      */
@@ -941,7 +920,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Sets if this BigModel can have shadow cast upon it.
+     * Sets if this PerformanceModel can have shadow cast upon it.
      *
      * @type {Boolean}
      */
@@ -954,7 +933,7 @@ class BigModel extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns true to indicate that BigModel is implements {@link Drawable}.
+     * Returns true to indicate that PerformanceModel is implements {@link Drawable}.
      *
      * @type {Boolean}
      */
@@ -974,7 +953,7 @@ class BigModel extends Component {
     /** @private */
     getRenderFlags(renderFlags) {
 
-        // Unlike Mesh, rendering modes are less mutually exclusive because a BigModel contains multiple BigModelMesh
+        // Unlike Mesh, rendering modes are less mutually exclusive because a PerformanceModel contains multiple PerformanceModelMesh
         // objects, which can have a mixture of rendering states.
 
         // TODO: can we optimize to avoid tests for ghosted objects from also being
@@ -982,11 +961,11 @@ class BigModel extends Component {
 
         renderFlags.reset();
 
-        if (this.numVisibleObjects === 0) {
+        if (this.numVisibleLayerPortions === 0) {
             return;
         }
 
-        if (this.numGhostedObjects > 0) {
+        if (this.numGhostedLayerPortions > 0) {
             const ghostMaterial = this.scene.ghostMaterial._state;
             if (ghostMaterial.fill) {
                 if (ghostMaterial.fillAlpha < 1.0) {
@@ -1004,7 +983,7 @@ class BigModel extends Component {
             }
         }
 
-        if (this.numEdgesObjects > 0) {
+        if (this.numEdgesLayerPortions > 0) {
             const edgeMaterial = this.scene.edgeMaterial._state;
             if (edgeMaterial.alpha < 1.0) {
                 renderFlags.normalEdgesTransparent = true;
@@ -1013,27 +992,18 @@ class BigModel extends Component {
             }
         }
 
-        // if (this.numGhostedObjects < this.numVisibleObjects) {
-        //     renderFlags.normalFillOpaque = true;
-        // }
+        if (this.numGhostedLayerPortions < this.numVisibleLayerPortions &&
+            this.numHighlightedLayerPortions < this.numVisibleLayerPortions &&
+            this.numSelectedLayerPortions < this.numVisibleLayerPortions &&
+            this.numTransparentLayerPortions < this.numVisibleLayerPortions) {
+            renderFlags.normalFillOpaque = true;
+        }
 
-        if (this.numTransparentObjects > 0) {
+        if (this.numTransparentLayerPortions > 0) {
             renderFlags.normalFillTransparent = true;
         }
 
-        renderFlags.normalFillOpaque = true;
-
-        // if (this.numVisibleObjects > this.numGhostedObjects && this.numVisibleObjects > this.numHighlightedObjects && this.numVisibleObjects > this.numSelectedObjects) {
-        //     if (this.numTransparentObjects < this.numVisibleObjects) {
-        //         renderFlags.normalFillTransparent = true;
-        //     }
-        //
-        //     {
-        //         renderFlags.normalFillOpaque = true;
-        //     }
-        // }
-
-        if (this.numSelectedObjects > 0) {
+        if (this.numSelectedLayerPortions > 0) {
             const selectedMaterial = this.scene.selectedMaterial._state;
             if (selectedMaterial.fill) {
                 if (selectedMaterial.fillAlpha < 1.0) {
@@ -1051,27 +1021,27 @@ class BigModel extends Component {
             }
         }
 
-        if (this.numHighlightedObjects > 0) {
+        if (this.numHighlightedLayerPortions > 0) {
             const highlightMaterial = this.scene.highlightMaterial._state;
             if (highlightMaterial.fill) {
                 if (highlightMaterial.fillAlpha < 1.0) {
-                    renderFlags.highlightFillTransparent = true;
+                    renderFlags.highlightedFillTransparent = true;
                 } else {
-                    renderFlags.highlightFillOpaque = true;
+                    renderFlags.highlightedFillOpaque = true;
                 }
             }
             if (highlightMaterial.edges) {
                 if (highlightMaterial.edgeAlpha < 1.0) {
-                    renderFlags.highlightEdgesTransparent = true;
+                    renderFlags.highlightedEdgesTransparent = true;
                 } else {
-                    renderFlags.highlightEdgesOpaque = true;
+                    renderFlags.highlightedEdgesOpaque = true;
                 }
             }
         }
     }
 
     /**
-     * Configures the appearance of ghosted objects within this BigModel.
+     * Configures the appearance of ghosted {@link Entity}s within this PerformanceModel.
      *
      * This is the {@link Scene#ghostMaterial}.
      *
@@ -1082,7 +1052,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Configures the appearance of highlighted objects within this BigModel.
+     * Configures the appearance of highlighted {@link Entity}s within this PerformanceModel.
      *
      * This is the {@link Scene#highlightMaterial}.
      *
@@ -1093,7 +1063,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Configures the appearance of selected objects within this BigModel.
+     * Configures the appearance of selected {@link Entity}s within this PerformanceModel.
      *
      * This is the {@link Scene#selectedMaterial}.
      *
@@ -1104,7 +1074,7 @@ class BigModel extends Component {
     }
 
     /**
-     * Configures the appearance of edges of objects within this BigModel.
+     * Configures the appearance of edges of {@link Entity}s within this PerformanceModel.
      *
      * This is the {@link Scene#edgeMaterial}.
      *
@@ -1234,7 +1204,7 @@ class BigModel extends Component {
 
     /** @private */
     drawPickMesh(frameCtx) {
-        if (this.numVisibleObjects === 0) {
+        if (this.numVisibleLayerPortions === 0) {
             return;
         }
         for (var i = 0, len = this._layers.length; i < len; i++) {
@@ -1252,7 +1222,7 @@ class BigModel extends Component {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Destroys this BigModel.
+     * Destroys this PerformanceModel.
      */
     destroy() {
         super.destroy();
@@ -1269,4 +1239,4 @@ class BigModel extends Component {
     }
 }
 
-export {BigModel};
+export {PerformanceModel};

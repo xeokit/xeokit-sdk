@@ -76,6 +76,11 @@ class Entity {
     get isObject() {
     }
 
+    /** Returns the parent Entity, if any. */
+    get parent() {
+
+    }
+
     /**
      * World-space 3D axis-aligned bounding box (AABB) of this Entity.
      *
@@ -390,6 +395,13 @@ class Entity {
      * @abstract
      */
     get receivesShadow() {
+
+    }
+
+    /**
+     * Destroys this Entity.
+     */
+    destroy() {
 
     }
 }

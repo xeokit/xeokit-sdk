@@ -25,24 +25,24 @@ import {Light} from './Light.js';
  *
  * // Create a Viewer and arrange the camera
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *     canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
  * // Replace the Scene's default lights with a single custom AmbientLight
  *
- * myViewer.scene.clearLights();
+ * viewer.scene.clearLights();
  *
- * new AmbientLight(myViewer.scene, {
+ * new AmbientLight(viewer.scene, {
  *      color: [0.0, 0.3, 0.7],
  *      intensity: 1.0
  * });
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "keyLight",
  *      dir: [0.8, -0.6, -0.8],
  *      color: [1.0, 0.3, 0.3],
@@ -50,7 +50,7 @@ import {Light} from './Light.js';
  *      space: "view"
  * });
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "fillLight",
  *      dir: [-0.8, -0.4, -0.4],
  *      color: [0.3, 1.0, 0.3],
@@ -58,7 +58,7 @@ import {Light} from './Light.js';
  *      space: "view"
  * });
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "rimLight",
  *      dir: [0.2, -0.8, 0.8],
  *      color: [0.6, 0.6, 0.6],
@@ -68,8 +68,8 @@ import {Light} from './Light.js';
  *
  * // Create a mesh with torus shape and PhongMaterial
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,
@@ -77,10 +77,10 @@ import {Light} from './Light.js';
  *          tubeSegments: 24,
  *          arc: Math.PI * 2.0
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
  *          ambient: [1.0, 1.0, 1.0],
  *          shininess: 30,
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse/uvGrid2.jpg"
  *          })
  *      })
@@ -88,7 +88,7 @@ import {Light} from './Light.js';
  *
  * // Adjust the color of our AmbientLight
  *
- * var ambientLight = myViewer.scene.lights["myAmbientLight"];
+ * var ambientLight = viewer.scene.lights["myAmbientLight"];
  * ambientLight.color = [1.0, 0.8, 0.8];
  *````
  */

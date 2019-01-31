@@ -17,18 +17,22 @@ import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 
 // Cached vars to avoid garbage collection
 
-function getMeshIDMap(scene, meshIds) {
+function getEntityIDMap(scene, entityIds) {
     const map = {};
-    let meshId;
-    let mesh;
-    for (let i = 0, len = meshIds.length; i < len; i++) {
-        meshId = meshIds[i];
-        mesh = scene.meshes[meshId];
-        if (!mesh) {
-            scene.warn("pick(): Mesh not found: " + meshId);
+    let entityId;
+    let entity;
+    for (let i = 0, len = entityIds.length; i < len; i++) {
+        entityId = entityIds[i];
+        entity = scene.component[entityId];
+        if (!entity) {
+            scene.warn("pick(): Component not found: " + entityId);
             continue;
         }
-        map[meshId] = true;
+        if (!entity.isEntity) {
+            scene.warn("pick(): Component is not an Entity: " + entityId);
+            continue;
+        }
+        map[entityId] = true;
     }
     return map;
 }
@@ -60,13 +64,13 @@ function getMeshIDMap(scene, meshIds) {
  * ## Getting a Viewer's Scene
  *
  * ````javascript
- * var scene = myViewer.scene;
+ * var scene = viewer.scene;
  * ````
  *
  * ## Creating and accessing Scene components
  *
  * As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
- * {@link BuildTorusGeometry} and a {@link PhongMaterial}:
+ * {@link uildTorusGeometry} and a {@link PhongMaterial}:
  *
  * ````javascript
  * var teapotMesh = new Mesh(scene, {
@@ -142,9 +146,9 @@ function getMeshIDMap(scene, meshIds) {
  *
  * ## Picking
  *
- * Use {@link Scene#pick} to pick and raycast meshes.
+ * Use {@link Scene#pick} to pick and raycast entites.
  *
- * For example, to pick a point on the surface of the closest mesh at the given canvas coordinates:
+ * For example, to pick a point on the surface of the closest entity at the given canvas coordinates:
  *
  * ````javascript
  * var hit = scene.pick({
@@ -152,9 +156,9 @@ function getMeshIDMap(scene, meshIds) {
  *      canvasPos: [23, 131]
  * });
  *
- * if (hit) { // Picked a Mesh
+ * if (hit) { // Picked an entity
  *
- *     var mesh = hit.mesh;
+ *     var entity = hit.entity;
  *
  *     var primitive = hit.primitive; // Type of primitive that was picked, usually "triangles"
  *     var primIndex = hit.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
@@ -170,37 +174,37 @@ function getMeshIDMap(scene, meshIds) {
  *
  * ## Pick masking
  *
- * We can use {@link Scene#pick}'s ````includeMeshes```` and ````excludeMeshes````  options to mask which {@link Mesh}es we attempt to pick.
+ * We can use {@link Scene#pick}'s ````includeEntities```` and ````excludeEntities````  options to mask which {@link Mesh}es we attempt to pick.
  *
- * This is useful for picking <em>through</em> things, to pick only the Meshes of interest.
+ * This is useful for picking <em>through</em> things, to pick only the Entities of interest.
  *
- * To pick only Meshes ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through any other Meshes that are
+ * To pick only Entities ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through any other Entities that are
  * in the way, as if they weren't there:
  *
  * ````javascript
  * var hit = scene.pick({
  *      canvasPos: [23, 131],
- *      includeMeshes: ["gearbox#77.0", "gearbox#79.0"]
+ *      includeEntities: ["gearbox#77.0", "gearbox#79.0"]
  * });
  *
  * if (hit) {
- *       // Mesh will always be either "gearbox#77.0" or "gearbox#79.0"
- *       var mesh = hit.mesh;
+ *       // Entity will always be either "gearbox#77.0" or "gearbox#79.0"
+ *       var entity = hit.entity;
  * }
  * ````
  *
- * To pick any pickable Mesh, except for ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through those
- * Meshes if they happen to be in the way:
+ * To pick any pickable Entity, except for ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through those
+ * Entities if they happen to be in the way:
  *
  * ````javascript
  * var hit = scene.pick({
  *      canvasPos: [23, 131],
- *      excludeMeshes: ["gearbox#77.0", "gearbox#79.0"]
+ *      excludeEntities: ["gearbox#77.0", "gearbox#79.0"]
  * });
  *
  * if (hit) {
- *       // Mesh will never be "gearbox#77.0" or "gearbox#79.0"
- *       var mesh = hit.mesh;
+ *       // Entity will never be "gearbox#77.0" or "gearbox#79.0"
+ *       var entity = hit.entity;
  * }
  * ````
  *
@@ -214,7 +218,7 @@ function getMeshIDMap(scene, meshIds) {
  * var aabb = scene.aabb; // [xmin, ymin, zmin, xmax, ymax, zmax]
  * ````
  *
- * Subscribing to updates to the AABB, which occur whenever {@link Mesh}es are transformed, their
+ * Subscribing to updates to the AABB, which occur whenever {@link Entity}s are transformed, their
  * {@link ReadableGeometry}s have been updated, or the {@link Camera} has moved:
  *
  * ````javascript
@@ -223,15 +227,15 @@ function getMeshIDMap(scene, meshIds) {
  * });
  * ````
  *
- * Getting the AABB of the {@link Node}s with the given IDs:
+ * Getting the AABB of the {@link Entity}s with the given IDs:
  *
  * ````JavaScript
- * scene.getAABB(); // Gets collective boundary of all Mesh Objects in the scene
+ * scene.getAABB(); // Gets collective boundary of all Entities in the scene
  * scene.getAABB("saw"); // Gets boundary of an Object
  * scene.getAABB(["saw", "gearbox"]); // Gets collective boundary of two Objects
  * ````
  *
- * See {@link Scene#getAABB} and {@link Node} for more info on querying and tracking boundaries.
+ * See {@link Scene#getAABB} and {@link Entity} for more info on querying and tracking boundaries.
  *
  * ## Managing the viewport
  *
@@ -371,7 +375,7 @@ class Scene extends Component {
         this.startTime = (new Date()).getTime();
 
         /**
-         * Map of {@link Entity}s that represent a models.
+         * Map of {@link Entity}s that represent models.
          *
          * Each {@link Entity} is mapped here by {@link Entity#id} when {@link Entity#isModel} is ````true````.
          *
@@ -1522,25 +1526,25 @@ class Scene extends Component {
     }
 
     /**
-     * Attempts to pick an {@link Mesh} in this Scene.
+     * Attempts to pick an {@link Entity} in this Scene.
      *
-     * Ignores {@link Mesh}es with {@link Mesh#pickable} set ````false````.
+     * Ignores {@link Entity}s with {@link Entity#pickable} set ````false````.
      *
-     * When a {@link Mesh} is picked, fires a "pick" event on the {@link Mesh} with the pick result as parameters.
+     * When an {@link Entity} is picked, fires a "pick" event on the {@link Entity} with the pick result as parameters.
      *
-     * Picking the {@link Mesh} at the given canvas coordinates:
+     * Picking the {@link Entity} at the given canvas coordinates:
 
      * ````javascript
      * var pickResult = scene.pick({
      *          canvasPos: [23, 131]
      *       });
      *
-     * if (pickResult) { // Picked a Mesh
-     *         var mesh = pickResult.mesh;
+     * if (pickResult) { // Picked an Entity
+     *         var entity = pickResult.entity;
      *     }
      * ````
      *
-     * Picking, with a ray cast through the canvas, hits a {@link Mesh}:
+     * Picking, with a ray cast through the canvas, hits an {@link Entity}:
      *
      * ````javascript
      * var pickResult = scene.pick({
@@ -1548,14 +1552,14 @@ class Scene extends Component {
      *         canvasPos: [23, 131]
      *      });
      *
-     * if (pickResult) { // Picked a Mesh
+     * if (pickResult) { // Picked an Entity
      *
-     *     var mesh = pickResult.mesh;
+     *     var entity = pickResult.entity;
      *
      *        // These properties are only on the pick result when we do a ray-pick:
      *
      *        var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
-     *        var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+     *        var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Entity's Geometry's indices array
      *        var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
      *        var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
      *        var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
@@ -1566,7 +1570,7 @@ class Scene extends Component {
      * }
      * ````
      *
-     * Picking the {@link Mesh} that intersects an arbitrarily-aligned World-space ray:
+     * Picking the {@link Entity} that intersects an arbitrarily-aligned World-space ray:
      *
      * ````javascript
      * var pickResult = scene.pick({
@@ -1575,12 +1579,12 @@ class Scene extends Component {
      *       direction: [0,0,1]   // Ray direction
      * });
      *
-     * if (pickResult) { // Picked a Mesh with the ray
+     * if (pickResult) { // Picked an Entity with the ray
      *
-     *       var mesh = pickResult.mesh;
+     *       var entity = pickResult.entity;
      *
      *       var primitive = pickResult.primitive; // Type of primitive that was picked, usually "triangles"
-     *       var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Mesh's Geometry's indices array
+     *       var primIndex = pickResult.primIndex; // Position of triangle's first index in the picked Entity's Geometry's indices array
      *       var indices = pickResult.indices; // UInt32Array containing the triangle's vertex indices
      *       var localPos = pickResult.localPos; // Float32Array containing the picked Local-space position on the triangle
      *       var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the triangle
@@ -1594,14 +1598,14 @@ class Scene extends Component {
      *  ````
      *
      * @param {*} params Picking parameters.
-     * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Mesh.
+     * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
      * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
-     * @param {String[]} [params.includeMeshes] IDs of {@link Mesh}es to restrict picking to. When given, ignores {@link Mesh}es whose IDs are not in this list.
-     * @param {String[]} [params.excludeMeshes] IDs of {@link Mesh}es to ignore. When given, will pick *through* these {@link Mesh}es, as if they were not there.
+     * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
+     * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
      * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
-     * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Mesh} is picked, else null. See method comments for description.
+     * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Entity} is picked, else null. See method comments for description.
      */
     pick(params, pickResult) {
 
@@ -1618,25 +1622,22 @@ class Scene extends Component {
             this.warn("picking without canvasPos or ray origin and direction");
         }
 
-        const includeMeshes = params.includeMeshes || params.include; // Backwards compat
-        if (includeMeshes) {
-            params.includeMeshIds = getMeshIDMap(this, includeMeshes);
+        const includeEntities = params.includeEntities || params.include; // Backwards compat
+        if (includeEntities) {
+            params.includeEntityIds = getEntityIDMap(this, includeEntities);
         }
 
-        const excludeMeshes = params.excludeMeshes || params.exclude; // Backwards compat
-        if (excludeMeshes) {
-            params.excludeMeshIds = getMeshIDMap(this, excludeMeshes);
+        const excludeEntities = params.excludeEntities || params.exclude; // Backwards compat
+        if (excludeEntities) {
+            params.excludeEntityIds = getEntityIDMap(this, excludeEntities);
         }
 
         pickResult = this._renderer.pick(params, pickResult);
 
         if (pickResult) {
-            utils.apply(params, pickResult);
-            pickResult.object = pickResult.mesh; // Backwards compat
-            if (params.pickSurface) {
-                pickResult.mesh.getPickResult(pickResult);
+            if (pickResult.entity.fire) {
+                pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doeosn't fire events...
             }
-            pickResult.mesh.fire("picked", pickResult); // TODO: BigModelMesh doeosn't fire events...
             return pickResult;
         }
     }
@@ -1786,7 +1787,7 @@ class Scene extends Component {
             return changed;
         });
     }
-    
+
     /**
      * Batch-updates {@link Entity#culled} on {@link Entity}s that represent objects.
      *
@@ -1941,7 +1942,7 @@ class Scene extends Component {
             if (entity) {
                 changed = callback(entity) || changed;
             }
-         //   this.warn("Entity not found: '" + id + "'");
+            //   this.warn("Entity not found: '" + id + "'");
         }
         return changed;
     }

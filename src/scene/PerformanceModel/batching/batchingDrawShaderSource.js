@@ -1,13 +1,10 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
-
-import {RENDER_PASSES} from '../../renderPasses.js';
+import {RENDER_PASSES} from '../renderPasses.js';
 
 /**
  * @private
+ * @constructor
  */
-const InstancingDrawShaderSource = function (layer) {
+const BatchingDrawShaderSource = function (layer) {
     this.vertex = buildVertex(layer);
     this.fragment = buildFragment(layer);
 };
@@ -22,26 +19,14 @@ function buildVertex(layer) {
     let light;
     const src = [];
 
-    src.push("// Instancing geometry drawing vertex shader");
+    src.push("// Batched geometry drawing vertex shader");
 
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
-    src.push("attribute vec2 normal;");
+    src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-
-    src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
-    src.push("attribute vec4 modelMatrixCol1;");
-    src.push("attribute vec4 modelMatrixCol2;");
-
-    src.push("attribute vec4 modelNormalMatrixCol0;");
-    src.push("attribute vec4 modelNormalMatrixCol1;");
-    src.push("attribute vec4 modelNormalMatrixCol2;");
-
-    // TODO: How to do per-instance normal modeling matrix?
-
-    src.push("uniform mat4 modelNormalMatrix;");
 
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
@@ -70,7 +55,7 @@ function buildVertex(layer) {
         }
     }
 
-    src.push("vec3 octDecode(vec2 oct) {");
+    src.push("vec3 octDecodeNormal(vec2 oct) {");
     src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
     src.push("    if (v.z < 0.0) {");
     src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
@@ -85,27 +70,32 @@ function buildVertex(layer) {
 
     src.push("void main(void) {");
 
+
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool ghosted      = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
-    src.push(`if (!visible || (renderPass == ${RENDER_PASSES.OPAQUE} && (transparent || ghosted || highlighted)) || (renderPass == ${RENDER_PASSES.TRANSPARENT} && (!transparent || ghosted || highlighted)) || (renderPass == ${RENDER_PASSES.GHOSTED} && (!ghosted || highlighted)) || (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
+    src.push(`if (
+    
+    (!visible) || 
+    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || ghosted)) || 
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || ghosted || highlighted)) || 
+    (renderPass == ${RENDER_PASSES.GHOSTED} && (!ghosted || highlighted)) || (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
+
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
 
-    src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-
-    src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-
+    src.push("vec4 worldPosition = (positionsDecodeMatrix * vec4(position, 1.0)); ");
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-    src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-    src.push("vec4 worldNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-    src.push("vec3 viewNormal = normalize(vec4(worldNormal * viewNormalMatrix).xyz);");
+    src.push("vec4 worldNormal =  vec4(octDecodeNormal(normal.xy), 0.0); ");
+
+    src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
+
 
     src.push("float lambertian = 1.0;");
     for (i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -144,6 +134,7 @@ function buildVertex(layer) {
     // src.push("vColor.g += 1.0;");
     // src.push("vColor.b += 1.0;");
 
+
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }
@@ -160,7 +151,7 @@ function buildFragment(layer) {
     let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Instancing geometry drawing fragment shader");
+    src.push("// Batched geometry drawing fragment shader");
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     if (clipping) {
@@ -185,9 +176,10 @@ function buildFragment(layer) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
+//    src.push("gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);");
     src.push("gl_FragColor = vColor;");
     src.push("}");
     return src;
 }
 
-export {InstancingDrawShaderSource};
+export {BatchingDrawShaderSource};

@@ -31,15 +31,15 @@ const modeNames = ["opaque", "mask", "blend"];
  * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
  * import {Texture} from "../src/scene/materials/Texture.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0.57, 1.37, 1.14];
- * myViewer.scene.camera.look = [0.04, 0.58, 0.00];
- * myViewer.scene.camera.up = [-0.22, 0.84, -0.48];
+ * viewer.scene.camera.eye = [0.57, 1.37, 1.14];
+ * viewer.scene.camera.look = [0.04, 0.58, 0.00];
+ * viewer.scene.camera.up = [-0.22, 0.84, -0.48];
  *
- * loadOBJGeometry(ReadableGeometry, myViewer.scene, {
+ * loadOBJGeometry(ReadableGeometry, viewer.scene, {
  *
  *      src: "models/obj/fireHydrant/FireHydrantMesh.obj",
  *      compressGeometry: false
@@ -49,30 +49,30 @@ const modeNames = ["opaque", "mask", "blend"];
  *
  *      // Success
  *
- *      new Mesh(myViewer.scene, {
+ *      new Mesh(viewer.scene, {
  *
  *          geometry: geometry,
  *
- *          material: new MetallicMaterial(myViewer.scene, {
+ *          material: new MetallicMaterial(viewer.scene, {
  *
  *              baseColor: [1, 1, 1],
  *              metallic: 1.0,
  *              roughness: 1.0,
  *
- *              baseColorMap: new Texture(myViewer.scene, {
+ *              baseColorMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
  *                  encoding: "sRGB"
  *              }),
- *              normalMap: new Texture(myViewer.scene, {
+ *              normalMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
  *              }),
- *              roughnessMap: new Texture(myViewer.scene, {
+ *              roughnessMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Roughness.png"
  *              }),
- *              metallicMap: new Texture(myViewer.scene, {
+ *              metallicMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Metallic.png"
  *              }),
- *              occlusionMap: new Texture(myViewer.scene, {
+ *              occlusionMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
  *              }),
  *
@@ -129,30 +129,30 @@ const modeNames = ["opaque", "mask", "blend"];
  * by {@link MetallicMaterial#roughness}.
  *
  * ````javascript
- * new Mesh(myViewer.scene, {
+ * new Mesh(viewer.scene, {
  *
  *     geometry: geometry,
  *
- *     material: new MetallicMaterial(myViewer.scene, {
+ *     material: new MetallicMaterial(viewer.scene, {
  *
  *         baseColor: [1, 1, 1],
  *         metallic: 1.0,
  *         roughness: 1.0,
  *
- *         baseColorMap: new Texture(myViewer.scene, {
+ *         baseColorMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
  *             encoding: "sRGB"
  *         }),
- *         normalMap: new Texture(myViewer.scene, {
+ *         normalMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
  *         }),
- *         metallicRoughnessMap: new Texture(myViewer.scene, {
+ *         metallicRoughnessMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"
  *         }),
- *         metallicRoughnessMap : new Texture(myViewer.scene, {                  // <<----------- Added
+ *         metallicRoughnessMap : new Texture(viewer.scene, {                  // <<----------- Added
  *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"  // R component multiplies by metallic
  *         }),                                                                   // G component multiplies by roughness
- *         occlusionMap: new Texture(myViewer.scene, {
+ *         occlusionMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
  *         }),
  *
@@ -183,11 +183,11 @@ const modeNames = ["opaque", "mask", "blend"];
  * with {@link MetallicMaterial#alphaMode} and {@link MetallicMaterial#alphaCutoff} to treat it as an alpha mask:
  *
  * ````javascript
- * new Mesh(myViewer.scene, {
+ * new Mesh(viewer.scene, {
  *
  *     geometry: geometry,
  *
- *     material: new MetallicMaterial(myViewer.scene, {
+ *     material: new MetallicMaterial(viewer.scene, {
  *
  *         baseColor: [1, 1, 1],
  *         metallic: 1.0,
@@ -196,23 +196,23 @@ const modeNames = ["opaque", "mask", "blend"];
  *         alphaMode : "mask",  // <<---------------- Added
  *         alphaCutoff : 0.2,   // <<---------------- Added
  *
- *         alphaMap : new Texture(myViewer.scene{ // <<---------------- Added
+ *         alphaMap : new Texture(viewer.scene{ // <<---------------- Added
  *              src: "textures/alphaMap.jpg"
  *         }),
- *         baseColorMap: new Texture(myViewer.scene, {
+ *         baseColorMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
  *             encoding: "sRGB"
  *         }),
- *         normalMap: new Texture(myViewer.scene, {
+ *         normalMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
  *         }),
- *         metallicRoughnessMap: new Texture(myViewer.scene, {
+ *         metallicRoughnessMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"
  *         }),
- *         metallicRoughnessMap : new Texture(myViewer.scene, {                  // <<----------- Added
+ *         metallicRoughnessMap : new Texture(viewer.scene, {                  // <<----------- Added
  *             src: "models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"  // R component multiplies by metallic
  *         }),                                                                   // G component multiplies by roughness
- *         occlusionMap: new Texture(myViewer.scene, {
+ *         occlusionMap: new Texture(viewer.scene, {
  *             src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
  *         }),
  *

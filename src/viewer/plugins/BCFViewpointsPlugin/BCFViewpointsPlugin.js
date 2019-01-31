@@ -324,13 +324,6 @@ class BCFViewpointsPlugin extends Plugin {
             });
         }
     }
-
-    /**
-     * Destroys this plugin.
-     */
-    destroy() {
-        super.destroy();
-    }
 }
 
 function xyzArrayToObject(arr) {

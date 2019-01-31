@@ -219,7 +219,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether clicking on a {@link Mesh} and dragging will pivot the {@link Camera} about the picked point on the Mesh's surface.
+     * Sets whether clicking on an {@link Entity} and dragging will pivot the {@link Camera} about the picked point on the Entity's surface.
      *
      * Default value is ````false````.
      *
@@ -230,7 +230,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether clicking on a {@link Mesh} and dragging will pivot the {@link Camera} about the picked point on the Mesh's surface.
+     * Gets whether clicking on an {@link Entity} and dragging will pivot the {@link Camera} about the picked point on the Entity's surface.
      *
      * Default value is ````false````.
      *
@@ -241,7 +241,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether scrolling the mouse wheel, when the mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the hovered point on the Mesh's surface.
+     * Sets whether scrolling the mouse wheel, when the mouse is over an {@link Entity}, will zoom the {@link Camera} towards the hovered point on the Entity's surface.
      *
      * Default value is ````false````.
      *
@@ -255,7 +255,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether scrolling the mouse wheel, when the mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the hovered point on the Mesh's surface.
+     * Gets whether scrolling the mouse wheel, when the mouse is over an {@link Entity}, will zoom the {@link Camera} towards the hovered point on the Entity's surface.
      *
      * Default value is ````false````.
      *
@@ -266,7 +266,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether scrolling the mouse wheel, when mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the pivot point.
+     * Sets whether scrolling the mouse wheel, when mouse is over an {@link Entity}, will zoom the {@link Camera} towards the pivot point.
      *
      * Default value is ````false````.
      *
@@ -280,7 +280,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether scrolling the mouse wheel, when mouse is over a {@link Mesh}, will zoom the {@link Camera} towards the pivot point.
+     * Gets whether scrolling the mouse wheel, when mouse is over an {@link Entity}, will zoom the {@link Camera} towards the pivot point.
      *
      * Default value is ````false````.
      *
@@ -458,15 +458,15 @@ class CameraControl extends Component {
         };
 
         const pickCursorPos = [0, 0];
-        let needPickMesh = false;
+        let needPickEntity = false;
         let needPickSurface = false;
-        let lastPickedMeshId;
+        let lastPickedEntityId;
         let hit;
         let picked = false;
         let pickedSurface = false;
 
         function updatePick() {
-            if (!needPickMesh && !needPickSurface) {
+            if (!needPickEntity && !needPickSurface) {
                 return;
             }
             picked = false;
@@ -476,67 +476,67 @@ class CameraControl extends Component {
                     pickSurface: true,
                     canvasPos: pickCursorPos
                 });
-            } else { // needPickMesh == true
+            } else { // needPickEntity == true
                 hit = scene.pick({
                     canvasPos: pickCursorPos
                 });
             }
             if (hit) {
                 picked = true;
-                const pickedMeshId = hit.mesh.id;
-                if (lastPickedMeshId !== pickedMeshId) {
-                    if (lastPickedMeshId !== undefined) {
+                const pickedEntityId = hit.entity.id;
+                if (lastPickedEntityId !== pickedEntityId) {
+                    if (lastPickedEntityId !== undefined) {
 
                         /**
-                         * Fired whenever the pointer no longer hovers over an {@link Mesh}.
+                         * Fired whenever the pointer no longer hovers over an {@link Entity}.
                          * @event hoverOut
-                         * @param mesh The Mesh
+                         * @param entity The Entity
                          */
                         self.fire("hoverOut", {
-                            mesh: scene.components[lastPickedMeshId]
+                            entity: scene.components[lastPickedEntityId]
                         });
                     }
 
                     /**
-                     * Fired when the pointer is over a new {@link Mesh}.
+                     * Fired when the pointer is over a new {@link Entity}.
                      * @event hoverEnter
-                     * @param hit A pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                     * @param hit A pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
                     self.fire("hoverEnter", hit);
-                    lastPickedMeshId = pickedMeshId;
+                    lastPickedEntityId = pickedEntityId;
                 }
                 /**
-                 * Fired continuously while the pointer is moving while hovering over an {@link Mesh}.
+                 * Fired continuously while the pointer is moving while hovering over an {@link Entity}.
                  * @event hover
-                 * @param hit A pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                 * @param hit A pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                  */
                 self.fire("hover", hit);
                 if (hit.worldPos) {
                     pickedSurface = true;
 
                     /**
-                     * Fired while the pointer hovers over the surface of an {@link Mesh}.
+                     * Fired while the pointer hovers over the surface of an {@link Entity}.
                      *
                      * This event provides 3D information about the point on the surface that the pointer is
                      * hovering over.
                      *
                      * @event hoverSurface
-                     * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
+                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
                      * surface position - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
                     self.fire("hoverSurface", hit);
                 }
             } else {
-                if (lastPickedMeshId !== undefined) {
+                if (lastPickedEntityId !== undefined) {
                     /**
-                     * Fired whenever the pointer no longer hovers over an {@link Mesh}.
+                     * Fired whenever the pointer no longer hovers over an {@link Entity}.
                      * @event hoverOut
-                     * @param mesh The Mesh
+                     * @param entity The Entity
                      */
                     self.fire("hoverOut", {
-                        mesh: scene.components[lastPickedMeshId]
+                        entity: scene.components[lastPickedEntityId]
                     });
-                    lastPickedMeshId = undefined;
+                    lastPickedEntityId = undefined;
                 }
                 /**
                  * Fired continuously while the pointer is moving but not hovering over anything.
@@ -547,7 +547,7 @@ class CameraControl extends Component {
                     canvasPos: pickCursorPos
                 });
             }
-            needPickMesh = false;
+            needPickEntity = false;
             needPickSurface = false;
         }
 
@@ -1315,7 +1315,7 @@ class CameraControl extends Component {
                     getCanvasPosFromEvent(e, pickCursorPos);
 
                     if (self.hasSubs("hover") || self.hasSubs("hoverOut") || self.hasSubs("hoverOff") || self.hasSubs("hoverSurface")) {
-                        needPickMesh = true;
+                        needPickEntity = true;
                     }
                 });
 
@@ -1372,21 +1372,21 @@ class CameraControl extends Component {
                             if (hit) {
 
                                 /**
-                                 * Fired whenever the pointer has picked (ie. clicked or tapped) an {@link Mesh}.
+                                 * Fired whenever the pointer has picked (ie. clicked or tapped) an {@link Entity}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param hit A surface pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
                                 self.fire("picked", hit);
                                 if (pickedSurface) {
 
                                     /**
-                                     * Fired when the pointer has picked (ie. clicked or tapped) the surface of an {@link Mesh}.
+                                     * Fired when the pointer has picked (ie. clicked or tapped) the surface of an {@link Entity}.
                                      *
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event pickedSurface
-                                     * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
+                                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
                                     self.fire("pickedSurface", hit);
@@ -1409,8 +1409,8 @@ class CameraControl extends Component {
                         if (clicks == 1) {
                             timeout = setTimeout(function () {
 
-                                needPickMesh = self._doublePickFlyTo;
-                                needPickSurface = needPickMesh || !!self.hasSubs("pickedSurface");
+                                needPickEntity = self._doublePickFlyTo;
+                                needPickSurface = needPickEntity || !!self.hasSubs("pickedSurface");
                                 pickCursorPos[0] = downCursorX;
                                 pickCursorPos[1] = downCursorY;
 
@@ -1432,27 +1432,27 @@ class CameraControl extends Component {
 
                             clearTimeout(timeout);
 
-                            needPickMesh = self._doublePickFlyTo;
-                            needPickSurface = needPickMesh && !!self.hasSubs("doublePickedSurface");
+                            needPickEntity = self._doublePickFlyTo;
+                            needPickSurface = needPickEntity && !!self.hasSubs("doublePickedSurface");
 
                             updatePick();
 
                             if (hit) {
                                 /**
-                                 * Fired whenever the pointer has double-picked (ie. double-clicked or double-tapped) an {@link Mesh}.
+                                 * Fired whenever the pointer has double-picked (ie. double-clicked or double-tapped) an {@link Entity}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Mesh - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param hit A surface pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
                                 self.fire("doublePicked", hit);
                                 if (pickedSurface) {
                                     /**
-                                     * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {@link Mesh}.
+                                     * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {@link Entity}.
                                      *
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event doublePickedSurface
-                                     * @param hit A surface pick hit result, containing the ID of the Mesh and 3D info on the
+                                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
                                     self.fire("doublePickedSurface", hit);
@@ -1553,7 +1553,7 @@ class CameraControl extends Component {
 
                                 pickCursorPos[0] = Math.round(changedTouches[0].clientX);
                                 pickCursorPos[1] = Math.round(changedTouches[0].clientY);
-                                needPickMesh = true;
+                                needPickEntity = true;
                                 needPickSurface = !!self.hasSubs("pickedSurface");
 
                                 updatePick();
@@ -1581,7 +1581,7 @@ class CameraControl extends Component {
 
                                 pickCursorPos[0] = Math.round(changedTouches[0].clientX);
                                 pickCursorPos[1] = Math.round(changedTouches[0].clientY);
-                                needPickMesh = true;
+                                needPickEntity = true;
                                 needPickSurface = !!self.hasSubs("pickedSurface");
 
                                 updatePick();
@@ -1738,7 +1738,7 @@ class CameraControl extends Component {
             pos = hit.worldPos
         }
 
-        const aabb = hit ? hit.mesh.aabb : this.scene.aabb;
+        const aabb = hit ? hit.entity.aabb : this.scene.aabb;
 
 
         if (pos) {

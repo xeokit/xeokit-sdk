@@ -30,39 +30,16 @@ const vecb = new Float32Array(3);
 const identityMat = math.identityMat4();
 
 /**
- * @desc A {@link Scene} {@link Entity} that represents a rendered 3D element.
- *
- * ## Meshes Representing Models
- *
- * * As an {@link Entity}, a Mesh represents a model when {@link Mesh#isModel} is ````true````.
- * * Each model-Mesh is registered by {@link Mesh#id} in {@link Scene#models}.
- * * Each model-Mesh can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.
- *
- * ## Meshes Representing Objects
- *
- * * As an {@link Entity}, a Mesh represents an object when {@link Mesh#isObject} is ````true````.
- * * Each object-Mesh is registered by {@link Mesh#id} in {@link Scene#objects}.
- * * Each object-Mesh can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.
- *
- * ## Updating Batches of Object-Meshes
- *
- * {@link Scene} provides the following methods for updating batches of object-Meshes using their {@link Mesh#id}s:
- *
- * * {@link Scene#setObjectsVisible}
- * * {@link Scene#setObjectsCulled}
- * * {@link Scene#setObjectsSelected}
- * * {@link Scene#setObjectsHighlighted}
- * * {@link Scene#setObjectsGhosted}
- * * {@link Scene#setObjectsEdges}
- * * {@link Scene#setObjectsColorized}
- * * {@link Scene#setObjectsOpacity}
+ * @desc An {@link Entity} that is a drawable element, with a {@link Geometry} and a {@link Material}, that can be
+ * connected into a scene graph using {@link Node}s.
  *
  * ## Usage
  *
  * The example below is the same as the one given for {@link Node}, since the two classes work together.  In this example,
  * we'll create a scene graph in which a root {@link Node} represents a group and the Meshes are leaves.
  *
- * Since {@link Node} implements {@link Entity}, we can designate the root {@link Node} as a model, causing it to be registered by ID in {@link Scene#models}.
+ * Since {@link Node} implements {@link Entity}, we can designate the root {@link Node} as a model, causing it to be registered by its
+ * ID in {@link Scene#models}.
  *
  * Since Mesh also implements {@link Entity}, we can designate the leaf Meshes as objects, causing them to
  * be registered by their IDs in {@link Scene#objects}.
@@ -71,7 +48,7 @@ const identityMat = math.identityMat4();
  *
  * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#sceneGraph_BasicSceneGraph)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation__SceneGraph)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -244,7 +221,7 @@ class Mesh extends Component {
             billboard: this._checkBillboard(cfg.billboard),
             layer: null,
             colorize: null,
-            pickID: this.scene._renderer.getPickID(this), // TODO: somehow puch this down into xeokit framework?
+            pickID: this.scene._renderer.getPickID(this),
             drawHash: "",
             pickHash: ""
         });
@@ -443,7 +420,7 @@ class Mesh extends Component {
         if (!this._aabb) {
             this._aabb = math.AABB3();
         }
-        this._buildAABB(this.worldMatrix, this._aabb); // Mesh or BigModel
+        this._buildAABB(this.worldMatrix, this._aabb); // Mesh or PerformanceModel
         this._aabbDirty = false;
     }
 
@@ -1675,9 +1652,17 @@ class Mesh extends Component {
         }
     }
 
+    /**
+     * @private
+     * @returns {PerformanceNode}
+     */
+    delegatePickedEntity() {
+        return this;
+    }
+
     /** @private */
-    getPickResult(pickResult) {
-        getPickResult(this, pickResult);
+    surfacePick(pickResult) {
+        surfacePick(this, pickResult);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1716,7 +1701,7 @@ class Mesh extends Component {
 }
 
 
-const getPickResult = (function () {
+const surfacePick = (function () {
 
     // Cached vars to avoid garbage collection
 

@@ -7,11 +7,11 @@ import {defaultMaterials} from "./defaultMaterials.js";
  * @param bimServerModel
  * @param roid
  * @param globalTransformationMatrix
- * @param bigModelBuilder
+ * @param detailModelBuilder
  * @constructor
  * @private
  */
-function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, bigModelBuilder) {
+function BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {
 
     var o = this;
 
@@ -211,13 +211,13 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
     function readStart(data) {
         var start = data.readUTF8();
         if (start !== "BGS") {
-            bigModelBuilder.error("data does not start with BGS (" + start + ")");
+            detailModelBuilder.error("data does not start with BGS (" + start + ")");
             return false;
         }
         protocolVersion = data.readByte();
-        bigModelBuilder.log("BIMServer protocol version = " + protocolVersion);
+        detailModelBuilder.log("BIMServer protocol version = " + protocolVersion);
         if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 && protocolVersion !== 17) {
-            bigModelBuilder.error("Unimplemented protocol version");
+            detailModelBuilder.error("Unimplemented protocol version");
             return false;
         }
         if (protocolVersion > 15) {
@@ -225,7 +225,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
         }
         data.align8();
         var boundary = data.readDoubleArray(6);
-        bigModelBuilder.gotModelBoundary(boundary);
+        detailModelBuilder.gotModelBoundary(boundary);
         currentState.mode = 1;
         progressListeners.forEach(function (progressListener) {
             progressListener("start", currentState.nrObjectsRead, currentState.nrObjectsRead);
@@ -260,7 +260,6 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
 
             let reused = stream.readInt();
             let ifcType = stream.readUTF8();
-            let ifcColor = defaultMaterials[ifcType];
 
             stream.align8();
 
@@ -293,26 +292,18 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
             var colors = null;
 
             if (numColors > 0) {
-
                 colors = stream.readFloatArray(numColors);
-
                 color[0] = colors[0];
-                color[1] = colors[0];
-                color[2] = colors[0];
-                color[3] = colors[0];
+                color[1] = colors[1];
+                color[2] = colors[2];
+                color[3] = colors[3];
+            }
 
-            } else if (color !== null) {
-
-                // Creating vertex colors here anyways (not transmitted over the line is a plus), should find a way to do this with scenejs without vertex-colors
-
-                // colors = new Array(numPositions * 4);
-                //
-                // for (var i = 0; i < numPositions; i++) {
-                //     colors[i * 4] = color.r;
-                //     colors[i * 4 + 1] = color.g;
-                //     colors[i * 4 + 2] = color.b;
-                //     colors[i * 4 + 3] = color.a;
-                // }
+            if (!gotColor) {
+                color[0] = 1.0;
+                color[1] = 1.0;
+                color[2] = 1.0;
+                color[3] = 1.0;
             }
 
             var multiUseGeometry = (reused > 1);
@@ -323,7 +314,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 // MULTI-USE GEOMETRY
                 //------------------------------------------------------------------------------------------------------
 
-                bigModelBuilder.createGeometry(geometryId, positions, normals, indices, reused);
+                detailModelBuilder.createGeometry(geometryId, positions, normals, indices);
 
                 multiUseGeometryLoaded[geometryId] = true;
 
@@ -341,10 +332,22 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
 
                             let waitingObjectData = waitingObjects[objectId];
 
-                            let ifcColor = defaultMaterials[waitingObjectData.ifcType];
+                            let meshColor = color;
+                            let meshOpacity = color[3];
 
-                            bigModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createNode(objectId, geometryId, waitingObjectData.ifcType);
+                            let ifcProps = detailModelBuilder.objectDefaults[waitingObjectData.ifcType];
+                            if (ifcProps) {
+                                if (ifcProps.colorize) {
+                                    meshColor = ifcProps.colorize;
+                                    meshOpacity = ifcProps.colorize[3];
+                                }
+                                if (ifcProps.opacity !== null && ifcProps.opacity !== undefined) {
+                                    meshOpacity = ifcProps.opacity;
+                                }
+                            }
+
+                            detailModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
+                            detailModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -370,10 +373,22 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
 
                             let waitingObjectData = waitingObjects[objectId];
 
-                            let ifcColor = defaultMaterials[waitingObjectData.ifcType];
+                            let meshColor = color;
+                            let meshOpacity = color[3];
 
-                            bigModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, ifcColor);
-                            bigModelBuilder.createNode(objectId, geometryId, waitingObjectData.ifcType);
+                            let ifcProps = detailModelBuilder.objectDefaults[waitingObjectData.ifcType];
+                            if (ifcProps) {
+                                if (ifcProps.colorize) {
+                                    meshColor = ifcProps.colorize;
+                                    meshOpacity = ifcProps.colorize[3];
+                                }
+                                if (ifcProps.opacity !== null && ifcProps.opacity !== undefined) {
+                                    meshOpacity = ifcProps.opacity;
+                                }
+                            }
+
+                            detailModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
+                            detailModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -406,8 +421,34 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
             var inPreparedBuffer = stream.readByte() === 1;
             var oid = stream.readLong();
             let ifcType = stream.readUTF8();
+            var numColors = stream.readInt();
 
-            let ifcColor = defaultMaterials[ifcType];
+            // if (numColors > 0) {
+            //     colors = stream.readFloatArray(numColors);
+            //     color[0] = colors[0];
+            //     color[1] = colors[1];
+            //     color[2] = colors[2];
+            //     color[3] = colors[3];
+            // } else {
+            color[0] = 1.0;
+            color[1] = 1.0;
+            color[2] = 1.0;
+            color[3] = 1.0;
+            //}
+
+            let meshColor = color;
+            let meshOpacity = color[3];
+
+            let ifcProps = detailModelBuilder.objectDefaults[ifcType];
+            if (ifcProps) {
+                if (ifcProps.colorize) {
+                    meshColor = ifcProps.colorize;
+                    meshOpacity = ifcProps.colorize[3];
+                }
+                if (ifcProps.opacity !== null && ifcProps.opacity !== undefined) {
+                    meshOpacity = ifcProps.opacity;
+                }
+            }
 
             stream.align8();
 
@@ -422,7 +463,7 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
             oid = infoToOid[geometryInfoOid];
 
             if (oid === null) {
-                // bigModelBuilder.error("Not found", infoToOid, geometryInfoOid);
+                // detailModelBuilder.error("Not found", infoToOid, geometryInfoOid);
                 return;
             }
 
@@ -439,8 +480,8 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 var normals = waitingGeometryData.normals;
                 var indices = waitingGeometryData.indices;
 
-                bigModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, matrix, ifcColor);
-                bigModelBuilder.createNode(objectId, geometryId, ifcType);
+                detailModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, matrix, meshColor, meshOpacity);
+                detailModelBuilder.createEntity(objectId, geometryId, ifcType);
 
                 delete singleUseGeometryLoaded[geometryId];
 
@@ -450,8 +491,8 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 // MULTI-USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
 
-                bigModelBuilder.createMeshInstancingGeometry(geometryId, matrix, ifcColor);
-                bigModelBuilder.createNode(oid, geometryId, ifcType);
+                detailModelBuilder.createMeshInstancingGeometry(geometryId, matrix, meshColor, meshOpacity);
+                detailModelBuilder.createEntity(oid, geometryId, ifcType);
 
             } else {
 
@@ -500,18 +541,18 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
                 //     });
             }
 
-        //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
+            //    this.createObject(roid, oid, oid, [], null, hasTransparency, type, objectBounds, true);
         } else if (geometryType === 7) {
-          //  this.processPreparedBuffer(stream, true);
+            //  this.processPreparedBuffer(stream, true);
 
         } else if (geometryType === 8) {
-         //   this.processPreparedBuffer(stream, false);
+            //   this.processPreparedBuffer(stream, false);
 
         } else if (geometryType === 10) {
-         //   this.processPreparedBufferInit(stream, true);
+            //   this.processPreparedBufferInit(stream, true);
 
         } else if (geometryType === 11) {
-          //  this.processPreparedBufferInit(stream, false);
+            //  this.processPreparedBufferInit(stream, false);
 
         } else {
             console.error("Unsupported geometry type: " + geometryType);
@@ -524,4 +565,4 @@ function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid,
     }
 }
 
-export {BIMServerBigGeometryLoader};
+export {BIMServerDetailGeometryLoader};

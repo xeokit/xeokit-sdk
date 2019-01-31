@@ -348,7 +348,7 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
 
             let geometryLoaded = geometriesLoaded[geometryDataId];
 
-            modelBuilder.createNode(oid, geometryLoaded ? [geometryDataId] : [], ifcType, matrix);
+            modelBuilder.createEntity(oid, geometryLoaded ? [geometryDataId] : [], ifcType, matrix);
 
             if (!geometryLoaded) {
 

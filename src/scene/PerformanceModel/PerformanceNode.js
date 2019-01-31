@@ -1,14 +1,9 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
 /**
- * @desc An element within a {@link BigModel}.
- *
- * * Created by {@link BigModel#createNode}.
- * * Has one or more {@link BigModelMesh}es.
- *
- * @implements {Entity}
+ * @private
  */
-class BigModelNode {
+class PerformanceNode {
 
     /**
      * @private
@@ -18,29 +13,28 @@ class BigModelNode {
         this._isObject = isObject;
 
         /**
-         * The BigModel that contains this BigModelObject.
+         * The PerformanceModel that contains this PerformanceModelNode.
          * @property model
-         * @type {BigModel}
+         * @type {PerformanceModel}
          * @final
          */
         this.model = model;
 
         /**
-         * The BigModelMesh instances contained by this BigModelObject
+         * The PerformanceModelMesh instances contained by this PerformanceModelNode
          * @property meshes
-         * @type {{Array of BigModelMesh}}
+         * @type {{Array of PerformanceModelMesh}}
          * @final
          */
         this.meshes = meshes;
 
         for (var i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
-            mesh.object = this;
             mesh.parent = this;
         }
 
         /**
-         * ID of this BigModelObject, unique within the {@link Scene}.
+         * ID of this PerformanceModelNode, unique within the {@link Scene}.
          * @property id
          * @type {String|Number
          * @final}
@@ -49,6 +43,7 @@ class BigModelNode {
 
         this._flags = flags;
         this._colorize = new Uint8Array([255, 255, 255, 255]);
+        this._opacity = 255;
 
         this._aabb = aabb;
 
@@ -57,8 +52,20 @@ class BigModelNode {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Entity members
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
-     * Always returns ````false```` because a BigModelNode can never represent a model.
+     * Returns true to indicate that PerformanceModelNode is an {@link Entity}.
+     * @type {Boolean}
+     */
+    get isEntity() {
+        return true;
+    }
+
+    /**
+     * Always returns ````false```` because a PerformanceModelNode can never represent a model.
      *
      * @type {Boolean}
      */
@@ -67,9 +74,9 @@ class BigModelNode {
     }
 
     /**
-     * Returns ````true```` if this BigModelNode represents an object.
+     * Returns ````true```` if this PerformanceModelNode represents an object.
      *
-     * When ````true```` the BigModelNode will be registered by {@link BigModelNode#id} in
+     * When ````true```` the PerformanceModelNode will be registered by {@link PerformanceNode#id} in
      * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
      * @type {Boolean}
@@ -79,7 +86,7 @@ class BigModelNode {
     }
 
     /**
-     * World-space 3D axis-aligned bounding box (AABB) of this BigModelNode.
+     * World-space 3D axis-aligned bounding box (AABB) of this PerformanceModelNode.
      *
      * Represented by a six-element Float32Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
@@ -91,12 +98,12 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is visible.
+     * Sets if this PerformanceModelNode is visible.
      *
-     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#visible} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#visibleObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -106,10 +113,8 @@ class BigModelNode {
         }
         if (visible) {
             this._flags = this._flags | RENDER_FLAGS.VISIBLE;
-            this.model.numVisibleObjects++;
         } else {
             this._flags = this._flags & ~RENDER_FLAGS.VISIBLE;
-            this.model.numVisibleObjects--;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setVisible(this._flags);
@@ -121,12 +126,12 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is visible.
+     * Gets if this PerformanceModelNode is visible.
      *
-     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#visible} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#visibleObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#visible} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -139,10 +144,10 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is highlighted.
+     * Sets if this PerformanceModelNode is highlighted.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -152,10 +157,8 @@ class BigModelNode {
         }
         if (highlighted) {
             this._flags = this._flags | RENDER_FLAGS.HIGHLIGHTED;
-            this.model.numHighlightedObjects++;
         } else {
             this._flags = this._flags & ~RENDER_FLAGS.HIGHLIGHTED;
-            this.model.numHighlightedObjects--;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setHighlighted(this._flags);
@@ -167,10 +170,10 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is highlighted.
+     * Gets if this PerformanceModelNode is highlighted.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -179,10 +182,10 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is ghosted.
+     * Sets if this PerformanceModelNode is ghosted.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#ghosted} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#ghostedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.
      *
      * @type {Boolean}
      */
@@ -192,10 +195,8 @@ class BigModelNode {
         }
         if (ghosted) {
             this._flags = this._flags | RENDER_FLAGS.GHOSTED;
-            this.model.numGhostedObjects++;
         } else {
             this._flags = this._flags & ~RENDER_FLAGS.GHOSTED;
-            this.model.numGhostedObjects--;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setGhosted(this._flags);
@@ -207,10 +208,10 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is ghosted.
+     * Gets if this PerformanceModelNode is ghosted.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#highlighted} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -219,10 +220,10 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is selected.
+     * Gets if this PerformanceModelNode is selected.
      *
-     * When both {@link BigModelNode#isObject} and {@link BigModelNode#selected} are ````true```` the BigModelNode will be
-     * registered by {@link BigModelNode#id} in {@link Scene#selectedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#selected} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -232,10 +233,8 @@ class BigModelNode {
         }
         if (selected) {
             this._flags = this._flags | RENDER_FLAGS.SELECTED;
-            this.model.numSelectedObjects++;
         } else {
             this._flags = this._flags & ~RENDER_FLAGS.SELECTED;
-            this.model.numSelectedObjects--;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setSelected(this._flags);
@@ -247,7 +246,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode's edges are enhanced.
+     * Sets if this PerformanceModelNode's edges are enhanced.
      *
      * @type {Boolean}
      */
@@ -256,7 +255,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode's edges are enhanced.
+     * Sets if this PerformanceModelNode's edges are enhanced.
      *
      * @type {Boolean}
      */
@@ -266,10 +265,8 @@ class BigModelNode {
         }
         if (edges) {
             this._flags = this._flags | RENDER_FLAGS.EDGES;
-            this.model.numEdgesObjects++;
         } else {
             this._flags = this._flags & ~RENDER_FLAGS.EDGES;
-            this.model.numEdgesObjects--;
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setEdges(this._flags);
@@ -278,7 +275,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode's edges are enhanced.
+     * Gets if this PerformanceModelNode's edges are enhanced.
      *
      * @type {Boolean}
      */
@@ -287,9 +284,9 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is culled.
+     * Sets if this PerformanceModelNode is culled.
      *
-     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -297,9 +294,9 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is culled.
+     * Gets if this PerformanceModelNode is culled.
      *
-     * Only rendered when {@link BigModelNode#visible} is ````true```` and {@link BigModelNode#culled} is ````false````.
+     * Only rendered when {@link PerformanceNode#visible} is ````true```` and {@link PerformanceNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -308,7 +305,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is clippable.
+     * Sets if this PerformanceModelNode is clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -330,7 +327,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is clippable.
+     * Gets if this PerformanceModelNode is clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -341,7 +338,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is included in boundary calculations.
+     * Sets if this PerformanceModelNode is included in boundary calculations.
      *
      * @type {Boolean}
      */
@@ -360,7 +357,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is included in boundary calculations.
+     * Gets if this PerformanceModelNode is included in boundary calculations.
      *
      * @type {Boolean}
      */
@@ -369,7 +366,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if this BigModelNode is pickable.
+     * Sets if this PerformanceModelNode is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -390,7 +387,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode is pickable.
+     * Gets if this PerformanceModelNode is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -401,7 +398,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets the BigModelNode's RGB colorize color, multiplies by the BigModelNode's rendered fragment colors.
+     * Gets the PerformanceModelNode's RGB colorize color, multiplies by the PerformanceModelNode's rendered fragment colors.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -412,13 +409,13 @@ class BigModelNode {
         this._colorize[1] = Math.floor(color[1] * 255.0);
         this._colorize[2] = Math.floor(color[2] * 255.0);
         for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setColorize(this._colorize);
+            this.meshes[i]._setColor(this._colorize);
         }
         this.model.glRedraw();
     }
 
     /**
-     * Gets the BigModelNode's RGB colorize color, multiplies by the BigModelNode's rendered fragment colors.
+     * Gets the PerformanceModelNode's RGB colorize color, multiplies by the PerformanceModelNode's rendered fragment colors.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -432,7 +429,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets the BigModelNode's opacity factor, multiplies by the BigModelNode's rendered fragment alphas.
+     * Sets the PerformanceModelNode's opacity factor, multiplies by the PerformanceModelNode's rendered fragment alphas.
      *
      * This is a factor in range ````[0..1]````.
      *
@@ -449,17 +446,6 @@ class BigModelNode {
         if (lastOpacity === opacity) {
             return;
         }
-        if (opacity < 255) {
-            if (lastOpacity === 255) {
-                this._layer.numTransparentObjects++;
-                this.model.numTransparentObjects++;
-            }
-        } else {
-            if (lastOpacity < 255) {
-                this._layer.numTransparentObjects--;
-                this.model.numTransparentObjects--;
-            }
-        }
         this._colorize[3] = opacity; // Only set alpha
         for (var i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setColor(this._colorize);
@@ -468,7 +454,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets the BigModelNode's opacity factor.
+     * Gets the PerformanceModelNode's opacity factor.
      *
      * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
@@ -479,7 +465,7 @@ class BigModelNode {
     }
 
     /**
-     * Sets if to this BigModelNode casts shadows.
+     * Sets if to this PerformanceModelNode casts shadows.
      *
      * @type {Boolean}
      */
@@ -488,7 +474,7 @@ class BigModelNode {
     }
 
     /**
-     * Gets if this BigModelNode casts shadows.
+     * Gets if this PerformanceModelNode casts shadows.
      *
      * @type {Boolean}
      */
@@ -497,7 +483,7 @@ class BigModelNode {
     }
 
     /**
-     * Whether or not this BigModelNode can have shadows cast upon it
+     * Whether or not this PerformanceModelNode can have shadows cast upon it
      *
      * @type {Boolean}
      */
@@ -506,7 +492,7 @@ class BigModelNode {
     }
 
     /**
-     * Whether or not this BigModelNode can have shadows cast upon it
+     * Whether or not this PerformanceModelNode can have shadows cast upon it
      *
      * @type {Boolean}
      */
@@ -515,54 +501,41 @@ class BigModelNode {
     }
 
     _finalize() {
-        const meshes = this.meshes;
-        const flags = this._flags;
-        var mesh;
-        for (var i = 0, len = meshes.length; i < len; i++) {
-            mesh = meshes[i];
-
+        const scene = this.model.scene;
+        if (this._isObject) {
             if (this.visible) {
-                mesh._setVisible(flags);
+                scene._objectVisibilityUpdated(this);
             }
             if (this.highlighted) {
-                mesh._setHighlighted(flags);
+                scene._objectHighlightedUpdated(this);
+            }
+            if (this.ghosted) {
+                scene._objectGhostedUpdated(this);
             }
             if (this.selected) {
-                mesh._setSelected(flags);
+                scene._objectSelectedUpdated(this);
             }
-            if (this.edges) {
-                mesh._setEdges(flags);
-            }
-            if (this.clippable) {
-                mesh._setClippable(flags);
-            }
-            if (this.collidable) {
-                mesh._setCollidable(flags);
-            }
-            if (this.pickable) {
-                mesh._setPickable(flags);
-            }
-
-
-            //    meshes[i]._setColor(this._colorize);
+        }
+        for (var i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._initFlags(this._flags);
         }
     }
 
-    _destroy() { // Called by BigModel
+    _destroy() { // Called by PerformanceModel
         const scene = this.model.scene;
         if (this._isObject) {
             scene._deregisterObject(this);
             if (this.visible) {
-                scene._objectVisibilityUpdated(this, false);
+                scene._objectVisibilityUpdated(this);
             }
             if (this.ghosted) {
-                scene._objectGhostedUpdated(this, false);
+                scene._objectGhostedUpdated(this);
             }
             if (this.selected) {
-                scene._objectSelectedUpdated(this, false);
+                scene._objectSelectedUpdated(this);
             }
             if (this.highlighted) {
-                scene._objectHighlightedUpdated(this, false);
+                scene._objectHighlightedUpdated(this);
             }
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
@@ -573,4 +546,4 @@ class BigModelNode {
 
 }
 
-export {BigModelNode};
+export {PerformanceNode};

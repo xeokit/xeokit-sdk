@@ -25,8 +25,8 @@ import {math} from '../../math/math.js';
  * viewer.camera.look = [0, 0, 0];
  * viewer.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0,0,0],
  *          radius: 1.0,
  *          tube: 0.5,
@@ -34,8 +34,8 @@ import {math} from '../../math/math.js';
  *          tubeSegments: 24,
  *          arc: Math.PI * 2.0
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *         diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *         diffuseMap: new Texture(viewer.scene, {
  *             src: "textures/diffuse/uvGrid2.jpg"
  *         })
  *      })
@@ -55,7 +55,7 @@ import {math} from '../../math/math.js';
  * @param {Number} [cfg.arc=Math.PI*0.5] The length of the arc in radians, where Math.PI*2 is a closed torus.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildTorusGeometry(geometryClass, owner, cfg = {}) {
+function buildTorusGeometry(cfg = {}) {
 
     let radius = cfg.radius || 1;
     if (radius < 0) {
@@ -168,12 +168,12 @@ function buildTorusGeometry(geometryClass, owner, cfg = {}) {
         }
     }
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,
         indices: indices
-    }));
+    });
 }
 
 export {buildTorusGeometry};

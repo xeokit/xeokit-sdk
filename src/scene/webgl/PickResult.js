@@ -7,14 +7,13 @@ class PickResult {
 
     constructor() {
 
-        
         /**
-         * Picked mesh.
-         * Null when no mesh was picked.
-         * @property mesh
-         * @type {Mesh|*}
+         * Picked entity.
+         * Null when no entity was picked.
+         * @property entity
+         * @type {Entity|*}
          */
-        this.mesh = null;
+        this.entity = null;
 
         /**
          * Type of primitive that was picked - usually "triangle".
@@ -26,12 +25,13 @@ class PickResult {
 
         /**
          * Index of primitive that was picked.
-         * -1 when no mesh was picked.
+         * -1 when no entity was picked.
          * @property primIndex
          * @type {number}
          */
         this.primIndex = -1;
 
+        this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float32Array([0, 0, 0]);
         this._direction = new Float32Array([0, 0, 0]);
         this._indices = new Int32Array(3);
@@ -43,6 +43,25 @@ class PickResult {
         this._uv = new Float32Array([0, 0]);
 
         this.reset();
+    }
+
+    /**
+     * Canvas coordinates when picking with a 2D pointer.
+     * @property canvasPos
+     * @type {Number[]}
+     */
+    get canvasPos() {
+        return this._gotCanvasPos ? this._canvasPos : null;
+    }
+
+    set canvasPos(value) {
+        if (value) {
+            this._canvasPos[0] = value[0];
+            this._canvasPos[1] = value[1];
+            this._gotCanvasPos = true;
+        } else {
+            this._gotCanvasPos = false;
+        }
     }
 
     /**
@@ -87,12 +106,12 @@ class PickResult {
     
     /**
      * Picked triangle's vertex indices.
-     * Only defined when a mesh and triangle was picked.
+     * Only defined when an entity and triangle was picked.
      * @property indices
      * @type {Int32Array}
      */
     get indices() {
-        return this.mesh && this._gotIndices ? this._indices : null;
+        return this.entity && this._gotIndices ? this._indices : null;
     }
 
     set indices(value) {
@@ -108,12 +127,12 @@ class PickResult {
 
     /**
      * Picked Local-space point on surface.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property localPos
      * @type {Number[]}
      */
     get localPos() {
-        return this.mesh && this._gotLocalPos ? this._localPos : null;
+        return this.entity && this._gotLocalPos ? this._localPos : null;
     }
 
     set localPos(value) {
@@ -129,12 +148,12 @@ class PickResult {
 
     /**
      * Picked World-space point on surface.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property worldPos
      * @type {Number[]}
      */
     get worldPos() {
-        return this.mesh && this._gotWorldPos ? this._worldPos : null;
+        return this.entity && this._gotWorldPos ? this._worldPos : null;
     }
 
     set worldPos(value) {
@@ -150,12 +169,12 @@ class PickResult {
 
     /**
      * Picked View-space point on surface.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property viewPos
      * @type {Number[]}
      */
     get viewPos() {
-        return this.mesh && this._gotViewPos ? this._viewPos : null;
+        return this.entity && this._gotViewPos ? this._viewPos : null;
     }
 
     set viewPos(value) {
@@ -171,12 +190,12 @@ class PickResult {
 
     /**
      * Barycentric coordinate within picked triangle.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property bary
      * @type {Number[]}
      */
     get bary() {
-        return this.mesh && this._gotBary ? this._bary : null;
+        return this.entity && this._gotBary ? this._bary : null;
     }
 
     set bary(value) {
@@ -192,12 +211,12 @@ class PickResult {
 
     /**
      * Normal vector at picked position on surface.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property normal
      * @type {Number[]}
      */
     get normal() {
-        return this.mesh && this._gotNormal ? this._normal : null;
+        return this.entity && this._gotNormal ? this._normal : null;
     }
 
     set normal(value) {
@@ -213,12 +232,12 @@ class PickResult {
 
     /**
      * UV coordinates at picked position on surface.
-     * Only defined when a mesh and a point on its surface was picked.
+     * Only defined when an entity and a point on its surface was picked.
      * @property uv
      * @type {Number[]}
      */
     get uv() {
-        return this.mesh && this._gotUV ? this._uv : null;
+        return this.entity && this._gotUV ? this._uv : null;
     }
 
     set uv(value) {
@@ -232,9 +251,10 @@ class PickResult {
     }
 
     reset() {
-        this.mesh = null;
+        this.entity = null;
         this.primIndex = -1;
         this.primitive = null;
+        this._gotCanvasPos = false;
         this._gotOrigin = false;
         this._gotDirection = false;
         this._gotIndices = false;

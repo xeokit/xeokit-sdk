@@ -6,7 +6,7 @@ import {CubeTexture} from './CubeTexture.js';
  * ## Usage
  *
  * ````javascript
- * new ReflectionMap(myViewer.scene, {
+ * new ReflectionMap(viewer.scene, {
  *     src: [
  *         "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
  *         "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",

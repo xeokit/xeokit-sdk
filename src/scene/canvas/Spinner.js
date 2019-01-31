@@ -145,7 +145,7 @@ const spinnerCSS = ".sk-fading-circle {\
  * * A Spinner is only visible while {@link Spinner#processes} is greater than zero.
  *
  * ````javascript
- * var spinner = myViewer.scene.canvas.spinner;
+ * var spinner = viewer.scene.canvas.spinner;
  *
  * // Increment count of busy processes represented by the spinner;
  * // assuming the count was zero, this now shows the spinner

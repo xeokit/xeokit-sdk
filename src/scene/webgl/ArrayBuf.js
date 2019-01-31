@@ -80,7 +80,7 @@ class ArrayBuf {
         if (!this.allocated) {
             return;
         }
-        if (data.length > this.length) {            // Needs reallocation
+        if (data.length + (offset || 0) > this.length) {            // Needs reallocation
             this.destroy();
             this._allocate(data, data.length);
         } else {            // No reallocation needed

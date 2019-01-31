@@ -14,7 +14,7 @@ import {core} from "./../../../scene/core.js";
 /**
  * @private
  */
-class GLTFLoader {
+class GLTFQualityLoader {
 
     constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
@@ -373,7 +373,7 @@ var parseGLTF = (function () {
 
         var alphaMode = materialInfo.alphaMode;
         switch (alphaMode) {
-            case "OPAQUE":
+            case "NORMAL_OPAQUE":
                 cfg.alphaMode = "opaque";
                 break;
             case "MASK":
@@ -753,15 +753,15 @@ var parseGLTF = (function () {
     function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
 
         parent = parent || ctx.modelNode;
-        var createNode;
+        var createEntity;
 
         if (ctx.handleGLTFNode) {
             var actions = {};
             if (!ctx.handleGLTFNode(ctx.modelNode.id, glTFNode, actions)) {
                 return;
             }
-            if (actions.createNode) {
-                createNode = actions.createNode;
+            if (actions.createEntity) {
+                createEntity = actions.createEntity;
             }
         }
 
@@ -818,7 +818,7 @@ var parseGLTF = (function () {
                 var mesh;
                 var numMeshes = meshesInfo.length;
 
-                if (!createNode && numMeshes > 0 && !hasChildNodes) {
+                if (!createEntity && numMeshes > 0 && !hasChildNodes) {
 
                     // Case 1: Not creating object, node has meshes, node has no child nodes
 
@@ -847,7 +847,7 @@ var parseGLTF = (function () {
                     return;
                 }
 
-                if (createNode && numMeshes === 1 && !hasChildNodes) {
+                if (createEntity && numMeshes === 1 && !hasChildNodes) {
 
                     // Case 2: Creating object, node has one mesh, node has no child nodes
 
@@ -869,13 +869,13 @@ var parseGLTF = (function () {
                     } else {
                         meshCfg.material = meshesInfoMesh.material;
                     }
-                    utils.apply(createNode, meshCfg);
+                    utils.apply(createEntity, meshCfg);
                     mesh = new Mesh(modelNode, meshCfg);
                     parent.addChild(mesh, false); // Don't automatically inherit properties
                     return;
                 }
 
-                if (createNode && numMeshes > 0 && !hasChildNodes) {
+                if (createEntity && numMeshes > 0 && !hasChildNodes) {
 
                     // Case 3: Creating object, node has meshes, node has no child nodes
 
@@ -883,7 +883,7 @@ var parseGLTF = (function () {
                         matrix: matrix
                     };
                     utils.apply(ctx.modelNodeProps, nodeCfg);
-                    utils.apply(createNode, nodeCfg);
+                    utils.apply(createEntity, nodeCfg);
                     let childNode = new Node(modelNode, nodeCfg);
                     parent.addChild(childNode, false);
                     for (let i = 0, len = numMeshes; i < len; i++) {
@@ -904,7 +904,7 @@ var parseGLTF = (function () {
                         } else {
                             meshCfg.material = meshesInfoMesh.material;
                         }
-                        utils.apply(createNode, meshCfg);
+                        utils.apply(createEntity, meshCfg);
                         meshCfg.id = null; // Avoid ID clash with parent Node
                         mesh = new Mesh(modelNode, meshCfg);
                         childNode.addChild(mesh, false);
@@ -912,7 +912,7 @@ var parseGLTF = (function () {
                     return;
                 }
 
-                if (!createNode && numMeshes > 0 && hasChildNodes) {
+                if (!createEntity && numMeshes > 0 && hasChildNodes) {
 
                     // Case 4: Not creating object, node has meshes, node has child nodes
 
@@ -950,7 +950,7 @@ var parseGLTF = (function () {
                     parentCfg = nodeCfg;
                 }
 
-                if (createNode && numMeshes === 0 && hasChildNodes) {
+                if (createEntity && numMeshes === 0 && hasChildNodes) {
 
                     // Case 5: Creating explicit object, node has meshes OR node has child nodes
 
@@ -958,8 +958,8 @@ var parseGLTF = (function () {
                         matrix: matrix
                     };
                     utils.apply(ctx.modelNodeProps, nodeCfg);
-                    utils.apply(createNode, nodeCfg);
-                    createNode.matrix = matrix;
+                    utils.apply(createEntity, nodeCfg);
+                    createEntity.matrix = matrix;
                     let childNode = new Node(modelNode, nodeCfg);
                     parent.addChild(childNode, false); // Don't automatically inherit properties
                     matrix = null;
@@ -967,7 +967,7 @@ var parseGLTF = (function () {
                     parentCfg = nodeCfg;
                 }
 
-                if (createNode && numMeshes > 0 || hasChildNodes) {
+                if (createEntity && numMeshes > 0 || hasChildNodes) {
 
                     // Case 6: Creating explicit object, node has meshes OR node has child nodes
 
@@ -975,8 +975,8 @@ var parseGLTF = (function () {
                         matrix: matrix
                     };
                     utils.apply(ctx.modelNodeProps, nodeCfg);
-                    if (createNode) {
-                        utils.apply(createNode, nodeCfg);
+                    if (createEntity) {
+                        utils.apply(createEntity, nodeCfg);
                     }
                     let childNode = new Node(modelNode, nodeCfg);
                     parent.addChild(childNode, false); // Don't automatically inherit properties
@@ -998,8 +998,8 @@ var parseGLTF = (function () {
                         } else {
                             meshCfg.material = meshesInfoMesh.material;
                         }
-                        if (createNode) {
-                            utils.apply(createNode, meshCfg);
+                        if (createEntity) {
+                            utils.apply(createEntity, meshCfg);
                         }
                         meshCfg.id = null; // Avoid ID clash with parent Node
                         mesh = new Mesh(modelNode, meshCfg);
@@ -1033,4 +1033,4 @@ var parseGLTF = (function () {
     }
 })();
 
-export {GLTFLoader}
+export {GLTFQualityLoader}

@@ -25,15 +25,15 @@ import {utils} from '../../utils.js';
  * viewer.camera.look = [0, 0, 0];
  * viewer.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0,0,0],
  *          radius: 1.5,
  *          heightSegments: 60,
  *          widthSegments: 60
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *         diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *         diffuseMap: new Texture(viewer.scene, {
  *             src: "textures/diffuse/uvGrid2.jpg"
  *         })
  *      })
@@ -51,7 +51,7 @@ import {utils} from '../../utils.js';
  * @param  {Number} [cfg.widthSegments=18] Number of longitudinal bands.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildSphereGeometry(geometryClass, owner, cfg = {}) {
+function buildSphereGeometry(cfg = {}) {
 
     const lod = cfg.lod || 1;
 
@@ -157,12 +157,12 @@ function buildSphereGeometry(geometryClass, owner, cfg = {}) {
         }
     }
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,
         indices: indices
-    }));
+    });
 }
 
 export {buildSphereGeometry};

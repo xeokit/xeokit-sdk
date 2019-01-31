@@ -15,38 +15,13 @@ const vecb = new Float32Array(3);
 const identityMat = math.identityMat4();
 
 /**
- * @desc A {@link Scene} {@link Entity} that represents a scene graph node.
- *
- * ## Nodes Representing Models
- *
- * * A Node represents a model when {@link Node#isModel} is ````true````.
- * * Each model-Node is registered by {@link Node#id} in {@link Scene#models}.
- * * Each model-Node can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.
- *
- * ## Nodes Representing Objects
- *
- * * A Node represents an object when {@link Node#isObject} is ````true````.
- * * Each object-Node is registered by {@link Node#id} in {@link Scene#objects}.
- * * Each object-Node can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.
- *
- * ## Updating Batches of Object-Meshes
- *
- * {@link Scene} provides the following methods for updating batches of object-Meshes using their {@link Mesh#id}s:
- *
- * * {@link Scene#setObjectsVisible}
- * * {@link Scene#setObjectsCulled}
- * * {@link Scene#setObjectsSelected}
- * * {@link Scene#setObjectsHighlighted}
- * * {@link Scene#setObjectsGhosted}
- * * {@link Scene#setObjectsEdges}
- * * {@link Scene#setObjectsColorized}
- * * {@link Scene#setObjectsOpacity}
+ * @desc An {@link Entity} that is a scene graph node that can have child Nodes and {@link Mesh}es.
  *
  * ## Usage
  *
  * The example below is the same as the one given for {@link Mesh}, since the two classes work together. In this example,
  * we'll create a scene graph in which a root Node represents a group and the {@link Mesh}s are leaves. Since Node
- * implements {@link Entity}, we can designate the root Node as a model, causing it to be registered by ID in {@link Scene#models}.
+ * implements {@link Entity}, we can designate the root Node as a model, causing it to be registered by its ID in {@link Scene#models}.
  *
  * Since {@link Mesh} also implements {@link Entity}, we can designate the leaf {@link Mesh}es as objects, causing them to
  * be registered by their IDs in {@link Scene#objects}.
@@ -55,7 +30,7 @@ const identityMat = math.identityMat4();
  *
  * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#sceneGraph_BasicSceneGraph)]
+ * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation__SceneGraph)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -781,7 +756,7 @@ class Node extends Component {
             this._aabb = math.AABB3();
         }
         if (this._buildAABB) {
-            this._buildAABB(this.worldMatrix, this._aabb); // Mesh or BigModel
+            this._buildAABB(this.worldMatrix, this._aabb); // Mesh or PerformanceModel
         } else { // Node | Node | Model
             math.collapseAABB3(this._aabb);
             let node;

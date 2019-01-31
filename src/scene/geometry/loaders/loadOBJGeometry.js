@@ -7,7 +7,7 @@ import {K3D} from '../../libs/k3d.js';
  * ## Usage
  *
  * In the example below we'll create a {@link Mesh} with {@link MetallicMaterial} and {@link ReadableGeometry} loaded from OBJ.
- * 
+ *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_loaders_OBJ)]
  *
  * ````javascript
@@ -17,48 +17,48 @@ import {K3D} from '../../libs/k3d.js';
  * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
  * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
  * import {Texture} from "../src/scene/materials/Texture.js";
- * 
- * const myViewer = new Viewer({
+ *
+ * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0.57, 1.37, 1.14];
- * myViewer.scene.camera.look = [0.04, 0.58, 0.00];
- * myViewer.scene.camera.up = [-0.22, 0.84, -0.48];
+ * viewer.scene.camera.eye = [0.57, 1.37, 1.14];
+ * viewer.scene.camera.look = [0.04, 0.58, 0.00];
+ * viewer.scene.camera.up = [-0.22, 0.84, -0.48];
  *
- * loadOBJGeometry(ReadableGeometry, myViewer.scene, {
+ * loadOBJGeometry(viewer.scene, {
  *
  *      src: "models/obj/fireHydrant/FireHydrantMesh.obj",
  *      compressGeometry: false
  *
- *  }).then(function (geometry) {
+ *  }).then(function (geometryCfg) {
  *
  *      // Success
  *
- *      new Mesh(myViewer.scene, {
+ *      new Mesh(viewer.scene, {
  *
- *          geometry: geometry,
+ *          geometry: new ReadableGeometry(viewer.scene, geometryCfg),
  *
- *          material: new MetallicMaterial(myViewer.scene, {
+ *          material: new MetallicMaterial(viewer.scene, {
  *
  *              baseColor: [1, 1, 1],
  *              metallic: 1.0,
  *              roughness: 1.0,
  * 
- *              baseColorMap: new Texture(myViewer.scene, {
+ *              baseColorMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Base_Color.png",
  *                  encoding: "sRGB"
  *              }),
- *              normalMap: new Texture(myViewer.scene, {
+ *              normalMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
  *              }),
- *              roughnessMap: new Texture(myViewer.scene, {
+ *              roughnessMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Roughness.png"
  *              }),
- *              metallicMap: new Texture(myViewer.scene, {
+ *              metallicMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Metallic.png"
  *              }),
- *              occlusionMap: new Texture(myViewer.scene, {
+ *              occlusionMap: new Texture(viewer.scene, {
  *                  src: "models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
  *              }),
  * 
@@ -71,14 +71,12 @@ import {K3D} from '../../libs/k3d.js';
  * ````
  *
  * @function loadOBJGeometry
- * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
- * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
- * @param {*} [cfg] Configs, also passed into {@link Geometry} subtype constructor.
- * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+ * @param {Scene} scene Scene we're loading the geometry for.
+ * @param {*} [cfg] Configs, also added to the result object.
  * @param {String} [cfg.src]  Path to OBJ file.
- * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
+ * @returns {Object} Configuration to pass into a {@link Geometry} constructor, containing geometry arrays loaded from the OBJ file.
  */
-function loadOBJGeometry(geometryClass, owner, cfg = {}) {
+function loadOBJGeometry(scene, cfg = {}) {
 
     return new Promise(function (resolve, reject) {
 
@@ -87,7 +85,7 @@ function loadOBJGeometry(geometryClass, owner, cfg = {}) {
             reject();
         }
 
-        var spinner = owner.scene.canvas.spinner;
+        var spinner = scene.canvas.spinner;
         spinner.processes++;
 
         utils.loadArraybuffer(cfg.src, function (data) {
@@ -115,14 +113,14 @@ function loadOBJGeometry(geometryClass, owner, cfg = {}) {
 
                 spinner.processes--;
 
-                resolve(new geometryClass(owner, utils.apply(cfg, {
+                resolve(utils.apply(cfg, {
                     primitive: "triangles",
                     positions: positions,
                     normals: normals.length > 0 ? normals : null,
                     autoNormals: normals.length === 0,
                     uv: uv,
                     indices: indices
-                })));
+                }));
             },
 
             function (msg) {

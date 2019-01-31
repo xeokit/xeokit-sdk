@@ -17,23 +17,23 @@ import {utils} from '../../utils.js';
  * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
  * import {Texture} from "../src/scene/materials/Texture.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *         canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildBoxGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildBoxGeometry(ReadableGeometry, viewer.scene, {
  *         center: [0,0,0],
  *         xSize: 1,  // Half-size on each axis
  *         ySize: 1,
  *         zSize: 1
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *         diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *         diffuseMap: new Texture(viewer.scene, {
  *             src: "textures/diffuse/uvGrid2.jpg"
  *         })
  *      })
@@ -51,7 +51,7 @@ import {utils} from '../../utils.js';
  * @param {Number} [cfg.zSize=1.0]  Half-size on the Z-axis.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildBoxGeometry(geometryClass, owner, cfg = {}) {
+function buildBoxGeometry(cfg = {}) {
 
     let xSize = cfg.xSize || 1;
     if (xSize < 0) {
@@ -83,7 +83,7 @@ function buildBoxGeometry(geometryClass, owner, cfg = {}) {
     const ymax = ySize + centerY;
     const zmax = zSize + centerZ;
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
 
         // The vertices - eight for our cube, each
         // one spanning three array elements for X,Y and Z
@@ -239,7 +239,7 @@ function buildBoxGeometry(geometryClass, owner, cfg = {}) {
             20, 21, 22,
             20, 22, 23
         ]
-    }));
+    });
 }
 
 export {buildBoxGeometry};

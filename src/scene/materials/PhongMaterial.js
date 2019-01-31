@@ -28,16 +28,16 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * import {Texture} from "../src/scene/materials/Texture.js";
  * import {Fresnel} from "../src/scene/materials/Fresnel.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *        canvasId: "myCanvas"
  *    });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,
@@ -45,13 +45,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *          tubeSegments: 24,
  *          arc: Math.PI * 2.0
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
  *          ambient: [0.9, 0.3, 0.9],
  *          shininess: 30,
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse/uvGrid2.jpg"
  *          }),
- *          specularFresnel: new Fresnel(myViewer.scene, {
+ *          specularFresnel: new Fresnel(viewer.scene, {
  *              leftColor: [1.0, 1.0, 1.0],
  *              rightColor: [0.0, 0.0, 0.0],
  *              power: 4

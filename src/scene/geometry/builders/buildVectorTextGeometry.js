@@ -1578,11 +1578,11 @@ const letters = {
  * @desc Creates wireframe vector text {@link Geometry}.
  *
  * ## Usage
- * 
+ *
  * Creating a {@link Mesh} with vector text {@link ReadableGeometry} :
  *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry)]
- * 
+ *
  * ````javascript
  *
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -1599,13 +1599,13 @@ const letters = {
  * viewer.camera.look = [0, 0, 0];
  * viewer.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildVectorTextGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildVectorTextGeometry(ReadableGeometry, viewer.scene, {
  *          origin: [0,0,0],
  *          text: "On the other side of the screen, it all looked so easy"
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *         diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *         diffuseMap: new Texture(viewer.scene, {
  *             src: "textures/diffuse/uvGrid2.jpg"
  *         })
  *      })
@@ -1623,7 +1623,7 @@ const letters = {
  * @param {String} [cfg.text=""] The text.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildVectorTextGeometry(geometryClass, owner, cfg = {}) {
+function buildVectorTextGeometry(cfg = {}) {
 
     var origin = cfg.origin || [0, 0, 0];
     var xOrigin = origin[0];
@@ -1716,11 +1716,11 @@ function buildVectorTextGeometry(geometryClass, owner, cfg = {}) {
         y -= 35 * mag * size;
     }
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
         primitive: "lines",
         positions: positions,
         indices: indices
-    }));
+    });
 }
 
 

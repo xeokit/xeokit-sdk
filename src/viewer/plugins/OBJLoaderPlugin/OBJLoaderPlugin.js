@@ -6,11 +6,19 @@ import {OBJLoader} from "./OBJLoader.js";
 /**
  * {@link Viewer} plugin that loads models from [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) files.
  *
- * * For each model loaded, creates a {@link Node} within the {@link Viewer}'s {@link Scene}.
- * * See the {@link OBJLoaderPlugin#load} method for parameters that you can configure each {@link Node} with as you load it.
- * * Can also load metadata for each {@link Node} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
- * * Can configure each {@link Node} with a local transformation.
- * * Can attach each {@link Node} as a child of a given {@link Node}.
+ * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+ * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
+ * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
+ *
+ * ## Metadata
+ *
+ * OBJLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a {@link MetaModel} corresponding
+ * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
+ *
+ * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
+ * metadata, we can also provide GLTFModelLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, OBJLoaderPlugin
+ * uses its own map of standard default colors, visibilities and opacities for IFC element types.
+
  *
  * ## Usage
  *
@@ -28,11 +36,11 @@ import {OBJLoader} from "./OBJLoader.js";
  *
  * viewer.camera.orbitPitch(20);
  *
- * // Add a GLTFLoaderPlugin to the Viewer
+ * // Add an OBJLoaderPlugin to the Viewer
  * const objLoader = new OBJLoaderPlugin(viewer);
  *
  * // Load an OBJ model
- * const model = objLoader.load({ // Model is a Node
+ * var model = objLoader.load({ // Model is an Entity
  *      id: "myModel",
  *      src: "./models/obj/sportsCar/sportsCar.obj",
  *      edges: true
@@ -43,16 +51,15 @@ import {OBJLoader} from "./OBJLoader.js";
  *      viewer.cameraFlight.flyTo(model);
  * })
  *
- * // Update properties of the model's Node
- * model.highlighted = true;
+ * // Find the model Entity by ID
+ * model = viewer.scene.models["myModel"];
  *
- * // You can unload the model via the plugin
- * plugin.unload("myModel");
+ * // Update properties of the model Entity
+ * model.highlight = [1,0,0];
  *
- * // Or unload it by calling destroy() on the model's Node
+ * // Destroy the model
  * model.destroy();
  * ````
- *
  * @class OBJLoaderPlugin
  */
 class OBJLoaderPlugin extends Plugin {
@@ -72,31 +79,21 @@ class OBJLoaderPlugin extends Plugin {
          * @private
          */
         this._loader = new OBJLoader(cfg);
-
-        /**
-         * Models currently loaded by this Plugin.
-         * @type {{String:Node}}
-         */
-        this.models = {};
     }
 
     /**
      * Loads an OBJ model from a file into this OBJLoader's {@link Viewer}.
      *
-     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.
-     *
      * @param {*} params  Loading parameters.
-     * @param {String} params.id ID to assign to the {@link Node} unique among all components in the Viewer's {@link Scene}.
+     * @param {String} params.id ID to assign to the model's root {@link Entity}, unique among all components in the Viewer's {@link Scene}.
      * @param {String} params.src Path to an OBJ file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file (see: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
-     * @param {Object} [params.parent] The parent {@link Node}, if we want to graft the model root {@link Node} into a xeokit object hierarchy.
-     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the {@link Node} with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model root {@link Node}'s local 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model root {@link Node}'s local scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model root {@link Node}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model root {@link Node}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @returns {{Node}} A {@link Node} tree representing the loaded OBJ model.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
@@ -131,57 +128,11 @@ class OBJLoaderPlugin extends Plugin {
             this._loader.load(modelNode, src, params);
         }
 
-        this.models[modelId] = modelNode;
-
         modelNode.once("destroyed", () => {
-            delete this.models[modelId];
             this.viewer.metaScene.destroyMetaModel(modelId);
-            this.fire("unloaded", modelId);
         });
 
         return modelNode;
-    }
-
-    /**
-     * Unloads a model that was previously loaded by this OBJLoaderPlugin.
-     *
-     * @param {String} id  ID of model to unload.
-     */
-    unload(id) {
-        const modelNode = this.models;
-        if (!modelNode) {
-            this.error(`unload() model with this ID not found: ${id}`);
-            return;
-        }
-        modelNode.destroy();
-    }
-
-    /**
-     * @private
-     */
-    send(name, value) {
-        switch (name) {
-            case "clear":
-                this.clear();
-                break;
-        }
-    }
-
-    /**
-     * Unloads models loaded by this OBJLoaderPlugin.
-     */
-    clear() {
-        for (const id in this.models) {
-            this.models[id].destroy();
-        }
-    }
-
-    /**
-     * Destroys this OBJLoaderPlugin, after first destroying any models it has loaded.
-     */
-    destroy() {
-        this.clear();
-        super.destroy();
     }
 }
 

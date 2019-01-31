@@ -1,30 +1,32 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
-import {InstancingPickShaderSource} from "./instancingPickShaderSource.js";
+import {Map} from "../../utils/Map.js";
+import {stats} from "../../stats.js"
+import {Program} from "../../webgl/Program.js";
+import {InstancingFillShaderSource} from "./instancingFillShaderSource.js";
+import {RENDER_PASSES} from '../renderPasses.js';
 
 const ids = new Map({});
 
 /**
  * @private
  */
-const InstancingPickRenderer = function (hash, layer) {
+const InstancingFillRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new InstancingPickShaderSource(layer);
+    this._shaderSource = new InstancingFillShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
+const defaultColorize = new Float32Array([1.0, 1.0, 1.0, 1.0]);
 
-InstancingPickRenderer.get = function (layer) {
+InstancingFillRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new InstancingPickRenderer(hash, layer);
+        renderer = new InstancingFillRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -40,11 +42,11 @@ function getHash(scene) {
     return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-InstancingPickRenderer.prototype.getValid = function () {
+InstancingFillRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-InstancingPickRenderer.prototype.put = function () {
+InstancingFillRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -55,11 +57,11 @@ InstancingPickRenderer.prototype.put = function () {
     }
 };
 
-InstancingPickRenderer.prototype.webglContextRestored = function () {
+InstancingFillRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
+InstancingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass) {
 
     const model = layer.model;
     const scene = model.scene;
@@ -79,19 +81,20 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
 
-    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf, gl.FLOAT, false);
-    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf, gl.FLOAT, false);
-    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf, gl.FLOAT, false);
+    gl.uniform1i(this._uRenderPass, renderPass);
+
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+
+    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
+    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
+    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
+
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
-    frameCtx.bindArray+=3;
+    frameCtx.bindArray += 3;
 
-    this._aPickColor.bindArrayBuffer(state.pickColorsBuf, gl.UNSIGNED_BYTE, false);
-    instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 1);
-    frameCtx.bindArray++;
-
-    this._aPosition.bindArrayBuffer(state.positionsBuf, gl.UNSIGNED_SHORT, false);
+    this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
 
     this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
@@ -101,40 +104,56 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
     state.indicesBuf.bind();
     frameCtx.bindArray++;
 
-    instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+    if (renderPass === RENDER_PASSES.GHOSTED) {
+        const material = scene.ghostMaterial._state;
+        const fillColor = material.fillColor;
+        const fillAlpha = material.fillAlpha;
+        gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
-    // Cleanup
+    } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
+        const material = scene.highlightMaterial._state;
+        const fillColor = material.fillColor;
+        const fillAlpha = material.fillAlpha;
+        gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+    } else if (renderPass === RENDER_PASSES.SELECTED) {
+        const material = scene.selectedMaterial._state;
+        const fillColor = material.fillColor;
+        const fillAlpha = material.fillAlpha;
+        gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+
+    } else {
+        gl.uniform4fv(this._uColor, defaultColorize);
+    }
+
+    instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-    instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 0);
+
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
 
     frameCtx.drawElements++;
 };
 
-InstancingPickRenderer.prototype._allocate = function (layer) {
+InstancingFillRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
-    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
-
     this._program = new Program(gl, this._shaderSource);
 
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
     }
-
     this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
-
     const program = this._program;
-
+    this._uRenderPass = program.getLocation("renderPass");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-
+    this._uColor = program.getLocation("color");
     this._uSectionPlanes = [];
     const clips = sectionPlanesState.sectionPlanes;
     for (var i = 0, len = clips.length; i < len; i++) {
@@ -144,31 +163,24 @@ InstancingPickRenderer.prototype._allocate = function (layer) {
             dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
-
     this._aPosition = program.getAttribute("position");
-    this._aPickColor = program.getAttribute("pickColor");
     this._aFlags = program.getAttribute("flags");
-
     this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
     this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
     this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
 };
 
-InstancingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
+InstancingFillRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
-    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
-    const lights = lightsState.lights;
-    let light;
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -195,4 +207,4 @@ InstancingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
 };
 
-export {InstancingPickRenderer};
+export {InstancingFillRenderer};

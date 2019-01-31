@@ -1,11 +1,14 @@
 import {math} from "../../math/math.js";
+import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from "../../webglInfo.js";
 
 import {RenderState} from "../../webgl/RenderState.js";
 import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 
-import {InstancingDrawRenderer} from "./draw/instancingDrawRenderer.js";
-import {InstancingPickRenderer} from "./pick/instancingPickRenderer.js";
+import {InstancingDrawRenderer} from "./instancingDrawRenderer.js";
+import {InstancingFillRenderer} from "./instancingFillRenderer.js";
+import {InstancingEdgesRenderer} from "./instancingEdgesRenderer.js";
+import {InstancingPickRenderer} from "./instancingPickRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -90,18 +93,22 @@ class InstancingLayer {
         if (cfg.indices) {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
-        if (cfg.edgeIndices) {
-            stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.edgeIndices) : new Uint16Array(cfg.edgeIndices), cfg.edgeIndices.length, 1, gl.STATIC_DRAW);
+        var edgeIndices = cfg.edgeIndices;
+        if (!edgeIndices) {
+            edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 10);
         }
+        stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
+
         this._state = new RenderState(stateCfg);
 
         // These counts are used to avoid unnecessary render passes
-        this.numObjects = 0;
-        this.numVisibleObjects = 0;
-        this.numTransparentObjects = 0;
-        this.numGhostedObjects = 0;
-        this.numHighlightedObjects = 0;
-        this.numEdgesObjects = 0;
+        this._numPortions = 0;
+        this._numVisibleLayerPortions = 0;
+        this._numTransparentLayerPortions = 0;
+        this._numGhostedLayerPortions = 0;
+        this._numHighlightedLayerPortions = 0;
+        this._numSelectedLayerPortions = 0;
+        this._numEdgesLayerPortions = 0;
 
         // Vertex arrays
         this._flags = [];
@@ -133,13 +140,14 @@ class InstancingLayer {
      * Gives the portion the specified flags, color and matrix.
      *
      * @param flags Unsigned long int
-     * @param color Quantized RGBA color
+     * @param color Quantized RGB color
+     * @param opacity Opacity [0..255]
      * @param matrix Flat float 4x4 matrix
      * @param aabb Flat float AABB
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(flags, color, matrix, aabb, pickColor) {
+    createPortion(flags, color, opacity, matrix, aabb, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
@@ -150,6 +158,7 @@ class InstancingLayer {
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
         var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        var selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
 
@@ -159,29 +168,38 @@ class InstancingLayer {
         this._flags.push(clippable);
 
         if (visible) {
-            this.numVisibleObjects++;
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
         }
         if (ghosted) {
-            this.numGhostedObjects++;
+            this._numGhostedLayerPortions++;
+            this.model.numGhostedLayerPortions++;
         }
         if (highlighted) {
-            this.numHighlightedObjects++;
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (selected) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
         }
         if (edges) {
-            this.numEdgesObjects++;
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
         }
 
-        const r = color[0]; // Color is pre-quantized
+        const r = color[0]; // Color is pre-quantized by PerformanceModel
         const g = color[1];
         const b = color[2];
         const a = color[3];
-        if (a < 255) {
-            this.numTransparentObjects++;
+        if (opacity < 255) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
         }
         this._colors.push(r);
         this._colors.push(g);
         this._colors.push(b);
-        this._colors.push(a);
+        this._colors.push(opacity);
 
         this._modelMatrixCol0.push(matrix[0]);
         this._modelMatrixCol0.push(matrix[4]);
@@ -242,7 +260,9 @@ class InstancingLayer {
 
         var portionId = this._portions.length;
         this._portions.push({});
-        this.numObjects++;
+
+        this._numPortions++;
+        this.model.numPortions++;
 
         return portionId;
     }
@@ -282,118 +302,241 @@ class InstancingLayer {
         }
         if (this._pickColors.length > 0) {
             let normalized = false;
-            this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._colors.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
             this._pickColors = []; // Release memory
         }
         this._finalized = true;
     }
 
-    setFlags(portionId, flags) {
+    // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
+
+    initFlags(portionId,  flags) {
+        if (flags & RENDER_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.GHOSTED) {
+            this._numGhostedLayerPortions++;
+            this.model.numGhostedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setVisible(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        tempUint8Vec4[0] = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        tempUint8Vec4[1] = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
-        tempUint8Vec4[2] = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        tempUint8Vec4[3] = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        if (flags & RENDER_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        } else {
+            this._numVisibleLayerPortions--;
+            this.model.numVisibleLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setHighlighted(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        } else {
+            this._numHighlightedLayerPortions--;
+            this.model.numHighlightedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setGhosted(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.GHOSTED) {
+            this._numGhostedLayerPortions++;
+            this.model.numGhostedLayerPortions++;
+        } else {
+            this._numGhostedLayerPortions--;
+            this.model.numGhostedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setSelected(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        } else {
+            this._numSelectedLayerPortions--;
+            this.model.numSelectedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setEdges(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        } else {
+            this._numEdgesLayerPortions--;
+            this.model.numEdgesLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setClippable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setCollidable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setPickable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setColor(portionId, color) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        // tempUint8Vec4[0] = color[0];
+        // tempUint8Vec4[1] = color[1];
+        // tempUint8Vec4[2] = color[2];
+        // tempUint8Vec4[3] = color[3];
+        // const opacity = color[3];
+        // if (opacity < 255) {
+        //     this._numTransparentLayerPortions++;
+        //     this.model.numTransparentLayerPortions++;
+        // } else {
+        //     this._numTransparentLayerPortions--;
+        //     this.model.numTransparentLayerPortions--;
+        // }
+        // this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
+
+    // setMatrix(portionId, matrix) {
+    //
+    //     if (!this._finalized) {
+    //         throw "Not finalized";
+    //     }
+    //
+    //     var offset = portionId * 4;
+    //
+    //     tempFloat32Vec4[0] = matrix[0];
+    //     tempFloat32Vec4[1] = matrix[4];
+    //     tempFloat32Vec4[2] = matrix[8];
+    //     tempFloat32Vec4[3] = matrix[12];
+    //
+    //     this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset, 4);
+    //
+    //     tempFloat32Vec4[0] = matrix[1];
+    //     tempFloat32Vec4[1] = matrix[5];
+    //     tempFloat32Vec4[2] = matrix[9];
+    //     tempFloat32Vec4[3] = matrix[13];
+    //
+    //     this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset, 4);
+    //
+    //     tempFloat32Vec4[0] = matrix[2];
+    //     tempFloat32Vec4[1] = matrix[6];
+    //     tempFloat32Vec4[2] = matrix[10];
+    //     tempFloat32Vec4[3] = matrix[14];
+    //
+    //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
+    // }
+
+    _setFlags(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
+        var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
+        var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
+        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        tempUint8Vec4[0] = visible;
+        tempUint8Vec4[1] = ghosted;
+        tempUint8Vec4[2] = highlighted;
+        tempUint8Vec4[3] = clippable;
         this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
-    }
-
-    setColor(portionId, color) { // TODO
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        tempUint8Vec4[0] = color[0];
-        tempUint8Vec4[1] = color[1];
-        tempUint8Vec4[2] = color[2];
-        tempUint8Vec4[3] = color[3];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
-    }
-
-    setMatrix(portionId, matrix) {
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        var offset = portionId * 4;
-
-        tempFloat32Vec4[0] = matrix[0];
-        tempFloat32Vec4[1] = matrix[4];
-        tempFloat32Vec4[2] = matrix[8];
-        tempFloat32Vec4[3] = matrix[12];
-
-        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset, 4);
-
-        tempFloat32Vec4[0] = matrix[1];
-        tempFloat32Vec4[1] = matrix[5];
-        tempFloat32Vec4[2] = matrix[9];
-        tempFloat32Vec4[3] = matrix[13];
-
-        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset, 4);
-
-        tempFloat32Vec4[0] = matrix[2];
-        tempFloat32Vec4[1] = matrix[6];
-        tempFloat32Vec4[2] = matrix[10];
-        tempFloat32Vec4[3] = matrix[14];
-
-        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
-
-        // tempFloat32Vec4[0] = matrix[3];
-        // tempFloat32Vec4[1] = matrix[7];
-        // tempFloat32Vec4[2] = matrix[11];
-        // tempFloat32Vec4[3] = matrix[15];
-        //
-        // this._state.modelMatrixCol3Buf.setData(tempFloat32Vec4, offset, 4);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-
-        if (this.numVisibleObjects === 0 || this.numTransparentObjects === this.numObjects || this.numGhostedObjects === this.numObjects) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numGhostedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
-            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE);
+            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
         }
     }
 
     drawNormalEdgesOpaque(frameCtx) {
-        return;
-        if (this.numEdgesObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
         }
     }
 
     drawNormalFillTransparent(frameCtx) {
-
-        if (this.numVisibleObjects === 0 || this.numTransparentObjects === 0 || this.numGhostedObjects === this.numObjects) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numGhostedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
-            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT);
+            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
         }
     }
 
     drawNormalTransparentEdges(frameCtx) {
-        return;
-        if (this.numEdgesObjects === 0 || this.numTransparentObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
         }
     }
 
     //-- GHOSTED--------------------------------------------------------------------------------------------------------
 
     drawGhostedFillOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -402,8 +545,7 @@ class InstancingLayer {
     }
 
     drawGhostedEdgesOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -412,8 +554,7 @@ class InstancingLayer {
     }
 
     drawGhostedFillTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -422,8 +563,7 @@ class InstancingLayer {
     }
 
     drawGhostedEdgesTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -434,8 +574,7 @@ class InstancingLayer {
     //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -444,8 +583,7 @@ class InstancingLayer {
     }
 
     drawHighlightedEdgesOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -454,8 +592,7 @@ class InstancingLayer {
     }
 
     drawHighlightedFillTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -464,8 +601,7 @@ class InstancingLayer {
     }
 
     drawHighlightedEdgesTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -476,8 +612,7 @@ class InstancingLayer {
     //-- SELECTED ------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -486,8 +621,7 @@ class InstancingLayer {
     }
 
     drawSelectedEdgesOpaque(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -496,8 +630,7 @@ class InstancingLayer {
     }
 
     drawSelectedFillTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -506,8 +639,7 @@ class InstancingLayer {
     }
 
     drawSelectedEdgesTransparent(frameCtx) {
-        return;
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -518,7 +650,7 @@ class InstancingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
-        if (this.numVisibleObjects === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._pickRenderer) {
@@ -546,12 +678,12 @@ class InstancingLayer {
         if (!this._drawRenderer) {
             this._drawRenderer = InstancingDrawRenderer.get(this);
         }
-        // if (!this._fillRenderer) {
-        //     this._fillRenderer = InstancingEmphasisFillRenderer.get(this);
-        // }
-        // if (!this._edgesRenderer) {
-        //     this._edgesRenderer = InstancingEmphasisEdgesRenderer.get(this);
-        // }
+        if (!this._fillRenderer) {
+            this._fillRenderer = InstancingFillRenderer.get(this);
+        }
+        if (!this._edgesRenderer) {
+            this._edgesRenderer = InstancingEdgesRenderer.get(this);
+        }
         if (!this._pickRenderer) {
             this._pickRenderer = InstancingPickRenderer.get(this);
         }
@@ -638,17 +770,19 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     const scale = math.mat4();
     const scalar = math.vec3();
     return function (positions, lenPositions, aabb, quantizedPositions, positionsDecodeMatrix) {
+
         const xmin = aabb[0];
         const ymin = aabb[1];
         const zmin = aabb[2];
+        const xmax = aabb[3];
+        const ymax = aabb[4];
+        const zmax = aabb[5];
         const xwid = aabb[3] - xmin;
         const ywid = aabb[4] - ymin;
         const zwid = aabb[5] - zmin;
-        // const maxInt = 2000000;
-        const maxInt = 65535;
-        const xMultiplier = maxInt / xwid;
-        const yMultiplier = maxInt / ywid;
-        const zMultiplier = maxInt / zwid;
+        const xMultiplier = xmax !== xmin ? 65535 / (xmax - xmin) : 0;
+        const yMultiplier = ymax !== ymin ? 65535 / (ymax - ymin) : 0;
+        const zMultiplier = zmax !== zmin ? 65535 / (zmax - zmin) : 0;
         let i;
         for (i = 0; i < lenPositions; i += 3) {
             quantizedPositions[i + 0] = Math.floor((positions[i + 0] - xmin) * xMultiplier);
@@ -658,9 +792,9 @@ var quantizePositions = (function () { // http://cg.postech.ac.kr/research/mesh_
         math.identityMat4(translate);
         math.translationMat4v(aabb, translate);
         math.identityMat4(scale);
-        scalar[0] = xwid / maxInt;
-        scalar[1] = ywid / maxInt;
-        scalar[2] = zwid / maxInt;
+        scalar[0] = xwid / 65535;
+        scalar[1] = ywid / 65535;
+        scalar[2] = zwid / 65535;
         math.scalingMat4v(scalar, scale);
         math.mulMat4(translate, scale, positionsDecodeMatrix);
     };

@@ -26,8 +26,8 @@ import {utils} from '../../utils.js';
  * viewer.camera.look = [0, 0, 0];
  * viewer.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildCylinderGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildCylinderGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0,0,0],
  *          radiusTop: 2.0,
  *          radiusBottom: 2.0,
@@ -36,8 +36,8 @@ import {utils} from '../../utils.js';
  *          heightSegments: 1,
  *          openEnded: false
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *         diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *         diffuseMap: new Texture(viewer.scene, {
  *             src: "textures/diffuse/uvGrid2.jpg"
  *         })
  *      })
@@ -58,7 +58,7 @@ import {utils} from '../../utils.js';
  * @param {Boolean} [cfg.openEnded=false]  Whether or not the cylinder has solid caps on the ends.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildCylinderGeometry(geometryClass, owner, cfg = {}) {
+function buildCylinderGeometry(cfg = {}) {
 
     let radiusTop = cfg.radiusTop || 1;
     if (radiusTop < 0) {
@@ -266,12 +266,12 @@ function buildCylinderGeometry(geometryClass, owner, cfg = {}) {
         }
     }
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,
         indices: indices
-    }));
+    });
 }
 
 

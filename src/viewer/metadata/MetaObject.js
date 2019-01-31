@@ -106,6 +106,31 @@ class MetaObject {
     }
 
     /**
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree, including this one.
+     *
+     * @returns {String[]} Array of {@link MetaObject#id}s.
+     */
+    getObjectIDsInSubtree() {
+        const list = [];
+
+        function visit(metaObject) {
+            if (!metaObject) {
+                return;
+            }
+            list.push(metaObject.id);
+            const children = metaObject.children;
+            if (children) {
+                for (var i = 0, len = children.length; i < len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+
+        visit(this);
+        return list;
+    }
+
+    /**
      * Returns properties of this MeteObject as JSON.
      *
      * @returns {{id: (String|Number), type: String, name: String, parent: (String|Number|Undefined)}}

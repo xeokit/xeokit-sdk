@@ -30,20 +30,20 @@ const tempAABB = math.AABB3();
  * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
  * import {Texture} from "../src/scene/materials/Texture.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *         canvasId: "myCanvas"
  *     });
  *
- * new Mesh(myViewer.scene, {
- *         geometry: new VBOGeometry(myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *         geometry: new VBOGeometry(viewer.scene, {
  *             primitive: "triangles",
  *             positions: [0.0, 3, 0.0, -3, -3, 0.0, 3, -3, 0.0],
  *             normals: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
  *             uv: [0.0, 0.0, 0.5, 1.0, 1.0, 0.0],
  *             indices: [0, 1, 2]
  *         }),
- *         material: new PhongMaterial(myViewer.scene, {
- *             diffuseMap: new Texture(myViewer.scene, {
+ *         material: new PhongMaterial(viewer.scene, {
+ *             diffuseMap: new Texture(viewer.scene, {
  *                 src: "textures/diffuse/uvGrid2.jpg"
  *             }),
  *             backfaces: true

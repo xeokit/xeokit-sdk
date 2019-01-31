@@ -10,7 +10,7 @@ import {MetaObject} from "./MetaObject.js";
  * ## Usage
  *
  * * [Metadata User guide]()
- * * [Metadata Example](http://xeolabs.com/xeokit-sdk/examples/#metadata_BasicExample)
+ * * [Metadata Example](http://xeolabs.com/xeokit-sdk/examples/#metadata_SceneGraph)
  */
 class MetaScene {
 
@@ -246,7 +246,7 @@ class MetaScene {
      * @param {String} id  ID of the root {@link MetaObject} of the given subtree.
      * @returns {String[]} Array of {@link MetaObject#id}s.
      */
-    getSubObjectIDs(id) {
+    getObjectIDsInSubtree(id) {
         const list = [];
         const metaObject = this.metaObjects[id];
 

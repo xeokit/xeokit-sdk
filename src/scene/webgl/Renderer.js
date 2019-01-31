@@ -1,4 +1,3 @@
-
 import {FrameContext} from './FrameContext.js';
 import {RenderFlags} from './RenderFlags.js';
 import {RenderBuffer} from './RenderBuffer.js';
@@ -121,15 +120,15 @@ const Renderer = function (scene, options) {
     };
 
     /**
-     * Gets a unique pick ID for the given mesh. A mesh can be a {@link Mesh}, or
+     * Gets a unique pick ID for the given entity. A entity can be a {@link Mesh}, or
      * anything that represents a WebGL draw call within a custom {@link Drawable}
      * instance.
-     * @param {Mesh|*} mesh A {@link Mesh}, or anything that represents a WebGL
+     * @param {Entity|*} entity An {@link Entity}, or anything that represents a WebGL
      * draw call within a custom {@link Drawable} instance.
      * @returns {Number} New pick ID.
      */
-    this.getPickID = function (mesh) {
-        return pickIDs.addItem(mesh);
+    this.getPickID = function (entity) {
+        return pickIDs.addItem(entity);
     };
 
     /**
@@ -645,10 +644,14 @@ const Renderer = function (scene, options) {
             let pickViewMatrix = null;
             let pickProjMatrix = null;
 
+            pickResult.pickSurface = params.pickSurface;
+
             if (params.canvasPos) {
 
                 canvasX = params.canvasPos[0];
                 canvasY = params.canvasPos[1];
+
+                pickResult.canvasPos = params.canvasPos;
 
             } else {
 
@@ -664,40 +667,44 @@ const Renderer = function (scene, options) {
 
                 canvasX = canvas.clientWidth * 0.5;
                 canvasY = canvas.clientHeight * 0.5;
+
+                pickResult.origin = origin;
+                pickResult.direction = direction;
             }
 
             pickBuf = pickBuf || new RenderBuffer(canvas, gl);
             pickBuf.bind();
 
-            pickMesh(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult);
+            const entity = pickEntity(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult);
 
-            if (!pickResult.mesh) {
+            if (!entity) {
                 pickBuf.unbind();
                 return null;
             }
 
-            if (params.pickSurface && pickResult.mesh.isSurfacePickable()) { // VBOGeometry does not support surface picking because it has no geometry data in browser memory
-                pickTriangle(pickResult.mesh, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
-            }
-
-            if (pickViewMatrix) {
-                pickResult.origin = origin;
-                pickResult.direction = direction;
+            if (params.pickSurface && entity.isSurfacePickable && entity.isSurfacePickable()) { // VBOGeometry does not support surface picking because it has no geometry data in browser memory
+                pickTriangle(entity, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
             }
 
             pickBuf.unbind();
+
+            if (params.pickSurface) {
+                entity.surfacePick(pickResult);
+            }
+
+            pickResult.entity = (entity.delegatePickedEntity) ? entity.delegatePickedEntity() : entity;
 
             return pickResult;
         };
     })();
 
     /**
-     * Picks a mesh, either through the canvas using the camera view transform, or through the center of a virtual
+     * Picks a entity, either through the canvas using the camera view transform, or through the center of a virtual
      * canvas using a view matrix aligned along a World-space ray.
      *
      * Calls drawPickMesh() on each Drawable in this Renderer.
      *
-     * If a mesh was picked, returns it via pickResult.mesh.
+     * If an entity was picked, returns it via pickResult.entity.
      *
      * @param canvasX
      * @param canvasY
@@ -707,7 +714,7 @@ const Renderer = function (scene, options) {
      * @params pickResult
      * @returns {*}
      */
-    function pickMesh(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult) {
+    function pickEntity(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -726,9 +733,8 @@ const Renderer = function (scene, options) {
 
         let i;
         let len;
-        let mesh;
-        const includeMeshIds = params.includeMeshIds;
-        const excludeMeshIds = params.excludeMeshIds;
+        const includeEntityIds = params.includeEntityIds;
+        const excludeEntityIds = params.excludeEntityIds;
 
         for (var type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
@@ -743,10 +749,10 @@ const Renderer = function (scene, options) {
                     if (!drawable.drawPickMesh || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
                         continue;
                     }
-                    if (includeMeshIds && !includeMeshIds[drawable.id]) { // TODO: push this logic into drawable
+                    if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
                         continue;
                     }
-                    if (excludeMeshIds && excludeMeshIds[drawable.id]) {
+                    if (excludeEntityIds && excludeEntityIds[drawable.id]) {
                         continue;
                     }
 
@@ -762,10 +768,12 @@ const Renderer = function (scene, options) {
             return;
         }
 
-        pickResult.mesh = pickIDs.items[pickID];
+        const entity = pickIDs.items[pickID];
+
+        return entity;
     }
 
-    function pickTriangle(mesh, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function pickTriangle(entity, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -782,7 +790,7 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mesh.drawPickTriangles(frameCtx);
+        entity.drawPickTriangles(frameCtx);
 
         const pix = pickBuf.read(canvasX, canvasY);
 

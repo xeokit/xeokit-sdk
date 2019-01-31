@@ -1,40 +1,58 @@
 import {utils} from "./../../../scene/utils.js"
+import {PerformanceModel} from "../../../scene/PerformanceModel/PerformanceModel.js";
 import {Node} from "./../../../scene/nodes/Node.js";
 import {Plugin} from "./../../Plugin.js";
-import {GLTFLoader} from "./GLTFLoader.js";
+import {GLTFQualityLoader} from "./GLTFQualityLoader.js";
+import {GLTFPerformanceLoader} from "./GLTFPerformanceLoader.js";
 import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
  * A {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
  *
- * * For each model loaded, creates a {@link Node} representing the model within the {@link Viewer}'s {@link Scene}.
- * * The {@link Node} will have {@link Node#isModel} set ````true```` and will be registered by {@link Node#id} in {@link Scene#models}.
- * * Can configure each {@link Node} with a local transformation.
- * * Can attach each {@link Node} as a child of a given {@link Node}.
- * * Can also load a {@link MetaModel} corresponding to the {@link Node} into {@link Viewer#metaScene} - more info: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata).
+ * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+ * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
+ * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
+ *
+ * ## Metadata
+ *
+ * GLTFLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a {@link MetaModel} corresponding
+ * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
+ *
+ * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
+ * metadata, we can also provide GLTFModelLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, GLTFLoaderPlugin
+ * uses its own map of default colors and visibilities for IFC element types.
+ *
+ * ## Quality Setting
+ *
+ * By default, GLTFModelLoaderPlugin will load a high-performance scene representation that's optimized for low memory usage and
+ * optimal rendering. The high-performance representation renders large numbers of objects efficiently, using geometry
+ * batching and instancing, with simple Lambertian shading that ignores any textures and realistic materials in the glTF.
+ *
+ * Specifying ````performance:false```` to {@link GLTFLoaderPlugin#load} will internally load a heavier scene
+ * representation comprised of {@link Node}, {@link Mesh}, {@link Geometry}, {@link Material} and {@link Texture} components,
+ * that will exactly preserve the materials specified in the glTF. Use this when you want to load a model for a realistic preview,
+ * maybe using PBR etc.
+ *
+ * We tend to use the default ````performance:true```` setting for CAD and BIM models, where structure is more important that
+ * surface appearance.
+ *
+ * Publically, GLTFLoaderPlugin creates the same {@link Entity}s for both levels of performance. Privately, however, it implements
+ * {@link Entity}s using two different sets of concrete subtypes, for its two different internally-managed scene representations.
  *
  * ## Usage
  *
  * In the example below we'll load the Schependomlaan model from a [glTF file](http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/), along
  * with an accompanying JSON [IFC metadata file](http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/).
  *
- * This will create a {@link Node} that represents the model, which is the root of a tree of {@link Entity}s ({@link Node}s
- * and {@link Mesh}es) that represent the model objects.
+ * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
+ * that hold their metadata.
  *
- * This will also load a {@link MetaModel}, which contains a {@link MetaObject} for each {@link Entity}. The {@link MetaModel} will
- * have an {@link MetaModel#id} that matches the root {@link Node#id}, and will be registered by that ID on {@link Viewer#metaScene}.
- *
- * The ````node```` elements in the glTF file represent IFC objects. Each ````node```` provides its IFC object ID in
- * its ````name```` attribute.
- *
- * GLTFLoaderPlugin creates an {@link Entity} within the tree from each glTF ````node````. For each {@link Entity}, GLTFLoader maps the
- * object ID to a {@link MetaObject}. Then, using the {@link MetaObject}'s IFC type, GLTFLoader finds the initial visibility and color
- * for the {@link Entity} in the lookup map provided by {@link IFCObjectDefaults}, which specifies the default initial
- * visible states of IFC objects. For example, an "IfcWindow" is transparent and unpickable, while an "IfcSpace" is invisible.
- *
- * You can override that map with your own if needed (see {@link GLTFLoaderPlugin#objectDefaults}.
+ * Since this model contains IFC types, the GLTFModelLoader will set the initial colors of object {@link Entity}s according
+ * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ *
+ * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
  *
@@ -71,12 +89,12 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
  * // 2
- * const model = gltfLoader.load({                                     // Creates a Node representing the model
+ * var model = gltfLoader.load({                                    // Returns an Entity that represents the model
  *      id: "myModel",
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
  *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
  *      edges: true,
- *      lambertMaterial: true
+ *      performance: true  // Load the default high-performance scene representation
  * });
  *
  * model.on("loaded", () => {
@@ -97,7 +115,7 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *      const parent = metaObject.parent;                               // MetaObject with type "IfcBuilding"
  *      const children = metaObject.children;                           // Array of child MetaObjects
  *      const objectId = metaObject.id;                                 // "0u4wgLe6n0ABVaiXyikbkA"
- *      const objectIds = viewer.metaScene.getSubObjectIDs(objectId);   // IDs of leaf sub-objects
+ *      const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
  *      const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
  *
  *      // 2
@@ -107,10 +125,10 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *      viewer.cameraFlight.flyTo(aabb);
  * });
  *
- * // You can unload the model via the plugin
- * plugin.unload("myModel");
+ * // Find the model Entity by ID
+ * model = viewer.scene.models["myModel"];
  *
- * // Or unload it by calling destroy() on the model's Node
+ * // Destroy the model
  * model.destroy();
  * ````
  *
@@ -160,13 +178,12 @@ class GLTFLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new GLTFLoader(this, cfg);
+        this._glTFQualityLoader = new GLTFQualityLoader(this, cfg);
 
         /**
-         * Models currently loaded by this Plugin.
-         * @type {{String:Node}}
+         * @private
          */
-        this.models = {};
+        this._glTFPerformanceLoader = new GLTFPerformanceLoader(this, cfg);
 
         this.objectDefaults = cfg.objectDefaults;
     }
@@ -196,31 +213,22 @@ class GLTFLoaderPlugin extends Plugin {
     /**
      * Loads a glTF model from a file into this GLTFLoaderPlugin's {@link Viewer}.
      *
-     * Creates a tree of {@link Node}s within the Viewer's {@link Scene} that represents the model.
-     *
-     * The root {@link Node} will have {@link Node#isModel} set true to indicate that it represents a model, and will
-     * therefore be registered in {@link Scene#models}.
-     *
-     * @param {*} params  Loading parameters.
-     * @param {String} [params.id] ID to assign to the root {@link Node#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
+     * @param {*} params Loading parameters.
+     * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} params.src Path to a glTF file.
      * @param {String} [params.metaModelSrc] Path to an optional metadata file (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
-     *
      * @params {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @params {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
-     *
-     * @param {Node} [params.parent] The parent {@link Node}, if we want to graft the model's root {@link Node} into a scene graph hierarchy.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
-     * @param {Number[]} [params.position=[0,0,0]] The model {@link Node}'s local 3D position.
-     * @param {Number[]} [params.scale=[1,1,1]] The model {@link Node}'s local scale.
-     * @param {Number[]} [params.rotation=[0,0,0]] The model root {@link Node}'s local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model {@link Node}'s local modeling transform matrix. Overrides the position, scale and rotation parameters.
-     * @param {Boolean} [params.lambertMaterial=true]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and a ````colorize````
-     * value set the to diffuse color extracted from the glTF material. This is typically used for large CAD models and will cause loading to ignore textures in the glTF.
+     * @param {Number[]} [params.position=[0,0,0]] The model World-space 3D position.
+     * @param {Number[]} [params.scale=[1,1,1]] The model's World-space scale.
+     * @param {Number[]} [params.rotation=[0,0,0]] The model's World-space rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @returns {Node} A {@link Node} representing the loaded glTF model.
+     * @params {Boolean} [params.performance=true] Set ````false```` to load all the materials and textures provided by the glTF file, otherwise leave ````true```` to load the default high-performance representation optimized for low memory usage and efficient rendering.
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
@@ -231,17 +239,32 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const modelNode = new Node(this.viewer.scene, utils.apply(params, {
-            isModel: true
-        }));
+        const performance = !!params.performance;
 
-        const modelId = modelNode.id;  // In case ID was auto-generated
+        const model = performance
+
+            // PerformanceModel provides performance-oriented scene representation
+            // converting glTF materials to simple flat-shading without textures
+
+            ? new PerformanceModel(this.viewer.scene, utils.apply(params, {
+                isModel: true
+            }))
+
+            // Scene Node graph supports original glTF materials
+
+            : new Node(this.viewer.scene, utils.apply(params, {
+                isModel: true
+            }));
+
+        const modelId = model.id;  // In case ID was auto-generated
         const src = params.src;
 
         if (!src) {
             this.error("load() param expected: src");
-            return modelNode; // Return new empty model
+            return model; // Return new empty model
         }
+
+        const loader = performance ? this._glTFPerformanceLoader : this._glTFQualityLoader;
 
         if (params.metaModelSrc) {
 
@@ -306,96 +329,69 @@ class GLTFLoaderPlugin extends Plugin {
                         }
                     }
 
-                    actions.createNode = { // Create a Node for this glTF scene node
+                    actions.createEntity = { // Create an Entity for this glTF scene node
                         id: nodeId,
-                        isObject: true // Registers the Node in Scene#objects
+                        isObject: true // Registers the Entity in Scene#objects
                     };
 
                     const props = objectDefaults[type];
 
-                    if (props) { // Set Node's initial rendering state for recognized type
+                    if (props) { // Set Entity's initial rendering state for recognized type
 
                         if (props.visible === false) {
-                            actions.createNode.visible = false;
+                            actions.createEntity.visible = false;
                         }
 
                         if (props.colorize) {
-                            actions.createNode.colorize = props.colorize;
+                            actions.createEntity.colorize = props.colorize;
                         }
 
                         if (props.pickable === false) {
-                            actions.createNode.pickable = false;
+                            actions.createEntity.pickable = false;
                         }
 
                         if (props.opacity !== undefined && props.opacity !== null) {
-                            actions.createNode.opacity = props.opacity;
+                            actions.createEntity.opacity = props.opacity;
                         }
                     }
 
                     return true; // Continue descending this glTF node subtree
                 };
 
-                self._loader.load(this, modelNode, src, params);
+                loader.load(this, model, src, params);
 
             }, function (errMsg) {
                 self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 self.viewer.scene.canvas.spinner.processes--;
             });
         } else {
-            this._loader.load(this, modelNode, src, params);
+
+            params.handleGLTFNode = function (modelId, glTFNode, actions) {
+
+                const name = glTFNode.name;
+
+                if (!name) {
+                    return true; // Continue descending this node subtree
+                }
+
+                const id = name;
+
+                actions.createEntity = { // Create an Entity for this glTF scene node
+                    id: id,
+                    isObject: true // Registers the Entity in Scene#objects
+                };
+
+                return true; // Continue descending this glTF node subtree
+            };
+
+            loader.load(this, model, src, params);
         }
 
-        this.models[modelId] = modelNode;
-
-        modelNode.once("destroyed", () => {
-            delete this.models[modelId];
+        model.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);
-            this.fire("unloaded", modelId);
         });
 
-        return modelNode;
-    }
-
-    /**
-     * Unloads a model that was loaded by this GLTFLoaderPlugin.
-     *
-     * @param {String} modelId  ID of model to unload.
-     */
-    unload(modelId) {
-        const modelNode = this.models;
-        if (!modelNode) {
-            this.error(`unload() model with this ID not found: ${modelId}`);
-            return;
-        }
-        modelNode.destroy();
-    }
-
-    /**
-     * @private
-     */
-    send(name, value) {
-        switch (name) {
-            case "clear":
-                this.clear();
-                break;
-        }
-    }
-
-    /**
-     * Unloads models loaded by this GLTFLoaderPlugin.
-     */
-    clear() {
-        for (const modelId in this.models) {
-            this.models[modelId].destroy();
-        }
-    }
-
-    /**
-     * Destroys this BIMServerLoaderPlugin, after first unloading any models it has loaded.
-     */
-    destroy() {
-        this.clear();
-        super.destroy();
+        return model;
     }
 }
 

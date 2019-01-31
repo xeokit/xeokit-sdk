@@ -28,13 +28,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * import {SpecularMaterial} from "src/scene/materials/SpecularMaterial.js";
  * import {Texture} from "src/scene/materials/Texture.js";
  *
- * const myViewer = new Viewer({ canvasId: "myCanvas" });
+ * const viewer = new Viewer({ canvasId: "myCanvas" });
  *
- * const myMesh = new Mesh(myViewer.scene,{
+ * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(myViewer.scene, ReadableGeometry, {}),
+ *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
  *
- *      material: new SpecularMaterial(myViewer.scene,{
+ *      material: new SpecularMaterial(viewer.scene,{
  *
  *          // Channels with default values, just to show them
  *
@@ -46,16 +46,16 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *
  *          // Textures to multiply some of the channels
  *
- *          diffuseMap: new Texture(myViewer.scene, { // RGB components multiply by diffuse
+ *          diffuseMap: new Texture(viewer.scene, { // RGB components multiply by diffuse
  *              src: "textures/diffuse.jpg"
  *          }),
- *          specularMap: new Texture(myViewer.scene, { // RGB component multiplies by specular
+ *          specularMap: new Texture(viewer.scene, { // RGB component multiplies by specular
  *              src: "textures/specular.jpg"
  *          }),
- *          glossinessMap: new Texture(myViewer.scene, { // R component multiplies by glossiness
+ *          glossinessMap: new Texture(viewer.scene, { // R component multiplies by glossiness
  *              src: "textures/glossiness.jpg"
  *          }),
- *          normalMap: new Texture(myViewer.scene, {
+ *          normalMap: new Texture(viewer.scene, {
  *              src: "textures/normalMap.jpg"
  *          })
  *      })
@@ -72,11 +72,11 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * {@link Texture}, where the *RGB* component multiplies by {@link SpecularMaterial#specular} and *A* multiplies by {@link SpecularMaterial#glossiness}.
  *
  * ````javascript
- * const myMesh = new Mesh(myViewer.scene,{
+ * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(myViewer.scene, ReadableGeometry, {}),
+ *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
  *
- *      material: new SpecularMaterial(myViewer.scene,{
+ *      material: new SpecularMaterial(viewer.scene,{
  *
  *          // Channels with default values, just to show them
  *
@@ -86,13 +86,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *          emissive: [0.0, 0.0, 0.0]
  *          alpha: 1.0,
  *
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse.jpg"
  *          }),
- *          specularGlossinessMap: new Texture(myViewer.scene, { // RGB multiplies by specular, A by glossiness
+ *          specularGlossinessMap: new Texture(viewer.scene, { // RGB multiplies by specular, A by glossiness
  *              src: "textures/specularGlossiness.jpg"
  *          }),
- *          normalMap: new Texture(myViewer.scene, {
+ *          normalMap: new Texture(viewer.scene, {
  *              src: "textures/normalMap.jpg"
  *          })
  *      })
@@ -108,11 +108,11 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * and {@link SpecularMaterial#alphaMode}, causing it to blend 50% with the background:
  *
  * ````javascript
- * const myMesh = new Mesh(myViewer.scene,{
+ * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(myViewer.scene, ReadableGeometry, {}),
+ *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
  *
- *      material: new SpecularMaterial(myViewer.scene,{
+ *      material: new SpecularMaterial(viewer.scene,{
  *
  *          // Channels with default values, just to show them
  *
@@ -123,13 +123,13 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *          alpha: 0.5,         // <<----------- Changed
  *          alphaMode: "blend", // <<----------- Added
  *
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse.jpg"
  *          }),
- *          specularGlossinessMap: new Texture(myViewer.scene, { // RGB multiplies by specular, A by glossiness
+ *          specularGlossinessMap: new Texture(viewer.scene, { // RGB multiplies by specular, A by glossiness
  *              src: "textures/specularGlossiness.jpg"
  *          }),
- *          normalMap: new Texture(myViewer.scene, {
+ *          normalMap: new Texture(viewer.scene, {
  *              src: "textures/normalMap.jpg"
  *          })
  *      })
@@ -143,11 +143,11 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * and {@link SpecularMaterial#alphaCutoff} to treat it as an alpha mask:
  *
  * ````javascript
- * const myMesh = new Mesh(myViewer.scene,{
+ * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(myViewer.scene, ReadableGeometry, {}),
+ *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
  *
- *      material: new SpecularMaterial(myViewer.scene, {
+ *      material: new SpecularMaterial(viewer.scene, {
  *
  *          // Channels with default values, just to show them
  *
@@ -159,16 +159,16 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *          alphaMode: "mask",  // <<----------- Changed
  *          alphaCutoff: 0.2,   // <<----------- Added
  *
- *          alphaMap: new Texture(myViewer.scene, { // <<---------- Added
+ *          alphaMap: new Texture(viewer.scene, { // <<---------- Added
  *              src: "textures/diffuse/crossGridColorMap.jpg"
  *          }),
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse.jpg"
  *          }),
- *          specularGlossinessMap: new Texture(myViewer.scene, { // RGB multiplies by specular, A by glossiness
+ *          specularGlossinessMap: new Texture(viewer.scene, { // RGB multiplies by specular, A by glossiness
  *              src: "textures/specularGlossiness.jpg"
  *          }),
- *          normalMap: new Texture(myViewer.scene, {
+ *          normalMap: new Texture(viewer.scene, {
  *              src: "textures/normalMap.jpg"
  *          })
  *      })

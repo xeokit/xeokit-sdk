@@ -2,7 +2,6 @@ import {math} from '../math/math.js';
 import {utils} from '../utils.js';
 import {core} from '../core.js';
 import {Component} from '../Component.js';
-import {Mesh} from '../mesh/Mesh.js';
 
 const tempVec3 = math.vec3();
 const newLook = math.vec3();
@@ -27,22 +26,22 @@ const lookEyeVec = math.vec3();
  * Configure {@link CameraFlightAnimation#fit} and {@link CameraFlightAnimation#fitFOV} to make it stop at the point
  * where the target occupies a certain amount of the field-of-view.
  *
- * ## Flying to a Mesh
+ * ## Flying to an Entity
  *
- * Flying to a {@link Mesh}:
+ * Flying to an {@link Entity}:
  *
  * ````Javascript
- * var mesh = new Mesh(myViewer.scene);
+ * var entity = new Mesh(viewer.scene);
  *
- * // Fly to the Mesh's World-space AABB
- * myViewer.cameraFlight.flyTo(mesh);
+ * // Fly to the Entity's World-space AABB
+ * viewer.cameraFlight.flyTo(entity);
  * ````
  * ## Flying to a position
  *
  * Flying the CameraFlightAnimation from the previous example to specified eye, look and up positions:
  *
  * ````Javascript
- * myViewer.cameraFlight.flyTo({
+ * viewer.cameraFlight.flyTo({
  *    eye: [-5,-5,-5],
  *    look: [0,0,0]
  *    up: [0,1,0],
@@ -58,7 +57,7 @@ const lookEyeVec = math.vec3();
  * axis-aligned bounding box:
  *
  * ````Javascript
- * myViewer.cameraFlight.flyTo(mesh.aabb);
+ * viewer.cameraFlight.flyTo(entity.aabb);
  * ````
  */
 class CameraFlightAnimation extends Component {
@@ -119,7 +118,7 @@ class CameraFlightAnimation extends Component {
      * @param {Number[]} [params.look] Position to fly the look position to.
      * @param {Number[]} [params.up] Position to fly the up vector to.
      * @param {Boolean} [params.fit=true] Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
-     * @param {Number} [params.fitFOV] How much of field-of-view, in degrees, that a target {@link Node} or its AABB should
+     * @param {Number} [params.fitFOV] How much of field-of-view, in degrees, that a target {@link Entity} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
      * @param {Number} [params.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
      * @param {Number} [params.orthoScale] TODO: document this
@@ -282,7 +281,7 @@ class CameraFlightAnimation extends Component {
      * @param {Number[]} [params.eye] Position to fly the eye position to.
      * @param {Number[]} [params.look]  Position to fly the look position to.
      * @param {Number[]} [params.up] Position to fly the up vector to.
-     * @param {Number} [params.fitFOV] How much of field-of-view, in degrees, that a target {@link Node} or its AABB should fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
+     * @param {Number} [params.fitFOV] How much of field-of-view, in degrees, that a target {@link Entity} or its AABB should fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
      * @param {Boolean} [params.fit] Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
      */
     jumpTo(params) {

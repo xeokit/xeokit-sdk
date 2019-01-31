@@ -273,19 +273,17 @@ class Drawable {
     drawSelectedEdgesTransparent(frameCtx) {
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Picking
+    //------------------------------------------------------------------------------------------------------------------
+
     /**
      * Called by xeokit to get if surface pixking is possible on this Drawable.
      */
     isSurfacePickable() {
     }
 
-
-    //==================================================================================================================
-    // TODO picking members
-    //==================================================================================================================
-
     drawPickDrawable(frameCtx) {
-
     }
 
     drawPickTriangles(frameCtx) {
@@ -305,8 +303,7 @@ class Drawable {
      * @param [pickResult.origin] World-space 3D ray origin, when ray picking.
      * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.
      */
-    getPickResult(pickResult) {
-        getPickResult(this, pickResult);
+    surfacePick(pickResult) {
     }
 }
 

@@ -1,10 +1,10 @@
-import {RENDER_PASSES} from '../../renderPasses.js';
+import {RENDER_PASSES} from '../renderPasses.js';
 
 /**
  * @private
  * @constructor
  */
-const BatchingEmphasisEdgesShaderSource = function (layer) {
+const BatchingEdgesShaderSource = function (layer) {
     this.vertex = buildVertex(layer);
     this.fragment = buildFragment(layer);
 };
@@ -15,14 +15,19 @@ function buildVertex(layer) {
     const src = [];
 
     src.push("// Batched geometry edges drawing vertex shader");
+
     src.push("precision mediump float;");
     src.push("precision mediump int;");
+
     src.push("uniform int renderPass;");
+
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
+
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
+
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
     }
@@ -39,18 +44,26 @@ function buildVertex(layer) {
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool ghosted      = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
+    src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EdgeMaterial.edgeColor, so is not quantized
 
-    src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
+    src.push(`if
+    (!visible ||
+    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || ghosted)) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &&  (!transparent || ghosted)) ||
+    (renderPass == ${RENDER_PASSES.GHOSTED} && !ghosted) ||
+    (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
 
-    src.push(`if (!visible || (renderPass == ${RENDER_PASSES.OPAQUE} && (transparent || ghosted)) || (renderPass == ${RENDER_PASSES.TRANSPARENT} && (!transparent || ghosted)) || (renderPass == ${RENDER_PASSES.GHOSTED} && !ghosted) || (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+
     src.push("} else {");
 
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
     src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
+
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");
     }
+
     src.push("  gl_Position = projMatrix * viewPosition;");
     src.push("}");
     src.push("}");
@@ -94,4 +107,4 @@ function buildFragment(layer) {
     return src;
 }
 
-export {BatchingEmphasisEdgesShaderSource};
+export {BatchingEdgesShaderSource};

@@ -30,19 +30,19 @@ import {math} from '../math/math.js';
  *
  * // Create a Viewer and arrange the camera
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *      canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
  * // Replace the Scene's default lights with three custom view-space DirLights
  *
- * myViewer.scene.clearLights();
+ * viewer.scene.clearLights();
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "keyLight",
  *      dir: [0.8, -0.6, -0.8],
  *      color: [1.0, 0.3, 0.3],
@@ -50,7 +50,7 @@ import {math} from '../math/math.js';
  *      space: "view"
  * });
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "fillLight",
  *      dir: [-0.8, -0.4, -0.4],
  *      color: [0.3, 1.0, 0.3],
@@ -58,7 +58,7 @@ import {math} from '../math/math.js';
  *      space: "view"
  * });
  *
- * new DirLight(myViewer.scene, {
+ * new DirLight(viewer.scene, {
  *      id: "rimLight",
  *      dir: [0.2, -0.8, 0.8],
  *      color: [0.6, 0.6, 0.6],
@@ -69,29 +69,29 @@ import {math} from '../math/math.js';
  *
  * // Create a sphere and ground plane
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {
  *          radius: 2.0
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
  *          diffuse: [0.7, 0.7, 0.7],
  *          specular: [1.0, 1.0, 1.0],
  *          emissive: [0, 0, 0],
  *          alpha: 1.0,
  *          ambient: [1, 1, 0],
- *          diffuseMap: new Texture(myViewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse/uvGrid2.jpg"
  *          })
  *      })
  *  });
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {
  *          xSize: 30,
  *          zSize: 30
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse/uvGrid2.jpg"
  *          }),
  *          backfaces: true

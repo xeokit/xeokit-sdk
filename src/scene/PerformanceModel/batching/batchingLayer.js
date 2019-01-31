@@ -3,16 +3,16 @@ import {WEBGL_INFO} from "../../webglInfo.js";
 import {RenderState} from "../../webgl/RenderState.js";
 import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 
-import {BatchingDrawRenderer} from "./draw/batchingDrawRenderer.js";
-import {BatchingEmphasisFillRenderer} from "./emphasis/batchingEmphasisFillRenderer.js";
-import {BatchingEmphasisEdgesRenderer} from "./emphasis/batchingEmphasisEdgesRenderer.js";
-import {BatchingPickRenderer} from "./pick/batchingPickRenderer.js";
+import {BatchingDrawRenderer} from "./batchingDrawRenderer.js";
+import {BatchingFillRenderer} from "./batchingFillRenderer.js";
+import {BatchingEdgesRenderer} from "./batchingEdgesRenderer.js";
+import {BatchingPickRenderer} from "./batchingPickRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const uint8Vec4Temp = new Uint8Array((bigIndicesSupported ? 5000000 : 65530) * 4); // Scratch memory for dynamic flags VBO update
+const tempUint8Vec4 = new Uint8Array((bigIndicesSupported ? 5000000 : 65530) * 4); // Scratch memory for dynamic flags VBO update
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
@@ -78,13 +78,13 @@ class BatchingLayer {
         });
 
         // These counts are used to avoid unnecessary render passes
-        this.numObjects = 0;
-        this.numVisibleObjects = 0;
-        this.numTransparentObjects = 0;
-        this.numGhostedObjects = 0;
-        this.numSelectedObjects = 0;
-        this.numHighlightedObjects = 0;
-        this.numEdgesObjects = 0;
+        this._numPortions = 0;
+        this._numVisibleLayerPortions = 0;
+        this._numTransparentLayerPortions = 0;
+        this._numGhostedLayerPortions = 0;
+        this._numSelectedLayerPortions = 0;
+        this._numHighlightedLayerPortions = 0;
+        this._numEdgesLayerPortions = 0;
 
         //this.pickObjectBaseIndex = cfg.pickObjectBaseIndex;
 
@@ -120,13 +120,14 @@ class BatchingLayer {
      * @param indices  Flat int indices array.
      * @param edgeIndices Flat int edges indices array.
      * @param flags Unsigned long int
-     * @param color Quantized RGBA color
+     * @param color Quantized RGB color [0..255,0..255,0..255,0..255]
+     * @param opacity Opacity [0..255]
      * @param matrix Flat float 4x4 matrix
      * @param aabb Flat float AABB
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(positions, normals, indices, edgeIndices, flags, color, matrix, aabb, pickColor) {
+    createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor) {
         if (this._finalized) {
             throw "Already finalized";
         }
@@ -197,39 +198,45 @@ class BatchingLayer {
             }
             buffer.lenFlags += lenFlags;
             if (visible) {
-                this.numVisibleObjects++;
+                this._numVisibleLayerPortions++;
+                this.model.numVisibleLayerPortions++;
             }
             if (ghosted) {
-                this.numGhostedObjects++;
+                this._numGhostedLayerPortions++;
+                this.model.numGhostedLayerPortions++;
             }
             if (highlighted) {
-                this.numHighlightedObjects++;
+                this._numHighlightedLayerPortions++;
+                this.model.numHighlightedLayerPortions++;
             }
             if (selected) {
-                this.numSelectedObjects++;
+                this._numSelectedLayerPortions++;
+                this.model.numSelectedLayerPortions++;
             }
             if (edges) {
-                this.numEdgesObjects++;
+                this._numEdgesLayerPortions++;
+                this.model.numEdgesLayerPortions++;
             }
         }
         if (color) {
             const lenColors = (numVerts * 4);
 
-            // Color is pre-quantized
-            const r = color[0];
+            const r = color[0]; // Color is pre-quantized by PerformanceModel
             const g = color[1];
             const b = color[2];
-            const a = color[3];
+
+            const a = opacity;
 
             for (var i = buffer.lenColors, len = buffer.lenColors + lenColors; i < len; i += 4) {
                 buffer.colors[i + 0] = r;
                 buffer.colors[i + 1] = g;
                 buffer.colors[i + 2] = b;
-                buffer.colors[i + 3] = a;
+                buffer.colors[i + 3] = opacity;
             }
             buffer.lenColors += lenColors;
             if (a < 255) {
-                this.numTransparentObjects++;
+                this._numTransparentLayerPortions++;
+                this.model.numTransparentLayerPortions++;
             }
         }
         if (indices) {
@@ -258,7 +265,10 @@ class BatchingLayer {
         var portionId = this._portions.length / 2;
         this._portions.push(vertsIndex);
         this._portions.push(numVerts);
-        this.numObjects++;
+
+        this._numPortions++;
+        this.model.numPortions++;
+
         return portionId;
     }
 
@@ -336,22 +346,164 @@ class BatchingLayer {
         this._finalized = true;
     }
 
-    setPickID(portionId, pickId) {
+    // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
+    // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
+
+    initFlags(portionId,  flags) {
+        if (flags & RENDER_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.GHOSTED) {
+            this._numGhostedLayerPortions++;
+            this.model.numGhostedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        }
+        if (flags & RENDER_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setVisible(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        var portionsIdx = portionId * 2;
-        var vertexBase = this._portions[portionsIdx];
-        var numVerts = this._portions[portionsIdx + 1];
-        var firstFlag = vertexBase * 4;
-        var lenPickColors = numVerts * 2;
-        for (var i = 0; i < lenPickColors; i += 2) {
-            uint8Vec4Temp[i] = pickId;
+        if (flags & RENDER_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        } else {
+            this._numVisibleLayerPortions--;
+            this.model.numVisibleLayerPortions--;
         }
-        this._state.pickColorsBuf.setData(uint8Vec4Temp.slice(0, lenPickColors), firstFlag, lenPickColors);
+        this._setFlags(portionId, flags);
     }
 
-    setFlags(portionId, flags) {
+    setHighlighted(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        } else {
+            this._numHighlightedLayerPortions--;
+            this.model.numHighlightedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setGhosted(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.GHOSTED) {
+            this._numGhostedLayerPortions++;
+            this.model.numGhostedLayerPortions++;
+        } else {
+            this._numGhostedLayerPortions--;
+            this.model.numGhostedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setSelected(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        } else {
+            this._numSelectedLayerPortions--;
+            this.model.numSelectedLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setEdges(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & RENDER_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        } else {
+            this._numEdgesLayerPortions--;
+            this.model.numEdgesLayerPortions--;
+        }
+        this._setFlags(portionId, flags);
+    }
+
+    setClippable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+    }
+
+    setCollidable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+    }
+
+    setPickable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+    }
+
+    setColor(portionId, color) {
+
+        //--------------------------------------------------------------------------------------------------------------
+        ///////////// TODO: Update numTransparentPortions on layer and model
+        //--------------------------------------------------------------------------------------------------------------
+
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        // var portionsIdx = portionId * 2;
+        // var vertexBase = this._portions[portionsIdx];
+        // var numVerts = this._portions[portionsIdx + 1];
+        // var firstColor = vertexBase * 4;
+        // var lenColors = numVerts * 4;
+        // const r = color[0];
+        // const g = color[1];
+        // const b = color[2];
+        // const a = color[3];
+        // for (var i = 0; i < lenColors; i += 4) {
+        //     tempUint8Vec4[i + 0] = r;
+        //     tempUint8Vec4[i + 1] = g;
+        //     tempUint8Vec4[i + 2] = b;
+        //     tempUint8Vec4[i + 3] = a;
+        // }
+        // const opacity = color[3];
+        // if (opacity < 255) {
+        //     this._numTransparentLayerPortions++;
+        //     this.model.numTransparentLayerPortions++;
+        // } else {
+        //     this._numTransparentLayerPortions--;
+        //     this.model.numTransparentLayerPortions--;
+        // }
+        // this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColors), firstColor, lenColors);
+    }
+
+    // setMatrix(portionId, matrix) { // TODO
+    // }
+
+    _setFlags(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -363,83 +515,59 @@ class BatchingLayer {
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
         var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+        var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         for (var i = 0; i < lenFlags; i += 4) {
-            uint8Vec4Temp[i + 0] = visible;
-            uint8Vec4Temp[i + 1] = ghosted;
-            uint8Vec4Temp[i + 2] = highlighted;
-            uint8Vec4Temp[i + 3] = clippable;
+            tempUint8Vec4[i + 0] = visible;
+            tempUint8Vec4[i + 1] = ghosted;
+            tempUint8Vec4[i + 2] = highlighted;
+            tempUint8Vec4[i + 3] = clippable;
         }
-        this._state.flagsBuf.setData(uint8Vec4Temp.slice(0, lenFlags), firstFlag, lenFlags);
-    }
-
-    setColor(portionId, color) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        var portionsIdx = portionId * 2;
-        var vertexBase = this._portions[portionsIdx];
-        var numVerts = this._portions[portionsIdx + 1];
-        var firstColor = vertexBase * 4;
-        var lenColors = numVerts * 4;
-        const r = color[0];
-        const g = color[1];
-        const b = color[2];
-        const a = color[3];
-        for (var i = 0; i < lenColors; i += 4) {
-            uint8Vec4Temp[i + 0] = r;
-            uint8Vec4Temp[i + 1] = g;
-            uint8Vec4Temp[i + 2] = b;
-            uint8Vec4Temp[i + 3] = a;
-        }
-        this._state.colorsBuf.setData(uint8Vec4Temp.slice(0, lenColors), firstColor, lenColors);
-    }
-
-    setMatrix(portionId, matrix) { // TODO
+        this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numTransparentObjects === this.numObjects || this.numGhostedObjects === this.numObjects) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numGhostedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
-            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE);
+            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
         }
     }
 
     drawNormalEdgesOpaque(frameCtx) {
-        if (this.numEdgesObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.OPAQUE);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_OPAQUE);
         }
     }
 
     drawNormalFillTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numTransparentObjects === 0 || this.numGhostedObjects === this.numObjects) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numGhostedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
-            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT);
+            this._drawRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
         }
     }
 
     drawNormalTransparentEdges(frameCtx) {
-        if (this.numEdgesObjects === 0 || this.numTransparentObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.TRANSPARENT);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.NORMAL_TRANSPARENT);
         }
     }
 
     //-- GHOSTED--------------------------------------------------------------------------------------------------------
 
     drawGhostedFillOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -448,7 +576,7 @@ class BatchingLayer {
     }
 
     drawGhostedEdgesOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -457,7 +585,7 @@ class BatchingLayer {
     }
 
     drawGhostedFillTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -466,7 +594,7 @@ class BatchingLayer {
     }
 
     drawGhostedEdgesTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numGhostedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -477,7 +605,7 @@ class BatchingLayer {
     //-- HIGHLIGHTED ---------------------------------------------------------------------------------------------------
 
     drawHighlightedFillOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -486,7 +614,7 @@ class BatchingLayer {
     }
 
     drawHighlightedEdgesOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -495,7 +623,7 @@ class BatchingLayer {
     }
 
     drawHighlightedFillTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -504,7 +632,7 @@ class BatchingLayer {
     }
 
     drawHighlightedEdgesTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numHighlightedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -515,7 +643,7 @@ class BatchingLayer {
     //-- SELECTED ------------------------------------------------------------------------------------------------------
 
     drawSelectedFillOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -524,7 +652,7 @@ class BatchingLayer {
     }
 
     drawSelectedEdgesOpaque(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -533,7 +661,7 @@ class BatchingLayer {
     }
 
     drawSelectedFillTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
@@ -542,7 +670,7 @@ class BatchingLayer {
     }
 
     drawSelectedEdgesTransparent(frameCtx) {
-        if (this.numVisibleObjects === 0 || this.numSelectedObjects === 0) {
+        if (this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
@@ -553,7 +681,7 @@ class BatchingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(frameCtx) {
-        if (this.numVisibleObjects === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         if (this._pickRenderer) {
@@ -582,10 +710,10 @@ class BatchingLayer {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
         if (!this._fillRenderer) {
-            this._fillRenderer = BatchingEmphasisFillRenderer.get(this);
+            this._fillRenderer = BatchingFillRenderer.get(this);
         }
         if (!this._edgesRenderer) {
-            this._edgesRenderer = BatchingEmphasisEdgesRenderer.get(this);
+            this._edgesRenderer = BatchingEdgesRenderer.get(this);
         }
         if (!this._pickRenderer) {
             this._pickRenderer = BatchingPickRenderer.get(this);

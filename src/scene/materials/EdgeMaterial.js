@@ -25,16 +25,19 @@ const PRESETS = {
 };
 
 /**
- * @desc Configures the appearance of {@link Mesh}es when their edges are emphasised.
+ * @desc Configures the appearance of {@link Entity}s when their edges are emphasised.
  *
- * * Emphasise edges of a {@link Mesh} by setting {@link Mesh#edges} ````true````.
- * * When {@link Mesh}es are within the subtree of a {@link Node}, then setting {@link Node#edges} ````true```` will collectively set {@link Mesh#edges} ````true```` on all those {@link Mesh}es.
+ * * Emphasise edges of an {@link Entity} by setting {@link Entity#edges} ````true````.
+ * * When {@link Entity}s are within the subtree of a root {@link Entity}, then setting {@link Entity#edges} on the root
+ * will collectively set that property on all sub-{@link Entity}s.
  * * EdgeMaterial provides several presets. Select a preset by setting {@link EdgeMaterial#preset} to the ID of a preset in {@link EdgeMaterial#presets}.
  * * By default, a {@link Mesh} uses the default EdgeMaterial in {@link Scene#edgeMaterial}, but you can assign each {@link Mesh#edgeMaterial} to a custom EdgeMaterial if required.
  *
  * ## Usage
  *
  * In the example below, we'll create a {@link Mesh} with its own EdgeMaterial and set {@link Mesh#edges} ````true```` to emphasise its edges.
+ *
+ * Recall that {@link Mesh} is a concrete subtype of the abstract {@link Entity} base class.
  *
  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_EdgeMaterial)]
  *
@@ -46,25 +49,25 @@ const PRESETS = {
  * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
  * import {EdgeMaterial} from "../src/scene/materials/EdgeMaterial.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *      canvasId: "myCanvas",
  *      transparent: true
  * });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
+ * new Mesh(viewer.scene, {
  *
- *      geometry: buildSphereGeometry(ReadableGeometry, myViewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
  *          radius: 1.5,
  *          heightSegments: 24,
  *          widthSegments: 16,
  *          edgeThreshold: 2 // Default is 10
- *      }),
+ *      })),
  *
- *      material: new PhongMaterial(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
  *          diffuse: [0.4, 0.4, 1.0],
  *          ambient: [0.9, 0.3, 0.9],
  *          shininess: 30,
@@ -72,7 +75,7 @@ const PRESETS = {
  *          alphaMode: "blend"
  *      }),
  *
- *      edgeMaterial: new EdgeMaterial(myViewer.scene, {
+ *      edgeMaterial: new EdgeMaterial(viewer.scene, {
  *          edgeColor: [0.0, 0.0, 1.0]
  *          edgeAlpha: 1.0,
  *          edgeWidth: 2
@@ -94,16 +97,19 @@ const PRESETS = {
  *
  * ````javascript
  * new Mesh({
- *     geometry: new TeapotGeometry(myViewer.scene, {
- *         edgeThreshold: 5
- *     }),
- *     material: new PhongMaterial(myViewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
+ *          radius: 1.5,
+ *          heightSegments: 24,
+ *          widthSegments: 16,
+ *          edgeThreshold: 2 // Default is 10
+ *      })),
+ *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
  *     edges: true
  * });
  *
- * var edgeMaterial = myViewer.scene.edgeMaterial;
+ * var edgeMaterial = viewer.scene.edgeMaterial;
  *
  * edgeMaterial.edgeColor = [0.2, 1.0, 0.2];
  * edgeMaterial.edgeAlpha = 1.0;
@@ -115,13 +121,13 @@ const PRESETS = {
  * Let's switch the {@link Scene#edgeMaterial} to one of the presets in {@link EdgeMaterial#presets}:
  *
  * ````javascript
- * myViewer.edgeMaterial.preset = EdgeMaterial.presets["sepia"];
+ * viewer.edgeMaterial.preset = EdgeMaterial.presets["sepia"];
  * ````
  *
  * We can also create an EdgeMaterial from a preset, while overriding properties of the preset as required:
  *
  * ````javascript
- * var myEdgeMaterial = new EdgeMaterial(myViewer.scene, {
+ * var myEdgeMaterial = new EdgeMaterial(viewer.scene, {
  *      preset: "sepia",
  *      edgeColor = [1.0, 0.5, 0.5]
  * });

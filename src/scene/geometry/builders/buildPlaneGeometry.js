@@ -26,16 +26,16 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * viewer.camera.look = [0, 0, 0];
  * viewer.camera.up = [0, 1, 0];
 
- * new Mesh(myViewer.scene, {
- *     geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *     geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {
  *          center: [0,0,0],
  *          xSize: 2,
  *          zSize: 2,
  *          xSegments: 10,
  *          zSegments: 10
  *      }),
- *      material: new PhongMaterial(myViewer.scene, {
- *          diffuseMap: new Texture(myViewer.scene, {
+ *      material: new PhongMaterial(viewer.scene, {
+ *          diffuseMap: new Texture(viewer.scene, {
  *              src: "textures/diffuse/uvGrid2.jpg"
  *          })
  *      })
@@ -54,7 +54,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * @param {Number} [cfg.zSegments=1] Number of segments on the Z-axis.
  * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
  */
-function buildPlaneGeometry(geometryClass, owner, cfg = {}) {
+function buildPlaneGeometry(cfg = {}) {
 
     let xSize = cfg.xSize || 1;
     if (xSize < 0) {
@@ -165,12 +165,12 @@ function buildPlaneGeometry(geometryClass, owner, cfg = {}) {
         }
     }
 
-    return new geometryClass(owner, utils.apply(cfg, {
+    return utils.apply(cfg, {
         positions: positions,
         normals: normals,
         uv: uvs,
         indices: indices
-    }));
+    });
 }
 
 export {buildPlaneGeometry};

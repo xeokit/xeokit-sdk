@@ -24,16 +24,16 @@ import {math} from '../math/math.js';
  * import {Geometry} from "../src/scene/geometry/Geometry.js";
  * import {LambertMaterial} from "../src/scene/materials/LambertMaterial.js";
  *
- * const myViewer = new Viewer({
+ * const viewer = new Viewer({
  *     canvasId: "myCanvas"
  * });
  *
- * myViewer.scene.camera.eye = [0, 0, 5];
- * myViewer.scene.camera.look = [0, 0, 0];
- * myViewer.scene.camera.up = [0, 1, 0];
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
  *
- * new Mesh(myViewer.scene, {
- *      geometry: buildTorusGeometry(Geometry, myViewer.scene, {
+ * new Mesh(viewer.scene, {
+ *      geometry: buildTorusGeometry(Geometry, viewer.scene, {
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,
@@ -41,7 +41,7 @@ import {math} from '../math/math.js';
  *          tubeSegments: 8,
  *          arc: Math.PI * 2.0
  *      }),
- *      material: new LambertMaterial(myViewer.scene, {
+ *      material: new LambertMaterial(viewer.scene, {
  *          ambient: [0.3, 0.3, 0.3],
  *          color: [0.5, 0.5, 0.0],
  *          alpha: 1.0, // Default
