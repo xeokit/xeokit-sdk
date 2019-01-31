@@ -18,33 +18,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "xeokit-sdk/src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html",
-    "<span>BIMServerBigLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js</span>",
-    "class"
-  ],
-  [
     "xeokit-sdk/src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin",
     "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html",
     "<span>BIMServerLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/src/scene/bigmodels/bigmodel.js~bigmodel",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html",
-    "<span>BigModel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/BigModel.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html",
-    "<span>BigModelMesh</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/BigModelMesh.js</span>",
-    "class"
-  ],
-  [
-    "xeokit-sdk/src/scene/bigmodels/bigmodelnode.js~bigmodelnode",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html",
-    "<span>BigModelNode</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/bigModels/BigModelNode.js</span>",
     "class"
   ],
   [
@@ -168,12 +144,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "xeokit-sdk/src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html",
-    "<span>GLTFBigModelLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js</span>",
-    "class"
-  ],
-  [
     "xeokit-sdk/src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin",
     "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html",
     "<span>GLTFLoaderPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</span>",
@@ -291,6 +261,12 @@ window.esdocSearchIndex = [
     "xeokit-sdk/src/scene/paths/path.js~path",
     "class/src/scene/paths/Path.js~Path.html",
     "<span>Path</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/paths/Path.js</span>",
+    "class"
+  ],
+  [
+    "xeokit-sdk/src/scene/performancemodel/performancemodel.js~performancemodel",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html",
+    "<span>PerformanceModel</span> <span class=\"search-result-import-path\">xeokit-sdk/src/scene/PerformanceModel/PerformanceModel.js</span>",
     "class"
   ],
   [
@@ -918,12 +894,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/scene/drawable.js",
-    "file/src/scene/Drawable.js.html",
-    "src/scene/Drawable.js",
-    "file"
-  ],
-  [
     "src/scene/entity.js",
     "file/src/scene/Entity.js.html",
     "src/scene/Entity.js",
@@ -949,13 +919,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/entity.js~entity#clippable",
-    "class/src/scene/Entity.js~Entity.html#instance-set-clippable",
+    "class/src/scene/Entity.js~Entity.html#instance-get-clippable",
     "src/scene/Entity.js~Entity#clippable",
     "member"
   ],
   [
     "src/scene/entity.js~entity#clippable",
-    "class/src/scene/Entity.js~Entity.html#instance-get-clippable",
+    "class/src/scene/Entity.js~Entity.html#instance-set-clippable",
     "src/scene/Entity.js~Entity#clippable",
     "member"
   ],
@@ -985,15 +955,21 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/entity.js~entity#culled",
-    "class/src/scene/Entity.js~Entity.html#instance-get-culled",
+    "class/src/scene/Entity.js~Entity.html#instance-set-culled",
     "src/scene/Entity.js~Entity#culled",
     "member"
   ],
   [
     "src/scene/entity.js~entity#culled",
-    "class/src/scene/Entity.js~Entity.html#instance-set-culled",
+    "class/src/scene/Entity.js~Entity.html#instance-get-culled",
     "src/scene/Entity.js~Entity#culled",
     "member"
+  ],
+  [
+    "src/scene/entity.js~entity#destroy",
+    "class/src/scene/Entity.js~Entity.html#instance-method-destroy",
+    "src/scene/Entity.js~Entity#destroy",
+    "method"
   ],
   [
     "src/scene/entity.js~entity#edges",
@@ -1021,13 +997,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/entity.js~entity#highlighted",
-    "class/src/scene/Entity.js~Entity.html#instance-get-highlighted",
+    "class/src/scene/Entity.js~Entity.html#instance-set-highlighted",
     "src/scene/Entity.js~Entity#highlighted",
     "member"
   ],
   [
     "src/scene/entity.js~entity#highlighted",
-    "class/src/scene/Entity.js~Entity.html#instance-set-highlighted",
+    "class/src/scene/Entity.js~Entity.html#instance-get-highlighted",
     "src/scene/Entity.js~Entity#highlighted",
     "member"
   ],
@@ -1057,20 +1033,20 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/entity.js~entity#opacity",
-    "class/src/scene/Entity.js~Entity.html#instance-get-opacity",
-    "src/scene/Entity.js~Entity#opacity",
-    "member"
-  ],
-  [
-    "src/scene/entity.js~entity#opacity",
     "class/src/scene/Entity.js~Entity.html#instance-set-opacity",
     "src/scene/Entity.js~Entity#opacity",
     "member"
   ],
   [
-    "src/scene/entity.js~entity#pickable",
-    "class/src/scene/Entity.js~Entity.html#instance-get-pickable",
-    "src/scene/Entity.js~Entity#pickable",
+    "src/scene/entity.js~entity#opacity",
+    "class/src/scene/Entity.js~Entity.html#instance-get-opacity",
+    "src/scene/Entity.js~Entity#opacity",
+    "member"
+  ],
+  [
+    "src/scene/entity.js~entity#parent",
+    "class/src/scene/Entity.js~Entity.html#instance-get-parent",
+    "src/scene/Entity.js~Entity#parent",
     "member"
   ],
   [
@@ -1080,14 +1056,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/entity.js~entity#receivesshadow",
-    "class/src/scene/Entity.js~Entity.html#instance-set-receivesShadow",
-    "src/scene/Entity.js~Entity#receivesShadow",
+    "src/scene/entity.js~entity#pickable",
+    "class/src/scene/Entity.js~Entity.html#instance-get-pickable",
+    "src/scene/Entity.js~Entity#pickable",
     "member"
   ],
   [
     "src/scene/entity.js~entity#receivesshadow",
     "class/src/scene/Entity.js~Entity.html#instance-get-receivesShadow",
+    "src/scene/Entity.js~Entity#receivesShadow",
+    "member"
+  ],
+  [
+    "src/scene/entity.js~entity#receivesshadow",
+    "class/src/scene/Entity.js~Entity.html#instance-set-receivesShadow",
     "src/scene/Entity.js~Entity#receivesShadow",
     "member"
   ],
@@ -1116,711 +1098,441 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js",
-    "file/src/scene/bigModels/BigModel.js.html",
-    "src/scene/bigModels/BigModel.js",
+    "src/scene/performancemodel/performancemesh.js",
+    "file/src/scene/PerformanceModel/PerformanceMesh.js.html",
+    "src/scene/PerformanceModel/PerformanceMesh.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#aabb",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-aabb",
-    "src/scene/bigModels/BigModel.js~BigModel#aabb",
+    "src/scene/performancemodel/performancemodel.js",
+    "file/src/scene/PerformanceModel/PerformanceModel.js.html",
+    "src/scene/PerformanceModel/PerformanceModel.js",
+    "file"
+  ],
+  [
+    "src/scene/performancemodel/performancemodel.js~performancemodel#aabb",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-aabb",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#aabb",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#castsshadow",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-castsShadow",
-    "src/scene/bigModels/BigModel.js~BigModel#castsShadow",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#castsshadow",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-castsShadow",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#castsShadow",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#castsshadow",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-castsShadow",
-    "src/scene/bigModels/BigModel.js~BigModel#castsShadow",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#castsshadow",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-castsShadow",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#castsShadow",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#clippable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-clippable",
-    "src/scene/bigModels/BigModel.js~BigModel#clippable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#clippable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-clippable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#clippable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#clippable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-clippable",
-    "src/scene/bigModels/BigModel.js~BigModel#clippable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#clippable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-clippable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#clippable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#collidable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-collidable",
-    "src/scene/bigModels/BigModel.js~BigModel#collidable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#collidable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-collidable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#collidable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#collidable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-collidable",
-    "src/scene/bigModels/BigModel.js~BigModel#collidable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#collidable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-collidable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#collidable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#colorize",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-colorize",
-    "src/scene/bigModels/BigModel.js~BigModel#colorize",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#colorize",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-colorize",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#colorize",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#colorize",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-colorize",
-    "src/scene/bigModels/BigModel.js~BigModel#colorize",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#colorize",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-colorize",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#colorize",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#constructor",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-constructor-constructor",
-    "src/scene/bigModels/BigModel.js~BigModel#constructor",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#constructor",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-constructor-constructor",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#constructor",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#creategeometry",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createGeometry",
-    "src/scene/bigModels/BigModel.js~BigModel#createGeometry",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#createentity",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-createEntity",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#createEntity",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#createmesh",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createMesh",
-    "src/scene/bigModels/BigModel.js~BigModel#createMesh",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#creategeometry",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-createGeometry",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#createGeometry",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#createnode",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-createNode",
-    "src/scene/bigModels/BigModel.js~BigModel#createNode",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#createmesh",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-createMesh",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#createMesh",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#culled",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-culled",
-    "src/scene/bigModels/BigModel.js~BigModel#culled",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#culled",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-culled",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#culled",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#culled",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-culled",
-    "src/scene/bigModels/BigModel.js~BigModel#culled",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#culled",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-culled",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#culled",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#destroy",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-destroy",
-    "src/scene/bigModels/BigModel.js~BigModel#destroy",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#destroy",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-destroy",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#destroy",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#edgematerial",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-edgeMaterial",
-    "src/scene/bigModels/BigModel.js~BigModel#edgeMaterial",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#edgematerial",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edgeMaterial",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edgeMaterial",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#edges",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-edges",
-    "src/scene/bigModels/BigModel.js~BigModel#edges",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#edges",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-edges",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#edges",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-edges",
-    "src/scene/bigModels/BigModel.js~BigModel#edges",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#edges",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-edges",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#edges",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#finalize",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-method-finalize",
-    "src/scene/bigModels/BigModel.js~BigModel#finalize",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#finalize",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-finalize",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#finalize",
     "method"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#ghostmaterial",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghostMaterial",
-    "src/scene/bigModels/BigModel.js~BigModel#ghostMaterial",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#ghostmaterial",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-ghostMaterial",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghostMaterial",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#ghosted",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-ghosted",
-    "src/scene/bigModels/BigModel.js~BigModel#ghosted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#ghosted",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-ghosted",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghosted",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#ghosted",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-ghosted",
-    "src/scene/bigModels/BigModel.js~BigModel#ghosted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#ghosted",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-ghosted",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghosted",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#highlightmaterial",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlightMaterial",
-    "src/scene/bigModels/BigModel.js~BigModel#highlightMaterial",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#highlightmaterial",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-highlightMaterial",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#highlightMaterial",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#highlighted",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-highlighted",
-    "src/scene/bigModels/BigModel.js~BigModel#highlighted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#highlighted",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-highlighted",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#highlighted",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#highlighted",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-highlighted",
-    "src/scene/bigModels/BigModel.js~BigModel#highlighted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#highlighted",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-highlighted",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#highlighted",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#isbigmodel",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-isBigModel",
-    "src/scene/bigModels/BigModel.js~BigModel#isBigModel",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#isdrawable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-isDrawable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#isDrawable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#isdrawable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-isDrawable",
-    "src/scene/bigModels/BigModel.js~BigModel#isDrawable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#isentity",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-isEntity",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#isEntity",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#isentity",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-isEntity",
-    "src/scene/bigModels/BigModel.js~BigModel#isEntity",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#ismodel",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-isModel",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#isModel",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#ismodel",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-isModel",
-    "src/scene/bigModels/BigModel.js~BigModel#isModel",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#isobject",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-isObject",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#isObject",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#isobject",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-isObject",
-    "src/scene/bigModels/BigModel.js~BigModel#isObject",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#isperformancemodel",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-isPerformanceModel",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#isPerformanceModel",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#matrix",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-matrix",
-    "src/scene/bigModels/BigModel.js~BigModel#matrix",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#matrix",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-matrix",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#matrix",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numedgesobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numEdgesObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numEdgesObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#opacity",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-opacity",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#opacity",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numgeometries",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGeometries",
-    "src/scene/bigModels/BigModel.js~BigModel#numGeometries",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#opacity",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-opacity",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#opacity",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numghostedobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numGhostedObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numGhostedObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#pickable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-pickable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#pickable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numhighlightedobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numHighlightedObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numHighlightedObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#pickable",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-pickable",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#pickable",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#position",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-position",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#position",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numselectedobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numSelectedObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numSelectedObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#quaternion",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-quaternion",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#quaternion",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numtransparentobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numTransparentObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numTransparentObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#receivesshadow",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-receivesShadow",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#receivesShadow",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#numvisibleobjects",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-member-numVisibleObjects",
-    "src/scene/bigModels/BigModel.js~BigModel#numVisibleObjects",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#receivesshadow",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-receivesShadow",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#receivesShadow",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#opacity",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-opacity",
-    "src/scene/bigModels/BigModel.js~BigModel#opacity",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#rotation",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-rotation",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#rotation",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#opacity",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-opacity",
-    "src/scene/bigModels/BigModel.js~BigModel#opacity",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#scale",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-scale",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#scale",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#pickable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-pickable",
-    "src/scene/bigModels/BigModel.js~BigModel#pickable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#selected",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-selected",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#selected",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#pickable",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-pickable",
-    "src/scene/bigModels/BigModel.js~BigModel#pickable",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#selected",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-selected",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#selected",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#position",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-position",
-    "src/scene/bigModels/BigModel.js~BigModel#position",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#selectedmaterial",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-selectedMaterial",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#selectedMaterial",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#quaternion",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-quaternion",
-    "src/scene/bigModels/BigModel.js~BigModel#quaternion",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#visible",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-visible",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#visible",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#receivesshadow",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-receivesShadow",
-    "src/scene/bigModels/BigModel.js~BigModel#receivesShadow",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#visible",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-visible",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#visible",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#receivesshadow",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-receivesShadow",
-    "src/scene/bigModels/BigModel.js~BigModel#receivesShadow",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#worldmatrix",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-worldMatrix",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#worldMatrix",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#rotation",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-rotation",
-    "src/scene/bigModels/BigModel.js~BigModel#rotation",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#worldnormalmatrix",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-worldNormalMatrix",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#worldNormalMatrix",
     "member"
   ],
   [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#scale",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-scale",
-    "src/scene/bigModels/BigModel.js~BigModel#scale",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#selected",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-selected",
-    "src/scene/bigModels/BigModel.js~BigModel#selected",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#selected",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-selected",
-    "src/scene/bigModels/BigModel.js~BigModel#selected",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#selectedmaterial",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-selectedMaterial",
-    "src/scene/bigModels/BigModel.js~BigModel#selectedMaterial",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#visible",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-visible",
-    "src/scene/bigModels/BigModel.js~BigModel#visible",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#visible",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-set-visible",
-    "src/scene/bigModels/BigModel.js~BigModel#visible",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#worldmatrix",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldMatrix",
-    "src/scene/bigModels/BigModel.js~BigModel#worldMatrix",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodel.js~bigmodel#worldnormalmatrix",
-    "class/src/scene/bigModels/BigModel.js~BigModel.html#instance-get-worldNormalMatrix",
-    "src/scene/bigModels/BigModel.js~BigModel#worldNormalMatrix",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js",
-    "file/src/scene/bigModels/BigModelMesh.js.html",
-    "src/scene/bigModels/BigModelMesh.js",
+    "src/scene/performancemodel/performancenode.js",
+    "file/src/scene/PerformanceModel/PerformanceNode.js.html",
+    "src/scene/PerformanceModel/PerformanceNode.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#aabb",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-member-aabb",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#aabb",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#constructor",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-constructor-constructor",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#constructor",
-    "method"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#drawpicktriangles",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-method-drawPickTriangles",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#drawPickTriangles",
-    "method"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#fire",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-method-fire",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#fire",
-    "method"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#getpickresult",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-method-getPickResult",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#getPickResult",
-    "method"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#id",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-member-id",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#id",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#model",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-member-model",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#model",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#object",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-member-object",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#object",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelmesh.js~bigmodelmesh#parent",
-    "class/src/scene/bigModels/BigModelMesh.js~BigModelMesh.html#instance-member-parent",
-    "src/scene/bigModels/BigModelMesh.js~BigModelMesh#parent",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js",
-    "file/src/scene/bigModels/BigModelNode.js.html",
-    "src/scene/bigModels/BigModelNode.js",
+    "src/scene/performancemodel/batching/batchingbuffer.js",
+    "file/src/scene/PerformanceModel/batching/batchingBuffer.js.html",
+    "src/scene/PerformanceModel/batching/batchingBuffer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#aabb",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-aabb",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#aabb",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#castsshadow",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-castsShadow",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#castsShadow",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#castsshadow",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-castsShadow",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#castsShadow",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#clippable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-clippable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#clippable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#clippable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-clippable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#clippable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#collidable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-collidable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#collidable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#collidable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-collidable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#collidable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#colorize",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-colorize",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#colorize",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#colorize",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-colorize",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#colorize",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#culled",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-culled",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#culled",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#culled",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-culled",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#culled",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#edges",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-edges",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#edges",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#edges",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-edges",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#edges",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#ghosted",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-ghosted",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#ghosted",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#ghosted",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-ghosted",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#ghosted",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#highlighted",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-highlighted",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#highlighted",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#highlighted",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-highlighted",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#highlighted",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#id",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-member-id",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#id",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#ismodel",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-isModel",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#isModel",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#isobject",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-isObject",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#isObject",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#meshes",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-member-meshes",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#meshes",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#model",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-member-model",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#model",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#opacity",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-opacity",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#opacity",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#opacity",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-opacity",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#opacity",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#pickable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-pickable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#pickable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#pickable",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-pickable",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#pickable",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#receivesshadow",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-receivesShadow",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#receivesShadow",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#receivesshadow",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-receivesShadow",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#receivesShadow",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#selected",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-selected",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#selected",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#selected",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-selected",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#selected",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#visible",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-get-visible",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#visible",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/bigmodelnode.js~bigmodelnode#visible",
-    "class/src/scene/bigModels/BigModelNode.js~BigModelNode.html#instance-set-visible",
-    "src/scene/bigModels/BigModelNode.js~BigModelNode#visible",
-    "member"
-  ],
-  [
-    "src/scene/bigmodels/batching/batchingbuffer.js",
-    "file/src/scene/bigModels/batching/batchingBuffer.js.html",
-    "src/scene/bigModels/batching/batchingBuffer.js",
+    "src/scene/performancemodel/batching/batchingdrawrenderer.js",
+    "file/src/scene/PerformanceModel/batching/batchingDrawRenderer.js.html",
+    "src/scene/PerformanceModel/batching/batchingDrawRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/batchinglayer.js",
-    "file/src/scene/bigModels/batching/batchingLayer.js.html",
-    "src/scene/bigModels/batching/batchingLayer.js",
+    "src/scene/performancemodel/batching/batchingdrawshadersource.js",
+    "file/src/scene/PerformanceModel/batching/batchingDrawShaderSource.js.html",
+    "src/scene/PerformanceModel/batching/batchingDrawShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/draw/batchingdrawrenderer.js",
-    "file/src/scene/bigModels/batching/draw/batchingDrawRenderer.js.html",
-    "src/scene/bigModels/batching/draw/batchingDrawRenderer.js",
+    "src/scene/performancemodel/batching/batchingedgesrenderer.js",
+    "file/src/scene/PerformanceModel/batching/batchingEdgesRenderer.js.html",
+    "src/scene/PerformanceModel/batching/batchingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/draw/batchingdrawshadersource.js",
-    "file/src/scene/bigModels/batching/draw/batchingDrawShaderSource.js.html",
-    "src/scene/bigModels/batching/draw/batchingDrawShaderSource.js",
+    "src/scene/performancemodel/batching/batchingedgesshadersource.js",
+    "file/src/scene/PerformanceModel/batching/batchingEdgesShaderSource.js.html",
+    "src/scene/PerformanceModel/batching/batchingEdgesShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/emphasis/batchingemphasisedgesrenderer.js",
-    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js.html",
-    "src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesRenderer.js",
+    "src/scene/performancemodel/batching/batchingfillrenderer.js",
+    "file/src/scene/PerformanceModel/batching/batchingFillRenderer.js.html",
+    "src/scene/PerformanceModel/batching/batchingFillRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/emphasis/batchingemphasisedgesshadersource.js",
-    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js.html",
-    "src/scene/bigModels/batching/emphasis/batchingEmphasisEdgesShaderSource.js",
+    "src/scene/performancemodel/batching/batchingfillshadersource.js",
+    "file/src/scene/PerformanceModel/batching/batchingFillShaderSource.js.html",
+    "src/scene/PerformanceModel/batching/batchingFillShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/emphasis/batchingemphasisfillrenderer.js",
-    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js.html",
-    "src/scene/bigModels/batching/emphasis/batchingEmphasisFillRenderer.js",
+    "src/scene/performancemodel/batching/batchinglayer.js",
+    "file/src/scene/PerformanceModel/batching/batchingLayer.js.html",
+    "src/scene/PerformanceModel/batching/batchingLayer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/emphasis/batchingemphasisfillshadersource.js",
-    "file/src/scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js.html",
-    "src/scene/bigModels/batching/emphasis/batchingEmphasisFillShaderSource.js",
+    "src/scene/performancemodel/batching/batchingpickrenderer.js",
+    "file/src/scene/PerformanceModel/batching/batchingPickRenderer.js.html",
+    "src/scene/PerformanceModel/batching/batchingPickRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/pick/batchingpickrenderer.js",
-    "file/src/scene/bigModels/batching/pick/batchingPickRenderer.js.html",
-    "src/scene/bigModels/batching/pick/batchingPickRenderer.js",
+    "src/scene/performancemodel/batching/batchingpickshadersource.js",
+    "file/src/scene/PerformanceModel/batching/batchingPickShaderSource.js.html",
+    "src/scene/PerformanceModel/batching/batchingPickShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/batching/pick/batchingpickshadersource.js",
-    "file/src/scene/bigModels/batching/pick/batchingPickShaderSource.js.html",
-    "src/scene/bigModels/batching/pick/batchingPickShaderSource.js",
+    "src/scene/performancemodel/instancing/instancingdrawrenderer.js",
+    "file/src/scene/PerformanceModel/instancing/instancingDrawRenderer.js.html",
+    "src/scene/PerformanceModel/instancing/instancingDrawRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/instancing/draw/instancingdrawrenderer.js",
-    "file/src/scene/bigModels/instancing/draw/instancingDrawRenderer.js.html",
-    "src/scene/bigModels/instancing/draw/instancingDrawRenderer.js",
+    "src/scene/performancemodel/instancing/instancingdrawshadersource.js",
+    "file/src/scene/PerformanceModel/instancing/instancingDrawShaderSource.js.html",
+    "src/scene/PerformanceModel/instancing/instancingDrawShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/instancing/draw/instancingdrawshadersource.js",
-    "file/src/scene/bigModels/instancing/draw/instancingDrawShaderSource.js.html",
-    "src/scene/bigModels/instancing/draw/instancingDrawShaderSource.js",
+    "src/scene/performancemodel/instancing/instancingedgesrenderer.js",
+    "file/src/scene/PerformanceModel/instancing/instancingEdgesRenderer.js.html",
+    "src/scene/PerformanceModel/instancing/instancingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/instancing/instancinglayer.js",
-    "file/src/scene/bigModels/instancing/instancingLayer.js.html",
-    "src/scene/bigModels/instancing/instancingLayer.js",
+    "src/scene/performancemodel/instancing/instancingedgesshadersource.js",
+    "file/src/scene/PerformanceModel/instancing/instancingEdgesShaderSource.js.html",
+    "src/scene/PerformanceModel/instancing/instancingEdgesShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/instancing/pick/instancingpickrenderer.js",
-    "file/src/scene/bigModels/instancing/pick/instancingPickRenderer.js.html",
-    "src/scene/bigModels/instancing/pick/instancingPickRenderer.js",
+    "src/scene/performancemodel/instancing/instancingfillrenderer.js",
+    "file/src/scene/PerformanceModel/instancing/instancingFillRenderer.js.html",
+    "src/scene/PerformanceModel/instancing/instancingFillRenderer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/instancing/pick/instancingpickshadersource.js",
-    "file/src/scene/bigModels/instancing/pick/instancingPickShaderSource.js.html",
-    "src/scene/bigModels/instancing/pick/instancingPickShaderSource.js",
+    "src/scene/performancemodel/instancing/instancingfillshadersource.js",
+    "file/src/scene/PerformanceModel/instancing/instancingFillShaderSource.js.html",
+    "src/scene/PerformanceModel/instancing/instancingFillShaderSource.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/renderflags.js",
-    "file/src/scene/bigModels/renderFlags.js.html",
-    "src/scene/bigModels/renderFlags.js",
+    "src/scene/performancemodel/instancing/instancinglayer.js",
+    "file/src/scene/PerformanceModel/instancing/instancingLayer.js.html",
+    "src/scene/PerformanceModel/instancing/instancingLayer.js",
     "file"
   ],
   [
-    "src/scene/bigmodels/renderpasses.js",
-    "file/src/scene/bigModels/renderPasses.js.html",
-    "src/scene/bigModels/renderPasses.js",
+    "src/scene/performancemodel/instancing/instancingpickrenderer.js",
+    "file/src/scene/PerformanceModel/instancing/instancingPickRenderer.js.html",
+    "src/scene/PerformanceModel/instancing/instancingPickRenderer.js",
+    "file"
+  ],
+  [
+    "src/scene/performancemodel/instancing/instancingpickshadersource.js",
+    "file/src/scene/PerformanceModel/instancing/instancingPickShaderSource.js.html",
+    "src/scene/PerformanceModel/instancing/instancingPickShaderSource.js",
+    "file"
+  ],
+  [
+    "src/scene/performancemodel/renderflags.js",
+    "file/src/scene/PerformanceModel/renderFlags.js.html",
+    "src/scene/PerformanceModel/renderFlags.js",
+    "file"
+  ],
+  [
+    "src/scene/performancemodel/renderpasses.js",
+    "file/src/scene/PerformanceModel/renderPasses.js.html",
+    "src/scene/PerformanceModel/renderPasses.js",
     "file"
   ],
   [
@@ -1849,13 +1561,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/camera.js~camera#devicematrix",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix",
     "src/scene/camera/Camera.js~Camera#deviceMatrix",
     "member"
   ],
   [
     "src/scene/camera/camera.js~camera#devicematrix",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-set-deviceMatrix",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-deviceMatrix",
     "src/scene/camera/Camera.js~Camera#deviceMatrix",
     "member"
   ],
@@ -1885,25 +1597,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/camera.js~camera#gimballock",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
-    "src/scene/camera/Camera.js~Camera#gimbalLock",
-    "member"
-  ],
-  [
-    "src/scene/camera/camera.js~camera#gimballock",
     "class/src/scene/camera/Camera.js~Camera.html#instance-get-gimbalLock",
     "src/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
   [
-    "src/scene/camera/camera.js~camera#look",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-set-look",
-    "src/scene/camera/Camera.js~Camera#look",
+    "src/scene/camera/camera.js~camera#gimballock",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-gimbalLock",
+    "src/scene/camera/Camera.js~Camera#gimbalLock",
     "member"
   ],
   [
     "src/scene/camera/camera.js~camera#look",
     "class/src/scene/camera/Camera.js~Camera.html#instance-get-look",
+    "src/scene/camera/Camera.js~Camera#look",
+    "member"
+  ],
+  [
+    "src/scene/camera/camera.js~camera#look",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-look",
     "src/scene/camera/Camera.js~Camera#look",
     "member"
   ],
@@ -2005,13 +1717,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/camera.js~camera#worldaxis",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
     "src/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
   [
     "src/scene/camera/camera.js~camera#worldaxis",
-    "class/src/scene/camera/Camera.js~Camera.html#instance-get-worldAxis",
+    "class/src/scene/camera/Camera.js~Camera.html#instance-set-worldAxis",
     "src/scene/camera/Camera.js~Camera#worldAxis",
     "member"
   ],
@@ -2053,13 +1765,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#active",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-active",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-active",
     "src/scene/camera/CameraControl.js~CameraControl#active",
     "member"
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#active",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-active",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-active",
     "src/scene/camera/CameraControl.js~CameraControl#active",
     "member"
   ],
@@ -2071,25 +1783,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
-    "src/scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
-    "member"
-  ],
-  [
-    "src/scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
     "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-doublePickFlyTo",
     "src/scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
     "member"
   ],
   [
-    "src/scene/camera/cameracontrol.js~cameracontrol#firstperson",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson",
-    "src/scene/camera/CameraControl.js~CameraControl#firstPerson",
+    "src/scene/camera/cameracontrol.js~cameracontrol#doublepickflyto",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-doublePickFlyTo",
+    "src/scene/camera/CameraControl.js~CameraControl#doublePickFlyTo",
     "member"
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#firstperson",
     "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-firstPerson",
+    "src/scene/camera/CameraControl.js~CameraControl#firstPerson",
+    "member"
+  ],
+  [
+    "src/scene/camera/cameracontrol.js~cameracontrol#firstperson",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-firstPerson",
     "src/scene/camera/CameraControl.js~CameraControl#firstPerson",
     "member"
   ],
@@ -2119,25 +1831,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#pantopointer",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer",
-    "src/scene/camera/CameraControl.js~CameraControl#panToPointer",
-    "member"
-  ],
-  [
-    "src/scene/camera/cameracontrol.js~cameracontrol#pantopointer",
     "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-panToPointer",
     "src/scene/camera/CameraControl.js~CameraControl#panToPointer",
     "member"
   ],
   [
-    "src/scene/camera/cameracontrol.js~cameracontrol#pivoting",
-    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting",
-    "src/scene/camera/CameraControl.js~CameraControl#pivoting",
+    "src/scene/camera/cameracontrol.js~cameracontrol#pantopointer",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-panToPointer",
+    "src/scene/camera/CameraControl.js~CameraControl#panToPointer",
     "member"
   ],
   [
     "src/scene/camera/cameracontrol.js~cameracontrol#pivoting",
     "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-get-pivoting",
+    "src/scene/camera/CameraControl.js~CameraControl#pivoting",
+    "member"
+  ],
+  [
+    "src/scene/camera/cameracontrol.js~cameracontrol#pivoting",
+    "class/src/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivoting",
     "src/scene/camera/CameraControl.js~CameraControl#pivoting",
     "member"
   ],
@@ -2185,25 +1897,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
-    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
-    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
-    "member"
-  ],
-  [
-    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
     "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fit",
     "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
   [
-    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
-    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fitFOV",
-    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fit",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fit",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fit",
     "member"
   ],
   [
     "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
     "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-fitFOV",
+    "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
+    "member"
+  ],
+  [
+    "src/scene/camera/cameraflightanimation.js~cameraflightanimation#fitfov",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-fitFOV",
     "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#fitFOV",
     "member"
   ],
@@ -2227,13 +1939,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
     "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
   [
     "src/scene/camera/cameraflightanimation.js~cameraflightanimation#trail",
-    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-set-trail",
+    "class/src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html#instance-get-trail",
     "src/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation#trail",
     "member"
   ],
@@ -2365,13 +2077,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/camerapathanimation.js~camerapathanimation#rate",
-    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-rate",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-rate",
     "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
     "member"
   ],
   [
     "src/scene/camera/camerapathanimation.js~camerapathanimation#rate",
-    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-get-rate",
+    "class/src/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html#instance-set-rate",
     "src/scene/camera/CameraPathAnimation.js~CameraPathAnimation#rate",
     "member"
   ],
@@ -2413,13 +2125,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/customprojection.js~customprojection#matrix",
-    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-matrix",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-set-matrix",
     "src/scene/camera/CustomProjection.js~CustomProjection#matrix",
     "member"
   ],
   [
     "src/scene/camera/customprojection.js~customprojection#matrix",
-    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-set-matrix",
+    "class/src/scene/camera/CustomProjection.js~CustomProjection.html#instance-get-matrix",
     "src/scene/camera/CustomProjection.js~CustomProjection#matrix",
     "member"
   ],
@@ -2527,13 +2239,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/ortho.js~ortho#far",
-    "class/src/scene/camera/Ortho.js~Ortho.html#instance-set-far",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-far",
     "src/scene/camera/Ortho.js~Ortho#far",
     "member"
   ],
   [
     "src/scene/camera/ortho.js~ortho#far",
-    "class/src/scene/camera/Ortho.js~Ortho.html#instance-get-far",
+    "class/src/scene/camera/Ortho.js~Ortho.html#instance-set-far",
     "src/scene/camera/Ortho.js~Ortho#far",
     "member"
   ],
@@ -2593,13 +2305,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/camera/perspective.js~perspective#fov",
-    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fov",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
     "src/scene/camera/Perspective.js~Perspective#fov",
     "member"
   ],
   [
     "src/scene/camera/perspective.js~perspective#fov",
-    "class/src/scene/camera/Perspective.js~Perspective.html#instance-get-fov",
+    "class/src/scene/camera/Perspective.js~Perspective.html#instance-set-fov",
     "src/scene/camera/Perspective.js~Perspective#fov",
     "member"
   ],
@@ -2653,13 +2365,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/canvas/canvas.js~canvas#backgroundimage",
-    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundImage",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundImage",
     "src/scene/canvas/Canvas.js~Canvas#backgroundImage",
     "member"
   ],
   [
     "src/scene/canvas/canvas.js~canvas#backgroundimage",
-    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-set-backgroundImage",
+    "class/src/scene/canvas/Canvas.js~Canvas.html#instance-get-backgroundImage",
     "src/scene/canvas/Canvas.js~Canvas#backgroundImage",
     "member"
   ],
@@ -2737,13 +2449,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/canvas/spinner.js~spinner#processes",
-    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-set-processes",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-get-processes",
     "src/scene/canvas/Spinner.js~Spinner#processes",
     "member"
   ],
   [
     "src/scene/canvas/spinner.js~spinner#processes",
-    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-get-processes",
+    "class/src/scene/canvas/Spinner.js~Spinner.html#instance-set-processes",
     "src/scene/canvas/Spinner.js~Spinner#processes",
     "member"
   ],
@@ -2839,13 +2551,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/geometry/readablegeometry.js~readablegeometry#positions",
-    "class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-positions",
+    "class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions",
     "src/scene/geometry/ReadableGeometry.js~ReadableGeometry#positions",
     "member"
   ],
   [
     "src/scene/geometry/readablegeometry.js~readablegeometry#positions",
-    "class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-get-positions",
+    "class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html#instance-set-positions",
     "src/scene/geometry/ReadableGeometry.js~ReadableGeometry#positions",
     "member"
   ],
@@ -3637,13 +3349,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/lights/ambientlight.js~ambientlight#color",
-    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-color",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color",
     "src/scene/lights/AmbientLight.js~AmbientLight#color",
     "member"
   ],
   [
     "src/scene/lights/ambientlight.js~ambientlight#color",
-    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-set-color",
+    "class/src/scene/lights/AmbientLight.js~AmbientLight.html#instance-get-color",
     "src/scene/lights/AmbientLight.js~AmbientLight#color",
     "member"
   ],
@@ -3697,25 +3409,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/lights/dirlight.js~dirlight#castsshadow",
-    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-castsShadow",
-    "src/scene/lights/DirLight.js~DirLight#castsShadow",
-    "member"
-  ],
-  [
-    "src/scene/lights/dirlight.js~dirlight#castsshadow",
     "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-castsShadow",
     "src/scene/lights/DirLight.js~DirLight#castsShadow",
     "member"
   ],
   [
-    "src/scene/lights/dirlight.js~dirlight#color",
-    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-color",
-    "src/scene/lights/DirLight.js~DirLight#color",
+    "src/scene/lights/dirlight.js~dirlight#castsshadow",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-castsShadow",
+    "src/scene/lights/DirLight.js~DirLight#castsShadow",
     "member"
   ],
   [
     "src/scene/lights/dirlight.js~dirlight#color",
     "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-color",
+    "src/scene/lights/DirLight.js~DirLight#color",
+    "member"
+  ],
+  [
+    "src/scene/lights/dirlight.js~dirlight#color",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-color",
     "src/scene/lights/DirLight.js~DirLight#color",
     "member"
   ],
@@ -3733,25 +3445,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/lights/dirlight.js~dirlight#dir",
-    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-dir",
-    "src/scene/lights/DirLight.js~DirLight#dir",
-    "member"
-  ],
-  [
-    "src/scene/lights/dirlight.js~dirlight#dir",
     "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-dir",
     "src/scene/lights/DirLight.js~DirLight#dir",
     "member"
   ],
   [
-    "src/scene/lights/dirlight.js~dirlight#intensity",
-    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-intensity",
-    "src/scene/lights/DirLight.js~DirLight#intensity",
+    "src/scene/lights/dirlight.js~dirlight#dir",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-dir",
+    "src/scene/lights/DirLight.js~DirLight#dir",
     "member"
   ],
   [
     "src/scene/lights/dirlight.js~dirlight#intensity",
     "class/src/scene/lights/DirLight.js~DirLight.html#instance-set-intensity",
+    "src/scene/lights/DirLight.js~DirLight#intensity",
+    "member"
+  ],
+  [
+    "src/scene/lights/dirlight.js~dirlight#intensity",
+    "class/src/scene/lights/DirLight.js~DirLight.html#instance-get-intensity",
     "src/scene/lights/DirLight.js~DirLight#intensity",
     "member"
   ],
@@ -3805,13 +3517,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/lights/pointlight.js~pointlight#color",
-    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-color",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-color",
     "src/scene/lights/PointLight.js~PointLight#color",
     "member"
   ],
   [
     "src/scene/lights/pointlight.js~pointlight#color",
-    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-color",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-color",
     "src/scene/lights/PointLight.js~PointLight#color",
     "member"
   ],
@@ -3841,25 +3553,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/lights/pointlight.js~pointlight#intensity",
-    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-intensity",
-    "src/scene/lights/PointLight.js~PointLight#intensity",
-    "member"
-  ],
-  [
-    "src/scene/lights/pointlight.js~pointlight#intensity",
     "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-intensity",
     "src/scene/lights/PointLight.js~PointLight#intensity",
     "member"
   ],
   [
-    "src/scene/lights/pointlight.js~pointlight#linearattenuation",
-    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-linearAttenuation",
-    "src/scene/lights/PointLight.js~PointLight#linearAttenuation",
+    "src/scene/lights/pointlight.js~pointlight#intensity",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-intensity",
+    "src/scene/lights/PointLight.js~PointLight#intensity",
     "member"
   ],
   [
     "src/scene/lights/pointlight.js~pointlight#linearattenuation",
     "class/src/scene/lights/PointLight.js~PointLight.html#instance-set-linearAttenuation",
+    "src/scene/lights/PointLight.js~PointLight#linearAttenuation",
+    "member"
+  ],
+  [
+    "src/scene/lights/pointlight.js~pointlight#linearattenuation",
+    "class/src/scene/lights/PointLight.js~PointLight.html#instance-get-linearAttenuation",
     "src/scene/lights/PointLight.js~PointLight#linearAttenuation",
     "member"
   ],
@@ -3979,13 +3691,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
     "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
   [
     "src/scene/materials/edgematerial.js~edgematerial#edgecolor",
-    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-edgeColor",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-edgeColor",
     "src/scene/materials/EdgeMaterial.js~EdgeMaterial#edgeColor",
     "member"
   ],
@@ -4003,13 +3715,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/edgematerial.js~edgematerial#preset",
-    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
     "src/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
   [
     "src/scene/materials/edgematerial.js~edgematerial#preset",
-    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-get-preset",
+    "class/src/scene/materials/EdgeMaterial.js~EdgeMaterial.html#instance-set-preset",
     "src/scene/materials/EdgeMaterial.js~EdgeMaterial#preset",
     "member"
   ],
@@ -4027,13 +3739,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
-    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-backfaces",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-backfaces",
     "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
     "member"
   ],
   [
     "src/scene/materials/emphasismaterial.js~emphasismaterial#backfaces",
-    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-backfaces",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-backfaces",
     "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#backfaces",
     "member"
   ],
@@ -4111,20 +3823,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
-    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillAlpha",
-    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
-    "member"
-  ],
-  [
-    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
     "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-fillAlpha",
     "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
     "member"
   ],
   [
-    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
-    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillColor",
-    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillalpha",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillAlpha",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillAlpha",
     "member"
   ],
   [
@@ -4134,14 +3840,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/materials/emphasismaterial.js~emphasismaterial#preset",
-    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-preset",
-    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#fillcolor",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-fillColor",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#fillColor",
     "member"
   ],
   [
     "src/scene/materials/emphasismaterial.js~emphasismaterial#preset",
     "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-preset",
+    "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
+    "member"
+  ],
+  [
+    "src/scene/materials/emphasismaterial.js~emphasismaterial#preset",
+    "class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-preset",
     "src/scene/materials/EmphasisMaterial.js~EmphasisMaterial#preset",
     "member"
   ],
@@ -4159,25 +3871,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/fresnel.js~fresnel#centerbias",
-    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
-    "src/scene/materials/Fresnel.js~Fresnel#centerBias",
-    "member"
-  ],
-  [
-    "src/scene/materials/fresnel.js~fresnel#centerbias",
     "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerBias",
     "src/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
-    "src/scene/materials/fresnel.js~fresnel#centercolor",
-    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerColor",
-    "src/scene/materials/Fresnel.js~Fresnel#centerColor",
+    "src/scene/materials/fresnel.js~fresnel#centerbias",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerBias",
+    "src/scene/materials/Fresnel.js~Fresnel#centerBias",
     "member"
   ],
   [
     "src/scene/materials/fresnel.js~fresnel#centercolor",
     "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-centerColor",
+    "src/scene/materials/Fresnel.js~Fresnel#centerColor",
+    "member"
+  ],
+  [
+    "src/scene/materials/fresnel.js~fresnel#centercolor",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-centerColor",
     "src/scene/materials/Fresnel.js~Fresnel#centerColor",
     "member"
   ],
@@ -4219,13 +3931,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/fresnel.js~fresnel#power",
-    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-power",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-power",
     "src/scene/materials/Fresnel.js~Fresnel#power",
     "member"
   ],
   [
     "src/scene/materials/fresnel.js~fresnel#power",
-    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-get-power",
+    "class/src/scene/materials/Fresnel.js~Fresnel.html#instance-set-power",
     "src/scene/materials/Fresnel.js~Fresnel#power",
     "member"
   ],
@@ -4267,25 +3979,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
-    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-backfaces",
-    "src/scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
-    "member"
-  ],
-  [
-    "src/scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
     "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-backfaces",
     "src/scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
     "member"
   ],
   [
-    "src/scene/materials/lambertmaterial.js~lambertmaterial#color",
-    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-color",
-    "src/scene/materials/LambertMaterial.js~LambertMaterial#color",
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#backfaces",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-backfaces",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#backfaces",
     "member"
   ],
   [
     "src/scene/materials/lambertmaterial.js~lambertmaterial#color",
     "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-color",
+    "src/scene/materials/LambertMaterial.js~LambertMaterial#color",
+    "member"
+  ],
+  [
+    "src/scene/materials/lambertmaterial.js~lambertmaterial#color",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-color",
     "src/scene/materials/LambertMaterial.js~LambertMaterial#color",
     "member"
   ],
@@ -4303,13 +4015,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
     "src/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
   [
     "src/scene/materials/lambertmaterial.js~lambertmaterial#emissive",
-    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-get-emissive",
+    "class/src/scene/materials/LambertMaterial.js~LambertMaterial.html#instance-set-emissive",
     "src/scene/materials/LambertMaterial.js~LambertMaterial#emissive",
     "member"
   ],
@@ -4387,13 +4099,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaCutoff",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaCutoff",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
     "member"
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#alphacutoff",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaCutoff",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaCutoff",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaCutoff",
     "member"
   ],
@@ -4405,25 +4117,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
-    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
-    "member"
-  ],
-  [
-    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
     "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-alphaMode",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
   [
-    "src/scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-backfaces",
-    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#alphamode",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-alphaMode",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#alphaMode",
     "member"
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
     "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-backfaces",
+    "src/scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
+    "member"
+  ],
+  [
+    "src/scene/materials/metallicmaterial.js~metallicmaterial#backfaces",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-backfaces",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#backfaces",
     "member"
   ],
@@ -4459,13 +4171,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#emissive",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-emissive",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissive",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
     "member"
   ],
   [
     "src/scene/materials/metallicmaterial.js~metallicmaterial#emissive",
-    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-get-emissive",
+    "class/src/scene/materials/MetallicMaterial.js~MetallicMaterial.html#instance-set-emissive",
     "src/scene/materials/MetallicMaterial.js~MetallicMaterial#emissive",
     "member"
   ],
@@ -4597,13 +4309,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaCutoff",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaCutoff",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
     "member"
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#alphacutoff",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-alphaCutoff",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-alphaCutoff",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#alphaCutoff",
     "member"
   ],
@@ -4633,13 +4345,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#ambient",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-ambient",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-ambient",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#ambient",
     "member"
   ],
@@ -4699,13 +4411,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#emissive",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-emissive",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#emissive",
     "member"
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#emissive",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-emissive",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-emissive",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#emissive",
     "member"
   ],
@@ -4759,13 +4471,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#pointsize",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-pointSize",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-pointSize",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#pointSize",
     "member"
   ],
@@ -4795,25 +4507,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#shininess",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-shininess",
-    "src/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
-    "member"
-  ],
-  [
-    "src/scene/materials/phongmaterial.js~phongmaterial#shininess",
     "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-shininess",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
-    "src/scene/materials/phongmaterial.js~phongmaterial#specular",
-    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular",
-    "src/scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "src/scene/materials/phongmaterial.js~phongmaterial#shininess",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-shininess",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#shininess",
     "member"
   ],
   [
     "src/scene/materials/phongmaterial.js~phongmaterial#specular",
     "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-set-specular",
+    "src/scene/materials/PhongMaterial.js~PhongMaterial#specular",
+    "member"
+  ],
+  [
+    "src/scene/materials/phongmaterial.js~phongmaterial#specular",
+    "class/src/scene/materials/PhongMaterial.js~PhongMaterial.html#instance-get-specular",
     "src/scene/materials/PhongMaterial.js~PhongMaterial#specular",
     "member"
   ],
@@ -4849,13 +4561,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaCutoff",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaCutoff",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
     "member"
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#alphacutoff",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-alphaCutoff",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-alphaCutoff",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#alphaCutoff",
     "member"
   ],
@@ -4879,13 +4591,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#backfaces",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-backfaces",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-backfaces",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
     "member"
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#backfaces",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-backfaces",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-backfaces",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#backfaces",
     "member"
   ],
@@ -4951,13 +4663,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#glossiness",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-glossiness",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossiness",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
     "member"
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#glossiness",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-glossiness",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-glossiness",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#glossiness",
     "member"
   ],
@@ -4993,13 +4705,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#pointsize",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-pointSize",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-pointSize",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#pointSize",
     "member"
   ],
@@ -5017,13 +4729,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
   [
     "src/scene/materials/specularmaterial.js~specularmaterial#specularf0",
-    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-get-specularF0",
+    "class/src/scene/materials/SpecularMaterial.js~SpecularMaterial.html#instance-set-specularF0",
     "src/scene/materials/SpecularMaterial.js~SpecularMaterial#specularF0",
     "member"
   ],
@@ -5215,25 +4927,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#collidable",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-collidable",
-    "src/scene/mesh/Mesh.js~Mesh#collidable",
-    "member"
-  ],
-  [
-    "src/scene/mesh/mesh.js~mesh#collidable",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-collidable",
     "src/scene/mesh/Mesh.js~Mesh#collidable",
     "member"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#colorize",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-colorize",
-    "src/scene/mesh/Mesh.js~Mesh#colorize",
+    "src/scene/mesh/mesh.js~mesh#collidable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-collidable",
+    "src/scene/mesh/Mesh.js~Mesh#collidable",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#colorize",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-colorize",
+    "src/scene/mesh/Mesh.js~Mesh#colorize",
+    "member"
+  ],
+  [
+    "src/scene/mesh/mesh.js~mesh#colorize",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-colorize",
     "src/scene/mesh/Mesh.js~Mesh#colorize",
     "member"
   ],
@@ -5245,13 +4957,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#culled",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-culled",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-culled",
     "src/scene/mesh/Mesh.js~Mesh#culled",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#culled",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-culled",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-culled",
     "src/scene/mesh/Mesh.js~Mesh#culled",
     "member"
   ],
@@ -5305,13 +5017,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#ghosted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted",
     "src/scene/mesh/Mesh.js~Mesh#ghosted",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#ghosted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted",
     "src/scene/mesh/Mesh.js~Mesh#ghosted",
     "member"
   ],
@@ -5323,13 +5035,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#highlighted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
     "src/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#highlighted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlighted",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted",
     "src/scene/mesh/Mesh.js~Mesh#highlighted",
     "member"
   ],
@@ -5389,25 +5101,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#matrix",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
-    "src/scene/mesh/Mesh.js~Mesh#matrix",
-    "member"
-  ],
-  [
-    "src/scene/mesh/mesh.js~mesh#matrix",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-matrix",
     "src/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#opacity",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
-    "src/scene/mesh/Mesh.js~Mesh#opacity",
+    "src/scene/mesh/mesh.js~mesh#matrix",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-matrix",
+    "src/scene/mesh/Mesh.js~Mesh#matrix",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#opacity",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-opacity",
+    "src/scene/mesh/Mesh.js~Mesh#opacity",
+    "member"
+  ],
+  [
+    "src/scene/mesh/mesh.js~mesh#opacity",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-opacity",
     "src/scene/mesh/Mesh.js~Mesh#opacity",
     "member"
   ],
@@ -5419,25 +5131,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#pickable",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-pickable",
-    "src/scene/mesh/Mesh.js~Mesh#pickable",
-    "member"
-  ],
-  [
-    "src/scene/mesh/mesh.js~mesh#pickable",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-pickable",
     "src/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#position",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-position",
-    "src/scene/mesh/Mesh.js~Mesh#position",
+    "src/scene/mesh/mesh.js~mesh#pickable",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-pickable",
+    "src/scene/mesh/Mesh.js~Mesh#pickable",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#position",
     "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-position",
+    "src/scene/mesh/Mesh.js~Mesh#position",
+    "member"
+  ],
+  [
+    "src/scene/mesh/mesh.js~mesh#position",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-position",
     "src/scene/mesh/Mesh.js~Mesh#position",
     "member"
   ],
@@ -5455,13 +5167,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#receivesshadow",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-receivesShadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-receivesShadow",
     "src/scene/mesh/Mesh.js~Mesh#receivesShadow",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#receivesshadow",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-receivesShadow",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-receivesShadow",
     "src/scene/mesh/Mesh.js~Mesh#receivesShadow",
     "member"
   ],
@@ -5497,13 +5209,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#rotation",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-rotation",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-rotation",
     "src/scene/mesh/Mesh.js~Mesh#rotation",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#rotation",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-rotation",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-rotation",
     "src/scene/mesh/Mesh.js~Mesh#rotation",
     "member"
   ],
@@ -5581,13 +5293,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/mesh/mesh.js~mesh#visible",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-visible",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-visible",
     "src/scene/mesh/Mesh.js~Mesh#visible",
     "member"
   ],
   [
     "src/scene/mesh/mesh.js~mesh#visible",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-visible",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-visible",
     "src/scene/mesh/Mesh.js~Mesh#visible",
     "member"
   ],
@@ -5719,13 +5431,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/nodes/node.js~node#castsshadow",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-castsShadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-castsShadow",
     "src/scene/nodes/Node.js~Node#castsShadow",
     "member"
   ],
   [
     "src/scene/nodes/node.js~node#castsshadow",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-castsShadow",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-castsShadow",
     "src/scene/nodes/Node.js~Node#castsShadow",
     "member"
   ],
@@ -5779,13 +5491,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/nodes/node.js~node#culled",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-culled",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-culled",
     "src/scene/nodes/Node.js~Node#culled",
     "member"
   ],
   [
     "src/scene/nodes/node.js~node#culled",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-culled",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-culled",
     "src/scene/nodes/Node.js~Node#culled",
     "member"
   ],
@@ -5923,13 +5635,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/nodes/node.js~node#quaternion",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-quaternion",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-quaternion",
     "src/scene/nodes/Node.js~Node#quaternion",
     "member"
   ],
   [
     "src/scene/nodes/node.js~node#quaternion",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-quaternion",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-quaternion",
     "src/scene/nodes/Node.js~Node#quaternion",
     "member"
   ],
@@ -6013,13 +5725,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/nodes/node.js~node#selected",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-selected",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-selected",
     "src/scene/nodes/Node.js~Node#selected",
     "member"
   ],
   [
     "src/scene/nodes/node.js~node#selected",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-selected",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-selected",
     "src/scene/nodes/Node.js~Node#selected",
     "member"
   ],
@@ -6049,13 +5761,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/nodes/node.js~node#visible",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-visible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-visible",
     "src/scene/nodes/Node.js~Node#visible",
     "member"
   ],
   [
     "src/scene/nodes/node.js~node#visible",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-visible",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-visible",
     "src/scene/nodes/Node.js~Node#visible",
     "member"
   ],
@@ -6097,20 +5809,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
-    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t",
-    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
-    "member"
-  ],
-  [
-    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
     "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-t",
     "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
     "member"
   ],
   [
-    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
-    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0",
-    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#t",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-t",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#t",
     "member"
   ],
   [
@@ -6120,14 +5826,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
-    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1",
-    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v0",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v0",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v0",
     "member"
   ],
   [
     "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
     "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-set-v1",
+    "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
+    "member"
+  ],
+  [
+    "src/scene/paths/cubicbeziercurve.js~cubicbeziercurve#v1",
+    "class/src/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html#instance-get-v1",
     "src/scene/paths/CubicBezierCurve.js~CubicBezierCurve#v1",
     "member"
   ],
@@ -6325,20 +6037,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#t",
-    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-t",
-    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#t",
-    "member"
-  ],
-  [
-    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#t",
     "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-t",
     "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#t",
     "member"
   ],
   [
-    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v0",
-    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v0",
-    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v0",
+    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#t",
+    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-t",
+    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#t",
     "member"
   ],
   [
@@ -6348,9 +6054,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v1",
-    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v1",
-    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v1",
+    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v0",
+    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v0",
+    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v0",
     "member"
   ],
   [
@@ -6360,14 +6066,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v2",
-    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v2",
-    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v2",
+    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v1",
+    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v1",
+    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v1",
     "member"
   ],
   [
     "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v2",
     "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-get-v2",
+    "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v2",
+    "member"
+  ],
+  [
+    "src/scene/paths/quadraticbeziercurve.js~quadraticbeziercurve#v2",
+    "class/src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html#instance-set-v2",
     "src/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve#v2",
     "member"
   ],
@@ -6415,13 +6127,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/paths/splinecurve.js~splinecurve#t",
-    "class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-t",
+    "class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t",
     "src/scene/paths/SplineCurve.js~SplineCurve#t",
     "member"
   ],
   [
     "src/scene/paths/splinecurve.js~splinecurve#t",
-    "class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-set-t",
+    "class/src/scene/paths/SplineCurve.js~SplineCurve.html#instance-get-t",
     "src/scene/paths/SplineCurve.js~SplineCurve#t",
     "member"
   ],
@@ -6469,13 +6181,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/scene/scene.js~scene#cleareachpass",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass",
     "src/scene/scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
   [
     "src/scene/scene/scene.js~scene#cleareachpass",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-set-clearEachPass",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-clearEachPass",
     "src/scene/scene/Scene.js~Scene#clearEachPass",
     "member"
   ],
@@ -6835,25 +6547,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/sectionplane/sectionplane.js~sectionplane#dir",
-    "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-dir",
-    "src/scene/sectionPlane/SectionPlane.js~SectionPlane#dir",
-    "member"
-  ],
-  [
-    "src/scene/sectionplane/sectionplane.js~sectionplane#dir",
     "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-dir",
     "src/scene/sectionPlane/SectionPlane.js~SectionPlane#dir",
     "member"
   ],
   [
-    "src/scene/sectionplane/sectionplane.js~sectionplane#pos",
-    "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
-    "src/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
+    "src/scene/sectionplane/sectionplane.js~sectionplane#dir",
+    "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-dir",
+    "src/scene/sectionPlane/SectionPlane.js~SectionPlane#dir",
     "member"
   ],
   [
     "src/scene/sectionplane/sectionplane.js~sectionplane#pos",
     "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-pos",
+    "src/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
+    "member"
+  ],
+  [
+    "src/scene/sectionplane/sectionplane.js~sectionplane#pos",
+    "class/src/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
     "src/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
     "member"
   ],
@@ -6883,13 +6595,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/skybox/skybox.js~skybox#size",
-    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
     "src/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
   [
     "src/scene/skybox/skybox.js~skybox#size",
-    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-set-size",
+    "class/src/scene/skybox/Skybox.js~Skybox.html#instance-get-size",
     "src/scene/skybox/Skybox.js~Skybox#size",
     "member"
   ],
@@ -6979,25 +6691,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/scene/viewport/viewport.js~viewport#autoboundary",
-    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary",
-    "src/scene/viewport/Viewport.js~Viewport#autoBoundary",
-    "member"
-  ],
-  [
-    "src/scene/viewport/viewport.js~viewport#autoboundary",
     "class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-autoBoundary",
     "src/scene/viewport/Viewport.js~Viewport#autoBoundary",
     "member"
   ],
   [
-    "src/scene/viewport/viewport.js~viewport#boundary",
-    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
-    "src/scene/viewport/Viewport.js~Viewport#boundary",
+    "src/scene/viewport/viewport.js~viewport#autoboundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-autoBoundary",
+    "src/scene/viewport/Viewport.js~Viewport#autoBoundary",
     "member"
   ],
   [
     "src/scene/viewport/viewport.js~viewport#boundary",
     "class/src/scene/viewport/Viewport.js~Viewport.html#instance-set-boundary",
+    "src/scene/viewport/Viewport.js~Viewport#boundary",
+    "member"
+  ],
+  [
+    "src/scene/viewport/viewport.js~viewport#boundary",
+    "class/src/scene/viewport/Viewport.js~Viewport.html#instance-get-boundary",
     "src/scene/viewport/Viewport.js~Viewport#boundary",
     "member"
   ],
@@ -7011,6 +6723,12 @@ window.esdocSearchIndex = [
     "src/scene/webgl/attribute.js",
     "file/src/scene/webgl/Attribute.js.html",
     "src/scene/webgl/Attribute.js",
+    "file"
+  ],
+  [
+    "src/scene/webgl/drawable.js",
+    "file/src/scene/webgl/Drawable.js.html",
+    "src/scene/webgl/Drawable.js",
     "file"
   ],
   [
@@ -7332,6 +7050,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/metadata/metaobject.js~metaobject#getobjectidsinsubtree",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-method-getObjectIDsInSubtree",
+    "src/viewer/metadata/MetaObject.js~MetaObject#getObjectIDsInSubtree",
+    "method"
+  ],
+  [
     "src/viewer/metadata/metaobject.js~metaobject#id",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-id",
     "src/viewer/metadata/MetaObject.js~MetaObject#id",
@@ -7398,9 +7122,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/metadata/metascene.js~metascene#getsubobjectids",
-    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-getSubObjectIDs",
-    "src/viewer/metadata/MetaScene.js~MetaScene#getSubObjectIDs",
+    "src/viewer/metadata/metascene.js~metascene#getobjectidsinsubtree",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-method-getObjectIDsInSubtree",
+    "src/viewer/metadata/MetaScene.js~MetaScene#getObjectIDsInSubtree",
     "method"
   ],
   [
@@ -7476,12 +7200,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#destroy",
-    "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#destroy",
-    "method"
-  ],
-  [
     "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#getviewpoint",
     "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint",
     "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#getViewpoint",
@@ -7497,72 +7215,6 @@ window.esdocSearchIndex = [
     "src/viewer/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#setviewpoint",
     "class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint",
     "src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js",
-    "file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js.html",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js",
-    "file"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#bimserver_version",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-BIMSERVER_VERSION",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#BIMSERVER_VERSION",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#bimserverclient",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-bimServerClient",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#bimServerClient",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#clear",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#clear",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#constructor",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-constructor-constructor",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#destroy",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#hiddentypes",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-member-hiddenTypes",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#hiddenTypes",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#load",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-load",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#load",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#objectdefaults",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-get-objectDefaults",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#objectDefaults",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#objectdefaults",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-set-objectDefaults",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#objectDefaults",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverbigloaderplugin.js~bimserverbigloaderplugin#unload",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerBigLoaderPlugin.js~BIMServerBigLoaderPlugin#unload",
     "method"
   ],
   [
@@ -7584,22 +7236,16 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#clear",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#clear",
-    "method"
-  ],
-  [
     "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#constructor",
     "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-constructor-constructor",
     "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#constructor",
     "method"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#destroy",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#destroy",
-    "method"
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#hiddentypes",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-member-hiddenTypes",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#hiddenTypes",
+    "member"
   ],
   [
     "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#load",
@@ -7608,15 +7254,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#materialworkflow",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-set-materialWorkflow",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#materialWorkflow",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#materialworkflow",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-get-materialWorkflow",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#materialWorkflow",
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#objectdefaults",
+    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-set-objectDefaults",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#objectDefaults",
     "member"
   ],
   [
@@ -7626,33 +7266,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#objectdefaults",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-set-objectDefaults",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#objectDefaults",
-    "member"
+    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderpluginold.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPluginOLD.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPluginOLD.js",
+    "file"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#readablegeometry",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-get-readableGeometry",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#readableGeometry",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#readablegeometry",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-set-readableGeometry",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#readableGeometry",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/bimserverloaderplugin.js~bimserverloaderplugin#unload",
-    "class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin#unload",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/bimserverloaderplugin/lib/bimserverbiggeometryloader.js",
-    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js.html",
-    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js",
+    "src/viewer/plugins/bimserverloaderplugin/lib/bimserverdetailgeometryloader.js",
+    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerDetailGeometryLoader.js.html",
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerDetailGeometryLoader.js",
     "file"
   ],
   [
@@ -7686,12 +7308,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/plugins/bimserverloaderplugin/lib/statictreerenderer.js",
-    "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/StaticTreeRenderer.js.html",
-    "src/viewer/plugins/BIMServerLoaderPlugin/lib/StaticTreeRenderer.js",
-    "file"
-  ],
-  [
     "src/viewer/plugins/bimserverloaderplugin/lib/stringview.js",
     "file/src/viewer/plugins/BIMServerLoaderPlugin/lib/StringView.js.html",
     "src/viewer/plugins/BIMServerLoaderPlugin/lib/StringView.js",
@@ -7722,70 +7338,10 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloader.js",
-    "file/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoader.js.html",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoader.js",
-    "file"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js",
-    "file/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js.html",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js",
-    "file"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#clear",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#clear",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#constructor",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-constructor-constructor",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#destroy",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#load",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-method-load",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#load",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#models",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-member-models",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#models",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/gltfbigmodelloaderplugin/gltfbigmodelloaderplugin.js~gltfbigmodelloaderplugin#unload",
-    "class/src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js~GLTFBigModelLoaderPlugin#unload",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/gltfloaderplugin/gltfloader.js",
-    "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoader.js.html",
-    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoader.js",
-    "file"
-  ],
-  [
     "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js",
     "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html",
     "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js",
     "file"
-  ],
-  [
-    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#clear",
-    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#clear",
-    "method"
   ],
   [
     "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#constructor",
@@ -7794,22 +7350,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#destroy",
-    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#destroy",
-    "method"
-  ],
-  [
     "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#load",
     "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-load",
     "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#load",
     "method"
-  ],
-  [
-    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#models",
-    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-member-models",
-    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#models",
-    "member"
   ],
   [
     "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#objectdefaults",
@@ -7824,10 +7368,16 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/plugins/gltfloaderplugin/gltfloaderplugin.js~gltfloaderplugin#unload",
-    "class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin#unload",
-    "method"
+    "src/viewer/plugins/gltfloaderplugin/gltfperformanceloader.js",
+    "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFPerformanceLoader.js.html",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFPerformanceLoader.js",
+    "file"
+  ],
+  [
+    "src/viewer/plugins/gltfloaderplugin/gltfqualityloader.js",
+    "file/src/viewer/plugins/GLTFLoaderPlugin/GLTFQualityLoader.js.html",
+    "src/viewer/plugins/GLTFLoaderPlugin/GLTFQualityLoader.js",
+    "file"
   ],
   [
     "src/viewer/plugins/lightsplugin/lightsplugin.js",
@@ -7878,39 +7428,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#clear",
-    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#clear",
-    "method"
-  ],
-  [
     "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#constructor",
     "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-constructor-constructor",
     "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#constructor",
     "method"
   ],
   [
-    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#destroy",
-    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#destroy",
-    "method"
-  ],
-  [
     "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#load",
     "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-load",
     "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#load",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#models",
-    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-member-models",
-    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#models",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/objloaderplugin/objloaderplugin.js~objloaderplugin#unload",
-    "class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin#unload",
     "method"
   ],
   [
@@ -7944,39 +7470,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#clear",
-    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#clear",
-    "method"
-  ],
-  [
     "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#constructor",
     "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-constructor-constructor",
     "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#constructor",
     "method"
   ],
   [
-    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#destroy",
-    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#destroy",
-    "method"
-  ],
-  [
     "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#load",
     "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-load",
     "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#load",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#models",
-    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-member-models",
-    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#models",
-    "member"
-  ],
-  [
-    "src/viewer/plugins/stlloaderplugin/stlloaderplugin.js~stlloaderplugin#unload",
-    "class/src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin#unload",
     "method"
   ],
   [
@@ -8088,21 +7590,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#clear",
-    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-method-clear",
-    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#clear",
-    "method"
-  ],
-  [
     "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#constructor",
     "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-constructor-constructor",
     "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#destroy",
-    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-method-destroy",
-    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#destroy",
     "method"
   ],
   [
@@ -8112,28 +7602,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#models",
-    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-member-models",
-    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#models",
-    "member"
-  ],
-  [
     "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#supportedschemas",
     "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-member-supportedSchemas",
     "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#supportedSchemas",
     "member"
-  ],
-  [
-    "src/viewer/plugins/xml3dloaderplugin/xml3dloaderplugin.js~xml3dloaderplugin#unload",
-    "class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html#instance-method-unload",
-    "src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin#unload",
-    "method"
-  ],
-  [
-    "src/viewer/plugins/xml3dloaderplugin/xml3dmodel.js",
-    "file/src/viewer/plugins/XML3DLoaderPlugin/XML3DModel.js.html",
-    "src/viewer/plugins/XML3DLoaderPlugin/XML3DModel.js",
-    "file"
   ],
   [
     "src/viewer/plugins/xml3dloaderplugin/zipjs/deflate.js",

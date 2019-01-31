@@ -1,7 +1,1379 @@
 [
   {
-    "name": "BIMServerBigGeometryLoader",
-    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerBigGeometryLoader.js",
+    "name": "buildBoxGeometry",
+    "filePath": "src/scene/geometry/builders/buildBoxGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 2,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 3,
+        "line": " * @desc Creates a box-shaped {@link Geometry}."
+      },
+      {
+        "lineNumber": 4,
+        "line": " *"
+      },
+      {
+        "lineNumber": 5,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 6,
+        "line": " *"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry}."
+      },
+      {
+        "lineNumber": 8,
+        "line": " *"
+      },
+      {
+        "lineNumber": 9,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildBoxGeometry)]"
+      },
+      {
+        "lineNumber": 10,
+        "line": " *"
+      },
+      {
+        "lineNumber": 11,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 12,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 13,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 14,
+        "line": " * import {buildBoxGeometry} from \"../src/scene/geometry/builders/buildBoxGeometry.js\";"
+      },
+      {
+        "lineNumber": 15,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 16,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 17,
+        "line": " * import {Texture} from \"../src/scene/materials/Texture.js\";"
+      },
+      {
+        "lineNumber": 18,
+        "line": " *"
+      },
+      {
+        "lineNumber": 19,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 20,
+        "line": " *         canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 21,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 22,
+        "line": " *"
+      },
+      {
+        "lineNumber": 23,
+        "line": " * viewer.scene.camera.eye = [0, 0, 5];"
+      },
+      {
+        "lineNumber": 24,
+        "line": " * viewer.scene.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * viewer.scene.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 26,
+        "line": " *"
+      },
+      {
+        "lineNumber": 27,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 28,
+        "line": " *      geometry: buildBoxGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 29,
+        "line": " *         center: [0,0,0],"
+      },
+      {
+        "lineNumber": 30,
+        "line": " *         xSize: 1,  // Half-size on each axis"
+      },
+      {
+        "lineNumber": 31,
+        "line": " *         ySize: 1,"
+      },
+      {
+        "lineNumber": 32,
+        "line": " *         zSize: 1"
+      },
+      {
+        "lineNumber": 33,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 34,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 35,
+        "line": " *         diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 36,
+        "line": " *             src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 37,
+        "line": " *         })"
+      },
+      {
+        "lineNumber": 38,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 39,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 40,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 41,
+        "line": " *"
+      },
+      {
+        "lineNumber": 42,
+        "line": " * @function buildBoxGeometry"
+      },
+      {
+        "lineNumber": 43,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 44,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 45,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 46,
+        "line": " * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 47,
+        "line": " * @param {Number[]} [cfg.center]  3D point indicating the center position."
+      },
+      {
+        "lineNumber": 48,
+        "line": " * @param {Number} [cfg.xSize=1.0]  Half-size on the X-axis."
+      },
+      {
+        "lineNumber": 49,
+        "line": " * @param {Number} [cfg.ySize=1.0]  Half-size on the Y-axis."
+      },
+      {
+        "lineNumber": 50,
+        "line": " * @param {Number} [cfg.zSize=1.0]  Half-size on the Z-axis."
+      },
+      {
+        "lineNumber": 51,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 52,
+        "line": " */"
+      },
+      {
+        "lineNumber": 53,
+        "line": "function buildBoxGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "buildCylinderGeometry",
+    "filePath": "src/scene/geometry/builders/buildCylinderGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 2,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 3,
+        "line": " * @desc Creates a cylinder-shaped {@link Geometry}."
+      },
+      {
+        "lineNumber": 4,
+        "line": " *"
+      },
+      {
+        "lineNumber": 5,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 6,
+        "line": " *"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * Creating a {@link Mesh} with a cylinder-shaped {@link ReadableGeometry} :"
+      },
+      {
+        "lineNumber": 8,
+        "line": " *"
+      },
+      {
+        "lineNumber": 9,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry)]"
+      },
+      {
+        "lineNumber": 10,
+        "line": " *"
+      },
+      {
+        "lineNumber": 11,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 12,
+        "line": " *"
+      },
+      {
+        "lineNumber": 13,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 14,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 15,
+        "line": " * import {buildCylinderGeometry} from \"../src/scene/geometry/builders/buildCylinderGeometry.js\";"
+      },
+      {
+        "lineNumber": 16,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 17,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 18,
+        "line": " * import {Texture} from \"../src/scene/materials/Texture.js\";"
+      },
+      {
+        "lineNumber": 19,
+        "line": " *"
+      },
+      {
+        "lineNumber": 20,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 21,
+        "line": " *      canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 22,
+        "line": " *  });"
+      },
+      {
+        "lineNumber": 23,
+        "line": " *"
+      },
+      {
+        "lineNumber": 24,
+        "line": " * viewer.camera.eye = [0, 0, 5];"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * viewer.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 26,
+        "line": " * viewer.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 27,
+        "line": " *"
+      },
+      {
+        "lineNumber": 28,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 29,
+        "line": " *      geometry: buildCylinderGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 30,
+        "line": " *          center: [0,0,0],"
+      },
+      {
+        "lineNumber": 31,
+        "line": " *          radiusTop: 2.0,"
+      },
+      {
+        "lineNumber": 32,
+        "line": " *          radiusBottom: 2.0,"
+      },
+      {
+        "lineNumber": 33,
+        "line": " *          height: 5.0,"
+      },
+      {
+        "lineNumber": 34,
+        "line": " *          radialSegments: 20,"
+      },
+      {
+        "lineNumber": 35,
+        "line": " *          heightSegments: 1,"
+      },
+      {
+        "lineNumber": 36,
+        "line": " *          openEnded: false"
+      },
+      {
+        "lineNumber": 37,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 38,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 39,
+        "line": " *         diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 40,
+        "line": " *             src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 41,
+        "line": " *         })"
+      },
+      {
+        "lineNumber": 42,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 43,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 44,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 45,
+        "line": " *"
+      },
+      {
+        "lineNumber": 46,
+        "line": " * @function buildCylinderGeometry"
+      },
+      {
+        "lineNumber": 47,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 48,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 49,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 50,
+        "line": " * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 51,
+        "line": " * @param {Number[]} [cfg.center]  3D point indicating the center position."
+      },
+      {
+        "lineNumber": 52,
+        "line": " * @param {Number} [cfg.radiusTop=1]  Radius of top."
+      },
+      {
+        "lineNumber": 53,
+        "line": " * @param {Number} [cfg.radiusBottom=1]  Radius of bottom."
+      },
+      {
+        "lineNumber": 54,
+        "line": " * @param {Number} [cfg.height=1] Height."
+      },
+      {
+        "lineNumber": 55,
+        "line": " * @param {Number} [cfg.radialSegments=60]  Number of horizontal segments."
+      },
+      {
+        "lineNumber": 56,
+        "line": " * @param {Number} [cfg.heightSegments=1]  Number of vertical segments."
+      },
+      {
+        "lineNumber": 57,
+        "line": " * @param {Boolean} [cfg.openEnded=false]  Whether or not the cylinder has solid caps on the ends."
+      },
+      {
+        "lineNumber": 58,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 59,
+        "line": " */"
+      },
+      {
+        "lineNumber": 60,
+        "line": "function buildCylinderGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "buildPlaneGeometry",
+    "filePath": "src/scene/geometry/builders/buildPlaneGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 3,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 4,
+        "line": " * @desc Creates a plane-shaped {@link Geometry}."
+      },
+      {
+        "lineNumber": 5,
+        "line": " *"
+      },
+      {
+        "lineNumber": 6,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 7,
+        "line": " *"
+      },
+      {
+        "lineNumber": 8,
+        "line": " * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:"
+      },
+      {
+        "lineNumber": 9,
+        "line": " *"
+      },
+      {
+        "lineNumber": 10,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry)]"
+      },
+      {
+        "lineNumber": 11,
+        "line": " *"
+      },
+      {
+        "lineNumber": 12,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 13,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 14,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 15,
+        "line": " * import {buildPlaneGeometry} from \"../src/scene/geometry/builders/buildPlaneGeometry.js\";"
+      },
+      {
+        "lineNumber": 16,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 17,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 18,
+        "line": " * import {Texture} from \"../src/scene/materials/Texture.js\";"
+      },
+      {
+        "lineNumber": 19,
+        "line": " *"
+      },
+      {
+        "lineNumber": 20,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 21,
+        "line": " *      canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 22,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 23,
+        "line": " *"
+      },
+      {
+        "lineNumber": 24,
+        "line": " * viewer.camera.eye = [0, 0, 5];"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * viewer.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 26,
+        "line": " * viewer.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 27,
+        "line": ""
+      },
+      {
+        "lineNumber": 28,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 29,
+        "line": " *     geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 30,
+        "line": " *          center: [0,0,0],"
+      },
+      {
+        "lineNumber": 31,
+        "line": " *          xSize: 2,"
+      },
+      {
+        "lineNumber": 32,
+        "line": " *          zSize: 2,"
+      },
+      {
+        "lineNumber": 33,
+        "line": " *          xSegments: 10,"
+      },
+      {
+        "lineNumber": 34,
+        "line": " *          zSegments: 10"
+      },
+      {
+        "lineNumber": 35,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 36,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 37,
+        "line": " *          diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 38,
+        "line": " *              src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 39,
+        "line": " *          })"
+      },
+      {
+        "lineNumber": 40,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 41,
+        "line": " *  });"
+      },
+      {
+        "lineNumber": 42,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 43,
+        "line": " *"
+      },
+      {
+        "lineNumber": 44,
+        "line": " * @function buildPlaneGeometry"
+      },
+      {
+        "lineNumber": 45,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 46,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 47,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 48,
+        "line": " * @param {Number[]} [cfg.center]  3D point indicating the center position."
+      },
+      {
+        "lineNumber": 49,
+        "line": " * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 50,
+        "line": " * @param {Number} [cfg.xSize=1] Dimension on the X-axis."
+      },
+      {
+        "lineNumber": 51,
+        "line": " * @param {Number} [cfg.zSize=1] Dimension on the Z-axis."
+      },
+      {
+        "lineNumber": 52,
+        "line": " * @param {Number} [cfg.xSegments=1] Number of segments on the X-axis."
+      },
+      {
+        "lineNumber": 53,
+        "line": " * @param {Number} [cfg.zSegments=1] Number of segments on the Z-axis."
+      },
+      {
+        "lineNumber": 54,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 55,
+        "line": " */"
+      },
+      {
+        "lineNumber": 56,
+        "line": "function buildPlaneGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "buildSphereGeometry",
+    "filePath": "src/scene/geometry/builders/buildSphereGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 2,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 3,
+        "line": " * @desc Creates a sphere-shaped {@link Geometry}."
+      },
+      {
+        "lineNumber": 4,
+        "line": " *"
+      },
+      {
+        "lineNumber": 5,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 6,
+        "line": " *"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * Creating a {@link Mesh} with a sphere-shaped {@link ReadableGeometry} :"
+      },
+      {
+        "lineNumber": 8,
+        "line": " *"
+      },
+      {
+        "lineNumber": 9,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry)]"
+      },
+      {
+        "lineNumber": 10,
+        "line": " *"
+      },
+      {
+        "lineNumber": 11,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 12,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 13,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 14,
+        "line": " * import {buildSphereGeometry} from \"../src/scene/geometry/builders/buildSphereGeometry.js\";"
+      },
+      {
+        "lineNumber": 15,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 16,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 17,
+        "line": " * import {Texture} from \"../src/scene/materials/Texture.js\";"
+      },
+      {
+        "lineNumber": 18,
+        "line": " *"
+      },
+      {
+        "lineNumber": 19,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 20,
+        "line": " *     canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 21,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 22,
+        "line": " *"
+      },
+      {
+        "lineNumber": 23,
+        "line": " * viewer.camera.eye = [0, 0, 5];"
+      },
+      {
+        "lineNumber": 24,
+        "line": " * viewer.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * viewer.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 26,
+        "line": " *"
+      },
+      {
+        "lineNumber": 27,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 28,
+        "line": " *      geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 29,
+        "line": " *          center: [0,0,0],"
+      },
+      {
+        "lineNumber": 30,
+        "line": " *          radius: 1.5,"
+      },
+      {
+        "lineNumber": 31,
+        "line": " *          heightSegments: 60,"
+      },
+      {
+        "lineNumber": 32,
+        "line": " *          widthSegments: 60"
+      },
+      {
+        "lineNumber": 33,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 34,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 35,
+        "line": " *         diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 36,
+        "line": " *             src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 37,
+        "line": " *         })"
+      },
+      {
+        "lineNumber": 38,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 39,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 40,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 41,
+        "line": " *"
+      },
+      {
+        "lineNumber": 42,
+        "line": " * @function buildSphereGeometry"
+      },
+      {
+        "lineNumber": 43,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 44,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 45,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 46,
+        "line": " * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 47,
+        "line": " * @param {Number[]} [cfg.center]  3D point indicating the center position."
+      },
+      {
+        "lineNumber": 48,
+        "line": " * @param {Number} [cfg.radius=1]  Radius."
+      },
+      {
+        "lineNumber": 49,
+        "line": " * @param {Number} [cfg.heightSegments=24] Number of latitudinal bands."
+      },
+      {
+        "lineNumber": 50,
+        "line": " * @param  {Number} [cfg.widthSegments=18] Number of longitudinal bands."
+      },
+      {
+        "lineNumber": 51,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 52,
+        "line": " */"
+      },
+      {
+        "lineNumber": 53,
+        "line": "function buildSphereGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "buildTorusGeometry",
+    "filePath": "src/scene/geometry/builders/buildTorusGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 3,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 4,
+        "line": " * @desc Creates a torus-shaped {@link Geometry}."
+      },
+      {
+        "lineNumber": 5,
+        "line": " *"
+      },
+      {
+        "lineNumber": 6,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * Creating a {@link Mesh} with a torus-shaped {@link ReadableGeometry} :"
+      },
+      {
+        "lineNumber": 8,
+        "line": " *"
+      },
+      {
+        "lineNumber": 9,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry)]"
+      },
+      {
+        "lineNumber": 10,
+        "line": " * "
+      },
+      {
+        "lineNumber": 11,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 12,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 13,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 14,
+        "line": " * import {buildTorusGeometry} from \"../src/scene/geometry/builders/buildTorusGeometry.js\";"
+      },
+      {
+        "lineNumber": 15,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 16,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 17,
+        "line": " * import {Texture} from \"../src/scene/materials/Texture.js\";"
+      },
+      {
+        "lineNumber": 18,
+        "line": " *"
+      },
+      {
+        "lineNumber": 19,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 20,
+        "line": " *      canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 21,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 22,
+        "line": " *"
+      },
+      {
+        "lineNumber": 23,
+        "line": " * viewer.camera.eye = [0, 0, 5];"
+      },
+      {
+        "lineNumber": 24,
+        "line": " * viewer.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 25,
+        "line": " * viewer.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 26,
+        "line": " *"
+      },
+      {
+        "lineNumber": 27,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 28,
+        "line": " *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 29,
+        "line": " *          center: [0,0,0],"
+      },
+      {
+        "lineNumber": 30,
+        "line": " *          radius: 1.0,"
+      },
+      {
+        "lineNumber": 31,
+        "line": " *          tube: 0.5,"
+      },
+      {
+        "lineNumber": 32,
+        "line": " *          radialSegments: 32,"
+      },
+      {
+        "lineNumber": 33,
+        "line": " *          tubeSegments: 24,"
+      },
+      {
+        "lineNumber": 34,
+        "line": " *          arc: Math.PI * 2.0"
+      },
+      {
+        "lineNumber": 35,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 36,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 37,
+        "line": " *         diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 38,
+        "line": " *             src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 39,
+        "line": " *         })"
+      },
+      {
+        "lineNumber": 40,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 41,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 42,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 43,
+        "line": " *"
+      },
+      {
+        "lineNumber": 44,
+        "line": " * @function buildTorusGeometry"
+      },
+      {
+        "lineNumber": 45,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 46,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 47,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 48,
+        "line": " * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 49,
+        "line": " * @param {Number[]} [cfg.center] 3D point indicating the center position."
+      },
+      {
+        "lineNumber": 50,
+        "line": " * @param {Number} [cfg.radius=1] The overall radius."
+      },
+      {
+        "lineNumber": 51,
+        "line": " * @param {Number} [cfg.tube=0.3] The tube radius."
+      },
+      {
+        "lineNumber": 52,
+        "line": " * @param {Number} [cfg.radialSegments=32] The number of radial segments."
+      },
+      {
+        "lineNumber": 53,
+        "line": " * @param {Number} [cfg.tubeSegments=24] The number of tubular segments."
+      },
+      {
+        "lineNumber": 54,
+        "line": " * @param {Number} [cfg.arc=Math.PI*0.5] The length of the arc in radians, where Math.PI*2 is a closed torus."
+      },
+      {
+        "lineNumber": 55,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 56,
+        "line": " */"
+      },
+      {
+        "lineNumber": 57,
+        "line": "function buildTorusGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "buildVectorTextGeometry",
+    "filePath": "src/scene/geometry/builders/buildVectorTextGeometry.js",
+    "lines": [
+      {
+        "lineNumber": 1576,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 1577,
+        "line": " * @desc Creates wireframe vector text {@link Geometry}."
+      },
+      {
+        "lineNumber": 1578,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1579,
+        "line": " * ## Usage"
+      },
+      {
+        "lineNumber": 1580,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1581,
+        "line": " * Creating a {@link Mesh} with vector text {@link ReadableGeometry} :"
+      },
+      {
+        "lineNumber": 1582,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1583,
+        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry)]"
+      },
+      {
+        "lineNumber": 1584,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1585,
+        "line": " * ````javascript"
+      },
+      {
+        "lineNumber": 1586,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1587,
+        "line": " * import {Viewer} from \"../src/viewer/Viewer.js\";"
+      },
+      {
+        "lineNumber": 1588,
+        "line": " * import {Mesh} from \"../src/scene/mesh/Mesh.js\";"
+      },
+      {
+        "lineNumber": 1589,
+        "line": " * import {buildVectorTextGeometry} from \"../src/scene/geometry/builders/buildVectorTextGeometry.js\";"
+      },
+      {
+        "lineNumber": 1590,
+        "line": " * import {ReadableGeometry} from \"../src/scene/geometry/ReadableGeometry.js\";"
+      },
+      {
+        "lineNumber": 1591,
+        "line": " * import {PhongMaterial} from \"../src/scene/materials/PhongMaterial.js\";"
+      },
+      {
+        "lineNumber": 1592,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1593,
+        "line": " * const viewer = new Viewer({"
+      },
+      {
+        "lineNumber": 1594,
+        "line": " *      canvasId: \"myCanvas\""
+      },
+      {
+        "lineNumber": 1595,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 1596,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1597,
+        "line": " * viewer.camera.eye = [0, 0, 100];"
+      },
+      {
+        "lineNumber": 1598,
+        "line": " * viewer.camera.look = [0, 0, 0];"
+      },
+      {
+        "lineNumber": 1599,
+        "line": " * viewer.camera.up = [0, 1, 0];"
+      },
+      {
+        "lineNumber": 1600,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1601,
+        "line": " * new Mesh(viewer.scene, {"
+      },
+      {
+        "lineNumber": 1602,
+        "line": " *      geometry: buildVectorTextGeometry(ReadableGeometry, viewer.scene, {"
+      },
+      {
+        "lineNumber": 1603,
+        "line": " *          origin: [0,0,0],"
+      },
+      {
+        "lineNumber": 1604,
+        "line": " *          text: \"On the other side of the screen, it all looked so easy\""
+      },
+      {
+        "lineNumber": 1605,
+        "line": " *      }),"
+      },
+      {
+        "lineNumber": 1606,
+        "line": " *      material: new PhongMaterial(viewer.scene, {"
+      },
+      {
+        "lineNumber": 1607,
+        "line": " *         diffuseMap: new Texture(viewer.scene, {"
+      },
+      {
+        "lineNumber": 1608,
+        "line": " *             src: \"textures/diffuse/uvGrid2.jpg\""
+      },
+      {
+        "lineNumber": 1609,
+        "line": " *         })"
+      },
+      {
+        "lineNumber": 1610,
+        "line": " *      })"
+      },
+      {
+        "lineNumber": 1611,
+        "line": " * });"
+      },
+      {
+        "lineNumber": 1612,
+        "line": " * ````"
+      },
+      {
+        "lineNumber": 1613,
+        "line": " *"
+      },
+      {
+        "lineNumber": 1614,
+        "line": " * @function buildVectorTextGeometry"
+      },
+      {
+        "lineNumber": 1615,
+        "line": " * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate."
+      },
+      {
+        "lineNumber": 1616,
+        "line": " * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well."
+      },
+      {
+        "lineNumber": 1617,
+        "line": " * @param {*} [cfg] Configs"
+      },
+      {
+        "lineNumber": 1618,
+        "line": " * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted."
+      },
+      {
+        "lineNumber": 1619,
+        "line": " * @param {Number[]} [cfg.center]  3D point indicating the center position."
+      },
+      {
+        "lineNumber": 1620,
+        "line": " * @param {Number[]} [cfg.origin] 3D point indicating the top left corner."
+      },
+      {
+        "lineNumber": 1621,
+        "line": " * @param {Number} [cfg.size=1] Size of each character."
+      },
+      {
+        "lineNumber": 1622,
+        "line": " * @param {String} [cfg.text=\"\"] The text."
+      },
+      {
+        "lineNumber": 1623,
+        "line": " * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass."
+      },
+      {
+        "lineNumber": 1624,
+        "line": " */"
+      },
+      {
+        "lineNumber": 1625,
+        "line": "function buildVectorTextGeometry(cfg = {}) {"
+      }
+    ],
+    "codeParams": [
+      "cfg"
+    ],
+    "docParams": [
+      "geometryClass",
+      "owner",
+      "cfg"
+    ]
+  },
+  {
+    "name": "BIMServerDetailGeometryLoader",
+    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerDetailGeometryLoader.js",
     "lines": [
       {
         "lineNumber": 3,
@@ -29,7 +1401,7 @@
       },
       {
         "lineNumber": 9,
-        "line": " * @param bigModelBuilder"
+        "line": " * @param detailModelBuilder"
       },
       {
         "lineNumber": 10,
@@ -45,7 +1417,7 @@
       },
       {
         "lineNumber": 13,
-        "line": "function BIMServerBigGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, bigModelBuilder) {"
+        "line": "function BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {"
       }
     ],
     "codeParams": [
@@ -53,14 +1425,14 @@
       "bimServerClientModel",
       "roid",
       "globalTransformationMatrix",
-      "bigModelBuilder"
+      "detailModelBuilder"
     ],
     "docParams": [
       "bimServerClient",
       "bimServerModel",
       "roid",
       "globalTransformationMatrix",
-      "bigModelBuilder"
+      "detailModelBuilder"
     ]
   },
   {
