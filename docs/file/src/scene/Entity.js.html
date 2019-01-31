@@ -118,10 +118,13 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/scene/Entity.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @desc A generic visible {@link Scene} element that has an identity and can be individually shown, hidden, selected,
+ * @desc An abstract 3D scene element that can be individually shown, hidden, selected,
  * highlighted, ghosted, culled, picked, clipped and bounded.
  *
- * An Entity can also represent a model and/or an object.
+ * An Entity can also represent a model or an object.
+ *
+ * Entity provides a uniform, abstract interface through which scene content can be accessed and manipulated, while internally
+ * xeokit can implement the content in various ways, using either {@link Node}s and {@link Mesh}s for realism, or {@link PerformanceModel}s for high detail.
  *
  * ## Entities Representing Models
  *

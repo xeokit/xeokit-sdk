@@ -117,13 +117,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Entity} from &apos;<span><a href="file/src/scene/Entity.js.html#lineNumber35">xeokit-sdk/src/scene/Entity.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Entity} from &apos;<span><a href="file/src/scene/Entity.js.html#lineNumber38">xeokit-sdk/src/scene/Entity.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">interface</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/scene/Entity.js.html#lineNumber35">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/scene/Entity.js.html#lineNumber38">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -143,9 +143,11 @@
 
   
   
-  <div class="description" data-ice="description"><p>A generic visible <span><a href="class/src/scene/scene/Scene.js~Scene.html">Scene</a></span> element that has an identity and can be individually shown, hidden, selected,
+  <div class="description" data-ice="description"><p>An abstract 3D scene element that can be individually shown, hidden, selected,
 highlighted, ghosted, culled, picked, clipped and bounded.</p>
-<p>An Entity can also represent a model and/or an object.</p>
+<p>An Entity can also represent a model or an object.</p>
+<p>Entity provides a uniform, abstract interface through which scene content can be accessed and manipulated, while internally
+xeokit can implement the content in various ways, using either <span><a href="class/src/scene/nodes/Node.js~Node.html">Node</a></span>s and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>s for realism, or <span><a href="class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span>s for high detail.</p>
 <h2 id="entities-representing-models">Entities Representing Models</h2><ul>
 <li>An Entity represents a model when <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> is <code>true</code>.</li>
 <li>Each model-Entity is registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>.</li>
@@ -1174,7 +1176,7 @@ highlighted, ghosted, culled, picked, clipped and bounded.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -1220,7 +1222,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber367">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -1264,7 +1266,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber377">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber380">source</a></span></span>
     </span>
   </h3>
 
@@ -1308,7 +1310,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber256">source</a></span></span>
     </span>
   </h3>
 
@@ -1353,7 +1355,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
@@ -1398,7 +1400,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber288">source</a></span></span>
     </span>
   </h3>
 
@@ -1442,7 +1444,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber275">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -1486,7 +1488,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber333">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1531,7 +1533,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber321">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber324">source</a></span></span>
     </span>
   </h3>
 
@@ -1576,7 +1578,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
@@ -1621,7 +1623,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -1666,7 +1668,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber210">source</a></span></span>
     </span>
   </h3>
 
@@ -1710,7 +1712,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1754,7 +1756,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -1800,7 +1802,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber146">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 
@@ -1846,7 +1848,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1892,7 +1894,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber162">source</a></span></span>
     </span>
   </h3>
 
@@ -1938,7 +1940,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -1982,7 +1984,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
@@ -2038,7 +2040,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber67">source</a></span></span>
     </span>
   </h3>
 
@@ -2084,7 +2086,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaModel
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -2130,7 +2132,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber357">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber360">source</a></span></span>
     </span>
   </h3>
 
@@ -2175,7 +2177,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber348">source</a></span></span>
     </span>
   </h3>
 
@@ -2220,7 +2222,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -2264,7 +2266,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
@@ -2309,7 +2311,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber300">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,7 +2356,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber387">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber390">source</a></span></span>
     </span>
   </h3>
 
@@ -2398,7 +2400,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -2442,7 +2444,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber200">source</a></span></span>
     </span>
   </h3>
 
@@ -2488,7 +2490,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -2534,7 +2536,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -2581,7 +2583,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber124">source</a></span></span>
     </span>
   </h3>
 
@@ -2631,7 +2633,7 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/scene/Entity.js.html#lineNumber407">source</a></span></span>
     </span>
   </h3>
 
