@@ -34,24 +34,17 @@
         "BIM Offline": [
 
             "#Loading BIM models from file system",
-
             "BIMOffline_Duplex",
             "BIMOffline_Schependomlaan",
             "BIMOffline_OTCConferenceCenter",
 
             "#Load masking",
-
             "BIMOffline_includeTypes_PlanView",
 
             "#Custom initial object states",
-
             "BIMOffline_objectDefaults",
 
-            // "#Huge model support",
-            // "BIMOffline_big_treeView_WestRiverSideHospital",
-
             "#Using the metadata API",
-
             "BIMOffline_metadata_Schependomlaan",
         ],
 
@@ -123,16 +116,6 @@
 
             "#Loading STL from files",
             "loading_STL_SpurGear"
-            // ,
-            //
-            // "#Large models from files",
-            // "loading_glTF_big_Schependomlaan",
-            // "loading_glTF_big_ModernOffice"
-        ],
-
-        "Metadata": [
-            "#Attaching information to scene content",
-            "metadata_BasicExample"
         ],
 
         "Materials": [
@@ -157,15 +140,21 @@
             "picking_canvas_mesh_highlight",
             "picking_canvas_mesh_select",
             "picking_canvas_surface"
-            // ,
-            // "picking_ray_mesh",
-            // "picking_ray_surface"
         ],
 
-        "Scene graphs": [
-            "#Creating scene graphs",
-            "sceneGraph_BasicSceneGraph",
-            "sceneGraph_SceneGraphWithModels"
+        "Scene representations": [
+
+            "#Standard representation",
+            "sceneRepresentation_SceneGraph",
+            "sceneRepresentation_SceneGraph_metadata",
+
+            // ,
+            // "sceneGraph_SceneGraphWithModels",
+
+            "#High-performance representation",
+            "sceneRepresentation_PerformanceModel_instancing",
+            "sceneRepresentation_PerformanceModel_batching",
+            "sceneRepresentation_PerformanceModel_metadata"
         ],
 
         "Section planes": [

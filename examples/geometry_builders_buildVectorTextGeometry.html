@@ -76,10 +76,10 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
-        geometry: buildVectorTextGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
             text: document.getElementById("source").innerText,
             size: 2
-        }),
+        })),
         material: new PhongMaterial(viewer.scene, {
             emissive: [0.0, 0.0, 0.5],
             lineWidth: 2

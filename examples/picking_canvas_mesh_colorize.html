@@ -59,10 +59,10 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to colorize them
+    // Mouse over Entities to colorize them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
     var lastColorize = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
@@ -73,24 +73,24 @@
 
         if (hit) {
 
-            console.log(hit.mesh.id);
+            console.log(hit.entity.id);
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.colorize = lastColorize;
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
                 }
 
-                lastMesh = hit.mesh;
-                lastColorize = hit.mesh.colorize.slice();
+                lastEntity = hit.entity;
+                lastColorize = hit.entity.colorize.slice();
 
-                hit.mesh.colorize = [0.0, 1.0, 0.0, 1.0];
+                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
             }
         } else {
 
-            if (lastMesh) {
-                lastMesh.colorize = lastColorize;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+                lastEntity = null;
             }
         }
     });

@@ -107,7 +107,7 @@
         const parent = metaObject.parent;                               // MetaObject with type "IfcBuilding"
         const children = metaObject.children;                           // Array of child MetaObjects
         const objectId = metaObject.id;                                 // "0u4wgLe6n0ABVaiXyikbkA"
-        const objectIds = viewer.metaScene.getSubObjectIDs(objectId);   // IDs of leaf sub-objects
+        const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
         const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
 
         // 2

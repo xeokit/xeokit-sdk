@@ -80,7 +80,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFBigModelLoaderPlugin} from "../src/viewer/plugins/GLTFBigModelLoaderPlugin/GLTFBigModelLoaderPlugin.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -101,7 +101,7 @@
     // Load a model and fit it to view
     //------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFBigModelLoaderPlugin(viewer, {
+    const gltfLoader = new GLTFLoaderPlugin(viewer, {
     });
 
     const structureModel = gltfLoader.load({
@@ -243,12 +243,12 @@
         });
 
         if (hit) {
-            var mesh = hit.mesh;
-            var metaObject = viewer.metaScene.metaObjects[mesh.id];
+            var entity = hit.entity;
+            var metaObject = viewer.metaScene.metaObjects[entity.id];
             if (metaObject) {
                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
             } else {
-                const parent = mesh.parent;
+                const parent = entity.parent;
                 if (parent) {
                     metaObject = viewer.metaScene.metaObjects[parent.id];
                     if (metaObject) {

@@ -18,11 +18,13 @@
 <canvas id="myCanvas"></canvas>
 <div id="info">
     <h1>Loading a glTF Model</h1>
-    <li>
-        <a target="_other"
-           href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-        - Loads glTF model from file system
-    </li>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+    </ul>
 </div>
 </body>
 <script type="module">
@@ -65,5 +67,13 @@
         viewer.cameraFlight.jumpTo(model);
     });
 
+
+    viewer.cameraControl.on("picked", function(e) {
+        console.log(e.mesh.id);
+        var parent = e.mesh.parent;
+        if (parent) {
+            console.log("parent.id = " + parent.id);
+        }
+    })
 </script>
 </html>

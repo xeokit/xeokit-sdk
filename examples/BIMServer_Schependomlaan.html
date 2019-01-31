@@ -46,6 +46,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="treePanel" class="treePanel"></div>
+
 <div id="info">
     <h1>Loading a BIM Model from BIMServer</h1>
     <ul>
@@ -74,7 +75,7 @@
 
     import {Viewer} from "./../src/viewer/Viewer.js";
     import BimServerClient from "./../src/viewer/utils/BIMServerClient/bimserverclient.js";
-    import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+    import {BIMServerLoaderPluginOLD} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // BIMServer parameters for this example
@@ -112,24 +113,24 @@
     // Mouse over objects to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
         var hit = viewer.scene.pick({
             canvasPos: coords
         });
         if (hit) {
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
-                if (lastMesh) {
-                    lastMesh.highlighted = false;
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
                 }
-                lastMesh = hit.mesh;
-                hit.mesh.highlighted = true;
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
             }
         } else {
-            if (lastMesh) {
-                lastMesh.highlighted = false;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
             }
         }
     });
@@ -145,12 +146,12 @@
         });
 
         if (hit) {
-            var mesh = hit.mesh;
-            var metaObject = viewer.metaScene.metaObjects[mesh.id];
+            var entity = hit.entity;
+            var metaObject = viewer.metaScene.metaObjects[entity.id];
             if (metaObject) {
                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
             } else {
-                const parent = mesh.parent;
+                const parent = entity.parent;
                 if (parent) {
                     metaObject = viewer.metaScene.metaObjects[parent.id];
                     if (metaObject) {
@@ -171,7 +172,7 @@
     // Add a BIMServerLoaderPlugin to the Viewer
     //------------------------------------------------------------------------------------------------------------------
 
-    const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
+    const bimServerLoader = new BIMServerLoaderPluginOLD(viewer, {
         bimServerClient: bimServerClient,
         materialWorkflow: "lambert"
     });

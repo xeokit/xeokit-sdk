@@ -94,14 +94,14 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
-        geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
             center: [0, 0, 0],
             radius: 1.5,
             tube: 0.5,
             radialSegments: 32,
             tubeSegments: 24,
             arc: Math.PI * 2.0
-        }),
+        })),
         material: new PhongMaterial(viewer.scene, {
             alpha: 0.9,
             alphaMode: "blend",

@@ -116,9 +116,9 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
-        geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
             radius: 1.3
-        }),
+        })),
         material: new PhongMaterial(viewer.scene, {
             diffuse: [0.7, 0.7, 0.7],
             specular: [1.0, 1.0, 1.0],
@@ -132,10 +132,10 @@
     });
 
     new Mesh(viewer.scene, {
-        geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
             xSize: 30,
             zSize: 30
-        }),
+        })),
         material: new PhongMaterial(viewer.scene, {
             diffuseMap: new Texture(viewer.scene, {
                 src: "textures/diffuse/uvGrid2.jpg"

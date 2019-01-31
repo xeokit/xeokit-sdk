@@ -116,28 +116,28 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
-        geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
             radius: 1.3
-        }),
+        })),
         material: new PhongMaterial(viewer.scene, {
             diffuse: [0.7, 0.7, 0.7],
             specular: [1.0, 1.0, 1.0],
             emissive: [0, 0, 0],
             alpha: 1.0,
             ambient: [1, 1, 0],
-            diffuseMap: new Texture(myViewer.scene, {
+            diffuseMap: new Texture(viewer.scene, {
                 src: "textures/diffuse/uvGrid2.jpg"
             })
         })
     });
 
-    new Mesh(myViewer.scene, {
-        geometry: buildPlaneGeometry(ReadableGeometry, myViewer.scene, {
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
             xSize: 30,
             zSize: 30
-        }),
-        material: new PhongMaterial(myViewer.scene, {
-            diffuseMap: new Texture(myViewer.scene, {
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuseMap: new Texture(viewer.scene, {
                 src: "textures/diffuse/uvGrid2.jpg"
             }),
             backfaces: true
@@ -149,8 +149,8 @@
     // Orbit camera
     //------------------------------------------------------------------------------------------------------------------
 
-    myViewer.scene.on("tick", function () {
-        myViewer.scene.camera.orbitYaw(0.3);
+    viewer.scene.on("tick", function () {
+        viewer.scene.camera.orbitYaw(0.3);
     });
 
 

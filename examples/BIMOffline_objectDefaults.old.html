@@ -242,14 +242,14 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to highlight them
+    // Mouse over entities to highlight them
     // Configure default highlight material to highlight edges yellow
     //------------------------------------------------------------------------------------------------------------------
 
     viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
-    var lastMesh = null;
+    var lastEntity = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
 
@@ -259,20 +259,20 @@
 
         if (hit) {
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.highlighted = false;
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
                 }
 
-                lastMesh = hit.mesh;
-                hit.mesh.highlighted = true;
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
             }
         } else {
 
-            if (lastMesh) {
-                lastMesh.highlighted = false;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
             }
         }
     });

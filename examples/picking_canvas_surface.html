@@ -73,7 +73,7 @@
     var hitHelper = new (function () {
 
         var mesh = new Mesh(viewer.scene, {
-            geometry: buildSphereGeometry(VBOGeometry, viewer.scene, {radius: .4}),
+            geometry: new VBOGeometry(viewer.scene, buildSphereGeometry({radius: .4})),
             material: new PhongMaterial(viewer.scene, {emissive: [1, 0, 0], diffuse: [0, 0, 0]}),
             position: [0, 0, 0],
             pickable: false,
@@ -94,37 +94,37 @@
     // Dynamically pick surfaces of model with the pointer, show pick intersection with red sphere
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
     var lastColorize = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
 
         var hit = viewer.scene.pick({
             canvasPos: coords,
-            pickSurface: true  // <<------ This causes picking to find the intersection point on the mesh
+            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
         });
 
         if (hit) {
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.colorize = lastColorize;
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
                 }
 
-                lastMesh = hit.mesh;
-                lastColorize = hit.mesh.colorize.slice();
+                lastEntity = hit.entity;
+                lastColorize = hit.entity.colorize.slice();
 
-                hit.mesh.colorize = [0.0, 1.0, 0.0, 1.0];
+                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
             }
 
             hitHelper.show(hit);
 
         } else {
 
-            if (lastMesh) {
-                lastMesh.colorize = lastColorize;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+                lastEntity = null;
 
                 hitHelper.hide();
             }

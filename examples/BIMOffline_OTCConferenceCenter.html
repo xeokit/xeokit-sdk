@@ -45,6 +45,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="treePanel" class="treePanel"></div>
+
 <div id="info">
     <h1>Loading a BIM Model from the File System</h1>
     <ul>
@@ -116,10 +117,10 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to highlight them
+    // Mouse over entityes to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
 
@@ -129,20 +130,20 @@
 
         if (hit) {
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.highlighted = false;
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
                 }
 
-                lastMesh = hit.mesh;
-                hit.mesh.highlighted = true;
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
             }
         } else {
 
-            if (lastMesh) {
-                lastMesh.highlighted = false;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
             }
         }
     });
@@ -226,6 +227,14 @@
 
         });
     });
+
+    viewer.cameraControl.on("picked", function(e) {
+        console.log("entity id = " + e.entity.id);
+        var parent = e.entity.parent;
+        if (parent) {
+            console.log("node ID = " + parent.id);
+        }
+    })
 
 </script>
 </html>

@@ -75,8 +75,7 @@
     // Create a mesh with torus shape
     //------------------------------------------------------------------------------------------------------------------
 
-    load3DSGeometry(ReadableGeometry, viewer.scene, {
-
+    load3DSGeometry(viewer.scene, {
         src: "models/3ds/lexus.3ds",
         compressGeometry: false
 
@@ -87,7 +86,7 @@
 
                 new Mesh(viewer.scene, {
 
-                    geometry: geometry,
+                    geometry: new ReadableGeometry(viewer.scene, geometry),
 
                     material: new PhongMaterial(viewer.scene, {
                         emissive: [1, 1, 1],

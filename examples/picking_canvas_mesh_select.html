@@ -61,10 +61,10 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to select them
+    // Mouse over Entities to select them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
 
     viewer.scene.input.on("mousemove", function (coords) {
 
@@ -74,20 +74,20 @@
 
         if (hit) {
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.selected = false;
+                if (lastEntity) {
+                    lastEntity.selected = false;
                 }
 
-                lastMesh = hit.mesh;
-                hit.mesh.selected = true;
+                lastEntity = hit.entity;
+                hit.entity.selected = true;
             }
         } else {
 
-            if (lastMesh) {
-                lastMesh.selected = false;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.selected = false;
+                lastEntity = null;
             }
         }
     });

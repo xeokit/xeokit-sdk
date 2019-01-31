@@ -136,20 +136,18 @@
     // Build a simple scene graph representing a table with four legs
     //------------------------------------------------------------------------------------------------------------------
 
-    const boxGeometry = buildBoxGeometry(ReadableGeometry, viewer.scene, {
+    const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
         xSize: 1,
         ySize: 1,
         zSize: 1
-    });
+    }));
 
     new Node(viewer.scene, {
         id: "furniture",
         isModel: true, // <------------------------------ Node represents a model
 
         children: [
-            new Node(viewer.scene, {
-                id: "table",
-                isObject: true, // <------------------- Node represents an object
+            new Node(viewer.scene, { // Anonymous transform group
 
                 rotation: [0, 50, 0],
                 position: [0, 0, 0],
@@ -235,8 +233,8 @@
             "projectId": "myTableProject",
             "revisionId": "V1.0",
             "metaObjects": [
-                {                               // Creates a MetaObject in the MetaModel
-                    "id": "table",
+                {
+                    "id": "table",              // ID does not match any Entity
                     "name": "Table",
                     "type": "furniture",        // Arbitrary type, could be IFC type
                     "properties": {             // Arbitrary properties, could be IfcPropertySet
@@ -244,17 +242,17 @@
                     }
                 },
                 {
-                    "id": "redLeg",
+                    "id": "redLeg",             // ID matches Node
                     "name": "Red table Leg",
                     "type": "leg",
-                    "parent": "table",           // References first MetaObject as parent
+                    "parent": "table",          // References first MetaObject as parent
                     "properties": {
                         "material": "wood"
                     }
                 },
                 {
-                    "id": "greenLeg",           // Node with corresponding id does not need to exist
-                    "name": "Green table leg",  // and MetaObject does not need to exist for Node with an id
+                    "id": "greenLeg",
+                    "name": "Green table leg",
                     "type": "leg",
                     "parent": "table",
                     "properties": {
@@ -380,15 +378,6 @@
 
     });
 
-    const slabs = viewer.metaScene.metaObjectsByType["IfcWallStandardCase"];
-    if (slabs) {
-        const slabObjectIds = Object.keys(slabs);
-        viewer.scene.setObjectsColorized(slabObjectIds, [0, 0, 0]);
-    }
-
-  //  viewer.cameraFlight.jumpTo(model);
-
-    //  window.treeView = treeView;
 
 
 </script>

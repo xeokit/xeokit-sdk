@@ -95,10 +95,10 @@
             // Ground plane
 
             new Mesh(viewer.scene, {
-                geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {
+                geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
                     xSize: 500,
                     zSize: 500
-                }),
+                })),
                 material: new PhongMaterial(viewer.scene, {
                     diffuse: [0.4, 1.0, 0.4],
                     backfaces: true

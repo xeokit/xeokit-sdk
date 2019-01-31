@@ -79,11 +79,11 @@
     // Build a simple scene graph representing a table with four legs
     //------------------------------------------------------------------------------------------------------------------
 
-    const boxGeometry = buildBoxGeometry(ReadableGeometry, viewer.scene, {
+    const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
         xSize: 1,
         ySize: 1,
         zSize: 1
-    });
+    }));
 
     new Node(viewer.scene, {
         id: "table",

@@ -79,26 +79,26 @@
     // Create a Viewer and arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
-    const myViewer = new Viewer({
+    const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
 
-    myViewer.scene.camera.eye = [-21.80, 4.01, 6.56];
-    myViewer.scene.camera.look = [0, -5.75, 0];
-    myViewer.scene.camera.up = [0.37, 0.91, -0.11];
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a simple scene graph representing a table with four legs
     //------------------------------------------------------------------------------------------------------------------
 
-    const boxGeometry = buildBoxGeometry(ReadableGeometry, myViewer.scene, {
+    const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
         xSize: 1,
         ySize: 1,
         zSize: 1
-    });
+    }));
 
-    new Node(myViewer.scene, {
+    new Node(viewer.scene, {
         objectId: "table", // <---------- Node with "objectId" represents a 3D object
         rotation: [0, 50, 0],
         position: [0, 0, 0],
@@ -106,16 +106,16 @@
 
         children: [
 
-            new Mesh(myViewer.scene, { // Red table leg
+            new Mesh(viewer.scene, { // Red table leg
                 objectId: "redLeg",
                 position: [-4, -6, -4],
                 scale: [1, 3, 1],
                 rotation: [0, 0, 0],
                 geometry: boxGeometry,
-                material: new PhongMaterial(myViewer.scene, {
+                material: new PhongMaterial(viewer.scene, {
                     diffuse: [1, 0.3, 0.3]
                 }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
+                highlightMaterial: new EmphasisMaterial(viewer.scene, {
                     fill: true,
                     fillColor: [1, 0, 0],
                     fillAlpha: 0.7,
@@ -126,16 +126,16 @@
                 })
             }),
 
-            new Mesh(myViewer.scene, { // Green table leg
+            new Mesh(viewer.scene, { // Green table leg
                 objectId: "greenLeg",
                 position: [4, -6, -4],
                 scale: [1, 3, 1],
                 rotation: [0, 0, 0],
                 geometry: boxGeometry,
-                material: new PhongMaterial(myViewer.scene, {
+                material: new PhongMaterial(viewer.scene, {
                     diffuse: [0.3, 1.0, 0.3]
                 }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
+                highlightMaterial: new EmphasisMaterial(viewer.scene, {
                     fill: true,
                     fillColor: [0, 1, 0],
                     fillAlpha: 0.7,
@@ -146,16 +146,16 @@
                 })
             }),
 
-            new Mesh(myViewer.scene, {// Blue table leg
+            new Mesh(viewer.scene, {// Blue table leg
                 objectId: "blueLeg",
                 position: [4, -6, 4],
                 scale: [1, 3, 1],
                 rotation: [0, 0, 0],
                 geometry: boxGeometry,
-                material: new PhongMaterial(myViewer.scene, {
+                material: new PhongMaterial(viewer.scene, {
                     diffuse: [0.3, 0.3, 1.0]
                 }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
+                highlightMaterial: new EmphasisMaterial(viewer.scene, {
                     fill: true,
                     fillColor: [0, 0, 1],
                     fillAlpha: 0.7,
@@ -166,16 +166,16 @@
                 })
             }),
 
-            new Mesh(myViewer.scene, {  // Yellow table leg
+            new Mesh(viewer.scene, {  // Yellow table leg
                 objectId: "yellowLeg",
                 position: [-4, -6, 4],
                 scale: [1, 3, 1],
                 rotation: [0, 0, 0],
                 geometry: boxGeometry,
-                material: new PhongMaterial(myViewer.scene, {
+                material: new PhongMaterial(viewer.scene, {
                     diffuse: [1.0, 1.0, 0.0]
                 }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
+                highlightMaterial: new EmphasisMaterial(viewer.scene, {
                     fill: true,
                     fillColor: [1, 1, 0],
                     fillAlpha: 0.7,
@@ -186,16 +186,16 @@
                 })
             }),
 
-            new Mesh(myViewer.scene, { // Purple table top
+            new Mesh(viewer.scene, { // Purple table top
                 objectId: "tableTop",
                 position: [0, -3, 0],
                 scale: [6, 0.5, 6],
                 rotation: [0, 0, 0],
                 geometry: boxGeometry,
-                material: new PhongMaterial(myViewer.scene, {
+                material: new PhongMaterial(viewer.scene, {
                     diffuse: [1.0, 0.3, 1.0]
                 }),
-                highlightMaterial: new EmphasisMaterial(myViewer.scene, {
+                highlightMaterial: new EmphasisMaterial(viewer.scene, {
                     fill: true,
                     fillColor: [1, 0, 1],
                     fillAlpha: 0.7,
@@ -209,33 +209,34 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over meshes to highlight them
+    // Mouse over Entities to highlight them
+    // Recall that a Mesh is an Entity
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastMesh = null;
+    var lastEntity = null;
 
-    myViewer.scene.input.on("mousemove", function (coords) {
+    viewer.scene.input.on("mousemove", function (coords) {
 
-        var hit = myViewer.scene.pick({
+        var hit = viewer.scene.pick({
             canvasPos: coords
         });
 
         if (hit) {
 
-            if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                if (lastMesh) {
-                    lastMesh.highlighted = false;
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
                 }
 
-                lastMesh = hit.mesh;
-                hit.mesh.highlighted = true;
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
             }
         } else {
 
-            if (lastMesh) {
-                lastMesh.highlighted = false;
-                lastMesh = null;
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
             }
         }
     });

@@ -140,7 +140,7 @@
     var xinc = 0.1;
     var i = 0;
 
-    var lastMesh = null;
+    var lastEntity = null;
     var lastColorize = null;
 
     model.on("loaded", function () {
@@ -164,7 +164,7 @@
             rayHelper.setRay(rayOrigin, rayDirection);
 
             var hit = viewer.scene.pick({
-                pickSurface: true,  // <<------ This causes picking to find the intersection point on the mesh
+                pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                 origin: rayOrigin,
                 direction: rayDirection
             });
@@ -173,25 +173,25 @@
 
                 hitHelper.show(hit);
 
-                if (!lastMesh || hit.mesh.id !== lastMesh.id) {
+                if (!lastEntity || hit.entity.id !== lastEntity.id) {
 
-                    if (lastMesh) {
-                        lastMesh.colorize = lastColorize;
+                    if (lastEntity) {
+                        lastEntity.colorize = lastColorize;
                     }
 
-                    lastMesh = hit.mesh;
-                    lastColorize = hit.mesh.colorize.slice();
+                    lastEntity = hit.entity;
+                    lastColorize = hit.entity.colorize.slice();
 
-                    hit.mesh.colorize = [0.0, 1.0, 0.0, 1.0];
+                    hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
 
                     rayHelper.setHighlighted(true);
                 }
 
             } else {
 
-                if (lastMesh) {
-                    lastMesh.colorize = lastColorize;
-                    lastMesh = null;
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
+                    lastEntity = null;
                 }
 
                 hitHelper.hide();

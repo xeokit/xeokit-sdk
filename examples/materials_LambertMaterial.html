@@ -74,14 +74,14 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
-        geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
             center: [0, 0, 0],
             radius: 1.5,
             tube: 0.5,
             radialSegments: 12,
             tubeSegments: 8,
             arc: Math.PI * 2.0
-        }),
+        })),
         material: new LambertMaterial(viewer.scene, {
             ambient: [0.3, 0.3, 0.3],
             color: [0.5, 0.5, 0.0],
