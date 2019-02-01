@@ -111,7 +111,7 @@
     // Build a PerformanceModel representing a table with four legs, using geometry instancing
     //------------------------------------------------------------------------------------------------------------------
 
-    const detailModel = new PerformanceModel(viewer.scene, {
+    const performanceModel = new PerformanceModel(viewer.scene, {
         id: "furniture",
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
         position: [0, 0, 0],
@@ -125,7 +125,7 @@
     // We'll instance this geometry by five meshes
     //--------------------------------------------------------
 
-    detailModel.createGeometry({
+    performanceModel.createGeometry({
 
         id: "myBoxGeometry",
 
@@ -175,7 +175,7 @@
     // Red table leg object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "redLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, -4],
@@ -184,7 +184,7 @@
         color: [1, 0.3, 0.3]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true // <----------------- Represents an object, registers PerformanceModelNode by ID on viewer.scene.objects
@@ -194,7 +194,7 @@
     // Green table leg object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "greenLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, -4],
@@ -203,7 +203,7 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true // <----------------- Represents an object, registers PerformanceModelNode by ID on viewer.scene.objects
@@ -213,7 +213,7 @@
     // Blue table leg
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "blueLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, 4],
@@ -222,7 +222,7 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true // <----------------- Represents an object, registers PerformanceModelNode by ID on viewer.scene.objects
@@ -232,7 +232,7 @@
     // Yellow table leg
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "yellowLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, 4],
@@ -241,7 +241,7 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    detailModel.createEntity({ // Create object
+    performanceModel.createEntity({ // Create object
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true // <----------------- Represents an object, registers PerformanceModelNode by ID on viewer.scene.objects
@@ -251,7 +251,7 @@
     // Purple table top
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "tableTopMesh",
         geometryId: "myBoxGeometry",
         position: [0, -3, 0],
@@ -260,7 +260,7 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    detailModel.createEntity({ // Create object
+    performanceModel.createEntity({ // Create object
         id: "tableTop",
         meshIds: ["tableTopMesh"],
         isObject: true // <----------------- Represents an object, registers PerformanceModelNode by ID on viewer.scene.objects
@@ -273,7 +273,7 @@
     // arrays that are currently under construction.
     //--------------------------------------------------------
 
-    detailModel.finalize();
+    performanceModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
     // Create some metadata for our PerformanceModel

@@ -65,7 +65,7 @@
     // Create a PerformanceModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
 
-    const detailModel = new PerformanceModel(viewer.scene, {
+    const performanceModel = new PerformanceModel(viewer.scene, {
         id: "table",
         isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
         position: [0, 0, 0],
@@ -79,7 +79,7 @@
     // Each object is comprised of a mesh, which belongs to a node
     //-----------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "redLegMesh",
 
         // The primitive type - allowed values are "points", "lines", "line-loop", "line-strip",
@@ -128,7 +128,7 @@
         color: [1, 0.3, 0.3]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -138,7 +138,7 @@
     // Green table leg object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "greenLegMesh",
         primitive: "triangles",
         positions: [
@@ -160,7 +160,7 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -170,7 +170,7 @@
     // Blue table leg object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "blueLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -192,7 +192,7 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -202,7 +202,7 @@
     // Yellow table leg object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "yellowLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -223,7 +223,7 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -233,7 +233,7 @@
     // Purple table top object
     //--------------------------------------------------------
 
-    detailModel.createMesh({
+    performanceModel.createMesh({
         id: "purpleTableTopMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -254,7 +254,7 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    detailModel.createEntity({
+    performanceModel.createEntity({
         id: "purpleTableTop",
         meshIds: ["purpleTableTopMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -267,7 +267,7 @@
     // arrays that are currently under construction within it.
     //------------------------------------------------------------
 
-    detailModel.finalize();
+    performanceModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
     // Find Entities by their IDs
