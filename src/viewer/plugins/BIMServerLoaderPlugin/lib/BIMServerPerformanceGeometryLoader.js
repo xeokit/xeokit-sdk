@@ -1,5 +1,4 @@
 import {DataInputStreamReader} from "./DataInputStreamReader.js";
-import {defaultMaterials} from "./defaultMaterials.js";
 
 /**
  *
@@ -11,7 +10,7 @@ import {defaultMaterials} from "./defaultMaterials.js";
  * @constructor
  * @private
  */
-function BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {
+function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {
 
     var o = this;
 
@@ -565,4 +564,4 @@ function BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, ro
     }
 }
 
-export {BIMServerDetailGeometryLoader};
+export {BIMServerPerformanceGeometryLoader};

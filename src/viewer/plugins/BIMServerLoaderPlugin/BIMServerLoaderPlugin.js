@@ -202,6 +202,13 @@ class BIMServerLoaderPlugin extends Plugin {
 
         const self = this;
 
+        params = params || {};
+
+        if (params.id && this.viewer.scene.components[params.id]) {
+            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
+            delete params.id;
+        }
+
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
@@ -209,15 +216,6 @@ class BIMServerLoaderPlugin extends Plugin {
         const scene = viewer.scene;
         const bimServerClient = this.bimServerClient;
         const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
-        const idMapping = { // This are arrays as multiple models might be loaded or unloaded.
-            'toGuid': [],
-            'toId': []
-        };
-
-        if (params.id && this.viewer.scene.components[params.id]) {
-            this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
-            delete params.id;
-        }
 
         const performanceModel = new PerformanceModel(scene, params);
         const modelId = performanceModel.id;
@@ -225,7 +223,7 @@ class BIMServerLoaderPlugin extends Plugin {
         var onTick;
 
         if (!poid) {
-            this.error("load() param expected: poid");
+            model.error("load() param expected: poid");
             return performanceModel; // TODO: Finalize?
         }
 
@@ -242,7 +240,6 @@ class BIMServerLoaderPlugin extends Plugin {
         const logging = !!params.logging;
 
         scene.canvas.spinner.processes++;
-
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {  // TODO: Preload not necessary combined with the bruteforce tree
 
@@ -269,9 +266,6 @@ class BIMServerLoaderPlugin extends Plugin {
                 const rootMetaObject = metaModel.rootMetaObject;
 
                 visit(rootMetaObject);
-
-                idMapping.toGuid.push(oidToGuid);
-                idMapping.toId.push(guidToOid);
 
                 const loader = new BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
 
@@ -317,7 +311,6 @@ class BIMServerLoaderPlugin extends Plugin {
                         // TODO
 
                         //o.viewer.setScale(scale); // Temporary until we find a better scaling system.
-
                     },
 
                     createGeometry: function (geometryDataId, positions, normals, indices) {
