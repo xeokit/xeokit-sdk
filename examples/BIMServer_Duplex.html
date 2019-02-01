@@ -50,14 +50,16 @@
     <h1>Loading a BIM Model from BIMServer</h1>
     <ul>
         <li>
-            <a target="_other" href="./../docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
         </li>
         <li>
             <a target="_other"
                href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274">Model source</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">User Guide</a>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer">User
+                Guide</a>
         </li>
     </ul>
 </div>
@@ -205,21 +207,17 @@
                 const roid = project.lastRevisionId;
                 const schema = project.schema;
 
-                const model = bimServerLoader.load({ // Returns a Node representing the model
+                const model = bimServerLoader.load({
 
-                    id: "myModel",                  // Assigned to Node#id, and Node#isModel will also be set true
+                    id: "myModel",                  // Assigned to Entity#id, and Entity#isModel will also be set true
 
                     poid: poid,
                     roid: roid,
                     schema: schema,
 
-                    //  scale: [0.001, 0.001, 0.001],   // Assigned to Node#scale, since model boundary exceeds view volume
-                    rotation: [-90, 0, 0],          // Assigned to Node#rotation, since model "up" is +Z
-                    edges: true,                    // Assigned to Node#edges, to emphasis edges
-
-                    lambertMaterial: true,          // LambertMaterial for all entities, for memory and rendering performance
-
-                    readableGeometry: false
+                    //  scale: [0.001, 0.001, 0.001],   // Assigned to Entity#scale, since model boundary exceeds view volume
+                    rotation: [-90, 0, 0],          // Assigned to Entity#rotation, since model "up" is +Z
+                    edges: true
                 });
 
                 //------------------------------------------------------------------------------------------------------
