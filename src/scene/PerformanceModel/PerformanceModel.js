@@ -62,7 +62,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## User Guide
  *
- * * [High Performance Models](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance_Models.html)
+ * * [High Performance Models](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance-Models)
  *
  * @implements {Drawable}
  * @implements {Entity}
