@@ -19,9 +19,7 @@ import {utils} from "../../../scene/utils.js";
  * ## Usage
  *
  * In the example below, we'll load the latest revision of a project's model from BIMSserver. We'll assume that we have a BIMServer
- * instance running and serving requests on port 8082, with a model loaded for project ID ````131073````. We'll get
- * the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
- * version of the API for the BIMServer version.
+ * instance running and serving requests on port 8082, with a model loaded for project ID ````131073````.
  *
  * Since xeokit's default World "up" direction is +Y, while the model's "up" is +Z, we'll rotate the
  * model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeokit to use +Z as "up".
