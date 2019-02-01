@@ -75,7 +75,7 @@
 
     import {Viewer} from "./../src/viewer/Viewer.js";
     import BimServerClient from "./../src/viewer/utils/BIMServerClient/bimserverclient.js";
-    import {BIMServerLoaderPluginOLD} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+    import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // BIMServer parameters for this example
@@ -84,7 +84,7 @@
     const bimServerAddress = "https://xeokit.cleverapps.io/";
     const username = "lindsay@biodigital.com";
     const password = "password";
-    const poid = 196609;
+    const poid = 131073;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer,
@@ -174,7 +174,7 @@
     // Add a BIMServerLoaderPlugin to the Viewer
     //------------------------------------------------------------------------------------------------------------------
 
-    const bimServerLoader = new BIMServerLoaderPluginOLD(viewer, {
+    const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
         bimServerClient: bimServerClient,
         materialWorkflow: "lambert"
     });
