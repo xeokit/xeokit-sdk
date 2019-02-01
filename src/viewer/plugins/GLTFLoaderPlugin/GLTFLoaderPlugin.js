@@ -239,7 +239,7 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performance = !!params.performance;
+        const performance = params.performance !== false;
 
         const model = performance
 
