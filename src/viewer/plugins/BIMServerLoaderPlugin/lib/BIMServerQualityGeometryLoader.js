@@ -4,7 +4,7 @@ import {defaultMaterials} from "./defaultMaterials.js";
 /**
  * @private
  */
-function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, modelBuilder) {
+function BIMServerQualityGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, modelBuilder) {
 
     var o = this;
 
@@ -249,7 +249,6 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
 
             let reused = stream.readInt();
             let ifcType = stream.readUTF8();
-            let ifcColor = defaultMaterials[ifcType];
 
             stream.align8();
 
@@ -415,4 +414,4 @@ function BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, gl
     }
 }
 
-export {BIMServerGeometryLoader};
+export {BIMServerQualityGeometryLoader};
