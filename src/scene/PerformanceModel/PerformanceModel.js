@@ -22,7 +22,7 @@ const defaultRotation = math.vec3([0, 0, 0]);
 const defaultQuaternion = math.identityQuaternion();
 
 /**
- * @desc An {@link Entity} that is a high-performance model representation designed for efficient rendering and low memory usage.
+ * @desc A high-performance model representation for efficient rendering and low memory usage.
  *
  * ## PerformanceModel Structure
  *
@@ -978,9 +978,9 @@ class PerformanceModel extends Component {
             }
             if (ghostMaterial.edges) {
                 if (ghostMaterial.edgeAlpha < 1.0) {
-                    renderFlags.ghostedFillTransparent = true;
+                    renderFlags.ghostedEdgesTransparent = true;
                 } else {
-                    renderFlags.ghostedFillOpaque = true;
+                    renderFlags.ghostedEdgesOpaque = true;
                 }
             }
         }
