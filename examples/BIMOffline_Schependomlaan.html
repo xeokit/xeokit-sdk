@@ -239,13 +239,13 @@
 
         if (hit) {
             var entity = hit.entity;
-            var metaObject = viewer.metaScene.metaObjects[entity.objectId];
+            var metaObject = viewer.metaScene.metaObjects[entity.id];
             if (metaObject) {
                 console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
             } else {
                 const parent = entity.parent;
                 if (parent) {
-                    metaObject = viewer.metaScene.metaObjects[parent.objectId];
+                    metaObject = viewer.metaScene.metaObjects[parent.id];
                     if (metaObject) {
                         console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
                     }
