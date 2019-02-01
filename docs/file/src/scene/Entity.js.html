@@ -123,8 +123,9 @@
  *
  * An Entity can also represent a model or an object.
  *
- * Entity provides a uniform, abstract interface through which scene content can be accessed and manipulated, while internally
- * xeokit can implement the content in various ways, using either {@link Node}s and {@link Mesh}s for realism, or {@link PerformanceModel}s for high detail.
+ * Entity provides a uniform, abstract interface through which different types of model representations can be accessed
+ * and manipulated. implements {@link Entity}s as {@link PerformanceModel}s for performance, or {@link Node}s and
+ * {@link Mesh}s for realism.
  *
  * ## Entities Representing Models
  *
