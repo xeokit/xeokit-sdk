@@ -404,13 +404,13 @@ class PerformanceNode {
      *
      * @type {Number[]}
      */
-    set colorize(color) {
+    set colorize(color) { // TODO
         this._colorize[0] = Math.floor(color[0] * 255.0); // Quantize
         this._colorize[1] = Math.floor(color[1] * 255.0);
         this._colorize[2] = Math.floor(color[2] * 255.0);
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setColor(this._colorize);
-        }
+        // for (var i = 0, len = this.meshes.length; i < len; i++) {
+        //     this.meshes[i]._setColor(this._colorize);
+        // }
         this.model.glRedraw();
     }
 
