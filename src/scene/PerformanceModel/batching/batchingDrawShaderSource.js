@@ -128,12 +128,7 @@ function buildVertex(layer) {
         src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
     }
 
-    src.push("vColor = colorize * vec4(reflectedColor * vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0), float(color.a) / 255.0);");
-
-    // src.push("vColor.r += 1.0;");
-    // src.push("vColor.g += 1.0;");
-    // src.push("vColor.b += 1.0;");
-
+    src.push("vColor = colorize *  vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);");
 
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
