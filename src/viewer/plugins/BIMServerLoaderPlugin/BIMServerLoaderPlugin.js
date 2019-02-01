@@ -1,7 +1,7 @@
 import {Plugin} from "./../../Plugin.js";
 import {PerformanceModel} from "../../../scene/PerformanceModel/PerformanceModel.js";
 
-import {BIMServerDetailGeometryLoader} from "./lib/BIMServerDetailGeometryLoader.js";
+import {BIMServerPerformanceGeometryLoader} from "./lib/BIMServerPerformanceGeometryLoader.js";
 import {loadMetaModel} from "./lib/loadMetaModel.js";
 import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 import {utils} from "../../../scene/utils.js";
@@ -103,6 +103,10 @@ import {utils} from "../../../scene/utils.js";
  *                 // To destroy the model, call destroy() on the model Entity
  *                 model.destroy();
  *             });
+ *
+ *             model.on("error", function(errMsg}
+ *                  console.error("Error while loading: " + errMsg);
+ *             });
  *         });
  *     });
  * });
@@ -198,46 +202,41 @@ class BIMServerLoaderPlugin extends Plugin {
 
         const self = this;
 
-        const modelId = params.id;
         const poid = params.poid;
         const roid = params.roid;
         const schema = params.schema;
         const viewer = this.viewer;
         const scene = viewer.scene;
         const bimServerClient = this.bimServerClient;
+        const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
         const idMapping = { // This are arrays as multiple models might be loaded or unloaded.
             'toGuid': [],
             'toId': []
         };
 
-        if (this.viewer.scene.components[params.id]) {
+        if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
             delete params.id;
         }
 
-        const detailModel = new PerformanceModel(scene, params);
-        const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
+        const performanceModel = new PerformanceModel(scene, params);
+        const modelId = performanceModel.id;
 
         var onTick;
 
-        if (!modelId) {
-            this.error("load() param expected: modelId");
-            return detailModel; // TODO: Finalize?
-        }
-
         if (!poid) {
             this.error("load() param expected: poid");
-            return detailModel; // TODO: Finalize?
+            return performanceModel; // TODO: Finalize?
         }
 
         if (!roid) {
             this.error("load() param expected: roid");
-            return detailModel; // TODO: Finalize?
+            return performanceModel; // TODO: Finalize?
         }
 
         if (!schema) {
             this.error("load() param expected: schema");
-            return detailModel; // TODO: Finalize?
+            return performanceModel; // TODO: Finalize?
         }
 
         const logging = !!params.logging;
@@ -249,7 +248,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
             loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
 
-                detailModel.once("destroyed", function () {
+                performanceModel.once("destroyed", function () {
                     viewer.metaScene.destroyMetaModel(modelId);
                 });
 
@@ -274,9 +273,9 @@ class BIMServerLoaderPlugin extends Plugin {
                 idMapping.toGuid.push(oidToGuid);
                 idMapping.toId.push(guidToOid);
 
-                const loader = new BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
+                const loader = new BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
 
-                    objectDefaults: self.objectDefaults,
+                    objectDefaults: objectDefaults,
 
                     log: function (msg) {
                         if (logging) {
@@ -286,6 +285,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
                     error: function (msg) {
                         self.error(msg);
+                        performanceModel.fire("error", msg);
                     },
 
                     warn: function (msg) {
@@ -322,7 +322,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
                     createGeometry: function (geometryDataId, positions, normals, indices) {
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        detailModel.createGeometry({
+                        performanceModel.createGeometry({
                             id: geometryId,
                             primitive: "triangles",
                             positions: positions,
@@ -334,7 +334,7 @@ class BIMServerLoaderPlugin extends Plugin {
                     createMeshInstancingGeometry: function (geometryDataId, matrix, color, opacity) {
                         const meshId = `${modelId}.${geometryDataId}.mesh`;
                         const geometryId = `${modelId}.${geometryDataId}`;
-                        detailModel.createMesh({
+                        performanceModel.createMesh({
                             id: meshId,
                             geometryId: geometryId,
                             matrix: matrix,
@@ -345,7 +345,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
                     createMeshSpecifyingGeometry: function (geometryDataId, positions, normals, indices, matrix, color, opacity) {
                         const meshId = `${modelId}.${geometryDataId}.mesh`;
-                        detailModel.createMesh({
+                        performanceModel.createMesh({
                             id: meshId,
                             primitive: "triangles",
                             positions: positions,
@@ -370,7 +370,7 @@ class BIMServerLoaderPlugin extends Plugin {
                         }
                         ifcType = ifcType || "DEFAULT";
                         const props = objectDefaults[ifcType] || {};
-                        detailModel.createEntity(utils.apply(props, {
+                        performanceModel.createEntity(utils.apply(props, {
                             id: id,
                             isObject: true,
                             meshIds: [meshId]
@@ -387,11 +387,13 @@ class BIMServerLoaderPlugin extends Plugin {
                         if (logging) {
                             self.log(`Finished loading geometries (${totalNrObjects} objects received)`);
                         }
-                        viewer.scene.off(onTick);
-                        scene.canvas.spinner.processes--;
-                        detailModel.finalize();
-                        detailModel.fire("loaded");
 
+                        viewer.scene.off(onTick);
+
+                        scene.canvas.spinner.processes--;
+
+                        performanceModel.finalize();
+                        performanceModel.fire("loaded");
                     }
                 });
 
@@ -405,7 +407,7 @@ class BIMServerLoaderPlugin extends Plugin {
             });
         });
 
-        return detailModel;
+        return performanceModel;
     };
 }
 
