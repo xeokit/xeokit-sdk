@@ -30,7 +30,7 @@
         }
 
         #myCanvas {
-            background: #ffffff;
+            background: lightBlue;
         }
     </style>
 
@@ -75,6 +75,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {AmbientLight} from '../src/scene/lights/AmbientLight.js';
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak ghosting and highlight materials
@@ -94,11 +95,17 @@
 
     viewer.scene.ghostMaterial.fillAlpha = 0.1;
     viewer.scene.ghostMaterial.fillColor = [0, 0, 0];
-    viewer.scene.ghostMaterial.edgeAlpha = 0.3;
+    viewer.scene.ghostMaterial.edgeAlpha = 0.4;
     viewer.scene.ghostMaterial.edgeColor = [0, 0, 0];
 
+    viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    new AmbientLight(viewer.scene, {
+        color: [0.35, 0.35, 0.2],
+        intensity: 1.0
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load model
@@ -113,7 +120,8 @@
         ifcDefaults: true,
         edges: true,
         edgeThreshold: 10,
-        performance: false
+        performance: true,
+        backfaces: false
     });
 
     //------------------------------------------------------------------------------------------------------------------
