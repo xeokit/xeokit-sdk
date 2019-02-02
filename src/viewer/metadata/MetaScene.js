@@ -7,10 +7,8 @@ import {MetaObject} from "./MetaObject.js";
  * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
  *
- * ## Usage
- *
- * * [Metadata User guide]()
- * * [Metadata Example](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
+ * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)
+ * * [Scene graph example with metadata](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
  */
 class MetaScene {
 
