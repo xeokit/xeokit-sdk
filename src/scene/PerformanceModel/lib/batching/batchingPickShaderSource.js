@@ -66,7 +66,7 @@ function buildFragment(layer) {
     src.push("varying vec4 vPickColor;");
     src.push("void main(void) {");
     if (clipping) {
-        src.push("if (clippable) {");
+    //    src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
         for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
@@ -74,7 +74,7 @@ function buildFragment(layer) {
             src.push("}");
         }
         src.push("  if (dist > 0.0) { discard; }");
-        src.push("}");
+    //    src.push("}");
     }
     src.push("   gl_FragColor = vPickColor; ");
     src.push("}");
