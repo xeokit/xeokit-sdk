@@ -60,7 +60,8 @@
                href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
         </li>
         <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User Guide</a>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
+                Guide</a>
         </li>
     </ul>
 </div>
@@ -100,11 +101,11 @@
     viewer.camera.up = [0.10, 0.98, -0.14];
 
     viewer.scene.ghostMaterial.fillAlpha = 0.1;
-    viewer.scene.ghostMaterial.fillColor = [0,0,0];
+    viewer.scene.ghostMaterial.fillColor = [0, 0, 0];
     viewer.scene.ghostMaterial.edgeAlpha = 0.4;
-    viewer.scene.ghostMaterial.edgeColor = [0,0,0];
+    viewer.scene.ghostMaterial.edgeColor = [0, 0, 0];
 
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -117,8 +118,7 @@
         id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true,
-        performance: false
+        edges: true
     });
 
     //------------------------------------------------------------------------------------------------------------------
