@@ -1,7 +1,7 @@
-import {math} from "../../math/math.js";
-import {WEBGL_INFO} from "../../webglInfo.js";
-import {RenderState} from "../../webgl/RenderState.js";
-import {ArrayBuf} from "../../webgl/ArrayBuf.js";
+import {math} from "../../../math/math.js";
+import {WEBGL_INFO} from "../../../webglInfo.js";
+import {RenderState} from "../../../webgl/RenderState.js";
+import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 
 import {BatchingDrawRenderer} from "./batchingDrawRenderer.js";
 import {BatchingFillRenderer} from "./batchingFillRenderer.js";

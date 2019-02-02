@@ -1628,9 +1628,6 @@ class Mesh extends Component {
     _pickDrawableRenderer() {
     }
 
-    drawPickDrawable(frameCtx) {
-    }
-
     /** @private  */
     drawPickMesh(frameCtx) {
         if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {

@@ -1,9 +1,9 @@
-import {math} from "../../math/math.js";
-import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
-import {WEBGL_INFO} from "../../webglInfo.js";
+import {math} from "../../../math/math.js";
+import {buildEdgeIndices} from '../../../math/buildEdgeIndices.js';
+import {WEBGL_INFO} from "../../../webglInfo.js";
 
-import {RenderState} from "../../webgl/RenderState.js";
-import {ArrayBuf} from "../../webgl/ArrayBuf.js";
+import {RenderState} from "../../../webgl/RenderState.js";
+import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 
 import {InstancingDrawRenderer} from "./instancingDrawRenderer.js";
 import {InstancingFillRenderer} from "./instancingFillRenderer.js";

@@ -775,6 +775,10 @@ const Renderer = function (scene, options) {
 
     function pickTriangle(entity, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
+        if (!entity.drawPickTriangles) {
+            return;
+        }
+
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"

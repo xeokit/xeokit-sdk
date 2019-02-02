@@ -1,4 +1,4 @@
-import {math} from "../math/math.js";
+import {math} from "../../math/math.js";
 
 /**
  * @private
@@ -143,24 +143,6 @@ class PerformanceMesh {
      */
     isSurfacePickable() {
         return false; // No geometry data in memory - can't support surface picking
-    }
-
-    /**
-     * @private
-     */
-    drawPickDrawable(frameCtx) {
-    }
-
-    /**
-     * @private
-     */
-    drawPickTriangles() {
-    }
-
-    /**
-     * @private
-     */
-    drawPickVertices(frameCtx) {
     }
 
     /**

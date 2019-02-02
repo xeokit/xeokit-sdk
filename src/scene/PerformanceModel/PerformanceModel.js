@@ -3,12 +3,12 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from './../webglInfo.js';
 
-import {PerformanceMesh} from './PerformanceMesh.js';
-import {PerformanceNode} from './PerformanceNode.js';
-import {getBatchingBuffer, putBatchingBuffer} from "./batching/batchingBuffer.js";
-import {BatchingLayer} from './batching/batchingLayer.js';
-import {InstancingLayer} from './instancing/instancingLayer.js';
-import {RENDER_FLAGS} from './renderFlags.js';
+import {PerformanceMesh} from './lib/PerformanceMesh.js';
+import {PerformanceNode} from './lib/PerformanceNode.js';
+import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffer.js";
+import {BatchingLayer} from './lib/batching/batchingLayer.js';
+import {InstancingLayer} from './lib/instancing/instancingLayer.js';
+import {RENDER_FLAGS} from './lib/renderFlags.js';
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 

@@ -1,6 +1,6 @@
-import {Map} from "../../utils/Map.js";
-import {stats} from "../../stats.js"
-import {Program} from "../../webgl/Program.js";
+import {Map} from "../../../utils/Map.js";
+import {stats} from "../../../stats.js"
+import {Program} from "../../../webgl/Program.js";
 
 import {InstancingEdgesShaderSource} from "./instancingEdgesShaderSource.js";
 import {RENDER_PASSES} from "../renderPasses.js";
