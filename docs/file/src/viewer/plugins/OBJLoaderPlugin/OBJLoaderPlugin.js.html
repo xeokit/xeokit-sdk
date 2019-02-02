@@ -218,7 +218,7 @@ class OBJLoaderPlugin extends Plugin {
 
         const self = this;
 
-        if (this.viewer.scene.components[params.id]) {
+        if (params.id &amp;&amp; this.viewer.scene.components[params.id]) {
             this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);
             delete params.id;
         }

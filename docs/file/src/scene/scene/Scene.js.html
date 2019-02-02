@@ -128,6 +128,7 @@ import {Input} from &apos;../input/Input.js&apos;;
 import {Viewport} from &apos;../viewport/Viewport.js&apos;;
 import {Camera} from &apos;../camera/Camera.js&apos;;
 import {DirLight} from &apos;../lights/DirLight.js&apos;;
+import {AmbientLight} from &apos;../lights/AmbientLight.js&apos;;
 import {ReadableGeometry} from &quot;../geometry/ReadableGeometry.js&quot;;
 import {buildBoxGeometry} from &apos;../geometry/builders/buildBoxGeometry.js&apos;;
 import {PhongMaterial} from &apos;../materials/PhongMaterial.js&apos;;
@@ -839,6 +840,11 @@ class Scene extends Component {
         });
 
         // Default lights
+
+        new AmbientLight(this, {
+            color: [0.35, 0.35, 0.2],
+            intensity: 1.0
+        });
 
         new DirLight(this, {
             dir: [0.8, -0.6, -0.8],
@@ -1599,6 +1605,7 @@ class Scene extends Component {
             let aabb;
             const collidables = this._collidables;
             let collidable;
+            let valid = false;
             for (const collidableId in collidables) {
                 if (collidables.hasOwnProperty(collidableId)) {
                     collidable = collidables[collidableId];
@@ -1624,7 +1631,16 @@ class Scene extends Component {
                     if (aabb[5] &gt; zmax) {
                         zmax = aabb[5];
                     }
+                    valid = true;
                 }
+            }
+            if (!valid) {
+                xmin = -1;
+                ymin = -1;
+                zmin = -1;
+                xmax = 1;
+                ymax = 1;
+                zmax = 1;
             }
             this._aabb[0] = xmin;
             this._aabb[1] = ymin;

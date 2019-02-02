@@ -117,13 +117,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerLoaderPlugin} from &apos;<span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber114">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BIMServerLoaderPlugin} from &apos;<span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber116">xeokit-sdk/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber114">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber116">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -152,9 +152,7 @@
 <li>When loading a model, we can specify a World-space transformation to position and orient it, along with initial rendering states to recursively apply to the Entity tree.</li>
 </ul>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll load the latest revision of a project&apos;s model from BIMSserver. We&apos;ll assume that we have a BIMServer
-instance running and serving requests on port 8082, with a model loaded for project ID <code>131073</code>. We&apos;ll get
-the file that defines the BIMServer JavaScript API from the BIMServer, which ensures that we have the right
-version of the API for the BIMServer version.</p>
+instance running and serving requests on port 8082, with a model loaded for project ID <code>131073</code>.</p>
 <p>Since xeokit&apos;s default World &quot;up&quot; direction is +Y, while the model&apos;s &quot;up&quot; is +Z, we&apos;ll rotate the
 model 90 degrees about the X-axis as we load it. Note that we could also instead configure xeokit to use +Z as &quot;up&quot;.</p>
 <p>A BIMServerLoaderPlugin is configured with a BIMServerClient, which provides a client-side facade through which
@@ -230,6 +228,10 @@ bimServerClient.init(() =&gt; {
 
                 // To destroy the model, call destroy() on the model Entity
                 model.destroy();
+            });
+
+            model.on(&quot;error&quot;, function(errMsg}
+                 console.error(&quot;Error while loading: &quot; + errMsg);
             });
         });
     });
@@ -731,7 +733,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -817,7 +819,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -861,7 +863,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
@@ -905,7 +907,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 
@@ -949,7 +951,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -994,7 +996,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1042,7 +1044,7 @@ bimServerClient.init(() =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber199">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js.html#lineNumber201">source</a></span></span>
     </span>
   </h3>
 

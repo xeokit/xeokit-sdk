@@ -132,43 +132,11 @@ class Drawable {
      * @abstract
      */
     get isDrawable() {
-
     }
 
-    /**
-     * Property with final value ````true```` to indicate that xeokit should render this Drawable in sorted order, relative to other Drawable of the same class.
-     *
-     * The sort order is determined by {@link Drawable#stateSortCompare}.
-     *
-     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
-     *
-     * @type {boolean}
-     * @abstract
-     */
-    get isStateSortable() {
-    }
-
-    /**
-     * Comparison function used by the renderer to determine the order in which xeokit should render the Drawable, relative to to other Drawablees.
-     *
-     * Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same rendering state changes to the GPU, ie. can collapse them.
-     *
-     * @param {Drawable} drawable1
-     * @param {Drawable} drawable2
-     * @returns {number}
-     * @abstract
-     */
-    stateSortCompare(drawable1, drawable2) {
-    }
-
-    /**
-     * Called by xeokit when about to render this Drawable, to get flags indicating what rendering effects to apply for it.
-     *
-     * @param {RenderFlags} renderFlags Returns the rendering flags.
-     * @abstract
-     */
-    getRenderFlags(renderFlags) {
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    // Emphasis materials
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * Configures the appearance of this Drawable when ghosted.
@@ -213,8 +181,43 @@ class Drawable {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // Render passes
+    // Rendering
     //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Property with final value ````true```` to indicate that xeokit should render this Drawable in sorted order, relative to other Drawable of the same class.
+     *
+     * The sort order is determined by {@link Drawable#stateSortCompare}.
+     *
+     * Sorting is essential for rendering performance, so that xeokit is able to avoid applying runs of the same state changes to the GPU, ie. can collapse them.
+     *
+     * @type {boolean}
+     * @abstract
+     */
+    get isStateSortable() {
+    }
+
+    /**
+     * Comparison function used by the renderer to determine the order in which xeokit should render the Drawable, relative to to other Drawablees.
+     *
+     * Sorting is essential for rendering performance, so that xeokit is able to avoid needlessly applying runs of the same rendering state changes to the GPU, ie. can collapse them.
+     *
+     * @param {Drawable} drawable1
+     * @param {Drawable} drawable2
+     * @returns {number}
+     * @abstract
+     */
+    stateSortCompare(drawable1, drawable2) {
+    }
+
+    /**
+     * Called by xeokit when about to render this Drawable, to get flags indicating what rendering effects to apply for it.
+     *
+     * @param {RenderFlags} renderFlags Returns the rendering flags.
+     * @abstract
+     */
+    getRenderFlags(renderFlags) {
+    }
 
     /**
      * Renders opaque edges using {@link Drawable#edgeMaterial}.
@@ -402,13 +405,7 @@ class Drawable {
     isSurfacePickable() {
     }
 
-    drawPickDrawable(frameCtx) {
-    }
-
     drawPickTriangles(frameCtx) {
-    }
-
-    drawPickVertices(frameCtx) {
     }
 
     /**

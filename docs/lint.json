@@ -1372,52 +1372,52 @@
     ]
   },
   {
-    "name": "BIMServerDetailGeometryLoader",
-    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerDetailGeometryLoader.js",
+    "name": "BIMServerPerformanceGeometryLoader",
+    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerPerformanceGeometryLoader.js",
     "lines": [
       {
-        "lineNumber": 3,
+        "lineNumber": 2,
         "line": "/**"
       },
       {
-        "lineNumber": 4,
+        "lineNumber": 3,
         "line": " *"
       },
       {
-        "lineNumber": 5,
+        "lineNumber": 4,
         "line": " * @param bimServerClient"
       },
       {
-        "lineNumber": 6,
+        "lineNumber": 5,
         "line": " * @param bimServerModel"
       },
       {
-        "lineNumber": 7,
+        "lineNumber": 6,
         "line": " * @param roid"
       },
       {
-        "lineNumber": 8,
+        "lineNumber": 7,
         "line": " * @param globalTransformationMatrix"
       },
       {
-        "lineNumber": 9,
+        "lineNumber": 8,
         "line": " * @param detailModelBuilder"
       },
       {
-        "lineNumber": 10,
+        "lineNumber": 9,
         "line": " * @constructor"
       },
       {
-        "lineNumber": 11,
+        "lineNumber": 10,
         "line": " * @private"
       },
       {
-        "lineNumber": 12,
+        "lineNumber": 11,
         "line": " */"
       },
       {
-        "lineNumber": 13,
-        "line": "function BIMServerDetailGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {"
+        "lineNumber": 12,
+        "line": "function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {"
       }
     ],
     "codeParams": [

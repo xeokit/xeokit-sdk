@@ -127,7 +127,7 @@ import {VBOGeometry} from &quot;../../../scene/geometry/VBOGeometry.js&quot;;
 import {Node} from &quot;../../../scene/nodes/Node.js&quot;;
 import {Mesh} from &quot;../../../scene/mesh/Mesh.js&quot;;
 
-import {BIMServerGeometryLoader} from &quot;./lib/BIMServerGeometryLoader.js&quot;;
+import {BIMServerQualityGeometryLoader} from &quot;./lib/BIMServerQualityGeometryLoaderader.js.js&quot;;
 import {loadMetaModel} from &quot;./lib/loadMetaModel.js&quot;;
 import {IFCObjectDefaults} from &quot;./../../../viewer/metadata/IFCObjectDefaults.js&quot;;
 import {utils} from &quot;../../../scene/utils.js&quot;;
@@ -403,7 +403,7 @@ class BIMServerLoaderPluginOLD extends Plugin {
                 idMapping.toGuid.push(oidToGuid);
                 idMapping.toId.push(guidToOid);
 
-                const loader = new BIMServerGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
+                const loader = new BIMServerQualityGeometryLoader(bimServerClient, bimServerClientModel, roid, null, {
 
                     log: function (msg) {
                         if (logging) {

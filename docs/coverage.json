@@ -1,7 +1,7 @@
 {
-  "coverage": "48.79%",
-  "expectCount": 2910,
-  "actualCount": 1420,
+  "coverage": "48.57%",
+  "expectCount": 2884,
+  "actualCount": 1401,
   "files": {
     "src/scene/Component.js": {
       "expectCount": 43,
@@ -31,16 +31,6 @@
       "expectCount": 34,
       "actualCount": 34,
       "undocumentLines": []
-    },
-    "src/scene/PerformanceModel/PerformanceMesh.js": {
-      "expectCount": 27,
-      "actualCount": 23,
-      "undocumentLines": [
-        8,
-        71,
-        72,
-        75
-      ]
     },
     "src/scene/PerformanceModel/PerformanceModel.js": {
       "expectCount": 112,
@@ -79,7 +69,17 @@
         836
       ]
     },
-    "src/scene/PerformanceModel/PerformanceNode.js": {
+    "src/scene/PerformanceModel/lib/PerformanceMesh.js": {
+      "expectCount": 24,
+      "actualCount": 20,
+      "undocumentLines": [
+        8,
+        71,
+        72,
+        75
+      ]
+    },
+    "src/scene/PerformanceModel/lib/PerformanceNode.js": {
       "expectCount": 43,
       "actualCount": 35,
       "undocumentLines": [
@@ -93,7 +93,7 @@
         524
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingBuffer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingBuffer.js": {
       "expectCount": 25,
       "actualCount": 3,
       "undocumentLines": [
@@ -121,7 +121,7 @@
         35
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingDrawRenderer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingDrawRenderer.js": {
       "expectCount": 12,
       "actualCount": 1,
       "undocumentLines": [
@@ -138,15 +138,15 @@
         176
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingDrawShaderSource.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingDrawShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
         12,
-        147
+        142
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingEdgesRenderer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingEdgesRenderer.js": {
       "expectCount": 12,
       "actualCount": 1,
       "undocumentLines": [
@@ -163,7 +163,7 @@
         137
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingEdgesShaderSource.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingEdgesShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -171,7 +171,7 @@
         73
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingFillRenderer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingFillRenderer.js": {
       "expectCount": 12,
       "actualCount": 1,
       "undocumentLines": [
@@ -188,7 +188,7 @@
         138
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingFillShaderSource.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingFillShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -196,7 +196,7 @@
         63
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingLayer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingLayer.js": {
       "expectCount": 64,
       "actualCount": 5,
       "undocumentLines": [
@@ -261,7 +261,7 @@
         723
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingPickRenderer.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingPickRenderer.js": {
       "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
@@ -277,7 +277,7 @@
         120
       ]
     },
-    "src/scene/PerformanceModel/batching/batchingPickShaderSource.js": {
+    "src/scene/PerformanceModel/lib/batching/batchingPickShaderSource.js": {
       "expectCount": 6,
       "actualCount": 1,
       "undocumentLines": [
@@ -288,7 +288,7 @@
         7
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingDrawRenderer.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingDrawRenderer.js": {
       "expectCount": 12,
       "actualCount": 1,
       "undocumentLines": [
@@ -305,15 +305,15 @@
         236
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingDrawShaderSource.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingDrawShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
         15,
-        162
+        158
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingEdgesRenderer.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingEdgesRenderer.js": {
       "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
@@ -329,7 +329,7 @@
         170
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingEdgesShaderSource.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingEdgesShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -337,7 +337,7 @@
         63
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingFillRenderer.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingFillRenderer.js": {
       "expectCount": 12,
       "actualCount": 1,
       "undocumentLines": [
@@ -354,7 +354,7 @@
         173
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingFillShaderSource.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingFillShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -362,7 +362,7 @@
         76
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingLayer.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingLayer.js": {
       "expectCount": 72,
       "actualCount": 3,
       "undocumentLines": [
@@ -437,7 +437,7 @@
         692
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingPickRenderer.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingPickRenderer.js": {
       "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
@@ -453,7 +453,7 @@
         158
       ]
     },
-    "src/scene/PerformanceModel/instancing/instancingPickShaderSource.js": {
+    "src/scene/PerformanceModel/lib/instancing/instancingPickShaderSource.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
@@ -461,12 +461,12 @@
         55
       ]
     },
-    "src/scene/PerformanceModel/renderFlags.js": {
+    "src/scene/PerformanceModel/lib/renderFlags.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/scene/PerformanceModel/renderPasses.js": {
+    "src/scene/PerformanceModel/lib/renderPasses.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
@@ -1105,7 +1105,7 @@
       ]
     },
     "src/scene/mesh/Mesh.js": {
-      "expectCount": 150,
+      "expectCount": 149,
       "actualCount": 94,
       "undocumentLines": [
         19,
@@ -1118,7 +1118,7 @@
         27,
         28,
         30,
-        1704,
+        1701,
         207,
         229,
         230,
@@ -1162,8 +1162,7 @@
         811,
         815,
         826,
-        1628,
-        1631
+        1628
       ]
     },
     "src/scene/mesh/draw/DrawRenderer.js": {
@@ -1474,24 +1473,23 @@
       "expectCount": 111,
       "actualCount": 65,
       "undocumentLines": [
-        20,
-        455,
+        21,
         456,
         457,
         458,
         459,
-        461,
+        460,
         462,
-        464,
-        533,
-        537,
-        578,
-        711,
-        717,
-        763,
-        777,
-        813,
-        838,
+        463,
+        465,
+        534,
+        538,
+        579,
+        712,
+        718,
+        769,
+        783,
+        819,
         844,
         850,
         856,
@@ -1500,26 +1498,27 @@
         874,
         880,
         886,
-        891,
-        896,
-        901,
-        906,
-        915,
-        924,
-        933,
-        942,
-        956,
-        1041,
-        1049,
-        1060,
-        1159,
-        1191,
-        1218,
-        1452,
-        1472,
-        1516,
-        1521,
-        1934
+        892,
+        897,
+        902,
+        907,
+        912,
+        921,
+        930,
+        939,
+        948,
+        962,
+        1047,
+        1055,
+        1066,
+        1165,
+        1197,
+        1224,
+        1458,
+        1478,
+        1532,
+        1537,
+        1950
       ]
     },
     "src/scene/sectionPlane/SectionPlane.js": {
@@ -1625,12 +1624,10 @@
       ]
     },
     "src/scene/webgl/Drawable.js": {
-      "expectCount": 30,
+      "expectCount": 28,
       "actualCount": 27,
       "undocumentLines": [
-        286,
-        289,
-        292
+        289
       ]
     },
     "src/scene/webgl/FrameContext.js": {
@@ -1862,25 +1859,10 @@
       "expectCount": 9,
       "actualCount": 8,
       "undocumentLines": [
-        163
+        165
       ]
     },
-    "src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPluginOLD.js": {
-      "expectCount": 19,
-      "actualCount": 15,
-      "undocumentLines": [
-        69,
-        91,
-        116,
-        129
-      ]
-    },
-    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerDetailGeometryLoader.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerGeometryLoader.js": {
+    "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerPerformanceGeometryLoader.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []

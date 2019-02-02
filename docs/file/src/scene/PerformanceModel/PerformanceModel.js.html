@@ -122,12 +122,12 @@ import {math} from &quot;../math/math.js&quot;;
 import {buildEdgeIndices} from &apos;../math/buildEdgeIndices.js&apos;;
 import {WEBGL_INFO} from &apos;./../webglInfo.js&apos;;
 
-import {PerformanceMesh} from &apos;./PerformanceMesh.js&apos;;
-import {PerformanceNode} from &apos;./PerformanceNode.js&apos;;
-import {getBatchingBuffer, putBatchingBuffer} from &quot;./batching/batchingBuffer.js&quot;;
-import {BatchingLayer} from &apos;./batching/batchingLayer.js&apos;;
-import {InstancingLayer} from &apos;./instancing/instancingLayer.js&apos;;
-import {RENDER_FLAGS} from &apos;./renderFlags.js&apos;;
+import {PerformanceMesh} from &apos;./lib/PerformanceMesh.js&apos;;
+import {PerformanceNode} from &apos;./lib/PerformanceNode.js&apos;;
+import {getBatchingBuffer, putBatchingBuffer} from &quot;./lib/batching/batchingBuffer.js&quot;;
+import {BatchingLayer} from &apos;./lib/batching/batchingLayer.js&apos;;
+import {InstancingLayer} from &apos;./lib/instancing/instancingLayer.js&apos;;
+import {RENDER_FLAGS} from &apos;./lib/renderFlags.js&apos;;
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;ANGLE_instanced_arrays&quot;];
 
@@ -141,7 +141,7 @@ const defaultRotation = math.vec3([0, 0, 0]);
 const defaultQuaternion = math.identityQuaternion();
 
 /**
- * @desc An {@link Entity} that is a high-performance model representation designed for efficient rendering and low memory usage.
+ * @desc A high-performance model representation for efficient rendering and low memory usage.
  *
  * ## PerformanceModel Structure
  *
@@ -181,7 +181,7 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## User Guide
  *
- * * [High Performance Models](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance_Models.html)
+ * * [High Performance Models](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance-Models)
  *
  * @implements {Drawable}
  * @implements {Entity}
@@ -1097,9 +1097,9 @@ class PerformanceModel extends Component {
             }
             if (ghostMaterial.edges) {
                 if (ghostMaterial.edgeAlpha &lt; 1.0) {
-                    renderFlags.ghostedFillTransparent = true;
+                    renderFlags.ghostedEdgesTransparent = true;
                 } else {
-                    renderFlags.ghostedFillOpaque = true;
+                    renderFlags.ghostedEdgesOpaque = true;
                 }
             }
         }
