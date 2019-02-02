@@ -25,8 +25,8 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/scene/nodes/Node.js~Node.html">Node</a>
-            - Organizes models in a scene graph
+               href="./../docs/class/src/scene/mesh/Mesh.js~Mesh.html">Node</a>
+            - Creates the ground plane
         </li>
         <li>
             <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Importing-Models">User Guide</a>
@@ -68,48 +68,39 @@
     const objLoader = new OBJLoaderPlugin(viewer);
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    new Node(viewer.scene, {
+    // Car
 
-        scale: [.5, .5, .5], // Scale the whole scene down a bit
-
-        children: [
-
-            // Car
-
-            objLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
-                id: "myModel",
-                src: "./models/obj/sportsCar/sportsCar.obj",
-                position: [-5, -1, 0],
-            }),
-
-            // House
-
-            gltfLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
-                id: "myModel2",
-                src: "./models/gltf/schependomlaan/scene.gltf",
-                metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-                rotation: [0, 50, 0],
-                edges: true
-            }),
-
-            // Ground plane
-
-            new Mesh(viewer.scene, {
-                geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-                    xSize: 500,
-                    zSize: 500
-                })),
-                material: new PhongMaterial(viewer.scene, {
-                    diffuse: [0.4, 1.0, 0.4],
-                    backfaces: true
-                }),
-                position: [0, -1.0, 0],
-                pickable: false,
-                collidable: false
-            })
-        ]
+    objLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
+        id: "myModel",
+        src: "./models/obj/sportsCar/sportsCar.obj",
+        position: [-5, -1, 0],
     });
 
+    // House
+
+    gltfLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
+        id: "myModel2",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        rotation: [0, 50, 0],
+        edges: true
+    });
+
+    // Ground plane
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 500,
+            zSize: 500
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0.4, 1.0, 0.4],
+            backfaces: true
+        }),
+        position: [0, -1.0, 0],
+        pickable: false,
+        collidable: false
+    });
 
 </script>
 </html>
