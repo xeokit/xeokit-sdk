@@ -306,8 +306,8 @@
                 });
 
             });
-        }, function (error) {
-            console.log(error);
+        }, function (response) {
+            console.log("Login failed: " + response.message);
         });
     });
 
