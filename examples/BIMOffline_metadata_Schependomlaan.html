@@ -19,7 +19,7 @@
 <div id="info">
     <h1>Loading Model & IFC Metadata</h1>
     <br>
-    <p>Loads a glTF BIM model and JSON IFC metadata from the file system, then uses the metadata to select the whole
+    <p>Loads a glTF BIM model and JSON IFC metadata from the file system, then uses the metadata to highlight the whole
         third storey and fit it to view.</p><br>
     <ul>
         <li>
@@ -55,7 +55,7 @@
     //------------------------------------------------------------------------------------------------------------------
     // 1. Create a Viewer,
     // 2. Arrange the camera,
-    // 3. Tweak the selection material (tone it down a bit)
+    // 3. Tweak the highlighting material
     //------------------------------------------------------------------------------------------------------------------
 
     // 1
@@ -69,7 +69,9 @@
     viewer.camera.orbitYaw(-45);
 
     // 3
-    viewer.scene.selectedMaterial.fillAlpha = 0.1;
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
     // 1. Create a glTF loader plugin,
@@ -92,7 +94,7 @@
 
         //--------------------------------------------------------------------------------------------------------------
         // 1. Find metadata on the third storey
-        // 2. Select all the objects in the third storey
+        // 2. Highlight all the objects in the third storey
         // 3. Fit the camera to all the objects on the third storey
         //--------------------------------------------------------------------------------------------------------------
 
@@ -110,7 +112,7 @@
         const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
 
         // 2
-        viewer.scene.setObjectsSelected(objectIds, true);
+        viewer.scene.setObjectsHighlighted(objectIds, true);
 
         // 3
         viewer.cameraFlight.jumpTo(aabb);
