@@ -165,15 +165,15 @@ maybe using PBR etc.</p>
 surface appearance.</p>
 <p>Publically, GLTFLoaderPlugin creates the same <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s for both levels of performance. Privately, however, it implements
 <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s using two different sets of concrete subtypes, for its two different internally-managed scene representations.</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/">glTF file</a>, along
-with an accompanying JSON <a href="http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/">IFC metadata file</a>.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/">glTF file</a>, along
+with an accompanying JSON <a href="http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/">IFC metadata file</a>.</p>
 <p>This will create a bunch of <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s that represents the model and its objects, along with a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> and <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s
 that hold their metadata.</p>
 <p>Since this model contains IFC types, the GLTFModelLoader will set the initial colors of object <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s according
 to the standard IFC element colors in the GLTFModel&apos;s current map. Override that with your own map via property <span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-objectDefaults">GLTFLoaderPlugin#objectDefaults</a></span>.</p>
 <p>Read more about this example in the user guide on <a href="https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">Viewing BIM Models Offline</a>.</p>
 <p>We&apos;re leaving <code>performance: true</code> since our model has many objects and we&apos;re not interested in realistic rendering.</p>
-<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter">Run this example</a>]</p>
+<p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 
@@ -250,7 +250,7 @@ model.destroy();</code>
 </code></pre>
 <h2 id="including-and-excluding-ifc-types">Including and excluding IFC types</h2><p>We can also load only those objects that have the specified IFC types. In the example below, we&apos;ll load only the
 objects that represent walls.</p>
-<p>[<a href="http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView">Run this example</a>]</p>
+<p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const model = gltfLoader.load({
     id: &quot;myModel&quot;,
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,

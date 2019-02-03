@@ -22,7 +22,7 @@ import {OBJLoader} from "./OBJLoader.js";
  *
  * ## Usage
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#loading_OBJ_SportsCar)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#loading_OBJ_SportsCar)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

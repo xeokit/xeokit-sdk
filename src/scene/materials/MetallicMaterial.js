@@ -21,7 +21,7 @@ const modeNames = ["opaque", "mask", "blend"];
  * channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
  * within the same {@link Texture} for efficiency.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#materials_MetallicMaterial)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_MetallicMaterial)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

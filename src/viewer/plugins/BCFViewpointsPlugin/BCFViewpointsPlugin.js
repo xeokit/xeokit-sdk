@@ -19,7 +19,7 @@ const tempVec3 = math.vec3();
  * slice the model in half using a {@link SectionPlanesPlugin}, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
  * which we'll log to the JavaScript developer console.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

@@ -11,7 +11,7 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  * In the example below, we'll load a model using a {@link GLTFLoaderPlugin}, then animate a {@link Camera}
  * through the frames in a {@link CameraPath}.
  *
- *  * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#camera_CameraPathAnimation)]
+ *  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraPathAnimation)]
  *
  * ````Javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

@@ -33,7 +33,7 @@
       },
       {
         "lineNumber": 9,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildBoxGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildBoxGeometry)]"
       },
       {
         "lineNumber": 10,
@@ -255,7 +255,7 @@
       },
       {
         "lineNumber": 9,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry)]"
       },
       {
         "lineNumber": 10,
@@ -505,7 +505,7 @@
       },
       {
         "lineNumber": 10,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry)]"
       },
       {
         "lineNumber": 11,
@@ -735,7 +735,7 @@
       },
       {
         "lineNumber": 9,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry)]"
       },
       {
         "lineNumber": 10,
@@ -953,7 +953,7 @@
       },
       {
         "lineNumber": 9,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry)]"
       },
       {
         "lineNumber": 10,
@@ -1191,7 +1191,7 @@
       },
       {
         "lineNumber": 1583,
-        "line": " * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry)]"
+        "line": " * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildVectorTextGeometry)]"
       },
       {
         "lineNumber": 1584,

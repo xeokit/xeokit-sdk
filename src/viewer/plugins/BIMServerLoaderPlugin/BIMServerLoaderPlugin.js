@@ -32,7 +32,7 @@ import {utils} from "../../../scene/utils.js";
  *
  * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
  *
- *  [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
+ *  [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer} from "./../src/viewer/Viewer.js";

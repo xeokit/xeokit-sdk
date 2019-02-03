@@ -57,8 +57,8 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * ## Examples
  *
- * * [PerformanceModel using geometry batching](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
- * * [PerformanceModel using geometry instancing](http://xeolabs.com/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)
+ * * [PerformanceModel using geometry batching](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
+ * * [PerformanceModel using geometry instancing](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_instancing)
  *
  * ## User Guide
  *

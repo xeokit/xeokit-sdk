@@ -8,7 +8,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  *
  * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildPlaneGeometry)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";

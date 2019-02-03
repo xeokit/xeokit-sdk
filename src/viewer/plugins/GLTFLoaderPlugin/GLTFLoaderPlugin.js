@@ -41,8 +41,8 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [glTF file](http://xeolabs.com/xeokit-sdk/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](http://xeolabs.com/xeokit-sdk/examples/metaModels/schependomlaan/).
+ * In the example below we'll load the Schependomlaan model from a [glTF file](http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/), along
+ * with an accompanying JSON [IFC metadata file](http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
@@ -54,7 +54,7 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  *
  * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -137,7 +137,7 @@ import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js
  * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
  * objects that represent walls.
  *
- * [[Run this example](http://xeolabs.com/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView)]
  *
  * ````javascript
  * const model = gltfLoader.load({
