@@ -301,41 +301,41 @@ class PerformanceNode {
     }
 
     /**
-     * Sets if this PerformanceModelNode is ghosted.
+     * Sets if this PerformanceModelNode is xrayed.
      *
-     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be
-     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.
+     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be
+     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
-    set ghosted(ghosted) {
-        if (!!(this._flags &amp; RENDER_FLAGS.GHOSTED) === ghosted) {
+    set xrayed(xrayed) {
+        if (!!(this._flags &amp; RENDER_FLAGS.XRAYED) === xrayed) {
             return; // Redundant update
         }
-        if (ghosted) {
-            this._flags = this._flags | RENDER_FLAGS.GHOSTED;
+        if (xrayed) {
+            this._flags = this._flags | RENDER_FLAGS.XRAYED;
         } else {
-            this._flags = this._flags &amp; ~RENDER_FLAGS.GHOSTED;
+            this._flags = this._flags &amp; ~RENDER_FLAGS.XRAYED;
         }
         for (var i = 0, len = this.meshes.length; i &lt; len; i++) {
-            this.meshes[i]._setGhosted(this._flags);
+            this.meshes[i]._setXRayed(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectGhostedUpdated(this);
+            this.model.scene._objectXRayedUpdated(this);
         }
         this.model.glRedraw();
     }
 
     /**
-     * Gets if this PerformanceModelNode is ghosted.
+     * Gets if this PerformanceModelNode is xrayed.
      *
      * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be
      * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
-    get ghosted() {
-        return this._getFlag(RENDER_FLAGS.GHOSTED);
+    get xrayed() {
+        return this._getFlag(RENDER_FLAGS.XRAYED);
     }
 
     /**
@@ -628,8 +628,8 @@ class PerformanceNode {
             if (this.highlighted) {
                 scene._objectHighlightedUpdated(this);
             }
-            if (this.ghosted) {
-                scene._objectGhostedUpdated(this);
+            if (this.xrayed) {
+                scene._objectXRayedUpdated(this);
             }
             if (this.selected) {
                 scene._objectSelectedUpdated(this);
@@ -647,8 +647,8 @@ class PerformanceNode {
             if (this.visible) {
                 scene._objectVisibilityUpdated(this);
             }
-            if (this.ghosted) {
-                scene._objectGhostedUpdated(this);
+            if (this.xrayed) {
+                scene._objectXRayedUpdated(this);
             }
             if (this.selected) {
                 scene._objectSelectedUpdated(this);

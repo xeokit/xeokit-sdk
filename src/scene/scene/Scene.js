@@ -101,7 +101,7 @@ function getEntityIDMap(scene, entityIds) {
  * ````javascript
  * var meshes = scene.types["Mesh"];
  * var teapotMesh = meshes["myMesh"];
- * teapotMesh.ghosted = true;
+ * teapotMesh.xrayed = true;
  *
  * var phongMaterials = scene.types["PhongMaterial"];
  * var teapotMaterial = phongMaterials["myMaterial"];
@@ -409,17 +409,17 @@ class Scene extends Component {
         this.visibleObjects = {};
 
         /**
-         * Map of currently ghosted {@link Entity}s that represent objects.
+         * Map of currently xrayed {@link Entity}s that represent objects.
          *
-         * An Entity represents an object if {@link Entity#isObject} is ````true````, and is ghosted when {@link Entity#ghosted} is true.
+         * An Entity represents an object if {@link Entity#isObject} is ````true````, and is xrayed when {@link Entity#xrayed} is true.
          *
          * Each {@link Entity} is mapped here by {@link Entity#id}.
          *
-         * @property ghostedObjects
+         * @property xrayedObjects
          * @final
          * @type {{String:Object}}
          */
-        this.ghostedObjects = {};
+        this.xrayedObjects = {};
 
         /**
          * Map of currently highlighted {@link Entity}s that represent objects.
@@ -455,7 +455,7 @@ class Scene extends Component {
         this._modelIds = null;
         this._objectIds = null;
         this._visibleObjectIds = null;
-        this._ghostedObjectIds = null;
+        this._xrayedObjectIds = null;
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
 
@@ -774,7 +774,7 @@ class Scene extends Component {
 
         dummy = this.geometry;
         dummy = this.material;
-        dummy = this.ghostMaterial;
+        dummy = this.xrayMaterial;
         dummy = this.edgeMaterial;
         dummy = this.selectedMaterial;
         dummy = this.highlightMaterial;
@@ -918,13 +918,13 @@ class Scene extends Component {
         this._visibleObjectIds = null; // Lazy regenerate
     }
 
-    _objectGhostedUpdated(entity) {
-        if (entity.ghosted) {
-            this.ghostedObjects[entity.id] = entity;
+    _objectXRayedUpdated(entity) {
+        if (entity.xrayed) {
+            this.xrayedObjects[entity.id] = entity;
         } else {
-            delete this.ghostedObjects[entity.id];
+            delete this.xrayedObjects[entity.id];
         }
-        this._ghostedObjectIds = null; // Lazy regenerate
+        this._xrayedObjectIds = null; // Lazy regenerate
     }
 
     _objectHighlightedUpdated(entity) {
@@ -1109,15 +1109,15 @@ class Scene extends Component {
     }
 
     /**
-     * Gets the IDs of the {@link Entity}s in {@link Scene#ghostedObjects}.
+     * Gets the IDs of the {@link Entity}s in {@link Scene#xrayedObjects}.
      *
      * @type {String[]}
      */
-    get ghostedObjectIds() {
-        if (!this._ghostedObjectIds) {
-            this._ghostedObjectIds = Object.keys(this.ghostedObjects);
+    get xrayedObjectIds() {
+        if (!this._xrayedObjectIds) {
+            this._xrayedObjectIds = Object.keys(this.xrayedObjects);
         }
-        return this._ghostedObjectIds;
+        return this._xrayedObjectIds;
     }
 
     /**
@@ -1351,19 +1351,19 @@ class Scene extends Component {
     }
 
     /**
-     * Gets the default ghosting {@link EmphasisMaterial} for this Scene.
+     * Gets the default xraying {@link EmphasisMaterial} for this Scene.
      *
-     * Has {@link EmphasisMaterial#id} set to "default.ghostMaterial".
+     * Has {@link EmphasisMaterial#id} set to "default.xrayMaterial".
      *
-     * {@link Mesh}s in this Scene have {@link Mesh#ghostMaterial} set to this {@link EmphasisMaterial} by default.
+     * {@link Mesh}s in this Scene have {@link Mesh#xrayMaterial} set to this {@link EmphasisMaterial} by default.
      *
-     * {@link Mesh}s are ghosted while {@link Mesh#ghosted} is ````true````.
+     * {@link Mesh}s are xrayed while {@link Mesh#xrayed} is ````true````.
      *
      * @type {EmphasisMaterial}
      */
-    get ghostMaterial() {
-        return this.components["default.ghostMaterial"] || new EmphasisMaterial(this, {
-            id: "default.ghostMaterial",
+    get xrayMaterial() {
+        return this.components["default.xrayMaterial"] || new EmphasisMaterial(this, {
+            id: "default.xrayMaterial",
             preset: "sepia",
             dontClear: true
         });
@@ -1862,21 +1862,21 @@ class Scene extends Component {
     }
 
     /**
-     * Batch-updates {@link Entity#ghosted} on {@link Entity}s that represent objects.
+     * Batch-updates {@link Entity#xrayed} on {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#ghosted} are ````true```` is
-     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
+     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#xrayed} are ````true```` is
+     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} ghosted Whether or not to ghost.
+     * @param {Boolean} xrayed Whether or not to xray.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
-    setObjectsGhosted(ids, ghosted) {
+    setObjectsXRayed(ids, xrayed) {
         return this._withEntities(ids, this.objects, entity => {
-            const changed = (entity.ghosted !== ghosted);
-            entity.ghosted = ghosted;
+            const changed = (entity.xrayed !== xrayed);
+            entity.xrayed = xrayed;
             return changed;
         });
     }
@@ -1983,7 +1983,7 @@ class Scene extends Component {
         this.models = null;
         this.objects = null;
         this.visibleObjects = null;
-        this.ghostedObjects = null;
+        this.xrayedObjects = null;
         this.highlightedObjects = null;
         this.selectedObjects = null;
         this.sectionPlanes = null;
@@ -1992,7 +1992,7 @@ class Scene extends Component {
         this.reflectionMaps = null;
         this._objectIds = null;
         this._visibleObjectIds = null;
-        this._ghostedObjectIds = null;
+        this._xrayedObjectIds = null;
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
         this.types = null;

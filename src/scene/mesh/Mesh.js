@@ -186,7 +186,7 @@ class Mesh extends Component {
      * @param {Boolean} [cfg.collidable=true] Indicates if the Mesh is initially included in boundary calculations.
      * @param {Boolean} [cfg.castsShadow=true] Indicates if the Mesh initially casts shadows.
      * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Mesh initially receives shadows.
-     * @param {Boolean} [cfg.ghosted=false] Indicates if the Mesh is initially ghosted.
+     * @param {Boolean} [cfg.xrayed=false] Indicates if the Mesh is initially xrayed.
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Mesh is initially highlighted.
      * @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
      * @param {Boolean} [cfg.edges=false] Indicates if the Mesh's edges are initially emphasized.
@@ -195,8 +195,8 @@ class Mesh extends Component {
      * @param {String} [cfg.billboard="none"] Mesh's billboarding behaviour. Options are "none" for no billboarding, "spherical" to always directly face {@link Camera.eye}, rotating both vertically and horizontally, or "cylindrical" to face the {@link Camera#eye} while rotating only about its vertically axis (use that mode for things like trees on a landscape).
      * @param {Geometry} [cfg.geometry] {@link Geometry} to define the shape of this Mesh. Inherits {@link Scene#geometry} by default.
      * @param {Material} [cfg.material] {@link Material} to define the normal rendered appearance for this Mesh. Inherits {@link Scene#material} by default.
-     * @param {EmphasisMaterial} [cfg.ghostMaterial] {@link EmphasisMaterial} to define the ghosted appearance for this Mesh. Inherits {@link Scene#ghostMaterial} by default.
-     * @param {EmphasisMaterial} [cfg.highlightMaterial] {@link EmphasisMaterial} to define the ghosted appearance for this Mesh. Inherits {@link Scene#highlightMaterial} by default.
+     * @param {EmphasisMaterial} [cfg.xrayMaterial] {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene#xrayMaterial} by default.
+     * @param {EmphasisMaterial} [cfg.highlightMaterial] {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene#highlightMaterial} by default.
      * @param {EmphasisMaterial} [cfg.selectedMaterial] {@link EmphasisMaterial} to define the selected appearance for this Mesh. Inherits {@link Scene#selectedMaterial} by default.
      * @param {EmphasisMaterial} [cfg.edgeMaterial] {@link EdgeMaterial} to define the appearance of enhanced edges for this Mesh. Inherits {@link Scene#edgeMaterial} by default.
      */
@@ -213,7 +213,7 @@ class Mesh extends Component {
             castsShadow: null,
             receivesShadow: null,
             outlined: null,
-            ghosted: false,
+            xrayed: false,
             highlighted: false,
             selected: false,
             edges: false,
@@ -235,7 +235,7 @@ class Mesh extends Component {
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
         this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
-        this._ghostMaterial = cfg.ghostMaterial ? this._checkComponent("EmphasisMaterial", cfg.ghostMaterial) : this.scene.ghostMaterial;
+        this._xrayMaterial = cfg.xrayMaterial ? this._checkComponent("EmphasisMaterial", cfg.xrayMaterial) : this.scene.xrayMaterial;
         this._highlightMaterial = cfg.highlightMaterial ? this._checkComponent("EmphasisMaterial", cfg.highlightMaterial) : this.scene.highlightMaterial;
         this._selectedMaterial = cfg.selectedMaterial ? this._checkComponent("EmphasisMaterial", cfg.selectedMaterial) : this.scene.selectedMaterial;
         this._edgeMaterial = cfg.edgeMaterial ? this._checkComponent("EdgeMaterial", cfg.edgeMaterial) : this.scene.edgeMaterial;
@@ -287,7 +287,7 @@ class Mesh extends Component {
         this.collidable = cfg.collidable;
         this.castsShadow = cfg.castsShadow;
         this.receivesShadow = cfg.receivesShadow;
-        this.ghosted = cfg.ghosted;
+        this.xrayed = cfg.xrayed;
         this.highlighted = cfg.highlighted;
         this.selected = cfg.selected;
         this.edges = cfg.edges;
@@ -508,7 +508,7 @@ class Mesh extends Component {
     }
 
     /**
-     * Defines the appearance of this Mesh when rendering normally, ie. when not ghosted, highlighted or selected.
+     * Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.
      *
      * Set to {@link Scene#material} by default.
      *
@@ -913,39 +913,39 @@ class Mesh extends Component {
     }
 
     /**
-     * Sets if this Mesh is ghosted.
+     * Sets if this Mesh is xrayed.
      *
-     * Ghosted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#ghostMaterial}.
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
      *
-     * When {@link Mesh#isObject} and {@link Mesh#ghosted} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#ghostedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
-    set ghosted(ghosted) {
-        ghosted = !!ghosted;
-        if (this._state.ghosted === ghosted) {
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        if (this._state.xrayed === xrayed) {
             return;
         }
-        this._state.ghosted = ghosted;
+        this._state.xrayed = xrayed;
         if (this._isObject) {
-            this.scene._objectGhostedUpdated(this);
+            this.scene._objectXRayedUpdated(this);
         }
         this.glRedraw();
     }
 
     /**
-     * Gets if this Mesh is ghosted.
+     * Gets if this Mesh is xrayed.
      *
-     * Ghosted appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#ghostMaterial}.
+     * XRayed appearance is configured by the {@link EmphasisMaterial} referenced by {@link Mesh#xrayMaterial}.
      *
-     * When {@link Mesh#isObject} and {@link Mesh#ghosted} are both ````true``` the Mesh will be
-     * registered by {@link Mesh#id} in {@link Scene#ghostedObjects}.
+     * When {@link Mesh#isObject} and {@link Mesh#xrayed} are both ````true``` the Mesh will be
+     * registered by {@link Mesh#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
-    get ghosted() {
-        return this._state.ghosted;
+    get xrayed() {
+        return this._state.xrayed;
     }
 
     /**
@@ -1388,20 +1388,20 @@ class Mesh extends Component {
 
         const state = this._state;
 
-        if (state.ghosted) {
-            const ghostMaterial = this._ghostMaterial._state;
-            if (ghostMaterial.fill) {
-                if (ghostMaterial.fillAlpha < 1.0) {
-                    renderFlags.ghostedFillTransparent = true;
+        if (state.xrayed) {
+            const xrayMaterial = this._xrayMaterial._state;
+            if (xrayMaterial.fill) {
+                if (xrayMaterial.fillAlpha < 1.0) {
+                    renderFlags.xrayedFillTransparent = true;
                 } else {
-                    renderFlags.ghostedFillOpaque = true;
+                    renderFlags.xrayedFillOpaque = true;
                 }
             }
-            if (ghostMaterial.edges) {
-                if (ghostMaterial.edgeAlpha < 1.0) {
-                    renderFlags.ghostedEdgesTransparent = true;
+            if (xrayMaterial.edges) {
+                if (xrayMaterial.edgeAlpha < 1.0) {
+                    renderFlags.xrayedEdgesTransparent = true;
                 } else {
-                    renderFlags.ghostedEdgesOpaque = true;
+                    renderFlags.xrayedEdgesOpaque = true;
                 }
             }
         } else {
@@ -1456,22 +1456,22 @@ class Mesh extends Component {
     }
 
     /**
-     * Defines the appearance of this Mesh when ghosted.
+     * Defines the appearance of this Mesh when xrayed.
      *
-     * Mesh is ghosted when {@link Mesh#ghosted} is ````true````.
+     * Mesh is xrayed when {@link Mesh#xrayed} is ````true````.
      *
-     * Set to {@link Scene#ghostMaterial} by default.
+     * Set to {@link Scene#xrayMaterial} by default.
      *
      * @type {EmphasisMaterial}
      */
-    get ghostMaterial() {
-        return this._ghostMaterial;
+    get xrayMaterial() {
+        return this._xrayMaterial;
     }
 
     /**
      * Defines the appearance of this Mesh when highlighted.
      *
-     * Mesh is ghosted when {@link Mesh#highlighted} is ````true````.
+     * Mesh is xrayed when {@link Mesh#highlighted} is ````true````.
      *
      * Set to {@link Scene#highlightMaterial} by default.
      *
@@ -1484,7 +1484,7 @@ class Mesh extends Component {
     /**
      * Defines the appearance of this Mesh when selected.
      *
-     * Mesh is ghosted when {@link Mesh#selected} is ````true````.
+     * Mesh is xrayed when {@link Mesh#selected} is ````true````.
      *
      * Set to {@link Scene#selectedMaterial} by default.
      *
@@ -1497,7 +1497,7 @@ class Mesh extends Component {
     /**
      * Defines the appearance of this Mesh when edges are enhanced.
      *
-     * Mesh is ghosted when {@link Mesh#edges} is ````true````.
+     * Mesh is xrayed when {@link Mesh#edges} is ````true````.
      *
      * Set to {@link Scene#edgeMaterial} by default.
      *
@@ -1536,30 +1536,30 @@ class Mesh extends Component {
     }
 
     /** @private  */
-    drawGhostedFillOpaque(frameCtx) {
+    drawXRayedFillOpaque(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == ghost
+            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawGhostedEdgesOpaque(frameCtx) {
+    drawXRayedEdgesOpaque(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == ghost
+            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawGhostedFillTransparent(frameCtx) {
+    drawXRayedFillTransparent(frameCtx) {
         if (this._emphasisFillRenderer || (this._emphasisFillRenderer = EmphasisFillRenderer.get(this))) {
-            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == ghost
+            this._emphasisFillRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
     /** @private  */
-    drawGhostedEdgesTransparent(frameCtx) {
+    drawXRayedEdgesTransparent(frameCtx) {
         if (this._emphasisEdgesRenderer || (this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this))) {
-            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == ghost
+            this._emphasisEdgesRenderer.drawMesh(frameCtx, this, 0); // 0 == xray
         }
     }
 
@@ -1679,8 +1679,8 @@ class Mesh extends Component {
             if (this._visible) {
                 this.scene._objectVisibilityUpdated(this, false);
             }
-            if (this._ghosted) {
-                this.scene._objectGhostedUpdated(this, false);
+            if (this._xrayed) {
+                this.scene._objectXRayedUpdated(this, false);
             }
             if (this._selected) {
                 this.scene._objectSelectedUpdated(this, false);

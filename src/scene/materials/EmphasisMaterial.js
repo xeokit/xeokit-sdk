@@ -112,20 +112,20 @@ const PRESETS = {
 };
 
 /**
- * Configures the appearance of {@link Entity}s when they are ghosted, highlighted or selected.
+ * Configures the appearance of {@link Entity}s when they are xrayed, highlighted or selected.
  *
- * * Ghost an {@link Entity} by setting {@link Entity#ghosted} ````true````.
+ * * XRay an {@link Entity} by setting {@link Entity#xrayed} ````true````.
  * * Highlight an {@link Entity} by setting {@link Entity#highlighted} ````true````.
  * * Select an {@link Entity} by setting {@link Entity#selected} ````true````.
- * * When {@link Entity}s are within the subtree of a root {@link Entity}, then setting {@link Entity#ghosted}, {@link Entity#highlighted} or {@link Entity#selected}
+ * * When {@link Entity}s are within the subtree of a root {@link Entity}, then setting {@link Entity#xrayed}, {@link Entity#highlighted} or {@link Entity#selected}
  * on the root will collectively set those properties on all sub-{@link Entity}s.
  * * EmphasisMaterial provides several presets. Select a preset by setting {@link EmphasisMaterial#preset} to the ID of a preset in {@link EmphasisMaterial#presets}.
- * * By default, a {@link Mesh} uses the default EmphasisMaterials in {@link Scene#ghostMaterial}, {@link Scene#highlightMaterial} and {@link Scene#selectedMaterial}
- * but you can assign each {@link Mesh#ghostMaterial}, {@link Mesh#highlightMaterial} or {@link Mesh#selectedMaterial} to a custom EmphasisMaterial, if required.
+ * * By default, a {@link Mesh} uses the default EmphasisMaterials in {@link Scene#xrayMaterial}, {@link Scene#highlightMaterial} and {@link Scene#selectedMaterial}
+ * but you can assign each {@link Mesh#xrayMaterial}, {@link Mesh#highlightMaterial} or {@link Mesh#selectedMaterial} to a custom EmphasisMaterial, if required.
  *
  * ## Usage
  *
- * In the example below, we'll create a {@link Mesh} with its own GhostMaterial and set {@link Mesh#ghosted} ````true```` to ghost it.
+ * In the example below, we'll create a {@link Mesh} with its own XRayMaterial and set {@link Mesh#xrayed} ````true```` to xray it.
  *
  * Recall that {@link Mesh} is a concrete subtype of the abstract {@link Entity} base class.
  *
@@ -137,7 +137,7 @@ const PRESETS = {
  *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
- *     ghostMaterial: new EdgeMaterial(viewer.scene, {
+ *     xrayMaterial: new EdgeMaterial(viewer.scene, {
  *         fill: true,
  *         fillColor: [0, 0, 0],
  *         fillAlpha: 0.7,
@@ -146,7 +146,7 @@ const PRESETS = {
  *         edgeAlpha: 1.0,
  *         edgeWidth: 2
  *     }),
- *     ghosted: true
+ *     xrayed: true
  * });
  * ````
  *
@@ -168,21 +168,21 @@ const PRESETS = {
  *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
- *     ghosted: true
+ *     xrayed: true
  * });
  *
- * var ghostMaterial = viewer.scene.ghostMaterial;
+ * var xrayMaterial = viewer.scene.xrayMaterial;
  *
- * ghostMaterial.fillColor = [0.2, 1.0, 0.2];
- * ghostMaterial.fillAlpha = 1.0;
+ * xrayMaterial.fillColor = [0.2, 1.0, 0.2];
+ * xrayMaterial.fillAlpha = 1.0;
  * ````
  *
  * ## Presets
  *
- * Let's switch the {@link Scene#ghostMaterial} to one of the presets in {@link EmphasisMaterial#presets}:
+ * Let's switch the {@link Scene#xrayMaterial} to one of the presets in {@link EmphasisMaterial#presets}:
  *
  * ````javascript
- * viewer.ghostMaterial.preset = EmphasisMaterial.presets["sepia"];
+ * viewer.xrayMaterial.preset = EmphasisMaterial.presets["sepia"];
  * ````
  *
  * We can also create an EmphasisMaterial from a preset, while overriding properties of the preset as required:
@@ -217,13 +217,13 @@ class EmphasisMaterial extends Material {
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] The EmphasisMaterial configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Boolean} [cfg.fill=true] Indicates if ghost surfaces are filled with color.
+     * @param {Boolean} [cfg.fill=true] Indicates if xray surfaces are filled with color.
      * @param {Number[]} [cfg.fillColor=[0.4,0.4,0.4]] EmphasisMaterial fill color.
-     * @param  {Number} [cfg.fillAlpha=0.2] Transparency of filled ghost faces. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
-     * @param {Boolean} [cfg.edges=true] Indicates if ghost edges are visible.
-     * @param {Number[]} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of ghost edges.
-     * @param {Number} [cfg.edgeAlpha=0.5] Transparency of ghost edges. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
-     * @param {Number} [cfg.edgeWidth=1] Width of ghost edges, in pixels.
+     * @param  {Number} [cfg.fillAlpha=0.2] Transparency of filled xray faces. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     * @param {Boolean} [cfg.edges=true] Indicates if xray edges are visible.
+     * @param {Number[]} [cfg.edgeColor=[0.2,0.2,0.2]]  RGB color of xray edges.
+     * @param {Number} [cfg.edgeAlpha=0.5] Transparency of xray edges. A value of ````0.0```` indicates fully transparent, ````1.0```` is fully opaque.
+     * @param {Number} [cfg.edgeWidth=1] Width of xray edges, in pixels.
      * @param {String} [cfg.preset] Selects a preset EmphasisMaterial configuration - see {@link EmphasisMaterial#presets}.
      * @param {Boolean} [cfg.backfaces=false] Whether to render geometry backfaces when emphasising.
      */

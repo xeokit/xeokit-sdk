@@ -155,21 +155,21 @@ function buildVertex(layer) {
     src.push(&quot;void main(void) {&quot;);
 
     /*
-     pass 0 - opaque, non-ghosted objects only
-     pass 1 - transparent, non-ghosted objects only
-     pass 2 - ghosted objects only
+     pass 0 - opaque, non-xrayed objects only
+     pass 1 - transparent, non-xrayed objects only
+     pass 2 - xrayed objects only
      pass 3 - highlighted objects only
      */
     src.push(&quot;bool visible      = (float(flags.x) &gt; 0.0);&quot;);
-    src.push(&quot;bool ghosted      = (float(flags.y) &gt; 0.0);&quot;);
+    src.push(&quot;bool xrayed      = (float(flags.y) &gt; 0.0);&quot;);
     src.push(&quot;bool highlighted  = (float(flags.z) &gt; 0.0);&quot;);
     src.push(&quot;bool transparent  = (color.a &lt; 1.0);&quot;); // Color comes from EdgeMaterial.edgeColor, so is not quantized
 
     src.push(`if
     (!visible ||
-    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (transparent || ghosted)) ||
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp;  (!transparent || ghosted)) ||
-    (renderPass == ${RENDER_PASSES.GHOSTED} &amp;&amp; !ghosted) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (transparent || xrayed)) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp;  (!transparent || xrayed)) ||
+    (renderPass == ${RENDER_PASSES.XRAYED} &amp;&amp; !xrayed) ||
     (renderPass == ${RENDER_PASSES.HIGHLIGHTED} &amp;&amp; !highlighted)) {`);
 
     src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex

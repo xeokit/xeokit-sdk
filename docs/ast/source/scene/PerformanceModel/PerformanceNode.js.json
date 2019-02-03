@@ -6847,7 +6847,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                  "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
                   "start": 5691,
                   "end": 6009,
                   "loc": {
@@ -6892,9 +6892,9 @@
                     "line": 192,
                     "column": 15
                   },
-                  "identifierName": "ghosted"
+                  "identifierName": "xrayed"
                 },
-                "name": "ghosted"
+                "name": "xrayed"
               },
               "kind": "set",
               "id": null,
@@ -6915,9 +6915,9 @@
                       "line": 192,
                       "column": 23
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 }
               ],
               "body": {
@@ -7102,9 +7102,9 @@
                                     "line": 193,
                                     "column": 49
                                   },
-                                  "identifierName": "GHOSTED"
+                                  "identifierName": "XRAYED"
                                 },
-                                "name": "GHOSTED"
+                                "name": "XRAYED"
                               },
                               "computed": false
                             },
@@ -7135,9 +7135,9 @@
                             "line": 193,
                             "column": 62
                           },
-                          "identifierName": "ghosted"
+                          "identifierName": "xrayed"
                         },
-                        "name": "ghosted"
+                        "name": "xrayed"
                       }
                     },
                     "consequent": {
@@ -7222,9 +7222,9 @@
                           "line": 196,
                           "column": 19
                         },
-                        "identifierName": "ghosted"
+                        "identifierName": "xrayed"
                       },
-                      "name": "ghosted"
+                      "name": "xrayed"
                     },
                     "consequent": {
                       "type": "BlockStatement",
@@ -7425,9 +7425,9 @@
                                       "line": 197,
                                       "column": 60
                                     },
-                                    "identifierName": "GHOSTED"
+                                    "identifierName": "XRAYED"
                                   },
-                                  "name": "GHOSTED"
+                                  "name": "XRAYED"
                                 },
                                 "computed": false
                               }
@@ -7652,9 +7652,9 @@
                                         "line": 199,
                                         "column": 61
                                       },
-                                      "identifierName": "GHOSTED"
+                                      "identifierName": "XRAYED"
                                     },
-                                    "name": "GHOSTED"
+                                    "name": "XRAYED"
                                   },
                                   "computed": false
                                 },
@@ -8101,9 +8101,9 @@
                                     "line": 202,
                                     "column": 38
                                   },
-                                  "identifierName": "_setGhosted"
+                                  "identifierName": "_setXRayed"
                                 },
-                                "name": "_setGhosted"
+                                "name": "_setXRayed"
                               },
                               "computed": false
                             },
@@ -8376,9 +8376,9 @@
                                     "line": 205,
                                     "column": 50
                                   },
-                                  "identifierName": "_objectGhostedUpdated"
+                                  "identifierName": "_objectXRayedUpdated"
                                 },
-                                "name": "_objectGhostedUpdated"
+                                "name": "_objectXRayedUpdated"
                               },
                               "computed": false
                             },
@@ -8525,7 +8525,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                  "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
                   "start": 5691,
                   "end": 6009,
                   "loc": {
@@ -8543,7 +8543,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                  "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
                   "start": 6597,
                   "end": 6923,
                   "loc": {
@@ -8588,9 +8588,9 @@
                     "line": 218,
                     "column": 15
                   },
-                  "identifierName": "ghosted"
+                  "identifierName": "xrayed"
                 },
-                "name": "ghosted"
+                "name": "xrayed"
               },
               "kind": "get",
               "id": null,
@@ -8734,9 +8734,9 @@
                                 "line": 219,
                                 "column": 49
                               },
-                              "identifierName": "GHOSTED"
+                              "identifierName": "XRAYED"
                             },
-                            "name": "GHOSTED"
+                            "name": "XRAYED"
                           },
                           "computed": false
                         }
@@ -8750,7 +8750,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                  "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
                   "start": 6597,
                   "end": 6923,
                   "loc": {
@@ -22890,9 +22890,9 @@
                                   "line": 512,
                                   "column": 28
                                 },
-                                "identifierName": "ghosted"
+                                "identifierName": "xrayed"
                               },
-                              "name": "ghosted"
+                              "name": "xrayed"
                             },
                             "computed": false
                           },
@@ -22983,9 +22983,9 @@
                                           "line": 513,
                                           "column": 43
                                         },
-                                        "identifierName": "_objectGhostedUpdated"
+                                        "identifierName": "_objectXRayedUpdated"
                                       },
-                                      "name": "_objectGhostedUpdated"
+                                      "name": "_objectXRayedUpdated"
                                     },
                                     "computed": false
                                   },
@@ -24309,9 +24309,9 @@
                                   "line": 531,
                                   "column": 28
                                 },
-                                "identifierName": "ghosted"
+                                "identifierName": "xrayed"
                               },
-                              "name": "ghosted"
+                              "name": "xrayed"
                             },
                             "computed": false
                           },
@@ -24402,9 +24402,9 @@
                                           "line": 532,
                                           "column": 43
                                         },
-                                        "identifierName": "_objectGhostedUpdated"
+                                        "identifierName": "_objectXRayedUpdated"
                                       },
-                                      "name": "_objectGhostedUpdated"
+                                      "name": "_objectXRayedUpdated"
                                     },
                                     "computed": false
                                   },
@@ -32144,7 +32144,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                    "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
                     "start": 5691,
                     "end": 6009,
                     "loc": {
@@ -32189,9 +32189,9 @@
                       "line": 192,
                       "column": 15
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 },
                 "kind": "set",
                 "id": null,
@@ -32212,9 +32212,9 @@
                         "line": 192,
                         "column": 23
                       },
-                      "identifierName": "ghosted"
+                      "identifierName": "xrayed"
                     },
-                    "name": "ghosted"
+                    "name": "xrayed"
                   }
                 ],
                 "body": {
@@ -32399,9 +32399,9 @@
                                       "line": 193,
                                       "column": 49
                                     },
-                                    "identifierName": "GHOSTED"
+                                    "identifierName": "XRAYED"
                                   },
-                                  "name": "GHOSTED"
+                                  "name": "XRAYED"
                                 },
                                 "computed": false
                               },
@@ -32432,9 +32432,9 @@
                               "line": 193,
                               "column": 62
                             },
-                            "identifierName": "ghosted"
+                            "identifierName": "xrayed"
                           },
-                          "name": "ghosted"
+                          "name": "xrayed"
                         }
                       },
                       "consequent": {
@@ -32519,9 +32519,9 @@
                             "line": 196,
                             "column": 19
                           },
-                          "identifierName": "ghosted"
+                          "identifierName": "xrayed"
                         },
-                        "name": "ghosted"
+                        "name": "xrayed"
                       },
                       "consequent": {
                         "type": "BlockStatement",
@@ -32722,9 +32722,9 @@
                                         "line": 197,
                                         "column": 60
                                       },
-                                      "identifierName": "GHOSTED"
+                                      "identifierName": "XRAYED"
                                     },
-                                    "name": "GHOSTED"
+                                    "name": "XRAYED"
                                   },
                                   "computed": false
                                 }
@@ -32949,9 +32949,9 @@
                                           "line": 199,
                                           "column": 61
                                         },
-                                        "identifierName": "GHOSTED"
+                                        "identifierName": "XRAYED"
                                       },
-                                      "name": "GHOSTED"
+                                      "name": "XRAYED"
                                     },
                                     "computed": false
                                   },
@@ -33398,9 +33398,9 @@
                                       "line": 202,
                                       "column": 38
                                     },
-                                    "identifierName": "_setGhosted"
+                                    "identifierName": "_setXRayed"
                                   },
-                                  "name": "_setGhosted"
+                                  "name": "_setXRayed"
                                 },
                                 "computed": false
                               },
@@ -33673,9 +33673,9 @@
                                       "line": 205,
                                       "column": 50
                                     },
-                                    "identifierName": "_objectGhostedUpdated"
+                                    "identifierName": "_objectXRayedUpdated"
                                   },
-                                  "name": "_objectGhostedUpdated"
+                                  "name": "_objectXRayedUpdated"
                                 },
                                 "computed": false
                               },
@@ -33822,7 +33822,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                    "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
                     "start": 5691,
                     "end": 6009,
                     "loc": {
@@ -33840,7 +33840,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                    "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
                     "start": 6597,
                     "end": 6923,
                     "loc": {
@@ -33885,9 +33885,9 @@
                       "line": 218,
                       "column": 15
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 },
                 "kind": "get",
                 "id": null,
@@ -34031,9 +34031,9 @@
                                   "line": 219,
                                   "column": 49
                                 },
-                                "identifierName": "GHOSTED"
+                                "identifierName": "XRAYED"
                               },
-                              "name": "GHOSTED"
+                              "name": "XRAYED"
                             },
                             "computed": false
                           }
@@ -34047,7 +34047,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+                    "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
                     "start": 6597,
                     "end": 6923,
                     "loc": {
@@ -48187,9 +48187,9 @@
                                     "line": 512,
                                     "column": 28
                                   },
-                                  "identifierName": "ghosted"
+                                  "identifierName": "xrayed"
                                 },
-                                "name": "ghosted"
+                                "name": "xrayed"
                               },
                               "computed": false
                             },
@@ -48280,9 +48280,9 @@
                                             "line": 513,
                                             "column": 43
                                           },
-                                          "identifierName": "_objectGhostedUpdated"
+                                          "identifierName": "_objectXRayedUpdated"
                                         },
-                                        "name": "_objectGhostedUpdated"
+                                        "name": "_objectXRayedUpdated"
                                       },
                                       "computed": false
                                     },
@@ -49606,9 +49606,9 @@
                                     "line": 531,
                                     "column": 28
                                   },
-                                  "identifierName": "ghosted"
+                                  "identifierName": "xrayed"
                                 },
-                                "name": "ghosted"
+                                "name": "xrayed"
                               },
                               "computed": false
                             },
@@ -49699,9 +49699,9 @@
                                             "line": 532,
                                             "column": 43
                                           },
-                                          "identifierName": "_objectGhostedUpdated"
+                                          "identifierName": "_objectXRayedUpdated"
                                         },
-                                        "name": "_objectGhostedUpdated"
+                                        "name": "_objectXRayedUpdated"
                                       },
                                       "computed": false
                                     },
@@ -50975,7 +50975,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+      "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
       "start": 5691,
       "end": 6009,
       "loc": {
@@ -51007,7 +51007,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+      "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
       "start": 6597,
       "end": 6923,
       "loc": {
@@ -64569,7 +64569,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#ghosted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     ",
+      "value": "*\n     * Sets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#xrayed} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     ",
       "start": 5691,
       "end": 6009,
       "loc": {
@@ -64621,7 +64621,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 6018,
       "end": 6025,
       "loc": {
@@ -64672,7 +64672,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 6026,
       "end": 6033,
       "loc": {
@@ -65039,7 +65039,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 6079,
       "end": 6086,
       "loc": {
@@ -65117,7 +65117,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 6092,
       "end": 6099,
       "loc": {
@@ -65341,7 +65341,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 6165,
       "end": 6172,
       "loc": {
@@ -65683,7 +65683,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 6229,
       "end": 6236,
       "loc": {
@@ -66106,7 +66106,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 6309,
       "end": 6316,
       "loc": {
@@ -66972,7 +66972,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_setGhosted",
+      "value": "_setXRayed",
       "start": 6421,
       "end": 6432,
       "loc": {
@@ -67520,7 +67520,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_objectGhostedUpdated",
+      "value": "_objectXRayedUpdated",
       "start": 6516,
       "end": 6537,
       "loc": {
@@ -67898,7 +67898,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this PerformanceModelNode is ghosted.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
+      "value": "*\n     * Gets if this PerformanceModelNode is xrayed.\n     *\n     * When both {@link PerformanceNode#isObject} and {@link PerformanceNode#highlighted} are ````true```` the PerformanceModelNode will be\n     * registered by {@link PerformanceNode#id} in {@link Scene#highlightedObjects}.\n     *\n     * @type {Boolean}\n     ",
       "start": 6597,
       "end": 6923,
       "loc": {
@@ -67950,7 +67950,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 6932,
       "end": 6939,
       "loc": {
@@ -68236,7 +68236,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 6986,
       "end": 6993,
       "loc": {
@@ -95482,7 +95482,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 15201,
       "end": 15208,
       "loc": {
@@ -95610,7 +95610,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_objectGhostedUpdated",
+      "value": "_objectXRayedUpdated",
       "start": 15234,
       "end": 15255,
       "loc": {
@@ -98419,7 +98419,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 15802,
       "end": 15809,
       "loc": {
@@ -98547,7 +98547,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_objectGhostedUpdated",
+      "value": "_objectXRayedUpdated",
       "start": 15835,
       "end": 15856,
       "loc": {

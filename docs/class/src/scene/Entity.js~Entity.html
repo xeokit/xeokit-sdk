@@ -144,7 +144,7 @@
   
   
   <div class="description" data-ice="description"><p>An abstract 3D scene element that can be individually shown, hidden, selected,
-highlighted, ghosted, culled, picked, clipped and bounded.</p>
+highlighted, xrayed, culled, picked, clipped and bounded.</p>
 <p>Entity provides an abstract interface through which different concrete types
 of scene element can be accessed and manipulated uniformly.</p>
 <h2 id="entities-representing-models">Entities Representing Models</h2><ul>
@@ -163,7 +163,7 @@ of scene element can be accessed and manipulated uniformly.</p>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsCulled">Scene#setObjectsCulled</a></span></li>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsSelected">Scene#setObjectsSelected</a></span></li>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsHighlighted">Scene#setObjectsHighlighted</a></span></li>
-<li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsGhosted">Scene#setObjectsGhosted</a></span></li>
+<li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsXRayed">Scene#setObjectsXRayed</a></span></li>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsEdges">Scene#setObjectsEdges</a></span></li>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsColorized">Scene#setObjectsColorized</a></span></li>
 <li><span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsOpacity">Scene#setObjectsOpacity</a></span></li>
@@ -578,13 +578,13 @@ of scene element can be accessed and manipulated uniformly.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html#instance-set-ghosted">ghosted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html#instance-set-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if this Entity is ghosted.</p>
+        <div data-ice="description"><p>Sets if this Entity is xrayed.</p>
 </div>
       </div>
     </td>
@@ -607,13 +607,13 @@ of scene element can be accessed and manipulated uniformly.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html#instance-get-ghosted">ghosted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/Entity.js~Entity.html#instance-get-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets if this Entity is ghosted.</p>
+        <div data-ice="description"><p>Gets if this Entity is xrayed.</p>
 </div>
       </div>
     </td>
@@ -1744,14 +1744,14 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-ghosted">
+  <h3 data-ice="anchor" id="instance-set-xrayed">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     <span class="abstract" data-ice="abstract">abstract</span>
     
     
-    <span class="code" data-ice="name">ghosted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
@@ -1762,9 +1762,9 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
   
   
-  <div data-ice="description"><p>Sets if this Entity is ghosted.</p>
-<p>When <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-ghosted">Entity#ghosted</a></span> are both <code>`true</code> the Entity will be
-registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects">Scene#ghostedObjects</a></span>.</p>
+  <div data-ice="description"><p>Sets if this Entity is xrayed.</p>
+<p>When <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> are both <code>`true</code> the Entity will be
+registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-xrayedObjects">Scene#xrayedObjects</a></span>.</p>
 </div>
 
   
@@ -1790,14 +1790,14 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-ghosted">
+  <h3 data-ice="anchor" id="instance-get-xrayed">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     <span class="abstract" data-ice="abstract">abstract</span>
     
     
-    <span class="code" data-ice="name">ghosted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
@@ -1808,9 +1808,9 @@ registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-
   
   
   
-  <div data-ice="description"><p>Gets if this Entity is ghosted.</p>
-<p>When <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-ghosted">Entity#ghosted</a></span> are both <code>`true</code> the Entity will be
-registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects">Scene#ghostedObjects</a></span>.</p>
+  <div data-ice="description"><p>Gets if this Entity is xrayed.</p>
+<p>When <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> are both <code>`true</code> the Entity will be
+registered by <span><a href="class/src/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-xrayedObjects">Scene#xrayedObjects</a></span>.</p>
 </div>
 
   

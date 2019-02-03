@@ -984,15 +984,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/entity.js~entity#ghosted",
-    "class/src/scene/Entity.js~Entity.html#instance-set-ghosted",
-    "src/scene/Entity.js~Entity#ghosted",
+    "src/scene/entity.js~entity#xrayed",
+    "class/src/scene/Entity.js~Entity.html#instance-set-xrayed",
+    "src/scene/Entity.js~Entity#xrayed",
     "member"
   ],
   [
-    "src/scene/entity.js~entity#ghosted",
-    "class/src/scene/Entity.js~Entity.html#instance-get-ghosted",
-    "src/scene/Entity.js~Entity#ghosted",
+    "src/scene/entity.js~entity#xrayed",
+    "class/src/scene/Entity.js~Entity.html#instance-get-xrayed",
+    "src/scene/Entity.js~Entity#xrayed",
     "member"
   ],
   [
@@ -1224,21 +1224,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/scene/performancemodel/performancemodel.js~performancemodel#ghostmaterial",
-    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-ghostMaterial",
-    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghostMaterial",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#xraymaterial",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-xrayMaterial",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#xrayMaterial",
     "member"
   ],
   [
-    "src/scene/performancemodel/performancemodel.js~performancemodel#ghosted",
-    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-ghosted",
-    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghosted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#xrayed",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-set-xrayed",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#xrayed",
     "member"
   ],
   [
-    "src/scene/performancemodel/performancemodel.js~performancemodel#ghosted",
-    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-ghosted",
-    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#ghosted",
+    "src/scene/performancemodel/performancemodel.js~performancemodel#xrayed",
+    "class/src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-get-xrayed",
+    "src/scene/PerformanceModel/PerformanceModel.js~PerformanceModel#xrayed",
     "member"
   ],
   [
@@ -5004,21 +5004,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#ghostmaterial",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial",
-    "src/scene/mesh/Mesh.js~Mesh#ghostMaterial",
+    "src/scene/mesh/mesh.js~mesh#xraymaterial",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayMaterial",
+    "src/scene/mesh/Mesh.js~Mesh#xrayMaterial",
     "member"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#ghosted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted",
-    "src/scene/mesh/Mesh.js~Mesh#ghosted",
+    "src/scene/mesh/mesh.js~mesh#xrayed",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed",
+    "src/scene/mesh/Mesh.js~Mesh#xrayed",
     "member"
   ],
   [
-    "src/scene/mesh/mesh.js~mesh#ghosted",
-    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted",
-    "src/scene/mesh/Mesh.js~Mesh#ghosted",
+    "src/scene/mesh/mesh.js~mesh#xrayed",
+    "class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayed",
+    "src/scene/mesh/Mesh.js~Mesh#xrayed",
     "member"
   ],
   [
@@ -5514,15 +5514,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/scene/nodes/node.js~node#ghosted",
-    "class/src/scene/nodes/Node.js~Node.html#instance-set-ghosted",
-    "src/scene/nodes/Node.js~Node#ghosted",
+    "src/scene/nodes/node.js~node#xrayed",
+    "class/src/scene/nodes/Node.js~Node.html#instance-set-xrayed",
+    "src/scene/nodes/Node.js~Node#xrayed",
     "member"
   ],
   [
-    "src/scene/nodes/node.js~node#ghosted",
-    "class/src/scene/nodes/Node.js~Node.html#instance-get-ghosted",
-    "src/scene/nodes/Node.js~Node#ghosted",
+    "src/scene/nodes/node.js~node#xrayed",
+    "class/src/scene/nodes/Node.js~Node.html#instance-get-xrayed",
+    "src/scene/nodes/Node.js~Node#xrayed",
     "member"
   ],
   [
@@ -6264,21 +6264,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/scene/scene/scene.js~scene#ghostmaterial",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial",
-    "src/scene/scene/Scene.js~Scene#ghostMaterial",
+    "src/scene/scene/scene.js~scene#xraymaterial",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial",
+    "src/scene/scene/Scene.js~Scene#xrayMaterial",
     "member"
   ],
   [
-    "src/scene/scene/scene.js~scene#ghostedobjectids",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostedObjectIds",
-    "src/scene/scene/Scene.js~Scene#ghostedObjectIds",
+    "src/scene/scene/scene.js~scene#xrayedobjectids",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayedObjectIds",
+    "src/scene/scene/Scene.js~Scene#xrayedObjectIds",
     "member"
   ],
   [
-    "src/scene/scene/scene.js~scene#ghostedobjects",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects",
-    "src/scene/scene/Scene.js~Scene#ghostedObjects",
+    "src/scene/scene/scene.js~scene#xrayedobjects",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-member-xrayedObjects",
+    "src/scene/scene/Scene.js~Scene#xrayedObjects",
     "member"
   ],
   [
@@ -6432,9 +6432,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/scene/scene/scene.js~scene#setobjectsghosted",
-    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsGhosted",
-    "src/scene/scene/Scene.js~Scene#setObjectsGhosted",
+    "src/scene/scene/scene.js~scene#setobjectsxrayed",
+    "class/src/scene/scene/Scene.js~Scene.html#instance-method-setObjectsXRayed",
+    "src/scene/scene/Scene.js~Scene#setObjectsXRayed",
     "method"
   ],
   [

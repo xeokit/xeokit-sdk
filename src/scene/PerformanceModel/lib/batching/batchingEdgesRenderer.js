@@ -77,8 +77,8 @@ BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPas
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    if (renderPass === RENDER_PASSES.GHOSTED) {
-        const material = scene.ghostMaterial._state;
+    if (renderPass === RENDER_PASSES.XRAYED) {
+        const material = scene.xrayMaterial._state;
         const edgeColor = material.edgeColor;
         const edgeAlpha = material.edgeAlpha;
         gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);

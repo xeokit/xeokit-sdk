@@ -165,15 +165,15 @@ function buildVertex(layer) {
     src.push(&quot;void main(void) {&quot;);
 
     src.push(&quot;bool visible      = (float(flags.x) &gt; 0.0);&quot;);
-    src.push(&quot;bool ghosted      = (float(flags.y) &gt; 0.0);&quot;);
+    src.push(&quot;bool xrayed      = (float(flags.y) &gt; 0.0);&quot;);
     src.push(&quot;bool highlighted  = (float(flags.z) &gt; 0.0);&quot;);
     src.push(&quot;bool transparent  = (color.a &lt; 1.0);&quot;); // Color comes from EmphasisMaterial.fillColor, so is not quantized
 
     src.push(`if
     (!visible ||
-    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (transparent || ghosted)) ||
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp; (!transparent || ghosted || highlighted)) ||
-    (renderPass == ${RENDER_PASSES.GHOSTED} &amp;&amp; (!ghosted || highlighted)) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} &amp;&amp; (transparent || xrayed)) ||
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &amp;&amp; (!transparent || xrayed || highlighted)) ||
+    (renderPass == ${RENDER_PASSES.XRAYED} &amp;&amp; (!xrayed || highlighted)) ||
     (renderPass == ${RENDER_PASSES.HIGHLIGHTED} &amp;&amp; !highlighted)) {`);
 
     src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex

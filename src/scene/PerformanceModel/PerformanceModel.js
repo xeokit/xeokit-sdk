@@ -84,7 +84,7 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.pickable=true] Indicates if the PerformanceModel is initially pickable.
      * @param {Boolean} [cfg.clippable=true] Indicates if the PerformanceModel is initially clippable.
      * @param {Boolean} [cfg.collidable=true] Indicates if the PerformanceModel is initially included in boundary calculations.
-     * @param {Boolean} [cfg.ghosted=false] Indicates if the PerformanceModel is initially ghosted.
+     * @param {Boolean} [cfg.xrayed=false] Indicates if the PerformanceModel is initially xrayed.
      * @param {Boolean} [cfg.highlighted=false] Indicates if the PerformanceModel is initially highlighted.
      * @param {Boolean} [cfg.selected=false] Indicates if the PerformanceModel is initially selected.
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
@@ -129,7 +129,7 @@ class PerformanceModel extends Component {
         /**
          * @private
          */
-        this.numGhostedLayerPortions = 0;
+        this.numXRayedLayerPortions = 0;
 
         /**
          * @private
@@ -153,7 +153,7 @@ class PerformanceModel extends Component {
         this.collidable = cfg.collidable;
         this.castsShadow = cfg.castsShadow;
         this.receivesShadow = cfg.receivesShadow;
-        this.ghosted = cfg.ghosted;
+        this.xrayed = cfg.xrayed;
         this.highlighted = cfg.highlighted;
         this.selected = cfg.selected;
         this.edges = cfg.edges;
@@ -468,7 +468,7 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.collidable=true] Indicates if the Entity is initially included in boundary calculations.
      * @param {Boolean} [cfg.castsShadow=true] Indicates if the Entity initially casts shadows.
      * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Entity initially receives shadows.
-     * @param {Boolean} [cfg.ghosted=false] Indicates if the Entity is initially ghosted. Ghosted appearance is configured by {@link PerformanceModel#ghostMaterial}.
+     * @param {Boolean} [cfg.xrayed=false] Indicates if the Entity is initially xrayed. XRayed appearance is configured by {@link PerformanceModel#xrayMaterial}.
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link PerformanceModel#highlightMaterial}.
      * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link PerformanceModel#selectedMaterial}.
      * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link PerformanceModel#edgeMaterial}.
@@ -524,8 +524,8 @@ class PerformanceModel extends Component {
         if (this._edges && cfg.edges !== false) {
             flags = flags | RENDER_FLAGS.EDGES;
         }
-        if (this._ghosted && cfg.ghosted !== false) {
-            flags = flags | RENDER_FLAGS.GHOSTED;
+        if (this._xrayed && cfg.xrayed !== false) {
+            flags = flags | RENDER_FLAGS.XRAYED;
         }
         if (this._highlighted && cfg.highlighted !== false) {
             flags = flags | RENDER_FLAGS.HIGHLIGHTED;
@@ -660,26 +660,26 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * Sets if all {@link Entity}s in this PerformanceModel are ghosted.
+     * Sets if all {@link Entity}s in this PerformanceModel are xrayed.
      *
      * @type {Boolean}
      */
-    set ghosted(ghosted) {
-        ghosted = !!ghosted;
-        this._ghosted = ghosted;
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        this._xrayed = xrayed;
         for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i].ghosted = ghosted;
+            this._nodes[i].xrayed = xrayed;
         }
         this.glRedraw();
     }
 
     /**
-     * Gets if any {@link Entity}s in this PerformanceModel are ghosted.
+     * Gets if any {@link Entity}s in this PerformanceModel are xrayed.
      *
      * @type {Boolean}
      */
-    get ghosted() {
-        return (this.numGhostedLayerPortions > 0);
+    get xrayed() {
+        return (this.numXRayedLayerPortions > 0);
     }
 
     /**
@@ -958,7 +958,7 @@ class PerformanceModel extends Component {
         // Unlike Mesh, rendering modes are less mutually exclusive because a PerformanceModel contains multiple PerformanceModelMesh
         // objects, which can have a mixture of rendering states.
 
-        // TODO: can we optimize to avoid tests for ghosted objects from also being
+        // TODO: can we optimize to avoid tests for xrayed objects from also being
         // highlighted in shader etc?
 
         renderFlags.reset();
@@ -967,20 +967,20 @@ class PerformanceModel extends Component {
             return;
         }
 
-        if (this.numGhostedLayerPortions > 0) {
-            const ghostMaterial = this.scene.ghostMaterial._state;
-            if (ghostMaterial.fill) {
-                if (ghostMaterial.fillAlpha < 1.0) {
-                    renderFlags.ghostedFillTransparent = true;
+        if (this.numXRayedLayerPortions > 0) {
+            const xrayMaterial = this.scene.xrayMaterial._state;
+            if (xrayMaterial.fill) {
+                if (xrayMaterial.fillAlpha < 1.0) {
+                    renderFlags.xrayedFillTransparent = true;
                 } else {
-                    renderFlags.ghostedFillOpaque = true;
+                    renderFlags.xrayedFillOpaque = true;
                 }
             }
-            if (ghostMaterial.edges) {
-                if (ghostMaterial.edgeAlpha < 1.0) {
-                    renderFlags.ghostedEdgesTransparent = true;
+            if (xrayMaterial.edges) {
+                if (xrayMaterial.edgeAlpha < 1.0) {
+                    renderFlags.xrayedEdgesTransparent = true;
                 } else {
-                    renderFlags.ghostedEdgesOpaque = true;
+                    renderFlags.xrayedEdgesOpaque = true;
                 }
             }
         }
@@ -994,7 +994,7 @@ class PerformanceModel extends Component {
             }
         }
 
-        if (this.numGhostedLayerPortions < this.numVisibleLayerPortions &&
+        if (this.numXRayedLayerPortions < this.numVisibleLayerPortions &&
             this.numHighlightedLayerPortions < this.numVisibleLayerPortions &&
             this.numSelectedLayerPortions < this.numVisibleLayerPortions &&
             this.numTransparentLayerPortions < this.numVisibleLayerPortions) {
@@ -1043,14 +1043,14 @@ class PerformanceModel extends Component {
     }
 
     /**
-     * Configures the appearance of ghosted {@link Entity}s within this PerformanceModel.
+     * Configures the appearance of xrayed {@link Entity}s within this PerformanceModel.
      *
-     * This is the {@link Scene#ghostMaterial}.
+     * This is the {@link Scene#xrayMaterial}.
      *
      * @type {EmphasisMaterial}
      */
-    get ghostMaterial() {
-        return this.scene.ghostMaterial;
+    get xrayMaterial() {
+        return this.scene.xrayMaterial;
     }
 
     /**
@@ -1115,30 +1115,30 @@ class PerformanceModel extends Component {
     }
 
     /** @private */
-    drawGhostedFillOpaque(frameCtx) {
+    drawXRayedFillOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawGhostedFillOpaque(frameCtx);
+            this._layers[i].drawXRayedFillOpaque(frameCtx);
         }
     }
 
     /** @private */
-    drawGhostedEdgesOpaque(frameCtx) {
+    drawXRayedEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawGhostedEdgesOpaque(frameCtx);
+            this._layers[i].drawXRayedEdgesOpaque(frameCtx);
         }
     }
 
     /** @private */
-    drawGhostedFillTransparent(frameCtx) {
+    drawXRayedFillTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawGhostedFillTransparent(frameCtx);
+            this._layers[i].drawXRayedFillTransparent(frameCtx);
         }
     }
 
     /** @private */
-    drawGhostedEdgesTransparent(frameCtx) {
+    drawXRayedEdgesTransparent(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].drawGhostedEdgesTransparent(frameCtx);
+            this._layers[i].drawXRayedEdgesTransparent(frameCtx);
         }
     }
 

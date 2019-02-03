@@ -2560,9 +2560,9 @@
                     "line": 102,
                     "column": 15
                   },
-                  "identifierName": "_setGhosted"
+                  "identifierName": "_setXRayed"
                 },
-                "name": "_setGhosted",
+                "name": "_setXRayed",
                 "leadingComments": null
               },
               "kind": "method",
@@ -2707,9 +2707,9 @@
                               "line": 103,
                               "column": 30
                             },
-                            "identifierName": "setGhosted"
+                            "identifierName": "setXRayed"
                           },
-                          "name": "setGhosted"
+                          "name": "setXRayed"
                         },
                         "computed": false
                       },
@@ -7536,9 +7536,9 @@
                       "line": 102,
                       "column": 15
                     },
-                    "identifierName": "_setGhosted"
+                    "identifierName": "_setXRayed"
                   },
-                  "name": "_setGhosted",
+                  "name": "_setXRayed",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -7683,9 +7683,9 @@
                                 "line": 103,
                                 "column": 30
                               },
-                              "identifierName": "setGhosted"
+                              "identifierName": "setXRayed"
                             },
-                            "name": "setGhosted"
+                            "name": "setXRayed"
                           },
                           "computed": false
                         },
@@ -14548,7 +14548,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_setGhosted",
+      "value": "_setXRayed",
       "start": 2339,
       "end": 2350,
       "loc": {
@@ -14781,7 +14781,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "setGhosted",
+      "value": "setXRayed",
       "start": 2380,
       "end": 2390,
       "loc": {

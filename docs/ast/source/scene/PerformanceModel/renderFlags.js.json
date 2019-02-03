@@ -812,9 +812,9 @@
                         "line": 14,
                         "column": 11
                       },
-                      "identifierName": "GHOSTED"
+                      "identifierName": "XRAYED"
                     },
-                    "name": "GHOSTED"
+                    "name": "XRAYED"
                   },
                   "value": {
                     "type": "BinaryExpression",
@@ -2113,9 +2113,9 @@
                           "line": 14,
                           "column": 11
                         },
-                        "identifierName": "GHOSTED"
+                        "identifierName": "XRAYED"
                       },
-                      "name": "GHOSTED"
+                      "name": "XRAYED"
                     },
                     "value": {
                       "type": "BinaryExpression",
@@ -2547,7 +2547,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, GHOSTED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
+              "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
               "start": 0,
               "end": 274,
               "loc": {
@@ -2574,7 +2574,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, GHOSTED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
+      "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
       "start": 0,
       "end": 274,
       "loc": {
@@ -2592,7 +2592,7 @@
   "tokens": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, GHOSTED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
+      "value": "*\n * @private\n * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}\n ",
       "start": 0,
       "end": 274,
       "loc": {
@@ -3942,7 +3942,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 482,
       "end": 489,
       "loc": {

@@ -20,14 +20,14 @@ class Drawable {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Configures the appearance of this Drawable when ghosted.
+     * Configures the appearance of this Drawable when xrayed.
      *
-     * Set to {@link Scene#ghostMaterial} by default.
+     * Set to {@link Scene#xrayMaterial} by default.
      *
      * @type {EmphasisMaterial}
      * @abstract
      */
-    get ghostMaterial() {
+    get xrayMaterial() {
     }
 
     /**
@@ -145,51 +145,51 @@ class Drawable {
     }
 
     /**
-     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.
+     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.
      *
-     * See {@link RenderFlags#ghostedFillOpaque}.
-     *
-     * @param {FrameContext} frameCtx Renderer frame context.
-     * @abstract
-     */
-    drawGhostedFillOpaque(frameCtx) {
-    }
-
-    /**
-     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.
-     *
-     * See {@link RenderFlags#ghostedEdgesOpaque}.
+     * See {@link RenderFlags#xrayedFillOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawGhostedEdgesOpaque(frameCtx) {
+    drawXRayedFillOpaque(frameCtx) {
     }
 
     /**
-     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.
+     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.
      *
-     * See {@link RenderFlags#ghostedFillTransparent}.
+     * See {@link RenderFlags#xrayedEdgesOpaque}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawGhostedFillTransparent(frameCtx) {
+    drawXRayedEdgesOpaque(frameCtx) {
     }
 
     /**
-     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.
+     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.
      *
-     * See {@link RenderFlags#ghostedEdgesTransparent}.
+     * See {@link RenderFlags#xrayedFillTransparent}.
      *
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawGhostedEdgesTransparent(frameCtx) {
+    drawXRayedFillTransparent(frameCtx) {
     }
 
     /**
-     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.
+     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.
+     *
+     * See {@link RenderFlags#xrayedEdgesTransparent}.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawXRayedEdgesTransparent(frameCtx) {
+    }
+
+    /**
+     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#highlightedFillOpaque}.
      *
@@ -200,7 +200,7 @@ class Drawable {
     }
 
     /**
-     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.
+     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#highlightedEdgesOpaque}.
      *
@@ -211,7 +211,7 @@ class Drawable {
     }
 
     /**
-     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.
+     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#highlightedFillTransparent}.
      *
@@ -222,7 +222,7 @@ class Drawable {
     }
 
     /**
-     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.
+     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#highlightedEdgesTransparent}.
      *
@@ -233,7 +233,7 @@ class Drawable {
     }
 
     /**
-     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.
+     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#highlightedFillOpaque}.
      *
@@ -244,7 +244,7 @@ class Drawable {
     }
 
     /**
-     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.
+     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#selectedEdgesOpaque}.
      *
@@ -255,7 +255,7 @@ class Drawable {
     }
 
     /**
-     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.
+     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#selectedFillTransparent}.
      *
@@ -266,7 +266,7 @@ class Drawable {
     }
 
     /**
-     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.
+     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.
      *
      * See {@link RenderFlags#selectedEdgesTransparent}.
      *

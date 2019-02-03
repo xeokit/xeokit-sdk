@@ -1,6 +1,6 @@
 /**
  * @desc An abstract 3D scene element that can be individually shown, hidden, selected,
- * highlighted, ghosted, culled, picked, clipped and bounded.
+ * highlighted, xrayed, culled, picked, clipped and bounded.
  *
  * Entity provides an abstract interface through which different concrete types
  * of scene element can be accessed and manipulated uniformly.
@@ -25,7 +25,7 @@
  * * {@link Scene#setObjectsCulled}
  * * {@link Scene#setObjectsSelected}
  * * {@link Scene#setObjectsHighlighted}
- * * {@link Scene#setObjectsGhosted}
+ * * {@link Scene#setObjectsXRayed}
  * * {@link Scene#setObjectsEdges}
  * * {@link Scene#setObjectsColorized}
  * * {@link Scene#setObjectsOpacity}
@@ -123,28 +123,28 @@ class Entity {
     }
 
     /**
-     * Sets if this Entity is ghosted.
+     * Sets if this Entity is xrayed.
      *
-     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be
-     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      * @abstract
      */
-    set ghosted(ghosted) {
+    set xrayed(xrayed) {
 
     }
 
     /**
-     * Gets if this Entity is ghosted.
+     * Gets if this Entity is xrayed.
      *
-     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be
-     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.
+     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be
+     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      * @abstract
      */
-    get ghosted() {
+    get xrayed() {
 
     }
 

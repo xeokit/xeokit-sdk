@@ -78,7 +78,7 @@
     import {AmbientLight} from '../src/scene/lights/AmbientLight.js';
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak ghosting and highlight materials
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -93,10 +93,10 @@
 
     viewer.cameraFlight.fitFOV = 25;
 
-    viewer.scene.ghostMaterial.fillAlpha = 0.1;
-    viewer.scene.ghostMaterial.fillColor = [0, 0, 0];
-    viewer.scene.ghostMaterial.edgeAlpha = 0.4;
-    viewer.scene.ghostMaterial.edgeColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
 
     viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
@@ -153,7 +153,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // When model loaded, create a tree view that toggles object ghosting
+    // When model loaded, create a tree view that toggles object xraying
     //------------------------------------------------------------------------------------------------------------------
 
     model.on("loaded", function () {
@@ -216,14 +216,14 @@
 
             treeView.on('node.checked', function (event, node) {
                 const objectId = event.id;
-                viewer.scene.setObjectsGhosted(objectId, false);
+                viewer.scene.setObjectsXRayed(objectId, false);
                 viewer.scene.setObjectsCollidable(objectId, true);
                 viewer.scene.setObjectsPickable(objectId, true);
             });
 
             treeView.on('node.unchecked', function (event, node) {
                 const objectId = event.id;
-                viewer.scene.setObjectsGhosted(objectId, true);
+                viewer.scene.setObjectsXRayed(objectId, true);
                 viewer.scene.setObjectsCollidable(objectId, false);
                 viewer.scene.setObjectsPickable(objectId, false);
             });

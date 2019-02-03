@@ -30,7 +30,7 @@ class XML3DLoader {
          */
         this.supportedSchemas = supportedSchemas;
 
-        this._ghostOpacity = 0.7;
+        this._xrayOpacity = 0.7;
         this._src = null;
         this._options = cfg;
 
@@ -49,7 +49,7 @@ class XML3DLoader {
         zip.workerScriptsPath = cfg.workerScriptsPath;
 
         this.src = cfg.src;
-        this.ghostOpacity = 0.7;
+        this.xrayOpacity = 0.7;
         this.displayEffect = cfg.displayEffect;
     }
 

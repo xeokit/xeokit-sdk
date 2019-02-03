@@ -2249,7 +2249,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "\n     pass 0 - opaque, non-ghosted objects only\n     pass 1 - transparent, non-ghosted objects only\n     pass 2 - ghosted objects only\n     pass 3 - highlighted objects only\n     ",
+                  "value": "\n     pass 0 - opaque, non-xrayed objects only\n     pass 1 - transparent, non-xrayed objects only\n     pass 2 - xrayed objects only\n     pass 3 - highlighted objects only\n     ",
                   "start": 976,
                   "end": 1159,
                   "loc": {
@@ -2372,7 +2372,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "\n     pass 0 - opaque, non-ghosted objects only\n     pass 1 - transparent, non-ghosted objects only\n     pass 2 - ghosted objects only\n     pass 3 - highlighted objects only\n     ",
+                  "value": "\n     pass 0 - opaque, non-xrayed objects only\n     pass 1 - transparent, non-xrayed objects only\n     pass 2 - xrayed objects only\n     pass 3 - highlighted objects only\n     ",
                   "start": 976,
                   "end": 1159,
                   "loc": {
@@ -2482,10 +2482,10 @@
                       }
                     },
                     "extra": {
-                      "rawValue": "bool ghosted      = (float(flags.y) > 0.0);",
-                      "raw": "\"bool ghosted      = (float(flags.y) > 0.0);\""
+                      "rawValue": "bool xrayed      = (float(flags.y) > 0.0);",
+                      "raw": "\"bool xrayed      = (float(flags.y) > 0.0);\""
                     },
-                    "value": "bool ghosted      = (float(flags.y) > 0.0);"
+                    "value": "bool xrayed      = (float(flags.y) > 0.0);"
                   }
                 ]
               }
@@ -2952,9 +2952,9 @@
                               "line": 53,
                               "column": 42
                             },
-                            "identifierName": "GHOSTED"
+                            "identifierName": "XRAYED"
                           },
-                          "name": "GHOSTED"
+                          "name": "XRAYED"
                         },
                         "computed": false
                       },
@@ -3045,8 +3045,8 @@
                           }
                         },
                         "value": {
-                          "raw": " && (transparent || ghosted)) ||\n    (renderPass == ",
-                          "cooked": " && (transparent || ghosted)) ||\n    (renderPass == "
+                          "raw": " && (transparent || xrayed)) ||\n    (renderPass == ",
+                          "cooked": " && (transparent || xrayed)) ||\n    (renderPass == "
                         },
                         "tail": false
                       },
@@ -3065,8 +3065,8 @@
                           }
                         },
                         "value": {
-                          "raw": " &&  (!transparent || ghosted)) ||\n    (renderPass == ",
-                          "cooked": " &&  (!transparent || ghosted)) ||\n    (renderPass == "
+                          "raw": " &&  (!transparent || xrayed)) ||\n    (renderPass == ",
+                          "cooked": " &&  (!transparent || xrayed)) ||\n    (renderPass == "
                         },
                         "tail": false
                       },
@@ -3085,8 +3085,8 @@
                           }
                         },
                         "value": {
-                          "raw": " && !ghosted) ||\n    (renderPass == ",
-                          "cooked": " && !ghosted) ||\n    (renderPass == "
+                          "raw": " && !xrayed) ||\n    (renderPass == ",
+                          "cooked": " && !xrayed) ||\n    (renderPass == "
                         },
                         "tail": false
                       },
@@ -8322,7 +8322,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "\n     pass 0 - opaque, non-ghosted objects only\n     pass 1 - transparent, non-ghosted objects only\n     pass 2 - ghosted objects only\n     pass 3 - highlighted objects only\n     ",
+      "value": "\n     pass 0 - opaque, non-xrayed objects only\n     pass 1 - transparent, non-xrayed objects only\n     pass 2 - xrayed objects only\n     pass 3 - highlighted objects only\n     ",
       "start": 976,
       "end": 1159,
       "loc": {
@@ -12520,7 +12520,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "\n     pass 0 - opaque, non-ghosted objects only\n     pass 1 - transparent, non-ghosted objects only\n     pass 2 - ghosted objects only\n     pass 3 - highlighted objects only\n     ",
+      "value": "\n     pass 0 - opaque, non-xrayed objects only\n     pass 1 - transparent, non-xrayed objects only\n     pass 2 - xrayed objects only\n     pass 3 - highlighted objects only\n     ",
       "start": 976,
       "end": 1159,
       "loc": {
@@ -12831,7 +12831,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "bool ghosted      = (float(flags.y) > 0.0);",
+      "value": "bool xrayed      = (float(flags.y) > 0.0);",
       "start": 1234,
       "end": 1279,
       "loc": {
@@ -13570,7 +13570,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " && (transparent || ghosted)) ||\n    (renderPass == ",
+      "value": " && (transparent || xrayed)) ||\n    (renderPass == ",
       "start": 1545,
       "end": 1597,
       "loc": {
@@ -13725,7 +13725,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " &&  (!transparent || ghosted)) ||\n    (renderPass == ",
+      "value": " &&  (!transparent || xrayed)) ||\n    (renderPass == ",
       "start": 1632,
       "end": 1686,
       "loc": {
@@ -13828,7 +13828,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 1702,
       "end": 1709,
       "loc": {
@@ -13880,7 +13880,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " && !ghosted) ||\n    (renderPass == ",
+      "value": " && !xrayed) ||\n    (renderPass == ",
       "start": 1710,
       "end": 1746,
       "loc": {

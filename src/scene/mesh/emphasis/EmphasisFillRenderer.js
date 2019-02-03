@@ -21,7 +21,7 @@ const EmphasisFillRenderer = function (hash, mesh) {
     this._allocate(mesh);
 };
 
-const ghostFillRenderers = {};
+const xrayFillRenderers = {};
 
 EmphasisFillRenderer.get = function (mesh) {
     const hash = [
@@ -32,10 +32,10 @@ EmphasisFillRenderer.get = function (mesh) {
         mesh._geometry._state.compressGeometry ? "cp" : "",
         mesh._state.hash
     ].join(";");
-    let renderer = ghostFillRenderers[hash];
+    let renderer = xrayFillRenderers[hash];
     if (!renderer) {
         renderer = new EmphasisFillRenderer(hash, mesh);
-        ghostFillRenderers[hash] = renderer;
+        xrayFillRenderers[hash] = renderer;
         stats.memory.programs++;
     }
     renderer._useCount++;
@@ -48,7 +48,7 @@ EmphasisFillRenderer.prototype.put = function () {
         if (this._program) {
             this._program.destroy();
         }
-        delete ghostFillRenderers[this._hash];
+        delete xrayFillRenderers[this._hash];
         stats.memory.programs--;
     }
 };
@@ -63,7 +63,7 @@ EmphasisFillRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     }
     const scene = this._scene;
     const gl = scene.canvas.gl;
-    const materialState = mode === 0 ? mesh._ghostMaterial._state : (mode === 1 ? mesh._highlightMaterial._state : mesh._selectedMaterial._state);
+    const materialState = mode === 0 ? mesh._xrayMaterial._state : (mode === 1 ? mesh._highlightMaterial._state : mesh._selectedMaterial._state);
     const meshState = mesh._state;
     const geometryState = mesh._geometry._state;
     if (frame.lastProgramId !== this._program.id) {

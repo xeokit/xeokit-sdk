@@ -143,18 +143,18 @@
 
   
   
-  <div class="description" data-ice="description"><p>Configures the appearance of <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s when they are ghosted, highlighted or selected.</p>
+  <div class="description" data-ice="description"><p>Configures the appearance of <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s when they are xrayed, highlighted or selected.</p>
 <ul>
-<li>Ghost an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> by setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-ghosted">Entity#ghosted</a></span> <code>true</code>.</li>
+<li>XRay an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> by setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> <code>true</code>.</li>
 <li>Highlight an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> by setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> <code>true</code>.</li>
 <li>Select an <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> by setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-selected">Entity#selected</a></span> <code>true</code>.</li>
-<li>When <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s are within the subtree of a root <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>, then setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-ghosted">Entity#ghosted</a></span>, <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> or <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-selected">Entity#selected</a></span>
+<li>When <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s are within the subtree of a root <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>, then setting <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span>, <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> or <span><a href="class/src/scene/Entity.js~Entity.html#instance-set-selected">Entity#selected</a></span>
 on the root will collectively set those properties on all sub-<span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
 <li>EmphasisMaterial provides several presets. Select a preset by setting <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-set-preset">EmphasisMaterial#preset</a></span> to the ID of a preset in <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-presets">EmphasisMaterial#presets</a></span>.</li>
-<li>By default, a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> uses the default EmphasisMaterials in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial">Scene#ghostMaterial</a></span>, <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span> and <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial">Scene#selectedMaterial</a></span>
-but you can assign each <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial">Mesh#ghostMaterial</a></span>, <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlightMaterial">Mesh#highlightMaterial</a></span> or <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-selectedMaterial">Mesh#selectedMaterial</a></span> to a custom EmphasisMaterial, if required.</li>
+<li>By default, a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> uses the default EmphasisMaterials in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial">Scene#xrayMaterial</a></span>, <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span> and <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial">Scene#selectedMaterial</a></span>
+but you can assign each <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayMaterial">Mesh#xrayMaterial</a></span>, <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-highlightMaterial">Mesh#highlightMaterial</a></span> or <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-selectedMaterial">Mesh#selectedMaterial</a></span> to a custom EmphasisMaterial, if required.</li>
 </ul>
-<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with its own GhostMaterial and set <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted">Mesh#ghosted</a></span> <code>true</code> to ghost it.</p>
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> with its own XRayMaterial and set <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed">Mesh#xrayed</a></span> <code>true</code> to xray it.</p>
 <p>Recall that <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span> is a concrete subtype of the abstract <span><a href="class/src/scene/Entity.js~Entity.html">Entity</a></span> base class.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">new Mesh(viewer.scene, {
     geometry: new BoxGeometry(viewer.scene, {
@@ -163,7 +163,7 @@ but you can assign each <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#in
     material: new PhongMaterial(viewer.scene, {
         diffuse: [0.2, 0.2, 1.0]
     }),
-    ghostMaterial: new EdgeMaterial(viewer.scene, {
+    xrayMaterial: new EdgeMaterial(viewer.scene, {
         fill: true,
         fillColor: [0, 0, 0],
         fillAlpha: 0.7,
@@ -172,7 +172,7 @@ but you can assign each <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#in
         edgeAlpha: 1.0,
         edgeWidth: 2
     }),
-    ghosted: true
+    xrayed: true
 });</code>
 </code></pre>
 <p>Note the <code>edgeThreshold</code> configuration for the <span><a href="class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span> on our <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span>.  EmphasisMaterial configures
@@ -190,16 +190,16 @@ to customize the effect.</p>
     material: new PhongMaterial(viewer.scene, {
         diffuse: [0.2, 0.2, 1.0]
     }),
-    ghosted: true
+    xrayed: true
 });
 
-var ghostMaterial = viewer.scene.ghostMaterial;
+var xrayMaterial = viewer.scene.xrayMaterial;
 
-ghostMaterial.fillColor = [0.2, 1.0, 0.2];
-ghostMaterial.fillAlpha = 1.0;</code>
+xrayMaterial.fillColor = [0.2, 1.0, 0.2];
+xrayMaterial.fillAlpha = 1.0;</code>
 </code></pre>
-<h2 id="presets">Presets</h2><p>Let&apos;s switch the <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial">Scene#ghostMaterial</a></span> to one of the presets in <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-presets">EmphasisMaterial#presets</a></span>:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.ghostMaterial.preset = EmphasisMaterial.presets[&quot;sepia&quot;];</code>
+<h2 id="presets">Presets</h2><p>Let&apos;s switch the <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial">Scene#xrayMaterial</a></span> to one of the presets in <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html#instance-get-presets">EmphasisMaterial#presets</a></span>:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.xrayMaterial.preset = EmphasisMaterial.presets[&quot;sepia&quot;];</code>
 </code></pre>
 <p>We can also create an EmphasisMaterial from a preset, while overriding properties of the preset as required:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">var myEmphasisMaterial = new EMphasisMaterial(viewer.scene, {
@@ -1448,7 +1448,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Indicates if ghost surfaces are filled with color.</p>
+      <td data-ice="description"><p>Indicates if xray surfaces are filled with color.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1464,7 +1464,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0.2</li></ul></td>
-      <td data-ice="description"><p>Transparency of filled ghost faces. A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
+      <td data-ice="description"><p>Transparency of filled xray faces. A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1472,7 +1472,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Indicates if ghost edges are visible.</p>
+      <td data-ice="description"><p>Indicates if xray edges are visible.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1480,7 +1480,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [0.2,0.2,0.2]</li></ul></td>
-      <td data-ice="description"><p>RGB color of ghost edges.</p>
+      <td data-ice="description"><p>RGB color of xray edges.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1488,7 +1488,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0.5</li></ul></td>
-      <td data-ice="description"><p>Transparency of ghost edges. A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
+      <td data-ice="description"><p>Transparency of xray edges. A value of <code>0.0</code> indicates fully transparent, <code>1.0</code> is fully opaque.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1496,7 +1496,7 @@ ghostMaterial.fillAlpha = 1.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 1</li></ul></td>
-      <td data-ice="description"><p>Width of ghost edges, in pixels.</p>
+      <td data-ice="description"><p>Width of xray edges, in pixels.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

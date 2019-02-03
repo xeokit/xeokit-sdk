@@ -6380,10 +6380,10 @@
                       }
                     },
                     "extra": {
-                      "rawValue": "bool ghosted      = (float(flags.y) > 0.0);",
-                      "raw": "\"bool ghosted      = (float(flags.y) > 0.0);\""
+                      "rawValue": "bool xrayed      = (float(flags.y) > 0.0);",
+                      "raw": "\"bool xrayed      = (float(flags.y) > 0.0);\""
                     },
-                    "value": "bool ghosted      = (float(flags.y) > 0.0);"
+                    "value": "bool xrayed      = (float(flags.y) > 0.0);"
                   }
                 ]
               }
@@ -6830,9 +6830,9 @@
                               "line": 97,
                               "column": 42
                             },
-                            "identifierName": "GHOSTED"
+                            "identifierName": "XRAYED"
                           },
-                          "name": "GHOSTED"
+                          "name": "XRAYED"
                         },
                         "computed": false
                       },
@@ -6943,8 +6943,8 @@
                           }
                         },
                         "value": {
-                          "raw": " && (!transparent || ghosted || highlighted)) || \n    (renderPass == ",
-                          "cooked": " && (!transparent || ghosted || highlighted)) || \n    (renderPass == "
+                          "raw": " && (!transparent || xrayed || highlighted)) || \n    (renderPass == ",
+                          "cooked": " && (!transparent || xrayed || highlighted)) || \n    (renderPass == "
                         },
                         "tail": false
                       },
@@ -6963,8 +6963,8 @@
                           }
                         },
                         "value": {
-                          "raw": " && (!ghosted || highlighted)) || \n    (renderPass == ",
-                          "cooked": " && (!ghosted || highlighted)) || \n    (renderPass == "
+                          "raw": " && (!xrayed || highlighted)) || \n    (renderPass == ",
+                          "cooked": " && (!xrayed || highlighted)) || \n    (renderPass == "
                         },
                         "tail": false
                       },
@@ -27298,7 +27298,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "bool ghosted      = (float(flags.y) > 0.0);",
+      "value": "bool xrayed      = (float(flags.y) > 0.0);",
       "start": 2723,
       "end": 2768,
       "loc": {
@@ -28176,7 +28176,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " && (!transparent || ghosted || highlighted)) || \n    (renderPass == ",
+      "value": " && (!transparent || xrayed || highlighted)) || \n    (renderPass == ",
       "start": 3066,
       "end": 3135,
       "loc": {
@@ -28279,7 +28279,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 3151,
       "end": 3158,
       "loc": {
@@ -28331,7 +28331,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " && (!ghosted || highlighted)) || \n    (renderPass == ",
+      "value": " && (!xrayed || highlighted)) || \n    (renderPass == ",
       "start": 3159,
       "end": 3213,
       "loc": {

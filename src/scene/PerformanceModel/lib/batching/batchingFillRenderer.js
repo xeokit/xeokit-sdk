@@ -89,8 +89,8 @@ BatchingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
     }
     state.indicesBuf.bind();
     frameCtx.bindArray++;
-    if (renderPass === RENDER_PASSES.GHOSTED) {
-        const material = scene.ghostMaterial._state;
+    if (renderPass === RENDER_PASSES.XRAYED) {
+        const material = scene.xrayMaterial._state;
         const fillColor = material.fillColor;
         const fillAlpha = material.fillAlpha;
         gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);

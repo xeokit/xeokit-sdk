@@ -286,7 +286,7 @@ class BIMServerLoaderPluginOLD extends Plugin {
      * @param {Boolean} [params.materialWorkflow=false]  When true, gives each {@link Mesh} the same {@link LambertMaterial} and {@link Mesh#colorize} set the to diffuse color, for memory and rendering efficiency.
      * @param {Boolean} [params.readableGeometry=false] When true, gives each {@link Mesh} a {@link ReadableGeometry}, otherwise gives it a {@link VBOGeometry} by default for memory efficiency.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces. When false, ignores backfaces.
-     * @param {Number} [params.edgeThreshold=20] When ghosting, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {Number} [params.edgeThreshold=20] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @returns {Node} An {@link Entity} representing the loaded BIMServer model.
      */
     load(params) {

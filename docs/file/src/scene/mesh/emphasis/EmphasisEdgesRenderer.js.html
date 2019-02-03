@@ -191,7 +191,7 @@ EmphasisEdgesRenderer.prototype.drawMesh = function (frame, mesh, mode) {
     }
     switch (mode) {
         case 0:
-            materialState = mesh._ghostMaterial._state;
+            materialState = mesh._xrayMaterial._state;
             break;
         case 1:
             materialState = mesh._highlightMaterial._state;

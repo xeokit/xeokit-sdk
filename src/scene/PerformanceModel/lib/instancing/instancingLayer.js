@@ -105,7 +105,7 @@ class InstancingLayer {
         this._numPortions = 0;
         this._numVisibleLayerPortions = 0;
         this._numTransparentLayerPortions = 0;
-        this._numGhostedLayerPortions = 0;
+        this._numXRayedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
@@ -156,14 +156,14 @@ class InstancingLayer {
         // TODO: find AABB for portion by transforming the geometry local AABB by the given matrix?
 
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
+        var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
 
         this._flags.push(visible);
-        this._flags.push(ghosted);
+        this._flags.push(xrayed);
         this._flags.push(highlighted);
         this._flags.push(clippable);
 
@@ -171,9 +171,9 @@ class InstancingLayer {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
         }
-        if (ghosted) {
-            this._numGhostedLayerPortions++;
-            this.model.numGhostedLayerPortions++;
+        if (xrayed) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
         }
         if (highlighted) {
             this._numHighlightedLayerPortions++;
@@ -324,9 +324,9 @@ class InstancingLayer {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.GHOSTED) {
-            this._numGhostedLayerPortions++;
-            this.model.numGhostedLayerPortions++;
+        if (flags & RENDER_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
         }
         if (flags & RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
@@ -367,16 +367,16 @@ class InstancingLayer {
         this._setFlags(portionId, flags);
     }
 
-    setGhosted(portionId, flags) {
+    setXRayed(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.GHOSTED) {
-            this._numGhostedLayerPortions++;
-            this.model.numGhostedLayerPortions++;
+        if (flags & RENDER_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
         } else {
-            this._numGhostedLayerPortions--;
-            this.model.numGhostedLayerPortions--;
+            this._numXRayedLayerPortions--;
+            this.model.numXRayedLayerPortions--;
         }
         this._setFlags(portionId, flags);
     }
@@ -484,12 +484,12 @@ class InstancingLayer {
             throw "Not finalized";
         }
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
+        var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         tempUint8Vec4[0] = visible;
-        tempUint8Vec4[1] = ghosted;
+        tempUint8Vec4[1] = xrayed;
         tempUint8Vec4[2] = highlighted;
         tempUint8Vec4[3] = clippable;
         this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
@@ -498,7 +498,7 @@ class InstancingLayer {
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numGhostedLayerPortions === this._numPortions) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
@@ -516,7 +516,7 @@ class InstancingLayer {
     }
 
     drawNormalFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numGhostedLayerPortions === this._numPortions) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
@@ -533,41 +533,41 @@ class InstancingLayer {
         }
     }
 
-    //-- GHOSTED--------------------------------------------------------------------------------------------------------
+    //-- XRAYED--------------------------------------------------------------------------------------------------------
 
-    drawGhostedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedFillOpaque(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
-            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED); // TODO: pass in transparent flag
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED); // TODO: pass in transparent flag
         }
     }
 
-    drawGhostedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedEdgesOpaque(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 
-    drawGhostedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedFillTransparent(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
-            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED); // TODO: pass in transparent flag
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED); // TODO: pass in transparent flag
         }
     }
 
-    drawGhostedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedEdgesTransparent(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 

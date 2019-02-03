@@ -145,7 +145,7 @@
                     plumbingModel.on("loaded", function() {
 
                         //------------------------------------------------------------------------------------------------------------------
-                        // When model loaded, create a tree view that toggles object ghosting
+                        // When model loaded, create a tree view that toggles object xraying
                         //------------------------------------------------------------------------------------------------------------------
 
                             // Builds tree view data from MetaModel
@@ -203,14 +203,14 @@
 
                                 treeView.on('node.selected', function (event, node) {
                                     const objectId = event.id;
-                                    viewer.scene.setObjectsGhosted(objectId, false);
+                                    viewer.scene.setObjectsXRayed(objectId, false);
                                     viewer.scene.setObjectsCollidable(objectId, true);
                                     viewer.scene.setObjectsPickable(objectId, true);
                                 });
 
                                 treeView.on('node.deselected', function (event, node) {
                                     const objectId = event.id;
-                                    viewer.scene.setObjectsGhosted(objectId, true);
+                                    viewer.scene.setObjectsXRayed(objectId, true);
                                     viewer.scene.setObjectsCollidable(objectId, false);
                                     viewer.scene.setObjectsPickable(objectId, false);
                                 });

@@ -99,8 +99,8 @@ class PerformanceMesh {
     /**
      * @private
      */
-    _setGhosted(flags) {
-        this._layer.setGhosted(this._portionId, flags);
+    _setXRayed(flags) {
+        this._layer.setXRayed(this._portionId, flags);
     }
 
     /**

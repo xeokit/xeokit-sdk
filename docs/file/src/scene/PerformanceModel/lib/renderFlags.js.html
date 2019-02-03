@@ -119,7 +119,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/scene/PerformanceModel/lib/renderFlags.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * @private
- * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, GHOSTED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}
+ * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}
  */
 const RENDER_FLAGS = {
     VISIBLE: 1,
@@ -130,7 +130,7 @@ const RENDER_FLAGS = {
     CAST_SHADOW: 1 &lt;&lt; 6,
     RECEIVE_SHADOW: 1 &lt;&lt; 7,
     OUTLINED: 1 &lt;&lt; 8,
-    GHOSTED: 1 &lt;&lt; 9,
+    XRAYED: 1 &lt;&lt; 9,
     HIGHLIGHTED: 1 &lt;&lt; 10,
     SELECTED: 1 &lt;&lt; 11,
     EDGES: 1 &lt;&lt; 12,

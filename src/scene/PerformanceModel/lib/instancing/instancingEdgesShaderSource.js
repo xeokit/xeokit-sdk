@@ -35,15 +35,15 @@ function buildVertex(layer) {
     src.push("uniform vec4 color;");
     src.push("void main(void) {");
     src.push("bool visible      = (float(flags.x) > 0.0);");
-    src.push("bool ghosted      = (float(flags.y) > 0.0);");
+    src.push("bool xrayed      = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EdgeMaterial.edgeColor, so is not quantized
 
     src.push(`
      if (!visible ||
-     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || ghosted || highlighted)) ||
-     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || ghosted || highlighted)) ||
-     (renderPass == ${RENDER_PASSES.GHOSTED} && (!ghosted || highlighted)) ||
+     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed || highlighted)) ||
+     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted)) ||
+     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted)) ||
      (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");

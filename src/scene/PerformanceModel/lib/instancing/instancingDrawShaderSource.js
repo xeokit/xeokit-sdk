@@ -86,15 +86,15 @@ function buildVertex(layer) {
     src.push("void main(void) {");
 
     src.push("bool visible      = (float(flags.x) > 0.0);");
-    src.push("bool ghosted      = (float(flags.y) > 0.0);");
+    src.push("bool xrayed      = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
     src.push(`if 
     (!visible || 
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent)) || 
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || ghosted || highlighted)) || 
-    (renderPass == ${RENDER_PASSES.GHOSTED} && (!ghosted || highlighted)) || 
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted)) || 
+    (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted)) || 
     (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted)) {`);
 
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex

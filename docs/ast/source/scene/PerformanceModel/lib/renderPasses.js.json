@@ -395,9 +395,9 @@
                         "line": 10,
                         "column": 11
                       },
-                      "identifierName": "GHOSTED"
+                      "identifierName": "XRAYED"
                     },
-                    "name": "GHOSTED"
+                    "name": "XRAYED"
                   },
                   "value": {
                     "type": "NumericLiteral",
@@ -450,9 +450,9 @@
                         "line": 11,
                         "column": 17
                       },
-                      "identifierName": "GHOSTED_EDGES"
+                      "identifierName": "XRAYED_EDGES"
                     },
-                    "name": "GHOSTED_EDGES"
+                    "name": "XRAYED_EDGES"
                   },
                   "value": {
                     "type": "NumericLiteral",
@@ -1044,9 +1044,9 @@
                           "line": 10,
                           "column": 11
                         },
-                        "identifierName": "GHOSTED"
+                        "identifierName": "XRAYED"
                       },
-                      "name": "GHOSTED"
+                      "name": "XRAYED"
                     },
                     "value": {
                       "type": "NumericLiteral",
@@ -1099,9 +1099,9 @@
                           "line": 11,
                           "column": 17
                         },
-                        "identifierName": "GHOSTED_EDGES"
+                        "identifierName": "XRAYED_EDGES"
                       },
-                      "name": "GHOSTED_EDGES"
+                      "name": "XRAYED_EDGES"
                     },
                     "value": {
                       "type": "NumericLiteral",
@@ -1945,7 +1945,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 164,
       "end": 171,
       "loc": {
@@ -2050,7 +2050,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED_EDGES",
+      "value": "XRAYED_EDGES",
       "start": 180,
       "end": 193,
       "loc": {

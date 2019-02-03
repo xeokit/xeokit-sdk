@@ -119,7 +119,7 @@ var parseGLTF = (function () {
             modelNodeProps: {
                 visible: modelNode.visible,
                 culled: modelNode.culled,
-                ghosted: modelNode.ghosted,
+                xrayed: modelNode.xrayed,
                 highlighted: modelNode.highlighted,
                 selected: modelNode.selected,
                 outlined: modelNode.outlined,

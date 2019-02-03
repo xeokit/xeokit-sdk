@@ -869,7 +869,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 3764,
                   "end": 4043,
                   "loc": {
@@ -914,9 +914,9 @@
                     "line": 134,
                     "column": 15
                   },
-                  "identifierName": "ghosted"
+                  "identifierName": "xrayed"
                 },
-                "name": "ghosted"
+                "name": "xrayed"
               },
               "kind": "set",
               "id": null,
@@ -937,9 +937,9 @@
                       "line": 134,
                       "column": 23
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 }
               ],
               "body": {
@@ -964,7 +964,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 3764,
                   "end": 4043,
                   "loc": {
@@ -982,7 +982,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 4083,
                   "end": 4362,
                   "loc": {
@@ -1027,9 +1027,9 @@
                     "line": 147,
                     "column": 15
                   },
-                  "identifierName": "ghosted"
+                  "identifierName": "xrayed"
                 },
-                "name": "ghosted"
+                "name": "xrayed"
               },
               "kind": "get",
               "id": null,
@@ -1059,7 +1059,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                  "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                   "start": 4083,
                   "end": 4362,
                   "loc": {
@@ -4386,7 +4386,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 3764,
                     "end": 4043,
                     "loc": {
@@ -4431,9 +4431,9 @@
                       "line": 134,
                       "column": 15
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 },
                 "kind": "set",
                 "id": null,
@@ -4454,9 +4454,9 @@
                         "line": 134,
                         "column": 23
                       },
-                      "identifierName": "ghosted"
+                      "identifierName": "xrayed"
                     },
-                    "name": "ghosted"
+                    "name": "xrayed"
                   }
                 ],
                 "body": {
@@ -4481,7 +4481,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 3764,
                     "end": 4043,
                     "loc": {
@@ -4499,7 +4499,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 4083,
                     "end": 4362,
                     "loc": {
@@ -4544,9 +4544,9 @@
                       "line": 147,
                       "column": 15
                     },
-                    "identifierName": "ghosted"
+                    "identifierName": "xrayed"
                   },
-                  "name": "ghosted"
+                  "name": "xrayed"
                 },
                 "kind": "get",
                 "id": null,
@@ -4576,7 +4576,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+                    "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
                     "start": 4083,
                     "end": 4362,
                     "loc": {
@@ -6979,7 +6979,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, ghosted, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsGhosted}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
+              "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, xrayed, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsXRayed}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
               "start": 0,
               "end": 1517,
               "loc": {
@@ -7007,7 +7007,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, ghosted, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsGhosted}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
+      "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, xrayed, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsXRayed}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
       "start": 0,
       "end": 1517,
       "loc": {
@@ -7151,7 +7151,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 3764,
       "end": 4043,
       "loc": {
@@ -7167,7 +7167,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 4083,
       "end": 4362,
       "loc": {
@@ -7553,7 +7553,7 @@
   "tokens": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, ghosted, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsGhosted}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
+      "value": "*\n * @desc An abstract 3D scene element that can be individually shown, hidden, selected,\n * highlighted, xrayed, culled, picked, clipped and bounded.\n *\n * Entity provides an abstract interface through which different concrete types\n * of scene element can be accessed and manipulated uniformly.\n *\n * ## Entities Representing Models\n *\n * * An Entity represents a model when {@link Entity#isModel} is ````true````.\n * * Each model-Entity is registered by {@link Entity#id} in {@link Scene#models}.\n * * Each model-Entity can also have a {@link MetaModel} with a matching {@link MetaModel#id}, by which it is registered in {@link MetaScene#metaModels}.\n *\n * ## Entities Representing Objects\n *\n * * An Entity represents an object when {@link Entity#isObject} is ````true````.\n * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.\n * * Each object-Entity can also have a {@link MetaObject} with a matching {@link MetaObject#id}, by which it is registered {@link MetaScene#metaObjects}.\n *\n * ## Updating Batches of Objects\n *\n * {@link Scene} provides the following methods for updating batches of object-Entities using their {@link Entity#id}s:\n *\n * * {@link Scene#setObjectsVisible}\n * * {@link Scene#setObjectsCulled}\n * * {@link Scene#setObjectsSelected}\n * * {@link Scene#setObjectsHighlighted}\n * * {@link Scene#setObjectsXRayed}\n * * {@link Scene#setObjectsEdges}\n * * {@link Scene#setObjectsColorized}\n * * {@link Scene#setObjectsOpacity}\n *\n * @interface\n * @abstract\n ",
       "start": 0,
       "end": 1517,
       "loc": {
@@ -9100,7 +9100,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Sets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Sets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 3764,
       "end": 4043,
       "loc": {
@@ -9152,7 +9152,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 4052,
       "end": 4059,
       "loc": {
@@ -9203,7 +9203,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 4060,
       "end": 4067,
       "loc": {
@@ -9294,7 +9294,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets if this Entity is ghosted.\n     *\n     * When {@link Entity#isObject} and {@link Entity#ghosted} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#ghostedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
+      "value": "*\n     * Gets if this Entity is xrayed.\n     *\n     * When {@link Entity#isObject} and {@link Entity#xrayed} are both ````true``` the Entity will be\n     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
       "start": 4083,
       "end": 4362,
       "loc": {
@@ -9346,7 +9346,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghosted",
+      "value": "xrayed",
       "start": 4371,
       "end": 4378,
       "loc": {

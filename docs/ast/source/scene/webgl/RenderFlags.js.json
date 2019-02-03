@@ -826,7 +826,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                         "start": 1430,
                         "end": 1641,
                         "loc": {
@@ -914,9 +914,9 @@
                               "line": 52,
                               "column": 30
                             },
-                            "identifierName": "ghostedFillOpaque"
+                            "identifierName": "xrayedFillOpaque"
                           },
-                          "name": "ghostedFillOpaque"
+                          "name": "xrayedFillOpaque"
                         },
                         "computed": false,
                         "leadingComments": null
@@ -942,7 +942,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                         "start": 1430,
                         "end": 1641,
                         "loc": {
@@ -960,7 +960,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
                         "start": 1691,
                         "end": 1904,
                         "loc": {
@@ -1048,9 +1048,9 @@
                               "line": 59,
                               "column": 31
                             },
-                            "identifierName": "ghostedEdgesOpaque"
+                            "identifierName": "xrayedEdgesOpaque"
                           },
-                          "name": "ghostedEdgesOpaque"
+                          "name": "xrayedEdgesOpaque"
                         },
                         "computed": false,
                         "leadingComments": null
@@ -1076,7 +1076,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
                         "start": 1691,
                         "end": 1904,
                         "loc": {
@@ -1094,7 +1094,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
                         "start": 1955,
                         "end": 2176,
                         "loc": {
@@ -1182,9 +1182,9 @@
                               "line": 66,
                               "column": 35
                             },
-                            "identifierName": "ghostedFillTransparent"
+                            "identifierName": "xrayedFillTransparent"
                           },
-                          "name": "ghostedFillTransparent"
+                          "name": "xrayedFillTransparent"
                         },
                         "computed": false,
                         "leadingComments": null
@@ -1210,7 +1210,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
                         "start": 1955,
                         "end": 2176,
                         "loc": {
@@ -1228,7 +1228,7 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
                         "start": 2231,
                         "end": 2450,
                         "loc": {
@@ -1316,9 +1316,9 @@
                               "line": 73,
                               "column": 36
                             },
-                            "identifierName": "ghostedEdgesTransparent"
+                            "identifierName": "xrayedEdgesTransparent"
                           },
-                          "name": "ghostedEdgesTransparent"
+                          "name": "xrayedEdgesTransparent"
                         },
                         "computed": false,
                         "leadingComments": null
@@ -1344,7 +1344,7 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+                        "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
                         "start": 2231,
                         "end": 2450,
                         "loc": {
@@ -3340,7 +3340,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                           "start": 1430,
                           "end": 1641,
                           "loc": {
@@ -3428,9 +3428,9 @@
                                 "line": 52,
                                 "column": 30
                               },
-                              "identifierName": "ghostedFillOpaque"
+                              "identifierName": "xrayedFillOpaque"
                             },
-                            "name": "ghostedFillOpaque"
+                            "name": "xrayedFillOpaque"
                           },
                           "computed": false,
                           "leadingComments": null
@@ -3456,7 +3456,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                           "start": 1430,
                           "end": 1641,
                           "loc": {
@@ -3474,7 +3474,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
                           "start": 1691,
                           "end": 1904,
                           "loc": {
@@ -3562,9 +3562,9 @@
                                 "line": 59,
                                 "column": 31
                               },
-                              "identifierName": "ghostedEdgesOpaque"
+                              "identifierName": "xrayedEdgesOpaque"
                             },
-                            "name": "ghostedEdgesOpaque"
+                            "name": "xrayedEdgesOpaque"
                           },
                           "computed": false,
                           "leadingComments": null
@@ -3590,7 +3590,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
                           "start": 1691,
                           "end": 1904,
                           "loc": {
@@ -3608,7 +3608,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
                           "start": 1955,
                           "end": 2176,
                           "loc": {
@@ -3696,9 +3696,9 @@
                                 "line": 66,
                                 "column": 35
                               },
-                              "identifierName": "ghostedFillTransparent"
+                              "identifierName": "xrayedFillTransparent"
                             },
-                            "name": "ghostedFillTransparent"
+                            "name": "xrayedFillTransparent"
                           },
                           "computed": false,
                           "leadingComments": null
@@ -3724,7 +3724,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
                           "start": 1955,
                           "end": 2176,
                           "loc": {
@@ -3742,7 +3742,7 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
                           "start": 2231,
                           "end": 2450,
                           "loc": {
@@ -3830,9 +3830,9 @@
                                 "line": 73,
                                 "column": 36
                               },
-                              "identifierName": "ghostedEdgesTransparent"
+                              "identifierName": "xrayedEdgesTransparent"
                             },
-                            "name": "ghostedEdgesTransparent"
+                            "name": "xrayedEdgesTransparent"
                           },
                           "computed": false,
                           "leadingComments": null
@@ -3858,7 +3858,7 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+                          "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
                           "start": 2231,
                           "end": 2450,
                           "loc": {
@@ -5113,7 +5113,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
       "start": 1430,
       "end": 1641,
       "loc": {
@@ -5129,7 +5129,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
       "start": 1691,
       "end": 1904,
       "loc": {
@@ -5145,7 +5145,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
       "start": 1955,
       "end": 2176,
       "loc": {
@@ -5161,7 +5161,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
       "start": 2231,
       "end": 2450,
       "loc": {
@@ -6525,7 +6525,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillOpaque}.\n         * @property ghostedFillOpaque\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
       "start": 1430,
       "end": 1641,
       "loc": {
@@ -6605,7 +6605,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostedFillOpaque",
+      "value": "xrayedFillOpaque",
       "start": 1655,
       "end": 1672,
       "loc": {
@@ -6702,7 +6702,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedEdgesOpaque}.\n         * @property ghostedEdgesOpaque\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
       "start": 1691,
       "end": 1904,
       "loc": {
@@ -6782,7 +6782,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostedEdgesOpaque",
+      "value": "xrayedEdgesOpaque",
       "start": 1918,
       "end": 1936,
       "loc": {
@@ -6879,7 +6879,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawGhostedFillTransparent}.\n         * @property ghostedFillTransparent\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
       "start": 1955,
       "end": 2176,
       "loc": {
@@ -6959,7 +6959,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostedFillTransparent",
+      "value": "xrayedFillTransparent",
       "start": 2190,
       "end": 2212,
       "loc": {
@@ -7056,7 +7056,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #ghostedEdgesTransparent}.\n         * @property ghostedEdgesTransparent\n         * @type {boolean}\n         ",
+      "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
       "start": 2231,
       "end": 2450,
       "loc": {
@@ -7136,7 +7136,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostedEdgesTransparent",
+      "value": "xrayedEdgesTransparent",
       "start": 2464,
       "end": 2487,
       "loc": {

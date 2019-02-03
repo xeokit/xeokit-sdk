@@ -10957,9 +10957,9 @@
                             "line": 123,
                             "column": 44
                           },
-                          "identifierName": "GHOSTED"
+                          "identifierName": "XRAYED"
                         },
-                        "name": "GHOSTED"
+                        "name": "XRAYED"
                       },
                       "computed": false
                     }
@@ -11083,9 +11083,9 @@
                                       "line": 124,
                                       "column": 44
                                     },
-                                    "identifierName": "ghostMaterial"
+                                    "identifierName": "xrayMaterial"
                                   },
-                                  "name": "ghostMaterial"
+                                  "name": "xrayMaterial"
                                 },
                                 "computed": false
                               },
@@ -51965,7 +51965,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GHOSTED",
+      "value": "XRAYED",
       "start": 4064,
       "end": 4071,
       "loc": {
@@ -52174,7 +52174,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostMaterial",
+      "value": "xrayMaterial",
       "start": 4106,
       "end": 4119,
       "loc": {

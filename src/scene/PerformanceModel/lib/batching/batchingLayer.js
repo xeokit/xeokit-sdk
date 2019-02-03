@@ -81,7 +81,7 @@ class BatchingLayer {
         this._numPortions = 0;
         this._numVisibleLayerPortions = 0;
         this._numTransparentLayerPortions = 0;
-        this._numGhostedLayerPortions = 0;
+        this._numXRayedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
@@ -184,7 +184,7 @@ class BatchingLayer {
         if (flags !== undefined) {
             const lenFlags = (numVerts * 4);
             var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-            var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
+            var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
             var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
             var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
             var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
@@ -192,7 +192,7 @@ class BatchingLayer {
             //   edges = Math.random() < .5;
             for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i < len; i += 4) {
                 buffer.flags[i + 0] = visible;
-                buffer.flags[i + 1] = ghosted;
+                buffer.flags[i + 1] = xrayed;
                 buffer.flags[i + 2] = highlighted;
                 buffer.flags[i + 3] = clippable;
             }
@@ -201,9 +201,9 @@ class BatchingLayer {
                 this._numVisibleLayerPortions++;
                 this.model.numVisibleLayerPortions++;
             }
-            if (ghosted) {
-                this._numGhostedLayerPortions++;
-                this.model.numGhostedLayerPortions++;
+            if (xrayed) {
+                this._numXRayedLayerPortions++;
+                this.model.numXRayedLayerPortions++;
             }
             if (highlighted) {
                 this._numHighlightedLayerPortions++;
@@ -362,9 +362,9 @@ class BatchingLayer {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.GHOSTED) {
-            this._numGhostedLayerPortions++;
-            this.model.numGhostedLayerPortions++;
+        if (flags & RENDER_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
         }
         if (flags & RENDER_FLAGS.SELECTED) {
             this._numSelectedLayerPortions++;
@@ -405,16 +405,16 @@ class BatchingLayer {
         this._setFlags(portionId, flags);
     }
 
-    setGhosted(portionId, flags) {
+    setXRayed(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & RENDER_FLAGS.GHOSTED) {
-            this._numGhostedLayerPortions++;
-            this.model.numGhostedLayerPortions++;
+        if (flags & RENDER_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
         } else {
-            this._numGhostedLayerPortions--;
-            this.model.numGhostedLayerPortions--;
+            this._numXRayedLayerPortions--;
+            this.model.numXRayedLayerPortions--;
         }
         this._setFlags(portionId, flags);
     }
@@ -513,13 +513,13 @@ class BatchingLayer {
         var firstFlag = vertexBase * 4;
         var lenFlags = numVerts * 4;
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-        var ghosted = !!(flags & RENDER_FLAGS.GHOSTED) ? 255 : 0;
+        var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         for (var i = 0; i < lenFlags; i += 4) {
             tempUint8Vec4[i + 0] = visible;
-            tempUint8Vec4[i + 1] = ghosted;
+            tempUint8Vec4[i + 1] = xrayed;
             tempUint8Vec4[i + 2] = highlighted;
             tempUint8Vec4[i + 3] = clippable;
         }
@@ -529,7 +529,7 @@ class BatchingLayer {
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numGhostedLayerPortions === this._numPortions) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
@@ -547,7 +547,7 @@ class BatchingLayer {
     }
 
     drawNormalFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numGhostedLayerPortions === this._numPortions) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
         if (this._drawRenderer) {
@@ -564,41 +564,41 @@ class BatchingLayer {
         }
     }
 
-    //-- GHOSTED--------------------------------------------------------------------------------------------------------
+    //-- XRAYED--------------------------------------------------------------------------------------------------------
 
-    drawGhostedFillOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedFillOpaque(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
-            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 
-    drawGhostedEdgesOpaque(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedEdgesOpaque(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 
-    drawGhostedFillTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedFillTransparent(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._fillRenderer) {
-            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._fillRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 
-    drawGhostedEdgesTransparent(frameCtx) {
-        if (this._numVisibleLayerPortions === 0 || this._numGhostedLayerPortions === 0) {
+    drawXRayedEdgesTransparent(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
         if (this._edgesRenderer) {
-            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.GHOSTED);
+            this._edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.XRAYED);
         }
     }
 

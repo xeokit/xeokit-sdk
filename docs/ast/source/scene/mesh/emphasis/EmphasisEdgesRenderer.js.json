@@ -5659,9 +5659,9 @@
                                       "line": 75,
                                       "column": 47
                                     },
-                                    "identifierName": "_ghostMaterial"
+                                    "identifierName": "_xrayMaterial"
                                   },
-                                  "name": "_ghostMaterial"
+                                  "name": "_xrayMaterial"
                                 },
                                 "computed": false
                               },
@@ -30716,7 +30716,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "_ghostMaterial",
+      "value": "_xrayMaterial",
       "start": 2055,
       "end": 2069,
       "loc": {

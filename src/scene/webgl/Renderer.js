@@ -290,10 +290,10 @@ const Renderer = function (scene, options) {
         const normalFillTransparentBin = [];
         const normalEdgesTransparentBin = [];
 
-        const ghostedFillOpaqueBin = [];
-        const ghostEdgesOpaqueBin = [];
-        const ghostedFillTransparentBin = [];
-        const ghostEdgesTransparentBin = [];
+        const xrayedFillOpaqueBin = [];
+        const xrayEdgesOpaqueBin = [];
+        const xrayedFillTransparentBin = [];
+        const xrayEdgesTransparentBin = [];
 
         const highlightedFillOpaqueBin = [];
         const highlightedEdgesOpaqueBin = [];
@@ -352,10 +352,10 @@ const Renderer = function (scene, options) {
             let normalFillTransparentBinLen = 0;
             let normalEdgesTransparentBinLen = 0;
 
-            let ghostedFillOpaqueBinLen = 0;
-            let ghostEdgesOpaqueBinLen = 0;
-            let ghostedFillTransparentBinLen = 0;
-            let ghostEdgesTransparentBinLen = 0;
+            let xrayedFillOpaqueBinLen = 0;
+            let xrayEdgesOpaqueBinLen = 0;
+            let xrayedFillTransparentBinLen = 0;
+            let xrayEdgesTransparentBinLen = 0;
 
             let highlightedFillOpaqueBinLen = 0;
             let highlightedEdgesOpaqueBinLen = 0;
@@ -405,20 +405,20 @@ const Renderer = function (scene, options) {
                             normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
                         }
 
-                        if (renderFlags.ghostedFillTransparent) {
-                            ghostedFillTransparentBin[ghostedFillTransparentBinLen++] = drawable;
+                        if (renderFlags.xrayedFillTransparent) {
+                            xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
                         }
 
-                        if (renderFlags.ghostedFillOpaque) {
-                            ghostedFillOpaqueBin[ghostedFillOpaqueBinLen++] = drawable;
+                        if (renderFlags.xrayedFillOpaque) {
+                            xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
                         }
 
-                        if (renderFlags.ghostedEdgesTransparent) {
-                            ghostEdgesTransparentBin[ghostEdgesTransparentBinLen++] = drawable;
+                        if (renderFlags.xrayedEdgesTransparent) {
+                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
                         }
 
-                        if (renderFlags.ghostedEdgesOpaque) {
-                            ghostEdgesOpaqueBin[ghostEdgesOpaqueBinLen++] = drawable;
+                        if (renderFlags.xrayedEdgesOpaque) {
+                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
                         }
 
                         if (renderFlags.highlightedFillTransparent) {
@@ -466,20 +466,20 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            if (ghostedFillOpaqueBinLen > 0) {
-                for (i = 0; i < ghostedFillOpaqueBinLen; i++) {
-                    ghostedFillOpaqueBin[i].drawGhostedFillOpaque(frameCtx);
+            if (xrayedFillOpaqueBinLen > 0) {
+                for (i = 0; i < xrayedFillOpaqueBinLen; i++) {
+                    xrayedFillOpaqueBin[i].drawXRayedFillOpaque(frameCtx);
                 }
             }
 
-            if (ghostEdgesOpaqueBinLen > 0) {
-                for (i = 0; i < ghostEdgesOpaqueBinLen; i++) {
-                    ghostEdgesOpaqueBin[i].drawGhostedEdgesOpaque(frameCtx);
+            if (xrayEdgesOpaqueBinLen > 0) {
+                for (i = 0; i < xrayEdgesOpaqueBinLen; i++) {
+                    xrayEdgesOpaqueBin[i].drawXRayedEdgesOpaque(frameCtx);
                 }
             }
 
             const transparentDepthMask = true;
-            if (ghostedFillTransparentBinLen > 0 || ghostEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0) {
+            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0) {
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.BLEND);
                 if (blendOneMinusSrcAlpha) { // Makes glTF windows appear correct
@@ -492,14 +492,14 @@ const Renderer = function (scene, options) {
                 if (!transparentDepthMask) {
                     gl.depthMask(false);
                 }
-                if (ghostEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < ghostEdgesTransparentBinLen; i++) {
-                        ghostEdgesTransparentBin[i].drawGhostedEdgesTransparent(frameCtx);
+                if (xrayEdgesTransparentBinLen > 0) {
+                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
+                        xrayEdgesTransparentBin[i].drawXRayedEdgesTransparent(frameCtx);
                     }
                 }
-                if (ghostedFillTransparentBinLen > 0) {
-                    for (i = 0; i < ghostedFillTransparentBinLen; i++) {
-                        ghostedFillTransparentBin[i].drawGhostedFillTransparent(frameCtx);
+                if (xrayedFillTransparentBinLen > 0) {
+                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
+                        xrayedFillTransparentBin[i].drawXRayedFillTransparent(frameCtx);
                     }
                 }
                 if (normalFillTransparentBinLen > 0) {

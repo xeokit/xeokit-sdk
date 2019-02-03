@@ -203,7 +203,7 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+                  "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
                   "start": 527,
                   "end": 719,
                   "loc": {
@@ -248,9 +248,9 @@
                     "line": 30,
                     "column": 21
                   },
-                  "identifierName": "ghostMaterial"
+                  "identifierName": "xrayMaterial"
                 },
-                "name": "ghostMaterial"
+                "name": "xrayMaterial"
               },
               "kind": "get",
               "id": null,
@@ -328,7 +328,7 @@
                 },
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+                  "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
                   "start": 527,
                   "end": 719,
                   "loc": {
@@ -1523,7 +1523,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4081,
                   "end": 4308,
                   "loc": {
@@ -1568,9 +1568,9 @@
                     "line": 155,
                     "column": 25
                   },
-                  "identifierName": "drawGhostedFillOpaque"
+                  "identifierName": "drawXRayedFillOpaque"
                 },
-                "name": "drawGhostedFillOpaque",
+                "name": "drawXRayedFillOpaque",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1619,7 +1619,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4081,
                   "end": 4308,
                   "loc": {
@@ -1637,7 +1637,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4358,
                   "end": 4587,
                   "loc": {
@@ -1682,9 +1682,9 @@
                     "line": 166,
                     "column": 26
                   },
-                  "identifierName": "drawGhostedEdgesOpaque"
+                  "identifierName": "drawXRayedEdgesOpaque"
                 },
-                "name": "drawGhostedEdgesOpaque",
+                "name": "drawXRayedEdgesOpaque",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1733,7 +1733,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4358,
                   "end": 4587,
                   "loc": {
@@ -1751,7 +1751,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4638,
                   "end": 4876,
                   "loc": {
@@ -1796,9 +1796,9 @@
                     "line": 177,
                     "column": 30
                   },
-                  "identifierName": "drawGhostedFillTransparent"
+                  "identifierName": "drawXRayedFillTransparent"
                 },
-                "name": "drawGhostedFillTransparent",
+                "name": "drawXRayedFillTransparent",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1847,7 +1847,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4638,
                   "end": 4876,
                   "loc": {
@@ -1865,7 +1865,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4931,
                   "end": 5170,
                   "loc": {
@@ -1910,9 +1910,9 @@
                     "line": 188,
                     "column": 31
                   },
-                  "identifierName": "drawGhostedEdgesTransparent"
+                  "identifierName": "drawXRayedEdgesTransparent"
                 },
-                "name": "drawGhostedEdgesTransparent",
+                "name": "drawXRayedEdgesTransparent",
                 "leadingComments": null
               },
               "kind": "method",
@@ -1961,7 +1961,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 4931,
                   "end": 5170,
                   "loc": {
@@ -1979,7 +1979,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5226,
                   "end": 5461,
                   "loc": {
@@ -2075,7 +2075,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5226,
                   "end": 5461,
                   "loc": {
@@ -2093,7 +2093,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5515,
                   "end": 5752,
                   "loc": {
@@ -2189,7 +2189,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5515,
                   "end": 5752,
                   "loc": {
@@ -2207,7 +2207,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5807,
                   "end": 6052,
                   "loc": {
@@ -2303,7 +2303,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 5807,
                   "end": 6052,
                   "loc": {
@@ -2321,7 +2321,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6111,
                   "end": 6358,
                   "loc": {
@@ -2417,7 +2417,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6111,
                   "end": 6358,
                   "loc": {
@@ -2435,7 +2435,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6418,
                   "end": 6653,
                   "loc": {
@@ -2531,7 +2531,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6418,
                   "end": 6653,
                   "loc": {
@@ -2549,7 +2549,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6704,
                   "end": 6935,
                   "loc": {
@@ -2645,7 +2645,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6704,
                   "end": 6935,
                   "loc": {
@@ -2663,7 +2663,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6987,
                   "end": 7226,
                   "loc": {
@@ -2759,7 +2759,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 6987,
                   "end": 7226,
                   "loc": {
@@ -2777,7 +2777,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 7282,
                   "end": 7523,
                   "loc": {
@@ -2873,7 +2873,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                   "start": 7282,
                   "end": 7523,
                   "loc": {
@@ -3531,7 +3531,7 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+                    "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
                     "start": 527,
                     "end": 719,
                     "loc": {
@@ -3576,9 +3576,9 @@
                       "line": 30,
                       "column": 21
                     },
-                    "identifierName": "ghostMaterial"
+                    "identifierName": "xrayMaterial"
                   },
-                  "name": "ghostMaterial"
+                  "name": "xrayMaterial"
                 },
                 "kind": "get",
                 "id": null,
@@ -3656,7 +3656,7 @@
                   },
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+                    "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
                     "start": 527,
                     "end": 719,
                     "loc": {
@@ -4851,7 +4851,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4081,
                     "end": 4308,
                     "loc": {
@@ -4896,9 +4896,9 @@
                       "line": 155,
                       "column": 25
                     },
-                    "identifierName": "drawGhostedFillOpaque"
+                    "identifierName": "drawXRayedFillOpaque"
                   },
-                  "name": "drawGhostedFillOpaque",
+                  "name": "drawXRayedFillOpaque",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -4947,7 +4947,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4081,
                     "end": 4308,
                     "loc": {
@@ -4965,7 +4965,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4358,
                     "end": 4587,
                     "loc": {
@@ -5010,9 +5010,9 @@
                       "line": 166,
                       "column": 26
                     },
-                    "identifierName": "drawGhostedEdgesOpaque"
+                    "identifierName": "drawXRayedEdgesOpaque"
                   },
-                  "name": "drawGhostedEdgesOpaque",
+                  "name": "drawXRayedEdgesOpaque",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5061,7 +5061,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4358,
                     "end": 4587,
                     "loc": {
@@ -5079,7 +5079,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4638,
                     "end": 4876,
                     "loc": {
@@ -5124,9 +5124,9 @@
                       "line": 177,
                       "column": 30
                     },
-                    "identifierName": "drawGhostedFillTransparent"
+                    "identifierName": "drawXRayedFillTransparent"
                   },
-                  "name": "drawGhostedFillTransparent",
+                  "name": "drawXRayedFillTransparent",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5175,7 +5175,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4638,
                     "end": 4876,
                     "loc": {
@@ -5193,7 +5193,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4931,
                     "end": 5170,
                     "loc": {
@@ -5238,9 +5238,9 @@
                       "line": 188,
                       "column": 31
                     },
-                    "identifierName": "drawGhostedEdgesTransparent"
+                    "identifierName": "drawXRayedEdgesTransparent"
                   },
-                  "name": "drawGhostedEdgesTransparent",
+                  "name": "drawXRayedEdgesTransparent",
                   "leadingComments": null
                 },
                 "kind": "method",
@@ -5289,7 +5289,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 4931,
                     "end": 5170,
                     "loc": {
@@ -5307,7 +5307,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5226,
                     "end": 5461,
                     "loc": {
@@ -5403,7 +5403,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5226,
                     "end": 5461,
                     "loc": {
@@ -5421,7 +5421,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5515,
                     "end": 5752,
                     "loc": {
@@ -5517,7 +5517,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5515,
                     "end": 5752,
                     "loc": {
@@ -5535,7 +5535,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5807,
                     "end": 6052,
                     "loc": {
@@ -5631,7 +5631,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 5807,
                     "end": 6052,
                     "loc": {
@@ -5649,7 +5649,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6111,
                     "end": 6358,
                     "loc": {
@@ -5745,7 +5745,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6111,
                     "end": 6358,
                     "loc": {
@@ -5763,7 +5763,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6418,
                     "end": 6653,
                     "loc": {
@@ -5859,7 +5859,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6418,
                     "end": 6653,
                     "loc": {
@@ -5877,7 +5877,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6704,
                     "end": 6935,
                     "loc": {
@@ -5973,7 +5973,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6704,
                     "end": 6935,
                     "loc": {
@@ -5991,7 +5991,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6987,
                     "end": 7226,
                     "loc": {
@@ -6087,7 +6087,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 6987,
                     "end": 7226,
                     "loc": {
@@ -6105,7 +6105,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 7282,
                     "end": 7523,
                     "loc": {
@@ -6201,7 +6201,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
                     "start": 7282,
                     "end": 7523,
                     "loc": {
@@ -6709,7 +6709,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+      "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
       "start": 527,
       "end": 719,
       "loc": {
@@ -6933,7 +6933,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4081,
       "end": 4308,
       "loc": {
@@ -6949,7 +6949,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4358,
       "end": 4587,
       "loc": {
@@ -6965,7 +6965,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4638,
       "end": 4876,
       "loc": {
@@ -6981,7 +6981,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4931,
       "end": 5170,
       "loc": {
@@ -6997,7 +6997,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5226,
       "end": 5461,
       "loc": {
@@ -7013,7 +7013,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5515,
       "end": 5752,
       "loc": {
@@ -7029,7 +7029,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5807,
       "end": 6052,
       "loc": {
@@ -7045,7 +7045,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6111,
       "end": 6358,
       "loc": {
@@ -7061,7 +7061,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6418,
       "end": 6653,
       "loc": {
@@ -7077,7 +7077,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6704,
       "end": 6935,
       "loc": {
@@ -7093,7 +7093,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6987,
       "end": 7226,
       "loc": {
@@ -7109,7 +7109,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 7282,
       "end": 7523,
       "loc": {
@@ -7518,7 +7518,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Configures the appearance of this Drawable when ghosted.\n     *\n     * Set to {@link Scene#ghostMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
+      "value": "*\n     * Configures the appearance of this Drawable when xrayed.\n     *\n     * Set to {@link Scene#xrayMaterial} by default.\n     *\n     * @type {EmphasisMaterial}\n     * @abstract\n     ",
       "start": 527,
       "end": 719,
       "loc": {
@@ -7570,7 +7570,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ghostMaterial",
+      "value": "xrayMaterial",
       "start": 728,
       "end": 741,
       "loc": {
@@ -9466,7 +9466,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4081,
       "end": 4308,
       "loc": {
@@ -9492,7 +9492,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawGhostedFillOpaque",
+      "value": "drawXRayedFillOpaque",
       "start": 4313,
       "end": 4334,
       "loc": {
@@ -9634,7 +9634,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4358,
       "end": 4587,
       "loc": {
@@ -9660,7 +9660,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawGhostedEdgesOpaque",
+      "value": "drawXRayedEdgesOpaque",
       "start": 4592,
       "end": 4614,
       "loc": {
@@ -9802,7 +9802,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4638,
       "end": 4876,
       "loc": {
@@ -9828,7 +9828,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawGhostedFillTransparent",
+      "value": "drawXRayedFillTransparent",
       "start": 4881,
       "end": 4907,
       "loc": {
@@ -9970,7 +9970,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders ghosted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#ghostedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders xrayed transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#xrayedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 4931,
       "end": 5170,
       "loc": {
@@ -9996,7 +9996,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "drawGhostedEdgesTransparent",
+      "value": "drawXRayedEdgesTransparent",
       "start": 5175,
       "end": 5202,
       "loc": {
@@ -10138,7 +10138,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5226,
       "end": 5461,
       "loc": {
@@ -10306,7 +10306,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5515,
       "end": 5752,
       "loc": {
@@ -10474,7 +10474,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 5807,
       "end": 6052,
       "loc": {
@@ -10642,7 +10642,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6111,
       "end": 6358,
       "loc": {
@@ -10810,7 +10810,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders highlighted opaque fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#highlightedFillOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6418,
       "end": 6653,
       "loc": {
@@ -10978,7 +10978,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected opaque edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected opaque edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesOpaque}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6704,
       "end": 6935,
       "loc": {
@@ -11146,7 +11146,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected transparent fill using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected transparent fill using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedFillTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 6987,
       "end": 7226,
       "loc": {
@@ -11314,7 +11314,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Renders selected transparent edges using {@link Drawable#ghostMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "value": "*\n     * Renders selected transparent edges using {@link Drawable#xrayMaterial}.\n     *\n     * See {@link RenderFlags#selectedEdgesTransparent}.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
       "start": 7282,
       "end": 7523,
       "loc": {

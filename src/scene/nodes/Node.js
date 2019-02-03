@@ -167,7 +167,7 @@ class Node extends Component {
      * @param {Boolean} [cfg.collidable=true] Indicates if the Node is initially included in boundary calculations.
      * @param {Boolean} [cfg.castsShadow=true] Indicates if the Node initially casts shadows.
      * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Node initially receives shadows.
-     * @param {Boolean} [cfg.ghosted=false] Indicates if the Node is initially ghosted.
+     * @param {Boolean} [cfg.xrayed=false] Indicates if the Node is initially xrayed.
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Node is initially highlighted.
      * @param {Boolean} [cfg.selected=false] Indicates if the Mesh is initially selected.
      * @param {Boolean} [cfg.edges=false] Indicates if the Node's edges are initially emphasized.
@@ -227,7 +227,7 @@ class Node extends Component {
         this.collidable = cfg.collidable;
         this.castsShadow = cfg.castsShadow;
         this.receivesShadow = cfg.receivesShadow;
-        this.ghosted = cfg.ghosted;
+        this.xrayed = cfg.xrayed;
         this.highlighted = cfg.highlighted;
         this.selected = cfg.selected;
         this.edges = cfg.edges;
@@ -348,36 +348,36 @@ class Node extends Component {
     }
 
     /**
-     * Sets if this Node and all child Nodes and {@link Mesh}es are ghosted.
+     * Sets if this Node and all child Nodes and {@link Mesh}es are xrayed.
      *
-     * When {@link Node#isObject} and {@link Node#ghosted} are both ````true```` the Node will be
-     * registered by {@link Node#id} in {@link Scene#ghostedObjects}.
+     * When {@link Node#isObject} and {@link Node#xrayed} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
-    set ghosted(ghosted) {
-        ghosted = !!ghosted;
-        this._ghosted = ghosted;
+    set xrayed(xrayed) {
+        xrayed = !!xrayed;
+        this._xrayed = xrayed;
         for (let i = 0, len = this._children.length; i < len; i++) {
-            this._children[i].ghosted = ghosted;
+            this._children[i].xrayed = xrayed;
         }
         if (this._isObject) {
-            this.scene._objectGhostedUpdated(this, ghosted);
+            this.scene._objectXRayedUpdated(this, xrayed);
         }
     }
 
     /**
-     * Gets if this Node is ghosted.
+     * Gets if this Node is xrayed.
      *
-     * When {@link Node#isObject} and {@link Node#ghosted} are both ````true```` the Node will be
-     * registered by {@link Node#id} in {@link Scene#ghostedObjects}.
+     * When {@link Node#isObject} and {@link Node#xrayed} are both ````true```` the Node will be
+     * registered by {@link Node#id} in {@link Scene#xrayedObjects}.
      *
      * Child Nodes and {@link Mesh}es may have different values for this property.
      *
      * @type {Boolean}
      */
-    get ghosted() {
-        return this._ghosted;
+    get xrayed() {
+        return this._xrayed;
     }
 
     /**
@@ -819,7 +819,7 @@ class Node extends Component {
         if (!!inheritStates) {
             child.visible = this.visible;
             child.culled = this.culled;
-            child.ghosted = this.ghosted;
+            child.xrayed = this.xrayed;
             child.highlited = this.highlighted;
             child.selected = this.selected;
             child.edges = this.edges;
@@ -1212,8 +1212,8 @@ class Node extends Component {
             if (this._visible) {
                 this.scene._objectVisibilityUpdated(this, false);
             }
-            if (this._ghosted) {
-                this.scene._objectGhostedUpdated(this, false);
+            if (this._xrayed) {
+                this.scene._objectXRayedUpdated(this, false);
             }
             if (this._selected) {
                 this.scene._objectSelectedUpdated(this, false);

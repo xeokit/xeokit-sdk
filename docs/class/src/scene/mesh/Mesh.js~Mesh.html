@@ -800,13 +800,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial">ghostMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayMaterial">xrayMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Defines the appearance of this Mesh when ghosted.</p>
+        <div data-ice="description"><p>Defines the appearance of this Mesh when xrayed.</p>
 </div>
       </div>
     </td>
@@ -829,13 +829,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted">ghosted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets if this Mesh is ghosted.</p>
+        <div data-ice="description"><p>Sets if this Mesh is xrayed.</p>
 </div>
       </div>
     </td>
@@ -858,13 +858,13 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghosted">ghosted</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayed">xrayed</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets if this Mesh is ghosted.</p>
+        <div data-ice="description"><p>Gets if this Mesh is xrayed.</p>
 </div>
       </div>
     </td>
@@ -3015,11 +3015,11 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.ghosted</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.xrayed</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>Indicates if the Mesh is initially ghosted.</p>
+      <td data-ice="description"><p>Indicates if the Mesh is initially xrayed.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -3085,17 +3085,17 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.ghostMaterial</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.xrayMaterial</td>
       <td data-ice="type" class="code"><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> to define the ghosted appearance for this Mesh. Inherits <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial">Scene#ghostMaterial</a></span> by default.</p>
+      <td data-ice="description"><p><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> to define the xrayed appearance for this Mesh. Inherits <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial">Scene#xrayMaterial</a></span> by default.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.highlightMaterial</td>
       <td data-ice="type" class="code"><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> to define the ghosted appearance for this Mesh. Inherits <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span> by default.</p>
+      <td data-ice="description"><p><span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> to define the xrayed appearance for this Mesh. Inherits <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span> by default.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -3701,7 +3701,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
   
   <div data-ice="description"><p>Defines the appearance of this Mesh when edges are enhanced.</p>
-<p>Mesh is ghosted when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-edges">Mesh#edges</a></span> is <code>true</code>.</p>
+<p>Mesh is xrayed when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-edges">Mesh#edges</a></span> is <code>true</code>.</p>
 <p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-edgeMaterial">Scene#edgeMaterial</a></span> by default.</p>
 </div>
 
@@ -3863,14 +3863,14 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-ghostMaterial">
+  <h3 data-ice="anchor" id="instance-get-xrayMaterial">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">ghostMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span>
+    <span class="code" data-ice="name">xrayMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span>
     <span class="right-info">
       
       
@@ -3881,9 +3881,9 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
   
   
-  <div data-ice="description"><p>Defines the appearance of this Mesh when ghosted.</p>
-<p>Mesh is ghosted when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted">Mesh#ghosted</a></span> is <code>true</code>.</p>
-<p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-ghostMaterial">Scene#ghostMaterial</a></span> by default.</p>
+  <div data-ice="description"><p>Defines the appearance of this Mesh when xrayed.</p>
+<p>Mesh is xrayed when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed">Mesh#xrayed</a></span> is <code>true</code>.</p>
+<p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-xrayMaterial">Scene#xrayMaterial</a></span> by default.</p>
 </div>
 
   
@@ -3909,14 +3909,14 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-ghosted">
+  <h3 data-ice="anchor" id="instance-set-xrayed">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">ghosted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
@@ -3927,10 +3927,10 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
   
   
   
-  <div data-ice="description"><p>Sets if this Mesh is ghosted.</p>
-<p>Ghosted appearance is configured by the <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> referenced by <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial">Mesh#ghostMaterial</a></span>.</p>
-<p>When <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-isObject">Mesh#isObject</a></span> and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted">Mesh#ghosted</a></span> are both <code>`true</code> the Mesh will be
-registered by <span><a href="class/src/scene/Component.js~Component.html#instance-member-id">Mesh#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects">Scene#ghostedObjects</a></span>.</p>
+  <div data-ice="description"><p>Sets if this Mesh is xrayed.</p>
+<p>XRayed appearance is configured by the <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> referenced by <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayMaterial">Mesh#xrayMaterial</a></span>.</p>
+<p>When <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-isObject">Mesh#isObject</a></span> and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed">Mesh#xrayed</a></span> are both <code>`true</code> the Mesh will be
+registered by <span><a href="class/src/scene/Component.js~Component.html#instance-member-id">Mesh#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-xrayedObjects">Scene#xrayedObjects</a></span>.</p>
 </div>
 
   
@@ -3956,14 +3956,14 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-ghosted">
+  <h3 data-ice="anchor" id="instance-get-xrayed">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">ghosted</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">xrayed</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
@@ -3974,10 +3974,10 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
   
   
   
-  <div data-ice="description"><p>Gets if this Mesh is ghosted.</p>
-<p>Ghosted appearance is configured by the <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> referenced by <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-ghostMaterial">Mesh#ghostMaterial</a></span>.</p>
-<p>When <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-isObject">Mesh#isObject</a></span> and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-ghosted">Mesh#ghosted</a></span> are both <code>`true</code> the Mesh will be
-registered by <span><a href="class/src/scene/Component.js~Component.html#instance-member-id">Mesh#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-ghostedObjects">Scene#ghostedObjects</a></span>.</p>
+  <div data-ice="description"><p>Gets if this Mesh is xrayed.</p>
+<p>XRayed appearance is configured by the <span><a href="class/src/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span> referenced by <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-xrayMaterial">Mesh#xrayMaterial</a></span>.</p>
+<p>When <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-get-isObject">Mesh#isObject</a></span> and <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-xrayed">Mesh#xrayed</a></span> are both <code>`true</code> the Mesh will be
+registered by <span><a href="class/src/scene/Component.js~Component.html#instance-member-id">Mesh#id</a></span> in <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-member-xrayedObjects">Scene#xrayedObjects</a></span>.</p>
 </div>
 
   
@@ -4022,7 +4022,7 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
   
   
   <div data-ice="description"><p>Defines the appearance of this Mesh when highlighted.</p>
-<p>Mesh is ghosted when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted">Mesh#highlighted</a></span> is <code>true</code>.</p>
+<p>Mesh is xrayed when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-highlighted">Mesh#highlighted</a></span> is <code>true</code>.</p>
 <p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-highlightMaterial">Scene#highlightMaterial</a></span> by default.</p>
 </div>
 
@@ -4535,7 +4535,7 @@ may also have a corresponding <span><a href="class/src/viewer/metadata/MetaObjec
   
   
   
-  <div data-ice="description"><p>Defines the appearance of this Mesh when rendering normally, ie. when not ghosted, highlighted or selected.</p>
+  <div data-ice="description"><p>Defines the appearance of this Mesh when rendering normally, ie. when not xrayed, highlighted or selected.</p>
 <p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-material">Scene#material</a></span> by default.</p>
 </div>
 
@@ -5438,7 +5438,7 @@ registered by <span><a href="class/src/scene/Component.js~Component.html#instanc
   
   
   <div data-ice="description"><p>Defines the appearance of this Mesh when selected.</p>
-<p>Mesh is ghosted when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-selected">Mesh#selected</a></span> is <code>true</code>.</p>
+<p>Mesh is xrayed when <span><a href="class/src/scene/mesh/Mesh.js~Mesh.html#instance-set-selected">Mesh#selected</a></span> is <code>true</code>.</p>
 <p>Set to <span><a href="class/src/scene/scene/Scene.js~Scene.html#instance-get-selectedMaterial">Scene#selectedMaterial</a></span> by default.</p>
 </div>
 

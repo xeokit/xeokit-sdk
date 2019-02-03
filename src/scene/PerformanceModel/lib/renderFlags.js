@@ -1,6 +1,6 @@
 /**
  * @private
- * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, GHOSTED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}
+ * @type {{PICKABLE: number, CLIPPABLE: number, BACKFACES: number, VISIBLE: number, SELECTED: number, OUTLINED: number, CULLED: number, RECEIVE_SHADOW: number, COLLIDABLE: number, XRAYED: number, CAST_SHADOW: number, EDGES: number, HIGHLIGHTED: number}}
  */
 const RENDER_FLAGS = {
     VISIBLE: 1,
@@ -11,7 +11,7 @@ const RENDER_FLAGS = {
     CAST_SHADOW: 1 << 6,
     RECEIVE_SHADOW: 1 << 7,
     OUTLINED: 1 << 8,
-    GHOSTED: 1 << 9,
+    XRAYED: 1 << 9,
     HIGHLIGHTED: 1 << 10,
     SELECTED: 1 << 11,
     EDGES: 1 << 12,

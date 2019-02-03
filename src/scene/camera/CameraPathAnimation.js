@@ -40,7 +40,7 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  *     edges: true,
  *     edgeThreshold: 20,
  *      lambertMaterial: false,
- *     ghosted: false
+ *     xrayed: false
  * });
  *
  * // Create a CameraPath
