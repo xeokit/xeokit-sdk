@@ -2,7 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {PerformanceModel} from "../../../scene/PerformanceModel/PerformanceModel.js";
 
 import {BIMServerPerformanceGeometryLoader} from "./lib/BIMServerPerformanceGeometryLoader.js";
-import {loadMetaModel} from "./lib/loadMetaModel.js";
+import {loadBIMServerMetaModel} from "../../utils/loadBIMServerMetaModel.js";
 import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 import {utils} from "../../../scene/utils.js";
 
@@ -243,7 +243,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {  // TODO: Preload not necessary combined with the bruteforce tree
 
-            loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
+            loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
 
                 performanceModel.once("destroyed", function () {
                     viewer.metaScene.destroyMetaModel(modelId);

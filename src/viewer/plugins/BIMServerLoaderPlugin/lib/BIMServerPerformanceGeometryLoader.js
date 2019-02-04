@@ -3,14 +3,14 @@ import {DataInputStreamReader} from "./DataInputStreamReader.js";
 /**
  *
  * @param bimServerClient
- * @param bimServerModel
+ * @param bimServerClientModel
  * @param roid
  * @param globalTransformationMatrix
- * @param detailModelBuilder
+ * @param performanceModelBuilder
  * @constructor
  * @private
  */
-function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {
+function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, performanceModelBuilder) {
 
     var o = this;
 
@@ -20,7 +20,6 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     var prepareReceived = false;
     const todo = [];
     const multiUseGeometryLoaded = {};
-    const geometriesLoaded = {};
     const objectsWaitingForGeometryData = {};
     const singleUseGeometriesWaitingForObjects = {};
 
@@ -210,13 +209,13 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
     function readStart(data) {
         var start = data.readUTF8();
         if (start !== "BGS") {
-            detailModelBuilder.error("data does not start with BGS (" + start + ")");
+            performanceModelBuilder.error("data does not start with BGS (" + start + ")");
             return false;
         }
         protocolVersion = data.readByte();
-        detailModelBuilder.log("BIMServer protocol version = " + protocolVersion);
+        performanceModelBuilder.log("BIMServer protocol version = " + protocolVersion);
         if (protocolVersion !== 10 && protocolVersion !== 11 && protocolVersion !== 16 && protocolVersion !== 17) {
-            detailModelBuilder.error("Unimplemented protocol version");
+            performanceModelBuilder.error("Unimplemented protocol version");
             return false;
         }
         if (protocolVersion > 15) {
@@ -224,7 +223,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
         }
         data.align8();
         var boundary = data.readDoubleArray(6);
-        detailModelBuilder.gotModelBoundary(boundary);
+        performanceModelBuilder.gotModelBoundary(boundary);
         currentState.mode = 1;
         progressListeners.forEach(function (progressListener) {
             progressListener("start", currentState.nrObjectsRead, currentState.nrObjectsRead);
@@ -313,7 +312,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                 // MULTI-USE GEOMETRY
                 //------------------------------------------------------------------------------------------------------
 
-                detailModelBuilder.createGeometry(geometryId, positions, normals, indices);
+                performanceModelBuilder.createGeometry(geometryId, positions, normals, indices);
 
                 multiUseGeometryLoaded[geometryId] = true;
 
@@ -334,7 +333,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                             let meshColor = color;
                             let meshOpacity = color[3];
 
-                            let ifcProps = detailModelBuilder.objectDefaults[waitingObjectData.ifcType];
+                            let ifcProps = performanceModelBuilder.objectDefaults[waitingObjectData.ifcType];
                             if (ifcProps) {
                                 if (ifcProps.colorize) {
                                     meshColor = ifcProps.colorize;
@@ -345,8 +344,8 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            detailModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
-                            detailModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+                            performanceModelBuilder.createMeshInstancingGeometry(geometryId, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
 
                             delete waitingObjects[objectId];
                         }
@@ -375,7 +374,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                             let meshColor = color;
                             let meshOpacity = color[3];
 
-                            let ifcProps = detailModelBuilder.objectDefaults[waitingObjectData.ifcType];
+                            let ifcProps = performanceModelBuilder.objectDefaults[waitingObjectData.ifcType];
                             if (ifcProps) {
                                 if (ifcProps.colorize) {
                                     meshColor = ifcProps.colorize;
@@ -386,8 +385,8 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                                 }
                             }
 
-                            detailModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
-                            detailModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
+                            performanceModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, waitingObjectData.matrix, meshColor, meshOpacity);
+                            performanceModelBuilder.createEntity(objectId, geometryId, waitingObjectData.ifcType);
                         }
                     }
 
@@ -438,7 +437,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             let meshColor = color;
             let meshOpacity = color[3];
 
-            let ifcProps = detailModelBuilder.objectDefaults[ifcType];
+            let ifcProps = performanceModelBuilder.objectDefaults[ifcType];
             if (ifcProps) {
                 if (ifcProps.colorize) {
                     meshColor = ifcProps.colorize;
@@ -462,7 +461,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
             oid = infoToOid[geometryInfoOid];
 
             if (oid === null) {
-                // detailModelBuilder.error("Not found", infoToOid, geometryInfoOid);
+                // performanceModelBuilder.error("Not found", infoToOid, geometryInfoOid);
                 return;
             }
 
@@ -479,8 +478,8 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                 var normals = waitingGeometryData.normals;
                 var indices = waitingGeometryData.indices;
 
-                detailModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, matrix, meshColor, meshOpacity);
-                detailModelBuilder.createEntity(objectId, geometryId, ifcType);
+                performanceModelBuilder.createMeshSpecifyingGeometry(geometryId, positions, normals, indices, matrix, meshColor, meshOpacity);
+                performanceModelBuilder.createEntity(objectId, geometryId, ifcType);
 
                 delete singleUseGeometryLoaded[geometryId];
 
@@ -490,8 +489,8 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
                 // MULTI-USE GEOMETRY WAITING
                 //------------------------------------------------------------------------------------------------------
 
-                detailModelBuilder.createMeshInstancingGeometry(geometryId, matrix, meshColor, meshOpacity);
-                detailModelBuilder.createEntity(oid, geometryId, ifcType);
+                performanceModelBuilder.createMeshInstancingGeometry(geometryId, matrix, meshColor, meshOpacity);
+                performanceModelBuilder.createEntity(oid, geometryId, ifcType);
 
             } else {
 
@@ -555,7 +554,7 @@ function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientMode
 
         } else {
             console.error("Unsupported geometry type: " + geometryType);
-// What's geometryType === 106 ?
+            // What's geometryType === 106 ?
         }
 
         currentState.nrObjectsRead++;

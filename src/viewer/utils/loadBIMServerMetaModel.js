@@ -1,10 +1,8 @@
-function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
+function loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
 
     function isArray(value) {
         return Object.prototype.toString.call(value) === "[object Array]";
     }
-
-    const self = this;
 
     return new Promise(function (resolve, reject) {
 
@@ -150,4 +148,4 @@ function loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
     });
 }
 
-export {loadMetaModel};
+export {loadBIMServerMetaModel};
