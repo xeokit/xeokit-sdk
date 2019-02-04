@@ -82,9 +82,11 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const bimServerAddress = "https://xeokit.cleverapps.io/";
-    const username = "lindsay@biodigital.com";
-    const password = "password";
-    const poid = 131073;
+
+    const username = "kevin.flynn@en.com";
+    const password = "secretPassword";
+
+    const poid = 196609;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer,
@@ -175,8 +177,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const bimServerLoader = new BIMServerLoaderPlugin(viewer, {
-        bimServerClient: bimServerClient,
-        materialWorkflow: "lambert"
+        bimServerClient: bimServerClient
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -440,9 +441,12 @@
                     });
                 });
 
+            }, function (response) {
+                console.log("BIMServer getProjectByPoid failed: " + response.message);
             });
-        }, function (error) {
-            console.log(error);
+
+        }, function (response) {
+            console.log("BIMServer login failed: " + response.message);
         });
     });
 
