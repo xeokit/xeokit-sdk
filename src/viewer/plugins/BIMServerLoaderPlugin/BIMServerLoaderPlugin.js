@@ -2,7 +2,7 @@ import {Plugin} from "./../../Plugin.js";
 import {PerformanceModel} from "../../../scene/PerformanceModel/PerformanceModel.js";
 
 import {BIMServerPerformanceGeometryLoader} from "./lib/BIMServerPerformanceGeometryLoader.js";
-import {loadBIMServerMetaModel} from "../../utils/loadBIMServerMetaModel.js";
+import {loadBIMServerMetaModel} from "../../utils/bimserver/loadBIMServerMetaModel.js";
 import {IFCObjectDefaults} from "./../../../viewer/metadata/IFCObjectDefaults.js";
 import {utils} from "../../../scene/utils.js";
 
