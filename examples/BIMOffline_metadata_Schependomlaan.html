@@ -19,7 +19,7 @@
 <div id="info">
     <h1>Loading Model & IFC Metadata</h1>
     <br>
-    <p>Loads a glTF BIM model and JSON IFC metadata from the file system, then uses the metadata to highlight the whole
+    <p>Loads a glTF BIM model and JSON IFC metadata from the file system, then uses the metadata to xray the whole
         third storey and fit it to view.</p><br>
     <ul>
         <li>
@@ -55,7 +55,7 @@
     //------------------------------------------------------------------------------------------------------------------
     // 1. Create a Viewer,
     // 2. Arrange the camera,
-    // 3. Tweak the highlighting material
+    // 3. Tweak the xray material
     //------------------------------------------------------------------------------------------------------------------
 
     // 1
@@ -65,13 +65,16 @@
     });
 
     // 2
-    viewer.camera.orbitPitch(20);
-    viewer.camera.orbitYaw(-45);
+    viewer.camera.eye = [-9.310346603393555, 7.988109588623047, 8.57520866394043];
+    viewer.camera.look = [11.207733154296875, 4.790754318237305, -11.757499694824219];
+    viewer.camera.up = [0.07814541459083557, 0.9939301013946533, -0.07743942737579346];
 
     // 3
-    viewer.scene.highlightMaterial.fill = false;
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+    viewer.scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
+    viewer.scene.xrayMaterial.edgeColor = [0.0, 0.0, 0.0];
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+
 
     //------------------------------------------------------------------------------------------------------------------
     // 1. Create a glTF loader plugin,
@@ -94,7 +97,7 @@
 
         //--------------------------------------------------------------------------------------------------------------
         // 1. Find metadata on the third storey
-        // 2. Highlight all the objects in the third storey
+        // 2. Xray all the objects in the third storey
         // 3. Fit the camera to all the objects on the third storey
         //--------------------------------------------------------------------------------------------------------------
 
@@ -112,7 +115,8 @@
         const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
 
         // 2
-        viewer.scene.setObjectsHighlighted(objectIds, true);
+        viewer.scene.setObjectsXRayed(objectIds, true);
+        viewer.scene.setObjectsPickable(objectIds, false);
 
         // 3
         viewer.cameraFlight.jumpTo(aabb);
@@ -121,5 +125,8 @@
     viewer.cameraControl.on("doublePicked", function (e) {
         console.log("Picked: " + e);
     });
+
+    window.viewer = viewer;
+
 </script>
 </html>
