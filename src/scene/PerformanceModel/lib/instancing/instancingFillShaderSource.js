@@ -88,7 +88,6 @@ function buildFragment(layer) {
     src.push("precision mediump int;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
-        src.push("uniform bool clippable;");
         for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -98,15 +97,13 @@ function buildFragment(layer) {
     src.push("uniform vec4 color;");
     src.push("void main(void) {");
     if (clipping) {
-        src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
         for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
-        src.push("  if (dist > 0.0) { discard; }");
-        src.push("}");
+        src.push("if (dist > 0.0) { discard; }");
     }
     src.push("gl_FragColor = color;");
     src.push("}");

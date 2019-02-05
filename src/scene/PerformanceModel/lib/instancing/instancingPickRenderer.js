@@ -161,8 +161,6 @@ InstancingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const program = this._program;
     const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
-    const lights = lightsState.lights;
-    let light;
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;

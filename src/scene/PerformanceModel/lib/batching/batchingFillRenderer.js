@@ -39,7 +39,7 @@ BatchingFillRenderer.get = function (layer) {
 };
 
 function getHash(scene) {
-    return [scene.canvas.canvas.id, "",scene._sectionPlanesState.getHash()].join(";")
+    return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
 }
 
 BatchingFillRenderer.prototype.getValid = function () {
@@ -96,6 +96,11 @@ BatchingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
     } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
         const material = scene.highlightMaterial._state;
+        const fillColor = material.fillColor;
+        const fillAlpha = material.fillAlpha;
+        gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+    } else if (renderPass === RENDER_PASSES.SELECTED) {
+        const material = scene.selectedMaterial._state;
         const fillColor = material.fillColor;
         const fillAlpha = material.fillAlpha;
         gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
