@@ -332,7 +332,10 @@ class PerformanceModel extends Component {
     createMesh(cfg) {
 
         var id = cfg.id;
-
+        if (id === undefined || id === null) {
+            this.error("Config missing: id");
+            return;
+        }
         if (this.scene.components[id]) {
             this.error("Scene already has a Component with this ID: " + id + " - will assign random ID");
             id = math.createUUID();
