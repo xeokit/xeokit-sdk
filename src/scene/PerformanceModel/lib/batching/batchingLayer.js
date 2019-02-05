@@ -194,7 +194,7 @@ class BatchingLayer {
                 buffer.flags[i + 0] = visible;
                 buffer.flags[i + 1] = xrayed;
                 buffer.flags[i + 2] = highlighted;
-                buffer.flags[i + 3] = clippable;
+                buffer.flags[i + 3] = selected;
             }
             buffer.lenFlags += lenFlags;
             if (visible) {
@@ -521,7 +521,7 @@ class BatchingLayer {
             tempUint8Vec4[i + 0] = visible;
             tempUint8Vec4[i + 1] = xrayed;
             tempUint8Vec4[i + 2] = highlighted;
-            tempUint8Vec4[i + 3] = clippable;
+            tempUint8Vec4[i + 3] = selected;
         }
         this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
     }

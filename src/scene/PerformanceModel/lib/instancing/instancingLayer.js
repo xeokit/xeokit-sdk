@@ -165,7 +165,7 @@ class InstancingLayer {
         this._flags.push(visible);
         this._flags.push(xrayed);
         this._flags.push(highlighted);
-        this._flags.push(clippable);
+        this._flags.push(selected);
 
         if (visible) {
             this._numVisibleLayerPortions++;
@@ -491,7 +491,7 @@ class InstancingLayer {
         tempUint8Vec4[0] = visible;
         tempUint8Vec4[1] = xrayed;
         tempUint8Vec4[2] = highlighted;
-        tempUint8Vec4[3] = clippable;
+        tempUint8Vec4[3] = selected;
         this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
