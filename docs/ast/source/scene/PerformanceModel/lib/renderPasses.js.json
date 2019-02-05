@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 264,
+  "end": 262,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 264,
+    "end": 262,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 20,
-        "end": 239,
+        "end": 237,
         "loc": {
           "start": {
             "line": 4,
@@ -46,7 +46,7 @@
           {
             "type": "VariableDeclarator",
             "start": 26,
-            "end": 238,
+            "end": 236,
             "loc": {
               "start": {
                 "line": 4,
@@ -78,7 +78,7 @@
             "init": {
               "type": "ObjectExpression",
               "start": 42,
-              "end": 238,
+              "end": 236,
               "loc": {
                 "start": {
                   "line": 4,
@@ -368,7 +368,7 @@
                 {
                   "type": "ObjectProperty",
                   "start": 164,
-                  "end": 174,
+                  "end": 173,
                   "loc": {
                     "start": {
                       "line": 10,
@@ -376,7 +376,7 @@
                     },
                     "end": {
                       "line": 10,
-                      "column": 14
+                      "column": 13
                     }
                   },
                   "method": false,
@@ -385,7 +385,7 @@
                   "key": {
                     "type": "Identifier",
                     "start": 164,
-                    "end": 171,
+                    "end": 170,
                     "loc": {
                       "start": {
                         "line": 10,
@@ -393,7 +393,7 @@
                       },
                       "end": {
                         "line": 10,
-                        "column": 11
+                        "column": 10
                       },
                       "identifierName": "XRAYED"
                     },
@@ -401,16 +401,16 @@
                   },
                   "value": {
                     "type": "NumericLiteral",
-                    "start": 173,
-                    "end": 174,
+                    "start": 172,
+                    "end": 173,
                     "loc": {
                       "start": {
                         "line": 10,
-                        "column": 13
+                        "column": 12
                       },
                       "end": {
                         "line": 10,
-                        "column": 14
+                        "column": 13
                       }
                     },
                     "extra": {
@@ -422,8 +422,8 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 180,
-                  "end": 196,
+                  "start": 179,
+                  "end": 194,
                   "loc": {
                     "start": {
                       "line": 11,
@@ -431,7 +431,7 @@
                     },
                     "end": {
                       "line": 11,
-                      "column": 20
+                      "column": 19
                     }
                   },
                   "method": false,
@@ -439,8 +439,8 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 180,
-                    "end": 193,
+                    "start": 179,
+                    "end": 191,
                     "loc": {
                       "start": {
                         "line": 11,
@@ -448,7 +448,7 @@
                       },
                       "end": {
                         "line": 11,
-                        "column": 17
+                        "column": 16
                       },
                       "identifierName": "XRAYED_EDGES"
                     },
@@ -456,16 +456,16 @@
                   },
                   "value": {
                     "type": "NumericLiteral",
-                    "start": 195,
-                    "end": 196,
+                    "start": 193,
+                    "end": 194,
                     "loc": {
                       "start": {
                         "line": 11,
-                        "column": 19
+                        "column": 18
                       },
                       "end": {
                         "line": 11,
-                        "column": 20
+                        "column": 19
                       }
                     },
                     "extra": {
@@ -477,8 +477,8 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 202,
-                  "end": 213,
+                  "start": 200,
+                  "end": 211,
                   "loc": {
                     "start": {
                       "line": 12,
@@ -494,8 +494,8 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 202,
-                    "end": 210,
+                    "start": 200,
+                    "end": 208,
                     "loc": {
                       "start": {
                         "line": 12,
@@ -511,8 +511,8 @@
                   },
                   "value": {
                     "type": "NumericLiteral",
-                    "start": 212,
-                    "end": 213,
+                    "start": 210,
+                    "end": 211,
                     "loc": {
                       "start": {
                         "line": 12,
@@ -532,8 +532,8 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 219,
-                  "end": 236,
+                  "start": 217,
+                  "end": 234,
                   "loc": {
                     "start": {
                       "line": 13,
@@ -549,8 +549,8 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 219,
-                    "end": 233,
+                    "start": 217,
+                    "end": 231,
                     "loc": {
                       "start": {
                         "line": 13,
@@ -566,8 +566,8 @@
                   },
                   "value": {
                     "type": "NumericLiteral",
-                    "start": 235,
-                    "end": 236,
+                    "start": 233,
+                    "end": 234,
                     "loc": {
                       "start": {
                         "line": 13,
@@ -597,8 +597,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 241,
-        "end": 264,
+        "start": 239,
+        "end": 262,
         "loc": {
           "start": {
             "line": 16,
@@ -613,8 +613,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 249,
-            "end": 262,
+            "start": 247,
+            "end": 260,
             "loc": {
               "start": {
                 "line": 16,
@@ -627,8 +627,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 249,
-              "end": 262,
+              "start": 247,
+              "end": 260,
               "loc": {
                 "start": {
                   "line": 16,
@@ -644,8 +644,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 249,
-              "end": 262,
+              "start": 247,
+              "end": 260,
               "loc": {
                 "start": {
                   "line": 16,
@@ -665,8 +665,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 241,
-        "end": 264,
+        "start": 239,
+        "end": 262,
         "loc": {
           "start": {
             "line": 16,
@@ -680,7 +680,7 @@
         "declaration": {
           "type": "VariableDeclaration",
           "start": 20,
-          "end": 239,
+          "end": 237,
           "loc": {
             "start": {
               "line": 4,
@@ -695,7 +695,7 @@
             {
               "type": "VariableDeclarator",
               "start": 26,
-              "end": 238,
+              "end": 236,
               "loc": {
                 "start": {
                   "line": 4,
@@ -727,7 +727,7 @@
               "init": {
                 "type": "ObjectExpression",
                 "start": 42,
-                "end": 238,
+                "end": 236,
                 "loc": {
                   "start": {
                     "line": 4,
@@ -1017,7 +1017,7 @@
                   {
                     "type": "ObjectProperty",
                     "start": 164,
-                    "end": 174,
+                    "end": 173,
                     "loc": {
                       "start": {
                         "line": 10,
@@ -1025,7 +1025,7 @@
                       },
                       "end": {
                         "line": 10,
-                        "column": 14
+                        "column": 13
                       }
                     },
                     "method": false,
@@ -1034,7 +1034,7 @@
                     "key": {
                       "type": "Identifier",
                       "start": 164,
-                      "end": 171,
+                      "end": 170,
                       "loc": {
                         "start": {
                           "line": 10,
@@ -1042,7 +1042,7 @@
                         },
                         "end": {
                           "line": 10,
-                          "column": 11
+                          "column": 10
                         },
                         "identifierName": "XRAYED"
                       },
@@ -1050,16 +1050,16 @@
                     },
                     "value": {
                       "type": "NumericLiteral",
-                      "start": 173,
-                      "end": 174,
+                      "start": 172,
+                      "end": 173,
                       "loc": {
                         "start": {
                           "line": 10,
-                          "column": 13
+                          "column": 12
                         },
                         "end": {
                           "line": 10,
-                          "column": 14
+                          "column": 13
                         }
                       },
                       "extra": {
@@ -1071,8 +1071,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 180,
-                    "end": 196,
+                    "start": 179,
+                    "end": 194,
                     "loc": {
                       "start": {
                         "line": 11,
@@ -1080,7 +1080,7 @@
                       },
                       "end": {
                         "line": 11,
-                        "column": 20
+                        "column": 19
                       }
                     },
                     "method": false,
@@ -1088,8 +1088,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 180,
-                      "end": 193,
+                      "start": 179,
+                      "end": 191,
                       "loc": {
                         "start": {
                           "line": 11,
@@ -1097,7 +1097,7 @@
                         },
                         "end": {
                           "line": 11,
-                          "column": 17
+                          "column": 16
                         },
                         "identifierName": "XRAYED_EDGES"
                       },
@@ -1105,16 +1105,16 @@
                     },
                     "value": {
                       "type": "NumericLiteral",
-                      "start": 195,
-                      "end": 196,
+                      "start": 193,
+                      "end": 194,
                       "loc": {
                         "start": {
                           "line": 11,
-                          "column": 19
+                          "column": 18
                         },
                         "end": {
                           "line": 11,
-                          "column": 20
+                          "column": 19
                         }
                       },
                       "extra": {
@@ -1126,8 +1126,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 202,
-                    "end": 213,
+                    "start": 200,
+                    "end": 211,
                     "loc": {
                       "start": {
                         "line": 12,
@@ -1143,8 +1143,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 202,
-                      "end": 210,
+                      "start": 200,
+                      "end": 208,
                       "loc": {
                         "start": {
                           "line": 12,
@@ -1160,8 +1160,8 @@
                     },
                     "value": {
                       "type": "NumericLiteral",
-                      "start": 212,
-                      "end": 213,
+                      "start": 210,
+                      "end": 211,
                       "loc": {
                         "start": {
                           "line": 12,
@@ -1181,8 +1181,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 219,
-                    "end": 236,
+                    "start": 217,
+                    "end": 234,
                     "loc": {
                       "start": {
                         "line": 13,
@@ -1198,8 +1198,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 219,
-                      "end": 233,
+                      "start": 217,
+                      "end": 231,
                       "loc": {
                         "start": {
                           "line": 13,
@@ -1215,8 +1215,8 @@
                     },
                     "value": {
                       "type": "NumericLiteral",
-                      "start": 235,
-                      "end": 236,
+                      "start": 233,
+                      "end": 234,
                       "loc": {
                         "start": {
                           "line": 13,
@@ -1947,7 +1947,7 @@
       },
       "value": "XRAYED",
       "start": 164,
-      "end": 171,
+      "end": 170,
       "loc": {
         "start": {
           "line": 10,
@@ -1955,7 +1955,7 @@
         },
         "end": {
           "line": 10,
-          "column": 11
+          "column": 10
         }
       }
     },
@@ -1972,16 +1972,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 171,
-      "end": 172,
+      "start": 170,
+      "end": 171,
       "loc": {
         "start": {
           "line": 10,
-          "column": 11
+          "column": 10
         },
         "end": {
           "line": 10,
-          "column": 12
+          "column": 11
         }
       }
     },
@@ -1999,16 +1999,16 @@
         "updateContext": null
       },
       "value": 5,
-      "start": 173,
-      "end": 174,
+      "start": 172,
+      "end": 173,
       "loc": {
         "start": {
           "line": 10,
-          "column": 13
+          "column": 12
         },
         "end": {
           "line": 10,
-          "column": 14
+          "column": 13
         }
       }
     },
@@ -2025,16 +2025,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 174,
-      "end": 175,
+      "start": 173,
+      "end": 174,
       "loc": {
         "start": {
           "line": 10,
-          "column": 14
+          "column": 13
         },
         "end": {
           "line": 10,
-          "column": 15
+          "column": 14
         }
       }
     },
@@ -2051,8 +2051,8 @@
         "binop": null
       },
       "value": "XRAYED_EDGES",
-      "start": 180,
-      "end": 193,
+      "start": 179,
+      "end": 191,
       "loc": {
         "start": {
           "line": 11,
@@ -2060,7 +2060,7 @@
         },
         "end": {
           "line": 11,
-          "column": 17
+          "column": 16
         }
       }
     },
@@ -2077,16 +2077,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 193,
-      "end": 194,
+      "start": 191,
+      "end": 192,
       "loc": {
         "start": {
           "line": 11,
-          "column": 17
+          "column": 16
         },
         "end": {
           "line": 11,
-          "column": 18
+          "column": 17
         }
       }
     },
@@ -2104,16 +2104,16 @@
         "updateContext": null
       },
       "value": 6,
-      "start": 195,
-      "end": 196,
+      "start": 193,
+      "end": 194,
       "loc": {
         "start": {
           "line": 11,
-          "column": 19
+          "column": 18
         },
         "end": {
           "line": 11,
-          "column": 20
+          "column": 19
         }
       }
     },
@@ -2130,16 +2130,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 196,
-      "end": 197,
+      "start": 194,
+      "end": 195,
       "loc": {
         "start": {
           "line": 11,
-          "column": 20
+          "column": 19
         },
         "end": {
           "line": 11,
-          "column": 21
+          "column": 20
         }
       }
     },
@@ -2156,8 +2156,8 @@
         "binop": null
       },
       "value": "SELECTED",
-      "start": 202,
-      "end": 210,
+      "start": 200,
+      "end": 208,
       "loc": {
         "start": {
           "line": 12,
@@ -2182,8 +2182,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 210,
-      "end": 211,
+      "start": 208,
+      "end": 209,
       "loc": {
         "start": {
           "line": 12,
@@ -2209,8 +2209,8 @@
         "updateContext": null
       },
       "value": 7,
-      "start": 212,
-      "end": 213,
+      "start": 210,
+      "end": 211,
       "loc": {
         "start": {
           "line": 12,
@@ -2235,8 +2235,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 213,
-      "end": 214,
+      "start": 211,
+      "end": 212,
       "loc": {
         "start": {
           "line": 12,
@@ -2261,8 +2261,8 @@
         "binop": null
       },
       "value": "SELECTED_EDGES",
-      "start": 219,
-      "end": 233,
+      "start": 217,
+      "end": 231,
       "loc": {
         "start": {
           "line": 13,
@@ -2287,8 +2287,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 233,
-      "end": 234,
+      "start": 231,
+      "end": 232,
       "loc": {
         "start": {
           "line": 13,
@@ -2314,8 +2314,8 @@
         "updateContext": null
       },
       "value": 8,
-      "start": 235,
-      "end": 236,
+      "start": 233,
+      "end": 234,
       "loc": {
         "start": {
           "line": 13,
@@ -2339,8 +2339,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 237,
-      "end": 238,
+      "start": 235,
+      "end": 236,
       "loc": {
         "start": {
           "line": 14,
@@ -2365,8 +2365,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 238,
-      "end": 239,
+      "start": 236,
+      "end": 237,
       "loc": {
         "start": {
           "line": 14,
@@ -2393,8 +2393,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 241,
-      "end": 247,
+      "start": 239,
+      "end": 245,
       "loc": {
         "start": {
           "line": 16,
@@ -2418,8 +2418,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 248,
-      "end": 249,
+      "start": 246,
+      "end": 247,
       "loc": {
         "start": {
           "line": 16,
@@ -2444,8 +2444,8 @@
         "binop": null
       },
       "value": "RENDER_PASSES",
-      "start": 249,
-      "end": 262,
+      "start": 247,
+      "end": 260,
       "loc": {
         "start": {
           "line": 16,
@@ -2469,8 +2469,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 262,
-      "end": 263,
+      "start": 260,
+      "end": 261,
       "loc": {
         "start": {
           "line": 16,
@@ -2495,8 +2495,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 263,
-      "end": 264,
+      "start": 261,
+      "end": 262,
       "loc": {
         "start": {
           "line": 16,
@@ -2521,8 +2521,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 264,
-      "end": 264,
+      "start": 262,
+      "end": 262,
       "loc": {
         "start": {
           "line": 16,

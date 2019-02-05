@@ -143,7 +143,7 @@
       "actualCount": 1,
       "undocumentLines": [
         12,
-        142
+        146
       ]
     },
     "src/scene/PerformanceModel/lib/batching/batchingEdgesRenderer.js": {
@@ -168,7 +168,7 @@
       "actualCount": 1,
       "undocumentLines": [
         12,
-        73
+        76
       ]
     },
     "src/scene/PerformanceModel/lib/batching/batchingFillRenderer.js": {
@@ -193,7 +193,7 @@
       "actualCount": 1,
       "undocumentLines": [
         11,
-        63
+        67
       ]
     },
     "src/scene/PerformanceModel/lib/batching/batchingLayer.js": {
@@ -310,7 +310,7 @@
       "actualCount": 1,
       "undocumentLines": [
         15,
-        158
+        161
       ]
     },
     "src/scene/PerformanceModel/lib/instancing/instancingEdgesRenderer.js": {
@@ -334,7 +334,7 @@
       "actualCount": 1,
       "undocumentLines": [
         15,
-        63
+        68
       ]
     },
     "src/scene/PerformanceModel/lib/instancing/instancingFillRenderer.js": {
@@ -359,7 +359,7 @@
       "actualCount": 1,
       "undocumentLines": [
         15,
-        76
+        79
       ]
     },
     "src/scene/PerformanceModel/lib/instancing/instancingLayer.js": {
@@ -1809,11 +1809,11 @@
       "expectCount": 25,
       "actualCount": 20,
       "undocumentLines": [
-        256,
-        263,
-        270,
-        243,
-        251
+        258,
+        265,
+        272,
+        245,
+        253
       ]
     },
     "src/viewer/metadata/IFCObjectDefaults.js": {
@@ -1938,13 +1938,6 @@
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
-    },
-    "src/viewer/plugins/BIMServerLoaderPlugin/lib/loadMetaModel.js": {
-      "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        1
-      ]
     },
     "src/viewer/plugins/BIMServerLoaderPlugin/lib/preloadQuery.js": {
       "expectCount": 1,
@@ -2341,7 +2334,7 @@
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/viewer/utils/BIMServerClient/bimserverapipromise.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/bimserverapipromise.js": {
       "expectCount": 11,
       "actualCount": 0,
       "undocumentLines": [
@@ -2358,7 +2351,7 @@
         61
       ]
     },
-    "src/viewer/utils/BIMServerClient/bimserverapiwebsocket.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/bimserverapiwebsocket.js": {
       "expectCount": 22,
       "actualCount": 0,
       "undocumentLines": [
@@ -2386,7 +2379,7 @@
         143
       ]
     },
-    "src/viewer/utils/BIMServerClient/bimserverclient.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/bimserverclient.js": {
       "expectCount": 73,
       "actualCount": 1,
       "undocumentLines": [
@@ -2464,28 +2457,28 @@
         907
       ]
     },
-    "src/viewer/utils/BIMServerClient/geometry.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/geometry.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
         1
       ]
     },
-    "src/viewer/utils/BIMServerClient/ifc2x3tc1.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/ifc2x3tc1.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
         1
       ]
     },
-    "src/viewer/utils/BIMServerClient/ifc4.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/ifc4.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
         1
       ]
     },
-    "src/viewer/utils/BIMServerClient/model.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/model.js": {
       "expectCount": 43,
       "actualCount": 0,
       "undocumentLines": [
@@ -2534,7 +2527,14 @@
         761
       ]
     },
-    "src/viewer/utils/BIMServerClient/translations_en.js": {
+    "src/viewer/utils/bimserver/BIMServerClient/translations_en.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/viewer/utils/bimserver/loadBIMServerMetaModel.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [

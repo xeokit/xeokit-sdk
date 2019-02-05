@@ -1372,72 +1372,8 @@
     ]
   },
   {
-    "name": "BIMServerPerformanceGeometryLoader",
-    "filePath": "src/viewer/plugins/BIMServerLoaderPlugin/lib/BIMServerPerformanceGeometryLoader.js",
-    "lines": [
-      {
-        "lineNumber": 2,
-        "line": "/**"
-      },
-      {
-        "lineNumber": 3,
-        "line": " *"
-      },
-      {
-        "lineNumber": 4,
-        "line": " * @param bimServerClient"
-      },
-      {
-        "lineNumber": 5,
-        "line": " * @param bimServerModel"
-      },
-      {
-        "lineNumber": 6,
-        "line": " * @param roid"
-      },
-      {
-        "lineNumber": 7,
-        "line": " * @param globalTransformationMatrix"
-      },
-      {
-        "lineNumber": 8,
-        "line": " * @param detailModelBuilder"
-      },
-      {
-        "lineNumber": 9,
-        "line": " * @constructor"
-      },
-      {
-        "lineNumber": 10,
-        "line": " * @private"
-      },
-      {
-        "lineNumber": 11,
-        "line": " */"
-      },
-      {
-        "lineNumber": 12,
-        "line": "function BIMServerPerformanceGeometryLoader(bimServerClient, bimServerClientModel, roid, globalTransformationMatrix, detailModelBuilder) {"
-      }
-    ],
-    "codeParams": [
-      "bimServerClient",
-      "bimServerClientModel",
-      "roid",
-      "globalTransformationMatrix",
-      "detailModelBuilder"
-    ],
-    "docParams": [
-      "bimServerClient",
-      "bimServerModel",
-      "roid",
-      "globalTransformationMatrix",
-      "detailModelBuilder"
-    ]
-  },
-  {
     "name": "BimServerClient#call",
-    "filePath": "src/viewer/utils/BIMServerClient/bimserverclient.js",
+    "filePath": "src/viewer/utils/bimserver/BIMServerClient/bimserverclient.js",
     "lines": [
       {
         "lineNumber": 928,

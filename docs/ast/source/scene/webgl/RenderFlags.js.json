@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 4720,
+  "end": 4708,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 4720,
+    "end": 4708,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "Identifier",
         "start": 205,
-        "end": 4697,
+        "end": 4685,
         "loc": {
           "start": {
             "line": 5,
@@ -64,7 +64,7 @@
         "body": {
           "type": "ClassBody",
           "start": 223,
-          "end": 4697,
+          "end": 4685,
           "loc": {
             "start": {
               "line": 5,
@@ -254,7 +254,7 @@
             {
               "type": "ClassMethod",
               "start": 343,
-              "end": 4695,
+              "end": 4683,
               "loc": {
                 "start": {
                   "line": 17,
@@ -294,7 +294,7 @@
               "body": {
                 "type": "BlockStatement",
                 "start": 351,
-                "end": 4695,
+                "end": 4683,
                 "loc": {
                   "start": {
                     "line": 17,
@@ -828,7 +828,7 @@
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                         "start": 1430,
-                        "end": 1641,
+                        "end": 1639,
                         "loc": {
                           "start": {
                             "line": 47,
@@ -844,8 +844,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 1650,
-                    "end": 1681,
+                    "start": 1648,
+                    "end": 1678,
                     "loc": {
                       "start": {
                         "line": 52,
@@ -853,13 +853,13 @@
                       },
                       "end": {
                         "line": 52,
-                        "column": 39
+                        "column": 38
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 1650,
-                      "end": 1680,
+                      "start": 1648,
+                      "end": 1677,
                       "loc": {
                         "start": {
                           "line": 52,
@@ -867,14 +867,14 @@
                         },
                         "end": {
                           "line": 52,
-                          "column": 38
+                          "column": 37
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 1650,
-                        "end": 1672,
+                        "start": 1648,
+                        "end": 1669,
                         "loc": {
                           "start": {
                             "line": 52,
@@ -882,13 +882,13 @@
                           },
                           "end": {
                             "line": 52,
-                            "column": 30
+                            "column": 29
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1650,
-                          "end": 1654,
+                          "start": 1648,
+                          "end": 1652,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -903,8 +903,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1655,
-                          "end": 1672,
+                          "start": 1653,
+                          "end": 1669,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -912,7 +912,7 @@
                             },
                             "end": {
                               "line": 52,
-                              "column": 30
+                              "column": 29
                             },
                             "identifierName": "xrayedFillOpaque"
                           },
@@ -923,16 +923,16 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 1675,
-                        "end": 1680,
+                        "start": 1672,
+                        "end": 1677,
                         "loc": {
                           "start": {
                             "line": 52,
-                            "column": 33
+                            "column": 32
                           },
                           "end": {
                             "line": 52,
-                            "column": 38
+                            "column": 37
                           }
                         },
                         "value": false
@@ -944,7 +944,7 @@
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                         "start": 1430,
-                        "end": 1641,
+                        "end": 1639,
                         "loc": {
                           "start": {
                             "line": 47,
@@ -961,8 +961,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 1691,
-                        "end": 1904,
+                        "start": 1688,
+                        "end": 1899,
                         "loc": {
                           "start": {
                             "line": 54,
@@ -978,8 +978,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 1913,
-                    "end": 1945,
+                    "start": 1908,
+                    "end": 1939,
                     "loc": {
                       "start": {
                         "line": 59,
@@ -987,13 +987,13 @@
                       },
                       "end": {
                         "line": 59,
-                        "column": 40
+                        "column": 39
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 1913,
-                      "end": 1944,
+                      "start": 1908,
+                      "end": 1938,
                       "loc": {
                         "start": {
                           "line": 59,
@@ -1001,14 +1001,14 @@
                         },
                         "end": {
                           "line": 59,
-                          "column": 39
+                          "column": 38
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 1913,
-                        "end": 1936,
+                        "start": 1908,
+                        "end": 1930,
                         "loc": {
                           "start": {
                             "line": 59,
@@ -1016,13 +1016,13 @@
                           },
                           "end": {
                             "line": 59,
-                            "column": 31
+                            "column": 30
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1913,
-                          "end": 1917,
+                          "start": 1908,
+                          "end": 1912,
                           "loc": {
                             "start": {
                               "line": 59,
@@ -1037,8 +1037,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1918,
-                          "end": 1936,
+                          "start": 1913,
+                          "end": 1930,
                           "loc": {
                             "start": {
                               "line": 59,
@@ -1046,7 +1046,7 @@
                             },
                             "end": {
                               "line": 59,
-                              "column": 31
+                              "column": 30
                             },
                             "identifierName": "xrayedEdgesOpaque"
                           },
@@ -1057,16 +1057,16 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 1939,
-                        "end": 1944,
+                        "start": 1933,
+                        "end": 1938,
                         "loc": {
                           "start": {
                             "line": 59,
-                            "column": 34
+                            "column": 33
                           },
                           "end": {
                             "line": 59,
-                            "column": 39
+                            "column": 38
                           }
                         },
                         "value": false
@@ -1077,8 +1077,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 1691,
-                        "end": 1904,
+                        "start": 1688,
+                        "end": 1899,
                         "loc": {
                           "start": {
                             "line": 54,
@@ -1095,8 +1095,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 1955,
-                        "end": 2176,
+                        "start": 1949,
+                        "end": 2168,
                         "loc": {
                           "start": {
                             "line": 61,
@@ -1112,8 +1112,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 2185,
-                    "end": 2221,
+                    "start": 2177,
+                    "end": 2212,
                     "loc": {
                       "start": {
                         "line": 66,
@@ -1121,13 +1121,13 @@
                       },
                       "end": {
                         "line": 66,
-                        "column": 44
+                        "column": 43
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 2185,
-                      "end": 2220,
+                      "start": 2177,
+                      "end": 2211,
                       "loc": {
                         "start": {
                           "line": 66,
@@ -1135,14 +1135,14 @@
                         },
                         "end": {
                           "line": 66,
-                          "column": 43
+                          "column": 42
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 2185,
-                        "end": 2212,
+                        "start": 2177,
+                        "end": 2203,
                         "loc": {
                           "start": {
                             "line": 66,
@@ -1150,13 +1150,13 @@
                           },
                           "end": {
                             "line": 66,
-                            "column": 35
+                            "column": 34
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 2185,
-                          "end": 2189,
+                          "start": 2177,
+                          "end": 2181,
                           "loc": {
                             "start": {
                               "line": 66,
@@ -1171,8 +1171,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2190,
-                          "end": 2212,
+                          "start": 2182,
+                          "end": 2203,
                           "loc": {
                             "start": {
                               "line": 66,
@@ -1180,7 +1180,7 @@
                             },
                             "end": {
                               "line": 66,
-                              "column": 35
+                              "column": 34
                             },
                             "identifierName": "xrayedFillTransparent"
                           },
@@ -1191,16 +1191,16 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 2215,
-                        "end": 2220,
+                        "start": 2206,
+                        "end": 2211,
                         "loc": {
                           "start": {
                             "line": 66,
-                            "column": 38
+                            "column": 37
                           },
                           "end": {
                             "line": 66,
-                            "column": 43
+                            "column": 42
                           }
                         },
                         "value": false
@@ -1211,8 +1211,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 1955,
-                        "end": 2176,
+                        "start": 1949,
+                        "end": 2168,
                         "loc": {
                           "start": {
                             "line": 61,
@@ -1229,8 +1229,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 2231,
-                        "end": 2450,
+                        "start": 2222,
+                        "end": 2439,
                         "loc": {
                           "start": {
                             "line": 68,
@@ -1246,8 +1246,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 2459,
-                    "end": 2496,
+                    "start": 2448,
+                    "end": 2484,
                     "loc": {
                       "start": {
                         "line": 73,
@@ -1255,13 +1255,13 @@
                       },
                       "end": {
                         "line": 73,
-                        "column": 45
+                        "column": 44
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 2459,
-                      "end": 2495,
+                      "start": 2448,
+                      "end": 2483,
                       "loc": {
                         "start": {
                           "line": 73,
@@ -1269,14 +1269,14 @@
                         },
                         "end": {
                           "line": 73,
-                          "column": 44
+                          "column": 43
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 2459,
-                        "end": 2487,
+                        "start": 2448,
+                        "end": 2475,
                         "loc": {
                           "start": {
                             "line": 73,
@@ -1284,13 +1284,13 @@
                           },
                           "end": {
                             "line": 73,
-                            "column": 36
+                            "column": 35
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 2459,
-                          "end": 2463,
+                          "start": 2448,
+                          "end": 2452,
                           "loc": {
                             "start": {
                               "line": 73,
@@ -1305,8 +1305,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2464,
-                          "end": 2487,
+                          "start": 2453,
+                          "end": 2475,
                           "loc": {
                             "start": {
                               "line": 73,
@@ -1314,7 +1314,7 @@
                             },
                             "end": {
                               "line": 73,
-                              "column": 36
+                              "column": 35
                             },
                             "identifierName": "xrayedEdgesTransparent"
                           },
@@ -1325,16 +1325,16 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 2490,
-                        "end": 2495,
+                        "start": 2478,
+                        "end": 2483,
                         "loc": {
                           "start": {
                             "line": 73,
-                            "column": 39
+                            "column": 38
                           },
                           "end": {
                             "line": 73,
-                            "column": 44
+                            "column": 43
                           }
                         },
                         "value": false
@@ -1345,8 +1345,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 2231,
-                        "end": 2450,
+                        "start": 2222,
+                        "end": 2439,
                         "loc": {
                           "start": {
                             "line": 68,
@@ -1363,8 +1363,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-                        "start": 2506,
-                        "end": 2725,
+                        "start": 2494,
+                        "end": 2713,
                         "loc": {
                           "start": {
                             "line": 75,
@@ -1380,8 +1380,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 2734,
-                    "end": 2769,
+                    "start": 2722,
+                    "end": 2757,
                     "loc": {
                       "start": {
                         "line": 80,
@@ -1394,8 +1394,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 2734,
-                      "end": 2768,
+                      "start": 2722,
+                      "end": 2756,
                       "loc": {
                         "start": {
                           "line": 80,
@@ -1409,8 +1409,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 2734,
-                        "end": 2760,
+                        "start": 2722,
+                        "end": 2748,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -1423,8 +1423,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 2734,
-                          "end": 2738,
+                          "start": 2722,
+                          "end": 2726,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -1439,8 +1439,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 2739,
-                          "end": 2760,
+                          "start": 2727,
+                          "end": 2748,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -1459,8 +1459,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 2763,
-                        "end": 2768,
+                        "start": 2751,
+                        "end": 2756,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -1479,8 +1479,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-                        "start": 2506,
-                        "end": 2725,
+                        "start": 2494,
+                        "end": 2713,
                         "loc": {
                           "start": {
                             "line": 75,
@@ -1497,8 +1497,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 2779,
-                        "end": 2996,
+                        "start": 2767,
+                        "end": 2984,
                         "loc": {
                           "start": {
                             "line": 82,
@@ -1514,8 +1514,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3005,
-                    "end": 3041,
+                    "start": 2993,
+                    "end": 3029,
                     "loc": {
                       "start": {
                         "line": 87,
@@ -1528,8 +1528,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3005,
-                      "end": 3040,
+                      "start": 2993,
+                      "end": 3028,
                       "loc": {
                         "start": {
                           "line": 87,
@@ -1543,8 +1543,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3005,
-                        "end": 3032,
+                        "start": 2993,
+                        "end": 3020,
                         "loc": {
                           "start": {
                             "line": 87,
@@ -1557,8 +1557,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3005,
-                          "end": 3009,
+                          "start": 2993,
+                          "end": 2997,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -1573,8 +1573,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3010,
-                          "end": 3032,
+                          "start": 2998,
+                          "end": 3020,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -1593,8 +1593,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 3035,
-                        "end": 3040,
+                        "start": 3023,
+                        "end": 3028,
                         "loc": {
                           "start": {
                             "line": 87,
@@ -1613,8 +1613,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 2779,
-                        "end": 2996,
+                        "start": 2767,
+                        "end": 2984,
                         "loc": {
                           "start": {
                             "line": 82,
@@ -1631,8 +1631,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 3051,
-                        "end": 3276,
+                        "start": 3039,
+                        "end": 3264,
                         "loc": {
                           "start": {
                             "line": 89,
@@ -1648,8 +1648,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3285,
-                    "end": 3325,
+                    "start": 3273,
+                    "end": 3313,
                     "loc": {
                       "start": {
                         "line": 94,
@@ -1662,8 +1662,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3285,
-                      "end": 3324,
+                      "start": 3273,
+                      "end": 3312,
                       "loc": {
                         "start": {
                           "line": 94,
@@ -1677,8 +1677,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3285,
-                        "end": 3316,
+                        "start": 3273,
+                        "end": 3304,
                         "loc": {
                           "start": {
                             "line": 94,
@@ -1691,8 +1691,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3285,
-                          "end": 3289,
+                          "start": 3273,
+                          "end": 3277,
                           "loc": {
                             "start": {
                               "line": 94,
@@ -1707,8 +1707,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3290,
-                          "end": 3316,
+                          "start": 3278,
+                          "end": 3304,
                           "loc": {
                             "start": {
                               "line": 94,
@@ -1727,8 +1727,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 3319,
-                        "end": 3324,
+                        "start": 3307,
+                        "end": 3312,
                         "loc": {
                           "start": {
                             "line": 94,
@@ -1747,8 +1747,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 3051,
-                        "end": 3276,
+                        "start": 3039,
+                        "end": 3264,
                         "loc": {
                           "start": {
                             "line": 89,
@@ -1765,8 +1765,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 3335,
-                        "end": 3562,
+                        "start": 3323,
+                        "end": 3550,
                         "loc": {
                           "start": {
                             "line": 96,
@@ -1782,8 +1782,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3571,
-                    "end": 3612,
+                    "start": 3559,
+                    "end": 3600,
                     "loc": {
                       "start": {
                         "line": 101,
@@ -1796,8 +1796,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3571,
-                      "end": 3611,
+                      "start": 3559,
+                      "end": 3599,
                       "loc": {
                         "start": {
                           "line": 101,
@@ -1811,8 +1811,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3571,
-                        "end": 3603,
+                        "start": 3559,
+                        "end": 3591,
                         "loc": {
                           "start": {
                             "line": 101,
@@ -1825,8 +1825,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3571,
-                          "end": 3575,
+                          "start": 3559,
+                          "end": 3563,
                           "loc": {
                             "start": {
                               "line": 101,
@@ -1841,8 +1841,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3576,
-                          "end": 3603,
+                          "start": 3564,
+                          "end": 3591,
                           "loc": {
                             "start": {
                               "line": 101,
@@ -1861,8 +1861,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 3606,
-                        "end": 3611,
+                        "start": 3594,
+                        "end": 3599,
                         "loc": {
                           "start": {
                             "line": 101,
@@ -1881,8 +1881,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 3335,
-                        "end": 3562,
+                        "start": 3323,
+                        "end": 3550,
                         "loc": {
                           "start": {
                             "line": 96,
@@ -1899,8 +1899,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-                        "start": 3623,
-                        "end": 3832,
+                        "start": 3611,
+                        "end": 3820,
                         "loc": {
                           "start": {
                             "line": 104,
@@ -1916,8 +1916,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 3841,
-                    "end": 3873,
+                    "start": 3829,
+                    "end": 3861,
                     "loc": {
                       "start": {
                         "line": 109,
@@ -1930,8 +1930,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 3841,
-                      "end": 3872,
+                      "start": 3829,
+                      "end": 3860,
                       "loc": {
                         "start": {
                           "line": 109,
@@ -1945,8 +1945,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 3841,
-                        "end": 3864,
+                        "start": 3829,
+                        "end": 3852,
                         "loc": {
                           "start": {
                             "line": 109,
@@ -1959,8 +1959,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 3841,
-                          "end": 3845,
+                          "start": 3829,
+                          "end": 3833,
                           "loc": {
                             "start": {
                               "line": 109,
@@ -1975,8 +1975,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 3846,
-                          "end": 3864,
+                          "start": 3834,
+                          "end": 3852,
                           "loc": {
                             "start": {
                               "line": 109,
@@ -1995,8 +1995,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 3867,
-                        "end": 3872,
+                        "start": 3855,
+                        "end": 3860,
                         "loc": {
                           "start": {
                             "line": 109,
@@ -2015,8 +2015,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-                        "start": 3623,
-                        "end": 3832,
+                        "start": 3611,
+                        "end": 3820,
                         "loc": {
                           "start": {
                             "line": 104,
@@ -2033,8 +2033,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 3883,
-                        "end": 4094,
+                        "start": 3871,
+                        "end": 4082,
                         "loc": {
                           "start": {
                             "line": 111,
@@ -2050,8 +2050,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 4103,
-                    "end": 4136,
+                    "start": 4091,
+                    "end": 4124,
                     "loc": {
                       "start": {
                         "line": 116,
@@ -2064,8 +2064,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 4103,
-                      "end": 4135,
+                      "start": 4091,
+                      "end": 4123,
                       "loc": {
                         "start": {
                           "line": 116,
@@ -2079,8 +2079,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 4103,
-                        "end": 4127,
+                        "start": 4091,
+                        "end": 4115,
                         "loc": {
                           "start": {
                             "line": 116,
@@ -2093,8 +2093,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 4103,
-                          "end": 4107,
+                          "start": 4091,
+                          "end": 4095,
                           "loc": {
                             "start": {
                               "line": 116,
@@ -2109,8 +2109,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 4108,
-                          "end": 4127,
+                          "start": 4096,
+                          "end": 4115,
                           "loc": {
                             "start": {
                               "line": 116,
@@ -2129,8 +2129,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 4130,
-                        "end": 4135,
+                        "start": 4118,
+                        "end": 4123,
                         "loc": {
                           "start": {
                             "line": 116,
@@ -2149,8 +2149,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-                        "start": 3883,
-                        "end": 4094,
+                        "start": 3871,
+                        "end": 4082,
                         "loc": {
                           "start": {
                             "line": 111,
@@ -2167,8 +2167,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 4146,
-                        "end": 4365,
+                        "start": 4134,
+                        "end": 4353,
                         "loc": {
                           "start": {
                             "line": 118,
@@ -2184,8 +2184,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 4374,
-                    "end": 4411,
+                    "start": 4362,
+                    "end": 4399,
                     "loc": {
                       "start": {
                         "line": 123,
@@ -2198,8 +2198,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 4374,
-                      "end": 4410,
+                      "start": 4362,
+                      "end": 4398,
                       "loc": {
                         "start": {
                           "line": 123,
@@ -2213,8 +2213,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 4374,
-                        "end": 4402,
+                        "start": 4362,
+                        "end": 4390,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -2227,8 +2227,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 4374,
-                          "end": 4378,
+                          "start": 4362,
+                          "end": 4366,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -2243,8 +2243,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 4379,
-                          "end": 4402,
+                          "start": 4367,
+                          "end": 4390,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -2263,8 +2263,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 4405,
-                        "end": 4410,
+                        "start": 4393,
+                        "end": 4398,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -2283,8 +2283,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-                        "start": 4146,
-                        "end": 4365,
+                        "start": 4134,
+                        "end": 4353,
                         "loc": {
                           "start": {
                             "line": 118,
@@ -2301,8 +2301,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 4421,
-                        "end": 4642,
+                        "start": 4409,
+                        "end": 4630,
                         "loc": {
                           "start": {
                             "line": 125,
@@ -2318,8 +2318,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 4651,
-                    "end": 4689,
+                    "start": 4639,
+                    "end": 4677,
                     "loc": {
                       "start": {
                         "line": 130,
@@ -2332,8 +2332,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 4651,
-                      "end": 4688,
+                      "start": 4639,
+                      "end": 4676,
                       "loc": {
                         "start": {
                           "line": 130,
@@ -2347,8 +2347,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 4651,
-                        "end": 4680,
+                        "start": 4639,
+                        "end": 4668,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -2361,8 +2361,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 4651,
-                          "end": 4655,
+                          "start": 4639,
+                          "end": 4643,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -2377,8 +2377,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 4656,
-                          "end": 4680,
+                          "start": 4644,
+                          "end": 4668,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -2397,8 +2397,8 @@
                       },
                       "right": {
                         "type": "BooleanLiteral",
-                        "start": 4683,
-                        "end": 4688,
+                        "start": 4671,
+                        "end": 4676,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -2417,8 +2417,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-                        "start": 4421,
-                        "end": 4642,
+                        "start": 4409,
+                        "end": 4630,
                         "loc": {
                           "start": {
                             "line": 125,
@@ -2462,8 +2462,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4699,
-        "end": 4720,
+        "start": 4687,
+        "end": 4708,
         "loc": {
           "start": {
             "line": 134,
@@ -2478,8 +2478,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 4707,
-            "end": 4718,
+            "start": 4695,
+            "end": 4706,
             "loc": {
               "start": {
                 "line": 134,
@@ -2492,8 +2492,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 4707,
-              "end": 4718,
+              "start": 4695,
+              "end": 4706,
               "loc": {
                 "start": {
                   "line": 134,
@@ -2509,8 +2509,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 4707,
-              "end": 4718,
+              "start": 4695,
+              "end": 4706,
               "loc": {
                 "start": {
                   "line": 134,
@@ -2530,8 +2530,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4699,
-        "end": 4720,
+        "start": 4687,
+        "end": 4708,
         "loc": {
           "start": {
             "line": 134,
@@ -2545,7 +2545,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 205,
-          "end": 4697,
+          "end": 4685,
           "loc": {
             "start": {
               "line": 5,
@@ -2578,7 +2578,7 @@
           "body": {
             "type": "ClassBody",
             "start": 223,
-            "end": 4697,
+            "end": 4685,
             "loc": {
               "start": {
                 "line": 5,
@@ -2768,7 +2768,7 @@
               {
                 "type": "ClassMethod",
                 "start": 343,
-                "end": 4695,
+                "end": 4683,
                 "loc": {
                   "start": {
                     "line": 17,
@@ -2808,7 +2808,7 @@
                 "body": {
                   "type": "BlockStatement",
                   "start": 351,
-                  "end": 4695,
+                  "end": 4683,
                   "loc": {
                     "start": {
                       "line": 17,
@@ -3342,7 +3342,7 @@
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                           "start": 1430,
-                          "end": 1641,
+                          "end": 1639,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -3358,8 +3358,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 1650,
-                      "end": 1681,
+                      "start": 1648,
+                      "end": 1678,
                       "loc": {
                         "start": {
                           "line": 52,
@@ -3367,13 +3367,13 @@
                         },
                         "end": {
                           "line": 52,
-                          "column": 39
+                          "column": 38
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 1650,
-                        "end": 1680,
+                        "start": 1648,
+                        "end": 1677,
                         "loc": {
                           "start": {
                             "line": 52,
@@ -3381,14 +3381,14 @@
                           },
                           "end": {
                             "line": 52,
-                            "column": 38
+                            "column": 37
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 1650,
-                          "end": 1672,
+                          "start": 1648,
+                          "end": 1669,
                           "loc": {
                             "start": {
                               "line": 52,
@@ -3396,13 +3396,13 @@
                             },
                             "end": {
                               "line": 52,
-                              "column": 30
+                              "column": 29
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 1650,
-                            "end": 1654,
+                            "start": 1648,
+                            "end": 1652,
                             "loc": {
                               "start": {
                                 "line": 52,
@@ -3417,8 +3417,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1655,
-                            "end": 1672,
+                            "start": 1653,
+                            "end": 1669,
                             "loc": {
                               "start": {
                                 "line": 52,
@@ -3426,7 +3426,7 @@
                               },
                               "end": {
                                 "line": 52,
-                                "column": 30
+                                "column": 29
                               },
                               "identifierName": "xrayedFillOpaque"
                             },
@@ -3437,16 +3437,16 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 1675,
-                          "end": 1680,
+                          "start": 1672,
+                          "end": 1677,
                           "loc": {
                             "start": {
                               "line": 52,
-                              "column": 33
+                              "column": 32
                             },
                             "end": {
                               "line": 52,
-                              "column": 38
+                              "column": 37
                             }
                           },
                           "value": false
@@ -3458,7 +3458,7 @@
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
                           "start": 1430,
-                          "end": 1641,
+                          "end": 1639,
                           "loc": {
                             "start": {
                               "line": 47,
@@ -3475,8 +3475,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 1691,
-                          "end": 1904,
+                          "start": 1688,
+                          "end": 1899,
                           "loc": {
                             "start": {
                               "line": 54,
@@ -3492,8 +3492,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 1913,
-                      "end": 1945,
+                      "start": 1908,
+                      "end": 1939,
                       "loc": {
                         "start": {
                           "line": 59,
@@ -3501,13 +3501,13 @@
                         },
                         "end": {
                           "line": 59,
-                          "column": 40
+                          "column": 39
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 1913,
-                        "end": 1944,
+                        "start": 1908,
+                        "end": 1938,
                         "loc": {
                           "start": {
                             "line": 59,
@@ -3515,14 +3515,14 @@
                           },
                           "end": {
                             "line": 59,
-                            "column": 39
+                            "column": 38
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 1913,
-                          "end": 1936,
+                          "start": 1908,
+                          "end": 1930,
                           "loc": {
                             "start": {
                               "line": 59,
@@ -3530,13 +3530,13 @@
                             },
                             "end": {
                               "line": 59,
-                              "column": 31
+                              "column": 30
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 1913,
-                            "end": 1917,
+                            "start": 1908,
+                            "end": 1912,
                             "loc": {
                               "start": {
                                 "line": 59,
@@ -3551,8 +3551,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1918,
-                            "end": 1936,
+                            "start": 1913,
+                            "end": 1930,
                             "loc": {
                               "start": {
                                 "line": 59,
@@ -3560,7 +3560,7 @@
                               },
                               "end": {
                                 "line": 59,
-                                "column": 31
+                                "column": 30
                               },
                               "identifierName": "xrayedEdgesOpaque"
                             },
@@ -3571,16 +3571,16 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 1939,
-                          "end": 1944,
+                          "start": 1933,
+                          "end": 1938,
                           "loc": {
                             "start": {
                               "line": 59,
-                              "column": 34
+                              "column": 33
                             },
                             "end": {
                               "line": 59,
-                              "column": 39
+                              "column": 38
                             }
                           },
                           "value": false
@@ -3591,8 +3591,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 1691,
-                          "end": 1904,
+                          "start": 1688,
+                          "end": 1899,
                           "loc": {
                             "start": {
                               "line": 54,
@@ -3609,8 +3609,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 1955,
-                          "end": 2176,
+                          "start": 1949,
+                          "end": 2168,
                           "loc": {
                             "start": {
                               "line": 61,
@@ -3626,8 +3626,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 2185,
-                      "end": 2221,
+                      "start": 2177,
+                      "end": 2212,
                       "loc": {
                         "start": {
                           "line": 66,
@@ -3635,13 +3635,13 @@
                         },
                         "end": {
                           "line": 66,
-                          "column": 44
+                          "column": 43
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2185,
-                        "end": 2220,
+                        "start": 2177,
+                        "end": 2211,
                         "loc": {
                           "start": {
                             "line": 66,
@@ -3649,14 +3649,14 @@
                           },
                           "end": {
                             "line": 66,
-                            "column": 43
+                            "column": 42
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 2185,
-                          "end": 2212,
+                          "start": 2177,
+                          "end": 2203,
                           "loc": {
                             "start": {
                               "line": 66,
@@ -3664,13 +3664,13 @@
                             },
                             "end": {
                               "line": 66,
-                              "column": 35
+                              "column": 34
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 2185,
-                            "end": 2189,
+                            "start": 2177,
+                            "end": 2181,
                             "loc": {
                               "start": {
                                 "line": 66,
@@ -3685,8 +3685,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2190,
-                            "end": 2212,
+                            "start": 2182,
+                            "end": 2203,
                             "loc": {
                               "start": {
                                 "line": 66,
@@ -3694,7 +3694,7 @@
                               },
                               "end": {
                                 "line": 66,
-                                "column": 35
+                                "column": 34
                               },
                               "identifierName": "xrayedFillTransparent"
                             },
@@ -3705,16 +3705,16 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 2215,
-                          "end": 2220,
+                          "start": 2206,
+                          "end": 2211,
                           "loc": {
                             "start": {
                               "line": 66,
-                              "column": 38
+                              "column": 37
                             },
                             "end": {
                               "line": 66,
-                              "column": 43
+                              "column": 42
                             }
                           },
                           "value": false
@@ -3725,8 +3725,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 1955,
-                          "end": 2176,
+                          "start": 1949,
+                          "end": 2168,
                           "loc": {
                             "start": {
                               "line": 61,
@@ -3743,8 +3743,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 2231,
-                          "end": 2450,
+                          "start": 2222,
+                          "end": 2439,
                           "loc": {
                             "start": {
                               "line": 68,
@@ -3760,8 +3760,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 2459,
-                      "end": 2496,
+                      "start": 2448,
+                      "end": 2484,
                       "loc": {
                         "start": {
                           "line": 73,
@@ -3769,13 +3769,13 @@
                         },
                         "end": {
                           "line": 73,
-                          "column": 45
+                          "column": 44
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2459,
-                        "end": 2495,
+                        "start": 2448,
+                        "end": 2483,
                         "loc": {
                           "start": {
                             "line": 73,
@@ -3783,14 +3783,14 @@
                           },
                           "end": {
                             "line": 73,
-                            "column": 44
+                            "column": 43
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 2459,
-                          "end": 2487,
+                          "start": 2448,
+                          "end": 2475,
                           "loc": {
                             "start": {
                               "line": 73,
@@ -3798,13 +3798,13 @@
                             },
                             "end": {
                               "line": 73,
-                              "column": 36
+                              "column": 35
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 2459,
-                            "end": 2463,
+                            "start": 2448,
+                            "end": 2452,
                             "loc": {
                               "start": {
                                 "line": 73,
@@ -3819,8 +3819,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2464,
-                            "end": 2487,
+                            "start": 2453,
+                            "end": 2475,
                             "loc": {
                               "start": {
                                 "line": 73,
@@ -3828,7 +3828,7 @@
                               },
                               "end": {
                                 "line": 73,
-                                "column": 36
+                                "column": 35
                               },
                               "identifierName": "xrayedEdgesTransparent"
                             },
@@ -3839,16 +3839,16 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 2490,
-                          "end": 2495,
+                          "start": 2478,
+                          "end": 2483,
                           "loc": {
                             "start": {
                               "line": 73,
-                              "column": 39
+                              "column": 38
                             },
                             "end": {
                               "line": 73,
-                              "column": 44
+                              "column": 43
                             }
                           },
                           "value": false
@@ -3859,8 +3859,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 2231,
-                          "end": 2450,
+                          "start": 2222,
+                          "end": 2439,
                           "loc": {
                             "start": {
                               "line": 68,
@@ -3877,8 +3877,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-                          "start": 2506,
-                          "end": 2725,
+                          "start": 2494,
+                          "end": 2713,
                           "loc": {
                             "start": {
                               "line": 75,
@@ -3894,8 +3894,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 2734,
-                      "end": 2769,
+                      "start": 2722,
+                      "end": 2757,
                       "loc": {
                         "start": {
                           "line": 80,
@@ -3908,8 +3908,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2734,
-                        "end": 2768,
+                        "start": 2722,
+                        "end": 2756,
                         "loc": {
                           "start": {
                             "line": 80,
@@ -3923,8 +3923,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 2734,
-                          "end": 2760,
+                          "start": 2722,
+                          "end": 2748,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -3937,8 +3937,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 2734,
-                            "end": 2738,
+                            "start": 2722,
+                            "end": 2726,
                             "loc": {
                               "start": {
                                 "line": 80,
@@ -3953,8 +3953,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2739,
-                            "end": 2760,
+                            "start": 2727,
+                            "end": 2748,
                             "loc": {
                               "start": {
                                 "line": 80,
@@ -3973,8 +3973,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 2763,
-                          "end": 2768,
+                          "start": 2751,
+                          "end": 2756,
                           "loc": {
                             "start": {
                               "line": 80,
@@ -3993,8 +3993,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-                          "start": 2506,
-                          "end": 2725,
+                          "start": 2494,
+                          "end": 2713,
                           "loc": {
                             "start": {
                               "line": 75,
@@ -4011,8 +4011,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 2779,
-                          "end": 2996,
+                          "start": 2767,
+                          "end": 2984,
                           "loc": {
                             "start": {
                               "line": 82,
@@ -4028,8 +4028,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3005,
-                      "end": 3041,
+                      "start": 2993,
+                      "end": 3029,
                       "loc": {
                         "start": {
                           "line": 87,
@@ -4042,8 +4042,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3005,
-                        "end": 3040,
+                        "start": 2993,
+                        "end": 3028,
                         "loc": {
                           "start": {
                             "line": 87,
@@ -4057,8 +4057,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3005,
-                          "end": 3032,
+                          "start": 2993,
+                          "end": 3020,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -4071,8 +4071,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3005,
-                            "end": 3009,
+                            "start": 2993,
+                            "end": 2997,
                             "loc": {
                               "start": {
                                 "line": 87,
@@ -4087,8 +4087,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3010,
-                            "end": 3032,
+                            "start": 2998,
+                            "end": 3020,
                             "loc": {
                               "start": {
                                 "line": 87,
@@ -4107,8 +4107,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 3035,
-                          "end": 3040,
+                          "start": 3023,
+                          "end": 3028,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -4127,8 +4127,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 2779,
-                          "end": 2996,
+                          "start": 2767,
+                          "end": 2984,
                           "loc": {
                             "start": {
                               "line": 82,
@@ -4145,8 +4145,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 3051,
-                          "end": 3276,
+                          "start": 3039,
+                          "end": 3264,
                           "loc": {
                             "start": {
                               "line": 89,
@@ -4162,8 +4162,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3285,
-                      "end": 3325,
+                      "start": 3273,
+                      "end": 3313,
                       "loc": {
                         "start": {
                           "line": 94,
@@ -4176,8 +4176,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3285,
-                        "end": 3324,
+                        "start": 3273,
+                        "end": 3312,
                         "loc": {
                           "start": {
                             "line": 94,
@@ -4191,8 +4191,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3285,
-                          "end": 3316,
+                          "start": 3273,
+                          "end": 3304,
                           "loc": {
                             "start": {
                               "line": 94,
@@ -4205,8 +4205,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3285,
-                            "end": 3289,
+                            "start": 3273,
+                            "end": 3277,
                             "loc": {
                               "start": {
                                 "line": 94,
@@ -4221,8 +4221,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3290,
-                            "end": 3316,
+                            "start": 3278,
+                            "end": 3304,
                             "loc": {
                               "start": {
                                 "line": 94,
@@ -4241,8 +4241,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 3319,
-                          "end": 3324,
+                          "start": 3307,
+                          "end": 3312,
                           "loc": {
                             "start": {
                               "line": 94,
@@ -4261,8 +4261,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 3051,
-                          "end": 3276,
+                          "start": 3039,
+                          "end": 3264,
                           "loc": {
                             "start": {
                               "line": 89,
@@ -4279,8 +4279,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 3335,
-                          "end": 3562,
+                          "start": 3323,
+                          "end": 3550,
                           "loc": {
                             "start": {
                               "line": 96,
@@ -4296,8 +4296,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3571,
-                      "end": 3612,
+                      "start": 3559,
+                      "end": 3600,
                       "loc": {
                         "start": {
                           "line": 101,
@@ -4310,8 +4310,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3571,
-                        "end": 3611,
+                        "start": 3559,
+                        "end": 3599,
                         "loc": {
                           "start": {
                             "line": 101,
@@ -4325,8 +4325,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3571,
-                          "end": 3603,
+                          "start": 3559,
+                          "end": 3591,
                           "loc": {
                             "start": {
                               "line": 101,
@@ -4339,8 +4339,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3571,
-                            "end": 3575,
+                            "start": 3559,
+                            "end": 3563,
                             "loc": {
                               "start": {
                                 "line": 101,
@@ -4355,8 +4355,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3576,
-                            "end": 3603,
+                            "start": 3564,
+                            "end": 3591,
                             "loc": {
                               "start": {
                                 "line": 101,
@@ -4375,8 +4375,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 3606,
-                          "end": 3611,
+                          "start": 3594,
+                          "end": 3599,
                           "loc": {
                             "start": {
                               "line": 101,
@@ -4395,8 +4395,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 3335,
-                          "end": 3562,
+                          "start": 3323,
+                          "end": 3550,
                           "loc": {
                             "start": {
                               "line": 96,
@@ -4413,8 +4413,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-                          "start": 3623,
-                          "end": 3832,
+                          "start": 3611,
+                          "end": 3820,
                           "loc": {
                             "start": {
                               "line": 104,
@@ -4430,8 +4430,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3841,
-                      "end": 3873,
+                      "start": 3829,
+                      "end": 3861,
                       "loc": {
                         "start": {
                           "line": 109,
@@ -4444,8 +4444,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3841,
-                        "end": 3872,
+                        "start": 3829,
+                        "end": 3860,
                         "loc": {
                           "start": {
                             "line": 109,
@@ -4459,8 +4459,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 3841,
-                          "end": 3864,
+                          "start": 3829,
+                          "end": 3852,
                           "loc": {
                             "start": {
                               "line": 109,
@@ -4473,8 +4473,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 3841,
-                            "end": 3845,
+                            "start": 3829,
+                            "end": 3833,
                             "loc": {
                               "start": {
                                 "line": 109,
@@ -4489,8 +4489,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 3846,
-                            "end": 3864,
+                            "start": 3834,
+                            "end": 3852,
                             "loc": {
                               "start": {
                                 "line": 109,
@@ -4509,8 +4509,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 3867,
-                          "end": 3872,
+                          "start": 3855,
+                          "end": 3860,
                           "loc": {
                             "start": {
                               "line": 109,
@@ -4529,8 +4529,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-                          "start": 3623,
-                          "end": 3832,
+                          "start": 3611,
+                          "end": 3820,
                           "loc": {
                             "start": {
                               "line": 104,
@@ -4547,8 +4547,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 3883,
-                          "end": 4094,
+                          "start": 3871,
+                          "end": 4082,
                           "loc": {
                             "start": {
                               "line": 111,
@@ -4564,8 +4564,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 4103,
-                      "end": 4136,
+                      "start": 4091,
+                      "end": 4124,
                       "loc": {
                         "start": {
                           "line": 116,
@@ -4578,8 +4578,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 4103,
-                        "end": 4135,
+                        "start": 4091,
+                        "end": 4123,
                         "loc": {
                           "start": {
                             "line": 116,
@@ -4593,8 +4593,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 4103,
-                          "end": 4127,
+                          "start": 4091,
+                          "end": 4115,
                           "loc": {
                             "start": {
                               "line": 116,
@@ -4607,8 +4607,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 4103,
-                            "end": 4107,
+                            "start": 4091,
+                            "end": 4095,
                             "loc": {
                               "start": {
                                 "line": 116,
@@ -4623,8 +4623,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 4108,
-                            "end": 4127,
+                            "start": 4096,
+                            "end": 4115,
                             "loc": {
                               "start": {
                                 "line": 116,
@@ -4643,8 +4643,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 4130,
-                          "end": 4135,
+                          "start": 4118,
+                          "end": 4123,
                           "loc": {
                             "start": {
                               "line": 116,
@@ -4663,8 +4663,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-                          "start": 3883,
-                          "end": 4094,
+                          "start": 3871,
+                          "end": 4082,
                           "loc": {
                             "start": {
                               "line": 111,
@@ -4681,8 +4681,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 4146,
-                          "end": 4365,
+                          "start": 4134,
+                          "end": 4353,
                           "loc": {
                             "start": {
                               "line": 118,
@@ -4698,8 +4698,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 4374,
-                      "end": 4411,
+                      "start": 4362,
+                      "end": 4399,
                       "loc": {
                         "start": {
                           "line": 123,
@@ -4712,8 +4712,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 4374,
-                        "end": 4410,
+                        "start": 4362,
+                        "end": 4398,
                         "loc": {
                           "start": {
                             "line": 123,
@@ -4727,8 +4727,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 4374,
-                          "end": 4402,
+                          "start": 4362,
+                          "end": 4390,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -4741,8 +4741,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 4374,
-                            "end": 4378,
+                            "start": 4362,
+                            "end": 4366,
                             "loc": {
                               "start": {
                                 "line": 123,
@@ -4757,8 +4757,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 4379,
-                            "end": 4402,
+                            "start": 4367,
+                            "end": 4390,
                             "loc": {
                               "start": {
                                 "line": 123,
@@ -4777,8 +4777,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 4405,
-                          "end": 4410,
+                          "start": 4393,
+                          "end": 4398,
                           "loc": {
                             "start": {
                               "line": 123,
@@ -4797,8 +4797,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-                          "start": 4146,
-                          "end": 4365,
+                          "start": 4134,
+                          "end": 4353,
                           "loc": {
                             "start": {
                               "line": 118,
@@ -4815,8 +4815,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 4421,
-                          "end": 4642,
+                          "start": 4409,
+                          "end": 4630,
                           "loc": {
                             "start": {
                               "line": 125,
@@ -4832,8 +4832,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 4651,
-                      "end": 4689,
+                      "start": 4639,
+                      "end": 4677,
                       "loc": {
                         "start": {
                           "line": 130,
@@ -4846,8 +4846,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 4651,
-                        "end": 4688,
+                        "start": 4639,
+                        "end": 4676,
                         "loc": {
                           "start": {
                             "line": 130,
@@ -4861,8 +4861,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 4651,
-                          "end": 4680,
+                          "start": 4639,
+                          "end": 4668,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -4875,8 +4875,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 4651,
-                            "end": 4655,
+                            "start": 4639,
+                            "end": 4643,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -4891,8 +4891,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 4656,
-                            "end": 4680,
+                            "start": 4644,
+                            "end": 4668,
                             "loc": {
                               "start": {
                                 "line": 130,
@@ -4911,8 +4911,8 @@
                         },
                         "right": {
                           "type": "BooleanLiteral",
-                          "start": 4683,
-                          "end": 4688,
+                          "start": 4671,
+                          "end": 4676,
                           "loc": {
                             "start": {
                               "line": 130,
@@ -4931,8 +4931,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-                          "start": 4421,
-                          "end": 4642,
+                          "start": 4409,
+                          "end": 4630,
                           "loc": {
                             "start": {
                               "line": 125,
@@ -5115,7 +5115,7 @@
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
       "start": 1430,
-      "end": 1641,
+      "end": 1639,
       "loc": {
         "start": {
           "line": 47,
@@ -5130,8 +5130,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 1691,
-      "end": 1904,
+      "start": 1688,
+      "end": 1899,
       "loc": {
         "start": {
           "line": 54,
@@ -5146,8 +5146,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 1955,
-      "end": 2176,
+      "start": 1949,
+      "end": 2168,
       "loc": {
         "start": {
           "line": 61,
@@ -5162,8 +5162,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 2231,
-      "end": 2450,
+      "start": 2222,
+      "end": 2439,
       "loc": {
         "start": {
           "line": 68,
@@ -5178,8 +5178,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-      "start": 2506,
-      "end": 2725,
+      "start": 2494,
+      "end": 2713,
       "loc": {
         "start": {
           "line": 75,
@@ -5194,8 +5194,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 2779,
-      "end": 2996,
+      "start": 2767,
+      "end": 2984,
       "loc": {
         "start": {
           "line": 82,
@@ -5210,8 +5210,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 3051,
-      "end": 3276,
+      "start": 3039,
+      "end": 3264,
       "loc": {
         "start": {
           "line": 89,
@@ -5226,8 +5226,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 3335,
-      "end": 3562,
+      "start": 3323,
+      "end": 3550,
       "loc": {
         "start": {
           "line": 96,
@@ -5242,8 +5242,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-      "start": 3623,
-      "end": 3832,
+      "start": 3611,
+      "end": 3820,
       "loc": {
         "start": {
           "line": 104,
@@ -5258,8 +5258,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 3883,
-      "end": 4094,
+      "start": 3871,
+      "end": 4082,
       "loc": {
         "start": {
           "line": 111,
@@ -5274,8 +5274,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 4146,
-      "end": 4365,
+      "start": 4134,
+      "end": 4353,
       "loc": {
         "start": {
           "line": 118,
@@ -5290,8 +5290,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 4421,
-      "end": 4642,
+      "start": 4409,
+      "end": 4630,
       "loc": {
         "start": {
           "line": 125,
@@ -6527,7 +6527,7 @@
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillOpaque}.\n         * @property xrayedFillOpaque\n         * @type {boolean}\n         ",
       "start": 1430,
-      "end": 1641,
+      "end": 1639,
       "loc": {
         "start": {
           "line": 47,
@@ -6554,8 +6554,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1650,
-      "end": 1654,
+      "start": 1648,
+      "end": 1652,
       "loc": {
         "start": {
           "line": 52,
@@ -6580,8 +6580,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1654,
-      "end": 1655,
+      "start": 1652,
+      "end": 1653,
       "loc": {
         "start": {
           "line": 52,
@@ -6606,8 +6606,8 @@
         "binop": null
       },
       "value": "xrayedFillOpaque",
-      "start": 1655,
-      "end": 1672,
+      "start": 1653,
+      "end": 1669,
       "loc": {
         "start": {
           "line": 52,
@@ -6615,7 +6615,7 @@
         },
         "end": {
           "line": 52,
-          "column": 30
+          "column": 29
         }
       }
     },
@@ -6633,16 +6633,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1673,
-      "end": 1674,
+      "start": 1670,
+      "end": 1671,
       "loc": {
         "start": {
           "line": 52,
-          "column": 31
+          "column": 30
         },
         "end": {
           "line": 52,
-          "column": 32
+          "column": 31
         }
       }
     },
@@ -6661,16 +6661,16 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 1675,
-      "end": 1680,
+      "start": 1672,
+      "end": 1677,
       "loc": {
         "start": {
           "line": 52,
-          "column": 33
+          "column": 32
         },
         "end": {
           "line": 52,
-          "column": 38
+          "column": 37
         }
       }
     },
@@ -6687,24 +6687,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1680,
-      "end": 1681,
+      "start": 1677,
+      "end": 1678,
       "loc": {
         "start": {
           "line": 52,
-          "column": 38
+          "column": 37
         },
         "end": {
           "line": 52,
-          "column": 39
+          "column": 38
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedEdgesOpaque}.\n         * @property xrayedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 1691,
-      "end": 1904,
+      "start": 1688,
+      "end": 1899,
       "loc": {
         "start": {
           "line": 54,
@@ -6731,8 +6731,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1913,
-      "end": 1917,
+      "start": 1908,
+      "end": 1912,
       "loc": {
         "start": {
           "line": 59,
@@ -6757,8 +6757,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1917,
-      "end": 1918,
+      "start": 1912,
+      "end": 1913,
       "loc": {
         "start": {
           "line": 59,
@@ -6783,8 +6783,8 @@
         "binop": null
       },
       "value": "xrayedEdgesOpaque",
-      "start": 1918,
-      "end": 1936,
+      "start": 1913,
+      "end": 1930,
       "loc": {
         "start": {
           "line": 59,
@@ -6792,7 +6792,7 @@
         },
         "end": {
           "line": 59,
-          "column": 31
+          "column": 30
         }
       }
     },
@@ -6810,16 +6810,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1937,
-      "end": 1938,
+      "start": 1931,
+      "end": 1932,
       "loc": {
         "start": {
           "line": 59,
-          "column": 32
+          "column": 31
         },
         "end": {
           "line": 59,
-          "column": 33
+          "column": 32
         }
       }
     },
@@ -6838,16 +6838,16 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 1939,
-      "end": 1944,
+      "start": 1933,
+      "end": 1938,
       "loc": {
         "start": {
           "line": 59,
-          "column": 34
+          "column": 33
         },
         "end": {
           "line": 59,
-          "column": 39
+          "column": 38
         }
       }
     },
@@ -6864,24 +6864,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1944,
-      "end": 1945,
+      "start": 1938,
+      "end": 1939,
       "loc": {
         "start": {
           "line": 59,
-          "column": 39
+          "column": 38
         },
         "end": {
           "line": 59,
-          "column": 40
+          "column": 39
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawXRayedFillTransparent}.\n         * @property xrayedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 1955,
-      "end": 2176,
+      "start": 1949,
+      "end": 2168,
       "loc": {
         "start": {
           "line": 61,
@@ -6908,8 +6908,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 2185,
-      "end": 2189,
+      "start": 2177,
+      "end": 2181,
       "loc": {
         "start": {
           "line": 66,
@@ -6934,8 +6934,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2189,
-      "end": 2190,
+      "start": 2181,
+      "end": 2182,
       "loc": {
         "start": {
           "line": 66,
@@ -6960,8 +6960,8 @@
         "binop": null
       },
       "value": "xrayedFillTransparent",
-      "start": 2190,
-      "end": 2212,
+      "start": 2182,
+      "end": 2203,
       "loc": {
         "start": {
           "line": 66,
@@ -6969,7 +6969,7 @@
         },
         "end": {
           "line": 66,
-          "column": 35
+          "column": 34
         }
       }
     },
@@ -6987,16 +6987,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2213,
-      "end": 2214,
+      "start": 2204,
+      "end": 2205,
       "loc": {
         "start": {
           "line": 66,
-          "column": 36
+          "column": 35
         },
         "end": {
           "line": 66,
-          "column": 37
+          "column": 36
         }
       }
     },
@@ -7015,16 +7015,16 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 2215,
-      "end": 2220,
+      "start": 2206,
+      "end": 2211,
       "loc": {
         "start": {
           "line": 66,
-          "column": 38
+          "column": 37
         },
         "end": {
           "line": 66,
-          "column": 43
+          "column": 42
         }
       }
     },
@@ -7041,24 +7041,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2220,
-      "end": 2221,
+      "start": 2211,
+      "end": 2212,
       "loc": {
         "start": {
           "line": 66,
-          "column": 43
+          "column": 42
         },
         "end": {
           "line": 66,
-          "column": 44
+          "column": 43
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #xrayedEdgesTransparent}.\n         * @property xrayedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 2231,
-      "end": 2450,
+      "start": 2222,
+      "end": 2439,
       "loc": {
         "start": {
           "line": 68,
@@ -7085,8 +7085,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 2459,
-      "end": 2463,
+      "start": 2448,
+      "end": 2452,
       "loc": {
         "start": {
           "line": 73,
@@ -7111,8 +7111,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2463,
-      "end": 2464,
+      "start": 2452,
+      "end": 2453,
       "loc": {
         "start": {
           "line": 73,
@@ -7137,8 +7137,8 @@
         "binop": null
       },
       "value": "xrayedEdgesTransparent",
-      "start": 2464,
-      "end": 2487,
+      "start": 2453,
+      "end": 2475,
       "loc": {
         "start": {
           "line": 73,
@@ -7146,7 +7146,7 @@
         },
         "end": {
           "line": 73,
-          "column": 36
+          "column": 35
         }
       }
     },
@@ -7164,16 +7164,16 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2488,
-      "end": 2489,
+      "start": 2476,
+      "end": 2477,
       "loc": {
         "start": {
           "line": 73,
-          "column": 37
+          "column": 36
         },
         "end": {
           "line": 73,
-          "column": 38
+          "column": 37
         }
       }
     },
@@ -7192,16 +7192,16 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 2490,
-      "end": 2495,
+      "start": 2478,
+      "end": 2483,
       "loc": {
         "start": {
           "line": 73,
-          "column": 39
+          "column": 38
         },
         "end": {
           "line": 73,
-          "column": 44
+          "column": 43
         }
       }
     },
@@ -7218,24 +7218,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2495,
-      "end": 2496,
+      "start": 2483,
+      "end": 2484,
       "loc": {
         "start": {
           "line": 73,
-          "column": 44
+          "column": 43
         },
         "end": {
           "line": 73,
-          "column": 45
+          "column": 44
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #drawHighlightedFillOpaque}.\n         * @property highlightedFillOpaque\n         * @type {boolean}\n         ",
-      "start": 2506,
-      "end": 2725,
+      "start": 2494,
+      "end": 2713,
       "loc": {
         "start": {
           "line": 75,
@@ -7262,8 +7262,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 2734,
-      "end": 2738,
+      "start": 2722,
+      "end": 2726,
       "loc": {
         "start": {
           "line": 80,
@@ -7288,8 +7288,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2738,
-      "end": 2739,
+      "start": 2726,
+      "end": 2727,
       "loc": {
         "start": {
           "line": 80,
@@ -7314,8 +7314,8 @@
         "binop": null
       },
       "value": "highlightedFillOpaque",
-      "start": 2739,
-      "end": 2760,
+      "start": 2727,
+      "end": 2748,
       "loc": {
         "start": {
           "line": 80,
@@ -7341,8 +7341,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2761,
-      "end": 2762,
+      "start": 2749,
+      "end": 2750,
       "loc": {
         "start": {
           "line": 80,
@@ -7369,8 +7369,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 2763,
-      "end": 2768,
+      "start": 2751,
+      "end": 2756,
       "loc": {
         "start": {
           "line": 80,
@@ -7395,8 +7395,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2768,
-      "end": 2769,
+      "start": 2756,
+      "end": 2757,
       "loc": {
         "start": {
           "line": 80,
@@ -7411,8 +7411,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesOpaque}.\n         * @property highlightedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 2779,
-      "end": 2996,
+      "start": 2767,
+      "end": 2984,
       "loc": {
         "start": {
           "line": 82,
@@ -7439,8 +7439,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3005,
-      "end": 3009,
+      "start": 2993,
+      "end": 2997,
       "loc": {
         "start": {
           "line": 87,
@@ -7465,8 +7465,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3009,
-      "end": 3010,
+      "start": 2997,
+      "end": 2998,
       "loc": {
         "start": {
           "line": 87,
@@ -7491,8 +7491,8 @@
         "binop": null
       },
       "value": "highlightedEdgesOpaque",
-      "start": 3010,
-      "end": 3032,
+      "start": 2998,
+      "end": 3020,
       "loc": {
         "start": {
           "line": 87,
@@ -7518,8 +7518,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3033,
-      "end": 3034,
+      "start": 3021,
+      "end": 3022,
       "loc": {
         "start": {
           "line": 87,
@@ -7546,8 +7546,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 3035,
-      "end": 3040,
+      "start": 3023,
+      "end": 3028,
       "loc": {
         "start": {
           "line": 87,
@@ -7572,8 +7572,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3040,
-      "end": 3041,
+      "start": 3028,
+      "end": 3029,
       "loc": {
         "start": {
           "line": 87,
@@ -7588,8 +7588,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedFillTransparent}.\n         * @property highlightedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 3051,
-      "end": 3276,
+      "start": 3039,
+      "end": 3264,
       "loc": {
         "start": {
           "line": 89,
@@ -7616,8 +7616,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3285,
-      "end": 3289,
+      "start": 3273,
+      "end": 3277,
       "loc": {
         "start": {
           "line": 94,
@@ -7642,8 +7642,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3289,
-      "end": 3290,
+      "start": 3277,
+      "end": 3278,
       "loc": {
         "start": {
           "line": 94,
@@ -7668,8 +7668,8 @@
         "binop": null
       },
       "value": "highlightedFillTransparent",
-      "start": 3290,
-      "end": 3316,
+      "start": 3278,
+      "end": 3304,
       "loc": {
         "start": {
           "line": 94,
@@ -7695,8 +7695,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3317,
-      "end": 3318,
+      "start": 3305,
+      "end": 3306,
       "loc": {
         "start": {
           "line": 94,
@@ -7723,8 +7723,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 3319,
-      "end": 3324,
+      "start": 3307,
+      "end": 3312,
       "loc": {
         "start": {
           "line": 94,
@@ -7749,8 +7749,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3324,
-      "end": 3325,
+      "start": 3312,
+      "end": 3313,
       "loc": {
         "start": {
           "line": 94,
@@ -7765,8 +7765,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #highlightedEdgesTransparent}.\n         * @property highlightedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 3335,
-      "end": 3562,
+      "start": 3323,
+      "end": 3550,
       "loc": {
         "start": {
           "line": 96,
@@ -7793,8 +7793,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3571,
-      "end": 3575,
+      "start": 3559,
+      "end": 3563,
       "loc": {
         "start": {
           "line": 101,
@@ -7819,8 +7819,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3575,
-      "end": 3576,
+      "start": 3563,
+      "end": 3564,
       "loc": {
         "start": {
           "line": 101,
@@ -7845,8 +7845,8 @@
         "binop": null
       },
       "value": "highlightedEdgesTransparent",
-      "start": 3576,
-      "end": 3603,
+      "start": 3564,
+      "end": 3591,
       "loc": {
         "start": {
           "line": 101,
@@ -7872,8 +7872,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3604,
-      "end": 3605,
+      "start": 3592,
+      "end": 3593,
       "loc": {
         "start": {
           "line": 101,
@@ -7900,8 +7900,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 3606,
-      "end": 3611,
+      "start": 3594,
+      "end": 3599,
       "loc": {
         "start": {
           "line": 101,
@@ -7926,8 +7926,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3611,
-      "end": 3612,
+      "start": 3599,
+      "end": 3600,
       "loc": {
         "start": {
           "line": 101,
@@ -7942,8 +7942,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillOpaque}.\n         * @property selectedFillOpaque\n         * @type {boolean}\n         ",
-      "start": 3623,
-      "end": 3832,
+      "start": 3611,
+      "end": 3820,
       "loc": {
         "start": {
           "line": 104,
@@ -7970,8 +7970,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 3841,
-      "end": 3845,
+      "start": 3829,
+      "end": 3833,
       "loc": {
         "start": {
           "line": 109,
@@ -7996,8 +7996,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3845,
-      "end": 3846,
+      "start": 3833,
+      "end": 3834,
       "loc": {
         "start": {
           "line": 109,
@@ -8022,8 +8022,8 @@
         "binop": null
       },
       "value": "selectedFillOpaque",
-      "start": 3846,
-      "end": 3864,
+      "start": 3834,
+      "end": 3852,
       "loc": {
         "start": {
           "line": 109,
@@ -8049,8 +8049,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3865,
-      "end": 3866,
+      "start": 3853,
+      "end": 3854,
       "loc": {
         "start": {
           "line": 109,
@@ -8077,8 +8077,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 3867,
-      "end": 3872,
+      "start": 3855,
+      "end": 3860,
       "loc": {
         "start": {
           "line": 109,
@@ -8103,8 +8103,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3872,
-      "end": 3873,
+      "start": 3860,
+      "end": 3861,
       "loc": {
         "start": {
           "line": 109,
@@ -8119,8 +8119,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesOpaque}.\n         * @property selectedEdgesOpaque\n         * @type {boolean}\n         ",
-      "start": 3883,
-      "end": 4094,
+      "start": 3871,
+      "end": 4082,
       "loc": {
         "start": {
           "line": 111,
@@ -8147,8 +8147,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4103,
-      "end": 4107,
+      "start": 4091,
+      "end": 4095,
       "loc": {
         "start": {
           "line": 116,
@@ -8173,8 +8173,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4107,
-      "end": 4108,
+      "start": 4095,
+      "end": 4096,
       "loc": {
         "start": {
           "line": 116,
@@ -8199,8 +8199,8 @@
         "binop": null
       },
       "value": "selectedEdgesOpaque",
-      "start": 4108,
-      "end": 4127,
+      "start": 4096,
+      "end": 4115,
       "loc": {
         "start": {
           "line": 116,
@@ -8226,8 +8226,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4128,
-      "end": 4129,
+      "start": 4116,
+      "end": 4117,
       "loc": {
         "start": {
           "line": 116,
@@ -8254,8 +8254,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 4130,
-      "end": 4135,
+      "start": 4118,
+      "end": 4123,
       "loc": {
         "start": {
           "line": 116,
@@ -8280,8 +8280,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4135,
-      "end": 4136,
+      "start": 4123,
+      "end": 4124,
       "loc": {
         "start": {
           "line": 116,
@@ -8296,8 +8296,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedFillTransparent}.\n         * @property selectedFillTransparent\n         * @type {boolean}\n         ",
-      "start": 4146,
-      "end": 4365,
+      "start": 4134,
+      "end": 4353,
       "loc": {
         "start": {
           "line": 118,
@@ -8324,8 +8324,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4374,
-      "end": 4378,
+      "start": 4362,
+      "end": 4366,
       "loc": {
         "start": {
           "line": 123,
@@ -8350,8 +8350,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4378,
-      "end": 4379,
+      "start": 4366,
+      "end": 4367,
       "loc": {
         "start": {
           "line": 123,
@@ -8376,8 +8376,8 @@
         "binop": null
       },
       "value": "selectedFillTransparent",
-      "start": 4379,
-      "end": 4402,
+      "start": 4367,
+      "end": 4390,
       "loc": {
         "start": {
           "line": 123,
@@ -8403,8 +8403,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4403,
-      "end": 4404,
+      "start": 4391,
+      "end": 4392,
       "loc": {
         "start": {
           "line": 123,
@@ -8431,8 +8431,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 4405,
-      "end": 4410,
+      "start": 4393,
+      "end": 4398,
       "loc": {
         "start": {
           "line": 123,
@@ -8457,8 +8457,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4410,
-      "end": 4411,
+      "start": 4398,
+      "end": 4399,
       "loc": {
         "start": {
           "line": 123,
@@ -8473,8 +8473,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Set by {@link Drawable#getRenderFlags} to indicate the {@link Drawable} needs {@link Drawable #selectedEdgesTransparent}.\n         * @property selectedEdgesTransparent\n         * @type {boolean}\n         ",
-      "start": 4421,
-      "end": 4642,
+      "start": 4409,
+      "end": 4630,
       "loc": {
         "start": {
           "line": 125,
@@ -8501,8 +8501,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 4651,
-      "end": 4655,
+      "start": 4639,
+      "end": 4643,
       "loc": {
         "start": {
           "line": 130,
@@ -8527,8 +8527,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4655,
-      "end": 4656,
+      "start": 4643,
+      "end": 4644,
       "loc": {
         "start": {
           "line": 130,
@@ -8553,8 +8553,8 @@
         "binop": null
       },
       "value": "selectedEdgesTransparent",
-      "start": 4656,
-      "end": 4680,
+      "start": 4644,
+      "end": 4668,
       "loc": {
         "start": {
           "line": 130,
@@ -8580,8 +8580,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4681,
-      "end": 4682,
+      "start": 4669,
+      "end": 4670,
       "loc": {
         "start": {
           "line": 130,
@@ -8608,8 +8608,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 4683,
-      "end": 4688,
+      "start": 4671,
+      "end": 4676,
       "loc": {
         "start": {
           "line": 130,
@@ -8634,8 +8634,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4688,
-      "end": 4689,
+      "start": 4676,
+      "end": 4677,
       "loc": {
         "start": {
           "line": 130,
@@ -8659,8 +8659,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4694,
-      "end": 4695,
+      "start": 4682,
+      "end": 4683,
       "loc": {
         "start": {
           "line": 131,
@@ -8684,8 +8684,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4696,
-      "end": 4697,
+      "start": 4684,
+      "end": 4685,
       "loc": {
         "start": {
           "line": 132,
@@ -8712,8 +8712,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 4699,
-      "end": 4705,
+      "start": 4687,
+      "end": 4693,
       "loc": {
         "start": {
           "line": 134,
@@ -8737,8 +8737,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4706,
-      "end": 4707,
+      "start": 4694,
+      "end": 4695,
       "loc": {
         "start": {
           "line": 134,
@@ -8763,8 +8763,8 @@
         "binop": null
       },
       "value": "RenderFlags",
-      "start": 4707,
-      "end": 4718,
+      "start": 4695,
+      "end": 4706,
       "loc": {
         "start": {
           "line": 134,
@@ -8788,8 +8788,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4718,
-      "end": 4719,
+      "start": 4706,
+      "end": 4707,
       "loc": {
         "start": {
           "line": 134,
@@ -8814,8 +8814,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4719,
-      "end": 4720,
+      "start": 4707,
+      "end": 4708,
       "loc": {
         "start": {
           "line": 134,
@@ -8840,8 +8840,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4720,
-      "end": 4720,
+      "start": 4708,
+      "end": 4708,
       "loc": {
         "start": {
           "line": 134,

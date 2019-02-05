@@ -94,7 +94,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-axisgizmoplugin">viewer/plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bcfviewpointsplugin">viewer/plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin">viewer/plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin-lib">viewer/plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadMetaModel">loadMetaModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-bimserverloaderplugin-lib">viewer/plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadBIMServerMetaModel">loadBIMServerMetaModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-gltfloaderplugin">viewer/plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-lightsplugin">viewer/plugins/LightsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/LightsPlugin/LightsPlugin.js~LightsPlugin.html">LightsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-plugins-objloaderplugin">viewer/plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -128,7 +128,7 @@ import {Node} from &quot;../../../scene/nodes/Node.js&quot;;
 import {Mesh} from &quot;../../../scene/mesh/Mesh.js&quot;;
 
 import {BIMServerQualityGeometryLoader} from &quot;./lib/BIMServerQualityGeometryLoaderader.js.js&quot;;
-import {loadMetaModel} from &quot;./lib/loadMetaModel.js&quot;;
+import {loadBIMServerMetaModel} from &quot;./lib/loadBIMServerMetaModelMetaModel.js&quot;;
 import {IFCObjectDefaults} from &quot;./../../../viewer/metadata/IFCObjectDefaults.js&quot;;
 import {utils} from &quot;../../../scene/utils.js&quot;;
 
@@ -376,7 +376,7 @@ class BIMServerLoaderPluginOLD extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel =&gt; {
 
-            loadMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
+            loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
 
                 modelNode.once(&quot;destroyed&quot;, function () {
                     viewer.metaScene.destroyMetaModel(id);
