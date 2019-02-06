@@ -17,11 +17,6 @@
                href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads glTF model from file system
         </li>
-        <li>
-            Loading with the <b>readableGeometry</b> option creates a model
-            with <a target="_other" href="./../docs/class/src/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a>
-            components, which are to be surface-picked
-        </li>
     </ul>
 </div>
 </body>
@@ -58,8 +53,8 @@
         id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
-        readableGeometry: true, // <<----------------------------- Surface picking only works with ReadableGeometry
-        edges: true
+        edges: true,
+        performance: false // https://github.com/xeokit/xeokit-sdk/issues/11
     });
 
     model.on("loaded", () => {

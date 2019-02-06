@@ -298,6 +298,8 @@ class GLTFLoaderPlugin extends Plugin {
                     }
                 }
 
+                params.readableGeometry = true; // Enables 3D picking https://github.com/xeokit/xeokit-sdk/issues/11
+
                 params.handleGLTFNode = function (modelId, glTFNode, actions) {
 
                     // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
