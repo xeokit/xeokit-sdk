@@ -72,14 +72,14 @@
         workerScriptsPath: "../src/viewer/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
     });
 
-    const modelNode = xml3dLoader.load({
+    const model = xml3dLoader.load({
         id: "myModel",
         src: "./models/xml3d/3dpreview.3dxml",
         edges: true
     });
 
-    modelNode.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(modelNode);
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })

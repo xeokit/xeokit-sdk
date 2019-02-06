@@ -23,18 +23,13 @@
         <li>
             <a target="_other"
                href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads model and IFC data from file system
+            - Loads model from file system
         </li>
         <li>
             <a target="_other"
                href="./../docs/class/src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
             - Creates section planes
         </li>
-        <li>See source code to examine the BCF JSON record</li>
-        <li>
-            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Saving-and-Loading-BCF-Viewpoints">Tutorial</a>
-        </li>
-
     </ul>
 </div>
 
@@ -79,11 +74,9 @@
     // Load the glTF model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const modelNode = gltfLoader.load({
+    const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        performance: true
+        src: "./models/gltf/schependomlaan/scene.gltf"
     });
 
     //------------------------------------------------------------------------------------------------------------------

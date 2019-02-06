@@ -39,7 +39,7 @@
 
     new AxisGizmoPlugin(viewer, {size: [250, 250]});
 
-    const modelNode = gltfLoader.load({
+    const model = gltfLoader.load({
         id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
@@ -51,8 +51,8 @@
 
     camera.orbitPitch(20);
 
-    modelNode.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(modelNode);
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
         scene.on("tick", () => {
             camera.orbitYaw(0.4);
         })
