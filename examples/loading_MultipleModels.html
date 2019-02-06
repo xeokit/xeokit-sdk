@@ -41,7 +41,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {Node} from "../src/scene/nodes/Node.js";
     import {OBJLoaderPlugin} from "../src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {Mesh} from "../src/scene/mesh/Mesh.js";
@@ -70,15 +69,16 @@
 
     // Car
 
-    objLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
+    objLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel",
         src: "./models/obj/sportsCar/sportsCar.obj",
         position: [-5, -1, 0],
+        scale: [1.5, 1.5, 1.5]
     });
 
     // House
 
-    gltfLoader.load({ // Returns a Node that will be registered on Viewer#scene#models
+    gltfLoader.load({ // Returns an Entity that will be registered on Viewer#scene#models
         id: "myModel2",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
