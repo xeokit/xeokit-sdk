@@ -50,8 +50,8 @@ class Viewer {
                 preserveDrawingBuffer: false
             },
             transparent: cfg.transparent !== false,
-            gammaInput: false,
-            gammaOutput: false
+            gammaInput: true,
+            gammaOutput: true
         });
 
         /**
