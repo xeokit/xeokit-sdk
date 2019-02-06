@@ -141,37 +141,6 @@ const defaultQuaternion = math.identityQuaternion();
 /**
  * @desc A high-performance model representation for efficient rendering and low memory usage.
  *
- * ## PerformanceModel Structure
- *
- * * A PerformanceModel represents each of its elements with an {@link Entity}.
- * * Each {@link Entity} has one or more meshes that define its shape.
- * * Each mesh has either its own unique geometry, or shares a geometry with other meshes.
- *
- * ## Geometry Batching and Instancing
- *
- * PerformanceModel uses geometry batching to render unique geometries, combining them
- * into a single set of VBOs that it renders in one draw call. The VBOs also contain additional per-vertex attribute arrays to
- * feed rendering state (visibility, color, effects etc) for each unique geometry&apos;s mesh into the vertex shader.
- *
- * PerformanceModel uses geometry instancing to render shared geometries. For each shared geometry, PerformanceModel combines per-instance
- * rendering state in the same set of instanced attribute arrays, to render all instances of each shared geometry in one
- * draw call. Because batching duplicates the rendering state for each vertex, instancing is much more efficient in terms of
- * memory and GPU bandwidth usage.
- *
- * ## Static Transforms
- *
- * Transforms within a PerformanceModel are static, ie. they cannot be dynamically
- * translated, rotated and scaled the way {@link Node}s and {@link Mesh}es can.
- *
- * ## GPU-Resident Geometry
- *
- * For low memory footprint, PerformanceModel stores its geometries in GPU only. GPU-resident geometry is
- * not readable by JavaScript.
- *
- * ## Picking
- *
- * PerformanceModel supports picking of entire {@link Entity}s, but does not yet support picking of 3D positions on their surfaces.
- *
  * ## Examples
  *
  * * [PerformanceModel using geometry batching](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_PerformanceModel_batching)
