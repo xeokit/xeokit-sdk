@@ -1,6 +1,7 @@
 // Fast queue that avoids using potentially inefficient array .shift() calls
 // Based on https://github.com/creationix/fastqueue
 
+/** @private */
 class Queue {
 
     constructor() {

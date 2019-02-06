@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export const geometry = {
 	"classes": {
 		"Vector3f": {

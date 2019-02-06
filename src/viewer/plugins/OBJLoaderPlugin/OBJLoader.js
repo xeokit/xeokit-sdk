@@ -13,7 +13,6 @@ class OBJLoader  {
     /**
      * Loads OBJ and MTL from file(s) into a {@link Node}.
      *
-     * @method load
      * @static
      * @param {Node} modelNode Node to load into.
      * @param {String} src Path to OBJ file.
@@ -41,7 +40,6 @@ class OBJLoader  {
     /**
      * Parses OBJ and MTL text strings into a {@link Node}.
      *
-     * @method parse
      * @static
      * @param {Node} modelNode Node to load into.
      * @param {String} objText OBJ text string.

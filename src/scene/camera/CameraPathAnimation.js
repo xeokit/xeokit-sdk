@@ -39,7 +39,6 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  *     src: "./models/gltf/modern_office/scene.gltf",
  *     edges: true,
  *     edgeThreshold: 20,
- *      lambertMaterial: false,
  *     xrayed: false
  * });
  *

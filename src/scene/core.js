@@ -77,12 +77,9 @@ function Core() {
     };
 
     /**
-     Registers a scene on xeokit.
-     This is called within the xeokit.Scene constructor.
-
-     @method _addScene
-     @param {Scene} scene The scene
-     @private
+     * Registers a scene on xeokit.
+     * This is called within the xeokit.Scene constructor.
+     * @private
      */
     this._addScene = function (scene) {
         if (scene.id) { // User-supplied ID
@@ -109,11 +106,7 @@ function Core() {
     };
 
     /**
-     Destroys all user-created {@link Scene}}Scenes{{/crossLink}} and
-     clears the default {@link Scene}.
-
-     @method clear
-     @demo foo
+     * @private
      */
     this.clear = function () {
         let scene;
@@ -132,20 +125,15 @@ function Core() {
         }
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    /////////// Fix me
-    //////////////////////////////////////////////////////////////////////////
-
     /**
-     Schedule a task to run at the next frame.
-
-     Internally, this pushes the task to a FIFO queue. Within each frame interval, xeokit processes the queue
-     for a certain period of time, popping tasks and running them. After each frame interval, tasks that did not
-     get a chance to run during the task are left in the queue to be run next time.
-
-     @method scheduleTask
-     @param {Function} callback Callback that runs the task.
-     @param {Object} [scope] Scope for the callback.
+     * Schedule a task to run at the next frame.
+     *
+     * Internally, this pushes the task to a FIFO queue. Within each frame interval, xeokit processes the queue
+     * for a certain period of time, popping tasks and running them. After each frame interval, tasks that did not
+     * get a chance to run during the task are left in the queue to be run next time.
+     *
+     * @param {Function} callback Callback that runs the task.
+     * @param {Object} [scope] Scope for the callback.
      */
     this.scheduleTask = function (callback, scope) {
         taskQueue.push(callback);

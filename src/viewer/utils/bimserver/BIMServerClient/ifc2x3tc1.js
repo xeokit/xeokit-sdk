@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export const ifc2x3tc1 = {
 	"classes": {
 		"Tristate": {},

@@ -20,6 +20,12 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *
  * ## Usage
  *
+ * In the example below, we'll use an XML3DLoaderPlugin to load a 3DXML model. When the model has loaded,
+ * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
+ * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ *
  * ````javascript
  * // Create a xeokit Viewer
  * const viewer = new Viewer({
@@ -37,12 +43,12 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *
  * // Load the 3DXML model
  * var model = plugin.load({ // Model is an Entity
- *      id: "myModel",
- *      src: "models/my3DXMLModel.3dxml",
- *      scale: [0.1, 0.1, 0.1],
- *      rotate: [90, 0, 0],
- *      translate: [100,0,0],
- *      edges: true
+ *     id: "myModel",
+ *     src: "./models/xml3d/3dpreview.3dxml",
+ *     scale: [0.1, 0.1, 0.1],
+ *     rotate: [90, 0, 0],
+ *     translate: [100,0,0],
+ *     edges: true
  * });
  *
  * // When the model has loaded, fit it to view

@@ -856,8 +856,6 @@ class Node extends Component {
 
     /**
      * Removes all child Nodes and {@link Mesh}es.
-     *
-     * @method removeChildren
      */
     removeChildren() {
         let child;

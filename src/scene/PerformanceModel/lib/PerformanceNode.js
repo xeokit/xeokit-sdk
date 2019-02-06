@@ -1,5 +1,8 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
+const tempColor = new Float32Array([0, 0, 0]);
+
+
 /**
  * @private
  */

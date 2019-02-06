@@ -4,48 +4,38 @@ import {SectionPlane} from "../../../scene/sectionPlane/SectionPlane.js";
 /**
  * {@link Viewer} plugin that manages user cross-section planes.
  *
- * TODO:
+ * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
+ * to create a {@link SectionPlane} to slice it in half.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Schependomlaan)]
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  *
- * // Create a viewer
  * const viewer = new Viewer({
- *      canvasId: "myCanvas"
+ *     canvasId: "myCanvas",
+ *     transparent: true
  * });
  *
- * // Add a GLTFModelsPlugin
- * const gltfLoaderPlugin = new GLTFModelsPlugin(viewer, {
- *      id: "GLTFModels"
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * const sectionPlanes = new SectionPlanesPlugin(viewer);
+ *
+ * const model = gltfLoader.load({
+ *     id: "myModel",
+ *     src: "./models/gltf/schependomlaan/scene.gltf"
  * });
  *
- * // Add a SectionPlanesPlugin
- * const sectionPlanesPlugin = new SectionPlanesPlugin(viewer, {
- *      id: "SectionPlanes"
- * });
- *
- * // Load a glTF model
- * const model = gltfLoaderPlugin.load({
- *      id: "myModel",
- *      src: "./models/gltf/mygltfmodel.gltf"
- * });
- *
- * // When the model has loaded, create some cross-sections
- * model.on("loaded", function() {
- *
- *     const sectionPlane1 = sectionPlanesPlugin.createSectionPlane({
- *         id: "myClip",
- *         pos: [0,0,0],
- *         dir: [0.5, 0.5, 0.5]
- *     });
- *
- *     const sectionPlane2 = sectionPlanesPlugin.createSectionPlane({
- *         id: "myClip2",
- *         pos: [0,0,0],
- *         dir: [0.5, -0.5, 0.5]
- *     });
+ * const sectionPlane = sectionPlanes.createSectionPlane({
+ *     id: "myClip",
+ *     pos: [0, 0, 0],
+ *     dir: [0.5, 0.0, 0.5]
  * });
  * ````
  */
@@ -78,8 +68,8 @@ class SectionPlanesPlugin extends Plugin {
      *
      * @param {Object} params SectionPlane plane configuration.
      * @param {String} params.id Unique ID to assign to the SectionPlane. Must be unique among all components in the Viewer.
-     * @param {[Number, Number, Number]} [params.pos=0,0,0] World-space position of the sectionPlane plane.
-     * @param {[Number, Number, Number]} [params.dir=[0,0,-1]} Vector indicating the orientation of the SectionPlane.
+     * @param {Number[]} [params.pos=0,0,0] World-space position of the sectionPlane plane.
+     * @param {Number[]} [params.dir=[0,0,-1]} Vector indicating the orientation of the SectionPlane.
      * @param {Boolean} [params.active=true] Whether the SectionPlane is initially active. Only clips while this is true.
      * @param {Boolean} [params.shown=true] Whether to show a helper object to indicate the SectionPlane's position and orientation.
      * @returns {SectionPlane}  A {@link SectionPlane} representing the SectionPlane.

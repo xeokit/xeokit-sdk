@@ -64,7 +64,7 @@ function nextHighestPowerOfTwo(x) {
  * viewer.camera.up = [0, 1, 0];
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,

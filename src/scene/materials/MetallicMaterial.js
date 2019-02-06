@@ -39,11 +39,8 @@ const modeNames = ["opaque", "mask", "blend"];
  * viewer.scene.camera.look = [0.04, 0.58, 0.00];
  * viewer.scene.camera.up = [-0.22, 0.84, -0.48];
  *
- * loadOBJGeometry(ReadableGeometry, viewer.scene, {
- *
- *      src: "models/obj/fireHydrant/FireHydrantMesh.obj",
- *      compressGeometry: false
- *
+ * loadOBJGeometry(viewer.scene, {
+ *      src: "models/obj/fireHydrant/FireHydrantMesh.obj"
  * })
  * .then(function (geometry) {
  *
@@ -51,7 +48,7 @@ const modeNames = ["opaque", "mask", "blend"];
  *
  *      new Mesh(viewer.scene, {
  *
- *          geometry: geometry,
+ *          geometry: new ReadableGeometry(viewer.scene, geometry),
  *
  *          material: new MetallicMaterial(viewer.scene, {
  *

@@ -26,7 +26,7 @@ import {utils} from '../../utils.js';
  * viewer.scene.camera.up = [0, 1, 0];
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildBoxGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildBoxGeometry({
  *         center: [0,0,0],
  *         xSize: 1,  // Half-size on each axis
  *         ySize: 1,
@@ -41,15 +41,13 @@ import {utils} from '../../utils.js';
  * ````
  *
  * @function buildBoxGeometry
- * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
- * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  * @param {Number[]} [cfg.center]  3D point indicating the center position.
  * @param {Number} [cfg.xSize=1.0]  Half-size on the X-axis.
  * @param {Number} [cfg.ySize=1.0]  Half-size on the Y-axis.
  * @param {Number} [cfg.zSize=1.0]  Half-size on the Z-axis.
- * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildBoxGeometry(cfg = {}) {
 

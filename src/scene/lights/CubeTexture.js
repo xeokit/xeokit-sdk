@@ -47,10 +47,8 @@ class CubeTexture extends Component {
      * @param {*} [cfg] Configs
      * @param {String} [cfg.id] Optional ID for this CubeTexture, unique among all components in the parent scene, generated automatically when omitted.
      * @param {String[]} [cfg.src=null]  Paths to six image files to load into this CubeTexture.
-     * @param [cfg.flipY=false] {Boolean} Flips this CubeTexture's source data along its vertical axis when true.
-     * @param [cfg.encoding="linear"] {String} Encoding format.  See the {@link CubeTexture/encoding} property for more info.
-     * @param owner
-     * @param cfg
+     * @param {Boolean} [cfg.flipY=false] Flips this CubeTexture's source data along its vertical axis when true.
+     * @param {String} [cfg.encoding="linear"] Encoding format.  See the {@link CubeTexture/encoding} property for more info.
      */
     constructor(owner, cfg = {}) {
 

@@ -13,32 +13,42 @@ import {math} from "./../../../scene/math/math.js";
 /**
  * {@link Viewer} plugin that shows the axii of the World-space coordinate system.
  *
- * @example
+ * ## Usage
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin)]
+ *
+ * ````JavaScript````
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {AxisGizmoPlugin} from "../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
  *
- * // Create a xeokit Viewer
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
  * });
  *
- * // Add an AxisGizmoPlugin to the Viewer
- * const axisGizmo = new AxisGizmoPlugin(viewer, {
- *     id: "AxisGizmo",
- *     size: [250, 250]
- * });
- *
- * // Add a GLTFLoaderPlugin to the Viewer
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
- * // Load the glTF model
+ * new AxisGizmoPlugin(viewer, {size: [250, 250]});
+ *
  * const model = gltfLoader.load({
  *     id: "myModel",
- *     src: "./models/myModel.gltf"
+ *     src: "./models/gltf/schependomlaan/scene.gltf",
+ *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     edges: true
  * });
  *
- * @class AxisGizmoPlugin
+ * const scene = viewer.scene;
+ * const camera = scene.camera;
+ *
+ * camera.orbitPitch(20);
+ *
+ * model.on("loaded", () => {
+ *     viewer.cameraFlight.jumpTo(modelNode);
+ *     scene.on("tick", () => {
+ *        camera.orbitYaw(0.4);
+ *     })
+ * });
+ * ````
  */
 class AxisGizmoPlugin extends Plugin {
 

@@ -31,7 +31,6 @@ class RenderState {
 
     /**
      Destroys this RenderState.
-     @method destroy
      */
     destroy() {
         ids.removeItem(this.id);

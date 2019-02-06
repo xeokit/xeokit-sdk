@@ -1,5 +1,8 @@
 import BimServerApiPromise from "./bimserverapipromise.js";
 
+/**
+ * @private
+ */
 export default class Model {
 	constructor(bimServerApi, poid, roid, schema) {
 		this.schema = schema;

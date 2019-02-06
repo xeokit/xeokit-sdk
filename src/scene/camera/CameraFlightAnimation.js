@@ -273,7 +273,6 @@ class CameraFlightAnimation extends Component {
      * * When the target is a boundary, this CameraFlightAnimation will position the {@link Camera} at where the target fills most of the canvas.
      * * When the target is an explicit {@link Camera} position, given as ````eye````, ````look```` and ````up```` vectors, then this CameraFlightAnimation will jump the {@link Camera} to that target.
      *
-     * @method flyTo
      * @param {*|Component} params  Either a parameters object or a {@link Component} subtype that has a World-space AABB.
      * @param {Number} [params.arc=0]  Factor in range [0..1] indicating how much the {@link Camera#eye} will swing away from its {@link Camera#look} as it flies to the target.
      * @param {Number|String|Component} [params.component] ID or instance of a component to fly to.
@@ -433,7 +432,6 @@ class CameraFlightAnimation extends Component {
 
     /**
      * Stops an earlier flyTo, fires arrival callback.
-     * @method stop
      */
     stop() {
         if (!this._flying) {
@@ -456,7 +454,6 @@ class CameraFlightAnimation extends Component {
 
     /**
      * Cancels an earlier flyTo without calling the arrival callback.
-     * @method cancel
      */
     cancel() {
         if (!this._flying) {

@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export default class BimServerApiPromise {
 	constructor(counter = null) {
 		this.isDone = false;

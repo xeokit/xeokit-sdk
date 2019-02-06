@@ -69,7 +69,7 @@ import {Light} from './Light.js';
  * // Create a mesh with torus shape and PhongMaterial
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,

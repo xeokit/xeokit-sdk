@@ -1,10 +1,13 @@
 /**
- * @desc Contains the results of a pick operation attempted with {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+ * @desc Pick result returned by {@link Scene#pick}.
  *
- * @private
  */
 class PickResult {
 
+    /**
+     * @private
+     * @param value
+     */
     constructor() {
 
         /**
@@ -54,6 +57,10 @@ class PickResult {
         return this._gotCanvasPos ? this._canvasPos : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set canvasPos(value) {
         if (value) {
             this._canvasPos[0] = value[0];
@@ -73,6 +80,10 @@ class PickResult {
         return this._gotOrigin ? this._origin : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set origin(value) {
         if (value) {
             this._origin[0] = value[0];
@@ -93,6 +104,10 @@ class PickResult {
         return this._gotDirection ? this._direction : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set direction(value) {
         if (value) {
             this._direction[0] = value[0];
@@ -114,6 +129,10 @@ class PickResult {
         return this.entity && this._gotIndices ? this._indices : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set indices(value) {
         if (value) {
             this._indices[0] = value[0];
@@ -135,6 +154,10 @@ class PickResult {
         return this.entity && this._gotLocalPos ? this._localPos : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set localPos(value) {
         if (value) {
             this._localPos[0] = value[0];
@@ -156,6 +179,10 @@ class PickResult {
         return this.entity && this._gotWorldPos ? this._worldPos : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set worldPos(value) {
         if (value) {
             this._worldPos[0] = value[0];
@@ -177,6 +204,10 @@ class PickResult {
         return this.entity && this._gotViewPos ? this._viewPos : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set viewPos(value) {
         if (value) {
             this._viewPos[0] = value[0];
@@ -198,6 +229,10 @@ class PickResult {
         return this.entity && this._gotBary ? this._bary : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set bary(value) {
         if (value) {
             this._bary[0] = value[0];
@@ -219,6 +254,10 @@ class PickResult {
         return this.entity && this._gotNormal ? this._normal : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set normal(value) {
         if (value) {
             this._normal[0] = value[0];
@@ -240,6 +279,10 @@ class PickResult {
         return this.entity && this._gotUV ? this._uv : null;
     }
 
+    /**
+     * @private
+     * @param value
+     */
     set uv(value) {
         if (value) {
             this._uv[0] = value[0];
@@ -250,6 +293,10 @@ class PickResult {
         }
     }
 
+    /**
+     * @private
+     * @param value
+     */
     reset() {
         this.entity = null;
         this.primIndex = -1;

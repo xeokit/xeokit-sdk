@@ -1,5 +1,8 @@
 //var WebSocket = require("ws");
 
+/**
+ * @private
+ */
 export default class BimServerApiWebSocket {
 	constructor(baseUrl, bimServerApi) {
 		this.connected = false;

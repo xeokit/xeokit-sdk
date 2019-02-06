@@ -63,9 +63,9 @@ class Perspective extends Component {
     /**
      * Sets the Perspective's field-of-view angle (FOV).
      *
-     * Fires a {@link Perspective/fov:event} event on change.
+     * Fires an "fov" event on change.
 
-     * default value is ````60.0````.
+     * Default value is ````60.0````.
      *
      * @param {Number} value New field-of-view.
      */
@@ -84,9 +84,7 @@ class Perspective extends Component {
     /**
      * Gets the Perspective's field-of-view angle (FOV).
      *
-     * Fires a {@link Perspective/fov:event} event on change.
-
-     * default value is ````60.0````.
+     * Default value is ````60.0````.
      *
      * @returns {Number} Current field-of-view.
      */
@@ -99,7 +97,7 @@ class Perspective extends Component {
      *
      * Options are ````"x"````, ````"y"```` or ````"min"````, to use the minimum axis.
      *
-     * Fires a {@link Perspective/fov:event} event on change.
+     * Fires an "fovAxis" event on change.
 
      * Default value ````"min"````.
      *
@@ -130,7 +128,7 @@ class Perspective extends Component {
      *
      * Options are ````"x"````, ````"y"```` or ````"min"````, to use the minimum axis.
      *
-     * Fires a {@link Perspective/fov:event} event on change.
+     * Fires an "fovAxis" event on change.
 
      * Default value is ````"min"````.
      *
@@ -143,7 +141,7 @@ class Perspective extends Component {
     /**
      * Sets the position of the Perspective's near plane on the positive View-space Z-axis.
      *
-     * Fires a {@link Perspective#near:emits} emits on change.
+     * Fires a "near" event on change.
      *
      * Default value is ````0.1````.
      *
@@ -163,7 +161,7 @@ class Perspective extends Component {
     /**
      * Gets the position of the Perspective's near plane on the positive View-space Z-axis.
      *
-     * Fires a {@link Perspective#near:emits} emits on change.
+     * Fires an "emits" emits on change.
      *
      * Default value is ````0.1````.
      *
@@ -174,13 +172,13 @@ class Perspective extends Component {
     }
 
     /**
-     Position of this Perspective's far plane on the positive View-space Z-axis.
-
-     Fires a {@link Perspective/far:event} event on change.
-
-     @property far
-     @default 10000.0
-     @type {Number}
+     * Sets the position of this Perspective's far plane on the positive View-space Z-axis.
+     *
+     * Fires a "far" event on change.
+     *
+     * @property far
+     * @default 10000.0
+     * @type {Number}
      */
     set far(value) {
         this._far = (value !== undefined && value !== null) ? value : 10000;
@@ -194,6 +192,13 @@ class Perspective extends Component {
         this.fire("far", this._far);
     }
 
+    /**
+     * Gets the position of this Perspective's far plane on the positive View-space Z-axis.
+     *
+     * @property far
+     * @default 10000.0
+     * @type {Number}
+     */
     get far() {
         return this._far;
     }
@@ -201,7 +206,7 @@ class Perspective extends Component {
     /**
      * Gets the Perspective's projection transform matrix.
      *
-     * Fires a {@link Perspective#matrix:emits} emits on change.
+     * Fires a "matrix" event on change.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *

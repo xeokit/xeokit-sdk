@@ -1600,7 +1600,7 @@ const letters = {
  * viewer.camera.up = [0, 1, 0];
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildVectorTextGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
  *          origin: [0,0,0],
  *          text: "On the other side of the screen, it all looked so easy"
  *      }),
@@ -1613,15 +1613,13 @@ const letters = {
  * ````
  *
  * @function buildVectorTextGeometry
- * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
- * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  * @param {Number[]} [cfg.center]  3D point indicating the center position.
  * @param {Number[]} [cfg.origin] 3D point indicating the top left corner.
  * @param {Number} [cfg.size=1] Size of each character.
  * @param {String} [cfg.text=""] The text.
- * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildVectorTextGeometry(cfg = {}) {
 

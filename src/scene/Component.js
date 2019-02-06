@@ -1,223 +1,114 @@
-/**
- The **Component** class is the base class for all xeokit components.
-
- ## Usage
-
- * [Component IDs](#component-ids)
- * [Metadata](#metadata)
- * [Logging](#logging)
- * [Destruction](#destruction)
- * [Creating custom Components](#creating-custom-components)
-
- ### Component IDs
-
- Every Component has an ID that's unique within the parent {@link Scene}. xeokit generates
- the IDs automatically by default, however you can also specify them yourself. In the example below, we're creating a
- scene comprised of {@link Scene}, {@link Material}, {@link ReadableGeometry} and
- {@link Mesh} components, while letting xeokit generate its own ID for
- the {@link ReadableGeometry}:
-
- ````javascript
- // The Scene is a Component too
- var scene = new xeokit.Scene({
-    id: "myScene"
- });
-
- var material = new xeokit.PhongMaterial(scene, {
-    id: "myMaterial"
- });
-
- var geometry = new xeokit.Geometry(scene, {
-    id: "myGeometry"
- });
-
- // Let xeokit automatically generate the ID for our Mesh
- var mesh = new xeokit.Mesh(scene, {
-    material: material,
-    geometry: geometry
- });
- ````
-
- We can then find those components like this:
-
- ````javascript
- // Find the Scene
- var theScene = xeokit.scenes["myScene"];
-
- // Find the Material
- var theMaterial = theScene.components["myMaterial"];
-
- // Find all PhongMaterials in the Scene
- var phongMaterials = theScene.types["PhongMaterial"];
-
- // Find our Material within the PhongMaterials
- var theMaterial = phongMaterials["myMaterial"];
- ````
-
- ### Component inheritance
-
-
- TODO
-
- All xeokit components are (at least indirect) subclasses of the Component base type.
-
- For most components, you can get the name of its class via its {@link Component#type} property:
-
- ````javascript
- var type = theMaterial.type; // "PhongMaterial"
- ````
-
- You can also test if a component implements or extends a given component class, like so:
-
- ````javascript
- // Evaluates true:
- var isComponent = theMaterial.isType("Component");
-
- // Evaluates true:
- var isMaterial = theMaterial.isType("Material");
-
- // Evaluates true:
- var isPhongMaterial = theMaterial.isType("PhongMaterial");
-
- // Evaluates false:
- var isMetallicMaterial = theMaterial.isType("MetallicMaterial");
- ````
-
- ### Metadata
-
- You can set optional **metadata** on your Components, which can be anything you like. These are intended
- to help manage your components within your application code or content pipeline. You could use metadata to attach
- authoring or version information, like this:
-
- ````javascript
- // Scene with authoring metadata
- var scene = new xeokit.Scene({
-    id: "myScene",
-    meta: {
-        title: "My bodacious 3D scene",
-        author: "@xeographics",
-        date: "February 30 2018"
-    }
- });
-
- // Material with descriptive metadata
- var material = new xeokit.PhongMaterial(scene, {
-    id: "myMaterial",
-    diffuse: [1, 0, 0],
-    meta: {
-        description: "Bright red color with no textures",
-        version: "0.1",
-        foo: "bar"
-    }
- });
- ````
-
- ### Logging
-
- Components have methods to log ID-prefixed messages to the JavaScript console:
-
- ````javascript
- material.log("Everything is fine, situation normal.");
- material.warn("Wait, whats that red light?");
- material.error("Aw, snap!");
- ````
-
- The logged messages will look like this in the console:
-
- ````text
- [LOG]   myMaterial: Everything is fine, situation normal.
- [WARN]  myMaterial: Wait, whats that red light..
- [ERROR] myMaterial: Aw, snap!
- ````
-
- ### Destruction
-
- Get notification of destruction directly on the Components:
-
- ````javascript
- material.once("destroyed", function() {
-    this.log("Component was destroyed: " + this.id);
- });
- ````
-
- Or get notification of destruction of any Component within its {@link Scene}, indiscriminately:
-
- ````javascript
- scene.on("componentDestroyed", function(component) {
-    this.log("Component was destroyed: " + component.id);
- });
- ````
-
- Then destroy a component like this:
-
- ````javascript
- material.destroy();
- ````
-
- ### Creating custom Components
-
- Subclassing a Component to create a new ````xeokit.ColoredTorus```` type:
-
- ````javascript
- class ColoredTorus extends xeokit.Component{
-
-     get type() {
-        return "ColoredTorus";
-     }
-
-     constructor(scene=null, cfg) { // Constructor
-
-         super(scene. cfg);
-
-         this._torus = new xeokit.Mesh({
-             geometry: new xeokit.TorusGeometry({radius: 2, tube: .6}),
-             material: new xeokit.MetallicMaterial({
-                 baseColor: [1.0, 0.5, 0.5],
-                 roughness: 0.4,
-                 metallic: 0.1
-             })
-         });
-
-         this.color = cfg.color;
-     },
-
-     set color(color) {
-         this._torus.material.baseColor = color;
-     }
-
-     get color() {
-         return this._torus.material.baseColor;
-     }
-
-     destroy() {
-         super.destroy();
-         this._torus.geometry.destroy();
-         this._torus.material.destroy();
-         this._torus.destroy();
-     }
- };
- ````
-
- #### Examples
-
- * [Custom component definition](../../examples/#extending_component_basic)
- * [Custom component that fires events](../../examples/#extending_component_changeEvents)
- * [Custom component that manages child components](../../examples/#extending_component_childCleanup)
- * [Custom component that schedules asynch tasks](../../examples/#extending_component_update)
-
- @class Component
- @module xeokit
- @constructor
- @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
- @param {*} [cfg] DepthBuf configuration
- @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
- @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this Component.
- */
-
 import {core} from "./core.js";
 import {utils} from './utils.js';
 import {Map} from "./utils/Map.js";
 
+/**
+ * @desc Base class for all xeokit components.
+ *
+ * ## Component IDs
+ *
+ * Every Component has an ID that's unique within the parent {@link Scene}. xeokit generates
+ * the IDs automatically by default, however you can also specify them yourself. In the example below, we're creating a
+ * scene comprised of {@link Scene}, {@link Material}, {@link ReadableGeometry} and
+ * {@link Mesh} components, while letting xeokit generate its own ID for
+ * the {@link ReadableGeometry}:
+ *
+ *````JavaScript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {PhongMaterial} from "../src/scene/materials/PhongMaterial.js";
+ * import {Texture} from "../src/scene/materials/Texture.js";
+ * import {Fresnel} from "../src/scene/materials/Fresnel.js";
+ *
+ * const viewer = new Viewer({
+ *        canvasId: "myCanvas"
+ *    });
+ *
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
+ *
+ * new Mesh(viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
+ *          center: [0, 0, 0],
+ *          radius: 1.5,
+ *          tube: 0.5,
+ *          radialSegments: 32,
+ *          tubeSegments: 24,
+ *          arc: Math.PI * 2.0
+ *      }),
+ *      material: new PhongMaterial(viewer.scene, {
+ *          id: "myMaterial",
+ *          ambient: [0.9, 0.3, 0.9],
+ *          shininess: 30,
+ *          diffuseMap: new Texture(viewer.scene, {
+ *              src: "textures/diffuse/uvGrid2.jpg"
+ *          }),
+ *          specularFresnel: new Fresnel(viewer.scene, {
+ *              leftColor: [1.0, 1.0, 1.0],
+ *              rightColor: [0.0, 0.0, 0.0],
+ *              power: 4
+ *          })
+ *     })
+ * });
+ *````
+ *
+ * We can then find those components like this:
+ *
+ * // Find the Material
+ * var material = viewer.scene.components["myMaterial"];
+ *
+ * // Find all PhongMaterials in the Scene
+ * var phongMaterials = viewer.scene.types["PhongMaterial"];
+ *
+ * // Find our Material within the PhongMaterials
+ * var materialAgain = phongMaterials["myMaterial"];
+ * ````
+ *
+ * ## Logging
+ *
+ * Components have methods to log ID-prefixed messages to the JavaScript console:
+ *
+ * ````javascript
+ * material.log("Everything is fine, situation normal.");
+ * material.warn("Wait, whats that red light?");
+ * material.error("Aw, snap!");
+ * ````
+ *
+ * The logged messages will look like this in the console:
+ *
+ * ````text
+ * [LOG]   myMaterial: Everything is fine, situation normal.
+ * [WARN]  myMaterial: Wait, whats that red light..
+ * [ERROR] myMaterial: Aw, snap!
+ * ````
+ *
+ * ## Destruction
+ *
+ * Get notification of destruction of Components:
+ *
+ * ````javascript
+ * material.once("destroyed", function() {
+ *     this.log("Component was destroyed: " + this.id);
+ * });
+ * ````
+ *
+ * Or get notification of destruction of any Component within its {@link Scene}:
+ *
+ * ````javascript
+ * scene.on("componentDestroyed", function(component) {
+ *     this.log("Component was destroyed: " + component.id);
+ * });
+ * ````
+ *
+ * Then destroy a component like this:
+ *
+ * ````javascript
+ * material.destroy();
+ * ````
+ */
 class Component {
 
     /**
@@ -237,11 +128,11 @@ class Component {
     constructor(owner = null, cfg = {}) {
 
         /**
-         The parent {@link Scene} that contains this Component.
-
-         @property scene
-         @type {Scene}
-         @final
+         * The parent {@link Scene} that contains this Component.
+         *
+         * @property scene
+         * @type {Scene}
+         * @final
          */
         this.scene = null;
 
@@ -354,8 +245,7 @@ class Component {
      combined.  This method is called by certain subclasses after they have made some sort of state update that would
      require re-ordering of the drawables list.
 
-     For example: a {@link DirLight} calls this on itself whenever you update its
-     {@link DirLight/dir:property"}}dir{{/crossLink}} property.
+     For example: a {@link DirLight} calls this on itself whenever you update {@link DirLight#dir}.
 
      @protected
      */
@@ -364,45 +254,22 @@ class Component {
     }
 
     /**
-     The {@link Component} that owns the lifecycle of this Component, if any.
-
-     When that component is destroyed, this component will be automatically destroyed also.
-
-     Will be null if this Component has no owner.
-
-     @property owner
-     @final
-     @type Component
+     * The {@link Component} that owns the lifecycle of this Component, if any.
+     *
+     * When that component is destroyed, this component will be automatically destroyed also.
+     *
+     * Will be null if this Component has no owner.
+     *
+     * @property owner
+     * @type {Component}
      */
     get owner() {
         return this._owner;
     }
 
     /**
-     Tests if this component is of the given type, or is a subclass of the given type.
-
-     The type may be given as either a string or a component constructor.
-
-     This method works by walking up the inheritance type chain, which this component provides in
-     property {@link Component/superTypes}, returning true as soon as one of the type strings in
-     the chain matches the given type, of false if none match.
-
-     #### Examples:
-
-     ````javascript
-     var myRotate = new xeokit.Rotate({ ... });
-
-     myRotate.isType(xeokit.Component); // Returns true for all xeokit components
-     myRotate.isType("Component"); // Returns true for all xeokit components
-     myRotate.isType(xeokit.Rotate); // Returns true
-     myRotate.isType(xeokit.Transform); // Returns true
-     myRotate.isType("Transform"); // Returns true
-     myRotate.isType(xeokit.Mesh); // Returns false, because xeokit.Rotate does not (even indirectly) extend xeokit.Mesh
-     ````
-
-     @method isType
-     @param  {String|Function} type Component type to compare with, eg "PhongMaterial", or a xeokit component constructor.
-     @returns {Boolean} True if this component is of given type or is subclass of the given type.
+     * Tests if this component is of the given type, or is a subclass of the given type.
+     * @type {Boolean}
      */
     isType(type) {
         return this.type === type;
@@ -414,7 +281,6 @@ class Component {
      * Notifies existing subscribers to the event, optionally retains the event to give to
      * any subsequent notifications on the event as they are made.
      *
-     * @method fire
      * @param {String} event The event type name
      * @param {Object} value The event parameters
      * @param {Boolean} [forget=false] When true, does not retain for subsequent subscribers
@@ -452,7 +318,6 @@ class Component {
      *
      * The callback is be called with this component as scope.
      *
-     * @method on
      * @param {String} event The event
      * @param {Function} callback Called fired on the event
      * @param {Object} [scope=this] Scope for the callback
@@ -490,10 +355,8 @@ class Component {
     }
 
     /**
-     * Cancels an event subscription that was previously made with {@link Component/on:method"}}Component#on(){{/crossLink}} or
-     * {@link Component/once:method"}}Component#once(){{/crossLink}}.
+     * Cancels an event subscription that was previously made with {@link Component#on} or {@link Component#once}.
      *
-     * @method off
      * @param {String} subId Publication subId
      */
     off(subId) {
@@ -517,12 +380,10 @@ class Component {
     /**
      * Subscribes to the next occurrence of the given event, then un-subscribes as soon as the event is subIdd.
      *
-     * This is equivalent to calling {@link Component/on:method"}}Component#on(){{/crossLink}}, and then calling
-     * {@link Component/off:method"}}Component#off(){{/crossLink}} inside the callback function.
+     * This is equivalent to calling {@link Component#on}, and then calling {@link Component#off} inside the callback function.
      *
-     * @method once
      * @param {String} event Data event to listen to
-     * @param {Function(data)} callback Called when fresh data is available at the event
+     * @param {Function} callback Called when fresh data is available at the event
      * @param {Object} [scope=this] Scope for the callback
      */
     once(event, callback, scope) {
@@ -538,7 +399,6 @@ class Component {
     /**
      * Returns true if there are any subscribers to the given event on this component.
      *
-     * @method hasSubs
      * @param {String} event The event
      * @return {Boolean} True if there are any subscribers to the given event on this component.
      */
@@ -551,10 +411,8 @@ class Component {
      *
      * The console message will have this format: *````[LOG] [<component type> <component id>: <message>````*
      *
-     * Also fires the message as a {@link Scene/log:event} event on the
-     * parent {@link Scene}.
+     * Also fires the message as a "log" event on the parent {@link Scene}.
      *
-     * @method log
      * @param {String} message The message to log
      */
     log(message) {
@@ -572,10 +430,8 @@ class Component {
      *
      * The console message will have this format: *````[WARN] [<component type> =<component id>: <message>````*
      *
-     * Also fires the message as a {@link Scene/warn:event} event on the
-     * parent {@link Scene}.
+     * Also fires the message as a "warn" event on the parent {@link Scene}.
      *
-     * @method warn
      * @param {String} message The message to log
      */
     warn(message) {
@@ -589,10 +445,8 @@ class Component {
      *
      * The console message will have this format: *````[ERROR] [<component type> =<component id>: <message>````*
      *
-     * Also fires the message as an {@link Scene/error:event} event on the
-     * parent {@link Scene}.
+     * Also fires the message as an "error" event on the parent {@link Scene}.
      *
-     * @method error
      * @param {String} message The message to log
      */
     error(message) {
@@ -603,6 +457,7 @@ class Component {
 
     /**
      * Adds a child component to this.
+     *
      * When component not given, attaches the scene's default instance for the given name (if any).
      * Publishes the new child component on this component, keyed to the given name.
      *
@@ -967,9 +822,8 @@ class Component {
     }
 
     /**
-     Destroys all {@link Component}s that are owned by this. These are Components that were instantiated with
-     this Component as their first constructor argument.
-     @method clear
+     * Destroys all {@link Component}s that are owned by this. These are Components that were instantiated with
+     * this Component as their first constructor argument.
      */
     clear() {
         if (this._ownedComponents) {

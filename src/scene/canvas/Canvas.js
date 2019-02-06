@@ -381,42 +381,41 @@ class Canvas extends Component {
     }
 
     /**
-     Returns a snapshot of this Canvas as a Base64-encoded image.
-
-     When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
-     and return it via the callback.
-
-     When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     possible when you have configured the Canvas's {@link Scene} to preserve the
-     WebGL drawing buffer, which has a performance overhead.
-
-     #### Usage:
-
-     ````javascript
-     // Get snapshot asynchronously
-     myScene.canvas.getSnapshot({
-             width: 500, // Defaults to size of canvas
-             height: 500,
-             format: "png" // Options are "jpeg" (default), "png" and "bmp"
-         }, function(imageDataURL) {
-             imageElement.src = imageDataURL;
-         });
-
-     // Get snapshot synchronously, requires that Scene be
-     // configured with preserveDrawingBuffer; true
-     imageElement.src = myScene.canvas.getSnapshot({
-             width: 500,
-             height: 500,
-             format: "png"
-         });
-     ````
-     @method getSnapshot
-     @param {*} [params] Capture options.
-     @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
-     @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
-     @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
-     @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
-     @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
+     * Returns a snapshot of this Canvas as a Base64-encoded image.
+     *
+     * When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
+     * and return it via the callback.
+     *
+     * When no callback is given, this method captures and returns the snapshot immediately. Note that is only
+     * possible when you have configured the Canvas's {@link Scene} to preserve the
+     * WebGL drawing buffer, which has a performance overhead.
+     *
+     * #### Usage:
+     *
+     * ````javascript
+     * // Get snapshot asynchronously
+     * viewer.scene.canvas.getSnapshot({
+     *         width: 500, // Defaults to size of canvas
+     *         height: 500,
+     *         format: "png" // Options are "jpeg" (default), "png" and "bmp"
+     *     }, function(imageDataURL) {
+     *         imageElement.src = imageDataURL;
+     *     });
+     *
+     * // Get snapshot synchronously, requires that Scene be
+     * // configured with preserveDrawingBuffer; true
+     * imageElement.src = viewer.scene.canvas.getSnapshot({
+     *         width: 500,
+     *         height: 500,
+     *         format: "png"
+     *     });
+     * ````
+     * @param {*} [params] Capture options.
+     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
+     * @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
      */
     getSnapshot(params, ok) {
 
@@ -462,26 +461,26 @@ class Canvas extends Component {
     }
 
     /**
-     Reads colors of pixels from the last rendered frame.
-
-     <p>Call this method like this:</p>
-
-     ````JavaScript
-
-     // Ignore transparent pixels (default is false)
-     var opaqueOnly = true;
-
-     var colors = new Float32Array(8);
-
-     myCanvas.readPixels([ 100, 22, 12, 33 ], colors, 2, opaqueOnly);
-     ````
-
-     Then the r,g,b components of the colors will be set to the colors at those pixels.
-
-     @param {Number[]} pixels
-     @param {Number[]} colors
-     @param {Number} size
-     @param {Boolean} opaqueOnly
+     * Reads colors of pixels from the last rendered frame.
+     *
+     * Call this method like this:
+     *
+     * ````JavaScript
+     *
+     * // Ignore transparent pixels (default is false)
+     * var opaqueOnly = true;
+     *
+     * var colors = new Float32Array(8);
+     *
+     * viewer.scene.canvas.readPixels([ 100, 22, 12, 33 ], colors, 2, opaqueOnly);
+     * ````
+     *
+     * Then the r,g,b components of the colors will be set to the colors at those pixels.
+     *
+     * @param {Number[]} pixels
+     * @param {Number[]} colors
+     * @param {Number} size
+     * @param {Boolean} opaqueOnly
      */
     readPixels(pixels, colors, size, opaqueOnly) {
         return this.scene._renderer.readPixels(pixels, colors, size, opaqueOnly);
@@ -497,13 +496,13 @@ class Canvas extends Component {
     }
 
     /**
-     A background color for the canvas. This is overridden by {@link Canvas/backgroundImage}.
-
-     You can set this to a new color at any time.
-
-     @property backgroundColor
-     @type {Number[]}
-     @default null
+     * A background color for the canvas. This is overridden by {@link Canvas#backgroundImage}.
+     *
+     * You can set this to a new color at any time.
+     *
+     * @property backgroundColor
+     * @type {Number[]}
+     * @default null
      */
     set backgroundColor(value) {
         if (!value) {
@@ -522,12 +521,12 @@ class Canvas extends Component {
     }
 
     /**
-     URL of a background image for the canvas. This is overrided by {@link Canvas/backgroundColor/property}.
-
-     You can set this to a new file path at any time.
-
-     @property backgroundImage
-     @type {String}
+     * URL of a background image for the canvas. This is overrided by {@link Canvas/backgroundColor/property}.
+     *
+     * You can set this to a new file path at any time.
+     *
+     * @property backgroundImage
+     * @type {String}
      */
     set backgroundImage(value) {
         if (!value) {

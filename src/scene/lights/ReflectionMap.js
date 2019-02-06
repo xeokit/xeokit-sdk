@@ -6,6 +6,23 @@ import {CubeTexture} from './CubeTexture.js';
  * ## Usage
  *
  * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Mesh} from "../src/scene/mesh/Mesh.js";
+ * import {buildSphereGeometry} from "../src/scene/geometry/builders/buildSphereGeometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
+ * import {MetallicMaterial} from "../src/scene/materials/MetallicMaterial.js";
+ * import {ReflectionMap} from "../src/scene/lights/ReflectionMap.js";
+ *
+ * // Create a Viewer and arrange the camera
+ *
+ * const viewer = new Viewer({
+ *      canvasId: "myCanvas"
+ * });
+ *
+ * viewer.scene.camera.eye = [0, 0, 5];
+ * viewer.scene.camera.look = [0, 0, 0];
+ * viewer.scene.camera.up = [0, 1, 0];
+ *
  * new ReflectionMap(viewer.scene, {
  *     src: [
  *         "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
@@ -15,6 +32,19 @@ import {CubeTexture} from './CubeTexture.js';
  *         "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
  *         "textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
  *     ]
+ * });
+ *
+ * // Create a sphere and ground plane
+ *
+ * new Mesh(viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
+ *          radius: 2.0
+ *      }),
+ *      new MetallicMaterial(viewer.scene, {
+ *          baseColor: [1, 1, 1],
+ *          metallic: 1.0,
+ *          roughness: 1.0
+ *      })
  * });
  * ````
  */

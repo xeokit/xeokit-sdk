@@ -26,7 +26,7 @@ import {math} from '../../math/math.js';
  * viewer.camera.up = [0, 1, 0];
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildTorusGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
  *          center: [0,0,0],
  *          radius: 1.0,
  *          tube: 0.5,
@@ -43,8 +43,6 @@ import {math} from '../../math/math.js';
  * ````
  *
  * @function buildTorusGeometry
- * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
- * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
  * @param {Number[]} [cfg.center] 3D point indicating the center position.
@@ -53,7 +51,7 @@ import {math} from '../../math/math.js';
  * @param {Number} [cfg.radialSegments=32] The number of radial segments.
  * @param {Number} [cfg.tubeSegments=24] The number of tubular segments.
  * @param {Number} [cfg.arc=Math.PI*0.5] The length of the arc in radians, where Math.PI*2 is a closed torus.
- * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildTorusGeometry(cfg = {}) {
 

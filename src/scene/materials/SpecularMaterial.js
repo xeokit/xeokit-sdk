@@ -32,7 +32,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  *
  * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry()),
  *
  *      material: new SpecularMaterial(viewer.scene,{
  *
@@ -74,7 +74,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * ````javascript
  * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry()),
  *
  *      material: new SpecularMaterial(viewer.scene,{
  *
@@ -110,7 +110,7 @@ const alphaModeNames = ["opaque", "mask", "blend"];
  * ````javascript
  * const myMesh = new Mesh(viewer.scene,{
  *
- *     geometry: buildTorusGeometry(viewer.scene, ReadableGeometry, {}),
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry()),
  *
  *      material: new SpecularMaterial(viewer.scene,{
  *

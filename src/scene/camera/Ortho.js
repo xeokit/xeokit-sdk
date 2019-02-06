@@ -84,7 +84,7 @@ class Ortho extends Component {
      *
      * Clamps to minimum value of ````0.01```.
      *
-     * Fires a {@link Ortho#scale:event} event on change.
+     * Fires a "scale" event on change.
      *
      * Default value is ````1.0````
      * @param {Number} value New scale value.
@@ -123,7 +123,7 @@ class Ortho extends Component {
     /**
      * Sets the position of the Ortho's near plane on the positive View-space Z-axis.
      *
-     * Fires a {@link Ortho#near:emits} emits on change.
+     * Fires a "near" emits on change.
      *
      * Default value is ````0.1````.
      *
@@ -155,7 +155,7 @@ class Ortho extends Component {
     /**
      * Sets the position of the Ortho's far plane on the positive View-space Z-axis.
      *
-     * Fires a {@link Ortho#far:emits} emits on change.
+     * Fires a "far" event on change.
      *
      * Default value is ````10000.0````.
      *
@@ -187,7 +187,7 @@ class Ortho extends Component {
     /**
      * Gets the Ortho's projection transform matrix.
      *
-     * Fires a {@link Ortho#matrix:emits} emits on change.
+     * Fires a "matrix" event on change.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *

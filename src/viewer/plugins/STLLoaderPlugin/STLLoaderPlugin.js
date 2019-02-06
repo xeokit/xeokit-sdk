@@ -35,6 +35,12 @@ import {utils} from "../../../scene/utils.js";
  *
  * ## Usage
  *
+ * In the example below, we'll use an STLLoaderPlugin to load an STL model of a spur gear. When the model has loaded,
+ * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
+ * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
+ *
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_SpurGear)]
+ *
  * ````javascript
  * // Create a xeokit Viewer
  * const viewer = new Viewer({
@@ -52,7 +58,7 @@ import {utils} from "../../../scene/utils.js";
  * // Load the STL model
  * var model = plugin.load({ // Model is an Entity
  *      id: "myModel",
- *      src: "models/mySTLModel.stl",
+ *      src: "./models/stl/binary/spurGear.stl",
  *      scale: [0.1, 0.1, 0.1],
  *      rotate: [90, 0, 0],
  *      translate: [100,0,0],

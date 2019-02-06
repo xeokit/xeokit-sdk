@@ -31,7 +31,7 @@ class CustomProjection extends Component {
     /**
      * Sets the CustomProjection's projection transform matrix.
      *
-     * Fires a {@link CustomProjection/matrix:event} event on change.
+     * Fires a "matrix" event on change.
 
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *

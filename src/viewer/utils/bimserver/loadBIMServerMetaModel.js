@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 function loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
 
     function isArray(value) {

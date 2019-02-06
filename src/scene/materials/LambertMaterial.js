@@ -21,7 +21,7 @@ import {math} from '../math/math.js';
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {Mesh} from "../src/scene/mesh/Mesh.js";
  * import {buildTorusGeometry} from "../src/scene/geometry/builders/buildTorusGeometry.js";
- * import {Geometry} from "../src/scene/geometry/Geometry.js";
+ * import {ReadableGeometry} from "../src/scene/geometry/ReadableGeometry.js";
  * import {LambertMaterial} from "../src/scene/materials/LambertMaterial.js";
  *
  * const viewer = new Viewer({
@@ -33,7 +33,7 @@ import {math} from '../math/math.js';
  * viewer.scene.camera.up = [0, 1, 0];
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildTorusGeometry(Geometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildTorusGeometry({
  *          center: [0, 0, 0],
  *          radius: 1.5,
  *          tube: 0.5,

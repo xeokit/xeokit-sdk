@@ -70,7 +70,7 @@ import {math} from '../math/math.js';
  * // Create a sphere and ground plane
  *
  * new Mesh(viewer.scene, {
- *      geometry: buildSphereGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
  *          radius: 2.0
  *      }),
  *      material: new PhongMaterial(viewer.scene, {

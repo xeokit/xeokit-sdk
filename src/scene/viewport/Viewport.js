@@ -89,7 +89,7 @@ class Viewport extends Component {
      *
      * When {@link Viewport#autoBoundary} is ````true````, ignores calls to this method and automatically synchronizes with {@link Canvas#boundary}.
      *
-     * Fires a {@link Viewport#boundary:event} event on change.
+     * Fires a "boundary"" event on change.
      *
      * Defaults to the {@link Canvas} extents.
      *

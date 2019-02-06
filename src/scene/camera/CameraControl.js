@@ -322,7 +322,7 @@ class CameraControl extends Component {
      * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
      * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
      *
-     * This only has an effect when {@link CameraControl#firstPerson is ````true````.
+     * This only has an effect when {@link CameraControl#firstPerson} is ````true````.
      *
      * Default value is ````false````.
      *
@@ -338,7 +338,7 @@ class CameraControl extends Component {
      * When set ````true````, this constrains {@link Camera#eye} movement to the horizontal X-Z plane. When doing a walkthrough,
      * this is useful to allow us to look upwards or downwards as we move, while keeping us moving in the  horizontal plane.
      *
-     * This only has an effect when {@link CameraControl#firstPerson is ````true````.
+     * This only has an effect when {@link CameraControl#firstPerson} is ````true````.
      *
      * Default value is ````false````.
      *

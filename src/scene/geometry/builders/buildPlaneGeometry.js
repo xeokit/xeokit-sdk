@@ -27,7 +27,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * viewer.camera.up = [0, 1, 0];
 
  * new Mesh(viewer.scene, {
- *     geometry: buildPlaneGeometry(ReadableGeometry, viewer.scene, {
+ *      geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
  *          center: [0,0,0],
  *          xSize: 2,
  *          zSize: 2,
@@ -43,8 +43,6 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * ````
  *
  * @function buildPlaneGeometry
- * @param {Geometry} geometryClass {@link Geometry} subtype to instantiate.
- * @param {Component} owner Owner {@link Component}. When destroyed, the owner will destroy the {@link Geometry} as well.
  * @param {*} [cfg] Configs
  * @param {Number[]} [cfg.center]  3D point indicating the center position.
  * @param {String} [cfg.id] Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted.
@@ -52,7 +50,7 @@ import {ReadableGeometry} from '../ReadableGeometry.js';
  * @param {Number} [cfg.zSize=1] Dimension on the Z-axis.
  * @param {Number} [cfg.xSegments=1] Number of segments on the X-axis.
  * @param {Number} [cfg.zSegments=1] Number of segments on the Z-axis.
- * @returns {Geometry} The {@link Geometry} subtype indicated by geometryClass.
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildPlaneGeometry(cfg = {}) {
 

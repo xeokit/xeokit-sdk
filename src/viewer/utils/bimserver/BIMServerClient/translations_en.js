@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export const translations = {
 	GETDATAOBJECTSBYTYPE_BUSY: "Loading objects",
 	REQUESTPASSWORDCHANGE_BUSY: "Busy sending password reset e-mail",

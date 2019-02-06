@@ -177,7 +177,7 @@ function getEntityIDMap(scene, entityIds) {
  *
  * We can use {@link Scene#pick}'s ````includeEntities```` and ````excludeEntities````  options to mask which {@link Mesh}es we attempt to pick.
  *
- * This is useful for picking <em>through</em> things, to pick only the Entities of interest.
+ * This is useful for picking through things, to pick only the Entities of interest.
  *
  * To pick only Entities ````"gearbox#77.0"```` and ````"gearbox#79.0"````, picking through any other Entities that are
  * in the way, as if they weren't there:
@@ -258,12 +258,6 @@ function getEntityIDMap(scene, entityIds) {
  * two views to be shown on the canvas at the same time.
  *
  * ````Javascript
- * // Load a glTF model
- * var model = new GLTFModel({
- *     src: "models/gltf/GearboxAssy/glTF-MaterialsCommon/GearboxAssy.gltf"
- * });
- *
- * var scene = model.scene;
  * var viewport = scene.viewport;
  *
  * // Configure Scene to render twice for each frame
@@ -493,7 +487,7 @@ class Scene extends Component {
         this.lights = {};
 
         /**
-         * The {@link LightMap}s in this Scene, each mapped to its its {@link LightMap#id}.
+         * The {@link LightMap}s in this Scene, each mapped to its {@link LightMap#id}.
          *
          * @type {{String:LightMap}}
          */

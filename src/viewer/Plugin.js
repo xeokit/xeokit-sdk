@@ -102,24 +102,6 @@ class Plugin {
     }
 
     /**
-     * Saves the state of this Plugin to a bookmark.
-     *
-     * @private
-     */
-    writeBookmark(bookmark) {
-        //...
-    }
-
-    /**
-     * Restores the state of this Plugin from a bookmark.
-     *
-     * @private
-     */
-    readBookmark(bookmark) {
-        //...
-    }
-
-    /**
      * Destroys this Plugin and removes it from its {@link Viewer}.
      */
     destroy() {

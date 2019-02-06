@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export const ifc4 = {
 		  "classes": {
 			    "Tristate": {},
