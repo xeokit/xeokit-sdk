@@ -26,15 +26,14 @@ class Viewer {
      * @param {Object} cfg  Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
-     * @param [cfg.passes=1] {Number} The number of times the {@link Viewer#scene} renders per frame.
-     * @param [cfg.clearEachPass=false] {Boolean} When doing multiple passes per frame, specifies if to clear the
-     * canvas before each pass (true) or just before the first pass (false).
-     * @param [cfg.transparent=false] {Boolean} Whether or not the canvas is transparent.
-     * @param [cfg.backgroundColor] {Number[]} RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
-     * @param [cfg.backgroundImage] {String} URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
-     * @param [cfg.gammaInput=false] {Boolean} When true, expects that all textures and colors are premultiplied gamma.
-     * @param [cfg.gammaOutput=true] {Boolean} Whether or not to render with pre-multiplied gama.
-     * @param [cfg.gammaFactor=2.2] {Number} The gamma factor to use when rendering with pre-multiplied gamma.
+     * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
+     * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
+     * @param {Boolean} [cfg.transparent=false]  Whether or not the canvas is transparent.
+     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
+     * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
+     * @param {Boolean} [cfg.gammaInput=false]  When true, expects that all textures and colors are premultiplied gamma.
+     * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
+     * @param  {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      */
     constructor(cfg) {
 
