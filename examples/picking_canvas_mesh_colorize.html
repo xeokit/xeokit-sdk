@@ -17,6 +17,9 @@
                href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads glTF model from file system
         </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Picking">User Guide</a>
+        </li>
 
     </ul>
 </div>
@@ -49,7 +52,7 @@
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true,
-        lambertMaterial: true
+        performance: false // https://github.com/xeokit/xeokit-sdk/issues/12
     });
 
     viewer.camera.orbitPitch(20);

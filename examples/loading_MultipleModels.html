@@ -11,7 +11,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>Models within a Scene Graph</h1>
+    <h1>Loading Multiple Models</h1>
     <ul>
         <li>
             <a target="_other"
@@ -56,9 +56,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [-3.44, -0.14, 1.51];
-    viewer.camera.look = [-2.23, -0.12, -0.47];
-    viewer.camera.up = [-0.00, 0.98, 0.00];
+    viewer.camera.eye = [-11.07, 1.75, 9.38];
+    viewer.camera.look = [-5.32, -0.70, 1.99];
+    viewer.camera.up = [0.15, 0.94, -0.20];
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a scene graph containing a bunch of models
@@ -101,6 +101,8 @@
         pickable: false,
         collidable: false
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>
