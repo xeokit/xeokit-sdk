@@ -1,7 +1,7 @@
 {
-  "coverage": "48.57%",
-  "expectCount": 2884,
-  "actualCount": 1401,
+  "coverage": "48.46%",
+  "expectCount": 2872,
+  "actualCount": 1392,
   "files": {
     "src/scene/Component.js": {
       "expectCount": 43,
@@ -58,15 +58,15 @@
         172,
         174,
         178,
-        644,
-        669,
-        692,
-        715,
-        738,
-        763,
-        787,
-        812,
-        836
+        647,
+        672,
+        695,
+        718,
+        741,
+        766,
+        790,
+        815,
+        839
       ]
     },
     "src/scene/PerformanceModel/lib/PerformanceMesh.js": {
@@ -159,8 +159,8 @@
         50,
         61,
         65,
-        109,
-        137
+        114,
+        142
       ]
     },
     "src/scene/PerformanceModel/lib/batching/batchingEdgesShaderSource.js": {
@@ -184,8 +184,8 @@
         49,
         60,
         64,
-        109,
-        138
+        114,
+        143
       ]
     },
     "src/scene/PerformanceModel/lib/batching/batchingFillShaderSource.js": {
@@ -325,8 +325,8 @@
         49,
         60,
         64,
-        138,
-        170
+        144,
+        176
       ]
     },
     "src/scene/PerformanceModel/lib/instancing/instancingEdgesShaderSource.js": {
@@ -1979,14 +1979,6 @@
         46
       ]
     },
-    "src/viewer/plugins/LightsPlugin/LightsPlugin.js": {
-      "expectCount": 9,
-      "actualCount": 7,
-      "undocumentLines": [
-        64,
-        66
-      ]
-    },
     "src/viewer/plugins/OBJLoaderPlugin/OBJLoader.js": {
       "expectCount": 10,
       "actualCount": 3,
@@ -2004,13 +1996,6 @@
       "expectCount": 4,
       "actualCount": 4,
       "undocumentLines": []
-    },
-    "src/viewer/plugins/PlanViewPlugin/PlanViewPlugin.js": {
-      "expectCount": 3,
-      "actualCount": 2,
-      "undocumentLines": [
-        3
-      ]
     },
     "src/viewer/plugins/STLLoaderPlugin/STLLoader.js": {
       "expectCount": 4,

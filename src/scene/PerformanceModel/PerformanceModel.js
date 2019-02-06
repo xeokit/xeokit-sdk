@@ -1083,7 +1083,7 @@ class PerformanceModel extends Component {
      *
      * This is the {@link Scene#edgeMaterial}.
      *
-     * @type EdgeMaterial
+     * @type {EdgeMaterial}
      */
     get edgeMaterial() {
         return this.scene.edgeMaterial;

@@ -137,7 +137,7 @@ const PRESETS = {
  *     material: new PhongMaterial(viewer.scene, {
  *         diffuse: [0.2, 0.2, 1.0]
  *     }),
- *     xrayMaterial: new EdgeMaterial(viewer.scene, {
+ *     xrayMaterial: new EmphasisMaterial(viewer.scene, {
  *         fill: true,
  *         fillColor: [0, 0, 0],
  *         fillAlpha: 0.7,
