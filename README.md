@@ -13,7 +13,7 @@ use for non-commercial purposes, with the option to buy a licence for commercial
 * [Features](https://github.com/xeolabs/xeokit-sdk/wiki/Features)
 * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
 * [User Guides](https://github.com/xeolabs/xeokit-sdk/wiki)
-* [API Documentation](http://xeolabs.com/xeokit-sdk/docs/)
+* [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
 * [Roadmap](https://github.com/xeolabs/xeokit-sdk/wiki/Roadmap)
 * [License](https://github.com/xeolabs/xeokit-sdk/wiki/License)
 * [FAQ](https://github.com/xeolabs/xeokit-sdk/wiki/FAQ)
