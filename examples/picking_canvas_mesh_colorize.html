@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Basic Picking with the Pointer</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Colorizing with the Pointer</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Picking">User Guide</a>
+        </li>
+
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        performance: false // https://github.com/xeokit/xeokit-sdk/issues/12
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to colorize them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+    var lastColorize = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            console.log(hit.entity.id);
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
+                }
+
+                lastEntity = hit.entity;
+                lastColorize = hit.entity.colorize.slice();
+
+                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+                lastEntity = null;
+            }
+        }
+    });
+
+</script>
+</html>

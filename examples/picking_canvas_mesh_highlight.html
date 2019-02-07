@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Minimial glTF Viewer Demo</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>Highlighting with the Pointer</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Picking">User Guide</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    viewer.camera.orbitPitch(20);
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+</script>
+</html>
