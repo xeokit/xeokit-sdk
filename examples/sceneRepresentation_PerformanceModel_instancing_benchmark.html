@@ -84,6 +84,11 @@
     viewer.scene.camera.look = [-106.46, -434.89, -171.60];
     viewer.scene.camera.up = [0.32, 0.92, 0.11];
 
+    viewer.scene.highlightMaterial.edges = false;
+
+    viewer.scene.gammaInput = false;
+    viewer.scene.gammaOutput = false;
+
     //------------------------------------------------------------------------------------------------------------------
     // Generate the buildings
     //------------------------------------------------------------------------------------------------------------------
@@ -214,6 +219,11 @@
             const pleaseWait = document.getElementById("pleaseWait");
             pleaseWait.parentElement.removeChild(pleaseWait);
             viewer.scene.canvas.spinner.processes -= 1;
+
+            // viewer.scene.on("tick", () => {
+            //     viewer.camera.orbitYaw(0.4);
+            // });
+
             done = true;
         }
     }
