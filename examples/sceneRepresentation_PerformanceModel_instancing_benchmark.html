@@ -53,7 +53,9 @@
     </ul>
 </div>
 
-<div id="pleaseWait">Geometry instancing benchmark<br>generating 582786 objects, please wait...</div>
+<div id="pleaseWait">Geometry instancing benchmark<br>generated <span id="numObjects"></span> of 582786 objects, please
+    wait...
+</div>
 
 </body>
 
@@ -107,6 +109,9 @@
     }));
 
     var numObjects = 0;
+
+    const numObjectsSpan = document.getElementById("numObjects");
+    const pleaseWaitSpan = document.getElementById("pleaseWait");
 
     function makeBuilding(xmin, zmin, xmax, zmax) {
 
@@ -163,6 +168,10 @@
 
             const meshId = "mesh" + numObjects++;
 
+            if (numObjects % 1000 === 0) {
+                numObjectsSpan.innerHTML = "" + numObjects;
+            }
+
             performanceModel.createMesh({
                 id: meshId,
                 geometryId: "myBoxGeometry",
@@ -183,22 +192,43 @@
     }
 
     var extent = 2500;
+    var x = -extent;
+    var z = -extent;
+    var done = false;
 
-    for (var x = -extent; x <= extent; x += 20) {
-        for (var z = -extent; z <= extent; z += 20) {
+    function nextBuilding() {
+        if (done) {
+            return;
+        }
+        if (z < extent) {
+            if (x < extent) {
+                x += 20;
+            } else {
+                x = -extent;
+                z += 20;
+            }
             makeBuilding(x + 2, z + 2, x + 5 - 2, z + 5 - 2);
+        } else {
+            pleaseWaitSpan.innerHTML += "preparing model..";
+            performanceModel.finalize();
+            const pleaseWait = document.getElementById("pleaseWait");
+            pleaseWait.parentElement.removeChild(pleaseWait);
+            viewer.scene.canvas.spinner.processes -= 1;
+            done = true;
         }
     }
 
-    performanceModel.finalize();
+    function run() {
+        for (var i = 0; i < 1000; i++) {
+            nextBuilding();
+        }
 
-    const pleaseWait = document.getElementById("pleaseWait");
-    pleaseWait.parentElement.removeChild(pleaseWait);
+        if (!done) {
+            setTimeout(run);
+        }
+    }
 
-    viewer.scene.canvas.spinner.processes -= 1;
-
-    console.log("numObjects = " + numObjects);
-
+    run();
 
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over Entities to highlight them
