@@ -4,7 +4,6 @@ import {VBOGeometry} from "../../../scene/geometry/VBOGeometry.js";
 import {PhongMaterial} from "./../../../scene/materials/PhongMaterial.js";
 import {MetallicMaterial} from "./../../../scene/materials/MetallicMaterial.js";
 import {SpecularMaterial} from "./../../../scene/materials/SpecularMaterial.js";
-import {LambertMaterial} from "./../../../scene/materials/LambertMaterial.js";
 import {Texture} from "./../../../scene/materials/Texture.js";
 import {Node} from "./../../../scene/nodes/Node.js";
 import {math} from "./../../../scene/math/math.js";
@@ -16,7 +15,7 @@ import {core} from "./../../../scene/core.js";
  */
 class GLTFQualityLoader {
 
-    constructor (cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
+    constructor(cfg) { // TODO: Loading options fallbacks on loader, eg. handleGLTFNode etc
         cfg = cfg || {};
     }
 
@@ -74,6 +73,7 @@ var loadGLTF = (function () {
             },
             error);
     };
+
     function getBasePath(src) {
         var i = src.lastIndexOf("/");
         return (i !== 0) ? src.substring(0, i + 1) : "";
@@ -110,7 +110,6 @@ var parseGLTF = (function () {
             handleGLTFNode: options.handleGLTFNode,
             ignoreMaterials: !!options.ignoreMaterials,
             edgeThreshold: options.edgeThreshold,
-            lambertMaterial: options.lambertMaterial !== false,
             readableGeometry: !!options.readableGeometry,
             json: json,
             scene: modelNode.scene,
@@ -140,12 +139,8 @@ var parseGLTF = (function () {
 
             loadBufferViews(ctx);
             loadAccessors(ctx);
-            if (!ctx.lambertMaterial) {
-                loadTextures(ctx);
-            }
-            if (!ctx.ignoreMaterials) {
-                loadMaterials(ctx);
-            }
+            loadTextures(ctx);
+            loadMaterials(ctx);
             loadMeshes(ctx);
             loadDefaultScene(ctx);
 
@@ -319,12 +314,7 @@ var parseGLTF = (function () {
             var material;
             for (var i = 0, len = materialsInfo.length; i < len; i++) {
                 materialInfo = materialsInfo[i];
-                if (ctx.lambertMaterial) {
-                    // Substitute RGBA for material, to use fast flat shading instead
-                    material = loadMaterialColorize(ctx, materialInfo);
-                } else {
-                    material = loadMaterial(ctx, materialInfo);
-                }
+                material = loadMaterial(ctx, materialInfo);
                 materialInfo._material = material;
             }
         }
@@ -829,18 +819,7 @@ var parseGLTF = (function () {
                             matrix: matrix
                         };
                         utils.apply(ctx.modelNodeProps, meshCfg);
-                        if (ctx.lambertMaterial) {
-                            if (!modelNode.material) {
-                                modelNode.material = new LambertMaterial(ctx.scene, {
-                                    backfaces: true
-                                });
-                            }
-                            meshCfg.material = modelNode.material;
-                            meshCfg.colorize = meshesInfoMesh.material;
-                            meshCfg.opacity = meshesInfoMesh.material[3];
-                        } else {
-                            meshCfg.material = meshesInfoMesh.material;
-                        }
+                        meshCfg.material = meshesInfoMesh.material;
                         mesh = new Mesh(modelNode, meshCfg);
                         parent.addChild(mesh, false); // Don't automatically inherit properties
                     }
@@ -857,18 +836,7 @@ var parseGLTF = (function () {
                         matrix: matrix
                     };
                     utils.apply(ctx.modelNodeProps, meshCfg);
-                    if (ctx.lambertMaterial) {
-                        if (!modelNode.material) {
-                            modelNode.material = new LambertMaterial(ctx.scene, {
-                                backfaces: true
-                            });
-                        }
-                        meshCfg.material = modelNode.material;
-                        meshCfg.colorize = meshesInfoMesh.material; // [R,G,B,A]
-                        meshCfg.opacity = meshesInfoMesh.material[3];
-                    } else {
-                        meshCfg.material = meshesInfoMesh.material;
-                    }
+                    meshCfg.material = meshesInfoMesh.material;
                     utils.apply(createEntity, meshCfg);
                     mesh = new Mesh(modelNode, meshCfg);
                     parent.addChild(mesh, false); // Don't automatically inherit properties
@@ -892,18 +860,7 @@ var parseGLTF = (function () {
                             geometry: meshesInfoMesh.geometry
                         };
                         utils.apply(ctx.modelNodeProps, meshCfg);
-                        if (ctx.lambertMaterial) {
-                            if (!modelNode.material) {
-                                modelNode.material = new LambertMaterial(ctx.scene, {
-                                    backfaces: true
-                                });
-                            }
-                            meshCfg.material = modelNode.material;
-                            meshCfg.colorize = meshesInfoMesh.material;
-                            meshCfg.opacity = meshesInfoMesh.material[3];
-                        } else {
-                            meshCfg.material = meshesInfoMesh.material;
-                        }
+                        meshCfg.material = meshesInfoMesh.material;
                         utils.apply(createEntity, meshCfg);
                         meshCfg.id = null; // Avoid ID clash with parent Node
                         mesh = new Mesh(modelNode, meshCfg);
@@ -930,18 +887,7 @@ var parseGLTF = (function () {
                         utils.apply(nodeCfg, meshCfg);
                         meshCfg.id = null; // Avoid ID clash with parent Node
                         meshCfg.matrix = null; // Node has matrix
-                        if (ctx.lambertMaterial) {
-                            if (!modelNode.material) {
-                                modelNode.material = new LambertMaterial(ctx.scene, {
-                                    backfaces: true
-                                });
-                            }
-                            meshCfg.material = modelNode.material;
-                            meshCfg.colorize = meshesInfoMesh.material;
-                            meshCfg.opacity = meshesInfoMesh.material[3];
-                        } else {
-                            meshCfg.material = meshesInfoMesh.material;
-                        }
+                        meshCfg.material = meshesInfoMesh.material;
                         mesh = new Mesh(modelNode, meshCfg);
                         childNode.addChild(mesh, false);
                     }
@@ -986,18 +932,7 @@ var parseGLTF = (function () {
                             geometry: meshesInfoMesh.geometry
                         };
                         utils.apply(ctx.modelProps, meshCfg);
-                        if (ctx.lambertMaterial) {
-                            if (!modelNode.material) {
-                                modelNode.material = new LambertMaterial(ctx.scene, {
-                                    backfaces: true
-                                });
-                            }
-                            meshCfg.material = modelNode.material;
-                            meshCfg.colorize = meshesInfoMesh.material; // [R,G,B,A]
-                            meshCfg.opacity = meshesInfoMesh.material[3];
-                        } else {
-                            meshCfg.material = meshesInfoMesh.material;
-                        }
+                        meshCfg.material = meshesInfoMesh.material;
                         if (createEntity) {
                             utils.apply(createEntity, meshCfg);
                         }
