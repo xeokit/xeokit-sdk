@@ -50,6 +50,7 @@
     viewer.scene.gammaOutput = true;
 
     viewer.camera.orbitPitch(20);
+    viewer.camera.zoom(-35);
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a ReflectionMap
@@ -78,7 +79,10 @@
     const model = xml3dLoader.load({
         id: "myModel",
         src: "./models/xml3d/3dpreview.3dxml",
-        edges: true
+
+        // Enhance edges and make slightly transparent
+        edges: true,
+        opacity: 0.8
     });
 
     model.on("loaded", () => {
@@ -87,6 +91,8 @@
             viewer.camera.orbitYaw(0.4);
         })
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>
