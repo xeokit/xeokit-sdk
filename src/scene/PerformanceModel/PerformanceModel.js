@@ -351,7 +351,7 @@ class PerformanceModel extends Component {
             this.numTransparentLayerPortions++;
         }
 
-        var mesh = new PerformanceMesh(this, id);
+        var mesh = new PerformanceMesh(this, id, color, opacity);
 
         var pickId = mesh.pickId;
 
