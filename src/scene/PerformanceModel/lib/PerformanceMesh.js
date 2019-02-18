@@ -1,11 +1,13 @@
 import {math} from "../../math/math.js";
 
+const tempIntRGBA = new Uint16Array([0, 0, 0, 0]);
+
 /**
  * @private
  */
 class PerformanceMesh {
 
-    constructor(model, id, layer = null, portionId = 0) {
+    constructor(model, id, color, opacity, layer = null, portionId = 0) {
 
         /**
          * The PerformanceModel that contains this PerformanceModelMesh.
@@ -70,9 +72,8 @@ class PerformanceMesh {
 
         this._layer = layer;
         this._portionId = portionId;
-    }
 
-    fire() { // TODO
+        this._color = [color[0], color[1], color[2], opacity]; // [0..255]
     }
 
     /**
@@ -87,6 +88,17 @@ class PerformanceMesh {
      */
     _setVisible(flags) {
         this._layer.setVisible(this._portionId, flags);
+    }
+
+    /**
+     * @private
+     */
+    _setColor(color, setOpacity) {
+        tempIntRGBA[0] = Math.floor((((this._color[0] / 255) * (color[0] / 255))) * 255);
+        tempIntRGBA[1] = Math.floor((((this._color[1] / 255) * (color[1] / 255))) * 255);
+        tempIntRGBA[2] = Math.floor((((this._color[2] / 255) * (color[2] / 255))) * 255);
+        tempIntRGBA[3] = Math.floor((((this._color[3] / 255) * (color[3] / 255))) * 255);
+        this._layer.setColor(this._portionId, tempIntRGBA, setOpacity);
     }
 
     /**

@@ -349,7 +349,7 @@ class BatchingLayer {
     // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
-    initFlags(portionId,  flags) {
+    initFlags(portionId, flags) {
         if (flags & RENDER_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
@@ -465,39 +465,36 @@ class BatchingLayer {
         }
     }
 
-    setColor(portionId, color) {
-
-        //--------------------------------------------------------------------------------------------------------------
-        ///////////// TODO: Update numTransparentPortions on layer and model
-        //--------------------------------------------------------------------------------------------------------------
-
+    setColor(portionId, color, setOpacity = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        // var portionsIdx = portionId * 2;
-        // var vertexBase = this._portions[portionsIdx];
-        // var numVerts = this._portions[portionsIdx + 1];
-        // var firstColor = vertexBase * 4;
-        // var lenColors = numVerts * 4;
-        // const r = color[0];
-        // const g = color[1];
-        // const b = color[2];
-        // const a = color[3];
-        // for (var i = 0; i < lenColors; i += 4) {
-        //     tempUint8Vec4[i + 0] = r;
-        //     tempUint8Vec4[i + 1] = g;
-        //     tempUint8Vec4[i + 2] = b;
-        //     tempUint8Vec4[i + 3] = a;
-        // }
-        // const opacity = color[3];
-        // if (opacity < 255) {
-        //     this._numTransparentLayerPortions++;
-        //     this.model.numTransparentLayerPortions++;
-        // } else {
-        //     this._numTransparentLayerPortions--;
-        //     this.model.numTransparentLayerPortions--;
-        // }
-        // this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColors), firstColor, lenColors);
+        var portionsIdx = portionId * 2;
+        var vertexBase = this._portions[portionsIdx];
+        var numVerts = this._portions[portionsIdx + 1];
+        var firstColor = vertexBase * 4;
+        var lenColor = numVerts * 4;
+        const r = color[0];
+        const g = color[1];
+        const b = color[2];
+        const a = color[3];
+        for (var i = 0; i < lenColor; i += 4) {
+            tempUint8Vec4[i + 0] = r;
+            tempUint8Vec4[i + 1] = g;
+            tempUint8Vec4[i + 2] = b;
+            tempUint8Vec4[i + 3] = a;
+        }
+        if (setOpacity) {
+            const opacity = color[3];
+            if (opacity < 255) {  // TODO: only increment transparency count when  this actually changes from initial value
+                this._numTransparentLayerPortions++;
+                this.model.numTransparentLayerPortions++;
+            } else {
+                this._numTransparentLayerPortions--;
+                this.model.numTransparentLayerPortions--;
+            }
+        }
+        this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColor), firstColor, lenColor);
     }
 
     // setMatrix(portionId, matrix) { // TODO

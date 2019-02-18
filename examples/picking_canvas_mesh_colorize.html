@@ -52,7 +52,7 @@
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true,
-        performance: false // https://github.com/xeokit/xeokit-sdk/issues/12
+        performance: true // https://github.com/xeokit/xeokit-sdk/issues/12
     });
 
     viewer.camera.orbitPitch(20);
@@ -87,7 +87,7 @@
                 lastEntity = hit.entity;
                 lastColorize = hit.entity.colorize.slice();
 
-                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
+                hit.entity.colorize = [0.0, 1.0, 0.0];
             }
         } else {
 

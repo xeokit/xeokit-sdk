@@ -140,14 +140,14 @@ class InstancingLayer {
      * Gives the portion the specified flags, color and matrix.
      *
      * @param flags Unsigned long int
-     * @param color Quantized RGB color
+     * @param rgbaInt Quantized RGBA color
      * @param opacity Opacity [0..255]
      * @param matrix Flat float 4x4 matrix
      * @param aabb Flat float AABB
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(flags, color, opacity, matrix, aabb, pickColor) {
+    createPortion(flags, rgbaInt, opacity, matrix, aabb, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
@@ -188,10 +188,10 @@ class InstancingLayer {
             this.model.numEdgesLayerPortions++;
         }
 
-        const r = color[0]; // Color is pre-quantized by PerformanceModel
-        const g = color[1];
-        const b = color[2];
-        const a = color[3];
+        const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
+        const g = rgbaInt[1];
+        const b = rgbaInt[2];
+        const a = rgbaInt[3];
         if (opacity < 255) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
@@ -311,7 +311,7 @@ class InstancingLayer {
     // The following setters are called by PerformanceModelMesh, in turn called by PerformanceModelNode, only after the layer is finalized.
     // It's important that these are called after finalize() in order to maintain integrity of counts like _numVisibleLayerPortions etc.
 
-    initFlags(portionId,  flags) {
+    initFlags(portionId, flags) {
         if (flags & RENDER_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
@@ -430,23 +430,25 @@ class InstancingLayer {
         this._setFlags(portionId, flags);
     }
 
-    setColor(portionId, color) {
+    setColor(portionId, color, setOpacity = false) { // RGBA color is normalized as ints
         if (!this._finalized) {
             throw "Not finalized";
         }
-        // tempUint8Vec4[0] = color[0];
-        // tempUint8Vec4[1] = color[1];
-        // tempUint8Vec4[2] = color[2];
-        // tempUint8Vec4[3] = color[3];
-        // const opacity = color[3];
-        // if (opacity < 255) {
-        //     this._numTransparentLayerPortions++;
-        //     this.model.numTransparentLayerPortions++;
-        // } else {
-        //     this._numTransparentLayerPortions--;
-        //     this.model.numTransparentLayerPortions--;
-        // }
-        // this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        tempUint8Vec4[0] = color[0];
+        tempUint8Vec4[1] = color[1];
+        tempUint8Vec4[2] = color[2];
+        tempUint8Vec4[3] = color[3];
+        if (setOpacity) {
+            const opacity = color[3];
+            if (opacity < 255) {
+                this._numTransparentLayerPortions++;
+                this.model.numTransparentLayerPortions++;
+            } else {
+                this._numTransparentLayerPortions--;
+                this.model.numTransparentLayerPortions--;
+            }
+        }
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
     // setMatrix(portionId, matrix) {

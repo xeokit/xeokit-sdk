@@ -1,7 +1,6 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
-const tempColor = new Float32Array([0, 0, 0]);
-
+const tempFloatRGB = new Float32Array([0, 0, 0]);
 
 /**
  * @private
@@ -46,7 +45,6 @@ class PerformanceNode {
 
         this._flags = flags;
         this._colorize = new Uint8Array([255, 255, 255, 255]);
-        this._opacity = 255;
 
         this._aabb = aabb;
 
@@ -407,13 +405,14 @@ class PerformanceNode {
      *
      * @type {Number[]}
      */
-    set colorize(color) { // TODO
+    set colorize(color) { // [0..1, 0..1, 0..1]
         this._colorize[0] = Math.floor(color[0] * 255.0); // Quantize
         this._colorize[1] = Math.floor(color[1] * 255.0);
         this._colorize[2] = Math.floor(color[2] * 255.0);
-        // for (var i = 0, len = this.meshes.length; i < len; i++) {
-        //     this.meshes[i]._setColor(this._colorize);
-        // }
+        const setOpacity = false;
+        for (var i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._setColor(this._colorize, setOpacity);
+        }
         this.model.glRedraw();
     }
 
@@ -424,11 +423,11 @@ class PerformanceNode {
      *
      * @type {Number[]}
      */
-    get colorize() {
-        tempColor[0] = this._colorize[0] / 255.0; // Unquantize
-        tempColor[1] = this._colorize[1] / 255.0;
-        tempColor[2] = this._colorize[2] / 255.0;
-        return tempColor;
+    get colorize() { // [0..1, 0..1, 0..1]
+        tempFloatRGB[0] = this._colorize[0] / 255.0; // Unquantize
+        tempFloatRGB[1] = this._colorize[1] / 255.0;
+        tempFloatRGB[2] = this._colorize[2] / 255.0;
+        return tempFloatRGB;
     }
 
     /**
@@ -450,8 +449,9 @@ class PerformanceNode {
             return;
         }
         this._colorize[3] = opacity; // Only set alpha
+        const setOpacity = true;
         for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setColor(this._colorize);
+            this.meshes[i]._setColor(this._colorize, setOpacity);
         }
         this.model.glRedraw();
     }
