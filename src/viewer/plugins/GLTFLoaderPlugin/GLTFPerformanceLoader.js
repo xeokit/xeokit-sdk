@@ -12,14 +12,15 @@ class GLTFPerformanceLoader {
         cfg = cfg || {};
     }
 
-    load(plugin, detailModel, src, options, ok, error) {
+    load(plugin, performanceModel, src, options, ok, error) {
         options = options || {};
-        var spinner = detailModel.scene.canvas.spinner;
+        var spinner = performanceModel.scene.canvas.spinner;
         spinner.processes++;
-        loadGLTF(plugin, detailModel, src, options, function () {
+        loadGLTF(plugin, performanceModel, src, options, function () {
                 spinner.processes--;
                 core.scheduleTask(function () {
-                    detailModel.fire("loaded", true, true);
+                    performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                    performanceModel.fire("loaded", true, true);
                 });
                 if (ok) {
                     ok();
@@ -31,25 +32,26 @@ class GLTFPerformanceLoader {
                 if (error) {
                     error(msg);
                 }
-                detailModel.fire("error", msg);
+                performanceModel.fire("error", msg);
             });
     }
 
-    parse(plugin, detailModel, gltf, options, ok, error) {
+    parse(plugin, performanceModel, gltf, options, ok, error) {
         options = options || {};
-        var spinner = detailModel.scene.canvas.spinner;
+        var spinner = performanceModel.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, "", options, detailModel, function () {
+        parseGLTF(plugin, gltf, "", options, performanceModel, function () {
                 spinner.processes--;
-                detailModel.fire("loaded", true, true);
+                performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                performanceModel.fire("loaded", true, true);
                 if (ok) {
                     ok();
                 }
             },
             function (msg) {
                 spinner.processes--;
-                detailModel.error(msg);
-                detailModel.fire("error", msg);
+                performanceModel.error(msg);
+                performanceModel.fire("error", msg);
                 if (error) {
                     error(msg);
                 }
@@ -61,10 +63,10 @@ const INSTANCE_THRESHOLD = 1;
 
 var loadGLTF = (function () {
 
-    return function (plugin, detailModel, src, options, ok, error) {
+    return function (plugin, performanceModel, src, options, ok, error) {
         utils.loadJSON(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, detailModel, ok, error);
+                parseGLTF(json, src, options, plugin, performanceModel, ok, error);
             },
             error);
     };
@@ -96,7 +98,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, detailModel, ok) {
+    return function (json, src, options, plugin, performanceModel, ok) {
 
         var ctx = {
             src: src,
@@ -104,21 +106,21 @@ var parseGLTF = (function () {
             basePath: options.basePath,
             handleGLTFNode: options.handleGLTFNode,
             json: json,
-            scene: detailModel.scene,
+            scene: performanceModel.scene,
             plugin: plugin,
-            detailModel: detailModel,
+            performanceModel: performanceModel,
             numObjects: 0
         };
 
-        detailModel.scene.loading++; // Disables (re)compilation
+        performanceModel.scene.loading++; // Disables (re)compilation
 
         loadBuffers(ctx, function () {
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
             loadMaterials(ctx);
             loadDefaultScene(ctx);
-            detailModel.scene.loading--; // Re-enables (re)compilation
-            detailModel.finalize();
+            performanceModel.scene.loading--; // Re-enables (re)compilation
+            performanceModel.finalize();
             ok();
         });
     };
@@ -349,12 +351,12 @@ var parseGLTF = (function () {
 
     function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
 
-        parent = parent || ctx.detailModel;
+        parent = parent || ctx.performanceModel;
         var createEntity;
 
         if (ctx.handleGLTFNode) {
             var actions = {};
-            if (!ctx.handleGLTFNode(ctx.detailModel.id, glTFNode, actions)) {
+            if (!ctx.handleGLTFNode(ctx.performanceModel.id, glTFNode, actions)) {
                 return;
             }
             if (actions.createEntity) {
@@ -363,7 +365,7 @@ var parseGLTF = (function () {
         }
 
         var json = ctx.json;
-        var detailModel = ctx.detailModel;
+        var performanceModel = ctx.performanceModel;
         var localMatrix;
 
         if (glTFNode.matrix) {
@@ -416,7 +418,7 @@ var parseGLTF = (function () {
 
                     for (var i = 0; i < numPrimitives; i++) {
                         const meshCfg = {
-                            id: detailModel.id + "." + ctx.numObjects++,
+                            id: performanceModel.id + "." + ctx.numObjects++,
                             matrix: matrix
                         };
                         var primitiveInfo = meshInfo.primitives[i];
@@ -450,7 +452,7 @@ var parseGLTF = (function () {
                             // Instancing
                             //------------------------------------------------------------------
 
-                            const geometryId = detailModel.id + "." + glTFNode.mesh;
+                            const geometryId = performanceModel.id + "." + glTFNode.mesh;
 
                             if (!meshInfo.geometryId) {
                                 meshInfo.geometryId = geometryId;
@@ -458,12 +460,12 @@ var parseGLTF = (function () {
                                     id: geometryId
                                 };
                                 loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
-                                detailModel.createGeometry(geometryCfg);
+                                performanceModel.createGeometry(geometryCfg);
                             }
 
                             meshCfg.geometryId = geometryId;
 
-                            const mesh = detailModel.createMesh(meshCfg);
+                            const mesh = performanceModel.createMesh(meshCfg);
                             meshIds.push(meshCfg.id);
 
                         } else {
@@ -474,13 +476,13 @@ var parseGLTF = (function () {
 
                             loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
 
-                            const mesh = detailModel.createMesh(meshCfg);
+                            const mesh = performanceModel.createMesh(meshCfg);
                             meshIds.push(meshCfg.id);
                         }
                     }
 
                     if (createEntity) {
-                        detailModel.createEntity(utils.apply(createEntity, {
+                        performanceModel.createEntity(utils.apply(createEntity, {
                             meshIds: meshIds
                         }));
                     } else {
