@@ -361,6 +361,8 @@ class CameraFlightAnimation extends Component {
             camera.eye = math.addVec3(newLook, newLookEyeVec, tempVec3);
             camera.look = newLook;
 
+            this.scene.camera.ortho.scale = diag * 1.1;
+
         } else if (newEye || newLook || newUp) {
 
             if (newEye) {
