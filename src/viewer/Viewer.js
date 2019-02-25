@@ -192,14 +192,14 @@ class Viewer {
             this.error(`Can't remove plugin - no plugin with this ID is installed: ${plugin.id}`);
             return;
         }
-        if (!installedPlugin !== plugin) {
+        if (installedPlugin !== plugin) {
             this.error(`Can't remove plugin - a different plugin is installed with this ID: ${plugin.id}`);
             return;
         }
         if (installedPlugin.clear) {
             installedPlugin.clear();
         }
-        delete this.plugins[id];
+        delete this.plugins[plugin.id];
         this.log(`Removed plugin: ${plugin.id}`);
     }
 
