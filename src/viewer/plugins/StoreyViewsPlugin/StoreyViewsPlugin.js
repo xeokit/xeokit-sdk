@@ -89,6 +89,12 @@ class StoreyViewsPlugin extends Plugin {
         this.format = cfg.format || "png";
         this.bgColor = cfg.bgColor || "white";
 
+        this._onCanvasBoundary = this.viewer.scene.canvas.on("boundary", (boundary) => {
+            const aspect = boundary[2] / boundary[3];
+            var width = 470; // TODO
+            var height = width / aspect;
+            this.size = [width, height];
+        });
 
         this._onModelLoaded = this.viewer.scene.on("modelLoaded", (modelId) => {
             this._buildModelStoreyViews(modelId);
@@ -214,7 +220,7 @@ class StoreyViewsPlugin extends Plugin {
         const camera = scene.camera;
         const metaScene = viewer.metaScene;
         const metaModel = metaScene.metaModels[modelId];
-        const modelEntity = scene.models[modelId];
+        const model = scene.models[modelId];
 
         if (!metaModel || !metaModel.rootMetaObject) {
             return;
@@ -238,7 +244,6 @@ class StoreyViewsPlugin extends Plugin {
         viewer.cameraFlight.jumpTo({
             aabb: scene.aabb
         });
-        viewer.camera._update();
 
         const storeyObjectIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
         const numStoreys = storeyObjectIds.length;
@@ -250,17 +255,22 @@ class StoreyViewsPlugin extends Plugin {
             const storeyMetaObject = metaModel.metaScene.metaObjects[storeyObjectId];
             const storySubObjectIds = storeyMetaObject.getObjectIDsInSubtree();
 
-            scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
+               scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
 
             for (var i = 0, len = storySubObjectIds.length; i < len; i++) {
                 const objectId = storySubObjectIds[i];
                 const metaObject = metaScene.metaObjects[objectId];
+
+                if (metaObject.type === "DEFAULT") {
+                    continue;
+                }
+
                 const object = scene.objects[objectId];
 
                 if (object) {
-                    const props = self._objectDefaults[metaObject.type];
+                    const props = self._objectDefaults[metaObject.type] ;
                     if (props) {
-                        object.visible = !!props.visible;
+                        object.visible = true;
                     }
                 }
             }
@@ -275,7 +285,7 @@ class StoreyViewsPlugin extends Plugin {
 
             const storeyView = new StoreyView(scene.aabb, modelId, storeyObjectId, snapshotData);
 
-            storeyView._onModelDestroyed = modelEntity.once("destroyed", () => {
+            storeyView._onModelDestroyed = model.once("destroyed", () => {
                 self._destroyModelStoreyViews(modelId);
             });
 
@@ -314,9 +324,9 @@ class StoreyViewsPlugin extends Plugin {
             for (let storyObjectId in storeyViews) {
                 if (storeyViews.hasOwnProperty(storyObjectId)) {
                     const storeyView = storeyViews[storyObjectId];
-                    const modelEntity = scene.models[storeyView.modelId];
-                    if (modelEntity) {
-                        modelEntity.off("destroyied", storeyView._onModelDestroyed);
+                    const model = scene.models[storeyView.modelId];
+                    if (model) {
+                        model.off("destroyed", storeyView._onModelDestroyed);
                     }
                     delete this.storeyViews[storyObjectId];
                 }
@@ -326,6 +336,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     destroy() {
+        this.viewer.scene.canvas.off(this._onCanvasBoundary);
         this.viewer.scene.off(this._onModelLoaded);
         this.viewer.scene.off(this._onTick);
         super.destroy();
