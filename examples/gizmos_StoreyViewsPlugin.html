@@ -19,6 +19,22 @@
             height: 600px;
             pointer-events: all;
         }
+
+        #info {
+            position: absolute;
+            top: 0;
+            z-index: 200000;
+            float: right;
+            right: 0;
+            padding: 10px;
+            height: auto;
+            text-align: left;
+            pointer-events: none;
+            background: RGBA(0, 0, 0, 0.4);
+            max-width: 500px;
+            color: white;
+        }
+
     </style>
 
     <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
@@ -68,6 +84,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {StoreyViewsPlugin} from "../src/viewer/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
+    import {AmbientLight} from "../src/scene/lights/AmbientLight.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak xraying and highlight materials
@@ -92,7 +109,8 @@
         id: "myModel",
         src: "./models/gltf/schependomlaan/scene.gltf",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true
+        edges: true,
+        performance: false
     });
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -100,8 +118,13 @@
     // This will automatically create StoreyViews when the model has loaded
     //----------------------------------------------------------------------------------------------------------------------
 
+    var canvas = viewer.scene.canvas;
+    var aspect = canvas.boundary[2] / canvas.boundary[3];
+    var snapshotWidth = 470;
+    var snapshotHeight = snapshotWidth / aspect;
+
     const storeyViews = new StoreyViewsPlugin(viewer, {
-        size: [220, 220],
+        size: [snapshotWidth, snapshotHeight],
         format: "png",  // Default
         ortho: true     // Default
     });
