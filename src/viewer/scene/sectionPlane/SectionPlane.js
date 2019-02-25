@@ -14,7 +14,7 @@ import {RenderState} from '../webgl/RenderState.js';
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {SectionPlane} from "../src/sectionPlane/SectionPlane.js";
  * 
  * const viewer = new Viewer({

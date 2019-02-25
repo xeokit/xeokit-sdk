@@ -19,8 +19,8 @@ import {math} from "../../viewer/scene/math/math.js";
  *
  * ````JavaScript````
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {AxisGizmoPlugin} from "../src/viewer/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
+ * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {AxisGizmoPlugin} from "../src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"

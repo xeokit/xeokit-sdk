@@ -37,7 +37,7 @@ import {utils} from "../../viewer/scene/utils.js";
  * ````javascript
  * import {Viewer} from "./../src/viewer/Viewer.js";
  * import BimServerClient from "./../src/viewer/utils/BIMServerClient/bimserverclient.js"
- * import {BIMServerLoaderPlugin} from "./../src/viewer/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+ * import {BIMServerLoaderPlugin} from "./../src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
  *
  * const bimServerAddress = "https://xeokit.cleverapps.io/";
  * const username = "kevin.flynn@en.com";

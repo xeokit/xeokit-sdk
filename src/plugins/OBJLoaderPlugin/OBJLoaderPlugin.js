@@ -26,7 +26,7 @@ import {OBJLoader} from "./OBJLoader.js";
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {OBJLoaderPlugin} from "../src/viewer/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
+ * import {OBJLoaderPlugin} from "../src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js";
  *
  * // Create a xeokit Viewer and arrange the camera
  * const viewer = new Viewer({

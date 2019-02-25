@@ -15,7 +15,7 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  *
  * ````Javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {CameraPath} from "../src/scene/camera/CameraPath.js";
  * import {CameraPathAnimation} from "../src/scene/camera/CameraPathAnimation.js";
  *

@@ -11,8 +11,8 @@ import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+ * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",

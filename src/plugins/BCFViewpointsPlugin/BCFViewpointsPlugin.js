@@ -23,9 +23,9 @@ const tempVec3 = math.vec3();
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {SectionPlanesPlugin} from "../src/viewer/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
- * import {BCFViewpointsPlugin} from "../src/viewer/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
+ * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
+ * import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
  *
  * // Create a Viewer
  * const viewer = new Viewer({
