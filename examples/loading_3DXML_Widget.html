@@ -14,7 +14,7 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/viewer/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a>
+               href="./../docs/class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a>
             - Loads a 3DXML model from file system
         </li>
         <li>
@@ -73,7 +73,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const xml3dLoader = new XML3DLoaderPlugin(viewer, {
-        workerScriptsPath: "../src/viewer/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
+        workerScriptsPath: "../src/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
     });
 
     const model = xml3dLoader.load({
