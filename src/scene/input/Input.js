@@ -1774,7 +1774,7 @@ class Input extends Component {
                 e.preventDefault();
             }
 
-        }, true);
+        }, false);
 
         document.addEventListener("keyup", this._keyUpListener = function (e) {
 
