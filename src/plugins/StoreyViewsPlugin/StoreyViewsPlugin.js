@@ -1,4 +1,4 @@
-import {Plugin} from "./../../Plugin.js";
+import {Plugin} from "../../viewer/Plugin.js";
 import {StoreyView} from "./StoreyView.js";
 import {IFCStoreyViewObjectDefaults} from "./IFCStoreyViewObjectDefaults.js";
 
