@@ -298,14 +298,14 @@ class Viewer {
             this.error(`Can&apos;t remove plugin - no plugin with this ID is installed: ${plugin.id}`);
             return;
         }
-        if (!installedPlugin !== plugin) {
+        if (installedPlugin !== plugin) {
             this.error(`Can&apos;t remove plugin - a different plugin is installed with this ID: ${plugin.id}`);
             return;
         }
         if (installedPlugin.clear) {
             installedPlugin.clear();
         }
-        delete this.plugins[id];
+        delete this.plugins[plugin.id];
         this.log(`Removed plugin: ${plugin.id}`);
     }
 
@@ -381,7 +381,8 @@ function getRotation(object) {
     }
 }
 
-export {Viewer}</code></pre>
+export {Viewer}
+</code></pre>
 
 </div>
 
