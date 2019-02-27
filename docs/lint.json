@@ -1,37 +1,7 @@
 [
   {
-    "name": "PickResult#reset",
-    "filePath": "src/scene/webgl/PickResult.js",
-    "lines": [
-      {
-        "lineNumber": 295,
-        "line": "    /**"
-      },
-      {
-        "lineNumber": 296,
-        "line": "     * @private"
-      },
-      {
-        "lineNumber": 297,
-        "line": "     * @param value"
-      },
-      {
-        "lineNumber": 298,
-        "line": "     */"
-      },
-      {
-        "lineNumber": 299,
-        "line": "    reset() {"
-      }
-    ],
-    "codeParams": [],
-    "docParams": [
-      "value"
-    ]
-  },
-  {
     "name": "BimServerClient#call",
-    "filePath": "src/viewer/utils/bimserver/BIMServerClient/bimserverclient.js",
+    "filePath": "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js",
     "lines": [
       {
         "lineNumber": 928,
@@ -106,6 +76,36 @@
       "showBusy",
       "showDone",
       "showError"
+    ]
+  },
+  {
+    "name": "PickResult#reset",
+    "filePath": "src/viewer/scene/webgl/PickResult.js",
+    "lines": [
+      {
+        "lineNumber": 295,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 296,
+        "line": "     * @private"
+      },
+      {
+        "lineNumber": 297,
+        "line": "     * @param value"
+      },
+      {
+        "lineNumber": 298,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 299,
+        "line": "    reset() {"
+      }
+    ],
+    "codeParams": [],
+    "docParams": [
+      "value"
     ]
   }
 ]

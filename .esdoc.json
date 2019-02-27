@@ -1,10 +1,13 @@
 {
   "source": "./src/",
   "destination": "./docs",
+  "excludes": [
+    "(workers|zipjs)"
+  ],
   "plugins": [
     {
       "name": "esdoc-standard-plugin",
-      "includeSource": false,
+      "includeSource": true,
       "option": {
         "lint": {"enable": true},
         "coverage": {"enable": true},
