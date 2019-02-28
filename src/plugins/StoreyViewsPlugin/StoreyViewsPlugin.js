@@ -212,6 +212,8 @@ class StoreyViewsPlugin extends Plugin {
 
     _buildModelStoreyViews(modelId) {
 
+        var t0 = performance.now();
+
         this._destroyModelStoreyViews(modelId);
 
         const self = this;
@@ -226,7 +228,33 @@ class StoreyViewsPlugin extends Plugin {
             return;
         }
 
+        // How we build StoreyViews:
+        //
+        // 1. Save state of scene objects
+        // 2. Save camera state
+        // 3. Save Canvas size
+        // 4. Set camera to ortho projection, looking down, fitted to scene boundary
+        // 5. Set canvas size to snapshot size (to avoid scaling blur)
+        // 6. With each IfcBuildingStorey object :-
+        //      6.1 Hide all scene objects
+        //      6.2 With each sub-object :-
+        //          6.2.1 Set state from objectDefaults
+        //      6.3 Grab snapshot of canvas
+        //      6.4 Create StoreyView from snapshot
+        // 7. Restore object states
+        // 8. Restore camera
+        // 9. Restore canvas size
+
+
+        // 1. Save state of scene objects
+
         const saveVisibleObjectIds = scene.visibleObjectIds.slice();
+        //const saveEdgesObjectIds = scene.edgesObjectIds.slice();
+        const saveXRayedObjectIds = scene.xrayedObjectIds.slice();
+        const saveHighlightedObjectIds = scene.highlightedObjectIds.slice();
+        const saveSelectedObjectIds = scene.selectedObjectIds.slice();
+
+        // 2. Save camera state
 
         const saveCamera = {
             eye: camera.eye.slice(),
@@ -235,6 +263,12 @@ class StoreyViewsPlugin extends Plugin {
             projection: camera.projection,
             orthoScale: camera.ortho.scale
         };
+
+        // 3. Save canvas size
+
+        const saveCanvasBoundary = scene.canvas.boundary.slice();
+
+        // 4. Set camera to ortho projection, looking down, fitted to scene boundary
 
         camera.projection = this._ortho ? "ortho" : "perspective";
         camera.eye = camera.worldUp.slice();
@@ -245,6 +279,13 @@ class StoreyViewsPlugin extends Plugin {
             aabb: scene.aabb
         });
 
+        // 5. Set canvas size to snapshot size (to avoid scaling blue)
+
+        scene.canvas.width = self._size[0];
+        scene.canvas.height = self._size[1];
+
+        // 6. With each IfcBuildingStorey object
+
         const storeyObjectIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
         const numStoreys = storeyObjectIds.length;
         var numStoreyViewsCreated = 0;
@@ -253,27 +294,48 @@ class StoreyViewsPlugin extends Plugin {
 
             const storeyObjectId = storeyObjectIds[numStoreyViewsCreated];
             const storeyMetaObject = metaModel.metaScene.metaObjects[storeyObjectId];
-            const storySubObjectIds = storeyMetaObject.getObjectIDsInSubtree();
+            const storeySubObjects = storeyMetaObject.getObjectIDsInSubtree();
 
-               scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
+            // 6.1 Hide all scene objects
 
-            for (var i = 0, len = storySubObjectIds.length; i < len; i++) {
-                const objectId = storySubObjectIds[i];
+            const props = self._objectDefaults["DEFAULT"] || {};
+
+            // if (props.visible) {
+            //     scene.setObjectsVisible(viewer.scene.visibleObjectIds, !!props.visible);
+            // } else {
+            //     scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
+            // }
+            //
+            scene.setObjectsVisible(viewer.scene.visibleObjectIds, !!props.visible);
+
+            // 6.2 With each sub-object
+
+            for (var i = 0, len = storeySubObjects.length; i < len; i++) {
+                const objectId = storeySubObjects[i];
                 const metaObject = metaScene.metaObjects[objectId];
 
-                if (metaObject.type === "DEFAULT") {
-                    continue;
-                }
+                // if (metaObject.type === "DEFAULT") {
+                //     continue;
+                // }
 
                 const object = scene.objects[objectId];
 
                 if (object) {
-                    const props = self._objectDefaults[metaObject.type] ;
+
+                    // 6.2.1 Set state from objectDefaults
+
+                    const props = self._objectDefaults[metaObject.type];
                     if (props) {
-                        object.visible = true;
+                        object.visible = props.visible;
+                        object.edges = props.edges;
+                        object.xrayed = props.xrayed;
+                        object.highlighted = props.highlighted;
+                        object.selected = props.selected;
                     }
                 }
             }
+
+            // 6.3 Grab snapshot of canvas
 
             scene.render(true); // Force-render a frame
 
@@ -282,6 +344,8 @@ class StoreyViewsPlugin extends Plugin {
                 height: self._size[1],
                 format: self._format,
             });
+
+            // 6.4 Create StoreyView from snapshot
 
             const storeyView = new StoreyView(scene.aabb, modelId, storeyObjectId, snapshotData);
 
@@ -300,8 +364,24 @@ class StoreyViewsPlugin extends Plugin {
 
             if (numStoreyViewsCreated === numStoreys) {
 
+                // 7. Restore object states
+
                 scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
                 scene.setObjectsVisible(saveVisibleObjectIds, true);
+
+                // scene.setObjectsEdges(viewer.scene.edgesObjectIds, false);
+                // scene.setObjectsEdges(saveEdgesObjectIds, true);
+
+                scene.setObjectsXRayed(viewer.scene.xrayedObjectIds, false);
+                scene.setObjectsXRayed(saveXRayedObjectIds, true);
+
+                scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
+                scene.setObjectsHighlighted(saveHighlightedObjectIds, true);
+
+                scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+                scene.setObjectsSelected(saveSelectedObjectIds, true);
+
+                // 8. Restore camera
 
                 camera.projection = saveCamera.projection;
                 camera.eye = saveCamera.eye;
@@ -309,12 +389,19 @@ class StoreyViewsPlugin extends Plugin {
                 camera.up = saveCamera.up;
                 camera.ortho.scale = camera.orthoScale;
 
+                // 9. Restore canvas size
+
+                scene.canvas.canvas.boundary = saveCanvasBoundary;
+
             } else {
                 createNextStoreyView();
             }
         }
 
         createNextStoreyView();
+
+        var t1 = performance.now();
+        console.log("StoreViewsPlugin._rebuildStoreyViews() took " + (t1 - t0) + " milliseconds.")
     }
 
     _destroyModelStoreyViews(modelId) {
