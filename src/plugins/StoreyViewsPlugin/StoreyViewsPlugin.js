@@ -55,6 +55,7 @@ const sceneState = new SceneState();
  *      for (var i = 0, len = storeyViewIds.length; i < len; i++) {
  *
  *          const storeyViewId   = storeyViewIds[i];
+ *
  *          const storeyView     = storeyViews.storeyViews[storeyViewId];
  *
  *          const aabb           = storeyView.aabb; // Boundary of storey elements
@@ -285,42 +286,34 @@ class StoreyViewsPlugin extends Plugin {
 
             // 5.1 Hide all scene objects
 
-            const props = self._objectDefaults["DEFAULT"] || {};
-
-            // if (props.visible) {
-            //     scene.setObjectsVisible(viewer.scene.visibleObjectIds, !!props.visible);
-            // } else {
-            //     scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
-            // }
-            //
-            scene.setObjectsVisible(viewer.scene.visibleObjectIds, !!props.visible);
+            scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
 
             // 5.2 With each sub-object
 
             for (var i = 0, len = storeySubObjects.length; i < len; i++) {
+
                 const objectId = storeySubObjects[i];
                 const metaObject = metaScene.metaObjects[objectId];
-
-                // if (metaObject.type === "DEFAULT") {
-                //     continue;
-                // }
-
                 const object = scene.objects[objectId];
 
                 if (object) {
 
                     // 5.2.1 Set state from objectDefaults
 
-                    const props = self._objectDefaults[metaObject.type];
+                    const props = self._objectDefaults[metaObject.type] || self._objectDefaults["DEFAULT"];
+
                     if (props) {
+
                         object.visible = props.visible;
                         object.edges = props.edges;
                         object.xrayed = props.xrayed;
                         object.highlighted = props.highlighted;
                         object.selected = props.selected;
+
                         if (props.colorize) {
                             object.colorize = props.colorize;
                         }
+
                         if (props.opacity !== null && props.opacity !== undefined) {
                             object.opacity = props.opacity;
                         }
