@@ -20,6 +20,7 @@ function buildVertex(layer) {
 
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
+    src.push("attribute vec4 flags2;");
     src.push("attribute vec4 pickColor;");
 
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
@@ -32,6 +33,7 @@ function buildVertex(layer) {
 
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+        src.push("varying vec4 vFlags2;");
     }
     src.push("varying vec4 vPickColor;");
     src.push("void main(void) {");
@@ -61,6 +63,7 @@ function buildFragment(layer) {
     src.push("precision mediump float;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+        src.push("vFlags2 = flags2;");
         for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -70,6 +73,8 @@ function buildFragment(layer) {
     src.push("varying vec4 vPickColor;");
     src.push("void main(void) {");
     if (clipping) {
+        src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+        src.push("  if (clippable) {");
         src.push("  float dist = 0.0;");
         for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
@@ -77,6 +82,7 @@ function buildFragment(layer) {
             src.push("}");
         }
         src.push("if (dist > 0.0) { discard; }");
+        src.push("}");
     }
     src.push("gl_FragColor = vPickColor; ");
     src.push("}");

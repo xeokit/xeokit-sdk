@@ -105,6 +105,10 @@ BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPas
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
     }
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        frameCtx.bindArray++;
+    }
     state.edgeIndicesBuf.bind();
     frameCtx.bindArray++;
     gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
@@ -137,6 +141,7 @@ BatchingEdgesRenderer.prototype._allocate = function (layer) {
     }
     this._aPosition = program.getAttribute("position");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
 };
 
 BatchingEdgesRenderer.prototype._bindProgram = function (frameCtx, layer) {

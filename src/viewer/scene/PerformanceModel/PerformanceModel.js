@@ -115,6 +115,11 @@ class PerformanceModel extends Component {
          */
         this.numEdgesLayerPortions = 0;
 
+        /**
+         * @private
+         */
+        this.numPickableLayerPortions = 0;
+
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;

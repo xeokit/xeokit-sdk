@@ -23,6 +23,7 @@ function buildVertex(layer) {
     src.push("uniform int renderPass;");
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
+    src.push("attribute vec4 flags2;");
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
     src.push("attribute vec4 modelMatrixCol1;");
     src.push("attribute vec4 modelMatrixCol2;");
@@ -31,6 +32,7 @@ function buildVertex(layer) {
     src.push("uniform mat4 positionsDecodeMatrix;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+        src.push("varying vec4 vFlags2;");
     }
     src.push("uniform vec4 color;");
     src.push("void main(void) {");
@@ -39,11 +41,12 @@ function buildVertex(layer) {
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
+    src.push("bool edges        = (float(flags2.y) > 0.0);");
 
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EdgeMaterial.edgeColor, so is not quantized
 
     src.push(`
-     if (!visible ||
+     if (!visible || !edges ||
         (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed || selected)) ||
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} &&  (!transparent || xrayed || highlighted || selected)) ||
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) ||
@@ -57,6 +60,7 @@ function buildVertex(layer) {
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
+        src.push("vFlags2 = flags2;");
     }
     src.push("gl_Position = projMatrix * viewPosition;");
     src.push("}");
@@ -78,6 +82,7 @@ function buildFragment(layer) {
     src.push("uniform vec4 color;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+        src.push("varying vec4 vFlags2;");
         for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -86,6 +91,8 @@ function buildFragment(layer) {
     }
     src.push("void main(void) {");
     if (clipping) {
+        src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+        src.push("  if (clippable) {");
         src.push("  float dist = 0.0;");
         for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
@@ -93,6 +100,7 @@ function buildFragment(layer) {
             src.push("}");
         }
         src.push("if (dist > 0.0) { discard; }");
+        src.push("}");
     }
     src.push("gl_FragColor = color;");
     src.push("}");

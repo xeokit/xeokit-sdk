@@ -109,9 +109,11 @@ class InstancingLayer {
         this._numHighlightedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
+        this._numPickableLayerPortions = 0;
 
         // Vertex arrays
         this._flags = [];
+        this._flags2 = [];
         this._colors = [];
         this._pickColors = [];
 
@@ -161,11 +163,18 @@ class InstancingLayer {
         var selected = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+        var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
 
         this._flags.push(visible);
         this._flags.push(xrayed);
         this._flags.push(highlighted);
         this._flags.push(selected);
+
+        this._flags2.push(clippable);
+        this._flags2.push(edges);
+        this._flags2.push(pickable);
+        this._flags2.push(0); // Unused
+
 
         if (visible) {
             this._numVisibleLayerPortions++;
@@ -186,6 +195,10 @@ class InstancingLayer {
         if (edges) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
+        }
+        if (pickable) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
         }
 
         const r = rgbaInt[0]; // Color is pre-quantized by PerformanceModel
@@ -280,7 +293,9 @@ class InstancingLayer {
         if (this._flags.length > 0) {
             let normalized = true;
             this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags), this._flags.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.STATIC_DRAW, normalized);
             this._flags = [];
+            this._flags2 = [];
         }
         if (this._modelMatrixCol0.length > 0) {
 
@@ -336,7 +351,12 @@ class InstancingLayer {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
+        if (flags & RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        }
         this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setVisible(portionId, flags) {
@@ -406,28 +426,34 @@ class InstancingLayer {
             this._numEdgesLayerPortions--;
             this.model.numEdgesLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setCollidable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        this._setFlags(portionId, flags);
     }
 
     setPickable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        this._setFlags(portionId, flags);
+        if (flags & RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        } else {
+            this._numPickableLayerPortions--;
+            this.model.numPickableLayerPortions--;
+        }
+        this._setFlags2(portionId, flags);
     }
 
     setColor(portionId, color, setOpacity = false) { // RGBA color is normalized as ints
@@ -489,7 +515,6 @@ class InstancingLayer {
         var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
-        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         tempUint8Vec4[0] = visible;
         tempUint8Vec4[1] = xrayed;
         tempUint8Vec4[2] = highlighted;
@@ -497,6 +522,18 @@ class InstancingLayer {
         this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
     }
 
+    _setFlags2(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+        var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+            tempUint8Vec4[0] = clippable;
+            tempUint8Vec4[1] = edges;
+            tempUint8Vec4[2] = pickable;
+        this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
+    }
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
@@ -726,6 +763,10 @@ class InstancingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
+        }
+        if (state.flags2Buf) {
+            state.flags2Buf.destroy();
+            state.flags2Buf = null;
         }
         if (state.modelMatrixCol0Buf) {
             state.modelMatrixCol0Buf.destroy();

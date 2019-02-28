@@ -19,6 +19,7 @@ class BatchingBuffer {
         this.normals = new Int8Array(MAX_VERTS * 3); // Compressed
         this.pickColors = new Uint8Array(MAX_VERTS * 4); // Compressed
         this.flags = new Uint8Array(MAX_VERTS * 4);
+        this.flags2 = new Uint8Array(MAX_VERTS * 4);
         this.indices = bigIndicesSupported ? new Uint32Array(MAX_VERTS * 6) : new Uint16Array(MAX_VERTS * 6); // FIXME
         this.edgeIndices = bigIndicesSupported ? new Uint32Array(MAX_VERTS * 6) : new Uint16Array(MAX_VERTS * 6); // FIXME
 
