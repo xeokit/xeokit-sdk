@@ -1,6 +1,10 @@
+import {SceneState} from "../../viewer/scene/scene/SceneState.js";
+
 import {Plugin} from "../../viewer/Plugin.js";
 import {StoreyView} from "./StoreyView.js";
 import {IFCStoreyViewObjectDefaults} from "./IFCStoreyViewObjectDefaults.js";
+
+const sceneState = new SceneState();
 
 /**
  * {@link Viewer} plugin that manages plan views
@@ -230,45 +234,28 @@ class StoreyViewsPlugin extends Plugin {
 
         // How we build StoreyViews:
         //
-        // 1. Save state of scene objects
-        // 2. Save camera state
-        // 3. Save Canvas size
-        // 4. Set camera to ortho projection, looking down, fitted to scene boundary
-        // 5. Set canvas size to snapshot size (to avoid scaling blur)
-        // 6. With each IfcBuildingStorey object :-
-        //      6.1 Hide all scene objects
-        //      6.2 With each sub-object :-
-        //          6.2.1 Set state from objectDefaults
-        //      6.3 Grab snapshot of canvas
-        //      6.4 Create StoreyView from snapshot
-        // 7. Restore object states
-        // 8. Restore camera
-        // 9. Restore canvas size
-
+        // 1. Save state of scene
+        // 2. Save Canvas size
+        // 3. Set camera to ortho projection, looking down, fitted to scene boundary
+        // 4. Set canvas size to snapshot size (to avoid scaling blur)
+        // 5. With each IfcBuildingStorey object :-
+        //      5.1 Hide all scene objects
+        //      5.2 With each sub-object :-
+        //          5.2.1 Set state from objectDefaults
+        //      5.3 Grab snapshot of canvas
+        //      5.4 Create StoreyView from snapshot
+        // 6. Restore scene state
+        // 7. Restore canvas size
 
         // 1. Save state of scene objects
 
-        const saveVisibleObjectIds = scene.visibleObjectIds.slice();
-        //const saveEdgesObjectIds = scene.edgesObjectIds.slice();
-        const saveXRayedObjectIds = scene.xrayedObjectIds.slice();
-        const saveHighlightedObjectIds = scene.highlightedObjectIds.slice();
-        const saveSelectedObjectIds = scene.selectedObjectIds.slice();
+        sceneState.save(scene);
 
-        // 2. Save camera state
-
-        const saveCamera = {
-            eye: camera.eye.slice(),
-            look: camera.look.slice(),
-            up: camera.up.slice(),
-            projection: camera.projection,
-            orthoScale: camera.ortho.scale
-        };
-
-        // 3. Save canvas size
+        // 2. Save canvas size
 
         const saveCanvasBoundary = scene.canvas.boundary.slice();
 
-        // 4. Set camera to ortho projection, looking down, fitted to scene boundary
+        // 3. Set camera to ortho projection, looking down, fitted to scene boundary
 
         camera.projection = this._ortho ? "ortho" : "perspective";
         camera.eye = camera.worldUp.slice();
@@ -279,12 +266,12 @@ class StoreyViewsPlugin extends Plugin {
             aabb: scene.aabb
         });
 
-        // 5. Set canvas size to snapshot size (to avoid scaling blue)
+        // 4. Set canvas size to snapshot size (to avoid scaling blue)
 
         scene.canvas.width = self._size[0];
         scene.canvas.height = self._size[1];
 
-        // 6. With each IfcBuildingStorey object
+        // 5. With each IfcBuildingStorey object
 
         const storeyObjectIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
         const numStoreys = storeyObjectIds.length;
@@ -296,7 +283,7 @@ class StoreyViewsPlugin extends Plugin {
             const storeyMetaObject = metaModel.metaScene.metaObjects[storeyObjectId];
             const storeySubObjects = storeyMetaObject.getObjectIDsInSubtree();
 
-            // 6.1 Hide all scene objects
+            // 5.1 Hide all scene objects
 
             const props = self._objectDefaults["DEFAULT"] || {};
 
@@ -308,7 +295,7 @@ class StoreyViewsPlugin extends Plugin {
             //
             scene.setObjectsVisible(viewer.scene.visibleObjectIds, !!props.visible);
 
-            // 6.2 With each sub-object
+            // 5.2 With each sub-object
 
             for (var i = 0, len = storeySubObjects.length; i < len; i++) {
                 const objectId = storeySubObjects[i];
@@ -322,7 +309,7 @@ class StoreyViewsPlugin extends Plugin {
 
                 if (object) {
 
-                    // 6.2.1 Set state from objectDefaults
+                    // 5.2.1 Set state from objectDefaults
 
                     const props = self._objectDefaults[metaObject.type];
                     if (props) {
@@ -331,11 +318,17 @@ class StoreyViewsPlugin extends Plugin {
                         object.xrayed = props.xrayed;
                         object.highlighted = props.highlighted;
                         object.selected = props.selected;
+                        if (props.colorize) {
+                            object.colorize = props.colorize;
+                        }
+                        if (props.opacity !== null && props.opacity !== undefined) {
+                            object.opacity = props.opacity;
+                        }
                     }
                 }
             }
 
-            // 6.3 Grab snapshot of canvas
+            // 5.3 Grab snapshot of canvas
 
             scene.render(true); // Force-render a frame
 
@@ -345,7 +338,7 @@ class StoreyViewsPlugin extends Plugin {
                 format: self._format,
             });
 
-            // 6.4 Create StoreyView from snapshot
+            // 5.4 Create StoreyView from snapshot
 
             const storeyView = new StoreyView(scene.aabb, modelId, storeyObjectId, snapshotData);
 
@@ -364,32 +357,11 @@ class StoreyViewsPlugin extends Plugin {
 
             if (numStoreyViewsCreated === numStoreys) {
 
-                // 7. Restore object states
+                // 6. Restore scene state
 
-                scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
-                scene.setObjectsVisible(saveVisibleObjectIds, true);
+                sceneState.restore(scene);
 
-                // scene.setObjectsEdges(viewer.scene.edgesObjectIds, false);
-                // scene.setObjectsEdges(saveEdgesObjectIds, true);
-
-                scene.setObjectsXRayed(viewer.scene.xrayedObjectIds, false);
-                scene.setObjectsXRayed(saveXRayedObjectIds, true);
-
-                scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
-                scene.setObjectsHighlighted(saveHighlightedObjectIds, true);
-
-                scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
-                scene.setObjectsSelected(saveSelectedObjectIds, true);
-
-                // 8. Restore camera
-
-                camera.projection = saveCamera.projection;
-                camera.eye = saveCamera.eye;
-                camera.look = saveCamera.look;
-                camera.up = saveCamera.up;
-                camera.ortho.scale = camera.orthoScale;
-
-                // 9. Restore canvas size
+                // 7. Restore canvas size
 
                 scene.canvas.canvas.boundary = saveCanvasBoundary;
 
