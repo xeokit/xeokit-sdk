@@ -243,7 +243,7 @@ class BIMServerLoaderPlugin extends Plugin {
 
         bimServerClient.getModel(poid, roid, schema, false, bimServerClientModel => {  // TODO: Preload not necessary combined with the bruteforce tree
 
-            loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel).then(function () {
+            loadBIMServerMetaModel(viewer, modelId, poid, roid, schema, bimServerClientModel).then(function () {
 
                 performanceModel.once("destroyed", function () {
                     viewer.metaScene.destroyMetaModel(modelId);

@@ -1,7 +1,7 @@
 /**
  * @private
  */
-function loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientModel) {
+function loadBIMServerMetaModel(viewer, modelId, poid, roid, schema, bimServerClientModel) {
 
     function isArray(value) {
         return Object.prototype.toString.call(value) === "[object Array]";
@@ -9,48 +9,191 @@ function loadBIMServerMetaModel(viewer, modelId, poid, roid, bimServerClientMode
 
     return new Promise(function (resolve, reject) {
 
-        const query = {
-            defines: {
-                Representation: {type: "IfcProduct", field: "Representation"},
-                ContainsElementsDefine: {
-                    type: "IfcSpatialStructureElement",
-                    field: "ContainsElements",
-                    include: {
-                        type: "IfcRelContainedInSpatialStructure",
-                        field: "RelatedElements",
-                        includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
+        if (schema == "ifc2x3tc1") {
+            var query = {
+                defines: {
+                    Representation: {
+                        type: "IfcProduct",
+                        fields: ["Representation", "geometry"]
+                    },
+                    ContainsElementsDefine: {
+                        type: "IfcSpatialStructureElement",
+                        field: "ContainsElements",
+                        include: {
+                            type: "IfcRelContainedInSpatialStructure",
+                            field: "RelatedElements",
+                            includes: [
+                                "IsDecomposedByDefine",
+                                "ContainsElementsDefine",
+                                "Representation"
+                            ]
+                        }
+                    },
+                    IsDecomposedByDefine: {
+                        type: "IfcObjectDefinition",
+                        field: "IsDecomposedBy",
+                        include: {
+                            type: "IfcRelDecomposes",
+                            field: "RelatedObjects",
+                            includes: [
+                                "IsDecomposedByDefine",
+                                "ContainsElementsDefine",
+                                "Representation"
+                            ]
+                        }
                     }
                 },
-                IsDecomposedByDefine: {
-                    type: "IfcObjectDefinition",
-                    field: "IsDecomposedBy",
-                    include: {
-                        type: "IfcRelDecomposes",
-                        field: "RelatedObjects",
-                        includes: ["IsDecomposedByDefine", "ContainsElementsDefine", "Representation"]
+                queries: [
+                    {
+                        type: "IfcProject",
+                        includes: [
+                            "IsDecomposedByDefine",
+                            "ContainsElementsDefine"
+                        ]
+                    },
+                    {
+                        type: {
+                            name: "IfcRepresentation",
+                            includeAllSubTypes: true
+                        }
+                    },
+                    {
+                        type: {
+                            name: "IfcProductRepresentation",
+                            includeAllSubTypes: true
+                        }
+                    },
+                    {
+                        type: "IfcPresentationLayerWithStyle"
+                    },
+                    {
+                        type: {
+                            name: "IfcProduct",
+                            includeAllSubTypes: true
+                        }
+                    },
+                    {
+                        type: "IfcProductDefinitionShape"
+                    },
+                    {
+                        type: "IfcPresentationLayerAssignment"
+                    },
+                    {
+                        type: "IfcRelAssociatesClassification",
+                        includes: [
+                            {
+                                type: "IfcRelAssociatesClassification",
+                                field: "RelatedObjects"
+                            },
+                            {
+                                type: "IfcRelAssociatesClassification",
+                                field: "RelatingClassification"
+                            }
+                        ]
+                    },
+                    {
+                        type: "IfcSIUnit"
+                    },
+                    {
+                        type: "IfcPresentationLayerAssignment"
+                    }
+                ]
+            };
+        } else if (schema == "ifc4") {
+            var query = {
+                defines: {
+                    Representation: {
+                        type: "IfcProduct",
+                        fields: ["Representation", "geometry"]
+                    },
+                    ContainsElementsDefine: {
+                        type: "IfcSpatialStructureElement",
+                        field: "ContainsElements",
+                        include: {
+                            type: "IfcRelContainedInSpatialStructure",
+                            field: "RelatedElements",
+                            includes: [
+                                "IsDecomposedByDefine",
+                                "ContainsElementsDefine",
+                                "Representation"
+                            ]
+                        }
+                    },
+                    IsDecomposedByDefine: {
+                        type: "IfcObjectDefinition",
+                        field: "IsDecomposedBy",
+                        include: {
+                            type: "IfcRelAggregates",
+                            field: "RelatedObjects",
+                            includes: [
+                                "IsDecomposedByDefine",
+                                "ContainsElementsDefine",
+                                "Representation"
+                            ]
+                        }
                     }
                 },
-            },
-            queries: [
-                {type: "IfcProject", includes: ["IsDecomposedByDefine", "ContainsElementsDefine"]},
-                {type: "IfcRepresentation", includeAllSubtypes: true},
-                {type: "IfcProductRepresentation"},
-                {type: "IfcPresentationLayerWithStyle"},
-                {type: "IfcProduct", includeAllSubtypes: true},
-                {type: "IfcProductDefinitionShape"},
-                {type: "IfcPresentationLayerAssignment"},
-                {
-                    type: "IfcRelAssociatesClassification",
-                    includes: [
-                        {type: "IfcRelAssociatesClassification", field: "RelatedObjects"},
-                        {type: "IfcRelAssociatesClassification", field: "RelatingClassification"}
-                    ]
-                },
-                {type: "IfcSIUnit"},
-                {type: "IfcPresentationLayerAssignment"}
-            ]
-        };
-
+                queries: [
+                    {
+                        type: "IfcProject",
+                        includes: [
+                            "IsDecomposedByDefine",
+                            "ContainsElementsDefine"
+                        ]
+                    },
+                    {
+                        type: {
+                            name: "IfcRepresentation",
+                            includeAllSubTypes: true
+                        }
+                    },
+                    {
+                        type: {
+                            name: "IfcProductRepresentation",
+                            includeAllSubTypes: true
+                        }
+                    },
+                    {
+                        type: "IfcPresentationLayerWithStyle"
+                    },
+                    {
+                        type: {
+                            name: "IfcProduct",
+                            includeAllSubTypes: true
+                        },
+                    },
+                    {
+                        type: "IfcProductDefinitionShape"
+                    },
+                    {
+                        type: "IfcPresentationLayerAssignment"
+                    },
+                    {
+                        type: "IfcRelAssociatesClassification",
+                        includes: [
+                            {
+                                type: "IfcRelAssociatesClassification",
+                                field: "RelatedObjects"
+                            },
+                            {
+                                type: "IfcRelAssociatesClassification",
+                                field: "RelatingClassification"
+                            }
+                        ]
+                    },
+                    {
+                        type: "IfcSIUnit"
+                    },
+                    {
+                        type: "IfcPresentationLayerAssignment"
+                    }
+                ]
+            };
+        } else {
+            console.error("IFC Schema [" + schema + "] not implemented.")
+            return false;
+        }
+        
         bimServerClientModel.query(query, function () {
         }).done(function () {
 
