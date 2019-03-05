@@ -106,18 +106,18 @@ class MetaObject {
     }
 
     /**
-     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree, including this one.
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree.
      *
      * @returns {String[]} Array of {@link MetaObject#id}s.
      */
     getObjectIDsInSubtree() {
-        const list = [];
+        const objectIds = [];
 
         function visit(metaObject) {
             if (!metaObject) {
                 return;
             }
-            list.push(metaObject.id);
+            objectIds.push(metaObject.id);
             const children = metaObject.children;
             if (children) {
                 for (var i = 0, len = children.length; i < len; i++) {
@@ -127,7 +127,39 @@ class MetaObject {
         }
 
         visit(this);
-        return list;
+        return objectIds;
+    }
+
+    /**
+     * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree that have the given {@link MetaObject#type}s.
+     *
+     * @param {String[]} types {@link MetaObject#type} values.
+     * @returns {String[]} Array of {@link MetaObject#id}s.
+     */
+    getObjectIDsInSubtreeByType(types) {
+        const mask = {};
+        for (var i = 0, len = types.length; i < len; i++) {
+            mask[types[i]] = types[i];
+        }
+        const objectIds = [];
+
+        function visit(metaObject) {
+            if (!metaObject) {
+                return;
+            }
+            if (mask[metaObject.type]) {
+                objectIds.push(metaObject.id);
+            }
+            const children = metaObject.children;
+            if (children) {
+                for (var i = 0, len = children.length; i < len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+
+        visit(this);
+        return objectIds;
     }
 
     /**

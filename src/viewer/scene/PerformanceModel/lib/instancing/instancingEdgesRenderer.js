@@ -126,6 +126,12 @@ InstancingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderP
         frameCtx.bindArray++;
     }
 
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf, gl.UNSIGNED_BYTE, true);
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
+        frameCtx.bindArray++;
+    }
+
     state.edgeIndicesBuf.bind();
     frameCtx.bindArray++;
     instanceExt.drawElementsInstancedANGLE(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
@@ -168,6 +174,7 @@ InstancingEdgesRenderer.prototype._allocate = function (layer) {
     }
     this._aPosition = program.getAttribute("position");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
     this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
     this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
     this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");

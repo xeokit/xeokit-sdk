@@ -140,12 +140,12 @@ function Core() {
         taskQueue.push(scope);
     };
 
-    this.runTasks = function (until) { // Pops and processes tasks in the queue, until the given number of milliseconds has elapsed.
+    this.runTasks = function (until = -1) { // Pops and processes tasks in the queue, until the given number of milliseconds has elapsed.
         let time = (new Date()).getTime();
         let callback;
         let scope;
         let tasksRun = 0;
-        while (taskQueue.length > 0 && time < until) {
+        while (taskQueue.length > 0 && (until < 0 || time < until)) {
             callback = taskQueue.shift();
             scope = taskQueue.shift();
             if (scope) {

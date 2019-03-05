@@ -79,6 +79,10 @@ BatchingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
         frameCtx.bindArray++;
     }
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        frameCtx.bindArray++;
+    }
     if (this._aPickColor) {
         this._aPickColor.bindArrayBuffer(state.pickColorsBuf, gl.UNSIGNED_BYTE, true);
         frameCtx.bindArray++;
@@ -115,6 +119,7 @@ BatchingPickRenderer.prototype._allocate = function (layer) {
     this._aPosition = program.getAttribute("position");
     this._aPickColor = program.getAttribute("pickColor");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
 };
 
 BatchingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {

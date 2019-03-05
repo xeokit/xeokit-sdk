@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minimal BIM Viewer for glTF Models</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #storeyViews {
+            margin-top: 20px;
+            overflow-y: scroll;
+            height: 600px;
+            pointer-events: all;
+        }
+
+        #info {
+            position: absolute;
+            top: 0;
+            z-index: 200000;
+            float: right;
+            right: 0;
+            padding: 10px;
+            height: auto;
+            text-align: left;
+            pointer-events: none;
+            background: RGBA(0, 0, 0, 0.4);
+            max-width: 500px;
+            color: white;
+        }
+
+    </style>
+
+    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
+    <script src="./libs/lodash.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
+    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
+
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>StoreyViewsPlugin (BETA)</h1>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
+            - Generates plan views of IfcStorey elements
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+    </ul>
+    <div id="storeyViews"></div>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true,
+        performance: false
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Add a StoreyViewsPlugin
+    // This will automatically create StoreyViews when the model has loaded
+    //----------------------------------------------------------------------------------------------------------------------
+
+    var canvas = viewer.scene.canvas;
+    var aspect = canvas.boundary[2] / canvas.boundary[3];
+    var snapshotWidth = 470;
+    var snapshotHeight = snapshotWidth / aspect;
+
+    const storeyViews = new StoreyViewsPlugin(viewer, {
+        size: [snapshotWidth, snapshotHeight],
+        format: "png",  // Default
+        ortho: true     // Default
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, get all StoreyViews from StoryViewsPlugin and show their canvas snapshots in this page
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", function () {
+
+        const storeyViewDiv = document.getElementById("storeyViews");
+        const storeyViewIds = Object.keys(storeyViews.storeyViews);
+
+        for (var i = 0, len = storeyViewIds.length; i < len; i++) {
+
+            const storeyViewId = storeyViewIds[i];
+            const storeyView = storeyViews.storeyViews[storeyViewId];
+            const img = document.createElement("img");
+
+            img.src = storeyView.snapshotData;
+            img.style.border = "1px solid #000000";
+            img.style.background = "lightblue";
+
+            storeyViewDiv.appendChild(img);
+        }
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>
