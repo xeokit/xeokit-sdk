@@ -38,6 +38,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -96,6 +99,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -134,7 +138,7 @@
   <div class="description" data-ice="description"><p>Contains the components that comprise a 3D scene.</p>
 <ul>
 <li>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> has a single Scene, which it provides in <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-scene">Viewer#scene</a></span>.</li>
-<li>Plugins like <span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span> and <span>PlanViewPlugin</span> also have their own private Scenes.</li>
+<li>Plugins like <span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span> and <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span> also have their own private Scenes.</li>
 </ul>
 <h2 id="getting-a-viewer--39-s-scene">Getting a Viewer&apos;s Scene</h2><pre><code class="lang-javascript"><code class="source-code prettyprint">var scene = viewer.scene;</code>
 </code></pre>
@@ -2711,7 +2715,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1469">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1473">source</a></span></span>
     </span>
   </h3>
 
@@ -2756,7 +2760,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1444">source</a></span></span>
     </span>
   </h3>
 
@@ -2844,7 +2848,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1453">source</a></span></span>
     </span>
   </h3>
 
@@ -2888,7 +2892,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1217">source</a></span></span>
     </span>
   </h3>
 
@@ -2933,7 +2937,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1233">source</a></span></span>
     </span>
   </h3>
 
@@ -3023,7 +3027,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1415">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1419">source</a></span></span>
     </span>
   </h3>
 
@@ -3070,7 +3074,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1294">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1298">source</a></span></span>
     </span>
   </h3>
 
@@ -3115,7 +3119,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1310">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1314">source</a></span></span>
     </span>
   </h3>
 
@@ -3160,7 +3164,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1244">source</a></span></span>
     </span>
   </h3>
 
@@ -3205,7 +3209,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1260">source</a></span></span>
     </span>
   </h3>
 
@@ -3250,7 +3254,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1283">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1287">source</a></span></span>
     </span>
   </h3>
 
@@ -3295,7 +3299,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1271">source</a></span></span>
     </span>
   </h3>
 
@@ -3340,7 +3344,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1327">source</a></span></span>
     </span>
   </h3>
 
@@ -3386,7 +3390,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1377">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1381">source</a></span></span>
     </span>
   </h3>
 
@@ -3433,7 +3437,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1126">source</a></span></span>
     </span>
   </h3>
 
@@ -3747,7 +3751,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1339">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1343">source</a></span></span>
     </span>
   </h3>
 
@@ -3793,7 +3797,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1074">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1078">source</a></span></span>
     </span>
   </h3>
 
@@ -3898,7 +3902,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1086">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1090">source</a></span></span>
     </span>
   </h3>
 
@@ -4003,7 +4007,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1202">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1206">source</a></span></span>
     </span>
   </h3>
 
@@ -4048,7 +4052,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1184">source</a></span></span>
     </span>
   </h3>
 
@@ -4181,7 +4185,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1396">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1400">source</a></span></span>
     </span>
   </h3>
 
@@ -4228,7 +4232,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1138">source</a></span></span>
     </span>
   </h3>
 
@@ -4394,7 +4398,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1173">source</a></span></span>
     </span>
   </h3>
 
@@ -4439,7 +4443,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1152">source</a></span></span>
     </span>
   </h3>
 
@@ -4528,7 +4532,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1431">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1435">source</a></span></span>
     </span>
   </h3>
 
@@ -4572,7 +4576,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1098">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1102">source</a></span></span>
     </span>
   </h3>
 
@@ -4677,7 +4681,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1358">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1362">source</a></span></span>
     </span>
   </h3>
 
@@ -4724,7 +4728,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1110">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1114">source</a></span></span>
     </span>
   </h3>
 
@@ -4833,7 +4837,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1658">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1662">source</a></span></span>
     </span>
   </h3>
 
@@ -4877,7 +4881,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1683">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1687">source</a></span></span>
     </span>
   </h3>
 
@@ -4921,7 +4925,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1673">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1677">source</a></span></span>
     </span>
   </h3>
 
@@ -4965,7 +4969,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1963">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1967">source</a></span></span>
     </span>
   </h3>
 
@@ -5009,7 +5013,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1704">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1708">source</a></span></span>
     </span>
   </h3>
 
@@ -5087,7 +5091,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1620">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1624">source</a></span></span>
     </span>
   </h3>
 
@@ -5335,7 +5339,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1793">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1797">source</a></span></span>
     </span>
   </h3>
 
@@ -5417,7 +5421,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1904">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1908">source</a></span></span>
     </span>
   </h3>
 
@@ -5500,7 +5504,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1810">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1814">source</a></span></span>
     </span>
   </h3>
 
@@ -5582,7 +5586,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1887">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1891">source</a></span></span>
     </span>
   </h3>
 
@@ -5664,7 +5668,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1850">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1854">source</a></span></span>
     </span>
   </h3>
 
@@ -5748,7 +5752,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1919">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1923">source</a></span></span>
     </span>
   </h3>
 
@@ -5831,7 +5835,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1936">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1940">source</a></span></span>
     </span>
   </h3>
 
@@ -5913,7 +5917,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1834">source</a></span></span>
     </span>
   </h3>
 
@@ -5997,7 +6001,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1776">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1780">source</a></span></span>
     </span>
   </h3>
 
@@ -6081,7 +6085,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1870">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1874">source</a></span></span>
     </span>
   </h3>
 
