@@ -7,7 +7,9 @@ import {IFCStoreyViewObjectDefaults} from "./IFCStoreyViewObjectDefaults.js";
 const sceneState = new SceneState();
 
 /**
- * {@link Viewer} plugin that manages plan views
+ * @desc A {@link Viewer} plugin that automatically generates plan view images.
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_StoreyViewsPlugin)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -70,6 +72,17 @@ const sceneState = new SceneState();
  */
 class StoreyViewsPlugin extends Plugin {
 
+    /**
+     * @constructor
+     *
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Object} [cfg.objectDefaults] Map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.  Default value is {@link IFCStoreyViewObjectDefaults}.
+     * @param {Boolean} [cfg.ortho=true] Whether to capture an orthographic or perspective view for each {@link StoreyView}.
+     * @param {Number[]} [cfg.size=[200,200]] Size of {@link StoreyView} images.
+     * @param {String} [cfg.format="png"] Format of {@link StoreyView} images. Allowed values are "png" and "jpeg".
+     */
     constructor(viewer, cfg = {}) {
 
         super("storeyViews", viewer);
@@ -116,7 +129,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets map of initial default states for {@link Entity}s within storeys.
+     * Sets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
      *
      * Default value is {@link IFCStoreyViewObjectDefaults}.
      *
@@ -128,7 +141,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Gets map of initial default states for {@link Entity}s within storeys.
+     * Gets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
      *
      * Default value is {@link IFCStoreyViewObjectDefaults}.
      *
@@ -139,6 +152,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Sets whether or not to capture an orthographic or perspective view for each {@link StoreyView}.
      *
      * @param ortho
      */
@@ -148,6 +162,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Gets whether or not to capture an orthographic or perspective view for each {@link StoreyView}.
      *
      * @returns {boolean}
      */
@@ -156,6 +171,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Sets the size of {@link StoreyView} images.
+     *
+     * Rebuilds {@link StoreyView}s when modified.
      *
      * @param size
      */
@@ -165,6 +183,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Gets the size of {@link StoreyView} images.
      *
      * @returns {*|number[]}
      */
@@ -173,6 +192,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Sets the format of {@link StoreyView} images. Allowed values are "png" and "jpeg".
+     *
+     * Rebuilds {@link StoreyView}s when modified.
      *
      * @param format
      */
@@ -183,6 +205,8 @@ class StoreyViewsPlugin extends Plugin {
 
     /**
      *
+     * Gets the format of {@link StoreyView} images. Allowed values are "png" and "jpeg".
+     *
      * @returns {*|number[]}
      */
     get format() {
@@ -190,6 +214,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Sets the background color of {@link StoreyView} images.
+     *
+     * Rebuilds {@link StoreyView}s when modified.
      *
      * @param bgColor
      */
@@ -199,6 +226,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
+     * Gets the background color of {@link StoreyView} images.
      *
      * @returns {*|number[]}
      */
