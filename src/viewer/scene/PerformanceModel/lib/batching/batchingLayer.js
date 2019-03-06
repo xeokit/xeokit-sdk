@@ -18,8 +18,6 @@ const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
 
-var currentBatchingLayer = null;
-
 /**
  * @private
  */
@@ -135,13 +133,6 @@ class BatchingLayer {
         }
         if (this._finalized) {
             throw "BatchingLayer full - check first with canCreatePortion()";
-        }
-        if (currentBatchingLayer !== null) {
-            if (currentBatchingLayer !== this) {
-                throw "Already packing another BatchingLayer";
-            }
-        } else {
-            currentBatchingLayer = this;
         }
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
@@ -349,8 +340,6 @@ class BatchingLayer {
         buffer.lenPickColors = 0;
         buffer.lenIndices = 0;
         buffer.lenEdgeIndices = 0;
-
-        currentBatchingLayer = null;
 
         this._buffer = null;
         this._finalized = true;
