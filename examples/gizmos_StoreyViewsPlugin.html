@@ -113,7 +113,7 @@
     var snapshotWidth = 470;
     var snapshotHeight = snapshotWidth / aspect;
 
-    const storeyViews = new StoreyViewsPlugin(viewer, {
+    const storeyViewsPlugin = new StoreyViewsPlugin(viewer, {
         size: [snapshotWidth, snapshotHeight],
         format: "png",  // Default
         ortho: true     // Default
@@ -126,12 +126,12 @@
     model.on("loaded", function () {
 
         const storeyViewDiv = document.getElementById("storeyViews");
-        const storeyViewIds = Object.keys(storeyViews.storeyViews);
+        const storeyViewIds = Object.keys(storeyViewsPlugin.storeyViews);
 
         for (var i = 0, len = storeyViewIds.length; i < len; i++) {
 
             const storeyViewId = storeyViewIds[i];
-            const storeyView = storeyViews.storeyViews[storeyViewId];
+            const storeyView = storeyViewsPlugin.storeyViews[storeyViewId];
             const img = document.createElement("img");
 
             img.src = storeyView.snapshotData;

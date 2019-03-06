@@ -3,7 +3,7 @@
  *
  * @type {{String:Object}}
  */
-const IFCStoreyViewObjectDefaults = {
+const IFCStoreyViewObjectStates = {
     IfcSlab: {
         visible: true,
         edges: true
@@ -57,4 +57,4 @@ const IFCStoreyViewObjectDefaults = {
     }
 };
 
-export {IFCStoreyViewObjectDefaults}
+export {IFCStoreyViewObjectStates}
