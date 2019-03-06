@@ -13,7 +13,7 @@
             background: lightblue;
         }
 
-        #storeyViews {
+        #planViews {
             margin-top: 20px;
             overflow-y: scroll;
             height: 600px;
@@ -44,11 +44,11 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>StoreyViewsPlugin (ALPHA)</h1>
+    <h1>PlanViewsPlugin</h1>
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
+               href="./../docs/class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a>
             - Generates plan views of IfcStorey elements
         </li>
         <li>
@@ -60,8 +60,11 @@
             <a target="_other"
                href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
         </li>
+        <li>
+            <a target="_other" href="https://github.com/xeolabs/xeokit-sdk/wiki/Plan-Views">User Guide</a>
+        </li>
     </ul>
-    <div id="storeyViews"></div>
+    <div id="planViews"></div>
 </div>
 
 </body>
@@ -74,10 +77,10 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
+    import {PlanViewsPlugin} from "../src/plugins/PlanViewsPlugin/PlanViewsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    // Create a Viewer, arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -104,8 +107,8 @@
     });
 
     //----------------------------------------------------------------------------------------------------------------------
-    // Add a StoreyViewsPlugin
-    // This will automatically create StoreyViews when the model has loaded
+    // Add a PlanViewsPlugin
+    // This will automatically create PlanViews when the model has loaded
     //----------------------------------------------------------------------------------------------------------------------
 
     var canvas = viewer.scene.canvas;
@@ -113,32 +116,32 @@
     var snapshotWidth = 470;
     var snapshotHeight = snapshotWidth / aspect;
 
-    const storeyViewsPlugin = new StoreyViewsPlugin(viewer, {
+    const planViewsPlugin = new PlanViewsPlugin(viewer, {
         size: [snapshotWidth, snapshotHeight],
         format: "png",  // Default
         ortho: true     // Default
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // When model loaded, get all StoreyViews from StoryViewsPlugin and show their canvas snapshots in this page
+    // When model loaded, get all PlanViews from StoryViewsPlugin and show their canvas snapshots in this page
     //------------------------------------------------------------------------------------------------------------------
 
     model.on("loaded", function () {
 
-        const storeyViewDiv = document.getElementById("storeyViews");
-        const storeyViewIds = Object.keys(storeyViewsPlugin.storeyViews);
+        const planViewDiv = document.getElementById("planViews");
+        const planViewIds = Object.keys(planViewsPlugin.planViews);
 
-        for (var i = 0, len = storeyViewIds.length; i < len; i++) {
+        for (var i = 0, len = planViewIds.length; i < len; i++) {
 
-            const storeyViewId = storeyViewIds[i];
-            const storeyView = storeyViewsPlugin.storeyViews[storeyViewId];
+            const planViewId = planViewIds[i];
+            const planView = planViewsPlugin.planViews[planViewId];
             const img = document.createElement("img");
 
-            img.src = storeyView.snapshotData;
+            img.src = planView.snapshotData;
             img.style.border = "1px solid #000000";
             img.style.background = "lightblue";
 
-            storeyViewDiv.appendChild(img);
+            planViewDiv.appendChild(img);
         }
     });
 

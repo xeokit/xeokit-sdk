@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js | xeokit-sdk</title>
+  <title data-ice="title">src/plugins/PlanViewsPlugin/PlanViewsPlugin.js | xeokit-sdk</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -35,12 +35,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -108,12 +108,12 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/PlanViewsPlugin/PlanViewsPlugin.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {SceneState} from &quot;../../viewer/scene/scene/SceneState.js&quot;;
 
 import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
-import {StoreyView} from &quot;./StoreyView.js&quot;;
-import {IFCStoreyViewObjectStates} from &quot;./IFCStoreyViewObjectStates.js&quot;;
+import {PlanView} from &quot;./PlanView.js&quot;;
+import {IFCPlanViewObjectStates} from &quot;./IFCPlanViewObjectStates.js&quot;;
 
 const sceneState = new SceneState();
 
@@ -129,19 +129,19 @@ const sceneState = new SceneState();
  * The {@link Entity}s within a storey correspond to {@link MetaObject}s within the structural subtree of
  * the &quot;IfcBuildingStorey&quot; {@link MetaObject}.
  *
- * StoreyViewPlugin automatically creates its {@link StoreyView}s as {@link MetaModel}s
+ * PlanViewPlugin automatically creates its {@link PlanView}s as {@link MetaModel}s
  * are created within its {@link Viewer}&apos;s {@link MetaScene}.
  *
- * StoreyViewPlugin configures the visual state of each {@link Entity} within each plan view according to
- * the type of its corresponding {@link MetaObject}, using the map of properties in {@link IFCStoreyViewObjectStates}
- * by default. You can customize the appearance of the Entities by providing your own {@link StoreyViewsPlugin#objectStates}.
+ * PlanViewPlugin configures the visual state of each {@link Entity} within each plan view according to
+ * the type of its corresponding {@link MetaObject}, using the map of properties in {@link IFCPlanViewObjectStates}
+ * by default. You can customize the appearance of the Entities by providing your own {@link PlanViewsPlugin#objectStates}.
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_StoreyViewsPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_PlanViewsPlugin)]
  *
  * ````javascript
  * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
  * import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
- * import {StoreyViewsPlugin} from &quot;../src/viewer/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js&quot;;
+ * import {PlanViewsPlugin} from &quot;../src/viewer/plugins/PlanViewsPlugin/PlanViewsPlugin.js&quot;;
  *
  * // Create a Viewer, arrange the camera
  *
@@ -165,39 +165,39 @@ const sceneState = new SceneState();
  *      edges: true
  * });
  *
- * // Add a StoreyViewsPlugin
- * // This will automatically create StoreyViews when the model has loaded
+ * // Add a PlanViewsPlugin
+ * // This will automatically create PlanViews when the model has loaded
  *
- * const storeyViews = new StoreyViewsPlugin(viewer, {
+ * const planViews = new PlanViewsPlugin(viewer, {
  *      size: [220, 220],
  *      format: &quot;png&quot;,  // Default
  *      ortho: true     // Default
  *  });
  *
  *
- * // When model loaded, get all StoreyViews from StoryViewsPlugin
+ * // When model loaded, get all PlanViews from StoryViewsPlugin
  *
  * model.on(&quot;loaded&quot;, function () {
  *
- *      const storeyViewIds = Object.keys(storeyViews.storeyViews);
+ *      const planViewIds = Object.keys(planViews.planViews);
  *
- *      for (var i = 0, len = storeyViewIds.length; i &lt; len; i++) {
+ *      for (var i = 0, len = planViewIds.length; i &lt; len; i++) {
  *
- *          const storeyViewId   = storeyViewIds[i];
+ *          const planViewId     = planViewIds[i];
  *
- *          const storeyView     = storeyViews.storeyViews[storeyViewId];
+ *          const planView       = planViews.planViews[planViewId];
  *
- *          const aabb           = storeyView.aabb; // Boundary of storey elements
- *          const modelId        = storeyView.modelId; // &quot;myModel&quot;
- *          const storeyObjectId = storeyView.storeyObjectId; // ID of IfcBuildingStorey
- *          const snapshotData   = storeyView.snapshotData;
+ *          const aabb           = planView.aabb; // Boundary of storey elements
+ *          const modelId        = planView.modelId; // &quot;myModel&quot;
+ *          const storeyObjectId = planView.storeyObjectId; // ID of IfcBuildingStorey
+ *          const snapshotData   = planView.snapshotData;
  *
  *          //...
  *      }
  * });
  * ````
  */
-class StoreyViewsPlugin extends Plugin {
+class PlanViewsPlugin extends Plugin {
 
     /**
      * @constructor
@@ -205,26 +205,26 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id=&quot;GLTFLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Object} [cfg.objectStates] Map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.  Default value is {@link IFCStoreyViewObjectStates}.
-     * @param {Boolean} [cfg.ortho=true] Whether to capture an orthographic or perspective view for each {@link StoreyView}.
-     * @param {Number[]} [cfg.size=[200,200]] Size of {@link StoreyView} images.
-     * @param {String} [cfg.format=&quot;png&quot;] Format of {@link StoreyView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
+     * @param {Object} [cfg.objectStates] Map of visual states for the {@link Entity}s as rendered within each {@link PlanView}.  Default value is {@link IFCPlanViewObjectStates}.
+     * @param {Boolean} [cfg.ortho=true] Whether to capture an orthographic or perspective view for each {@link PlanView}.
+     * @param {Number[]} [cfg.size=[200,200]] Size of {@link PlanView} images.
+     * @param {String} [cfg.format=&quot;png&quot;] Format of {@link PlanView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
      */
     constructor(viewer, cfg = {}) {
 
-        super(&quot;storeyViews&quot;, viewer);
+        super(&quot;planViews&quot;, viewer);
 
         /**
-         * A {@link StoreyView} for each {@link MetaObject} whose {@link MetaObject#type} equals &quot;IfcBuildingStorey&quot;, mapped to {@link Entity#id}.
-         * @type {{String:StoreyView}}
+         * A {@link PlanView} for each {@link MetaObject} whose {@link MetaObject#type} equals &quot;IfcBuildingStorey&quot;, mapped to {@link Entity#id}.
+         * @type {{String:PlanView}}
          */
-        this.storeyViews = {};
+        this.planViews = {};
 
         /**
-         * A map {@link StoreyView}s for each  {@link MetaModel}.
-         * @type {{String:StoreyView}}
+         * A map {@link PlanView}s for each  {@link MetaModel}.
+         * @type {{String:PlanView}}
          */
-        this.modelStoreyViews = {};
+        this.modelPlanViews = {};
 
         // TODO: view fit or margin configuration for snapshot
 
@@ -242,35 +242,35 @@ class StoreyViewsPlugin extends Plugin {
         });
 
         this._onModelLoaded = this.viewer.scene.on(&quot;modelLoaded&quot;, (modelId) =&gt; {
-            this._buildModelStoreyViews(modelId);
+            this._buildModelPlanViews(modelId);
         });
 
         const self = this;
 
         this._onTick = this.viewer.scene.on(&quot;tick&quot;, function () {
             if (self._dirty) {
-                self._rebuildStoreyViews();
+                self._rebuildPlanViews();
                 self._dirty = false;
             }
         });
     }
 
     /**
-     * Sets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
+     * Sets map of visual states for the {@link Entity}s as rendered within each {@link PlanView}.
      *
-     * Default value is {@link IFCStoreyViewObjectStates}.
+     * Default value is {@link IFCPlanViewObjectStates}.
      *
      * @type {{String: Object}}
      */
     set objectStates(value) {
-        this._objectStates = value || IFCStoreyViewObjectStates;
+        this._objectStates = value || IFCPlanViewObjectStates;
         this._dirty = true;
     }
 
     /**
-     * Gets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
+     * Gets map of visual states for the {@link Entity}s as rendered within each {@link PlanView}.
      *
-     * Default value is {@link IFCStoreyViewObjectStates}.
+     * Default value is {@link IFCPlanViewObjectStates}.
      *
      * @type {{String: Object}}
      */
@@ -279,7 +279,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets whether or not to capture an orthographic or perspective view for each {@link StoreyView}.
+     * Sets whether or not to capture an orthographic or perspective view for each {@link PlanView}.
      *
      * @param ortho
      */
@@ -289,7 +289,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Gets whether or not to capture an orthographic or perspective view for each {@link StoreyView}.
+     * Gets whether or not to capture an orthographic or perspective view for each {@link PlanView}.
      *
      * @returns {boolean}
      */
@@ -298,9 +298,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets the size of {@link StoreyView} images.
+     * Sets the size of {@link PlanView} images.
      *
-     * Rebuilds {@link StoreyView}s when updated.
+     * Rebuilds {@link PlanView}s when updated.
      *
      * @param size
      */
@@ -310,7 +310,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Gets the size of {@link StoreyView} images.
+     * Gets the size of {@link PlanView} images.
      *
      * @returns {*|number[]}
      */
@@ -319,9 +319,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets the format of {@link StoreyView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
+     * Sets the format of {@link PlanView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
      *
-     * Rebuilds {@link StoreyView}s when updated.
+     * Rebuilds {@link PlanView}s when updated.
      *
      * @param format
      */
@@ -332,7 +332,7 @@ class StoreyViewsPlugin extends Plugin {
 
     /**
      *
-     * Gets the format of {@link StoreyView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
+     * Gets the format of {@link PlanView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
      *
      * @returns {*|number[]}
      */
@@ -341,9 +341,9 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets the background color of {@link StoreyView} images.
+     * Sets the background color of {@link PlanView} images.
      *
-     * Rebuilds {@link StoreyView}s when updated.
+     * Rebuilds {@link PlanView}s when updated.
      *
      * @param bgColor
      */
@@ -353,7 +353,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Gets the background color of {@link StoreyView} images.
+     * Gets the background color of {@link PlanView} images.
      *
      * @returns {*|number[]}
      */
@@ -361,20 +361,20 @@ class StoreyViewsPlugin extends Plugin {
         return this._bgColor;
     }
 
-    _rebuildStoreyViews() {
+    _rebuildPlanViews() {
         const models = this.viewer.scene.models;
         for (var modelId in models) {
             if (models.hasOwnProperty(modelId)) {
-                this._buildModelStoreyViews(modelId);
+                this._buildModelPlanViews(modelId);
             }
         }
     }
 
-    _buildModelStoreyViews(modelId) {
+    _buildModelPlanViews(modelId) {
 
         var t0 = performance.now();
 
-        this._destroyModelStoreyViews(modelId);
+        this._destroyModelPlanViews(modelId);
 
         const self = this;
         const viewer = this.viewer;
@@ -388,7 +388,7 @@ class StoreyViewsPlugin extends Plugin {
             return;
         }
 
-        // How we build StoreyViews:
+        // How we build PlanViews:
         //
         // 1. Save state of scene
         // 2. Save Canvas size
@@ -399,7 +399,7 @@ class StoreyViewsPlugin extends Plugin {
         //      5.2 With each sub-object :-
         //          5.2.1 Set state from objectStates
         //      5.3 Grab snapshot of canvas
-        //      5.4 Create StoreyView from snapshot
+        //      5.4 Create PlanView from snapshot
         // 6. Restore scene state
         // 7. Restore canvas size
 
@@ -431,11 +431,11 @@ class StoreyViewsPlugin extends Plugin {
 
         const storeyObjectIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType([&quot;IfcBuildingStorey&quot;]);
         const numStoreys = storeyObjectIds.length;
-        var numStoreyViewsCreated = 0;
+        var numPlanViewsCreated = 0;
 
-        function createNextStoreyView() {
+        function createNextPlanView() {
 
-            const storeyObjectId = storeyObjectIds[numStoreyViewsCreated];
+            const storeyObjectId = storeyObjectIds[numPlanViewsCreated];
             const storeyMetaObject = metaModel.metaScene.metaObjects[storeyObjectId];
             const storeySubObjects = storeyMetaObject.getObjectIDsInSubtree();
 
@@ -486,24 +486,24 @@ class StoreyViewsPlugin extends Plugin {
                 format: self._format,
             });
 
-            // 5.4 Create StoreyView from snapshot
+            // 5.4 Create PlanView from snapshot
 
-            const storeyView = new StoreyView(scene.aabb, modelId, storeyObjectId, snapshotData);
+            const planView = new PlanView(scene.aabb, modelId, storeyObjectId, snapshotData);
 
-            storeyView._onModelDestroyed = model.once(&quot;destroyed&quot;, () =&gt; {
-                self._destroyModelStoreyViews(modelId);
+            planView._onModelDestroyed = model.once(&quot;destroyed&quot;, () =&gt; {
+                self._destroyModelPlanViews(modelId);
             });
 
-            self.storeyViews[storeyObjectId] = storeyView;
+            self.planViews[storeyObjectId] = planView;
 
-            if (!self.modelStoreyViews[modelId]) {
-                self.modelStoreyViews[modelId] = {};
+            if (!self.modelPlanViews[modelId]) {
+                self.modelPlanViews[modelId] = {};
             }
-            self.modelStoreyViews[modelId][storeyObjectId] = storeyView;
+            self.modelPlanViews[modelId][storeyObjectId] = planView;
 
-            numStoreyViewsCreated++;
+            numPlanViewsCreated++;
 
-            if (numStoreyViewsCreated === numStoreys) {
+            if (numPlanViewsCreated === numStoreys) {
 
                 // 6. Restore scene state
 
@@ -514,31 +514,31 @@ class StoreyViewsPlugin extends Plugin {
                 scene.canvas.canvas.boundary = saveCanvasBoundary;
 
             } else {
-                createNextStoreyView();
+                createNextPlanView();
             }
         }
 
-        createNextStoreyView();
+        createNextPlanView();
 
         var t1 = performance.now();
-        console.log(&quot;StoreViewsPlugin._rebuildStoreyViews() took &quot; + (t1 - t0) + &quot; milliseconds.&quot;)
+        console.log(&quot;StoreViewsPlugin._rebuildPlanViews() took &quot; + (t1 - t0) + &quot; milliseconds.&quot;)
     }
 
-    _destroyModelStoreyViews(modelId) {
-        const storeyViews = this.modelStoreyViews[modelId];
+    _destroyModelPlanViews(modelId) {
+        const planViews = this.modelPlanViews[modelId];
         const scene = this.viewer.scene;
-        if (storeyViews) {
-            for (let storyObjectId in storeyViews) {
-                if (storeyViews.hasOwnProperty(storyObjectId)) {
-                    const storeyView = storeyViews[storyObjectId];
-                    const model = scene.models[storeyView.modelId];
+        if (planViews) {
+            for (let storyObjectId in planViews) {
+                if (planViews.hasOwnProperty(storyObjectId)) {
+                    const planView = planViews[storyObjectId];
+                    const model = scene.models[planView.modelId];
                     if (model) {
-                        model.off(&quot;destroyed&quot;, storeyView._onModelDestroyed);
+                        model.off(&quot;destroyed&quot;, planView._onModelDestroyed);
                     }
-                    delete this.storeyViews[storyObjectId];
+                    delete this.planViews[storyObjectId];
                 }
             }
-            delete this.modelStoreyViews[modelId];
+            delete this.modelPlanViews[modelId];
         }
     }
 
@@ -550,7 +550,7 @@ class StoreyViewsPlugin extends Plugin {
     }
 }
 
-export {StoreyViewsPlugin}
+export {PlanViewsPlugin}
 </code></pre>
 
 </div>

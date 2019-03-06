@@ -1,9 +1,9 @@
 /**
- * @desc Property states for {@link Entity}s in {@link StoreyView}s capture by a {@link StoreyViewsPlugin}.
+ * @desc Property states for {@link Entity}s in {@link PlanView}s capture by a {@link PlanViewsPlugin}.
  *
  * @type {{String:Object}}
  */
-const IFCStoreyViewObjectStates = {
+const IFCPlanViewObjectStates = {
     IfcSlab: {
         visible: true,
         edges: true
@@ -57,4 +57,4 @@ const IFCStoreyViewObjectStates = {
     }
 };
 
-export {IFCStoreyViewObjectStates}
+export {IFCPlanViewObjectStates}

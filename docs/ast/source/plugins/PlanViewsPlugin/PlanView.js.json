@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1531,
+  "end": 1515,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 47,
-      "column": 20
+      "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1531,
+    "end": 1515,
     "loc": {
       "start": {
         "line": 1,
@@ -23,15 +23,15 @@
       },
       "end": {
         "line": 47,
-        "column": 20
+        "column": 18
       }
     },
     "sourceType": "module",
     "body": [
       {
         "type": "Identifier",
-        "start": 91,
-        "end": 1509,
+        "start": 89,
+        "end": 1495,
         "loc": {
           "start": {
             "line": 4,
@@ -44,8 +44,8 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 97,
-          "end": 107,
+          "start": 95,
+          "end": 103,
           "loc": {
             "start": {
               "line": 4,
@@ -53,22 +53,22 @@
             },
             "end": {
               "line": 4,
-              "column": 16
+              "column": 14
             },
-            "identifierName": "StoreyView"
+            "identifierName": "PlanView"
           },
-          "name": "StoreyView",
+          "name": "PlanView",
           "leadingComments": null
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 108,
-          "end": 1509,
+          "start": 104,
+          "end": 1495,
           "loc": {
             "start": {
               "line": 4,
-              "column": 17
+              "column": 15
             },
             "end": {
               "line": 45,
@@ -78,8 +78,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 147,
-              "end": 1507,
+              "start": 143,
+              "end": 1493,
               "loc": {
                 "start": {
                   "line": 9,
@@ -94,8 +94,8 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 147,
-                "end": 158,
+                "start": 143,
+                "end": 154,
                 "loc": {
                   "start": {
                     "line": 9,
@@ -118,8 +118,8 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 159,
-                  "end": 163,
+                  "start": 155,
+                  "end": 159,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -135,8 +135,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 165,
-                  "end": 172,
+                  "start": 161,
+                  "end": 168,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -152,8 +152,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 174,
-                  "end": 188,
+                  "start": 170,
+                  "end": 184,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -169,8 +169,8 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 190,
-                  "end": 202,
+                  "start": 186,
+                  "end": 198,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -187,8 +187,8 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 204,
-                "end": 1507,
+                "start": 200,
+                "end": 1493,
                 "loc": {
                   "start": {
                     "line": 9,
@@ -202,8 +202,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 521,
-                    "end": 546,
+                    "start": 517,
+                    "end": 542,
                     "loc": {
                       "start": {
                         "line": 17,
@@ -216,8 +216,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 521,
-                      "end": 545,
+                      "start": 517,
+                      "end": 541,
                       "loc": {
                         "start": {
                           "line": 17,
@@ -231,8 +231,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 521,
-                        "end": 530,
+                        "start": 517,
+                        "end": 526,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -245,8 +245,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 521,
-                          "end": 525,
+                          "start": 517,
+                          "end": 521,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -261,8 +261,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 526,
-                          "end": 530,
+                          "start": 522,
+                          "end": 526,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -281,8 +281,8 @@
                       },
                       "right": {
                         "type": "CallExpression",
-                        "start": 533,
-                        "end": 545,
+                        "start": 529,
+                        "end": 541,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -295,8 +295,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 533,
-                          "end": 543,
+                          "start": 529,
+                          "end": 539,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -309,8 +309,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 533,
-                            "end": 537,
+                            "start": 529,
+                            "end": 533,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -326,8 +326,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 538,
-                            "end": 543,
+                            "start": 534,
+                            "end": 539,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -351,8 +351,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.\n         *\n         * Represented by a six-element Float32Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.\n         ",
-                        "start": 215,
-                        "end": 512,
+                        "start": 211,
+                        "end": 508,
                         "loc": {
                           "start": {
                             "line": 11,
@@ -369,8 +369,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-                        "start": 556,
-                        "end": 718,
+                        "start": 552,
+                        "end": 714,
                         "loc": {
                           "start": {
                             "line": 19,
@@ -386,8 +386,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 727,
-                    "end": 750,
+                    "start": 723,
+                    "end": 746,
                     "loc": {
                       "start": {
                         "line": 25,
@@ -400,8 +400,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 727,
-                      "end": 749,
+                      "start": 723,
+                      "end": 745,
                       "loc": {
                         "start": {
                           "line": 25,
@@ -415,8 +415,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 727,
-                        "end": 739,
+                        "start": 723,
+                        "end": 735,
                         "loc": {
                           "start": {
                             "line": 25,
@@ -429,8 +429,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 727,
-                          "end": 731,
+                          "start": 723,
+                          "end": 727,
                           "loc": {
                             "start": {
                               "line": 25,
@@ -445,8 +445,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 732,
-                          "end": 739,
+                          "start": 728,
+                          "end": 735,
                           "loc": {
                             "start": {
                               "line": 25,
@@ -465,8 +465,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 742,
-                        "end": 749,
+                        "start": 738,
+                        "end": 745,
                         "loc": {
                           "start": {
                             "line": 25,
@@ -486,8 +486,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-                        "start": 556,
-                        "end": 718,
+                        "start": 552,
+                        "end": 714,
                         "loc": {
                           "start": {
                             "line": 19,
@@ -504,8 +504,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-                        "start": 760,
-                        "end": 931,
+                        "start": 756,
+                        "end": 927,
                         "loc": {
                           "start": {
                             "line": 27,
@@ -521,8 +521,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 940,
-                    "end": 977,
+                    "start": 936,
+                    "end": 973,
                     "loc": {
                       "start": {
                         "line": 33,
@@ -535,8 +535,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 940,
-                      "end": 976,
+                      "start": 936,
+                      "end": 972,
                       "loc": {
                         "start": {
                           "line": 33,
@@ -550,8 +550,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 940,
-                        "end": 959,
+                        "start": 936,
+                        "end": 955,
                         "loc": {
                           "start": {
                             "line": 33,
@@ -564,8 +564,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 940,
-                          "end": 944,
+                          "start": 936,
+                          "end": 940,
                           "loc": {
                             "start": {
                               "line": 33,
@@ -580,8 +580,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 945,
-                          "end": 959,
+                          "start": 941,
+                          "end": 955,
                           "loc": {
                             "start": {
                               "line": 33,
@@ -600,8 +600,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 962,
-                        "end": 976,
+                        "start": 958,
+                        "end": 972,
                         "loc": {
                           "start": {
                             "line": 33,
@@ -621,8 +621,8 @@
                       {
                         "type": "CommentBlock",
                         "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-                        "start": 760,
-                        "end": 931,
+                        "start": 756,
+                        "end": 927,
                         "loc": {
                           "start": {
                             "line": 27,
@@ -638,9 +638,9 @@
                     "trailingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-                        "start": 987,
-                        "end": 1459,
+                        "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+                        "start": 983,
+                        "end": 1445,
                         "loc": {
                           "start": {
                             "line": 35,
@@ -656,8 +656,8 @@
                   },
                   {
                     "type": "ExpressionStatement",
-                    "start": 1468,
-                    "end": 1501,
+                    "start": 1454,
+                    "end": 1487,
                     "loc": {
                       "start": {
                         "line": 43,
@@ -670,8 +670,8 @@
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 1468,
-                      "end": 1500,
+                      "start": 1454,
+                      "end": 1486,
                       "loc": {
                         "start": {
                           "line": 43,
@@ -685,8 +685,8 @@
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 1468,
-                        "end": 1485,
+                        "start": 1454,
+                        "end": 1471,
                         "loc": {
                           "start": {
                             "line": 43,
@@ -699,8 +699,8 @@
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 1468,
-                          "end": 1472,
+                          "start": 1454,
+                          "end": 1458,
                           "loc": {
                             "start": {
                               "line": 43,
@@ -715,8 +715,8 @@
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 1473,
-                          "end": 1485,
+                          "start": 1459,
+                          "end": 1471,
                           "loc": {
                             "start": {
                               "line": 43,
@@ -735,8 +735,8 @@
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 1488,
-                        "end": 1500,
+                        "start": 1474,
+                        "end": 1486,
                         "loc": {
                           "start": {
                             "line": 43,
@@ -755,9 +755,9 @@
                     "leadingComments": [
                       {
                         "type": "CommentBlock",
-                        "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-                        "start": 987,
-                        "end": 1459,
+                        "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+                        "start": 983,
+                        "end": 1445,
                         "loc": {
                           "start": {
                             "line": 35,
@@ -778,8 +778,8 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * @private\n     ",
-                  "start": 115,
-                  "end": 142,
+                  "start": 111,
+                  "end": 138,
                   "loc": {
                     "start": {
                       "line": 6,
@@ -801,8 +801,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1511,
-        "end": 1531,
+        "start": 1497,
+        "end": 1515,
         "loc": {
           "start": {
             "line": 47,
@@ -810,15 +810,15 @@
           },
           "end": {
             "line": 47,
-            "column": 20
+            "column": 18
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1519,
-            "end": 1529,
+            "start": 1505,
+            "end": 1513,
             "loc": {
               "start": {
                 "line": 47,
@@ -826,13 +826,13 @@
               },
               "end": {
                 "line": 47,
-                "column": 18
+                "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1519,
-              "end": 1529,
+              "start": 1505,
+              "end": 1513,
               "loc": {
                 "start": {
                   "line": 47,
@@ -840,16 +840,16 @@
                 },
                 "end": {
                   "line": 47,
-                  "column": 18
+                  "column": 16
                 },
-                "identifierName": "StoreyView"
+                "identifierName": "PlanView"
               },
-              "name": "StoreyView"
+              "name": "PlanView"
             },
             "exported": {
               "type": "Identifier",
-              "start": 1519,
-              "end": 1529,
+              "start": 1505,
+              "end": 1513,
               "loc": {
                 "start": {
                   "line": 47,
@@ -857,11 +857,11 @@
                 },
                 "end": {
                   "line": 47,
-                  "column": 18
+                  "column": 16
                 },
-                "identifierName": "StoreyView"
+                "identifierName": "PlanView"
               },
-              "name": "StoreyView"
+              "name": "PlanView"
             }
           }
         ],
@@ -869,8 +869,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1511,
-        "end": 1531,
+        "start": 1497,
+        "end": 1515,
         "loc": {
           "start": {
             "line": 47,
@@ -878,13 +878,13 @@
           },
           "end": {
             "line": 47,
-            "column": 20
+            "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 91,
-          "end": 1509,
+          "start": 89,
+          "end": 1495,
           "loc": {
             "start": {
               "line": 4,
@@ -897,8 +897,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 97,
-            "end": 107,
+            "start": 95,
+            "end": 103,
             "loc": {
               "start": {
                 "line": 4,
@@ -906,22 +906,22 @@
               },
               "end": {
                 "line": 4,
-                "column": 16
+                "column": 14
               },
-              "identifierName": "StoreyView"
+              "identifierName": "PlanView"
             },
-            "name": "StoreyView",
+            "name": "PlanView",
             "leadingComments": null
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 108,
-            "end": 1509,
+            "start": 104,
+            "end": 1495,
             "loc": {
               "start": {
                 "line": 4,
-                "column": 17
+                "column": 15
               },
               "end": {
                 "line": 45,
@@ -931,8 +931,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 147,
-                "end": 1507,
+                "start": 143,
+                "end": 1493,
                 "loc": {
                   "start": {
                     "line": 9,
@@ -947,8 +947,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 147,
-                  "end": 158,
+                  "start": 143,
+                  "end": 154,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -971,8 +971,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 159,
-                    "end": 163,
+                    "start": 155,
+                    "end": 159,
                     "loc": {
                       "start": {
                         "line": 9,
@@ -988,8 +988,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 165,
-                    "end": 172,
+                    "start": 161,
+                    "end": 168,
                     "loc": {
                       "start": {
                         "line": 9,
@@ -1005,8 +1005,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 174,
-                    "end": 188,
+                    "start": 170,
+                    "end": 184,
                     "loc": {
                       "start": {
                         "line": 9,
@@ -1022,8 +1022,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 190,
-                    "end": 202,
+                    "start": 186,
+                    "end": 198,
                     "loc": {
                       "start": {
                         "line": 9,
@@ -1040,8 +1040,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 204,
-                  "end": 1507,
+                  "start": 200,
+                  "end": 1493,
                   "loc": {
                     "start": {
                       "line": 9,
@@ -1055,8 +1055,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 521,
-                      "end": 546,
+                      "start": 517,
+                      "end": 542,
                       "loc": {
                         "start": {
                           "line": 17,
@@ -1069,8 +1069,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 521,
-                        "end": 545,
+                        "start": 517,
+                        "end": 541,
                         "loc": {
                           "start": {
                             "line": 17,
@@ -1084,8 +1084,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 521,
-                          "end": 530,
+                          "start": 517,
+                          "end": 526,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -1098,8 +1098,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 521,
-                            "end": 525,
+                            "start": 517,
+                            "end": 521,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -1114,8 +1114,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 526,
-                            "end": 530,
+                            "start": 522,
+                            "end": 526,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -1134,8 +1134,8 @@
                         },
                         "right": {
                           "type": "CallExpression",
-                          "start": 533,
-                          "end": 545,
+                          "start": 529,
+                          "end": 541,
                           "loc": {
                             "start": {
                               "line": 17,
@@ -1148,8 +1148,8 @@
                           },
                           "callee": {
                             "type": "MemberExpression",
-                            "start": 533,
-                            "end": 543,
+                            "start": 529,
+                            "end": 539,
                             "loc": {
                               "start": {
                                 "line": 17,
@@ -1162,8 +1162,8 @@
                             },
                             "object": {
                               "type": "Identifier",
-                              "start": 533,
-                              "end": 537,
+                              "start": 529,
+                              "end": 533,
                               "loc": {
                                 "start": {
                                   "line": 17,
@@ -1179,8 +1179,8 @@
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 538,
-                              "end": 543,
+                              "start": 534,
+                              "end": 539,
                               "loc": {
                                 "start": {
                                   "line": 17,
@@ -1204,8 +1204,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.\n         *\n         * Represented by a six-element Float32Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.\n         ",
-                          "start": 215,
-                          "end": 512,
+                          "start": 211,
+                          "end": 508,
                           "loc": {
                             "start": {
                               "line": 11,
@@ -1222,8 +1222,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-                          "start": 556,
-                          "end": 718,
+                          "start": 552,
+                          "end": 714,
                           "loc": {
                             "start": {
                               "line": 19,
@@ -1239,8 +1239,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 727,
-                      "end": 750,
+                      "start": 723,
+                      "end": 746,
                       "loc": {
                         "start": {
                           "line": 25,
@@ -1253,8 +1253,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 727,
-                        "end": 749,
+                        "start": 723,
+                        "end": 745,
                         "loc": {
                           "start": {
                             "line": 25,
@@ -1268,8 +1268,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 727,
-                          "end": 739,
+                          "start": 723,
+                          "end": 735,
                           "loc": {
                             "start": {
                               "line": 25,
@@ -1282,8 +1282,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 727,
-                            "end": 731,
+                            "start": 723,
+                            "end": 727,
                             "loc": {
                               "start": {
                                 "line": 25,
@@ -1298,8 +1298,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 732,
-                            "end": 739,
+                            "start": 728,
+                            "end": 735,
                             "loc": {
                               "start": {
                                 "line": 25,
@@ -1318,8 +1318,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 742,
-                          "end": 749,
+                          "start": 738,
+                          "end": 745,
                           "loc": {
                             "start": {
                               "line": 25,
@@ -1339,8 +1339,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-                          "start": 556,
-                          "end": 718,
+                          "start": 552,
+                          "end": 714,
                           "loc": {
                             "start": {
                               "line": 19,
@@ -1357,8 +1357,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-                          "start": 760,
-                          "end": 931,
+                          "start": 756,
+                          "end": 927,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -1374,8 +1374,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 940,
-                      "end": 977,
+                      "start": 936,
+                      "end": 973,
                       "loc": {
                         "start": {
                           "line": 33,
@@ -1388,8 +1388,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 940,
-                        "end": 976,
+                        "start": 936,
+                        "end": 972,
                         "loc": {
                           "start": {
                             "line": 33,
@@ -1403,8 +1403,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 940,
-                          "end": 959,
+                          "start": 936,
+                          "end": 955,
                           "loc": {
                             "start": {
                               "line": 33,
@@ -1417,8 +1417,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 940,
-                            "end": 944,
+                            "start": 936,
+                            "end": 940,
                             "loc": {
                               "start": {
                                 "line": 33,
@@ -1433,8 +1433,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 945,
-                            "end": 959,
+                            "start": 941,
+                            "end": 955,
                             "loc": {
                               "start": {
                                 "line": 33,
@@ -1453,8 +1453,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 962,
-                          "end": 976,
+                          "start": 958,
+                          "end": 972,
                           "loc": {
                             "start": {
                               "line": 33,
@@ -1474,8 +1474,8 @@
                         {
                           "type": "CommentBlock",
                           "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-                          "start": 760,
-                          "end": 931,
+                          "start": 756,
+                          "end": 927,
                           "loc": {
                             "start": {
                               "line": 27,
@@ -1491,9 +1491,9 @@
                       "trailingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-                          "start": 987,
-                          "end": 1459,
+                          "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+                          "start": 983,
+                          "end": 1445,
                           "loc": {
                             "start": {
                               "line": 35,
@@ -1509,8 +1509,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 1468,
-                      "end": 1501,
+                      "start": 1454,
+                      "end": 1487,
                       "loc": {
                         "start": {
                           "line": 43,
@@ -1523,8 +1523,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 1468,
-                        "end": 1500,
+                        "start": 1454,
+                        "end": 1486,
                         "loc": {
                           "start": {
                             "line": 43,
@@ -1538,8 +1538,8 @@
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 1468,
-                          "end": 1485,
+                          "start": 1454,
+                          "end": 1471,
                           "loc": {
                             "start": {
                               "line": 43,
@@ -1552,8 +1552,8 @@
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 1468,
-                            "end": 1472,
+                            "start": 1454,
+                            "end": 1458,
                             "loc": {
                               "start": {
                                 "line": 43,
@@ -1568,8 +1568,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 1473,
-                            "end": 1485,
+                            "start": 1459,
+                            "end": 1471,
                             "loc": {
                               "start": {
                                 "line": 43,
@@ -1588,8 +1588,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 1488,
-                          "end": 1500,
+                          "start": 1474,
+                          "end": 1486,
                           "loc": {
                             "start": {
                               "line": 43,
@@ -1608,9 +1608,9 @@
                       "leadingComments": [
                         {
                           "type": "CommentBlock",
-                          "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-                          "start": 987,
-                          "end": 1459,
+                          "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+                          "start": 983,
+                          "end": 1445,
                           "loc": {
                             "start": {
                               "line": 35,
@@ -1631,8 +1631,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * @private\n     ",
-                    "start": 115,
-                    "end": 142,
+                    "start": 111,
+                    "end": 138,
                     "loc": {
                       "start": {
                         "line": 6,
@@ -1651,9 +1651,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.\n ",
+              "value": "*\n * @desc A plan view of a building storey, managed by a {@link PlanViewsPlugin}.\n ",
               "start": 0,
-              "end": 90,
+              "end": 88,
               "loc": {
                 "start": {
                   "line": 1,
@@ -1679,9 +1679,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.\n ",
+      "value": "*\n * @desc A plan view of a building storey, managed by a {@link PlanViewsPlugin}.\n ",
       "start": 0,
-      "end": 90,
+      "end": 88,
       "loc": {
         "start": {
           "line": 1,
@@ -1696,8 +1696,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * @private\n     ",
-      "start": 115,
-      "end": 142,
+      "start": 111,
+      "end": 138,
       "loc": {
         "start": {
           "line": 6,
@@ -1712,8 +1712,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.\n         *\n         * Represented by a six-element Float32Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.\n         ",
-      "start": 215,
-      "end": 512,
+      "start": 211,
+      "end": 508,
       "loc": {
         "start": {
           "line": 11,
@@ -1728,8 +1728,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-      "start": 556,
-      "end": 718,
+      "start": 552,
+      "end": 714,
       "loc": {
         "start": {
           "line": 19,
@@ -1744,8 +1744,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-      "start": 760,
-      "end": 931,
+      "start": 756,
+      "end": 927,
       "loc": {
         "start": {
           "line": 27,
@@ -1759,9 +1759,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-      "start": 987,
-      "end": 1459,
+      "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+      "start": 983,
+      "end": 1445,
       "loc": {
         "start": {
           "line": 35,
@@ -1777,9 +1777,9 @@
   "tokens": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.\n ",
+      "value": "*\n * @desc A plan view of a building storey, managed by a {@link PlanViewsPlugin}.\n ",
       "start": 0,
-      "end": 90,
+      "end": 88,
       "loc": {
         "start": {
           "line": 1,
@@ -1806,8 +1806,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 91,
-      "end": 96,
+      "start": 89,
+      "end": 94,
       "loc": {
         "start": {
           "line": 4,
@@ -1831,9 +1831,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "StoreyView",
-      "start": 97,
-      "end": 107,
+      "value": "PlanView",
+      "start": 95,
+      "end": 103,
       "loc": {
         "start": {
           "line": 4,
@@ -1841,7 +1841,7 @@
         },
         "end": {
           "line": 4,
-          "column": 16
+          "column": 14
         }
       }
     },
@@ -1857,24 +1857,24 @@
         "postfix": false,
         "binop": null
       },
-      "start": 108,
-      "end": 109,
+      "start": 104,
+      "end": 105,
       "loc": {
         "start": {
           "line": 4,
-          "column": 17
+          "column": 15
         },
         "end": {
           "line": 4,
-          "column": 18
+          "column": 16
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n     * @private\n     ",
-      "start": 115,
-      "end": 142,
+      "start": 111,
+      "end": 138,
       "loc": {
         "start": {
           "line": 6,
@@ -1899,8 +1899,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 147,
-      "end": 158,
+      "start": 143,
+      "end": 154,
       "loc": {
         "start": {
           "line": 9,
@@ -1924,8 +1924,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 158,
-      "end": 159,
+      "start": 154,
+      "end": 155,
       "loc": {
         "start": {
           "line": 9,
@@ -1950,8 +1950,8 @@
         "binop": null
       },
       "value": "aabb",
-      "start": 159,
-      "end": 163,
+      "start": 155,
+      "end": 159,
       "loc": {
         "start": {
           "line": 9,
@@ -1976,8 +1976,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 163,
-      "end": 164,
+      "start": 159,
+      "end": 160,
       "loc": {
         "start": {
           "line": 9,
@@ -2002,8 +2002,8 @@
         "binop": null
       },
       "value": "modelId",
-      "start": 165,
-      "end": 172,
+      "start": 161,
+      "end": 168,
       "loc": {
         "start": {
           "line": 9,
@@ -2028,8 +2028,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 172,
-      "end": 173,
+      "start": 168,
+      "end": 169,
       "loc": {
         "start": {
           "line": 9,
@@ -2054,8 +2054,8 @@
         "binop": null
       },
       "value": "storeyObjectId",
-      "start": 174,
-      "end": 188,
+      "start": 170,
+      "end": 184,
       "loc": {
         "start": {
           "line": 9,
@@ -2080,8 +2080,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 188,
-      "end": 189,
+      "start": 184,
+      "end": 185,
       "loc": {
         "start": {
           "line": 9,
@@ -2106,8 +2106,8 @@
         "binop": null
       },
       "value": "snapshotData",
-      "start": 190,
-      "end": 202,
+      "start": 186,
+      "end": 198,
       "loc": {
         "start": {
           "line": 9,
@@ -2131,8 +2131,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 202,
-      "end": 203,
+      "start": 198,
+      "end": 199,
       "loc": {
         "start": {
           "line": 9,
@@ -2156,8 +2156,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 204,
-      "end": 205,
+      "start": 200,
+      "end": 201,
       "loc": {
         "start": {
           "line": 9,
@@ -2172,8 +2172,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.\n         *\n         * Represented by a six-element Float32Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.\n         ",
-      "start": 215,
-      "end": 512,
+      "start": 211,
+      "end": 508,
       "loc": {
         "start": {
           "line": 11,
@@ -2200,8 +2200,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 521,
-      "end": 525,
+      "start": 517,
+      "end": 521,
       "loc": {
         "start": {
           "line": 17,
@@ -2226,8 +2226,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 525,
-      "end": 526,
+      "start": 521,
+      "end": 522,
       "loc": {
         "start": {
           "line": 17,
@@ -2252,8 +2252,8 @@
         "binop": null
       },
       "value": "aabb",
-      "start": 526,
-      "end": 530,
+      "start": 522,
+      "end": 526,
       "loc": {
         "start": {
           "line": 17,
@@ -2279,8 +2279,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 531,
-      "end": 532,
+      "start": 527,
+      "end": 528,
       "loc": {
         "start": {
           "line": 17,
@@ -2305,8 +2305,8 @@
         "binop": null
       },
       "value": "aabb",
-      "start": 533,
-      "end": 537,
+      "start": 529,
+      "end": 533,
       "loc": {
         "start": {
           "line": 17,
@@ -2331,8 +2331,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 537,
-      "end": 538,
+      "start": 533,
+      "end": 534,
       "loc": {
         "start": {
           "line": 17,
@@ -2357,8 +2357,8 @@
         "binop": null
       },
       "value": "slice",
-      "start": 538,
-      "end": 543,
+      "start": 534,
+      "end": 539,
       "loc": {
         "start": {
           "line": 17,
@@ -2382,8 +2382,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 543,
-      "end": 544,
+      "start": 539,
+      "end": 540,
       "loc": {
         "start": {
           "line": 17,
@@ -2407,8 +2407,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 544,
-      "end": 545,
+      "start": 540,
+      "end": 541,
       "loc": {
         "start": {
           "line": 17,
@@ -2433,8 +2433,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 545,
-      "end": 546,
+      "start": 541,
+      "end": 542,
       "loc": {
         "start": {
           "line": 17,
@@ -2449,8 +2449,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of the {@link MetaModel} that contains the building storey.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
-      "start": 556,
-      "end": 718,
+      "start": 552,
+      "end": 714,
       "loc": {
         "start": {
           "line": 19,
@@ -2477,8 +2477,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 727,
-      "end": 731,
+      "start": 723,
+      "end": 727,
       "loc": {
         "start": {
           "line": 25,
@@ -2503,8 +2503,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 731,
-      "end": 732,
+      "start": 727,
+      "end": 728,
       "loc": {
         "start": {
           "line": 25,
@@ -2529,8 +2529,8 @@
         "binop": null
       },
       "value": "modelId",
-      "start": 732,
-      "end": 739,
+      "start": 728,
+      "end": 735,
       "loc": {
         "start": {
           "line": 25,
@@ -2556,8 +2556,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 740,
-      "end": 741,
+      "start": 736,
+      "end": 737,
       "loc": {
         "start": {
           "line": 25,
@@ -2582,8 +2582,8 @@
         "binop": null
       },
       "value": "modelId",
-      "start": 742,
-      "end": 749,
+      "start": 738,
+      "end": 745,
       "loc": {
         "start": {
           "line": 25,
@@ -2608,8 +2608,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 749,
-      "end": 750,
+      "start": 745,
+      "end": 746,
       "loc": {
         "start": {
           "line": 25,
@@ -2624,8 +2624,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n         * ID of the {@link MetaObject} that represents the building storey.\n         *\n         * @property storeObjectId\n         * @type {String|Number}\n         ",
-      "start": 760,
-      "end": 931,
+      "start": 756,
+      "end": 927,
       "loc": {
         "start": {
           "line": 27,
@@ -2652,8 +2652,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 940,
-      "end": 944,
+      "start": 936,
+      "end": 940,
       "loc": {
         "start": {
           "line": 33,
@@ -2678,8 +2678,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 944,
-      "end": 945,
+      "start": 940,
+      "end": 941,
       "loc": {
         "start": {
           "line": 33,
@@ -2704,8 +2704,8 @@
         "binop": null
       },
       "value": "storeyObjectId",
-      "start": 945,
-      "end": 959,
+      "start": 941,
+      "end": 955,
       "loc": {
         "start": {
           "line": 33,
@@ -2731,8 +2731,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 960,
-      "end": 961,
+      "start": 956,
+      "end": 957,
       "loc": {
         "start": {
           "line": 33,
@@ -2757,8 +2757,8 @@
         "binop": null
       },
       "value": "storeyObjectId",
-      "start": 962,
-      "end": 976,
+      "start": 958,
+      "end": 972,
       "loc": {
         "start": {
           "line": 33,
@@ -2783,8 +2783,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 976,
-      "end": 977,
+      "start": 972,
+      "end": 973,
       "loc": {
         "start": {
           "line": 33,
@@ -2798,9 +2798,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link StoreyViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of\n         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).\n         ",
-      "start": 987,
-      "end": 1459,
+      "value": "*\n         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.\n         *\n         * The format is indicated by {@link PlanViewsPlugin#format}.\n         *\n         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of\n         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).\n         ",
+      "start": 983,
+      "end": 1445,
       "loc": {
         "start": {
           "line": 35,
@@ -2827,8 +2827,8 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 1468,
-      "end": 1472,
+      "start": 1454,
+      "end": 1458,
       "loc": {
         "start": {
           "line": 43,
@@ -2853,8 +2853,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1472,
-      "end": 1473,
+      "start": 1458,
+      "end": 1459,
       "loc": {
         "start": {
           "line": 43,
@@ -2879,8 +2879,8 @@
         "binop": null
       },
       "value": "snapshotData",
-      "start": 1473,
-      "end": 1485,
+      "start": 1459,
+      "end": 1471,
       "loc": {
         "start": {
           "line": 43,
@@ -2906,8 +2906,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 1486,
-      "end": 1487,
+      "start": 1472,
+      "end": 1473,
       "loc": {
         "start": {
           "line": 43,
@@ -2932,8 +2932,8 @@
         "binop": null
       },
       "value": "snapshotData",
-      "start": 1488,
-      "end": 1500,
+      "start": 1474,
+      "end": 1486,
       "loc": {
         "start": {
           "line": 43,
@@ -2958,8 +2958,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1500,
-      "end": 1501,
+      "start": 1486,
+      "end": 1487,
       "loc": {
         "start": {
           "line": 43,
@@ -2983,8 +2983,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1506,
-      "end": 1507,
+      "start": 1492,
+      "end": 1493,
       "loc": {
         "start": {
           "line": 44,
@@ -3008,8 +3008,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1508,
-      "end": 1509,
+      "start": 1494,
+      "end": 1495,
       "loc": {
         "start": {
           "line": 45,
@@ -3036,8 +3036,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1511,
-      "end": 1517,
+      "start": 1497,
+      "end": 1503,
       "loc": {
         "start": {
           "line": 47,
@@ -3061,8 +3061,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1518,
-      "end": 1519,
+      "start": 1504,
+      "end": 1505,
       "loc": {
         "start": {
           "line": 47,
@@ -3086,9 +3086,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "StoreyView",
-      "start": 1519,
-      "end": 1529,
+      "value": "PlanView",
+      "start": 1505,
+      "end": 1513,
       "loc": {
         "start": {
           "line": 47,
@@ -3096,7 +3096,7 @@
         },
         "end": {
           "line": 47,
-          "column": 18
+          "column": 16
         }
       }
     },
@@ -3112,16 +3112,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1529,
-      "end": 1530,
+      "start": 1513,
+      "end": 1514,
       "loc": {
         "start": {
           "line": 47,
-          "column": 18
+          "column": 16
         },
         "end": {
           "line": 47,
-          "column": 19
+          "column": 17
         }
       }
     },
@@ -3138,16 +3138,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1530,
-      "end": 1531,
+      "start": 1514,
+      "end": 1515,
       "loc": {
         "start": {
           "line": 47,
-          "column": 19
+          "column": 17
         },
         "end": {
           "line": 47,
-          "column": 20
+          "column": 18
         }
       }
     },
@@ -3164,16 +3164,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1531,
-      "end": 1531,
+      "start": 1515,
+      "end": 1515,
       "loc": {
         "start": {
           "line": 47,
-          "column": 20
+          "column": 18
         },
         "end": {
           "line": 47,
-          "column": 20
+          "column": 18
         }
       }
     }

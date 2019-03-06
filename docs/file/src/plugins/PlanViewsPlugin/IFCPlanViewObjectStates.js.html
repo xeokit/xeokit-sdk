@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../../">
-  <title data-ice="title">src/plugins/StoreyViewsPlugin/StoreyView.js | xeokit-sdk</title>
+  <title data-ice="title">src/plugins/PlanViewsPlugin/IFCPlanViewObjectStates.js | xeokit-sdk</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -35,12 +35,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -108,54 +108,67 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/StoreyViewsPlugin/StoreyView.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/PlanViewsPlugin/IFCPlanViewObjectStates.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.
+ * @desc Property states for {@link Entity}s in {@link PlanView}s capture by a {@link PlanViewsPlugin}.
+ *
+ * @type {{String:Object}}
  */
-class StoreyView {
-
-    /**
-     * @private
-     */
-    constructor(aabb, modelId, storeyObjectId, snapshotData) {
-
-        /**
-         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.
-         *
-         * Represented by a six-element Float32Array containing the min/max extents of the
-         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
-         */
-        this.aabb = aabb.slice();
-
-        /**
-         * ID of the {@link MetaModel} that contains the building storey.
-         *
-         * @property modelId
-         * @type {String|Number}
-         */
-        this.modelId = modelId;
-
-        /**
-         * ID of the {@link MetaObject} that represents the building storey.
-         *
-         * @property storeObjectId
-         * @type {String|Number}
-         */
-        this.storeyObjectId = storeyObjectId;
-
-        /**
-         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.
-         *
-         * The format is indicated by {@link StoreyViewsPlugin#format}.
-         *
-         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of
-         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).
-         */
-        this.snapshotData = snapshotData;
+const IFCPlanViewObjectStates = {
+    IfcSlab: {
+        visible: true,
+        edges: true
+    },
+    IfcWall: {
+        visible: true,
+        edges: true
+    },
+    IfcWallStandardCase: {
+        visible: true,
+        edges: true
+    },
+    IfcDoor: {
+        visible: true,
+        edges: true
+    },
+    IfcWindow: {
+        visible: true,
+        edges: true
+    },
+    IfcColumn: {
+        visible: true,
+        edges: true
+    },
+    IfcCurtainWall: {
+        visible: true,
+        edges: true
+    },
+    IfcStair: {
+        visible: true,
+        edges: true
+    },
+    IfcStairFlight: {
+        visible: true,
+        edges: true
+    },
+    IfcRamp: {
+        visible: true,
+        edges: true
+    },
+    IfcFurniture: {
+        visible: true,
+        edges: true
+    },
+    IfcFooting: {
+        visible: true,
+        edges: true
+    },
+    DEFAULT: {
+        visible: false
     }
-}
+};
 
-export {StoreyView};</code></pre>
+export {IFCPlanViewObjectStates}</code></pre>
 
 </div>
 

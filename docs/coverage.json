@@ -354,6 +354,36 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/plugins/PlanViewsPlugin/IFCPlanViewObjectStates.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/plugins/PlanViewsPlugin/PlanView.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/plugins/PlanViewsPlugin/PlanViewsPlugin.js": {
+      "expectCount": 28,
+      "actualCount": 14,
+      "undocumentLines": [
+        7,
+        126,
+        133,
+        139,
+        155,
+        156,
+        176,
+        197,
+        218,
+        240,
+        253,
+        262,
+        416,
+        434
+      ]
+    },
     "src/plugins/STLLoaderPlugin/STLLoader.js": {
       "expectCount": 4,
       "actualCount": 1,
@@ -381,36 +411,6 @@
       "undocumentLines": [
         61,
         63
-      ]
-    },
-    "src/plugins/StoreyViewsPlugin/IFCStoreyViewObjectStates.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/StoreyViewsPlugin/StoreyView.js": {
-      "expectCount": 6,
-      "actualCount": 6,
-      "undocumentLines": []
-    },
-    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js": {
-      "expectCount": 28,
-      "actualCount": 14,
-      "undocumentLines": [
-        7,
-        126,
-        133,
-        139,
-        155,
-        156,
-        176,
-        197,
-        218,
-        240,
-        253,
-        262,
-        416,
-        434
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {

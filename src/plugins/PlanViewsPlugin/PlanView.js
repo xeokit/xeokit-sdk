@@ -1,7 +1,7 @@
 /**
- * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.
+ * @desc A plan view of a building storey, managed by a {@link PlanViewsPlugin}.
  */
-class StoreyView {
+class PlanView {
 
     /**
      * @private
@@ -35,13 +35,13 @@ class StoreyView {
         /**
          * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.
          *
-         * The format is indicated by {@link StoreyViewsPlugin#format}.
+         * The format is indicated by {@link PlanViewsPlugin#format}.
          *
-         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of
-         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).
+         * This property is automatically regenerated whenever {@link PlanViewsPlugin} is reconfigured (eg. on update of
+         * {@link PlanViewsPlugin#format}, {@link PlanViewsPlugin#size}, {@link PlanViewsPlugin#objectStates} etc).
          */
         this.snapshotData = snapshotData;
     }
 }
 
-export {StoreyView};
+export {PlanView};
