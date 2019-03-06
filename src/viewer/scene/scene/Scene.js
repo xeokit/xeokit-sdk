@@ -61,6 +61,7 @@ function getEntityIDMap(scene, entityIds) {
  *
  * * A {@link Viewer} has a single Scene, which it provides in {@link Viewer#scene}.
  * * Plugins like {@link AxisGizmoPlugin} also have their own private Scenes.
+ * * Each Scene has a corresponding {@link MetaScene}, which the Viewer provides in {@link Viewer#metaScene}.
  *
  * ## Getting a Viewer's Scene
  *

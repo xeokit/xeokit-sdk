@@ -9,10 +9,9 @@ import {MetaObject} from "./MetaObject.js";
  *
  * A MetaModel is created by {@link MetaScene#createMetaModel} and belongs to a {@link MetaScene}.
  *
- * Each MetaModel is registered by {@link MetaObject#id} in {@link MetaScene#metaModels}.
+ * Each MetaModel is registered by {@link MetaModel#id} in {@link MetaScene#metaModels}.
  *
- * A {@link MetaModel} represents its object structure with a tree of {@link MetaObject}s, with {@link MetaModel#rootMetaObject} referencing
- * the root {@link MetaObject}.
+ * A {@link MetaModel} represents its object structure with a tree of {@link MetaObject}s, with {@link MetaModel#rootMetaObject} referencing the root {@link MetaObject}.
  *
  * @class MetaModel
  */
