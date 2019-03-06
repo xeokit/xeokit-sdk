@@ -40,7 +40,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -517,7 +517,7 @@ var parseGLTF = (function () {
 
         if (glTFNode.mesh !== undefined) {
 
-            var meshInfo = json.meshes[glTFNode.mesh];
+            const meshInfo = json.meshes[glTFNode.mesh];
 
             if (meshInfo) {
 
@@ -525,16 +525,16 @@ var parseGLTF = (function () {
 
                 if (numPrimitives &gt; 0) {
 
-                    var meshIds = [];
+                    const meshIds = [];
 
                     for (var i = 0; i &lt; numPrimitives; i++) {
                         const meshCfg = {
                             id: performanceModel.id + &quot;.&quot; + ctx.numObjects++,
                             matrix: matrix
                         };
-                        var primitiveInfo = meshInfo.primitives[i];
+                        const primitiveInfo = meshInfo.primitives[i];
 
-                        var materialIndex = primitiveInfo.material;
+                        const materialIndex = primitiveInfo.material;
                         var materialInfo;
                         if (materialIndex !== null &amp;&amp; materialIndex !== undefined) {
                             materialInfo = json.materials[materialIndex];
@@ -563,20 +563,20 @@ var parseGLTF = (function () {
                             // Instancing
                             //------------------------------------------------------------------
 
-                            const geometryId = performanceModel.id + &quot;.&quot; + glTFNode.mesh;
+                            const geometryId = performanceModel.id + &quot;.&quot; + glTFNode.mesh + &quot;.&quot; + i;
 
-                            if (!meshInfo.geometryId) {
-                                meshInfo.geometryId = geometryId;
-                                var geometryCfg = {
+                            if (!primitiveInfo.geometryId) { // Ensures we only load each primitive mesh once
+                                primitiveInfo.geometryId = geometryId;
+                                const geometryCfg = {
                                     id: geometryId
                                 };
-                                loadPrimitiveGeometry(ctx, meshInfo, i, geometryCfg);
+                                loadPrimitiveGeometry(ctx, primitiveInfo, geometryCfg);
                                 performanceModel.createGeometry(geometryCfg);
                             }
 
                             meshCfg.geometryId = geometryId;
 
-                            const mesh = performanceModel.createMesh(meshCfg);
+                            performanceModel.createMesh(meshCfg);
                             meshIds.push(meshCfg.id);
 
                         } else {
@@ -585,9 +585,9 @@ var parseGLTF = (function () {
                             // Batching
                             //------------------------------------------------------------------
 
-                            loadPrimitiveGeometry(ctx, meshInfo, i, meshCfg);
+                            loadPrimitiveGeometry(ctx, primitiveInfo, meshCfg);
 
-                            const mesh = performanceModel.createMesh(meshCfg);
+                            performanceModel.createMesh(meshCfg);
                             meshIds.push(meshCfg.id);
                         }
                     }
@@ -597,9 +597,9 @@ var parseGLTF = (function () {
                             meshIds: meshIds
                         }));
                     } else {
-                        // PerformanceModel.createEntity({
-                        //     meshIds: meshIds
-                        // });
+                        performanceModel.createEntity({
+                            meshIds: meshIds
+                        });
                     }
                 }
             }
@@ -621,15 +621,7 @@ var parseGLTF = (function () {
         }
     }
 
-    function loadPrimitiveGeometry(ctx, meshInfo, primitiveIdx, geometryCfg) {
-        var primitivesInfo = meshInfo.primitives;
-        if (!primitivesInfo) {
-            return;
-        }
-        var primitiveInfo = primitivesInfo[primitiveIdx];
-        if (!primitiveInfo) {
-            return;
-        }
+    function loadPrimitiveGeometry(ctx, primitiveInfo, geometryCfg) {
         var attributes = primitiveInfo.attributes;
         if (!attributes) {
             return;
@@ -644,7 +636,7 @@ var parseGLTF = (function () {
         if (positionsIndex !== null &amp;&amp; positionsIndex !== undefined) {
             const accessorInfo = ctx.json.accessors[positionsIndex];
             geometryCfg.positions = loadAccessorTypedArray(ctx, accessorInfo);
-          //  scalePositionsArray(geometryCfg.positions);
+            //  scalePositionsArray(geometryCfg.positions);
         }
         var normalsIndex = attributes.NORMAL;
         if (normalsIndex !== null &amp;&amp; normalsIndex !== undefined) {
@@ -670,10 +662,10 @@ var parseGLTF = (function () {
     }
 
     function scalePositionsArray(positions) {
-        for (var i =0, len = positions.length; i &lt; len; i+=3) {
-            positions[i+0] *= 1000;
-            positions[i+1] *= 1000;
-            positions[i+2] *= 1000;
+        for (var i = 0, len = positions.length; i &lt; len; i += 3) {
+            positions[i + 0] *= 1000;
+            positions[i + 1] *= 1000;
+            positions[i + 2] *= 1000;
         }
 
     }
@@ -681,7 +673,8 @@ var parseGLTF = (function () {
     function error(ctx, msg) {
         ctx.plugin.error(msg);
     }
-})();
+})
+();
 
 export {GLTFPerformanceLoader}</code></pre>
 

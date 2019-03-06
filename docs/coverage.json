@@ -1,6 +1,6 @@
 {
-  "coverage": "51.26%",
-  "expectCount": 2807,
+  "coverage": "51.28%",
+  "expectCount": 2806,
   "actualCount": 1439,
   "files": {
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
@@ -383,7 +383,7 @@
         63
       ]
     },
-    "src/plugins/StoreyViewsPlugin/IFCStoreyViewObjectDefaults.js": {
+    "src/plugins/StoreyViewsPlugin/IFCStoreyViewObjectStates.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
@@ -398,19 +398,19 @@
       "actualCount": 14,
       "undocumentLines": [
         7,
-        110,
-        117,
-        123,
+        126,
+        133,
         139,
-        140,
-        160,
-        181,
-        202,
-        224,
-        237,
-        246,
-        400,
-        418
+        155,
+        156,
+        176,
+        197,
+        218,
+        240,
+        253,
+        262,
+        416,
+        434
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
@@ -686,7 +686,7 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingLayer.js": {
-      "expectCount": 66,
+      "expectCount": 65,
       "actualCount": 5,
       "undocumentLines": [
         14,
@@ -695,61 +695,60 @@
         17,
         18,
         19,
-        21,
-        819,
-        848,
-        895,
-        912,
-        930,
-        35,
-        36,
-        68,
+        808,
+        837,
+        884,
+        901,
+        919,
+        33,
+        34,
+        66,
+        80,
+        81,
         82,
         83,
         84,
         85,
         86,
         87,
-        88,
-        89,
-        93,
+        91,
+        92,
         94,
-        96,
-        362,
-        395,
-        409,
-        423,
-        437,
-        451,
-        465,
-        472,
-        478,
-        492,
-        527,
-        549,
-        571,
-        580,
-        589,
+        351,
+        384,
+        398,
+        412,
+        426,
+        440,
+        454,
+        461,
+        467,
+        481,
+        516,
+        538,
+        560,
+        569,
+        578,
+        587,
         598,
-        609,
-        618,
-        627,
+        607,
+        616,
+        625,
         636,
-        647,
-        656,
-        665,
+        645,
+        654,
+        663,
         674,
-        685,
-        694,
-        703,
+        683,
+        692,
+        701,
         712,
-        723,
+        721,
+        724,
+        728,
         732,
-        735,
-        739,
-        743,
-        747,
-        763
+        736,
+        752
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingPickRenderer.js": {
@@ -792,8 +791,8 @@
         49,
         60,
         64,
-        159,
-        243
+        160,
+        244
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingDrawShaderSource.js": {
@@ -816,8 +815,8 @@
         49,
         60,
         64,
-        150,
-        183
+        154,
+        187
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingEdgesShaderSource.js": {
@@ -841,8 +840,8 @@
         49,
         60,
         64,
-        146,
-        180
+        149,
+        183
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingFillShaderSource.js": {
@@ -943,8 +942,8 @@
         47,
         58,
         62,
-        124,
-        165
+        129,
+        169
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingPickShaderSource.js": {
@@ -952,7 +951,7 @@
       "actualCount": 1,
       "undocumentLines": [
         13,
-        57
+        63
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/renderFlags.js": {

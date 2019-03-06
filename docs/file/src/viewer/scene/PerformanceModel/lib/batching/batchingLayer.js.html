@@ -40,7 +40,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -128,8 +128,6 @@ const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
-
-var currentBatchingLayer = null;
 
 /**
  * @private
@@ -246,13 +244,6 @@ class BatchingLayer {
         }
         if (this._finalized) {
             throw &quot;BatchingLayer full - check first with canCreatePortion()&quot;;
-        }
-        if (currentBatchingLayer !== null) {
-            if (currentBatchingLayer !== this) {
-                throw &quot;Already packing another BatchingLayer&quot;;
-            }
-        } else {
-            currentBatchingLayer = this;
         }
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
@@ -460,8 +451,6 @@ class BatchingLayer {
         buffer.lenPickColors = 0;
         buffer.lenIndices = 0;
         buffer.lenEdgeIndices = 0;
-
-        currentBatchingLayer = null;
 
         this._buffer = null;
         this._finalized = true;

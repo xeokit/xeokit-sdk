@@ -40,7 +40,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -109,13 +109,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber73">xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber89">xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber73">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber89">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -135,7 +135,18 @@
 
   
   
-  <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that automatically generates plan view images.</p>
+  <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides plan view images of storeys within IFC building models.</p>
+<p>A plan view image consists of a downward-looking orthographic snapshot image of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within a storey
+belonging to a building model.</p>
+<p>Each building storey is represented by a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> of type &quot;IfcBuildingStorey&quot; within the
+Viewer&apos;s <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span>.</p>
+<p>The <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within a storey correspond to <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s within the structural subtree of
+the &quot;IfcBuildingStorey&quot; <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>.</p>
+<p>StoreyViewPlugin automatically creates its <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s as <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>s
+are created within its <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span>.</p>
+<p>StoreyViewPlugin configures the visual state of each <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> within each plan view according to
+the type of its corresponding <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>, using the map of properties in <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span>
+by default. You can customize the appearance of the Entities by providing your own <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">StoreyViewsPlugin#objectStates</a></span>.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_StoreyViewsPlugin">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/viewer/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
@@ -406,7 +417,7 @@ model.on(&quot;loaded&quot;, function () {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">objectStates</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
         </p>
       </div>
       <div>
@@ -435,7 +446,7 @@ model.on(&quot;loaded&quot;, function () {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectDefaults">objectDefaults</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates">objectStates</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
         </p>
       </div>
       <div>
@@ -890,7 +901,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -933,10 +944,10 @@ model.on(&quot;loaded&quot;, function () {
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.objectDefaults</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.objectStates</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>.  Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span>.</p>
+      <td data-ice="description"><p>Map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>.  Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1000,7 +1011,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1056,7 +1067,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
@@ -1064,7 +1075,7 @@ model.on(&quot;loaded&quot;, function () {
   
   
   <div data-ice="description"><p>Sets the background color of <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span> images.</p>
-<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when modified.</p>
+<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when updated.</p>
 </div>
 
   
@@ -1101,7 +1112,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
@@ -1109,7 +1120,7 @@ model.on(&quot;loaded&quot;, function () {
   
   
   <div data-ice="description"><p>Sets the format of <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span> images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.</p>
-<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when modified.</p>
+<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when updated.</p>
 </div>
 
   
@@ -1146,7 +1157,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber228">source</a></span></span>
     </span>
   </h3>
 
@@ -1202,7 +1213,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber100">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -1235,18 +1246,18 @@ model.on(&quot;loaded&quot;, function () {
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-objectDefaults">
+  <h3 data-ice="anchor" id="instance-set-objectStates">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="code" data-ice="name">objectStates</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber154">source</a></span></span>
     </span>
   </h3>
 
@@ -1254,7 +1265,7 @@ model.on(&quot;loaded&quot;, function () {
   
   
   <div data-ice="description"><p>Sets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>.</p>
-<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span>.</p>
+<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span>.</p>
 </div>
 
   
@@ -1280,18 +1291,18 @@ model.on(&quot;loaded&quot;, function () {
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-objectDefaults">
+  <h3 data-ice="anchor" id="instance-get-objectStates">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">objectDefaults</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
+    <span class="code" data-ice="name">objectStates</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber166">source</a></span></span>
     </span>
   </h3>
 
@@ -1299,7 +1310,7 @@ model.on(&quot;loaded&quot;, function () {
   
   
   <div data-ice="description"><p>Gets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>.</p>
-<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span>.</p>
+<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span>.</p>
 </div>
 
   
@@ -1336,7 +1347,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1380,7 +1391,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -1436,7 +1447,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber190">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -1492,7 +1503,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -1500,7 +1511,7 @@ model.on(&quot;loaded&quot;, function () {
   
   
   <div data-ice="description"><p>Sets the size of <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span> images.</p>
-<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when modified.</p>
+<p>Rebuilds <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span>s when updated.</p>
 </div>
 
   
@@ -1537,7 +1548,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber94">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -1584,7 +1595,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber434">source</a></span></span>
     </span>
   </h3>
 

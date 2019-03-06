@@ -40,7 +40,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -110,7 +110,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/StoreyViewsPlugin/StoreyView.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * @desc A plan view managed by a {@link StoreyViewsPlugin}.
+ * @desc A plan view of a building storey, managed by a {@link StoreyViewsPlugin}.
  */
 class StoreyView {
 
@@ -120,22 +120,36 @@ class StoreyView {
     constructor(aabb, modelId, storeyObjectId, snapshotData) {
 
         /**
+         * Axis-aligned World-space boundary of the {@link Entity}s within the building storey.
          *
+         * Represented by a six-element Float32Array containing the min/max extents of the
+         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
          */
         this.aabb = aabb.slice();
 
         /**
+         * ID of the {@link MetaModel} that contains the building storey.
          *
+         * @property modelId
+         * @type {String|Number}
          */
         this.modelId = modelId;
 
         /**
+         * ID of the {@link MetaObject} that represents the building storey.
          *
+         * @property storeObjectId
+         * @type {String|Number}
          */
         this.storeyObjectId = storeyObjectId;
 
         /**
+         * Base64-encoded downward-looking orthographic snapshot image of {@link Entity}s within the building storey.
          *
+         * The format is indicated by {@link StoreyViewsPlugin#format}.
+         *
+         * This property is automatically regenerated whenever {@link StoreyViewsPlugin} is reconfigured (eg. on update of
+         * {@link StoreyViewsPlugin#format}, {@link StoreyViewsPlugin#size}, {@link StoreyViewsPlugin#objectStates} etc).
          */
         this.snapshotData = snapshotData;
     }

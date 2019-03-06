@@ -40,7 +40,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyView.js~StoreyView.html">StoreyView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectDefaults">IFCStoreyViewObjectDefaults</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyViewObjectStates">IFCStoreyViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -113,12 +113,28 @@
 
 import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
 import {StoreyView} from &quot;./StoreyView.js&quot;;
-import {IFCStoreyViewObjectDefaults} from &quot;./IFCStoreyViewObjectDefaults.js&quot;;
+import {IFCStoreyViewObjectStates} from &quot;./IFCStoreyViewObjectStates.js&quot;;
 
 const sceneState = new SceneState();
 
 /**
- * @desc A {@link Viewer} plugin that automatically generates plan view images.
+ * @desc A {@link Viewer} plugin that provides plan view images of storeys within IFC building models.
+ *
+ * A plan view image consists of a downward-looking orthographic snapshot image of {@link Entity}s within a storey
+ * belonging to a building model.
+ *
+ * Each building storey is represented by a {@link MetaObject} of type &quot;IfcBuildingStorey&quot; within the
+ * Viewer&apos;s {@link MetaScene}.
+ *
+ * The {@link Entity}s within a storey correspond to {@link MetaObject}s within the structural subtree of
+ * the &quot;IfcBuildingStorey&quot; {@link MetaObject}.
+ *
+ * StoreyViewPlugin automatically creates its {@link StoreyView}s as {@link MetaModel}s
+ * are created within its {@link Viewer}&apos;s {@link MetaScene}.
+ *
+ * StoreyViewPlugin configures the visual state of each {@link Entity} within each plan view according to
+ * the type of its corresponding {@link MetaObject}, using the map of properties in {@link IFCStoreyViewObjectStates}
+ * by default. You can customize the appearance of the Entities by providing your own {@link StoreyViewsPlugin#objectStates}.
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_StoreyViewsPlugin)]
  *
@@ -189,7 +205,7 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id=&quot;GLTFLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Object} [cfg.objectDefaults] Map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.  Default value is {@link IFCStoreyViewObjectDefaults}.
+     * @param {Object} [cfg.objectStates] Map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.  Default value is {@link IFCStoreyViewObjectStates}.
      * @param {Boolean} [cfg.ortho=true] Whether to capture an orthographic or perspective view for each {@link StoreyView}.
      * @param {Number[]} [cfg.size=[200,200]] Size of {@link StoreyView} images.
      * @param {String} [cfg.format=&quot;png&quot;] Format of {@link StoreyView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
@@ -212,7 +228,7 @@ class StoreyViewsPlugin extends Plugin {
 
         // TODO: view fit or margin configuration for snapshot
 
-        this.objectDefaults = cfg.objectDefaults;
+        this.objectStates = cfg.objectStates;
         this.ortho = !!cfg.ortho;
         this.size = cfg.size || [200, 200];
         this.format = cfg.format || &quot;png&quot;;
@@ -242,24 +258,24 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Sets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
      *
-     * Default value is {@link IFCStoreyViewObjectDefaults}.
+     * Default value is {@link IFCStoreyViewObjectStates}.
      *
      * @type {{String: Object}}
      */
-    set objectDefaults(value) {
-        this._objectDefaults = value || IFCStoreyViewObjectDefaults;
+    set objectStates(value) {
+        this._objectStates = value || IFCStoreyViewObjectStates;
         this._dirty = true;
     }
 
     /**
      * Gets map of visual states for the {@link Entity}s as rendered within each {@link StoreyView}.
      *
-     * Default value is {@link IFCStoreyViewObjectDefaults}.
+     * Default value is {@link IFCStoreyViewObjectStates}.
      *
      * @type {{String: Object}}
      */
-    get objectDefaults() {
-        return this._objectDefaults;
+    get objectStates() {
+        return this._objectStates;
     }
 
     /**
@@ -284,7 +300,7 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Sets the size of {@link StoreyView} images.
      *
-     * Rebuilds {@link StoreyView}s when modified.
+     * Rebuilds {@link StoreyView}s when updated.
      *
      * @param size
      */
@@ -305,7 +321,7 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Sets the format of {@link StoreyView} images. Allowed values are &quot;png&quot; and &quot;jpeg&quot;.
      *
-     * Rebuilds {@link StoreyView}s when modified.
+     * Rebuilds {@link StoreyView}s when updated.
      *
      * @param format
      */
@@ -327,7 +343,7 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Sets the background color of {@link StoreyView} images.
      *
-     * Rebuilds {@link StoreyView}s when modified.
+     * Rebuilds {@link StoreyView}s when updated.
      *
      * @param bgColor
      */
@@ -381,7 +397,7 @@ class StoreyViewsPlugin extends Plugin {
         // 5. With each IfcBuildingStorey object :-
         //      5.1 Hide all scene objects
         //      5.2 With each sub-object :-
-        //          5.2.1 Set state from objectDefaults
+        //          5.2.1 Set state from objectStates
         //      5.3 Grab snapshot of canvas
         //      5.4 Create StoreyView from snapshot
         // 6. Restore scene state
@@ -437,9 +453,9 @@ class StoreyViewsPlugin extends Plugin {
 
                 if (object) {
 
-                    // 5.2.1 Set state from objectDefaults
+                    // 5.2.1 Set state from objectStates
 
-                    const props = self._objectDefaults[metaObject.type] || self._objectDefaults[&quot;DEFAULT&quot;];
+                    const props = self._objectStates[metaObject.type] || self._objectStates[&quot;DEFAULT&quot;];
 
                     if (props) {
 
