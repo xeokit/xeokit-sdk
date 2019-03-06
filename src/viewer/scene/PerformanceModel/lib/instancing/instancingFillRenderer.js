@@ -139,6 +139,9 @@ InstancingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
 
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) {
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
 
     frameCtx.drawElements++;
 };

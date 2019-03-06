@@ -144,6 +144,10 @@ InstancingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderP
         instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
     }
 
+    if (this._aFlags2) {
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
+
     frameCtx.drawElements++;
 };
 

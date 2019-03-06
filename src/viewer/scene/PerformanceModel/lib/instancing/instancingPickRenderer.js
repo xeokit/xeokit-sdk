@@ -79,28 +79,30 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
 
-    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf, gl.FLOAT, false);
-    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf, gl.FLOAT, false);
-    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf, gl.FLOAT, false);
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+
+    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
+    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
+    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
 
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
-    frameCtx.bindArray+=3;
+    frameCtx.bindArray += 3;
 
-    this._aPickColor.bindArrayBuffer(state.pickColorsBuf, gl.UNSIGNED_BYTE, false);
+    this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 1);
     frameCtx.bindArray++;
 
-    this._aPosition.bindArrayBuffer(state.positionsBuf, gl.UNSIGNED_SHORT, false);
+    this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
 
-    this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
+    this._aFlags.bindArrayBuffer(state.flagsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
     frameCtx.bindArray++;
 
     if (this._aFlags2) {
-        this._aFlags2.bindArrayBuffer(state.flags2Buf, gl.UNSIGNED_BYTE, true);
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         frameCtx.bindArray++;
     }
@@ -112,11 +114,14 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     // Cleanup
 
-    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) { // Won't be in shader when not clipping
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
 
     frameCtx.drawElements++;
 };
@@ -124,7 +129,6 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
 InstancingPickRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
-    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
 
     this._program = new Program(gl, this._shaderSource);
@@ -174,7 +178,6 @@ InstancingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;

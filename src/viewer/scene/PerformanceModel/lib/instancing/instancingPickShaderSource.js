@@ -37,13 +37,19 @@ function buildVertex(layer) {
     }
     src.push("varying vec4 vPickColor;");
     src.push("void main(void) {");
-    src.push("bool visible      = (float(flags.x) > 0.0);");
-    src.push(`if (!visible) {`);
+    src.push("bool visible   = (float(flags.x) > 0.0);");
+    src.push("bool pickable  = (float(flags2.z) > 0.0);");
+    src.push(`if (!visible || !pickable) {`);
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("} else {");
+
+
     src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+
     src.push("  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+
     src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
+
     src.push("  vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);");
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");

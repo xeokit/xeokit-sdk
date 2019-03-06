@@ -73,10 +73,10 @@ BatchingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
-    this._aPosition.bindArrayBuffer(state.positionsBuf, gl.UNSIGNED_SHORT, false); // TODO: Don't need these params, these are now derived from the buffer.
+    this._aPosition.bindArrayBuffer(state.positionsBuf); // TODO: Don't need these params, these are now derived from the buffer.
     frameCtx.bindArray++;
     if (this._aFlags) {
-        this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
+        this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
     }
     if (this._aFlags2) {
@@ -84,7 +84,7 @@ BatchingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.bindArray++;
     }
     if (this._aPickColor) {
-        this._aPickColor.bindArrayBuffer(state.pickColorsBuf, gl.UNSIGNED_BYTE, true);
+        this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
         frameCtx.bindArray++;
     }
     state.indicesBuf.bind();
