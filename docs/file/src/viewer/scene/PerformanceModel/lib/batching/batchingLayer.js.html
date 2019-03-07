@@ -35,6 +35,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
@@ -96,6 +99,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -124,8 +128,6 @@ const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
-
-var currentBatchingLayer = null;
 
 /**
  * @private
@@ -179,6 +181,7 @@ class BatchingLayer {
             normalsBuf: null,
             colorsbuf: null,
             flagsBuf: null,
+            flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
             positionsDecodeMatrix: math.mat4()
@@ -192,6 +195,7 @@ class BatchingLayer {
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
+        this._numPickableLayerPortions = 0;
 
         //this.pickObjectBaseIndex = cfg.pickObjectBaseIndex;
 
@@ -241,13 +245,6 @@ class BatchingLayer {
         if (this._finalized) {
             throw &quot;BatchingLayer full - check first with canCreatePortion()&quot;;
         }
-        if (currentBatchingLayer !== null) {
-            if (currentBatchingLayer !== this) {
-                throw &quot;Already packing another BatchingLayer&quot;;
-            }
-        } else {
-            currentBatchingLayer = this;
-        }
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
         const vertsIndex = positionsIndex / 3;
@@ -290,18 +287,21 @@ class BatchingLayer {
         }
         if (flags !== undefined) {
             const lenFlags = (numVerts * 4);
-            var visible = !!(flags &amp; RENDER_FLAGS.VISIBLE) ? 255 : 0;
-            var xrayed = !!(flags &amp; RENDER_FLAGS.XRAYED) ? 255 : 0;
-            var highlighted = !!(flags &amp; RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-            var selected = !!(flags &amp; RENDER_FLAGS.SELECTED) ? 255 : 0;
-            var clippable = !!(flags &amp; RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-            var edges = !!(flags &amp; RENDER_FLAGS.EDGES) ? 255 : 0;
-            //   edges = Math.random() &lt; .5;
+            const visible = !!(flags &amp; RENDER_FLAGS.VISIBLE) ? 255 : 0;
+            const xrayed = !!(flags &amp; RENDER_FLAGS.XRAYED) ? 255 : 0;
+            const highlighted = !!(flags &amp; RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+            const selected = !!(flags &amp; RENDER_FLAGS.SELECTED) ? 255 : 0;
+            const clippable = !!(flags &amp; RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+            const edges = !!(flags &amp; RENDER_FLAGS.EDGES) ? 255 : 0;
+            const pickable = !!(flags &amp; RENDER_FLAGS.PICKABLE) ? 255 : 0;
             for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i &lt; len; i += 4) {
                 buffer.flags[i + 0] = visible;
                 buffer.flags[i + 1] = xrayed;
                 buffer.flags[i + 2] = highlighted;
                 buffer.flags[i + 3] = selected;
+                buffer.flags2[i + 0] = clippable;
+                buffer.flags2[i + 1] = edges;
+                buffer.flags2[i + 2] = pickable;
             }
             buffer.lenFlags += lenFlags;
             if (visible) {
@@ -323,6 +323,10 @@ class BatchingLayer {
             if (edges) {
                 this._numEdgesLayerPortions++;
                 this.model.numEdgesLayerPortions++;
+            }
+            if (pickable) {
+                this._numPickableLayerPortions++;
+                this.model.numPickableLayerPortions++;
             }
         }
         if (color) {
@@ -411,6 +415,7 @@ class BatchingLayer {
         if (buffer.lenFlags &gt; 0) {
             let normalized = true;
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
+            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenPickColors &gt; 0) {
             let normalized = false;
@@ -447,8 +452,6 @@ class BatchingLayer {
         buffer.lenIndices = 0;
         buffer.lenEdgeIndices = 0;
 
-        currentBatchingLayer = null;
-
         this._buffer = null;
         this._finalized = true;
     }
@@ -481,7 +484,12 @@ class BatchingLayer {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
+        if (flags &amp; RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        }
         this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setVisible(portionId, flags) {
@@ -551,13 +559,14 @@ class BatchingLayer {
             this._numEdgesLayerPortions--;
             this.model.numEdgesLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw &quot;Not finalized&quot;;
         }
+        this._setFlags2(portionId, flags);
     }
 
     setCollidable(portionId, flags) {
@@ -570,6 +579,14 @@ class BatchingLayer {
         if (!this._finalized) {
             throw &quot;Not finalized&quot;;
         }
+        if (flags &amp; RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        } else {
+            this._numPickableLayerPortions--;
+            this.model.numPickableLayerPortions--;
+        }
+        this._setFlags2(portionId, flags);
     }
 
     setColor(portionId, color, setOpacity = false) {
@@ -620,7 +637,6 @@ class BatchingLayer {
         var xrayed = !!(flags &amp; RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags &amp; RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags &amp; RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
-        var clippable = !!(flags &amp; RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         for (var i = 0; i &lt; lenFlags; i += 4) {
             tempUint8Vec4[i + 0] = visible;
             tempUint8Vec4[i + 1] = xrayed;
@@ -628,6 +644,26 @@ class BatchingLayer {
             tempUint8Vec4[i + 3] = selected;
         }
         this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
+    }
+
+    _setFlags2(portionId, flags) {
+        if (!this._finalized) {
+            throw &quot;Not finalized&quot;;
+        }
+        var portionsIdx = portionId * 2;
+        var vertexBase = this._portions[portionsIdx];
+        var numVerts = this._portions[portionsIdx + 1];
+        var firstFlag = vertexBase * 4;
+        var lenFlags = numVerts * 4;
+        var clippable = !!(flags &amp; RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        var edges = !!(flags &amp; RENDER_FLAGS.EDGES) ? 255 : 0;
+        var pickable = !!(flags &amp; RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        for (var i = 0; i &lt; lenFlags; i += 4) {
+            tempUint8Vec4[i + 0] = clippable;
+            tempUint8Vec4[i + 1] = edges;
+            tempUint8Vec4[i + 2] = pickable;
+        }
+        this._state.flags2Buf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
@@ -859,6 +895,10 @@ class BatchingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
+        }
+        if (state.flags2Buf) {
+            state.flags2Buf.destroy();
+            state.flags2Buf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();

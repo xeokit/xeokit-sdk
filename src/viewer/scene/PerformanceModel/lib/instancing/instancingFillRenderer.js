@@ -101,6 +101,12 @@ InstancingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
     frameCtx.bindArray++;
 
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf, gl.UNSIGNED_BYTE, true);
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
+        frameCtx.bindArray++;
+    }
+
     state.indicesBuf.bind();
     frameCtx.bindArray++;
 
@@ -133,6 +139,9 @@ InstancingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
 
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) {
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
 
     frameCtx.drawElements++;
 };
@@ -165,6 +174,7 @@ InstancingFillRenderer.prototype._allocate = function (layer) {
     }
     this._aPosition = program.getAttribute("position");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
     this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
     this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
     this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");

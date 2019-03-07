@@ -115,6 +115,11 @@ class PerformanceModel extends Component {
          */
         this.numEdgesLayerPortions = 0;
 
+        /**
+         * @private
+         */
+        this.numPickableLayerPortions = 0;
+
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -143,6 +148,9 @@ class PerformanceModel extends Component {
         this._worldNormalMatrix = math.mat4();
         math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
         math.transposeMat4(this._worldNormalMatrix);
+
+        this._opacity = 1.0;
+        this._colorize = [1, 1, 1];
 
         this._isModel = cfg.isModel;
         if (this._isModel) {
@@ -831,8 +839,11 @@ class PerformanceModel extends Component {
      *
      * @type {Number[]}
      */
-    set colorize(rgb) { // TODO
-
+    set colorize(colorize) {
+        this._colorize = colorize;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].colorize = colorize;
+        }
     }
 
     /**
@@ -842,8 +853,8 @@ class PerformanceModel extends Component {
      *
      * @type {Number[]}
      */
-    get colorize() {  // TODO
-        return new Float32Array[1, 1, 1, 1];
+    get colorize() {
+        return this._colorize;
     }
 
     /**
@@ -853,8 +864,11 @@ class PerformanceModel extends Component {
      *
      * @type {Number}
      */
-    set opacity(opacity) { // TODO
-
+    set opacity(opacity) {
+        this._opacity = opacity;
+        for (var i = 0, len = this._nodes.length; i < len; i++) {
+            this._nodes[i].opacity = opacity;
+        }
     }
 
     /**
@@ -864,8 +878,8 @@ class PerformanceModel extends Component {
      *
      * @type {Number}
      */
-    get opacity() { // TODO
-
+    get opacity() {
+        return this._opacity;
     }
 
     /**

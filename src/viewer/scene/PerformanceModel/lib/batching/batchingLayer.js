@@ -18,8 +18,6 @@ const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
 
-var currentBatchingLayer = null;
-
 /**
  * @private
  */
@@ -72,6 +70,7 @@ class BatchingLayer {
             normalsBuf: null,
             colorsbuf: null,
             flagsBuf: null,
+            flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
             positionsDecodeMatrix: math.mat4()
@@ -85,6 +84,7 @@ class BatchingLayer {
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
+        this._numPickableLayerPortions = 0;
 
         //this.pickObjectBaseIndex = cfg.pickObjectBaseIndex;
 
@@ -134,13 +134,6 @@ class BatchingLayer {
         if (this._finalized) {
             throw "BatchingLayer full - check first with canCreatePortion()";
         }
-        if (currentBatchingLayer !== null) {
-            if (currentBatchingLayer !== this) {
-                throw "Already packing another BatchingLayer";
-            }
-        } else {
-            currentBatchingLayer = this;
-        }
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
         const vertsIndex = positionsIndex / 3;
@@ -183,18 +176,21 @@ class BatchingLayer {
         }
         if (flags !== undefined) {
             const lenFlags = (numVerts * 4);
-            var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
-            var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
-            var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-            var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
-            var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
-            var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
-            //   edges = Math.random() < .5;
+            const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
+            const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
+            const highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
+            const selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
+            const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+            const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+            const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
             for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i < len; i += 4) {
                 buffer.flags[i + 0] = visible;
                 buffer.flags[i + 1] = xrayed;
                 buffer.flags[i + 2] = highlighted;
                 buffer.flags[i + 3] = selected;
+                buffer.flags2[i + 0] = clippable;
+                buffer.flags2[i + 1] = edges;
+                buffer.flags2[i + 2] = pickable;
             }
             buffer.lenFlags += lenFlags;
             if (visible) {
@@ -216,6 +212,10 @@ class BatchingLayer {
             if (edges) {
                 this._numEdgesLayerPortions++;
                 this.model.numEdgesLayerPortions++;
+            }
+            if (pickable) {
+                this._numPickableLayerPortions++;
+                this.model.numPickableLayerPortions++;
             }
         }
         if (color) {
@@ -304,6 +304,7 @@ class BatchingLayer {
         if (buffer.lenFlags > 0) {
             let normalized = true;
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
+            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenPickColors > 0) {
             let normalized = false;
@@ -340,8 +341,6 @@ class BatchingLayer {
         buffer.lenIndices = 0;
         buffer.lenEdgeIndices = 0;
 
-        currentBatchingLayer = null;
-
         this._buffer = null;
         this._finalized = true;
     }
@@ -374,7 +373,12 @@ class BatchingLayer {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
+        if (flags & RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        }
         this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setVisible(portionId, flags) {
@@ -444,13 +448,14 @@ class BatchingLayer {
             this._numEdgesLayerPortions--;
             this.model.numEdgesLayerPortions--;
         }
-        this._setFlags(portionId, flags);
+        this._setFlags2(portionId, flags);
     }
 
     setClippable(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";
         }
+        this._setFlags2(portionId, flags);
     }
 
     setCollidable(portionId, flags) {
@@ -463,6 +468,14 @@ class BatchingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
+        if (flags & RENDER_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        } else {
+            this._numPickableLayerPortions--;
+            this.model.numPickableLayerPortions--;
+        }
+        this._setFlags2(portionId, flags);
     }
 
     setColor(portionId, color, setOpacity = false) {
@@ -513,7 +526,6 @@ class BatchingLayer {
         var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
         var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
-        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         for (var i = 0; i < lenFlags; i += 4) {
             tempUint8Vec4[i + 0] = visible;
             tempUint8Vec4[i + 1] = xrayed;
@@ -521,6 +533,26 @@ class BatchingLayer {
             tempUint8Vec4[i + 3] = selected;
         }
         this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
+    }
+
+    _setFlags2(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        var portionsIdx = portionId * 2;
+        var vertexBase = this._portions[portionsIdx];
+        var numVerts = this._portions[portionsIdx + 1];
+        var firstFlag = vertexBase * 4;
+        var lenFlags = numVerts * 4;
+        var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
+        var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
+        var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+        for (var i = 0; i < lenFlags; i += 4) {
+            tempUint8Vec4[i + 0] = clippable;
+            tempUint8Vec4[i + 1] = edges;
+            tempUint8Vec4[i + 2] = pickable;
+        }
+        this._state.flags2Buf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------
@@ -752,6 +784,10 @@ class BatchingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
+        }
+        if (state.flags2Buf) {
+            state.flags2Buf.destroy();
+            state.flags2Buf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();

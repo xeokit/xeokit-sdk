@@ -89,6 +89,10 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
     }
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        frameCtx.bindArray++;
+    }
     state.indicesBuf.bind();
     frameCtx.bindArray++;
     if (renderPass === RENDER_PASSES.XRAYED) {
@@ -171,6 +175,7 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._aNormal = program.getAttribute("normal");
     this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
 };
 
 BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {

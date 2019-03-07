@@ -35,6 +35,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
@@ -96,6 +99,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -186,25 +190,33 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
 
-    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf, gl.FLOAT, false);
-    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf, gl.FLOAT, false);
-    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf, gl.FLOAT, false);
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+
+    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
+    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
+    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
 
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
-    frameCtx.bindArray+=3;
+    frameCtx.bindArray += 3;
 
-    this._aPickColor.bindArrayBuffer(state.pickColorsBuf, gl.UNSIGNED_BYTE, false);
+    this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 1);
     frameCtx.bindArray++;
 
-    this._aPosition.bindArrayBuffer(state.positionsBuf, gl.UNSIGNED_SHORT, false);
+    this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
 
-    this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
+    this._aFlags.bindArrayBuffer(state.flagsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
     frameCtx.bindArray++;
+
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
+        frameCtx.bindArray++;
+    }
 
     state.indicesBuf.bind();
     frameCtx.bindArray++;
@@ -213,11 +225,14 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     // Cleanup
 
-    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) { // Won&apos;t be in shader when not clipping
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
 
     frameCtx.drawElements++;
 };
@@ -225,7 +240,6 @@ InstancingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
 InstancingPickRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
-    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
 
     this._program = new Program(gl, this._shaderSource);
@@ -256,6 +270,7 @@ InstancingPickRenderer.prototype._allocate = function (layer) {
     this._aPosition = program.getAttribute(&quot;position&quot;);
     this._aPickColor = program.getAttribute(&quot;pickColor&quot;);
     this._aFlags = program.getAttribute(&quot;flags&quot;);
+    this._aFlags2 = program.getAttribute(&quot;flags2&quot;);
 
     this._aModelMatrixCol0 = program.getAttribute(&quot;modelMatrixCol0&quot;);
     this._aModelMatrixCol1 = program.getAttribute(&quot;modelMatrixCol1&quot;);
@@ -274,7 +289,6 @@ InstancingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length &gt; 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;

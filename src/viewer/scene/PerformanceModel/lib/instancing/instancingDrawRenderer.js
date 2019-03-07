@@ -106,16 +106,22 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
 
-    this._aNormal.bindArrayBuffer(state.normalsBuf, gl.BYTE, true);
+    this._aNormal.bindArrayBuffer(state.normalsBuf);
     frameCtx.bindArray++;
 
-    this._aColor.bindArrayBuffer(state.colorsBuf, gl.UNSIGNED_BYTE, false);
+    this._aColor.bindArrayBuffer(state.colorsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
     frameCtx.bindArray++;
 
-    this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
+    this._aFlags.bindArrayBuffer(state.flagsBuf);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
     frameCtx.bindArray++;
+
+    if (this._aFlags2) {
+        this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
+        frameCtx.bindArray++;
+    }
 
     state.indicesBuf.bind();
     frameCtx.bindArray++;
@@ -136,16 +142,17 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
 
     instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
-    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
-
-    instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol0.location, 0); // TODO: Is this needed
+    instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol0.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol1.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelNormalMatrixCol2.location, 0);
-
     instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) { // Won't be in shader when not clipping
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
 
     frameCtx.drawElements++;
 };
@@ -223,6 +230,7 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
     this._aNormal = program.getAttribute("normal");
     this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
+    this._aFlags2 = program.getAttribute("flags2");
 
     this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
     this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");

@@ -10,7 +10,7 @@ class Attribute {
         this.location = location;
     }
 
-    bindArrayBuffer(arrayBuf, type, normalized = false, stride = 0, offset = 0) {
+    bindArrayBuffer(arrayBuf) {
         if (!arrayBuf) {
             return;
         }

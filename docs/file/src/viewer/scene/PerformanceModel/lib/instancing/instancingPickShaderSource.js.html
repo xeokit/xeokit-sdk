@@ -35,6 +35,9 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
@@ -96,6 +99,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -127,6 +131,7 @@ function buildVertex(layer) {
 
     src.push(&quot;attribute vec3 position;&quot;);
     src.push(&quot;attribute vec4 flags;&quot;);
+    src.push(&quot;attribute vec4 flags2;&quot;);
     src.push(&quot;attribute vec4 pickColor;&quot;);
 
     src.push(&quot;attribute vec4 modelMatrixCol0;&quot;); // Modeling matrix
@@ -139,16 +144,23 @@ function buildVertex(layer) {
 
     if (clipping) {
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
+        src.push(&quot;varying vec4 vFlags2;&quot;);
     }
     src.push(&quot;varying vec4 vPickColor;&quot;);
     src.push(&quot;void main(void) {&quot;);
-    src.push(&quot;bool visible      = (float(flags.x) &gt; 0.0);&quot;);
-    src.push(`if (!visible) {`);
+    src.push(&quot;bool visible   = (float(flags.x) &gt; 0.0);&quot;);
+    src.push(&quot;bool pickable  = (float(flags2.z) &gt; 0.0);&quot;);
+    src.push(`if (!visible || !pickable) {`);
     src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex
     src.push(&quot;} else {&quot;);
+
+
     src.push(&quot;  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); &quot;);
+
     src.push(&quot;  worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);&quot;);
+
     src.push(&quot;  vec4 viewPosition  = viewMatrix * worldPosition; &quot;);
+
     src.push(&quot;  vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);&quot;);
     if (clipping) {
         src.push(&quot;  vWorldPosition = worldPosition;&quot;);
@@ -168,6 +180,7 @@ function buildFragment(layer) {
     src.push(&quot;precision mediump float;&quot;);
     if (clipping) {
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
+        src.push(&quot;vFlags2 = flags2;&quot;);
         for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
             src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
             src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
@@ -177,6 +190,8 @@ function buildFragment(layer) {
     src.push(&quot;varying vec4 vPickColor;&quot;);
     src.push(&quot;void main(void) {&quot;);
     if (clipping) {
+        src.push(&quot;  bool clippable = (float(vFlags2.x) &gt; 0.0);&quot;);
+        src.push(&quot;  if (clippable) {&quot;);
         src.push(&quot;  float dist = 0.0;&quot;);
         for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
             src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
@@ -184,6 +199,7 @@ function buildFragment(layer) {
             src.push(&quot;}&quot;);
         }
         src.push(&quot;if (dist &gt; 0.0) { discard; }&quot;);
+        src.push(&quot;}&quot;);
     }
     src.push(&quot;gl_FragColor = vPickColor; &quot;);
     src.push(&quot;}&quot;);
