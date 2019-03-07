@@ -1,7 +1,7 @@
 /**
  * @private
  */
-const request = {
+const Request = {
     Make: function make(args) {
         return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
@@ -21,4 +21,4 @@ const request = {
     }
 };
 
-export {request};
+export {Request};
