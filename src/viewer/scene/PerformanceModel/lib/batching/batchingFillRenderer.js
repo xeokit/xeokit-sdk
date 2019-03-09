@@ -77,7 +77,7 @@ BatchingFillRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     gl.uniform1i(this._uRenderPass, renderPass);
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
 
@@ -156,7 +156,6 @@ BatchingFillRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;

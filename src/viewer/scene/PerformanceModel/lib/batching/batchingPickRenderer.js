@@ -72,6 +72,7 @@ BatchingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf); // TODO: Don't need these params, these are now derived from the buffer.
     frameCtx.bindArray++;
@@ -133,7 +134,6 @@ BatchingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     frameCtx.useProgram++;
     gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix || cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
