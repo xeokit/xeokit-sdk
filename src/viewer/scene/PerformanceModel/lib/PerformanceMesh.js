@@ -4,6 +4,7 @@ const tempIntRGBA = new Uint16Array([0, 0, 0, 0]);
 
 /**
  * @private
+ * @implements Pickable
  */
 class PerformanceMesh {
 
@@ -21,9 +22,9 @@ class PerformanceMesh {
         this.model = model;
 
         /**
-         * The PerformanceModelObject that contains this PerformanceModelMesh.
+         * The PerformanceNode that contains this PerformanceModelMesh.
          *
-         * A PerformanceModelMesh always belongs to exactly one PerformanceModelObject.
+         * A PerformanceModelMesh always belongs to exactly one PerformanceNode.
          *
          * @property object
          * @type {PerformanceNode}
@@ -32,9 +33,9 @@ class PerformanceMesh {
         this.object = null;
 
         /**
-         * The PerformanceModelObject that contains this PerformanceModelMesh.
+         * The PerformanceNode that contains this PerformanceModelMesh.
          *
-         * A PerformanceModelMesh always belongs to exactly one PerformanceModelObject.
+         * A PerformanceModelMesh always belongs to exactly one PerformanceNode.
          *
          * @property object
          * @type {PerformanceNode}
@@ -150,18 +151,34 @@ class PerformanceMesh {
         this._layer.setPickable(this._portionId, flags);
     }
 
-    /**
-     * @private
-     */
-    isSurfacePickable() {
-        return false; // No geometry data in memory - can't support surface picking
+    /** @private */
+    canPickTriangle() {
+        return false;
     }
 
-    /**
-     * @private
-     */
-    surfacePick(pickResult) {
+    /** @private */
+    drawPickTriangles(frameCtx) {
         // NOP
+    }
+
+    /** @private */
+    pickTriangleSurface(pickResult) {
+        // NOP
+    }
+
+    /** @private */
+    canPickWorldPos() {
+        return true;
+    }
+
+    /** @private */
+    drawPickDepths(frameCtx) {
+        this.model.drawPickDepths(frameCtx);
+    }
+
+    /** @private */
+    drawPickNormals(frameCtx) {
+        this.model.drawPickNormals(frameCtx);
     }
 
     /**

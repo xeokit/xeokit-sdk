@@ -4612,7 +4612,8 @@ const math = {
      Transforms a Canvas-space position into a World-space ray, in the context of a Camera.
      @method canvasPosToWorldRay
      @static
-     @param {Camera} camera The Camera.
+     @param {Number[]} viewMatrix View matrix
+     @param {Number[]} projMatrix Projection matrix
      @param {Number[]} canvasPos The Canvas-space position.
      @param {Number[]} worldRayOrigin The World-space ray origin.
      @param {Number[]} worldRayDir The World-space ray direction.
@@ -4626,14 +4627,11 @@ const math = {
         const tempVec4c = new Float32Array(4);
         const tempVec4d = new Float32Array(4);
 
-        return (camera, canvasPos, worldRayOrigin, worldRayDir) => {
+        return (viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
 
             const canvas = camera.scene.canvas.canvas;
 
-            const viewMat = camera.viewMatrix;
-            const projMat = camera.projection === "ortho" ? camera.ortho.matrix : camera.perspective.matrix;
-
-            const pvMat = math.mulMat4(projMat, viewMat, tempMat4b);
+            const pvMat = math.mulMat4(projMatrix, viewMatrix, tempMat4b);
             const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
 
             // Calculate clip space coordinates, which will be in range
@@ -4677,6 +4675,9 @@ const math = {
      @static
      @param {Camera} camera The Camera.
      @param {Mesh} mesh The Mesh.
+     @param {Number[]} viewMatrix View matrix
+     @param {Number[]} projMatrix Projection matrix
+     @param {Number[]} worldMatrix Modeling matrix
      @param {Number[]} canvasPos The Canvas-space position.
      @param {Number[]} localRayOrigin The Local-space ray origin.
      @param {Number[]} localRayDir The Local-space ray direction.
@@ -4686,8 +4687,8 @@ const math = {
         const worldRayOrigin = new Float32Array(3);
         const worldRayDir = new Float32Array(3);
 
-        return (camera, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
-            math.canvasPosToWorldRay(camera, canvasPos, worldRayOrigin, worldRayDir);
+        return (viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
+            math.canvasPosToWorldRay(viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
             math.worldRayToLocalRay(worldMatrix, worldRayOrigin, worldRayDir, localRayOrigin, localRayDir);
         };
     }))(),

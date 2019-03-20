@@ -120,11 +120,7 @@ const Renderer = function (scene, options) {
     };
 
     /**
-     * Gets a unique pick ID for the given entity. A entity can be a {@link Mesh}, or
-     * anything that represents a WebGL draw call within a custom {@link Drawable}
-     * instance.
-     * @param {Entity|*} entity An {@link Entity}, or anything that represents a WebGL
-     * draw call within a custom {@link Drawable} instance.
+     * Gets a unique pick ID for the given Pickable. A Pickable can be a {@link Mesh} or a {@link PerformanceMesh}.
      * @returns {Number} New pick ID.
      */
     this.getPickID = function (entity) {
@@ -366,8 +362,6 @@ const Renderer = function (scene, options) {
             let selectedEdgesOpaqueBinLen = 0;
             let selectedFillTransparentBinLen = 0;
             let selectedEdgesTransparentBinLen = 0;
-
-            let outlinedOpaqueBinLen = 0;
 
             //------------------------------------------------------------------------------------------------------
             // Render normal opaque solids, defer others to bins to render after
@@ -615,7 +609,7 @@ const Renderer = function (scene, options) {
     })();
 
     /**
-     * Picks a drawable in the scene.
+     * Picks an Entity.
      * @private
      */
     this.pick = (function () {
@@ -651,6 +645,9 @@ const Renderer = function (scene, options) {
                 canvasX = params.canvasPos[0];
                 canvasY = params.canvasPos[1];
 
+                pickViewMatrix = scene.camera.viewMatrix;
+                pickProjMatrix = scene.camera.projMatrix;
+
                 pickResult.canvasPos = params.canvasPos;
 
             } else {
@@ -675,46 +672,37 @@ const Renderer = function (scene, options) {
             pickBuf = pickBuf || new RenderBuffer(canvas, gl);
             pickBuf.bind();
 
-            const entity = pickEntity(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params, pickResult);
+            const pickable = pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params);
 
-            if (!entity) {
+            if (!pickable) {
                 pickBuf.unbind();
                 return null;
             }
 
-            if (params.pickSurface && entity.isSurfacePickable && entity.isSurfacePickable()) { // VBOGeometry does not support surface picking because it has no geometry data in browser memory
-                pickTriangle(entity, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+            if (params.pickSurface) {
+
+                if (pickable.canPickTriangle && pickable.canPickTriangle()) {
+                    pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+                    pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+
+                } else {
+
+                    if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
+                        pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+                        pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix,  pickProjMatrix, pickResult);
+                    }
+                }
             }
 
             pickBuf.unbind();
 
-            if (params.pickSurface) {
-                entity.surfacePick(pickResult);
-            }
-
-            pickResult.entity = (entity.delegatePickedEntity) ? entity.delegatePickedEntity() : entity;
+            pickResult.entity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
             return pickResult;
         };
     })();
 
-    /**
-     * Picks a entity, either through the canvas using the camera view transform, or through the center of a virtual
-     * canvas using a view matrix aligned along a World-space ray.
-     *
-     * Calls drawPickMesh() on each Drawable in this Renderer.
-     *
-     * If an entity was picked, returns it via pickResult.entity.
-     *
-     * @param canvasX
-     * @param canvasY
-     * @param pickViewMatrix
-     * @param pickProjMatrix
-     * @param params
-     * @params pickResult
-     * @returns {*}
-     */
-    function pickEntity(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
+    function pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -768,14 +756,14 @@ const Renderer = function (scene, options) {
             return;
         }
 
-        const entity = pickIDs.items[pickID];
+        const pickable = pickIDs.items[pickID];
 
-        return entity;
+        return pickable;
     }
 
-    function pickTriangle(entity, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
 
-        if (!entity.drawPickTriangles) {
+        if (!pickable.drawPickTriangles) {
             return;
         }
 
@@ -794,7 +782,7 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        entity.drawPickTriangles(frameCtx);
+        pickable.drawPickTriangles(frameCtx);
 
         const pix = pickBuf.read(canvasX, canvasY);
 
@@ -803,6 +791,103 @@ const Renderer = function (scene, options) {
         primIndex *= 3; // Convert from triangle number to first vertex in indices
 
         pickResult.primIndex = primIndex;
+    }
+
+    var pickWorldPos = (function () {
+
+        const tempVec4a = math.vec4();
+        const tempVec4b = math.vec4();
+        const tempVec4c = math.vec4();
+        const tempVec4d = math.vec4();
+        const tempVec4e = math.vec4();
+        const tempMat4a = math.mat4();
+        const tempMat4b = math.mat4();
+
+        return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+
+            frameCtx.reset();
+            frameCtx.backfaces = true;
+            frameCtx.frontface = true; // "ccw"
+            frameCtx.pickViewMatrix = pickViewMatrix;
+            frameCtx.pickProjMatrix = pickProjMatrix;
+
+            const boundary = scene.viewport.boundary;
+            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+            gl.clearColor(0, 0, 0, 0);
+            gl.enable(gl.DEPTH_TEST);
+            gl.disable(gl.CULL_FACE);
+            gl.disable(gl.BLEND);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
+
+            const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+
+            const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
+
+            // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
+            var x = (canvasX - canvas.width / 2) / (canvas.width / 2);
+            var y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+            var pvMat = math.mulMat4(pickProjMatrix, pickViewMatrix, tempMat4a);
+            var pvMatInverse = math.inverseMat4(pvMat, tempMat4b);
+
+            tempVec4a[0] = x;
+            tempVec4a[1] = y;
+            tempVec4a[2] = -1;
+            tempVec4a[3] = 1;
+
+            var world1 = math.transformVec4(pvMatInverse, tempVec4a);
+            world1 = math.mulVec4Scalar(world1, 1 / world1[3]);
+
+            tempVec4b[0] = x;
+            tempVec4b[1] = y;
+            tempVec4b[2] = 1;
+            tempVec4b[3] = 1;
+
+            var world2 = math.transformVec4(pvMatInverse, tempVec4b);
+            world2 = math.mulVec4Scalar(world2, 1 / world2[3]);
+
+            var dir = math.subVec3(world2, world1, tempVec4c);
+            var worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
+
+            pickResult.worldPos = worldPos;
+        }
+
+    })();
+
+    function unpackDepth(depthZ) {
+        var vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
+        var bitShift = [1.0 / (256.0 * 256.0 * 256.0), 1.0 / (256.0 * 256.0), 1.0 / 256.0, 1.0];
+        return math.dotVec4(vec, bitShift);
+    }
+
+    function pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // "ccw"
+        frameCtx.pickViewMatrix = pickViewMatrix;
+        frameCtx.pickProjMatrix = pickProjMatrix;
+
+        const boundary = scene.viewport.boundary;
+        gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.CULL_FACE);
+        gl.disable(gl.BLEND);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
+
+        const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+
+        const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
+
+        math.normalizeVec3(worldNormal);
+
+        pickResult.worldNormal = worldNormal;
     }
 
     /**

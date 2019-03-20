@@ -86,8 +86,8 @@ PickVertexRenderer.prototype._bindProgram = function (frame) {
     frame.useProgram++;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, camera.project._state.matrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;

@@ -27,13 +27,13 @@ class Perspective extends Component {
         super(owner, cfg);
 
         this._state = new RenderState({
-            matrix: math.mat4()
+            matrix: math.mat4(),
+            near : 0.1,
+            far: 10000.0
         });
 
         this._dirty = false;
         this._fov = 60.0;
-        this._near = 0.1;
-        this._far = 10000.0;
 
         // Recompute aspect from change in canvas size
         this._canvasResized = this.scene.canvas.on("boundary", this._needUpdate, this);
@@ -55,7 +55,7 @@ class Perspective extends Component {
             fov = fov / aspect;
         }
         fov = Math.min(fov, 120);
-        math.perspectiveMat4(fov * (Math.PI / 180.0), aspect, this._near, this._far, this._state.matrix);
+        math.perspectiveMat4(fov * (Math.PI / 180.0), aspect, this._state.near, this._state.far, this._state.matrix);
         this.glRedraw();
         this.fire("matrix", this._state.matrix);
     }
@@ -148,14 +148,14 @@ class Perspective extends Component {
      * @param {Number} value New Perspective near plane position.
      */
     set near(value) {
-        this._near = (value !== undefined && value !== null) ? value : 0.1;
+        this._state.near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
          Fired whenever this Perspective's   {@link Perspective/near} property changes.
          @event near
          @param value The property's new value
          */
-        this.fire("near", this._near);
+        this.fire("near", this._state.near);
     }
 
     /**
@@ -168,7 +168,7 @@ class Perspective extends Component {
      * @return {Number} Near frustum plane position.
      */
     get near() {
-        return this._near;
+        return this._state.near;
     }
 
     /**
@@ -181,7 +181,7 @@ class Perspective extends Component {
      * @type {Number}
      */
     set far(value) {
-        this._far = (value !== undefined && value !== null) ? value : 10000;
+        this._state.far = (value !== undefined && value !== null) ? value : 10000;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
          Fired whenever this Perspective's  {@link Perspective/far} property changes.
@@ -189,7 +189,7 @@ class Perspective extends Component {
          @event far
          @param value The property's new value
          */
-        this.fire("far", this._far);
+        this.fire("far", this._state.far);
     }
 
     /**
@@ -200,7 +200,7 @@ class Perspective extends Component {
      * @type {Number}
      */
     get far() {
-        return this._far;
+        return this._state.far;
     }
 
     /**

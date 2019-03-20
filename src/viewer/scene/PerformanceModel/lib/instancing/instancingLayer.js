@@ -8,7 +8,9 @@ import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 import {InstancingDrawRenderer} from "./instancingDrawRenderer.js";
 import {InstancingFillRenderer} from "./instancingFillRenderer.js";
 import {InstancingEdgesRenderer} from "./instancingEdgesRenderer.js";
-import {InstancingPickRenderer} from "./instancingPickRenderer.js";
+import {InstancingPickMeshRenderer} from "./instancingPickMeshRenderer.js";
+import {InstancingPickDepthRenderer} from "./instancingPickDepthRenderer.js";
+import {InstancingPickNormalsRenderer} from "./instancingPickNormalsRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -18,7 +20,6 @@ const MAX_VERTS = bigIndicesSupported ? 5000000 : 65530;
 const quantizedPositions = new Uint16Array(MAX_VERTS * 3);
 const compressedNormals = new Int8Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
-const tempFloat32Vec4 = new Float32Array(4);
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
 
@@ -692,8 +693,26 @@ class InstancingLayer {
         if (this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._pickRenderer) {
-            this._pickRenderer.drawLayer(frameCtx, this);
+        if (this._pickMeshRenderer) {
+            this._pickMeshRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawPickDepths(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._pickDepthRenderer) {
+            this._pickDepthRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawPickNormals(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._pickNormalsRenderer) {
+            this._pickNormalsRenderer.drawLayer(frameCtx, this);
         }
     }
 
@@ -710,9 +729,17 @@ class InstancingLayer {
             this._edgesRenderer.put();
             this._edgesRenderer = null;
         }
-        if (this._pickRenderer && this._pickRenderer.getValid() === false) {
-            this._pickRenderer.put();
-            this._pickRenderer = null;
+        if (this._pickMeshRenderer && this._pickMeshRenderer.getValid() === false) {
+            this._pickMeshRenderer.put();
+            this._pickMeshRenderer = null;
+        }
+        if (this._pickDepthRenderer && this._pickDepthRenderer.getValid() === false) {
+            this._pickDepthRenderer.put();
+            this._pickDepthRenderer = null;
+        }
+        if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
+            this._pickNormalsRenderer.put();
+            this._pickNormalsRenderer = null;
         }
         if (!this._drawRenderer) {
             this._drawRenderer = InstancingDrawRenderer.get(this);
@@ -723,8 +750,14 @@ class InstancingLayer {
         if (!this._edgesRenderer) {
             this._edgesRenderer = InstancingEdgesRenderer.get(this);
         }
-        if (!this._pickRenderer) {
-            this._pickRenderer = InstancingPickRenderer.get(this);
+        if (!this._pickMeshRenderer) {
+            this._pickMeshRenderer = InstancingPickMeshRenderer.get(this);
+        }
+        if (!this._pickDepthRenderer) {
+            this._pickDepthRenderer = InstancingPickDepthRenderer.get(this);
+        }
+        if (!this._pickNormalsRenderer) {
+            this._pickNormalsRenderer = InstancingPickNormalsRenderer.get(this);
         }
     }
 
@@ -742,9 +775,13 @@ class InstancingLayer {
             this._edgesRenderer.put();
             this._edgesRenderer = null;
         }
-        if (this._pickRenderer) {
-            this._pickRenderer.put();
-            this._pickRenderer = null;
+        if (this._pickMeshRenderer) {
+            this._pickMeshRenderer.put();
+            this._pickMeshRenderer = null;
+        }
+        if (this._pickDepthRenderer) {
+            this._pickDepthRenderer.put();
+            this._pickDepthRenderer = null;
         }
 
         const state = this._state;

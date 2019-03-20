@@ -73,8 +73,8 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
     const cameraState = camera._state;
     this._program.bind();
     frame.useProgram++;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix || cameraState.matrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix || camera.project._state.matrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
