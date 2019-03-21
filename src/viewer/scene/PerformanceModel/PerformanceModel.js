@@ -245,6 +245,16 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Starts building a tile.
+     *
+     * @param {*} cfg Geometry properties.
+     * @param {String|Number} cfg.id Mandatory ID for the tile, to refer to with {@link PerformanceModel#finalizeTile}.
+     */
+    createTile(cfg) {
+
+    }
+
+    /**
      * Creates a reusable geometry within this PerformanceModel.
      *
      * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
@@ -528,6 +538,15 @@ class PerformanceModel extends Component {
         var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodes.push(node);
         return node;
+    }
+
+    /**
+     * Finishes building a tile.
+     *
+     * @param {String} tileId ID of tile previously created with {@link PerformanceModel#createTile}.
+     */
+    finalizeTile(tileId) {
+
     }
 
     /**
