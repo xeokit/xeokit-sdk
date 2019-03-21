@@ -329,6 +329,8 @@ const Renderer = function (scene, options) {
             gl.frontFace(gl.CCW);
             gl.enable(gl.CULL_FACE);
             gl.depthMask(true);
+            gl.lineWidth(1);
+            frameCtx.lineWidth = 1;
 
             let i;
             let len;

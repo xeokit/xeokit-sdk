@@ -87,15 +87,10 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
             }
             frame.frontface = frontface;
         }
-        if (frame.lineWidth !== materialState.lineWidth) {
-            gl.lineWidth(materialState.lineWidth);
-            frame.lineWidth = materialState.lineWidth;
-        }
-        if (this._uPointSize) {
-            gl.uniform1i(this._uPointSize, materialState.pointSize);
-        }
         this._lastMaterialId = materialState.id;
     }
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
     // Mesh state
     if (this._uClippable) {
@@ -167,15 +162,11 @@ PickMeshRenderer.prototype._bindProgram = function (frame) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
-    const camera = scene.camera;
-    const cameraState = camera._state;
     this._program.bind();
     frame.useProgram++;
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         let sectionPlaneUniforms;
         let uSectionPlaneActive;

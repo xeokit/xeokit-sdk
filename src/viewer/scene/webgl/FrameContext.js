@@ -137,6 +137,13 @@ class FrameContext {
          * @type {Number[]}
          */
         this.pickProjMatrix = null;
+
+        /** The current line width.
+         *
+         * @property lineWidth
+         * @type Number
+         */
+        this.lineWidth = 1;
     }
 }
 

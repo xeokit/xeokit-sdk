@@ -80,14 +80,10 @@ PickVertexRenderer.prototype._bindProgram = function (frame) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
-    const camera = scene.camera;
-    const cameraState = camera._state;
     this._program.bind();
     frame.useProgram++;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -126,6 +122,8 @@ PickVertexRenderer.prototype.drawMesh = function (frame, mesh) {
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     // Bind VBOs
     if (geometryState.id !== this._lastGeometryId) {
         const pickPositionsBuf = geometryState.getVertexPickPositions();
