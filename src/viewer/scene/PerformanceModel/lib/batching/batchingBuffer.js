@@ -46,7 +46,7 @@ function getBatchingBuffer() {
  * @private
  */
 function putBatchingBuffer(buffer) {
-    //freeBuffers.push(buffer);
+    freeBuffers.push(buffer);
 }
 
 export {getBatchingBuffer, putBatchingBuffer};
