@@ -56,7 +56,7 @@ function buildVertex(layer) {
         }
     }
 
-    src.push("vec3 octDecodeNormal(vec2 oct) {");
+    src.push("vec3 octDecode(vec2 oct) {");
     src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
     src.push("    if (v.z < 0.0) {");
     src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
@@ -95,7 +95,7 @@ function buildVertex(layer) {
     src.push("vec4 worldPosition = (positionsDecodeMatrix * vec4(position, 1.0)); ");
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-    src.push("vec4 worldNormal =  vec4(octDecodeNormal(normal.xy), 0.0); ");
+    src.push("vec4 worldNormal =  vec4(octDecode(normal.xy), 0.0); ");
 
     src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 

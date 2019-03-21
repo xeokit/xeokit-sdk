@@ -204,7 +204,7 @@ class Mesh extends Component {
 
         super(owner, cfg);
 
-        this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from xeokit.Object#matrix and xeokit.Object.#normalMatrix
+        this._state = new RenderState({ // NOTE: Renderer gets modeling and normal matrices from Mesh#matrix and Mesh.#normalWorldMatrix
             visible: true,
             culled: false,
             pickable: null,
@@ -1619,15 +1619,6 @@ class Mesh extends Component {
         }
     }
 
-    /** @private
-     */
-    isSurfacePickable() {
-        return this._geometry.isReadableGeometry; // VBOGeometry does not support surface picking because it has no geometry data in browser memory
-    }
-
-    _pickDrawableRenderer() {
-    }
-
     /** @private  */
     drawPickMesh(frameCtx) {
         if (this._pickMeshRenderer || (this._pickMeshRenderer = PickMeshRenderer.get(this))) {
@@ -1635,11 +1626,22 @@ class Mesh extends Component {
         }
     }
 
+    /** @private
+     */
+    canPickTriangle() {
+        return this._geometry.isReadableGeometry; // VBOGeometry does not support surface picking because it has no geometry data in browser memory
+    }
+
     /** @private  */
     drawPickTriangles(frameCtx) {
         if (this._pickTriangleRenderer || (this._pickTriangleRenderer = PickTriangleRenderer.get(this))) {
             this._pickTriangleRenderer.drawMesh(frameCtx, this);
         }
+    }
+
+    /** @private */
+    pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult) {
+        pickTriangleSurface(this, pickViewMatrix, pickProjMatrix, pickResult);
     }
 
     /** @private  */
@@ -1655,11 +1657,6 @@ class Mesh extends Component {
      */
     delegatePickedEntity() {
         return this;
-    }
-
-    /** @private */
-    surfacePick(pickResult) {
-        surfacePick(this, pickResult);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1698,7 +1695,7 @@ class Mesh extends Component {
 }
 
 
-const surfacePick = (function () {
+const pickTriangleSurface = (function () {
 
     // Cached vars to avoid garbage collection
 
@@ -1733,7 +1730,7 @@ const surfacePick = (function () {
     const tempVec3j = math.vec3();
     const tempVec3k = math.vec3();
 
-    return function (mesh, pickResult) {
+    return function (mesh, pickViewMatrix, pickProjMatrix, pickResult) {
 
         var primIndex = pickResult.primIndex;
 
@@ -1814,7 +1811,7 @@ const surfacePick = (function () {
 
                 if (pickResult.canvasPos) {
                     canvasPos = pickResult.canvasPos;
-                    math.canvasPosToLocalRay(camera, mesh.worldMatrix, canvasPos, localRayOrigin, localRayDir);
+                    math.canvasPosToLocalRay(pickViewMatrix, pickProjMatrix, mesh.worldMatrix, canvasPos, localRayOrigin, localRayDir);
 
                 } else if (pickResult.origin && pickResult.direction) {
                     math.worldRayToLocalRay(mesh.worldMatrix, pickResult.origin, pickResult.direction, localRayOrigin, localRayDir);
@@ -1873,9 +1870,9 @@ const surfacePick = (function () {
 
                         // Decompress vertex normals
 
-                        const ia2 = ia * 2;
-                        const ib2 = ib * 2;
-                        const ic2 = ic * 2;
+                        const ia2 = ia * 3;
+                        const ib2 = ib * 3;
+                        const ic2 = ic * 3;
 
                         geometryCompressionUtils.decompressNormal(normals.subarray(ia2, ia2 + 2), normalA);
                         geometryCompressionUtils.decompressNormal(normals.subarray(ib2, ib2 + 2), normalB);
@@ -1901,7 +1898,7 @@ const surfacePick = (function () {
                         math.mulVec3Scalar(normalB, bary[1], tempVec3b), tempVec3c),
                         math.mulVec3Scalar(normalC, bary[2], tempVec3d), tempVec3e);
 
-                    pickResult.normal = math.transformVec3(mesh.worldNormalMatrix, normal, tempVec3f);
+                    pickResult.worldNormal = math.normalizeVec3(math.transformVec3(mesh.worldNormalMatrix, normal, tempVec3f));
                 }
 
                 // Get interpolated UV coordinates

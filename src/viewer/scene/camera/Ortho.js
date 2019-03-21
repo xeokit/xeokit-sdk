@@ -29,7 +29,9 @@ class Ortho extends Component {
         super(owner, cfg);
 
         this._state = new RenderState({
-            matrix: math.mat4()
+            matrix: math.mat4(),
+            near : 0.1,
+            far: 10000.0
         });
 
         this.scale = cfg.scale;
@@ -71,7 +73,7 @@ class Ortho extends Component {
             bottom = -halfSize;
         }
 
-        math.orthoMat4c(left, right, bottom, top, this._near, this._far, this._state.matrix);
+        math.orthoMat4c(left, right, bottom, top, this._state.near, this._state.far, this._state.matrix);
 
         this.glRedraw();
 
@@ -130,7 +132,7 @@ class Ortho extends Component {
      * @param {Number} value New Ortho near plane position.
      */
     set near(value) {
-        this._near = (value !== undefined && value !== null) ? value : 0.1;
+        this._state.near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
         /**
          Fired whenever this Ortho's  {@link Ortho#near} property changes.
@@ -138,7 +140,7 @@ class Ortho extends Component {
          @event near
          @param value The property's new value
          */
-        this.fire("near", this._near);
+        this.fire("near", this._state.near);
     }
 
     /**
@@ -149,7 +151,7 @@ class Ortho extends Component {
      * @returns {Number} New Ortho near plane position.
      */
     get near() {
-        return this._near;
+        return this._state.near;
     }
 
     /**
@@ -162,7 +164,7 @@ class Ortho extends Component {
      * @param {Number} value New far ortho plane position.
      */
     set far(value) {
-        this._far = (value !== undefined && value !== null) ? value : 10000.0;
+        this._state.far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
         /**
          Fired whenever this Ortho's {@link Ortho#far} property changes.
@@ -170,7 +172,7 @@ class Ortho extends Component {
          @event far
          @param value The property's new value
          */
-        this.fire("far", this._far);
+        this.fire("far", this._state.far);
     }
 
     /**
@@ -181,7 +183,7 @@ class Ortho extends Component {
      * @returns {Number} New far ortho plane position.
      */
     get far() {
-        return this._far;
+        return this._state.far;
     }
 
     /**

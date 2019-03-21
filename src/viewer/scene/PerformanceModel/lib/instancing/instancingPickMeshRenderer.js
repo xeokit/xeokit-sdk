@@ -1,31 +1,30 @@
 import {Map} from "../../../utils/Map.js";
 import {stats} from "../../../stats.js"
 import {Program} from "../../../webgl/Program.js";
-import {BatchingPickShaderSource} from "./batchingPickShaderSource.js";
+import {InstancingPickMeshShaderSource} from "./instancingPickMeshShaderSource.js";
 
 const ids = new Map({});
 
 /**
  * @private
- * @constructor
  */
-const BatchingPickRenderer = function (hash, layer) {
+const InstancingPickMeshRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new BatchingPickShaderSource(layer);
+    this._shaderSource = new InstancingPickMeshShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
 
-BatchingPickRenderer.get = function (layer) {
+InstancingPickMeshRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new BatchingPickRenderer(hash, layer);
+        renderer = new InstancingPickMeshRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -41,11 +40,11 @@ function getHash(scene) {
     return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-BatchingPickRenderer.prototype.getValid = function () {
+InstancingPickMeshRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-BatchingPickRenderer.prototype.put = function () {
+InstancingPickMeshRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -56,86 +55,131 @@ BatchingPickRenderer.prototype.put = function () {
     }
 };
 
-BatchingPickRenderer.prototype.webglContextRestored = function () {
+InstancingPickMeshRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-BatchingPickRenderer.prototype.drawLayer = function (frameCtx, layer) {
+InstancingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
+
     const model = layer.model;
     const scene = model.scene;
     const gl = scene.canvas.gl;
     const state = layer._state;
+    const instanceExt = this._instanceExt;
+
     if (!this._program) {
         this._allocate(layer);
+        if (this.errors) {
+            return;
+        }
     }
+
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
+
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
-    this._aPosition.bindArrayBuffer(state.positionsBuf); // TODO: Don't need these params, these are now derived from the buffer.
+
+    this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
+    this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
+    this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
+
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 1);
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 1);
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 1);
+    frameCtx.bindArray += 3;
+
+    this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
+    instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 1);
     frameCtx.bindArray++;
-    if (this._aFlags) {
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        frameCtx.bindArray++;
-    }
+
+    this._aPosition.bindArrayBuffer(state.positionsBuf);
+    frameCtx.bindArray++;
+
+    this._aFlags.bindArrayBuffer(state.flagsBuf);
+    instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 1);
+    frameCtx.bindArray++;
+
     if (this._aFlags2) {
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         frameCtx.bindArray++;
     }
-    if (this._aPickColor) {
-        this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
-        frameCtx.bindArray++;
-    }
+
     state.indicesBuf.bind();
     frameCtx.bindArray++;
-    gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+
+    instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+
+    // Cleanup
+
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+    instanceExt.vertexAttribDivisorANGLE(this._aPickColor.location, 0);
+    instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
+    if (this._aFlags2) { // Won't be in shader when not clipping
+        instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
+    }
+
     frameCtx.drawElements++;
 };
 
-BatchingPickRenderer.prototype._allocate = function (layer) {
+InstancingPickMeshRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
+
     this._program = new Program(gl, this._shaderSource);
+
     if (this._program.errors) {
         this.errors = this._program.errors;
         return;
     }
+
+    this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
+
     const program = this._program;
+
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
+
     this._uSectionPlanes = [];
-    const sectionPlanes = sectionPlanesState.sectionPlanes;
-    for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+    const clips = sectionPlanesState.sectionPlanes;
+    for (var i = 0, len = clips.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
             dir: program.getLocation("sectionPlaneDir" + i)
         });
     }
+
     this._aPosition = program.getAttribute("position");
     this._aPickColor = program.getAttribute("pickColor");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
+
+    this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
+    this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
+    this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
 };
 
-BatchingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
+InstancingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
+    const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
-    const camera = scene.camera;
-    const cameraState = camera._state;
     program.bind();
     frameCtx.useProgram++;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix || cameraState.matrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
+    const camera = scene.camera;
+    const cameraState = camera._state;
+    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
-        const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+        const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
         let uSectionPlaneActive;
         let sectionPlane;
@@ -144,7 +188,7 @@ BatchingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
         for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
             sectionPlaneUniforms = this._uSectionPlanes[i];
             uSectionPlaneActive = sectionPlaneUniforms.active;
-            sectionPlane = sectionPlanes[i];
+            sectionPlane = clips[i];
             if (uSectionPlaneActive) {
                 gl.uniform1i(uSectionPlaneActive, sectionPlane.active);
             }
@@ -160,4 +204,4 @@ BatchingPickRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
 };
 
-export {BatchingPickRenderer};
+export {InstancingPickMeshRenderer};

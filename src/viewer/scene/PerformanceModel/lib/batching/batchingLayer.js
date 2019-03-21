@@ -6,7 +6,9 @@ import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 import {BatchingDrawRenderer} from "./batchingDrawRenderer.js";
 import {BatchingFillRenderer} from "./batchingFillRenderer.js";
 import {BatchingEdgesRenderer} from "./batchingEdgesRenderer.js";
-import {BatchingPickRenderer} from "./batchingPickRenderer.js";
+import {BatchingPickMeshRenderer} from "./batchingPickMeshRenderer.js";
+import {BatchingPickDepthRenderer} from "./batchingPickDepthRenderer.js";
+import {BatchingPickNormalsRenderer} from "./batchingPickNormalsRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -713,8 +715,26 @@ class BatchingLayer {
         if (this._numVisibleLayerPortions === 0) {
             return;
         }
-        if (this._pickRenderer) {
-            this._pickRenderer.drawLayer(frameCtx, this);
+        if (this._pickMeshRenderer) {
+            this._pickMeshRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawPickDepths(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._pickDepthRenderer) {
+            this._pickDepthRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawPickNormals(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._pickNormalsRenderer) {
+            this._pickNormalsRenderer.drawLayer(frameCtx, this);
         }
     }
 
@@ -731,9 +751,17 @@ class BatchingLayer {
             this._edgesRenderer.put();
             this._edgesRenderer = null;
         }
-        if (this._pickRenderer && this._pickRenderer.getValid() === false) {
-            this._pickRenderer.put();
-            this._pickRenderer = null;
+        if (this._pickMeshRenderer && this._pickMeshRenderer.getValid() === false) {
+            this._pickMeshRenderer.put();
+            this._pickMeshRenderer = null;
+        }
+        if (this._pickDepthRenderer && this._pickDepthRenderer.getValid() === false) {
+            this._pickDepthRenderer.put();
+            this._pickDepthRenderer = null;
+        }
+        if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
+            this._pickNormalsRenderer.put();
+            this._pickNormalsRenderer = null;
         }
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
@@ -744,8 +772,14 @@ class BatchingLayer {
         if (!this._edgesRenderer) {
             this._edgesRenderer = BatchingEdgesRenderer.get(this);
         }
-        if (!this._pickRenderer) {
-            this._pickRenderer = BatchingPickRenderer.get(this);
+        if (!this._pickMeshRenderer) {
+            this._pickMeshRenderer = BatchingPickMeshRenderer.get(this);
+        }
+        if (!this._pickDepthRenderer) {
+            this._pickDepthRenderer = BatchingPickDepthRenderer.get(this);
+        }
+        if (!this._pickNormalsRenderer) {
+            this._pickNormalsRenderer = BatchingPickNormalsRenderer.get(this);
         }
     }
 
@@ -763,9 +797,17 @@ class BatchingLayer {
             this._edgesRenderer.put();
             this._edgesRenderer = null;
         }
-        if (this._pickRenderer) {
-            this._pickRenderer.put();
-            this._pickRenderer = null;
+        if (this._pickMeshRenderer) {
+            this._pickMeshRenderer.put();
+            this._pickMeshRenderer = null;
+        }
+        if (this._pickDepthRenderer) {
+            this._pickDepthRenderer.put();
+            this._pickDepthRenderer = null;
+        }
+        if (this._pickNormalsRenderer) {
+            this._pickNormalsRenderer.put();
+            this._pickNormalsRenderer = null;
         }
 
         const state = this._state;

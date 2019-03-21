@@ -1184,12 +1184,6 @@ class PerformanceModel extends Component {
         }
     }
 
-    /** @private
-     */
-    isSurfacePickable() {
-        return false;
-    }
-
     /** @private */
     drawPickMesh(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
@@ -1200,9 +1194,30 @@ class PerformanceModel extends Component {
         }
     }
 
-    /** @private */
-    _findPickedObject(color) {
-        // TODO: map color back to an object
+    /**
+     * Called by PerformanceMesh.drawPickDepths()
+     * @private
+     */
+    drawPickDepths(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].drawPickDepths(frameCtx);
+        }
+    }
+
+    /**
+     * Called by PerformanceMesh.drawPickNormals()
+     * @private
+     */
+    drawPickNormals(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].drawPickNormals(frameCtx);
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------

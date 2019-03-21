@@ -40,10 +40,6 @@ function buildVertex(layer) {
     src.push("attribute vec4 modelNormalMatrixCol1;");
     src.push("attribute vec4 modelNormalMatrixCol2;");
 
-    // TODO: How to do per-instance normal modeling matrix?
-
-    src.push("uniform mat4 modelNormalMatrix;");
-
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 viewNormalMatrix;");

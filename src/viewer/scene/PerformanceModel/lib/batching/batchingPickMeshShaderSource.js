@@ -1,7 +1,7 @@
 /**
  * @private
  */
-class BatchingPickShaderSource {
+class BatchingPickMeshShaderSource {
     constructor(layer) {
         this.vertex = buildVertex(layer);
         this.fragment = buildFragment(layer);
@@ -87,4 +87,4 @@ function buildFragment(layer) {
     return src;
 }
 
-export {BatchingPickShaderSource};
+export {BatchingPickMeshShaderSource};

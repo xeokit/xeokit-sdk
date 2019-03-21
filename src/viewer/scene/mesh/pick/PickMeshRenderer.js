@@ -174,8 +174,8 @@ PickMeshRenderer.prototype._bindProgram = function (frame) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix || cameraState.matrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix || camera.project._state.matrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         let sectionPlaneUniforms;
         let uSectionPlaneActive;

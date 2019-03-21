@@ -27,15 +27,15 @@ class Frustum extends Component {
         super(owner, cfg);
 
         this._state = new RenderState({
-            matrix: math.mat4()
+            matrix: math.mat4(),
+            near : 0.1,
+            far: 10000.0
         });
 
         this._left = -1.0;
         this._right = 1.0;
         this._bottom = -1.0;
         this._top = 1.0;
-        this._near = 0.1;
-        this._far = 5000.0;
 
         // Set component properties
 
@@ -48,7 +48,7 @@ class Frustum extends Component {
     }
 
     _update() {
-        math.frustumMat4(this._left, this._right, this._bottom, this._top, this._near, this._far, this._state.matrix);
+        math.frustumMat4(this._left, this._right, this._bottom, this._top, this._state.near, this._state.far, this._state.matrix);
         this.glRedraw();
         this.fire("matrix", this._state.matrix);
     }
@@ -181,7 +181,7 @@ class Frustum extends Component {
      * @param {Number} value New Frustum near plane position.
      */
     set near(value) {
-        this._near = (value !== undefined && value !== null) ? value : 0.1;
+        this._state.near = (value !== undefined && value !== null) ? value : 0.1;
         this._needUpdate();
 
         /**
@@ -190,7 +190,7 @@ class Frustum extends Component {
          @emits near
          @param value The property's new value
          */
-        this.fire("near", this._near);
+        this.fire("near", this._state.near);
     }
 
     /**
@@ -203,7 +203,7 @@ class Frustum extends Component {
      * @return {Number} Near frustum plane position.
      */
     get near() {
-        return this._near;
+        return this._state.near;
     }
 
     /**
@@ -216,7 +216,7 @@ class Frustum extends Component {
      * @param {Number} value New far frustum plane position.
      */
     set far(value) {
-        this._far = (value !== undefined && value !== null) ? value : 10000.0;
+        this._state.far = (value !== undefined && value !== null) ? value : 10000.0;
         this._needUpdate();
 
         /**
@@ -225,7 +225,7 @@ class Frustum extends Component {
          @emits far
          @param value The property's new value
          */
-        this.fire("far", this._far);
+        this.fire("far", this._state.far);
     }
 
     /**
@@ -236,7 +236,7 @@ class Frustum extends Component {
      * @return {Number} Far frustum plane position.
      */
     get far() {
-        return this._far;
+        return this._state.far;
     }
 
     /**

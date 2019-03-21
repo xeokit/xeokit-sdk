@@ -42,7 +42,7 @@ class PickResult {
         this._worldPos = new Float32Array([0, 0, 0]);
         this._viewPos = new Float32Array([0, 0, 0]);
         this._bary = new Float32Array([0, 0, 0]);
-        this._normal = new Float32Array([0, 0, 0]);
+        this._worldNormal = new Float32Array([0, 0, 0]);
         this._uv = new Float32Array([0, 0]);
 
         this.reset();
@@ -247,25 +247,25 @@ class PickResult {
     /**
      * Normal vector at picked position on surface.
      * Only defined when an entity and a point on its surface was picked.
-     * @property normal
+     * @property worldNormal
      * @type {Number[]}
      */
-    get normal() {
-        return this.entity && this._gotNormal ? this._normal : null;
+    get worldNormal() {
+        return this.entity && this._gotWorldNormal ? this._worldNormal : null;
     }
 
     /**
      * @private
      * @param value
      */
-    set normal(value) {
+    set worldNormal(value) {
         if (value) {
-            this._normal[0] = value[0];
-            this._normal[1] = value[1];
-            this._normal[2] = value[2];
-            this._gotNormal = true;
+            this._worldNormal[0] = value[0];
+            this._worldNormal[1] = value[1];
+            this._worldNormal[2] = value[2];
+            this._gotWorldNormal = true;
         } else {
-            this._gotNormal = false;
+            this._gotWorldNormal = false;
         }
     }
 
@@ -309,7 +309,7 @@ class PickResult {
         this._gotWorldPos = false;
         this._gotViewPos = false;
         this._gotBary = false;
-        this._gotNormal = false;
+        this._gotWorldNormal = false;
         this._gotUV = false;
     }
 }
