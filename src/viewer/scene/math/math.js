@@ -4627,9 +4627,7 @@ const math = {
         const tempVec4c = new Float32Array(4);
         const tempVec4d = new Float32Array(4);
 
-        return (viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
-
-            const canvas = camera.scene.canvas.canvas;
+        return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
 
             const pvMat = math.mulMat4(projMatrix, viewMatrix, tempMat4b);
             const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
@@ -4687,8 +4685,8 @@ const math = {
         const worldRayOrigin = new Float32Array(3);
         const worldRayDir = new Float32Array(3);
 
-        return (viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
-            math.canvasPosToWorldRay(viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
+        return (canvas, viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
+            math.canvasPosToWorldRay(canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
             math.worldRayToLocalRay(worldMatrix, worldRayOrigin, worldRayDir, localRayOrigin, localRayDir);
         };
     }))(),
