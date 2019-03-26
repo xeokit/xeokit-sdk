@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>NavCube Gizmo</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>NavCube</h1>
+    <ul>
+
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
+            - Navigation Cube Gizmo
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads glTF model from file system
+        </li>
+
+    </ul>
+</div>
+</body>
+<script type="module">
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    new NavCubePlugin(viewer, {size: 350});
+
+    const model = gltfLoader.load({
+        id: "myModel",
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    const scene = viewer.scene;
+    const camera = scene.camera;
+
+    camera.orbitPitch(20);
+
+    model.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(model);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>
