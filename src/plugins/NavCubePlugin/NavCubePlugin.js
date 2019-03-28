@@ -10,11 +10,27 @@ import {buildCylinderGeometry} from "../../../src/viewer/scene/geometry/builders
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 
 /**
- * {@link Viewer} plugin that provides a navigation cube gizmo, which enables us to quickly align the {@link Camera} along the World-space coordinate axii or diagonals.
+ * {@link Viewer} plugin that provides a navigation control that lets us look at the {@link Scene} from along a chosen axis or diagonal.
+ *
+ * The NavCube is an interactive 3D cube gizmo that appears in a corner of the Viewer's {@link Canvas}.
+ *
+ * Rotating the cube causes the Viewer's {@link Camera} to orbit its current point-of-interest. Orbiting the Camera
+ * causes the cube to rotate in synch.
+ *
+ * The faces of the cube are aligned with the Viewer's {@link Scene}'s World-space coordinate axis. Clicking on a face moves
+ * the Camera to look at the entire Scene along the corresponding axis. Clicking on an edge or a corner looks at
+ * the entire Scene along a diagonal.
+ *
+ * The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
+ * NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.
  *
  * ## Usage
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
+ * In the example below, we'll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the corner of
+ * Viewer's Canvas. Then we'll use the {@link GLTFLoaderPlugin} to load a model into the Viewer's Scene. We can then
+ * use the NavCube to look at the model along each axis or diagonal.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
  *
  * ````JavaScript````
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -29,11 +45,17 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  * viewer.camera.look = [4.40, 3.72, 8.89];
  * viewer.camera.up = [-0.01, 0.99, 0.03];
  *
- * new NavCubePlugin(viewer, {
- *     visible: true, // Default
- *     size: 250, // NavCube canvas size in pixels (default is 200)
- *     alignment: "topRight", // "bottomLeft" (default) | "topLeft" | "topRight" | "bottomRight"
- *     topMargin: 170
+ * const navCube = new NavCubePlugin(viewer, {
+ *
+ *     visible: true,           // Initially visible (default)
+ *
+ *     size: 250,               // NavCube size in pixels (default is 200)
+ *     alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+ *     topMargin: 170,          // 170 pixels margin from top of Viewer canvas
+ *
+ *     cameraFly: true,       // Fly camera to each selected axis/diagonal
+ *     cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
+ *     cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
  * });
  *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -43,10 +65,6 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *     src: "./models/gltf/duplex/scene.gltf",
  *     metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
  *     edges: true
- * });
- *
- * model.on("loaded", () => {
- *     viewer.cameraFlight.jumpTo(model);
  * });
  * ````
  */
@@ -64,6 +82,9 @@ class NavCubePlugin extends Plugin {
      * @param {Number} [cfg.rightMargin=10] The margin between the NavCube and the right edge of the {@link Viewer}'s {@link Canvas}, in pixels.
      * @param {Number} [cfg.topMargin=10] The margin between the NavCube and the top edge of the {@link Viewer}'s {@link Canvas}, in pixels.
      * @param {Number} [cfg.bottomMargin=10] The margin between the NavCube and the bottom edge of the {@link Viewer}'s {@link Canvas}, in pixels.
+     * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
+     * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
+     * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
      */
     constructor(viewer, cfg = {}) {
 
@@ -89,14 +110,6 @@ class NavCubePlugin extends Plugin {
         style.visibility = visible ? "visible" : "hidden";
 
         document.body.appendChild(this._navCubeCanvas);
-
-        this.setVisible(cfg.visible);
-        this.setSize(cfg.size);
-        this.setAlignment(cfg.alignment);
-        this.setLeftMargin(cfg.leftMargin);
-        this.setRightMargin(cfg.rightMargin);
-        this.setTopMargin(cfg.topMargin);
-        this.setBottomMargin(cfg.bottomMargin);
 
         var navCubeScene = new Scene({
             canvasId: this._navCubeCanvas.id,
@@ -422,12 +435,24 @@ class NavCubePlugin extends Plugin {
                     var diag = math.getAABB3Diag(aabb);
                     math.getAABB3Center(aabb, center);
                     var dist = Math.abs(diag / Math.tan(55.0 / 2));
-                    viewer.cameraFlight.flyTo({
-                        look: center,
-                        eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
-                        up: up || [0, 1, 0],
-                        orthoScale: diag * 1.3
-                    }, ok);
+                    if (self._cameraFly) {
+                        viewer.cameraFlight.flyTo({
+                            look: center,
+                            eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
+                            up: up || [0, 1, 0],
+                            orthoScale: diag * 1.3,
+                            fitFOV: self._cameraFitFOV,
+                            duration: self._cameraFlyDuration
+                        }, ok);
+                    } else {
+                        viewer.cameraFlight.jumpTo({
+                            look: center,
+                            eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
+                            up: up || [0, 1, 0],
+                            orthoScale: diag * 1.3,
+                            fitFOV: self._cameraFitFOV
+                        }, ok);
+                    }
                 };
             })();
         }
@@ -441,6 +466,17 @@ class NavCubePlugin extends Plugin {
                 this._updateLayout();
             }
         });
+
+        this.setVisible(cfg.visible);
+        this.setSize(cfg.size);
+        this.setAlignment(cfg.alignment);
+        this.setLeftMargin(cfg.leftMargin);
+        this.setRightMargin(cfg.rightMargin);
+        this.setTopMargin(cfg.topMargin);
+        this.setBottomMargin(cfg.bottomMargin);
+        this.setCameraFitFOV(cfg.cameraFitFOV);
+        this.setCameraFly(cfg.cameraFly);
+        this.setCameraFlyDuration(cfg.cameraFlyDuration);
     }
 
     send(name, value) {
@@ -566,7 +602,7 @@ class NavCubePlugin extends Plugin {
      *
      * @param {Number} leftMargin The left margin value, in pixels.
      */
-    setLeftMargin(leftMargin) {
+    setLeftMargin(leftMargin = 10) {
         this._leftMargin = (leftMargin !== null && leftMargin !== undefined) ? leftMargin : 10;
         this._needUpdateLayout = true;
     }
@@ -589,7 +625,7 @@ class NavCubePlugin extends Plugin {
      *
      * @param {Number} rightMargin The right margin value, in pixels.
      */
-    setRightMargin(rightMargin) {
+    setRightMargin(rightMargin = 10) {
         this._rightMargin = (rightMargin !== null && rightMargin !== undefined) ? rightMargin : 10;
         this._needUpdateLayout = true;
     }
@@ -612,7 +648,7 @@ class NavCubePlugin extends Plugin {
      *
      * @param {Number} topMargin The top margin value, in pixels.
      */
-    setTopMargin(topMargin) {
+    setTopMargin(topMargin = 10) {
         this._topMargin = (topMargin !== null && topMargin !== undefined) ? topMargin : 10;
         this._needUpdateLayout = true;
     }
@@ -635,7 +671,7 @@ class NavCubePlugin extends Plugin {
      *
      * @param {Number} bottomMargin The bottom margin value, in pixels.
      */
-    setBottomMargin(bottomMargin) {
+    setBottomMargin(bottomMargin = 10) {
         this._bottomMargin = (bottomMargin !== null && bottomMargin !== undefined) ? bottomMargin : 10;
         this._needUpdateLayout = true;
     }
@@ -649,6 +685,74 @@ class NavCubePlugin extends Plugin {
      */
     getBottomMargin() {
         return this._bottomMargin;
+    }
+
+    /**
+     * Sets whether the {@link Camera} flies or jumps to each selected axis or diagonal.
+     *
+     * Default is ````true````, to fly.
+     *
+     * @param {Boolean} cameraFly Set ````true```` to fly, else ````false```` to jump.
+     */
+    setCameraFly(cameraFly = true) {
+        this._cameraFly = cameraFly;
+    }
+
+    /**
+     * Gets whether the {@link Camera} flies or jumps to each selected axis or diagonal.
+     *
+     * Default is ````true````, to fly.
+     *
+     * @returns {Boolean} Returns ````true```` to fly, else ````false```` to jump.
+     */
+    getCameraFly() {
+        return this._cameraFly;
+    }
+
+    /**
+     * Sets how much of the field-of-view, in degrees, that the {@link Scene} should
+     * fill the canvas when flying or jumping the {@link Camera} to each selected axis or diagonal.
+     *
+     * Default value is ````45````.
+     *
+     * @param {Number} cameraFitFOV New FOV value.
+     */
+    setCameraFitFOV(cameraFitFOV = 45) {
+        this._cameraFitFOV = cameraFitFOV;
+    }
+
+    /**
+     * Gets how much of the field-of-view, in degrees, that the {@link Scene} should
+     * fill the canvas when flying or jumping the {@link Camera} to each selected axis or diagonal.
+     *
+     * Default value is ````45````.
+     *
+     * @returns {Number} Current FOV value.
+     */
+    getCameraFitFOV() {
+        return this._cameraFitFOV;
+    }
+
+    /**
+     * When flying the {@link Camera} to each new axis or diagonal, sets how long, in seconds, that the Camera takes to get there.
+     *
+     * Default is ````0.5````.
+     *
+     * @param {Boolean} cameraFlyDuration Camera flight duration in seconds.
+     */
+    setCameraFlyDuration(cameraFlyDuration = 0.5) {
+        this._cameraFlyDuration = cameraFlyDuration;
+    }
+
+    /**
+     * When flying the {@link Camera} to each new axis or diagonal, gets how long, in seconds, that the Camera takes to get there.
+     *
+     * Default is ````0.5````.
+     *
+     * @returns {Boolean} Camera flight duration in seconds.
+     */
+    getCameraFlyDuration() {
+        return this._cameraFlyDuration;
     }
 
     destroy() {
