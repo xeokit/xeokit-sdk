@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 8994,
+  "end": 7569,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 307,
+      "line": 280,
       "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 8994,
+    "end": 7569,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 307,
+        "line": 280,
         "column": 18
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 8974,
+        "end": 7549,
         "loc": {
           "start": {
             "line": 8,
             "column": 0
           },
           "end": {
-            "line": 305,
+            "line": 278,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 8974,
+          "end": 7549,
           "loc": {
             "start": {
               "line": 8,
               "column": 15
             },
             "end": {
-              "line": 305,
+              "line": 278,
               "column": 1
             }
           },
@@ -2866,9 +2866,7 @@
                   }
                 },
                 "body": [],
-                "directives": [],
-                "leadingComments": null,
-                "trailingComments": null
+                "directives": []
               },
               "leadingComments": [
                 {
@@ -2887,385 +2885,6 @@
                     }
                   }
                 }
-              ],
-              "trailingComments": [
-                {
-                  "type": "CommentLine",
-                  "value": "------------------------------------------------------------------------------------------------------------------",
-                  "start": 7553,
-                  "end": 7669,
-                  "loc": {
-                    "start": {
-                      "line": 279,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 279,
-                      "column": 120
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " Picking",
-                  "start": 7674,
-                  "end": 7684,
-                  "loc": {
-                    "start": {
-                      "line": 280,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 280,
-                      "column": 14
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": "------------------------------------------------------------------------------------------------------------------",
-                  "start": 7689,
-                  "end": 7805,
-                  "loc": {
-                    "start": {
-                      "line": 281,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 281,
-                      "column": 120
-                    }
-                  }
-                },
-                {
-                  "type": "CommentBlock",
-                  "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-                  "start": 7811,
-                  "end": 7902,
-                  "loc": {
-                    "start": {
-                      "line": 283,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 285,
-                      "column": 7
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "ClassMethod",
-              "start": 7907,
-              "end": 7934,
-              "loc": {
-                "start": {
-                  "line": 286,
-                  "column": 4
-                },
-                "end": {
-                  "line": 287,
-                  "column": 5
-                }
-              },
-              "static": false,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 7907,
-                "end": 7924,
-                "loc": {
-                  "start": {
-                    "line": 286,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 286,
-                    "column": 21
-                  },
-                  "identifierName": "isSurfacePickable"
-                },
-                "name": "isSurfacePickable",
-                "leadingComments": null
-              },
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [],
-              "body": {
-                "type": "BlockStatement",
-                "start": 7927,
-                "end": 7934,
-                "loc": {
-                  "start": {
-                    "line": 286,
-                    "column": 24
-                  },
-                  "end": {
-                    "line": 287,
-                    "column": 5
-                  }
-                },
-                "body": [],
-                "directives": []
-              },
-              "leadingComments": [
-                {
-                  "type": "CommentLine",
-                  "value": "------------------------------------------------------------------------------------------------------------------",
-                  "start": 7553,
-                  "end": 7669,
-                  "loc": {
-                    "start": {
-                      "line": 279,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 279,
-                      "column": 120
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " Picking",
-                  "start": 7674,
-                  "end": 7684,
-                  "loc": {
-                    "start": {
-                      "line": 280,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 280,
-                      "column": 14
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": "------------------------------------------------------------------------------------------------------------------",
-                  "start": 7689,
-                  "end": 7805,
-                  "loc": {
-                    "start": {
-                      "line": 281,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 281,
-                      "column": 120
-                    }
-                  }
-                },
-                {
-                  "type": "CommentBlock",
-                  "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-                  "start": 7811,
-                  "end": 7902,
-                  "loc": {
-                    "start": {
-                      "line": 283,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 285,
-                      "column": 7
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "ClassMethod",
-              "start": 7940,
-              "end": 7975,
-              "loc": {
-                "start": {
-                  "line": 289,
-                  "column": 4
-                },
-                "end": {
-                  "line": 290,
-                  "column": 5
-                }
-              },
-              "static": false,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 7940,
-                "end": 7957,
-                "loc": {
-                  "start": {
-                    "line": 289,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 289,
-                    "column": 21
-                  },
-                  "identifierName": "drawPickTriangles"
-                },
-                "name": "drawPickTriangles"
-              },
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [
-                {
-                  "type": "Identifier",
-                  "start": 7958,
-                  "end": 7966,
-                  "loc": {
-                    "start": {
-                      "line": 289,
-                      "column": 22
-                    },
-                    "end": {
-                      "line": 289,
-                      "column": 30
-                    },
-                    "identifierName": "frameCtx"
-                  },
-                  "name": "frameCtx"
-                }
-              ],
-              "body": {
-                "type": "BlockStatement",
-                "start": 7968,
-                "end": 7975,
-                "loc": {
-                  "start": {
-                    "line": 289,
-                    "column": 32
-                  },
-                  "end": {
-                    "line": 290,
-                    "column": 5
-                  }
-                },
-                "body": [],
-                "directives": [],
-                "leadingComments": null,
-                "trailingComments": null
-              },
-              "trailingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                  "start": 7981,
-                  "end": 8936,
-                  "loc": {
-                    "start": {
-                      "line": 292,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 302,
-                      "column": 7
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "ClassMethod",
-              "start": 8941,
-              "end": 8972,
-              "loc": {
-                "start": {
-                  "line": 303,
-                  "column": 4
-                },
-                "end": {
-                  "line": 304,
-                  "column": 5
-                }
-              },
-              "static": false,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 8941,
-                "end": 8952,
-                "loc": {
-                  "start": {
-                    "line": 303,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 303,
-                    "column": 15
-                  },
-                  "identifierName": "surfacePick"
-                },
-                "name": "surfacePick",
-                "leadingComments": null
-              },
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [
-                {
-                  "type": "Identifier",
-                  "start": 8953,
-                  "end": 8963,
-                  "loc": {
-                    "start": {
-                      "line": 303,
-                      "column": 16
-                    },
-                    "end": {
-                      "line": 303,
-                      "column": 26
-                    },
-                    "identifierName": "pickResult"
-                  },
-                  "name": "pickResult"
-                }
-              ],
-              "body": {
-                "type": "BlockStatement",
-                "start": 8965,
-                "end": 8972,
-                "loc": {
-                  "start": {
-                    "line": 303,
-                    "column": 28
-                  },
-                  "end": {
-                    "line": 304,
-                    "column": 5
-                  }
-                },
-                "body": [],
-                "directives": []
-              },
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                  "start": 7981,
-                  "end": 8936,
-                  "loc": {
-                    "start": {
-                      "line": 292,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 302,
-                      "column": 7
-                    }
-                  }
-                }
               ]
             }
           ]
@@ -3276,15 +2895,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 8976,
-        "end": 8994,
+        "start": 7551,
+        "end": 7569,
         "loc": {
           "start": {
-            "line": 307,
+            "line": 280,
             "column": 0
           },
           "end": {
-            "line": 307,
+            "line": 280,
             "column": 18
           }
         },
@@ -3292,29 +2911,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 8984,
-            "end": 8992,
+            "start": 7559,
+            "end": 7567,
             "loc": {
               "start": {
-                "line": 307,
+                "line": 280,
                 "column": 8
               },
               "end": {
-                "line": 307,
+                "line": 280,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 8984,
-              "end": 8992,
+              "start": 7559,
+              "end": 7567,
               "loc": {
                 "start": {
-                  "line": 307,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 307,
+                  "line": 280,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -3323,15 +2942,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 8984,
-              "end": 8992,
+              "start": 7559,
+              "end": 7567,
               "loc": {
                 "start": {
-                  "line": 307,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 307,
+                  "line": 280,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -3344,29 +2963,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 8976,
-        "end": 8994,
+        "start": 7551,
+        "end": 7569,
         "loc": {
           "start": {
-            "line": 307,
+            "line": 280,
             "column": 0
           },
           "end": {
-            "line": 307,
+            "line": 280,
             "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 8974,
+          "end": 7549,
           "loc": {
             "start": {
               "line": 8,
               "column": 0
             },
             "end": {
-              "line": 305,
+              "line": 278,
               "column": 1
             }
           },
@@ -3392,14 +3011,14 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 8974,
+            "end": 7549,
             "loc": {
               "start": {
                 "line": 8,
                 "column": 15
               },
               "end": {
-                "line": 305,
+                "line": 278,
                 "column": 1
               }
             },
@@ -6194,9 +5813,7 @@
                     }
                   },
                   "body": [],
-                  "directives": [],
-                  "leadingComments": null,
-                  "trailingComments": null
+                  "directives": []
                 },
                 "leadingComments": [
                   {
@@ -6211,385 +5828,6 @@
                       },
                       "end": {
                         "line": 275,
-                        "column": 7
-                      }
-                    }
-                  }
-                ],
-                "trailingComments": [
-                  {
-                    "type": "CommentLine",
-                    "value": "------------------------------------------------------------------------------------------------------------------",
-                    "start": 7553,
-                    "end": 7669,
-                    "loc": {
-                      "start": {
-                        "line": 279,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 279,
-                        "column": 120
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": " Picking",
-                    "start": 7674,
-                    "end": 7684,
-                    "loc": {
-                      "start": {
-                        "line": 280,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 280,
-                        "column": 14
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": "------------------------------------------------------------------------------------------------------------------",
-                    "start": 7689,
-                    "end": 7805,
-                    "loc": {
-                      "start": {
-                        "line": 281,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 281,
-                        "column": 120
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-                    "start": 7811,
-                    "end": 7902,
-                    "loc": {
-                      "start": {
-                        "line": 283,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 285,
-                        "column": 7
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "ClassMethod",
-                "start": 7907,
-                "end": 7934,
-                "loc": {
-                  "start": {
-                    "line": 286,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 287,
-                    "column": 5
-                  }
-                },
-                "static": false,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "start": 7907,
-                  "end": 7924,
-                  "loc": {
-                    "start": {
-                      "line": 286,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 286,
-                      "column": 21
-                    },
-                    "identifierName": "isSurfacePickable"
-                  },
-                  "name": "isSurfacePickable",
-                  "leadingComments": null
-                },
-                "kind": "method",
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 7927,
-                  "end": 7934,
-                  "loc": {
-                    "start": {
-                      "line": 286,
-                      "column": 24
-                    },
-                    "end": {
-                      "line": 287,
-                      "column": 5
-                    }
-                  },
-                  "body": [],
-                  "directives": []
-                },
-                "leadingComments": [
-                  {
-                    "type": "CommentLine",
-                    "value": "------------------------------------------------------------------------------------------------------------------",
-                    "start": 7553,
-                    "end": 7669,
-                    "loc": {
-                      "start": {
-                        "line": 279,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 279,
-                        "column": 120
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": " Picking",
-                    "start": 7674,
-                    "end": 7684,
-                    "loc": {
-                      "start": {
-                        "line": 280,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 280,
-                        "column": 14
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": "------------------------------------------------------------------------------------------------------------------",
-                    "start": 7689,
-                    "end": 7805,
-                    "loc": {
-                      "start": {
-                        "line": 281,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 281,
-                        "column": 120
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-                    "start": 7811,
-                    "end": 7902,
-                    "loc": {
-                      "start": {
-                        "line": 283,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 285,
-                        "column": 7
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "ClassMethod",
-                "start": 7940,
-                "end": 7975,
-                "loc": {
-                  "start": {
-                    "line": 289,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 290,
-                    "column": 5
-                  }
-                },
-                "static": false,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "start": 7940,
-                  "end": 7957,
-                  "loc": {
-                    "start": {
-                      "line": 289,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 289,
-                      "column": 21
-                    },
-                    "identifierName": "drawPickTriangles"
-                  },
-                  "name": "drawPickTriangles"
-                },
-                "kind": "method",
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 7958,
-                    "end": 7966,
-                    "loc": {
-                      "start": {
-                        "line": 289,
-                        "column": 22
-                      },
-                      "end": {
-                        "line": 289,
-                        "column": 30
-                      },
-                      "identifierName": "frameCtx"
-                    },
-                    "name": "frameCtx"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 7968,
-                  "end": 7975,
-                  "loc": {
-                    "start": {
-                      "line": 289,
-                      "column": 32
-                    },
-                    "end": {
-                      "line": 290,
-                      "column": 5
-                    }
-                  },
-                  "body": [],
-                  "directives": [],
-                  "leadingComments": null,
-                  "trailingComments": null
-                },
-                "trailingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                    "start": 7981,
-                    "end": 8936,
-                    "loc": {
-                      "start": {
-                        "line": 292,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 302,
-                        "column": 7
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "ClassMethod",
-                "start": 8941,
-                "end": 8972,
-                "loc": {
-                  "start": {
-                    "line": 303,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 304,
-                    "column": 5
-                  }
-                },
-                "static": false,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "start": 8941,
-                  "end": 8952,
-                  "loc": {
-                    "start": {
-                      "line": 303,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 303,
-                      "column": 15
-                    },
-                    "identifierName": "surfacePick"
-                  },
-                  "name": "surfacePick",
-                  "leadingComments": null
-                },
-                "kind": "method",
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 8953,
-                    "end": 8963,
-                    "loc": {
-                      "start": {
-                        "line": 303,
-                        "column": 16
-                      },
-                      "end": {
-                        "line": 303,
-                        "column": 26
-                      },
-                      "identifierName": "pickResult"
-                    },
-                    "name": "pickResult"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 8965,
-                  "end": 8972,
-                  "loc": {
-                    "start": {
-                      "line": 303,
-                      "column": 28
-                    },
-                    "end": {
-                      "line": 304,
-                      "column": 5
-                    }
-                  },
-                  "body": [],
-                  "directives": []
-                },
-                "leadingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-                    "start": 7981,
-                    "end": 8936,
-                    "loc": {
-                      "start": {
-                        "line": 292,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 302,
                         "column": 7
                       }
                     }
@@ -7119,86 +6357,6 @@
         },
         "end": {
           "line": 275,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "------------------------------------------------------------------------------------------------------------------",
-      "start": 7553,
-      "end": 7669,
-      "loc": {
-        "start": {
-          "line": 279,
-          "column": 4
-        },
-        "end": {
-          "line": 279,
-          "column": 120
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " Picking",
-      "start": 7674,
-      "end": 7684,
-      "loc": {
-        "start": {
-          "line": 280,
-          "column": 4
-        },
-        "end": {
-          "line": 280,
-          "column": 14
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "------------------------------------------------------------------------------------------------------------------",
-      "start": 7689,
-      "end": 7805,
-      "loc": {
-        "start": {
-          "line": 281,
-          "column": 4
-        },
-        "end": {
-          "line": 281,
-          "column": 120
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-      "start": 7811,
-      "end": 7902,
-      "loc": {
-        "start": {
-          "line": 283,
-          "column": 4
-        },
-        "end": {
-          "line": 285,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-      "start": 7981,
-      "end": 8936,
-      "loc": {
-        "start": {
-          "line": 292,
-          "column": 4
-        },
-        "end": {
-          "line": 302,
           "column": 7
         }
       }
@@ -11481,171 +10639,6 @@
       }
     },
     {
-      "type": "CommentLine",
-      "value": "------------------------------------------------------------------------------------------------------------------",
-      "start": 7553,
-      "end": 7669,
-      "loc": {
-        "start": {
-          "line": 279,
-          "column": 4
-        },
-        "end": {
-          "line": 279,
-          "column": 120
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " Picking",
-      "start": 7674,
-      "end": 7684,
-      "loc": {
-        "start": {
-          "line": 280,
-          "column": 4
-        },
-        "end": {
-          "line": 280,
-          "column": 14
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "------------------------------------------------------------------------------------------------------------------",
-      "start": 7689,
-      "end": 7805,
-      "loc": {
-        "start": {
-          "line": 281,
-          "column": 4
-        },
-        "end": {
-          "line": 281,
-          "column": 120
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     * Called by xeokit to get if surface pixking is possible on this Drawable.\n     ",
-      "start": 7811,
-      "end": 7902,
-      "loc": {
-        "start": {
-          "line": 283,
-          "column": 4
-        },
-        "end": {
-          "line": 285,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "isSurfacePickable",
-      "start": 7907,
-      "end": 7924,
-      "loc": {
-        "start": {
-          "line": 286,
-          "column": 4
-        },
-        "end": {
-          "line": 286,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7924,
-      "end": 7925,
-      "loc": {
-        "start": {
-          "line": 286,
-          "column": 21
-        },
-        "end": {
-          "line": 286,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7925,
-      "end": 7926,
-      "loc": {
-        "start": {
-          "line": 286,
-          "column": 22
-        },
-        "end": {
-          "line": 286,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7927,
-      "end": 7928,
-      "loc": {
-        "start": {
-          "line": 286,
-          "column": 24
-        },
-        "end": {
-          "line": 286,
-          "column": 25
-        }
-      }
-    },
-    {
       "type": {
         "label": "}",
         "beforeExpr": false,
@@ -11657,360 +10650,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7933,
-      "end": 7934,
+      "start": 7548,
+      "end": 7549,
       "loc": {
         "start": {
-          "line": 287,
-          "column": 4
-        },
-        "end": {
-          "line": 287,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "drawPickTriangles",
-      "start": 7940,
-      "end": 7957,
-      "loc": {
-        "start": {
-          "line": 289,
-          "column": 4
-        },
-        "end": {
-          "line": 289,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7957,
-      "end": 7958,
-      "loc": {
-        "start": {
-          "line": 289,
-          "column": 21
-        },
-        "end": {
-          "line": 289,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "frameCtx",
-      "start": 7958,
-      "end": 7966,
-      "loc": {
-        "start": {
-          "line": 289,
-          "column": 22
-        },
-        "end": {
-          "line": 289,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7966,
-      "end": 7967,
-      "loc": {
-        "start": {
-          "line": 289,
-          "column": 30
-        },
-        "end": {
-          "line": 289,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7968,
-      "end": 7969,
-      "loc": {
-        "start": {
-          "line": 289,
-          "column": 32
-        },
-        "end": {
-          "line": 289,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7974,
-      "end": 7975,
-      "loc": {
-        "start": {
-          "line": 290,
-          "column": 4
-        },
-        "end": {
-          "line": 290,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     * Given a {@link PickResult} that contains a {@link PickResult#primIndex}, which indicates that a primitive was picked on the Drawable, then add more information to the PickResult about the picked position on the surface of the Drawable.\n     *\n     * Architecturally, this delegates collection of that Drawable-specific info to the Drawable, allowing it to provide whatever info it's able to.\n     *\n     * @param {PickResult} pickResult The PickResult to augment with pick intersection information specific to this Mesh.\n     * @param [pickResult.primIndex] Index of the primitive that was picked on this Mesh. Essential for obtaining the intersection information.\n     * @param [pickResult.canvasPos] Canvas coordinates, provided when picking through the Canvas.\n     * @param [pickResult.origin] World-space 3D ray origin, when ray picking.\n     * @param [pickResult.direction] World-space 3D ray direction, provided when ray picking.\n     ",
-      "start": 7981,
-      "end": 8936,
-      "loc": {
-        "start": {
-          "line": 292,
-          "column": 4
-        },
-        "end": {
-          "line": 302,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "surfacePick",
-      "start": 8941,
-      "end": 8952,
-      "loc": {
-        "start": {
-          "line": 303,
-          "column": 4
-        },
-        "end": {
-          "line": 303,
-          "column": 15
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8952,
-      "end": 8953,
-      "loc": {
-        "start": {
-          "line": 303,
-          "column": 15
-        },
-        "end": {
-          "line": 303,
-          "column": 16
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "pickResult",
-      "start": 8953,
-      "end": 8963,
-      "loc": {
-        "start": {
-          "line": 303,
-          "column": 16
-        },
-        "end": {
-          "line": 303,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8963,
-      "end": 8964,
-      "loc": {
-        "start": {
-          "line": 303,
-          "column": 26
-        },
-        "end": {
-          "line": 303,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8965,
-      "end": 8966,
-      "loc": {
-        "start": {
-          "line": 303,
-          "column": 28
-        },
-        "end": {
-          "line": 303,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8971,
-      "end": 8972,
-      "loc": {
-        "start": {
-          "line": 304,
-          "column": 4
-        },
-        "end": {
-          "line": 304,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8973,
-      "end": 8974,
-      "loc": {
-        "start": {
-          "line": 305,
+          "line": 278,
           "column": 0
         },
         "end": {
-          "line": 305,
+          "line": 278,
           "column": 1
         }
       }
@@ -12030,15 +10678,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 8976,
-      "end": 8982,
+      "start": 7551,
+      "end": 7557,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 0
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 6
         }
       }
@@ -12055,15 +10703,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8983,
-      "end": 8984,
+      "start": 7558,
+      "end": 7559,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 7
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 8
         }
       }
@@ -12081,15 +10729,15 @@
         "binop": null
       },
       "value": "Drawable",
-      "start": 8984,
-      "end": 8992,
+      "start": 7559,
+      "end": 7567,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 8
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 16
         }
       }
@@ -12106,15 +10754,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8992,
-      "end": 8993,
+      "start": 7567,
+      "end": 7568,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 16
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 17
         }
       }
@@ -12132,15 +10780,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8993,
-      "end": 8994,
+      "start": 7568,
+      "end": 7569,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 17
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 18
         }
       }
@@ -12158,15 +10806,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8994,
-      "end": 8994,
+      "start": 7569,
+      "end": 7569,
       "loc": {
         "start": {
-          "line": 307,
+          "line": 280,
           "column": 18
         },
         "end": {
-          "line": 307,
+          "line": 280,
           "column": 18
         }
       }
