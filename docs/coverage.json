@@ -13,9 +13,9 @@
       "actualCount": 6,
       "undocumentLines": [
         5,
-        329,
-        333,
-        261
+        326,
+        330,
+        258
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
