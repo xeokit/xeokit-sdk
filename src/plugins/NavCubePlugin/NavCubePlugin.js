@@ -143,18 +143,15 @@ class NavCubePlugin extends Plugin {
         }());
 
         this._onCameraMatrix = viewer.camera.on("matrix", this._synchCamera);
-
         this._onCameraWorldAxis = viewer.camera.on("worldAxis", this._synchCamera);
-
         this._onCameraFOV = viewer.camera.perspective.on("fov", (fov) => {
             this._navCubeCamera.perspective.fov = fov;
         });
-
         this._onCameraProjection = viewer.camera.on("projection", (projection) => {
             this._navCubeCamera.projection = projection;
         });
 
-        viewer.camera.on("worldAxis", (projection) => {
+        viewer.camera.on("worldAxis", (worldAxis) => {
             /*
         case "zUp":
             this._zUp = true;
@@ -173,10 +170,8 @@ class NavCubePlugin extends Plugin {
 
         this._cubeTextureCanvas = new CubeTextureCanvas(viewer);
 
-        const image = this._cubeTextureCanvas.getImage();
-
         this._cubeSampler = new Texture(navCubeScene, {
-            image: image,
+            image: this._cubeTextureCanvas.getImage(),
             flipY: true,
             wrapS: "clampToEdge",
             wrapT: "clampToEdge"
@@ -226,9 +221,6 @@ class NavCubePlugin extends Plugin {
                 heightSegments: 1,
                 openEnded: true
             })),
-            // geometry: new VBOGeometry(navCubeScene, buildPlaneGeometry({
-            //     center: [0, -1.5, 0], xSize: 2.0, zSize: 2.0, xSegments: 2, zSegments: 2
-            // })),
             material: new PhongMaterial(navCubeScene, {
                 diffuse: [0.0, 0.0, 0.0], specular: [0, 0, 0], emissive: [0.0, 0.0, 0.0], alpha: 0.5
             }),
@@ -455,7 +447,7 @@ class NavCubePlugin extends Plugin {
         switch (name) {
             case "language":
                 this._cubeTextureCanvas.clear();
-                this._repaint();
+                this._repaint(); // CubeTextureCanvas gets language from Viewer
                 break;
         }
     }
