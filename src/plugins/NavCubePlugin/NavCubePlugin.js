@@ -6,74 +6,65 @@ import {Mesh} from "./../../../src/viewer/scene/mesh/Mesh.js";
 import {ReadableGeometry} from "../../../src/viewer/scene/geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../../../src/viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../../src/viewer/scene/materials/Texture.js";
-import {buildPlaneGeometry} from "../../../src/viewer/scene/geometry/builders/buildPlaneGeometry.js";
 import {buildCylinderGeometry} from "../../../src/viewer/scene/geometry/builders/buildCylinderGeometry.js";
-
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 
-function getCoordsWithinElement(event) {
-    var coords = [0, 0];
-    if (!event) {
-        event = window.event;
-        coords[0] = event.x;
-        coords[1] = event.y;
-    } else {
-        var element = event.target;
-        var totalOffsetLeft = 0;
-        var totalOffsetTop = 0;
-        while (element.offsetParent) {
-            totalOffsetLeft += element.offsetLeft;
-            totalOffsetTop += element.offsetTop;
-            element = element.offsetParent;
-        }
-        coords[0] = event.pageX - totalOffsetLeft;
-        coords[1] = event.pageY - totalOffsetTop;
-    }
-    return coords;
-}
-
 /**
- * {@link Viewer} plugin that shows the axii of the World-space coordinate system.
+ * {@link Viewer} plugin that provides a navigation cube gizmo, which enables us to quickly align the {@link Camera} along the World-space coordinate axii or diagonals.
  *
  * ## Usage
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
  *
  * ````JavaScript````
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
- * import {AxisGizmoPlugin} from "../src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js";
+ * import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas"
  * });
  *
- * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ * viewer.camera.eye = [-3.93, 2.85, 27.01];
+ * viewer.camera.look = [4.40, 3.72, 8.89];
+ * viewer.camera.up = [-0.01, 0.99, 0.03];
  *
- * new AxisGizmoPlugin(viewer, {size: [250, 250]});
+ * new NavCubePlugin(viewer, {
+ *     visible: true, // Default
+ *     size: 250, // NavCube canvas size in pixels (default is 200)
+ *     alignment: "topRight", // "bottomLeft" (default) | "topLeft" | "topRight" | "bottomRight"
+ *     topMargin: 170
+ * });
+ *
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
  * const model = gltfLoader.load({
  *     id: "myModel",
- *     src: "./models/gltf/schependomlaan/scene.gltf",
- *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     src: "./models/gltf/duplex/scene.gltf",
+ *     metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
  *     edges: true
  * });
  *
- * const scene = viewer.scene;
- * const camera = scene.camera;
- *
- * camera.orbitPitch(20);
- *
  * model.on("loaded", () => {
- *     viewer.cameraFlight.jumpTo(modelNode);
- *     scene.on("tick", () => {
- *        camera.orbitYaw(0.4);
- *     })
+ *     viewer.cameraFlight.jumpTo(model);
  * });
  * ````
  */
 class NavCubePlugin extends Plugin {
 
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg NavCubePlugin configuration.
+     * @param {String} [cfg.id="NavCube"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Boolean} [cfg.visible=true] Initial visibility.
+     * @param {Number} [cfg.size=200] Size of the NavCube area, in pixels.
+     * @param {String} [cfg.alignment="bottomRight"] The alignment of the NavCube within the bounds of the {@link Viewer}'s {@link Canvas}. Accepted values are "bottomRight", "bottomLeft", "topLeft" and "topRight".
+     * @param {Number} [cfg.leftMargin=10] The margin between the NavCube and the left edge of the {@link Viewer}'s {@link Canvas}, in pixels.
+     * @param {Number} [cfg.rightMargin=10] The margin between the NavCube and the right edge of the {@link Viewer}'s {@link Canvas}, in pixels.
+     * @param {Number} [cfg.topMargin=10] The margin between the NavCube and the top edge of the {@link Viewer}'s {@link Canvas}, in pixels.
+     * @param {Number} [cfg.bottomMargin=10] The margin between the NavCube and the bottom edge of the {@link Viewer}'s {@link Canvas}, in pixels.
+     */
     constructor(viewer, cfg = {}) {
 
         super("NavCube", viewer, cfg);
@@ -86,30 +77,26 @@ class NavCubePlugin extends Plugin {
         this._navCubeCanvas = document.createElement('canvas');
         this._navCubeCanvas.id = "cubeCanvas" + viewer.scene.canvas.canvas.id;
 
-        this._left = cfg.left;
-        this._right = cfg.right;
-        this._top = cfg.top;
-        this._bottom = cfg.bottom;
-
         var style = this._navCubeCanvas.style;
         style.height = size + "px";
         style.width = size + "px";
         style.padding = "0";
         style.margin = "0";
-        style.left = "0px";
         style.top = "0px";
+        style.left = "0px";
         style.position = "absolute";
         style["z-index"] = "2000000";
         style.visibility = visible ? "visible" : "hidden";
 
         document.body.appendChild(this._navCubeCanvas);
 
-        var canvas = viewer.scene.canvas;
-
-        canvas.on("boundary", function (boundary) {
-            style.right = (-size / 4) + "px";
-            style.top = (-size / 4) + "px";
-        });
+        this.setVisible(cfg.visible);
+        this.setSize(cfg.size);
+        this.setAlignment(cfg.alignment);
+        this.setLeftMargin(cfg.leftMargin);
+        this.setRightMargin(cfg.rightMargin);
+        this.setTopMargin(cfg.topMargin);
+        this.setBottomMargin(cfg.bottomMargin);
 
         var navCubeScene = new Scene({
             canvasId: this._navCubeCanvas.id,
@@ -125,7 +112,7 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera = navCubeScene.camera;
         this._navCubeCamera.ortho.scale = 7.0;
         this._navCubeCamera.ortho.near = 0.1;
-        this._navCubeCamera.ortho.far = 5000;
+        this._navCubeCamera.ortho.far = 2000;
 
         this._zUp = false;
 
@@ -140,7 +127,7 @@ class NavCubePlugin extends Plugin {
                 var eye = viewer.camera.eye;
                 var look = viewer.camera.look;
                 var up = viewer.camera.up;
-                eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 7);
+                eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
                 if (self._zUp) { // +Z up
                     math.transformVec3(matrix, eyeLookVec, eyeLookVecCube);
                     math.transformVec3(matrix, up, upCube);
@@ -155,14 +142,15 @@ class NavCubePlugin extends Plugin {
             };
         }());
 
-        viewer.camera.on("matrix", this._synchCamera);
-        viewer.camera.on("worldAxis", this._synchCamera);
+        this._onCameraMatrix = viewer.camera.on("matrix", this._synchCamera);
 
-        viewer.camera.perspective.on("fov", (fov) => {
+        this._onCameraWorldAxis = viewer.camera.on("worldAxis", this._synchCamera);
+
+        this._onCameraFOV = viewer.camera.perspective.on("fov", (fov) => {
             this._navCubeCamera.perspective.fov = fov;
         });
 
-        viewer.camera.on("projection", (projection) => {
+        this._onCameraProjection = viewer.camera.on("projection", (projection) => {
             this._navCubeCamera.projection = projection;
         });
 
@@ -252,83 +240,45 @@ class NavCubePlugin extends Plugin {
 
         var lastAreaId = -1;
 
-        // Mouse/touch rotation handlers
+        function actionMove(posX, posY) {
+            var yawInc = (posX - lastX) * -sensitivity;
+            var pitchInc = (posY - lastY) * -sensitivity;
+            yaw -= yawInc;
+            pitch -= pitchInc;
+            if (minPitch !== undefined && pitch < minPitch) {
+                pitch = minPitch;
+            }
+            if (maxPitch !== undefined && pitch > maxPitch) {
+                pitch = maxPitch;
+            }
+            viewer.camera.orbitYaw(yawInc);
+            viewer.camera.orbitPitch(-pitchInc);
+            lastX = posX;
+            lastY = posY;
+        }
 
-        // (function () {
-        //
-        //     var yaw = 0;
-        //     var pitch = 0;
-        //     var minPitch = null;
-        //     var maxPitch = null;
-        //     var sensitivity = 0.5;
-        //
-        //     var lastX;
-        //     var lastY;
-        //     var dragging = false;
-        //
-        //     var over = false;
-        //
-        //     function mouseDown(event) {
-        //         lastX = event.clientX;
-        //         lastY = event.clientY;
-        //         dragging = true;
-        //     }
-        //
-        //     function touchStart(event) {
-        //         lastX = event.targetTouches[0].clientX;
-        //         lastY = event.targetTouches[0].clientY;
-        //         dragging = true;
-        //     }
-        //
-        //     function mouseUp() {
-        //         dragging = false;
-        //     }
-        //
-        //     function touchEnd() {
-        //         dragging = false;
-        //     }
-        //
-        //     function mouseMove(event) {
-        //         var posX = event.clientX;
-        //         var posY = event.clientY;
-        //         actionMove(posX, posY);
-        //     }
-        //
-        //     function touchMove(event) {
-        //         var posX = event.targetTouches[0].clientX;
-        //         var posY = event.targetTouches[0].clientY;
-        //         actionMove(posX, posY);
-        //     }
-        //
-        //     function actionMove(posX, posY) {
-        //         if (dragging) {
-        //             var yawInc = (posX - lastX) * -sensitivity;
-        //             var pitchInc = (posY - lastY) * -sensitivity;
-        //             yaw -= yawInc;
-        //             pitch -= pitchInc;
-        //             if (minPitch !== undefined && pitch < minPitch) {
-        //                 pitch = minPitch;
-        //             }
-        //             if (maxPitch !== undefined && pitch > maxPitch) {
-        //                 pitch = maxPitch;
-        //             }
-        //             viewer.camera.orbitYaw(yawInc);
-        //             viewer.camera.orbitPitch(-pitchInc);
-        //             lastX = posX;
-        //             lastY = posY;
-        //         }
-        //     }
-        //
-        //     self._navCubeCanvas.addEventListener('mousedown', mouseDown, true);
-        //     self._navCubeCanvas.addEventListener('mousemove', mouseMove, true);
-        //     self._navCubeCanvas.addEventListener('mouseup', mouseUp, true);
-        //     self._navCubeCanvas.addEventListener('touchstart', touchStart, {passive: true});
-        //     self._navCubeCanvas.addEventListener('touchmove', touchMove, {passive: true});
-        //     self._navCubeCanvas.addEventListener('touchend', touchEnd, {passive: true});
-        // })();
+        function getCoordsWithinElement(event) {
+            var coords = [0, 0];
+            if (!event) {
+                event = window.event;
+                coords[0] = event.x;
+                coords[1] = event.y;
+            } else {
+                var element = event.target;
+                var totalOffsetLeft = 0;
+                var totalOffsetTop = 0;
+                while (element.offsetParent) {
+                    totalOffsetLeft += element.offsetLeft;
+                    totalOffsetTop += element.offsetTop;
+                    element = element.offsetParent;
+                }
+                coords[0] = event.pageX - totalOffsetLeft;
+                coords[1] = event.pageY - totalOffsetTop;
+            }
+            return coords;
+        }
 
-        (function () {
-
+        {
             var downX = null;
             var downY = null;
             var down = false;
@@ -343,24 +293,7 @@ class NavCubePlugin extends Plugin {
             var lastY;
             var dragging = false;
 
-            function actionMove(posX, posY) {
-                    var yawInc = (posX - lastX) * -sensitivity;
-                    var pitchInc = (posY - lastY) * -sensitivity;
-                    yaw -= yawInc;
-                    pitch -= pitchInc;
-                    if (minPitch !== undefined && pitch < minPitch) {
-                        pitch = minPitch;
-                    }
-                    if (maxPitch !== undefined && pitch > maxPitch) {
-                        pitch = maxPitch;
-                    }
-                    viewer.camera.orbitYaw(yawInc);
-                    viewer.camera.orbitPitch(-pitchInc);
-                    lastX = posX;
-                    lastY = posY;
-            }
-
-            self._navCubeCanvas.addEventListener("mousedown", function (e) {
+            self._navCubeCanvas.addEventListener("mousedown", self._onMouseDown = function (e) {
                 downX = e.x;
                 downY = e.y;
                 lastX = e.clientX;
@@ -376,16 +309,8 @@ class NavCubePlugin extends Plugin {
                     down = false;
                 }
             });
-            //
-            // self._navCubeCanvas.addEventListener("mousemove", function (e) {
-            //     if (down) {
-            //         var posX = e.clientX;
-            //         var posY = e.clientY;
-            //         actionMove(posX, posY);
-            //     }
-            // });
 
-            self._navCubeCanvas.addEventListener("mouseup", function (e) {
+            document.addEventListener("mouseup", self._onMouseUp = function (e) {
                 if (e.which !== 1) {// Left button
                     return;
                 }
@@ -454,7 +379,7 @@ class NavCubePlugin extends Plugin {
                 }
             });
 
-            self._navCubeCanvas.addEventListener("mousemove", function (e) {
+            document.addEventListener("mousemove", self._onMouseMove = function (e) {
                 if (lastAreaId >= 0) {
                     self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                     self._repaint();
@@ -467,16 +392,6 @@ class NavCubePlugin extends Plugin {
                     actionMove(posX, posY);
                     return;
                 }
-                // if (down) {
-                //     if (lastAreaId >= 0) {
-                //         self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
-                //         self._repaint();
-                //         lastAreaId = -1;
-                //     }
-                  //  self._repaint();
-                  //   document.body.style.cursor = "move";
-                 //   return;
-    //            }
                 var canvasPos = getCoordsWithinElement(e);
                 var hit = navCubeScene.pick({
                     canvasPos: canvasPos,
@@ -523,7 +438,17 @@ class NavCubePlugin extends Plugin {
                     }, ok);
                 };
             })();
-        })();
+        }
+
+        this._onCanvasBoundary = viewer.scene.canvas.on("boundary", () => {
+            this._needUpdateLayout = true;
+        });
+
+        this._onSceneTick = viewer.scene.on("tick", () => {
+            if (this._needUpdateLayout) {
+                this._updateLayout();
+            }
+        });
     }
 
     send(name, value) {
@@ -541,6 +466,34 @@ class NavCubePlugin extends Plugin {
         this._cubeMesh.material.emissiveMap.image = image;
     }
 
+    _updateLayout() {
+        const boundary = this.viewer.scene.canvas.boundary;
+        const size = this._size;
+        const style = this._navCubeCanvas.style;
+        style.width = size + "px";
+        style.height = size + "px";
+        switch (this._alignment) {
+            case "bottomRight":
+                style.top = (boundary[1] + boundary[3] - size - this._bottomMargin) + "px";
+                style.left = (boundary[0] + boundary[2] - size - this._rightMargin) + "px";
+                break;
+            case "bottomLeft":
+                style.top = (boundary[1] + boundary[3] - size - this._bottomMargin) + "px";
+                style.left = this._leftMargin + "px";
+                break;
+            case "topLeft":
+                style.top = this._topMargin + "px";
+                style.left = this._leftMargin + "px";
+                break;
+            case "topRight":
+                style.top = this._topMargin + "px";
+                style.left = (boundary[0] + boundary[2] - size - this._rightMargin) + "px";
+                break;
+        }
+        this._needUpdateLayout = false;
+    }
+
+
     /**
      * Sets if the NavCube is visible.
      *
@@ -550,6 +503,7 @@ class NavCubePlugin extends Plugin {
         this._cubeMesh.visible = visible;
         this._shadow.visible = visible;
         this._navCubeCanvas.style.visibility = visible ? "visible" : "hidden";
+        this._needUpdateLayout = true;
     }
 
     /**
@@ -564,19 +518,15 @@ class NavCubePlugin extends Plugin {
     /**
      * Sets the canvas size of the NavCube.
      *
-     * Since the canvas is square, the size is given for a single dimension.
+     * Since the canvas is square, the size is given for a single dimension. Default value is ````200````.
      *
-     * @param {number} size The canvas size.
+     * @param {number} size The canvas size, in pixels.
      */
     setSize(size = 200) {
         this._size = size;
         this._navCubeCanvas.width = size;
         this._navCubeCanvas.height = size;
-        var style = this._navCubeCanvas.style;
-        style.width = size + "px";
-        style.height = size + "px";
-        style.right = (-size / 4) + "px";
-        style.top = (-size / 4) + "px";
+        this._needUpdateLayout = true;
     }
 
     /**
@@ -590,9 +540,135 @@ class NavCubePlugin extends Plugin {
         return this._size;
     };
 
-    destroy() {
+    /**
+     * Sets the alignment of the NavCube within the bounds of the {@link Viewer}'s {@link Canvas}.
+     *
+     * Default value is "bottomRight".
+     *
+     * @param {String} alignment The alignment - "bottomRight" (default) | "bottomLeft" | "topLeft" | "topRight"
+     */
+    setAlignment(alignment = "bottomRight") {
+        if (alignment !== "bottomRight" && alignment !== "bottomLeft" && alignment !== "topLeft" && alignment !== "topRight") {
+            this.error("Illegal value for alignment - defaulting to `bottomRight'");
+            alignment = "bottomRight";
+        }
+        this._alignment = alignment;
+        this._needUpdateLayout = true;
+    }
 
-        // TODO Deregister canvas handlers
+    /**
+     * Gets the alignment of the NavCube within the bounds of the {@link Viewer}'s {@link Canvas}.
+     *
+     * Default value is "bottomRight".
+     *
+     * @returns {String} The alignment - "bottomRight" (default) | "bottomLeft" | "topLeft" | "topRight"
+     */
+    getAlignment() {
+        return this._alignment;
+    }
+
+    /**
+     * Sets the margin between the NavCube and the left edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topLeft" or "bottomLeft". Default value is ````10````.
+     *
+     * @param {Number} leftMargin The left margin value, in pixels.
+     */
+    setLeftMargin(leftMargin) {
+        this._leftMargin = (leftMargin !== null && leftMargin !== undefined) ? leftMargin : 10;
+        this._needUpdateLayout = true;
+    }
+
+    /**
+     * Gets the margin between the NavCube and the left edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topLeft" or "bottomLeft". Default value is ````10````.
+     *
+     * @return {Number} leftMargin The left margin value, in pixels.
+     */
+    getLeftMargin() {
+        return this._leftMargin;
+    }
+
+    /**
+     * Sets the margin between the NavCube and the right edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topRight" or "bottomRight". Default value is ````10````.
+     *
+     * @param {Number} rightMargin The right margin value, in pixels.
+     */
+    setRightMargin(rightMargin) {
+        this._rightMargin = (rightMargin !== null && rightMargin !== undefined) ? rightMargin : 10;
+        this._needUpdateLayout = true;
+    }
+
+    /**
+     * Gets the margin between the NavCube and the right edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topRight" or "bottomRight". Default value is ````10````.
+     *
+     * @return {Number} rightMargin The right margin value, in pixels.
+     */
+    getRightMargin() {
+        return this._rightMargin;
+    }
+
+    /**
+     * Sets the margin between the NavCube and the top edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topRight" or "topLeft". Default value is ````10````.
+     *
+     * @param {Number} topMargin The top margin value, in pixels.
+     */
+    setTopMargin(topMargin) {
+        this._topMargin = (topMargin !== null && topMargin !== undefined) ? topMargin : 10;
+        this._needUpdateLayout = true;
+    }
+
+    /**
+     * Gets the margin between the NavCube and the top edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "topRight" or "topLeft". Default value is ````10````.
+     *
+     * @return {Number} topMargin The top margin value, in pixels.
+     */
+    getTopMargin() {
+        return this._topMargin;
+    }
+
+    /**
+     * Sets the margin between the NavCube and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "bottomRight" or "bottomLeft". Default value is ````10````.
+     *
+     * @param {Number} bottomMargin The bottom margin value, in pixels.
+     */
+    setBottomMargin(bottomMargin) {
+        this._bottomMargin = (bottomMargin !== null && bottomMargin !== undefined) ? bottomMargin : 10;
+        this._needUpdateLayout = true;
+    }
+
+    /**
+     * Gets the margin between the NavCube and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     *
+     * This applies when the NavCube's alignment is "bottomRight" or "bottomLeft". Default value is ````10````.
+     *
+     * @return {Number} bottomMargin The bottom margin value, in pixels.
+     */
+    getBottomMargin() {
+        return this._bottomMargin;
+    }
+
+    destroy() {
+        this.viewer.scene.canvas.off(this._onCanvasBoundary);
+        this.viewer.scene.off(this._onSceneTick);
+        this.viewer.camera.off(this._onCameraMatrix);
+        this.viewer.camera.off(this._onCameraWorldAxis);
+        this.viewer.camera.perspective.off(this._onCameraFOV);
+        this.viewer.camera.off(this._onCameraProjection);
+        this._navCubeCanvas.removeEventListener("mousedown", this._onMouseDown);
+        document.removeEventListener("mousemove", this._onMouseMove);
+        document.removeEventListener("mouseup", this._onMouseUp);
 
         super.destroy();
     }
