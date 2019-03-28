@@ -50,7 +50,7 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *     visible: true,           // Initially visible (default)
  *
  *     size: 250,               // NavCube size in pixels (default is 200)
- *     alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+ *     alignment: "topRight",   // Align NavCube to top-right of Viewer canvas
  *     topMargin: 170,          // 170 pixels margin from top of Viewer canvas
  *
  *     cameraFly: true,       // Fly camera to each selected axis/diagonal
