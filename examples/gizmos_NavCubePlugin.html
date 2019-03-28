@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>NavCube Gizmo</title>
+    <title>NavCubePlugin</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
 <canvas id="myCanvas"></canvas>
 <div id="info">
-    <h1>NavCube</h1>
+    <h1>NavCubePlugin</h1>
     <ul>
 
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
-            - Navigation Cube Gizmo
+            - Camera navigation cube gizmo
         </li>
         <li>
             <a target="_other"
@@ -35,14 +35,23 @@
         canvasId: "myCanvas"
     });
 
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.03];
+
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    new NavCubePlugin(viewer, {size: 350});
+    new NavCubePlugin(viewer, {
+        visible: true, // Default
+        size: 250, // NavCube canvas size in pixels (default is 200)
+        alignment: "topRight", // "bottomLeft" (default) | "topLeft" | "topRight" | "bottomRight"
+        topMargin: 170
+    });
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "./models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
         edges: true
     });
 
