@@ -995,17 +995,6 @@ class Scene extends Component {
             this._needRecompile = false;
         }
 
-        if (this.loading > 0 || this.canvas.spinner.processes > 0) {
-            this.canvas.canvas.style.opacity = 0.0;
-            return;
-        }
-
-        let opacity = Number.parseFloat(this.canvas.canvas.style.opacity);
-        if (opacity < 1.0) {
-            opacity += 0.1;
-            this.canvas.canvas.style.opacity = opacity;
-        }
-
         renderEvent.sceneId = this.id;
 
         const passes = this._passes;
