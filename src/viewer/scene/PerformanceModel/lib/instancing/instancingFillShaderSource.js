@@ -109,6 +109,7 @@ function buildFragment(layer) {
             src.push("}");
         }
         src.push("if (dist > 0.0) { discard; }");
+        src.push("}");
     }
     src.push("gl_FragColor = color;");
     src.push("}");

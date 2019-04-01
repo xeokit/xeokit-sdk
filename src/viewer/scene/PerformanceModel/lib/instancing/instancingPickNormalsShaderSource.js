@@ -71,7 +71,7 @@ function buildFragment(layer) {
     src.push("precision highp float;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
-        src.push("vFlags2 = flags2;");
+        src.push("varying vec4 vFlags2;");
         for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
