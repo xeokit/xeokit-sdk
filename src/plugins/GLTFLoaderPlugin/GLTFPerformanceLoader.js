@@ -56,7 +56,10 @@ const INSTANCE_THRESHOLD = 1;
 var loadGLTF = (function () {
 
     return function (plugin, performanceModel, src, options, ok, error) {
+        var spinner = plugin.viewer.scene.canvas.spinner;
+        spinner.processes++;
         utils.loadJSON(src, function (json) { // OK
+                spinner.processes--;
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, plugin, performanceModel, ok, error);
             },
@@ -105,8 +108,10 @@ var parseGLTF = (function () {
             numObjects: 0,
             nodes: []
         };
-
+        var spinner = plugin.viewer.scene.canvas.spinner;
+        spinner.processes++;
         loadBuffers(ctx, function () {
+            spinner.processes--;
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
             loadMaterials(ctx);
