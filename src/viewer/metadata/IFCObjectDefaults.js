@@ -39,12 +39,6 @@ const IFCObjectDefaults = {
         colorize: [0.637255, 0.603922, 0.670588],
         priority: 1
     },
-    IfcWindow: {
-        colorize: [0.137255, 0.403922, 0.870588],
-        pickable: false,
-        opacity: 0.4,
-        priority: 1
-    },
 
     // Priority 2
 
@@ -170,6 +164,13 @@ const IFCObjectDefaults = {
         visible: false,
         opacity: 0.5,
         priority: 6
+    },
+
+    IfcWindow: {
+        colorize: [0.137255, 0.403922, 0.870588],
+        pickable: false,
+        opacity: 0.4,
+        priority: 6 // FIXME: transparent objects need to be last in order to avoid strange wireframe effect
     },
 
     //
