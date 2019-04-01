@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -34,6 +34,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
@@ -209,6 +211,8 @@ BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPas
         const edgeAlpha = material.edgeAlpha;
         gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
     }
+
+    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     gl.uniform1i(this._uRenderPass, renderPass);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
@@ -266,7 +270,6 @@ BatchingEdgesRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     if (sectionPlanesState.sectionPlanes.length &gt; 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
