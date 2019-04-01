@@ -429,7 +429,7 @@ var parseGLTF = (function () {
                         id: tileId
                     });
                     priority = glTFNode.priority;
-                    setTimeout(nextPriority, 200);
+                    setTimeout(nextPriority, 300);
                     return;
                 }
                 loadNode(ctx, glTFNode, tileId);
