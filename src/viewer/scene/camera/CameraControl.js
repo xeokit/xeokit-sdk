@@ -802,7 +802,7 @@ class CameraControl extends Component {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
                             updatePick();
-                            if (pickedSurface) {
+                            if (pickedSurface && hit.worldPos) {
                                 panToWorldPos(hit.worldPos, -vZoom);
                             } else {
                                 camera.zoom(vZoom);
