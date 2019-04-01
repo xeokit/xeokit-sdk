@@ -342,10 +342,6 @@ class BatchingLayer {
             this._numHighlightedLayerPortions++;
             this.model.numHighlightedLayerPortions++;
         }
-        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
-        }
         if (flags & RENDER_FLAGS.XRAYED) {
             this._numXRayedLayerPortions++;
             this.model.numXRayedLayerPortions++;
