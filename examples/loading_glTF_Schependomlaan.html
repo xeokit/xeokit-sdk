@@ -68,16 +68,11 @@
     });
 
     model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+        viewer.cameraFlight.flyTo(model);
     });
 
-
     viewer.cameraControl.on("picked", function(e) {
-        console.log(e.mesh.id);
-        var parent = e.mesh.parent;
-        if (parent) {
-            console.log("parent.id = " + parent.id);
-        }
+        console.log(e.entity.id);
     })
 </script>
 </html>
