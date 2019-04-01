@@ -300,12 +300,42 @@ class GLTFLoaderPlugin extends Plugin {
 
                 params.readableGeometry = true; // Enables 3D picking https://github.com/xeokit/xeokit-sdk/issues/11
 
-                params.handleGLTFNode = function (modelId, glTFNode, actions) {
+                params.prioritizeGLTFNode = function (modelId, glTFNode) {
 
                     // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
                     // in the MetaModel we just loaded. We'll create Node components in the Scene for all the nodes as we
                     // descend into them, but will give special treatment to those nodes that have a "name", ie. set initial
                     // state for those according to the MetaModel.
+
+                    const name = glTFNode.name;
+
+                    if (!name) {
+                        return 0;
+                    }
+
+                    const nodeId = name;
+                    const metaObject = self.viewer.metaScene.metaObjects[nodeId];
+                    const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
+
+                    if (metaObject) {
+                        if (excludeTypes) {
+                            if (excludeTypes[type]) {
+                                return null;
+                            }
+                        }
+                        if (includeTypes) {
+                            if (!includeTypes[type]) {
+                                return null;
+                            }
+                        }
+                    }
+
+                    const props = objectDefaults[type];
+
+                    return props ? (props.priority || 0) : 0;
+                };
+
+                params.handleGLTFNode = function (modelId, glTFNode, actions) {
 
                     const name = glTFNode.name;
 
@@ -317,21 +347,7 @@ class GLTFLoaderPlugin extends Plugin {
                     const metaObject = self.viewer.metaScene.metaObjects[nodeId];
                     const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
 
-                    if (metaObject) {
-                        if (excludeTypes) {
-                            if (excludeTypes[type]) {
-                                return false;
-                            }
-                        }
-
-                        if (includeTypes) {
-                            if (!includeTypes[type]) {
-                                return false;
-                            }
-                        }
-                    }
-
-                    actions.createEntity = { // Create an Entity for this glTF scene node
+                    actions.createEntity = {
                         id: nodeId,
                         isObject: true // Registers the Entity in Scene#objects
                     };
