@@ -163,7 +163,7 @@
 
         // Fit model to view
         model.on("loaded", () => {
-            viewer.cameraFlight.jumpTo(model);
+            viewer.cameraFlight.flyTo(model);
         });
 
         // Builds tree view data from MetaModel

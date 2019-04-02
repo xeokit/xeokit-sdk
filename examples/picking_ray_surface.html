@@ -41,7 +41,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.orbitPitch(20);
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -55,10 +57,6 @@
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true,
         performance: true // https://github.com/xeokit/xeokit-sdk/issues/11
-    });
-
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
     });
 
     //------------------------------------------------------------------------------------------------------------------
