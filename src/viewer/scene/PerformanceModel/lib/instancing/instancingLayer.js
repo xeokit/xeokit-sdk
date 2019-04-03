@@ -176,7 +176,6 @@ class InstancingLayer {
         this._flags2.push(pickable);
         this._flags2.push(0); // Unused
 
-
         if (visible) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
@@ -331,10 +330,6 @@ class InstancingLayer {
         if (flags & RENDER_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
-        }
-        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
         }
         if (flags & RENDER_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;

@@ -35,9 +35,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [-3.93, 2.85, 27.01];
-    viewer.camera.look = [4.40, 3.72, 8.89];
-    viewer.camera.up = [-0.01, 0.99, 0.03];
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
@@ -56,15 +56,6 @@
         src: "./models/gltf/duplex/scene.gltf",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
         edges: true
-    });
-
-    const scene = viewer.scene;
-    const camera = scene.camera;
-
-    camera.orbitPitch(20);
-
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
     });
 
     window.viewer = viewer;

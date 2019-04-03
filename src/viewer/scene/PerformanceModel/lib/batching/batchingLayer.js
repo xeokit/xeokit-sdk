@@ -290,7 +290,6 @@ class BatchingLayer {
 
         quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
-        //if (buffer.slicing) {
         if (buffer.lenPositions > 0) {
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
         }
@@ -318,22 +317,6 @@ class BatchingLayer {
         if (buffer.lenEdgeIndices > 0) {
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.slice(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
         }
-        // } else {
-        //     state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions, buffer.quantizedPositions.length, 3, gl.STATIC_DRAW);
-        //     if (buffer.lenNormals > 0) {
-        //         state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals, buffer.normals.length, 2, gl.STATIC_DRAW);
-        //     }
-        //     if (buffer.lenColors > 0) {
-        //         state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors, buffer.colors.length, 4, gl.STATIC_DRAW);
-        //     }
-        //     state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags, buffer.flags.length, 4, gl.STATIC_DRAW);
-        //     if (buffer.lenIndices > 0) {
-        //         state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices, buffer.indices.length, 1, gl.STATIC_DRAW);
-        //     }
-        //     if (buffer.lenEdgeIndices > 0) {
-        //         state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
-        //     }
-        // }
 
         buffer.lenPositions = 0;
         buffer.lenColors = 0;
@@ -354,10 +337,6 @@ class BatchingLayer {
         if (flags & RENDER_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
-        }
-        if (flags & RENDER_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
         }
         if (flags & RENDER_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;

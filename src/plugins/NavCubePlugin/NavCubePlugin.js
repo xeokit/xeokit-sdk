@@ -287,6 +287,7 @@ class NavCubePlugin extends Plugin {
             var downX = null;
             var downY = null;
             var down = false;
+            var over = false;
 
             var yaw = 0;
             var pitch = 0;
@@ -297,6 +298,15 @@ class NavCubePlugin extends Plugin {
             var lastX;
             var lastY;
             var dragging = false;
+
+            self._navCubeCanvas.addEventListener("mouseenter", self._onMouseEnter = function (e) {
+                over = true;
+            });
+
+
+            self._navCubeCanvas.addEventListener("mouseleave", self._onMouseLeave = function (e) {
+                over = false;
+            });
 
             self._navCubeCanvas.addEventListener("mousedown", self._onMouseDown = function (e) {
                 downX = e.x;
@@ -390,11 +400,17 @@ class NavCubePlugin extends Plugin {
                     self._repaint();
                     lastAreaId = -1;
                 }
+                if (e.buttons === 1 && !down) {
+                    return;
+                }
                 if (down) {
                     var posX = e.clientX;
                     var posY = e.clientY;
                     document.body.style.cursor = "move";
                     actionMove(posX, posY);
+                    return;
+                }
+                if (!over) {
                     return;
                 }
                 var canvasPos = getCoordsWithinElement(e);
@@ -762,6 +778,8 @@ class NavCubePlugin extends Plugin {
         this.viewer.camera.off(this._onCameraWorldAxis);
         this.viewer.camera.perspective.off(this._onCameraFOV);
         this.viewer.camera.off(this._onCameraProjection);
+        this._navCubeCanvas.removeEventListener("mouseenter", this._onMouseEnter);
+        this._navCubeCanvas.removeEventListener("mouseleave", this._onMouseLeave);
         this._navCubeCanvas.removeEventListener("mousedown", this._onMouseDown);
         document.removeEventListener("mousemove", this._onMouseMove);
         document.removeEventListener("mouseup", this._onMouseUp);
