@@ -94,7 +94,6 @@ var parseGLTF = (function () {
     };
 
     return function (json, src, options, plugin, performanceModel, ok) {
-
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
@@ -111,10 +110,10 @@ var parseGLTF = (function () {
         var spinner = plugin.viewer.scene.canvas.spinner;
         spinner.processes++;
         loadBuffers(ctx, function () {
-            spinner.processes--;
             loadBufferViews(ctx);
             freeBuffers(ctx); // Don't need buffers once we've created views of them
             loadMaterials(ctx);
+            spinner.processes--;
             loadDefaultScene(ctx, ok);
         });
     };
@@ -415,12 +414,18 @@ var parseGLTF = (function () {
         var priority = null;
         var tileId = null;
         var nodei = 0;
+        var spinnerShowing = true;
+        ctx.plugin.viewer.scene.canvas.spinner.processes++;
         function nextPriority() {
             for (var i = nodei, len = ctx.nodes.length; i < len; i++) {
                 const glTFNode = ctx.nodes[i];
                 if (priority !== glTFNode.priority) {
                     if (tileId !== null) {
                         ctx.performanceModel.finalizeTile(tileId);
+                        if (spinnerShowing) {
+                            ctx.plugin.viewer.scene.canvas.spinner.processes--;
+                            spinnerShowing = false;
+                        }
                     }
                     nodei = i + 1;
                     tileId = "" + glTFNode.priority;
@@ -429,16 +434,22 @@ var parseGLTF = (function () {
                         id: tileId
                     });
                     priority = glTFNode.priority;
-                    setTimeout(nextPriority, 300);
+                    setTimeout(nextPriority, 150);
                     return;
                 }
                 loadNode(ctx, glTFNode, tileId);
             }
             ctx.performanceModel.finalize();
+            if (spinnerShowing) {
+                ctx.plugin.viewer.scene.canvas.spinner.processes--;
+                spinnerShowing = false;
+            }
             ok();
         }
+
         nextPriority();
     }
+
 
     function countMeshUsage(ctx, glTFNode) {
         var json = ctx.json;
