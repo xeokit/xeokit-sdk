@@ -259,7 +259,6 @@ class GLTFLoaderPlugin extends Plugin {
             }));
 
         const modelId = model.id;  // In case ID was auto-generated
-        const src = params.src;
 
         if (!params.src && !params.gltf) {
             this.error("load() param expected: src or gltf");
