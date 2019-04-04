@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -34,6 +34,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
@@ -296,6 +298,73 @@
         
         <div data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from <a href="https://www.khronos.org/gltf/">glTF</a>.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+    </div>
+<div data-ice="dirSummaryWrap">
+      <h2 data-ice="dirPath" id="plugins-navcubeplugin">plugins/NavCubePlugin</h2>
+      <div data-ice="dirSummary"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides a navigation control that lets us look at the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along a chosen axis or diagonal.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-function">F</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span><span class="code" data-ice="signature">(viewer: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -2630,6 +2699,7 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
 <div style="padding-left: 1em"><a href="#plugins-bimserverloaderplugin">BIMServerLoaderPlugin</a></div>
 <div style="padding-left: 2em"><a href="#plugins-bimserverloaderplugin-bimserverclient">BIMServerClient</a></div>
 <div style="padding-left: 1em"><a href="#plugins-gltfloaderplugin">GLTFLoaderPlugin</a></div>
+<div style="padding-left: 1em"><a href="#plugins-navcubeplugin">NavCubePlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-objloaderplugin">OBJLoaderPlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-planviewsplugin">PlanViewsPlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-stlloaderplugin">STLLoaderPlugin</a></div>

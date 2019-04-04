@@ -76,6 +76,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {AmbientLight} from '../src/viewer/scene/lights/AmbientLight.js';
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak xraying and highlight materials
@@ -105,6 +106,18 @@
     new AmbientLight(viewer.scene, {
         color: [0.35, 0.35, 0.2],
         intensity: 1.0
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube gizmo
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
     });
 
     //------------------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
-<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="http://my-library.org/logo.png"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="https://twitter.com/xeolabs"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="http://my-library.org/logo.png"></head>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -34,6 +34,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
@@ -4723,7 +4725,8 @@ const math = {
      Transforms a Canvas-space position into a World-space ray, in the context of a Camera.
      @method canvasPosToWorldRay
      @static
-     @param {Camera} camera The Camera.
+     @param {Number[]} viewMatrix View matrix
+     @param {Number[]} projMatrix Projection matrix
      @param {Number[]} canvasPos The Canvas-space position.
      @param {Number[]} worldRayOrigin The World-space ray origin.
      @param {Number[]} worldRayDir The World-space ray direction.
@@ -4737,14 +4740,9 @@ const math = {
         const tempVec4c = new Float32Array(4);
         const tempVec4d = new Float32Array(4);
 
-        return (camera, canvasPos, worldRayOrigin, worldRayDir) =&gt; {
+        return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) =&gt; {
 
-            const canvas = camera.scene.canvas.canvas;
-
-            const viewMat = camera.viewMatrix;
-            const projMat = camera.projection === &quot;ortho&quot; ? camera.ortho.matrix : camera.perspective.matrix;
-
-            const pvMat = math.mulMat4(projMat, viewMat, tempMat4b);
+            const pvMat = math.mulMat4(projMatrix, viewMatrix, tempMat4b);
             const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
 
             // Calculate clip space coordinates, which will be in range
@@ -4788,6 +4786,9 @@ const math = {
      @static
      @param {Camera} camera The Camera.
      @param {Mesh} mesh The Mesh.
+     @param {Number[]} viewMatrix View matrix
+     @param {Number[]} projMatrix Projection matrix
+     @param {Number[]} worldMatrix Modeling matrix
      @param {Number[]} canvasPos The Canvas-space position.
      @param {Number[]} localRayOrigin The Local-space ray origin.
      @param {Number[]} localRayDir The Local-space ray direction.
@@ -4797,8 +4798,8 @@ const math = {
         const worldRayOrigin = new Float32Array(3);
         const worldRayDir = new Float32Array(3);
 
-        return (camera, worldMatrix, canvasPos, localRayOrigin, localRayDir) =&gt; {
-            math.canvasPosToWorldRay(camera, canvasPos, worldRayOrigin, worldRayDir);
+        return (canvas, viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) =&gt; {
+            math.canvasPosToWorldRay(canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
             math.worldRayToLocalRay(worldMatrix, worldRayOrigin, worldRayDir, localRayOrigin, localRayDir);
         };
     }))(),

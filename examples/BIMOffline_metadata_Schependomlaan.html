@@ -65,9 +65,9 @@
     });
 
     // 2
-    viewer.camera.eye = [-9.310346603393555, 7.988109588623047, 8.57520866394043];
-    viewer.camera.look = [11.207733154296875, 4.790754318237305, -11.757499694824219];
-    viewer.camera.up = [0.07814541459083557, 0.9939301013946533, -0.07743942737579346];
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     // 3
     viewer.scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
@@ -98,7 +98,6 @@
         //--------------------------------------------------------------------------------------------------------------
         // 1. Find metadata on the third storey
         // 2. Xray all the objects in the third storey
-        // 3. Fit the camera to all the objects on the third storey
         //--------------------------------------------------------------------------------------------------------------
 
         // 1
@@ -117,9 +116,6 @@
         // 2
         viewer.scene.setObjectsXRayed(objectIds, true);
         viewer.scene.setObjectsPickable(objectIds, false);
-
-        // 3
-        viewer.cameraFlight.jumpTo(aabb);
     });
 
     viewer.cameraControl.on("doublePicked", function (e) {

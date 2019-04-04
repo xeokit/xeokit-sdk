@@ -1739,6 +1739,7 @@ const pickTriangleSurface = (function () {
             const geometry = mesh.geometry._state;
             const scene = mesh.scene;
             const camera = scene.camera;
+            const canvas = scene.canvas;
 
             if (geometry.primitiveName === "triangles") {
 
@@ -1811,7 +1812,7 @@ const pickTriangleSurface = (function () {
 
                 if (pickResult.canvasPos) {
                     canvasPos = pickResult.canvasPos;
-                    math.canvasPosToLocalRay(pickViewMatrix, pickProjMatrix, mesh.worldMatrix, canvasPos, localRayOrigin, localRayDir);
+                    math.canvasPosToLocalRay(canvas.canvas, pickViewMatrix, pickProjMatrix, mesh.worldMatrix, canvasPos, localRayOrigin, localRayDir);
 
                 } else if (pickResult.origin && pickResult.direction) {
                     math.worldRayToLocalRay(mesh.worldMatrix, pickResult.origin, pickResult.direction, localRayOrigin, localRayDir);

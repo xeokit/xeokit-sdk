@@ -31,6 +31,7 @@ function buildVertex(layer) {
 
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
+        src.push("varying vec4 vFlags2;");
     }
     src.push("uniform vec4 color;");
 

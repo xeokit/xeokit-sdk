@@ -109,6 +109,7 @@ var parseGLTF = (function () {
             src: src,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
+            prioritizeGLTFNode: options.prioritizeGLTFNode,
             handleGLTFNode: options.handleGLTFNode,
             ignoreMaterials: !!options.ignoreMaterials,
             edgeThreshold: options.edgeThreshold,
@@ -746,6 +747,13 @@ var parseGLTF = (function () {
 
         parent = parent || ctx.modelNode;
         var createEntity;
+
+        if (ctx.prioritizeGLTFNode) {
+            const priority = ctx.prioritizeGLTFNode(ctx.performanceModel.id, glTFNode);
+            if (priority === undefined || priority === null) {
+                return;
+            }
+        }
 
         if (ctx.handleGLTFNode) {
             var actions = {};

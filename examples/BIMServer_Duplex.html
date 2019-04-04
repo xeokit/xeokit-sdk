@@ -74,6 +74,7 @@
     import {Viewer} from "./../src/viewer/Viewer.js";
     import BimServerClient from "../src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js"
     import {BIMServerLoaderPlugin} from "../src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // BIMServer parameters for this example
@@ -109,6 +110,18 @@
     viewer.scene.highlightMaterial.edges = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube gizmo
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over objects to highlight them

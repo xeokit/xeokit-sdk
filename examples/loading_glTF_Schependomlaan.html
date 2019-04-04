@@ -48,8 +48,9 @@
         transparent: true
     });
 
-    viewer.camera.orbitPitch(20);
-    viewer.camera.orbitYaw(-45);
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     viewer.scene.selectedMaterial.fillAlpha = 0.1;
 
@@ -67,16 +68,11 @@
     });
 
     model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+        viewer.cameraFlight.flyTo(model);
     });
 
-
     viewer.cameraControl.on("picked", function(e) {
-        console.log(e.mesh.id);
-        var parent = e.mesh.parent;
-        if (parent) {
-            console.log("parent.id = " + parent.id);
-        }
+        console.log(e.entity.id);
     })
 </script>
 </html>

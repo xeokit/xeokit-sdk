@@ -828,6 +828,13 @@ class Camera extends Component {
         this.glRedraw();
         this._update(); // Need to rebuild lookat matrix with full eye, look & up
         this.fire("dirty");
+        /**
+         Fired whenever this Camera's  {@link Camera#projection} property changes.
+
+         @event projection
+         @param value The property's new value
+         */
+        this.fire("projection",  this._projectionType);
     }
 
     /**

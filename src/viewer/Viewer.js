@@ -37,6 +37,13 @@ class Viewer {
     constructor(cfg) {
 
         /**
+         * The Viewer's current language setting.
+         * @property language
+         * @type {String}
+         */
+        this.language = "en";
+
+        /**
          * The Viewer's {@link Scene}.
          * @property scene
          * @type {Scene}

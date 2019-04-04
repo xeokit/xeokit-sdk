@@ -12,7 +12,6 @@ import {RENDER_FLAGS} from './lib/renderFlags.js';
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
-var tempColor = new Uint8Array(3);
 var tempMat4 = math.mat4();
 var tempMat4b = math.mat4();
 
@@ -20,6 +19,8 @@ const defaultScale = math.vec3([1, 1, 1]);
 const defaultPosition = math.vec3([0, 0, 0]);
 const defaultRotation = math.vec3([0, 0, 0]);
 const defaultQuaternion = math.identityQuaternion();
+
+const DEFAULT_TILE_ID = "__default";
 
 /**
  * @desc A high-performance model representation for efficient rendering and low memory usage.
@@ -64,13 +65,9 @@ class PerformanceModel extends Component {
 
         super(owner, cfg);
 
+        this._tiles = {};
         this._aabb = math.collapseAABB3();
         this._layers = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
-        this._instancingLayers = {}; // InstancingLayer for each geometry - can build many of these concurrently
-        this._currentBatchingLayer = null; // Current BatchingLayer - can only build one of these at a time due to its use of global geometry buffers
-        this._buffer = getBatchingBuffer(); // Each PerformanceModel gets it's own batching buffer - allows multiple PerformanceModels to load concurrently
-
-        this._meshes = {};
         this._nodes = [];
 
         /**
@@ -156,6 +153,10 @@ class PerformanceModel extends Component {
         if (this._isModel) {
             this.scene._registerModel(this);
         }
+
+        this.createTile({ // Create geometries, meshes and entities in this tile by default
+            id: DEFAULT_TILE_ID
+        });
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -245,6 +246,33 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * Starts building a tile.
+     *
+     * Tiles are used to incrementally show the {@link Entity}s within a PerformanceModel as it is being built. As each
+     * geometry, mesh or {@link Entity} is created in the PerformanceModel, it may be optionally added to a tile. When that
+     * tile is then finalized, then all its {@link Entity}s are immediately created within the {@link Scene}.
+     *
+     * @param {*} cfg Geometry properties.
+     * @param {String|Number} cfg.id Mandatory ID for the tile, to refer to with {@link PerformanceModel#finalizeTile}.
+     */
+    createTile(cfg) {
+        if (this._tiles[cfg.id]) {
+            this.warn("Tile already exists: " + cfg.id);
+            return;
+        }
+        const tile = {
+            id: cfg.id,
+            layers: [],
+            instancingLayers: {}, // InstancingLayer for each geometry - can build many of these concurrently
+            currentBatchingLayer: null, // Current BatchingLayer - can only build one of these at a time due to its use of global geometry buffers
+            buffer: getBatchingBuffer(), // Each PerformanceModel gets it's own batching buffer - allows multiple PerformanceModels to load concurrently
+            meshes: {},
+            nodes: []
+        };
+        this._tiles[cfg.id] = tile;
+    }
+
+    /**
      * Creates a reusable geometry within this PerformanceModel.
      *
      * We can then supply the geometry ID to {@link PerformanceModel#createMesh} when we want to create meshes that instance the geometry.
@@ -253,6 +281,7 @@ class PerformanceModel extends Component {
      *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link PerformanceModel#createMesh}.
+     * @param {String} [cfg.tileId] Optional ID of a tile to add the geometry to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
      * @param {String} [cfg.primitive="triangles"] The primitive type. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} cfg.positions Flat array of positions.
      * @param {Number[]} cfg.normals Flat array of normal vectors.
@@ -264,18 +293,24 @@ class PerformanceModel extends Component {
             this.error("WebGL instanced arrays not supported"); // TODO: Gracefully use batching?
             return;
         }
-        var geometryId = cfg.id;
+        const geometryId = cfg.id;
         if (geometryId === undefined || geometryId === null) {
             this.error("Config missing: id");
             return;
         }
-        if (this._instancingLayers[geometryId]) {
+        const tileId = cfg.tileId || DEFAULT_TILE_ID;
+        var tile = this._tiles[tileId];
+        if (!tile) {
+            this.error("Tile not found: " + tileId + " - using default tile");
+            tile = this._tiles[DEFAULT_TILE_ID];
+        }
+        if (tile.instancingLayers[geometryId]) {
             this.error("Geometry already created: " + geometryId);
             return;
         }
         var instancingLayer = new InstancingLayer(this, cfg);
-        this._layers.unshift(instancingLayer); // Instancing layers are rendered before batching layers
-        this._instancingLayers[geometryId] = instancingLayer;
+        tile.layers.push(instancingLayer);
+        tile.instancingLayers[geometryId] = instancingLayer;
         this.numGeometries++;
     }
 
@@ -293,7 +328,8 @@ class PerformanceModel extends Component {
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
+     * @param {String} [cfg.tileId] Optional ID of a tile to add the mesh to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method. If a tile ID is also given, then the geometry must exist within that tile.
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
@@ -321,12 +357,19 @@ class PerformanceModel extends Component {
         const geometryId = cfg.geometryId;
         const instancing = (geometryId !== undefined);
 
+        const tileId = cfg.tileId || DEFAULT_TILE_ID;
+        var tile = this._tiles[tileId];
+        if (!tile) {
+            this.error("Tile not found: " + tileId + " - using default tile");
+            tile = this._tiles[DEFAULT_TILE_ID];
+        }
+
         if (instancing) {
             if (!instancedArraysSupported) {
                 this.error("WebGL instanced arrays not supported"); // TODO: Gracefully use batching?
                 return;
             }
-            if (!this._instancingLayers[geometryId]) {
+            if (!tile.instancingLayers[geometryId]) {
                 this.error("Geometry not found: " + geometryId + " - ensure that you create it first with createGeometry()");
                 return;
             }
@@ -371,7 +414,7 @@ class PerformanceModel extends Component {
         const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
 
         if (instancing) {
-            var instancingLayer = this._instancingLayers[geometryId];
+            var instancingLayer = tile.instancingLayers[geometryId];
             layer = instancingLayer;
             portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
@@ -404,24 +447,24 @@ class PerformanceModel extends Component {
                 return null;
             }
 
-            if (this._currentBatchingLayer) {
-                if (!this._currentBatchingLayer.canCreatePortion(cfg.positions.length)) {
-                    this._currentBatchingLayer.finalize();
-                    this._currentBatchingLayer = null;
+            if (tile.currentBatchingLayer) {
+                if (!tile.currentBatchingLayer.canCreatePortion(cfg.positions.length)) {
+                    tile.currentBatchingLayer.finalize();
+                    tile.currentBatchingLayer = null;
                 }
             }
 
-            if (!this._currentBatchingLayer) {
-                this._currentBatchingLayer = new BatchingLayer(this, {primitive: "triangles", buffer: this._buffer});
-                this._layers.push(this._currentBatchingLayer); // For efficient GL state sorting, instancing layers rendered before batching layers
+            if (!tile.currentBatchingLayer) {
+                tile.currentBatchingLayer = new BatchingLayer(this, {primitive: "triangles", buffer: tile.buffer});
+                tile.layers.push(tile.currentBatchingLayer);
             }
 
-            layer = this._currentBatchingLayer;
+            layer = tile.currentBatchingLayer;
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
 
-            portionId = this._currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
+            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
             this.numGeometries++;
         }
@@ -431,7 +474,7 @@ class PerformanceModel extends Component {
         mesh._portionId = portionId;
         mesh.aabb = aabb;
 
-        this._meshes[id] = mesh;
+        tile.meshes[id] = mesh;
     }
 
     /**
@@ -440,6 +483,8 @@ class PerformanceModel extends Component {
      * A mesh can only belong to one {@link Entity}, so you'll get an error if you try to reuse a mesh among multiple {@link Entity}s.
      *
      * @param {Object} cfg Entity configuration.
+     * @param {String} cfg.id Optional ID for the new Entity. Must not clash with any existing components within the {@link Scene}.
+     * @param {String} [cfg.tileId] Optional ID of a tile to add the Entity to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
      * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
      * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
      * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
@@ -469,6 +514,12 @@ class PerformanceModel extends Component {
             this.error("Config missing: meshIds");
             return;
         }
+        const tileId = cfg.tileId || DEFAULT_TILE_ID;
+        var tile = this._tiles[tileId];
+        if (!tile) {
+            this.error("Tile not found: " + tileId + " - using default tile");
+            tile = this._tiles[DEFAULT_TILE_ID];
+        }
         var i;
         var len;
         var meshId;
@@ -476,7 +527,7 @@ class PerformanceModel extends Component {
         var meshes = [];
         for (i = 0, len = meshIds.length; i < len; i++) {
             meshId = meshIds[i];
-            mesh = this._meshes[meshId];
+            mesh = tile.meshes[meshId];
             if (!mesh) {
                 this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
                 continue;
@@ -485,6 +536,7 @@ class PerformanceModel extends Component {
                 this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
                 continue;
             }
+            delete tile.meshes[meshId];
             meshes.push(mesh);
         }
         // Create PerformanceModelNode flags
@@ -526,45 +578,71 @@ class PerformanceModel extends Component {
         }
 
         var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
-        this._nodes.push(node);
+        tile.nodes.push(node);
         return node;
+    }
+
+    /**
+     * Finalizes a tile.
+     *
+     * Immediately creates the tile's {@link Entity}s within the {@link Scene}.
+     *
+     * Once finalized, you can't add anything more to the tile.
+     *
+     * @param {String} tileId ID of tile previously created with {@link PerformanceModel#createTile}.
+     */
+    finalizeTile(tileId) {
+        const tile = this._tiles[tileId];
+        if (!tile) {
+            this.warn("Tile not found: " + tileId);
+            return;
+        }
+        if (tile.currentBatchingLayer) {
+            tile.currentBatchingLayer.finalize();
+            tile.currentBatchingLayer = null;
+        }
+        if (tile.buffer) {
+            putBatchingBuffer(tile.buffer);
+            tile.buffer = null;
+        }
+        for (const geometryId in tile.instancingLayers) {
+            if (tile.instancingLayers.hasOwnProperty(geometryId)) {
+                tile.instancingLayers[geometryId].finalize();
+            }
+        }
+        for (var i = 0, len = tile.nodes.length; i < len; i++) {
+            const node = tile.nodes[i];
+            node._finalize();
+            this._nodes.push(node);
+        }
+        for (var i = 0, len = tile.layers.length; i < len; i++) {
+            const layer = tile.layers[i];
+            if (layer instanceof InstancingLayer) { // For efficient GL state sorting, instancing layers are rendered before batching layers
+                this._layers.unshift(layer);
+            } else {
+                this._layers.push(layer);
+            }
+        }
+        delete this._tiles[tileId];
+        this.glRedraw();
+        this.scene._aabbDirty = true;
     }
 
     /**
      * Finalizes this PerformanceModel.
      *
-     * Internally, this builds any geometry batches or instanced arrays that are currently under construction.
+     * Implicitly finalizes all tiles created with {#link PerformanceModel#createTile}.
+     *
+     * Immediately creates the PerformanceModel's {@link Entity}s within the {@link Scene}.
      *
      * Once finalized, you can't add anything more to this PerformanceModel.
      */
     finalize() {
-        if (this._currentBatchingLayer) {
-            this._currentBatchingLayer.finalize();
-            this._currentBatchingLayer = null;
-        }
-        if (this._buffer) {
-            putBatchingBuffer(this._buffer);
-            this._buffer = null;
-        }
-        for (const geometryId in this._instancingLayers) {
-            if (this._instancingLayers.hasOwnProperty(geometryId)) {
-                this._instancingLayers[geometryId].finalize();
+        for (var tileId in this._tiles) {
+            if (this._tiles.hasOwnProperty(tileId)) {
+                this.finalizeTile(tileId);
             }
         }
-        for (var i = 0, len = this._nodes.length; i < len; i++) {
-            this._nodes[i]._finalize();
-        }
-        this.glRedraw();
-        this.scene._aabbDirty = true;
-        //console.log("[PerformanceModel] finalize() - num nodes = " + this._nodes.length + ", num geometries = " + this.numGeometries);
-    }
-
-    /** @private */
-    compile() {
-        for (var i = 0, len = this._layers.length; i < len; i++) {
-            this._layers[i].compileShaders();
-        }
-        this.glRedraw();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1220,6 +1298,16 @@ class PerformanceModel extends Component {
         }
     }
 
+    /**
+     * Called by xeokit to compile shaders for this PerformanceModel.
+     * @private
+     */
+    compile() {
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].compileShaders();
+        }
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // Component members
     //------------------------------------------------------------------------------------------------------------------
@@ -1228,6 +1316,16 @@ class PerformanceModel extends Component {
      * Destroys this PerformanceModel.
      */
     destroy() {
+        for (var tileId in this._tiles) {
+            if (this._tiles.hasOwnProperty(tileId)) {
+                const tile = this._tiles[tileId];
+                for (var i = 0, leni = tile.nodes.length; i < len; i++) {
+                    const node = tile.nodes[i];
+                    node._destroy();
+                }
+                putBatchingBuffer(tile.buffer);
+            }
+        }
         super.destroy();
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].destroy();
