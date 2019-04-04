@@ -41,7 +41,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.orbitPitch(20);
+    viewer.camera.eye = [-3.9338698387145996, 2.8559818267822266, 27.018949508666992];
+    viewer.camera.look = [4.400000095367432, 3.7249999046325684, 8.899999618530273];
+    viewer.camera.up = [-0.018190976232290268, 0.999053955078125, 0.0395493358373642];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -51,10 +53,9 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
-        edges: true,
-        performance: true // https://github.com/xeokit/xeokit-sdk/issues/11
+        src: "./models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
     });
 
     model.on("loaded", () => {

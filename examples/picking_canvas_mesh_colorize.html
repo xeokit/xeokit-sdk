@@ -41,6 +41,9 @@
         canvasId: "myCanvas"
     });
 
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.039];
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
     //------------------------------------------------------------------------------------------------------------------
@@ -49,18 +52,10 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
-        edges: true,
-        performance: true // https://github.com/xeokit/xeokit-sdk/issues/12
+        src: "./models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
     });
-
-    viewer.camera.orbitPitch(20);
-
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
-    });
-
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over Entities to colorize them
     //------------------------------------------------------------------------------------------------------------------
