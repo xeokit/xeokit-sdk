@@ -167,11 +167,13 @@ function loadJSON(url, ok, err) {
     request.addEventListener('load', function (event) {
         var response = event.target.response;
         if (this.status === 200) {
+            var json;
             try {
-                ok(JSON.parse(response));
+                json = JSON.parse(response);
             } catch (e) {
                 err(`utils.loadJSON(): Failed to parse JSON response - ${e}`);
             }
+            ok(json);
         } else if (this.status === 0) {
             // Some browsers return HTTP Status 0 when using non-http protocol
             // e.g. 'file://' or 'data://'. Handle as success.
