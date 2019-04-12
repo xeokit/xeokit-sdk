@@ -10,11 +10,10 @@ use for non-commercial purposes, with the option to buy a licence for commercial
 ## Resources
 
 * [Website](https://xeokit.io/)
-* [Features](https://github.com/xeolabs/xeokit-sdk/wiki/Features)
+* [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
 * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
-* [User Guides](https://github.com/xeolabs/xeokit-sdk/wiki)
+* [User Guides](https://github.com/xeokit/xeokit-sdk/wiki)
 * [API Documentation](https://xeokit.github.io/xeokit-sdk/docs/)
-* [Roadmap](https://github.com/xeolabs/xeokit-sdk/wiki/Roadmap)
-* [License](https://github.com/xeolabs/xeokit-sdk/wiki/License)
-* [FAQ](https://github.com/xeolabs/xeokit-sdk/wiki/FAQ)
-* [Contact](http://xeolabs.com/)
+* [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
+* [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
+* [Contact](http://xeolabs.com/contact/)
