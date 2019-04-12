@@ -178,7 +178,11 @@ function loadJSON(url, ok, err) {
             // Some browsers return HTTP Status 0 when using non-http protocol
             // e.g. 'file://' or 'data://'. Handle as success.
             console.warn('loadFile: HTTP Status 0 received.');
-            ok(response);
+            try {
+                ok(JSON.parse(response));
+            } catch (e) {
+                err(`utils.loadJSON(): Failed to parse JSON response - ${e}`);
+            }
         } else {
             err(event);
         }
