@@ -224,7 +224,7 @@ class BIMServerLoaderPlugin extends Plugin {
         var onTick;
 
         if (!poid) {
-            model.error("load() param expected: poid");
+            this.error("load() param expected: poid");
             return performanceModel; // TODO: Finalize?
         }
 
