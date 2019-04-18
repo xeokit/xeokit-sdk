@@ -192,6 +192,7 @@ class CameraControl extends Component {
         this.panToPointer = cfg.panToPointer;
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
+        this.pointerEnabled = true;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -400,6 +401,28 @@ class CameraControl extends Component {
     }
 
     /**
+     * Sets whether canvas pointer events are enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````true```` to enable drag events.
+     */
+    set pointerEnabled(value) {
+        this._pointerEnabled = !!value;
+    }
+
+    /**
+     * Gets whether canvas pointer events are enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` to enable drag events.
+     */
+    get pointerEnabled() {
+        return this._pointerEnabled;
+    }
+
+    /**
      * @private
      */
     set keyboardLayout(value) {
@@ -466,6 +489,9 @@ class CameraControl extends Component {
         let pickedSurface = false;
 
         function updatePick() {
+            if (!self._pointerEnabled) {
+                return;
+            }
             if (!needPickEntity && !needPickSurface) {
                 return;
             }
@@ -873,7 +899,7 @@ class CameraControl extends Component {
                 let mouseDownRight;
 
                 canvas.addEventListener("mousedown", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     over = true;
@@ -899,14 +925,13 @@ class CameraControl extends Component {
                             lastX = mousePos[0];
                             lastY = mousePos[1];
                             break;
-                            break;
                         default:
                             break;
                     }
                 });
 
                 canvas.addEventListener("mouseup", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     switch (e.which) {
@@ -928,7 +953,7 @@ class CameraControl extends Component {
                 });
 
                 document.addEventListener("mouseup", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     switch (e.which) {
@@ -950,7 +975,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener("mouseenter", function () {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     over = true;
@@ -959,7 +984,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener("mouseleave", function () {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     over = false;
@@ -968,7 +993,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener("mousemove", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -988,7 +1013,7 @@ class CameraControl extends Component {
                 });
 
                 scene.on("tick", function () {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (Math.abs(xDelta) === 0 && Math.abs(yDelta) === 0) {
@@ -1019,7 +1044,7 @@ class CameraControl extends Component {
                 // Mouse wheel zoom
 
                 canvas.addEventListener("wheel", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (self._panToPointer) {
@@ -1037,7 +1062,7 @@ class CameraControl extends Component {
                 // Keyboard zoom
 
                 scene.on("tick", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1062,7 +1087,7 @@ class CameraControl extends Component {
                 (function () {
 
                     scene.on("tick", function (e) {
-                        if (!self._active) {
+                        if (!(self._active && self._pointerEnabled)) {
                             return;
                         }
                         if (!over) {
@@ -1147,7 +1172,7 @@ class CameraControl extends Component {
                 }
 
                 canvas.addEventListener("touchstart", function (event) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     const touches = event.touches;
@@ -1179,7 +1204,7 @@ class CameraControl extends Component {
                 }, {passive: true});
 
                 canvas.addEventListener("touchmove", function (event) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     const touches = event.touches;
@@ -1235,7 +1260,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1268,7 +1293,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on("tick", function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1308,10 +1333,10 @@ class CameraControl extends Component {
 
                 canvas.addEventListener("mousemove", function (e) {
 
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
-
+                    
                     getCanvasPosFromEvent(e, pickCursorPos);
 
                     if (self.hasSubs("hover") || self.hasSubs("hoverOut") || self.hasSubs("hoverOff") || self.hasSubs("hoverSurface")) {
@@ -1325,7 +1350,7 @@ class CameraControl extends Component {
                 let downCursorY;
 
                 canvas.addEventListener('mousedown', function (e) {
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
                     downX = e.clientX;
@@ -1351,7 +1376,7 @@ class CameraControl extends Component {
 
                     return function (e) {
 
-                        if (!self._active) {
+                        if (!(self._active && self._pointerEnabled)) {
                             return;
                         }
 
@@ -1495,7 +1520,7 @@ class CameraControl extends Component {
 
                 canvas.addEventListener("touchstart", function (event) {
 
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
 
@@ -1533,7 +1558,7 @@ class CameraControl extends Component {
 
                 canvas.addEventListener("touchend", function (event) {
 
-                    if (!self._active) {
+                    if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
 
@@ -1640,7 +1665,7 @@ class CameraControl extends Component {
 
             document.addEventListener("keydown", function (e) {
 
-                if (!self._active) {
+                if (!(self._active && self._pointerEnabled)) {
                     return;
                 }
 
