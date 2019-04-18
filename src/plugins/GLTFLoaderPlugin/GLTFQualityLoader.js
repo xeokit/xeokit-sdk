@@ -739,13 +739,14 @@ var parseGLTF = (function () {
                 error(ctx, "Node not found: " + i);
                 continue;
             }
-            loadNode(ctx, i, glTFNode, null, null);
+            loadNode(ctx, glTFNode, null, null);
         }
     }
 
-    function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
+    function loadNode(ctx, glTFNode, matrix, parent) {
 
         parent = parent || ctx.modelNode;
+
         var createEntity;
 
         if (ctx.prioritizeGLTFNode) {
@@ -903,7 +904,6 @@ var parseGLTF = (function () {
                     }
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
 
                 if (createEntity && numMeshes === 0 && hasChildNodes) {
@@ -920,7 +920,6 @@ var parseGLTF = (function () {
                     parent.addChild(childNode, false); // Don't automatically inherit properties
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
 
                 if (createEntity && numMeshes > 0 || hasChildNodes) {
@@ -952,7 +951,6 @@ var parseGLTF = (function () {
                     }
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
             }
         }
@@ -968,7 +966,7 @@ var parseGLTF = (function () {
                     error(ctx, "Node not found: " + i);
                     continue;
                 }
-                loadNode(ctx, nodeIdx, childNodeInfo, matrix, parent, parentCfg);
+                loadNode(ctx, childNodeInfo, matrix, parent);
             }
         }
     }
