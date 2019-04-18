@@ -178,7 +178,7 @@ class BIMServerLoaderPlugin extends Plugin {
     }
 
     /**
-     * Loads a model from a BIMServer into this GLTFLoaderPlugin's {@link Viewer}.
+     * Loads a model from a BIMServer into this BIMServerLoaderPlugin's {@link Viewer}.
      *
      * Creates a tree of {@link Entity}s that represents the model.
      *
