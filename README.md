@@ -1,6 +1,6 @@
 # xeokit-sdk
 
-[xeokit](http://xeokit.io) is a software development kit from [xeolabs](http://xeolabs.com) for viewing high-detail 3D models in the browser.
+[xeokit](http://xeokit.io) is a software development kit from [xeolabs](http://xeolabs.com) for viewing high-detail 3D models in the browser. 
 
 The SDK is provided under a [GPL V3](https://github.com/xeolabs/xeokit.io/wiki/License) dual-license, which allows free
 use for non-commercial purposes, with the option to buy a licence for commercial use.
