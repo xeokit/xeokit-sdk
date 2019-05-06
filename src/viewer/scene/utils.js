@@ -198,30 +198,48 @@ function loadJSON(url, ok, err) {
  * @private
  */
 function loadArraybuffer(url, ok, err) {
-    // Avoid checking ok and err on each use.
+    // Check for data: URI
     var defaultCallback = (_value) => undefined;
     ok = ok || defaultCallback;
     err = err || defaultCallback;
-    var request = new XMLHttpRequest();
-    request.responseType = "arraybuffer";
-//            request.addEventListener('progress',
-//                function (event) {
-//                    // TODO: Update the task? { type:'progress', loaded:event.loaded, total:event.total }
-//                }, false);
-    request.addEventListener('load',
-        function (event) {
-            if (event.target.response) {
-                ok(event.target.response);
-            } else {
-                err('Invalid file [' + url + ']');
+    const dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
+    const dataUriRegexResult = url.match(dataUriRegex);
+    if (dataUriRegexResult) { // Safari can't handle data URIs through XMLHttpRequest
+        const isBase64 = !!dataUriRegexResult[2];
+        var data = dataUriRegexResult[3];
+        data = window.decodeURIComponent(data);
+        if (isBase64) {
+            data = window.atob(data);
+        }
+        try {
+            const buffer = new ArrayBuffer(data.length);
+            const view = new Uint8Array(buffer);
+            for (var i = 0; i < data.length; i++) {
+                view[i] = data.charCodeAt(i);
             }
-        }, false);
-    request.addEventListener('error',
-        function () {
-            err('Couldn\'t load URL [' + url + ']');
-        }, false);
-    request.open('GET', url, true);
-    request.send(null);
+            window.setTimeout(function () {
+                ok(buffer);
+            }, 0);
+        } catch (error) {
+            window.setTimeout(function () {
+                err(error);
+            }, 0);
+        }
+    } else {
+        const request = new XMLHttpRequest();
+        request.open('GET', ctx.basePath + url, true);
+        request.responseType = 'arraybuffer';
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    ok(request.response);
+                } else {
+                    err('loadArrayBuffer error : ' + request.response);
+                }
+            }
+        };
+        request.send(null);
+    }
 }
 
 /**
@@ -404,7 +422,7 @@ function flattenParentChildHierarchy(root) {
                 visit(children[i]);
             }
         }
-         node.children = [];
+        node.children = [];
     }
 
     visit(root);

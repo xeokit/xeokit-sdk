@@ -69,7 +69,7 @@ class GLTFQualityLoader {
 
 var loadGLTF = (function () {
     return function (plugin, modelNode, src, options, ok, error) {
-        utils.loadJSON(src, function (json) { // OK
+        plugin.dataSource.getGLTF(src, function (json) { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, plugin, modelNode, ok, error);
             },
@@ -177,70 +177,13 @@ var parseGLTF = (function () {
     function loadBuffer(ctx, bufferInfo, ok, err) {
         var uri = bufferInfo.uri;
         if (uri) {
-            loadArrayBuffer(ctx, uri, function (data) {
+            ctx.plugin.dataSource.getArrayBuffer(ctx, uri, function (data) {
                     bufferInfo._buffer = data;
                     ok();
                 },
                 err);
         } else {
             err('gltf/handleBuffer missing uri in ' + JSON.stringify(bufferInfo));
-        }
-    }
-
-    function loadArrayBuffer(ctx, url, ok, err) {
-
-        // Check for data: URI
-
-        var dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
-        var dataUriRegexResult = url.match(dataUriRegex);
-
-        if (dataUriRegexResult) { // Safari can't handle data URIs through XMLHttpRequest
-
-            var mimeType = dataUriRegexResult[1];
-            var isBase64 = !!dataUriRegexResult[2];
-            var data = dataUriRegexResult[3];
-
-            data = window.decodeURIComponent(data);
-
-            if (isBase64) {
-                data = window.atob(data);
-            }
-
-            try {
-                var buffer = new ArrayBuffer(data.length);
-                var view = new Uint8Array(buffer);
-                for (var i = 0; i < data.length; i++) {
-                    view[i] = data.charCodeAt(i);
-                }
-                window.setTimeout(function () {
-                    ok(buffer);
-                }, 0);
-            } catch (error) {
-                window.setTimeout(function () {
-                    err(error);
-                }, 0);
-            }
-        } else {
-
-            if (ctx.loadBuffer) {
-                ctx.loadBuffer(url, ok, err);
-
-            } else {
-
-                var request = new XMLHttpRequest();
-                request.open('GET', ctx.basePath + url, true);
-                request.responseType = 'arraybuffer';
-                request.onreadystatechange = function () {
-                    if (request.readyState === 4) {
-                        if (request.status === 200) {
-                            ok(request.response);
-                        } else {
-                            err('loadArrayBuffer error : ' + request.response);
-                        }
-                    }
-                };
-                request.send(null);
-            }
         }
     }
 

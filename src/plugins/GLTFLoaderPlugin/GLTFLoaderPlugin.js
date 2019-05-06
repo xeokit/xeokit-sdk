@@ -5,6 +5,7 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {GLTFQualityLoader} from "./GLTFQualityLoader.js";
 import {GLTFPerformanceLoader} from "./GLTFPerformanceLoader.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
+import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
 
 /**
  * A {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -170,6 +171,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
+     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads using XMLHttpRequest.
      */
     constructor(viewer, cfg = {}) {
 
@@ -185,7 +187,30 @@ class GLTFLoaderPlugin extends Plugin {
          */
         this._glTFPerformanceLoader = new GLTFPerformanceLoader(this, cfg);
 
+        this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
+    }
+
+    /**
+     * Sets a custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
+     *
+     * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    set dataSource(value) {
+        this._dataSource = value || new GLTFDefaultDataSource();
+    }
+
+    /**
+     * Gets the custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
+     *
+     * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    get dataSource() {
+        return this._dataSource;
     }
 
     /**
@@ -387,7 +412,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 self.viewer.scene.canvas.spinner.processes++;
 
-                utils.loadJSON(metaModelSrc, (metaModelData) => {
+                self._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
                     self.viewer.scene.canvas.spinner.processes--;
 
