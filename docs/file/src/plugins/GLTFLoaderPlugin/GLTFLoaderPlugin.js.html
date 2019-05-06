@@ -33,7 +33,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -118,6 +119,7 @@ import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
 import {GLTFQualityLoader} from &quot;./GLTFQualityLoader.js&quot;;
 import {GLTFPerformanceLoader} from &quot;./GLTFPerformanceLoader.js&quot;;
 import {IFCObjectDefaults} from &quot;../../viewer/metadata/IFCObjectDefaults.js&quot;;
+import {GLTFDefaultDataSource} from &quot;./GLTFDefaultDataSource.js&quot;;
 
 /**
  * A {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -283,6 +285,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id=&quot;GLTFLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
+     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads using XMLHttpRequest.
      */
     constructor(viewer, cfg = {}) {
 
@@ -298,7 +301,30 @@ class GLTFLoaderPlugin extends Plugin {
          */
         this._glTFPerformanceLoader = new GLTFPerformanceLoader(this, cfg);
 
+        this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
+    }
+
+    /**
+     * Sets a custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
+     *
+     * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    set dataSource(value) {
+        this._dataSource = value || new GLTFDefaultDataSource();
+    }
+
+    /**
+     * Gets the custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.
+     *
+     * Default value is {@link GLTFDefaultDataSource}, which loads via an XMLHttpRequest.
+     *
+     * @type {Object}
+     */
+    get dataSource() {
+        return this._dataSource;
     }
 
     /**
@@ -328,8 +354,10 @@ class GLTFLoaderPlugin extends Plugin {
      *
      * @param {*} params Loading parameters.
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer&apos;s {@link Scene}, generated automatically by default.
-     * @param {String} params.src Path to a glTF file.
-     * @param {String} [params.metaModelSrc] Path to an optional metadata file (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {String} [params.src] Path to a glTF file, as an alternative to the ````gltf```` parameter.
+     * @param {*} [params.gltf] glTF JSON, as an alternative to the ````src```` parameter.
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelData```` parameter (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
+     * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter (see user guide: [Model Metadata](https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata)).
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @params {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @params {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
@@ -370,25 +398,21 @@ class GLTFLoaderPlugin extends Plugin {
             }));
 
         const modelId = model.id;  // In case ID was auto-generated
-        const src = params.src;
 
-        if (!src) {
-            this.error(&quot;load() param expected: src&quot;);
+        if (!params.src &amp;&amp; !params.gltf) {
+            this.error(&quot;load() param expected: src or gltf&quot;);
             return model; // Return new empty model
         }
 
         const loader = performance ? this._glTFPerformanceLoader : this._glTFQualityLoader;
 
-        if (params.metaModelSrc) {
+        if (params.metaModelSrc || params.metaModelData) {
 
-            const metaModelSrc = params.metaModelSrc;
             const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
 
-            this.viewer.scene.canvas.spinner.processes++;
+            const processMetaModelData = function (metaModelData) {
 
-            utils.loadJSON(metaModelSrc, (modelMetadata) =&gt; {
-
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata, {
+                self.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: params.includeTypes,
                     excludeTypes: params.excludeTypes
                 });
@@ -411,14 +435,44 @@ class GLTFLoaderPlugin extends Plugin {
                     }
                 }
 
-                params.readableGeometry = true; // Enables 3D picking https://github.com/xeokit/xeokit-sdk/issues/11
+                params.readableGeometry = false;
 
-                params.handleGLTFNode = function (modelId, glTFNode, actions) {
+                params.prioritizeGLTFNode = function (modelId, glTFNode) {
 
                     // The &quot;name&quot; property of the glTF scene node contains the object ID, with which we can find a MetaObject
                     // in the MetaModel we just loaded. We&apos;ll create Node components in the Scene for all the nodes as we
                     // descend into them, but will give special treatment to those nodes that have a &quot;name&quot;, ie. set initial
                     // state for those according to the MetaModel.
+
+                    const name = glTFNode.name;
+
+                    if (!name) {
+                        return 0;
+                    }
+
+                    const nodeId = name;
+                    const metaObject = self.viewer.metaScene.metaObjects[nodeId];
+                    const type = (metaObject ? metaObject.type : &quot;DEFAULT&quot;) || &quot;DEFAULT&quot;;
+
+                    if (metaObject) {
+                        if (excludeTypes) {
+                            if (excludeTypes[type]) {
+                                return null;
+                            }
+                        }
+                        if (includeTypes) {
+                            if (!includeTypes[type]) {
+                                return null;
+                            }
+                        }
+                    }
+
+                    const props = objectDefaults[type];
+
+                    return props ? (props.priority || 0) : 0;
+                };
+
+                params.handleGLTFNode = function (modelId, glTFNode, actions) {
 
                     const name = glTFNode.name;
 
@@ -430,21 +484,7 @@ class GLTFLoaderPlugin extends Plugin {
                     const metaObject = self.viewer.metaScene.metaObjects[nodeId];
                     const type = (metaObject ? metaObject.type : &quot;DEFAULT&quot;) || &quot;DEFAULT&quot;;
 
-                    if (metaObject) {
-                        if (excludeTypes) {
-                            if (excludeTypes[type]) {
-                                return false;
-                            }
-                        }
-
-                        if (includeTypes) {
-                            if (!includeTypes[type]) {
-                                return false;
-                            }
-                        }
-                    }
-
-                    actions.createEntity = { // Create an Entity for this glTF scene node
+                    actions.createEntity = {
                         id: nodeId,
                         isObject: true // Registers the Entity in Scene#objects
                     };
@@ -473,12 +513,35 @@ class GLTFLoaderPlugin extends Plugin {
                     return true; // Continue descending this glTF node subtree
                 };
 
-                loader.load(this, model, src, params);
+                if (params.src) {
+                    loader.load(self, model, params.src, params);
+                } else {
+                    loader.parse(self, model, params.gltf, params);
+                }
+            };
 
-            }, function (errMsg) {
-                self.error(`load(): Failed to load model metadata for model &apos;${modelId} from  &apos;${metaModelSrc}&apos; - ${errMsg}`);
-                self.viewer.scene.canvas.spinner.processes--;
-            });
+            if (params.metaModelSrc) {
+
+                const metaModelSrc = params.metaModelSrc;
+
+                self.viewer.scene.canvas.spinner.processes++;
+
+                self._dataSource.getMetaModel(metaModelSrc, (metaModelData) =&gt; {
+
+                    self.viewer.scene.canvas.spinner.processes--;
+
+                    processMetaModelData(metaModelData);
+
+                }, function (errMsg) {
+                    self.error(`load(): Failed to load model metadata for model &apos;${modelId} from  &apos;${metaModelSrc}&apos; - ${errMsg}`);
+                    self.viewer.scene.canvas.spinner.processes--;
+                });
+
+            } else if (params.metaModelData) {
+
+                processMetaModelData(params.metaModelData);
+            }
+
         } else {
 
             params.handleGLTFNode = function (modelId, glTFNode, actions) {
@@ -499,7 +562,11 @@ class GLTFLoaderPlugin extends Plugin {
                 return true; // Continue descending this glTF node subtree
             };
 
-            loader.load(this, model, src, params);
+            if (params.src) {
+                loader.load(self, model, params.src, params);
+            } else {
+                loader.parse(self, model, params.gltf, params);
+            }
         }
 
         model.once(&quot;destroyed&quot;, () =&gt; {

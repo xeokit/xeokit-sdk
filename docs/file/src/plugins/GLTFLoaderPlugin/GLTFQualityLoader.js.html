@@ -33,7 +33,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -182,7 +183,7 @@ class GLTFQualityLoader {
 
 var loadGLTF = (function () {
     return function (plugin, modelNode, src, options, ok, error) {
-        utils.loadJSON(src, function (json) { // OK
+        plugin.dataSource.getGLTF(src, function (json) { // OK
                 options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, plugin, modelNode, ok, error);
             },
@@ -222,6 +223,7 @@ var parseGLTF = (function () {
             src: src,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
+            prioritizeGLTFNode: options.prioritizeGLTFNode,
             handleGLTFNode: options.handleGLTFNode,
             ignoreMaterials: !!options.ignoreMaterials,
             edgeThreshold: options.edgeThreshold,
@@ -289,70 +291,13 @@ var parseGLTF = (function () {
     function loadBuffer(ctx, bufferInfo, ok, err) {
         var uri = bufferInfo.uri;
         if (uri) {
-            loadArrayBuffer(ctx, uri, function (data) {
+            ctx.plugin.dataSource.getArrayBuffer(ctx, uri, function (data) {
                     bufferInfo._buffer = data;
                     ok();
                 },
                 err);
         } else {
             err(&apos;gltf/handleBuffer missing uri in &apos; + JSON.stringify(bufferInfo));
-        }
-    }
-
-    function loadArrayBuffer(ctx, url, ok, err) {
-
-        // Check for data: URI
-
-        var dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
-        var dataUriRegexResult = url.match(dataUriRegex);
-
-        if (dataUriRegexResult) { // Safari can&apos;t handle data URIs through XMLHttpRequest
-
-            var mimeType = dataUriRegexResult[1];
-            var isBase64 = !!dataUriRegexResult[2];
-            var data = dataUriRegexResult[3];
-
-            data = window.decodeURIComponent(data);
-
-            if (isBase64) {
-                data = window.atob(data);
-            }
-
-            try {
-                var buffer = new ArrayBuffer(data.length);
-                var view = new Uint8Array(buffer);
-                for (var i = 0; i &lt; data.length; i++) {
-                    view[i] = data.charCodeAt(i);
-                }
-                window.setTimeout(function () {
-                    ok(buffer);
-                }, 0);
-            } catch (error) {
-                window.setTimeout(function () {
-                    err(error);
-                }, 0);
-            }
-        } else {
-
-            if (ctx.loadBuffer) {
-                ctx.loadBuffer(url, ok, err);
-
-            } else {
-
-                var request = new XMLHttpRequest();
-                request.open(&apos;GET&apos;, ctx.basePath + url, true);
-                request.responseType = &apos;arraybuffer&apos;;
-                request.onreadystatechange = function () {
-                    if (request.readyState === 4) {
-                        if (request.status === 200) {
-                            ok(request.response);
-                        } else {
-                            err(&apos;loadArrayBuffer error : &apos; + request.response);
-                        }
-                    }
-                };
-                request.send(null);
-            }
         }
     }
 
@@ -851,14 +796,22 @@ var parseGLTF = (function () {
                 error(ctx, &quot;Node not found: &quot; + i);
                 continue;
             }
-            loadNode(ctx, i, glTFNode, null, null);
+            loadNode(ctx, glTFNode, null, null);
         }
     }
 
-    function loadNode(ctx, nodeIdx, glTFNode, matrix, parent, parentCfg) {
+    function loadNode(ctx, glTFNode, matrix, parent) {
 
         parent = parent || ctx.modelNode;
+
         var createEntity;
+
+        if (ctx.prioritizeGLTFNode) {
+            const priority = ctx.prioritizeGLTFNode(ctx.performanceModel.id, glTFNode);
+            if (priority === undefined || priority === null) {
+                return;
+            }
+        }
 
         if (ctx.handleGLTFNode) {
             var actions = {};
@@ -1008,7 +961,6 @@ var parseGLTF = (function () {
                     }
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
 
                 if (createEntity &amp;&amp; numMeshes === 0 &amp;&amp; hasChildNodes) {
@@ -1025,7 +977,6 @@ var parseGLTF = (function () {
                     parent.addChild(childNode, false); // Don&apos;t automatically inherit properties
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
 
                 if (createEntity &amp;&amp; numMeshes &gt; 0 || hasChildNodes) {
@@ -1057,7 +1008,6 @@ var parseGLTF = (function () {
                     }
                     matrix = null;
                     parent = childNode;
-                    parentCfg = nodeCfg;
                 }
             }
         }
@@ -1073,7 +1023,7 @@ var parseGLTF = (function () {
                     error(ctx, &quot;Node not found: &quot; + i);
                     continue;
                 }
-                loadNode(ctx, nodeIdx, childNodeInfo, matrix, parent, parentCfg);
+                loadNode(ctx, childNodeInfo, matrix, parent);
             }
         }
     }

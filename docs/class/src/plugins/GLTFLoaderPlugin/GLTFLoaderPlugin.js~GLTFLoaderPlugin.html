@@ -33,7 +33,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -111,13 +112,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber164">xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber165">xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber164">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber165">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -315,6 +316,64 @@ objects that do not represent empty space.</p>
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-set-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets a custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html#instance-get-dataSource">dataSource</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -668,7 +727,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber176">source</a></span></span>
     </span>
   </h3>
 
@@ -717,6 +776,13 @@ objects that do not represent empty space.</p>
       <td data-ice="description"><p>Map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.  Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.dataSource</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span>, which loads using XMLHttpRequest.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -743,6 +809,96 @@ objects that do not represent empty space.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-dataSource">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber201">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets a custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.</p>
+<p>Default value is <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span>, which loads via an XMLHttpRequest.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-dataSource">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">dataSource</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber212">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments.</p>
+<p>Default value is <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span>, which loads via an XMLHttpRequest.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-objectDefaults">
     <span class="access" data-ice="access">public</span>
     
@@ -754,7 +910,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber198">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber223">source</a></span></span>
     </span>
   </h3>
 
@@ -799,7 +955,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber234">source</a></span></span>
     </span>
   </h3>
 
@@ -847,7 +1003,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 
@@ -884,15 +1040,29 @@ objects that do not represent empty space.</p>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.src</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Path to a glTF file.</p>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path to a glTF file, as an alternative to the <code>gltf</code> parameter.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.gltf</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>glTF JSON, as an alternative to the <code>src</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.metaModelSrc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Path to an optional metadata file (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.metaModelData</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter (see user guide: <a href="https://github.com/xeolabs/xeokit.io/wiki/Model-Metadata">Model Metadata</a>).</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

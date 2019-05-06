@@ -33,7 +33,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -403,7 +404,6 @@ class BatchingLayer {
 
         quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
-        //if (buffer.slicing) {
         if (buffer.lenPositions &gt; 0) {
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
         }
@@ -431,22 +431,6 @@ class BatchingLayer {
         if (buffer.lenEdgeIndices &gt; 0) {
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.slice(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
         }
-        // } else {
-        //     state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions, buffer.quantizedPositions.length, 3, gl.STATIC_DRAW);
-        //     if (buffer.lenNormals &gt; 0) {
-        //         state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals, buffer.normals.length, 2, gl.STATIC_DRAW);
-        //     }
-        //     if (buffer.lenColors &gt; 0) {
-        //         state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors, buffer.colors.length, 4, gl.STATIC_DRAW);
-        //     }
-        //     state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags, buffer.flags.length, 4, gl.STATIC_DRAW);
-        //     if (buffer.lenIndices &gt; 0) {
-        //         state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices, buffer.indices.length, 1, gl.STATIC_DRAW);
-        //     }
-        //     if (buffer.lenEdgeIndices &gt; 0) {
-        //         state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
-        //     }
-        // }
 
         buffer.lenPositions = 0;
         buffer.lenColors = 0;
@@ -467,10 +451,6 @@ class BatchingLayer {
         if (flags &amp; RENDER_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
-        }
-        if (flags &amp; RENDER_FLAGS.HIGHLIGHTED) {
-            this._numHighlightedLayerPortions++;
-            this.model.numHighlightedLayerPortions++;
         }
         if (flags &amp; RENDER_FLAGS.HIGHLIGHTED) {
             this._numHighlightedLayerPortions++;

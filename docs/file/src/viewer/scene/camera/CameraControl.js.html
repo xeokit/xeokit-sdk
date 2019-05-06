@@ -33,7 +33,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
@@ -305,6 +306,7 @@ class CameraControl extends Component {
         this.panToPointer = cfg.panToPointer;
         this.panToPivot = cfg.panToPivot;
         this.inertia = cfg.inertia;
+        this.pointerEnabled = true;
 
         this._initEvents(); // Set up all the mouse/touch/kb handlers
     }
@@ -513,6 +515,28 @@ class CameraControl extends Component {
     }
 
     /**
+     * Sets whether canvas pointer events are enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````true```` to enable drag events.
+     */
+    set pointerEnabled(value) {
+        this._pointerEnabled = !!value;
+    }
+
+    /**
+     * Gets whether canvas pointer events are enabled.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````true```` to enable drag events.
+     */
+    get pointerEnabled() {
+        return this._pointerEnabled;
+    }
+
+    /**
      * @private
      */
     set keyboardLayout(value) {
@@ -579,6 +603,9 @@ class CameraControl extends Component {
         let pickedSurface = false;
 
         function updatePick() {
+            if (!self._pointerEnabled) {
+                return;
+            }
             if (!needPickEntity &amp;&amp; !needPickSurface) {
                 return;
             }
@@ -915,7 +942,7 @@ class CameraControl extends Component {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
                             updatePick();
-                            if (pickedSurface) {
+                            if (pickedSurface &amp;&amp; hit.worldPos) {
                                 panToWorldPos(hit.worldPos, -vZoom);
                             } else {
                                 camera.zoom(vZoom);
@@ -986,7 +1013,7 @@ class CameraControl extends Component {
                 let mouseDownRight;
 
                 canvas.addEventListener(&quot;mousedown&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     over = true;
@@ -1012,14 +1039,13 @@ class CameraControl extends Component {
                             lastX = mousePos[0];
                             lastY = mousePos[1];
                             break;
-                            break;
                         default:
                             break;
                     }
                 });
 
                 canvas.addEventListener(&quot;mouseup&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     switch (e.which) {
@@ -1041,7 +1067,7 @@ class CameraControl extends Component {
                 });
 
                 document.addEventListener(&quot;mouseup&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     switch (e.which) {
@@ -1063,7 +1089,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener(&quot;mouseenter&quot;, function () {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     over = true;
@@ -1072,7 +1098,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener(&quot;mouseleave&quot;, function () {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     over = false;
@@ -1081,7 +1107,7 @@ class CameraControl extends Component {
                 });
 
                 canvas.addEventListener(&quot;mousemove&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1101,7 +1127,7 @@ class CameraControl extends Component {
                 });
 
                 scene.on(&quot;tick&quot;, function () {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (Math.abs(xDelta) === 0 &amp;&amp; Math.abs(yDelta) === 0) {
@@ -1132,7 +1158,7 @@ class CameraControl extends Component {
                 // Mouse wheel zoom
 
                 canvas.addEventListener(&quot;wheel&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (self._panToPointer) {
@@ -1150,7 +1176,7 @@ class CameraControl extends Component {
                 // Keyboard zoom
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1175,7 +1201,7 @@ class CameraControl extends Component {
                 (function () {
 
                     scene.on(&quot;tick&quot;, function (e) {
-                        if (!self._active) {
+                        if (!(self._active &amp;&amp; self._pointerEnabled)) {
                             return;
                         }
                         if (!over) {
@@ -1260,7 +1286,7 @@ class CameraControl extends Component {
                 }
 
                 canvas.addEventListener(&quot;touchstart&quot;, function (event) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     const touches = event.touches;
@@ -1292,7 +1318,7 @@ class CameraControl extends Component {
                 }, {passive: true});
 
                 canvas.addEventListener(&quot;touchmove&quot;, function (event) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     const touches = event.touches;
@@ -1348,7 +1374,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1381,7 +1407,7 @@ class CameraControl extends Component {
             (function () {
 
                 scene.on(&quot;tick&quot;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     if (!over) {
@@ -1421,10 +1447,10 @@ class CameraControl extends Component {
 
                 canvas.addEventListener(&quot;mousemove&quot;, function (e) {
 
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
-
+                    
                     getCanvasPosFromEvent(e, pickCursorPos);
 
                     if (self.hasSubs(&quot;hover&quot;) || self.hasSubs(&quot;hoverOut&quot;) || self.hasSubs(&quot;hoverOff&quot;) || self.hasSubs(&quot;hoverSurface&quot;)) {
@@ -1438,7 +1464,7 @@ class CameraControl extends Component {
                 let downCursorY;
 
                 canvas.addEventListener(&apos;mousedown&apos;, function (e) {
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
                     downX = e.clientX;
@@ -1464,7 +1490,7 @@ class CameraControl extends Component {
 
                     return function (e) {
 
-                        if (!self._active) {
+                        if (!(self._active &amp;&amp; self._pointerEnabled)) {
                             return;
                         }
 
@@ -1608,7 +1634,7 @@ class CameraControl extends Component {
 
                 canvas.addEventListener(&quot;touchstart&quot;, function (event) {
 
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
 
@@ -1646,7 +1672,7 @@ class CameraControl extends Component {
 
                 canvas.addEventListener(&quot;touchend&quot;, function (event) {
 
-                    if (!self._active) {
+                    if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
 
@@ -1753,7 +1779,7 @@ class CameraControl extends Component {
 
             document.addEventListener(&quot;keydown&quot;, function (e) {
 
-                if (!self._active) {
+                if (!(self._active &amp;&amp; self._pointerEnabled)) {
                     return;
                 }
 
