@@ -27,10 +27,11 @@ class Viewer {
      * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
-     * @param {Boolean} [cfg.transparent=false]  Whether or not the canvas is transparent.
+     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for canvas snapshots to work.
+     * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
      * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
      * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
-     * @param {Boolean} [cfg.gammaInput=false]  When true, expects that all textures and colors are premultiplied gamma.
+     * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param  {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      */
@@ -53,7 +54,7 @@ class Viewer {
             canvasId: cfg.canvasId,
             webgl2: false,
             contextAttr: {
-                preserveDrawingBuffer: false
+                preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
             },
             transparent: cfg.transparent !== false,
             gammaInput: true,
