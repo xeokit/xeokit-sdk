@@ -227,7 +227,7 @@ function loadArraybuffer(url, ok, err) {
         }
     } else {
         const request = new XMLHttpRequest();
-        request.open('GET', ctx.basePath + url, true);
+        request.open('GET', url, true);
         request.responseType = 'arraybuffer';
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
