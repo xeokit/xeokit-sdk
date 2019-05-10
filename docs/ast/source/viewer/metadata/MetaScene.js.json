@@ -202,7 +202,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
+            "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
             "start": 87,
             "end": 464,
             "loc": {
@@ -24301,7 +24301,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
+              "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
               "start": 87,
               "end": 464,
               "loc": {
@@ -24329,7 +24329,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
+      "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
       "start": 87,
       "end": 464,
       "loc": {
@@ -25209,7 +25209,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
+      "value": "*\n * @desc Metadata corresponding to a {@link Scene}.\n *\n * * Located in {@link Viewer#metaScene}.\n * * Contains {@link MetaModel}s and {@link MetaObject}s.\n * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)\n * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)\n ",
       "start": 87,
       "end": 464,
       "loc": {

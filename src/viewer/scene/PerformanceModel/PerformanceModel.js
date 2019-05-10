@@ -32,7 +32,7 @@ const DEFAULT_TILE_ID = "__default";
  *
  * ## User Guide
  *
- * * [High Performance Model Representation](https://github.com/xeolabs/xeokit-sdk/wiki/High-Performance-Model-Representation)
+ * * [High Performance Model Representation](https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation)
  *
  * @implements {Drawable}
  * @implements {Entity}
