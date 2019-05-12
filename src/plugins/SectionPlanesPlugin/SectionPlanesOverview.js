@@ -1,12 +1,18 @@
 import {math} from "../../../src/viewer/scene/math/math.js";
 import {Scene} from "../../../src/viewer/scene/scene/Scene.js";
 import {DirLight} from "./../../../src/viewer/scene/lights/DirLight.js";
-import {SectionPlanesOverviewHelper} from "./SectionPlanesOverviewHelper.js";
+import {SectionPlanesOverviewPlane} from "./SectionPlanesOverviewPlane.js";
 
 /**
- * An overview of the {@link SectionPlane}s managed by a {@link SectionPlanesPlugin}.
+ * @desc Provides an interactive 3D overview of the {@link SectionPlane}s created by its {@link SectionPlanesPlugin}.
  *
- * {@link SectionPlanesPlugin} has one of these on
+ * Located at {@link SectionPlanesPlugin#overview}.
+ *
+ * Renders the 3D overview on an a separate canvas at a corner of the {@link Viewer}'s {@link Scene} {@link Canvas}.
+ *
+ * The overview contains a {@link SectionPlanesOverviewPlane} for each {@link SectionPlane} in
+ * the {@link Scene}, which renders a 3D plane to indicate the SectionPlane's current position and
+ * orientation.  Click each 3D plane to activate or deactivate its {@link SectionPlane}'s {@link SectionPlaneControl}.
  */
 class SectionPlanesOverview {
 
@@ -15,15 +21,26 @@ class SectionPlanesOverview {
      */
     constructor(plugin, cfg) {
 
-        if (!cfg.onClicked || !cfg.onNothingClicked) {
-            throw "Missing config(s): onClicked or onNothingClicked";
+        if (!cfg.onHoverEnterPlane || !cfg.onHoverLeavePlane || !cfg.onClickedNothing || !cfg.onClickedPlane) {
+            throw "Missing config(s): onHoverEnterPlane, onHoverLeavePlane, onClickedNothing || onClickedPlane";
         }
 
+        /**
+         * The {@link SectionPlanesPlugin} that manages this SectionPlanesOverview.
+         *
+         * @type {SectionPlanesPlugin}
+         */
+        this.plugin = plugin;
+
         this._viewer = plugin.viewer;
-        this._onClicked = cfg.onClicked;
-        this._onNothingClicked = cfg.onNothingClicked;
-        this._sectionPlaneHelpers = {};
+
+        this._onHoverEnterPlane = cfg.onHoverEnterPlane;
+        this._onHoverLeavePlane = cfg.onHoverLeavePlane;
+        this._onClickedNothing = cfg.onClickedNothing;
+        this._onClickedPlane = cfg.onClickedPlane;
         this._visible = true;
+
+        this._planes = {};
 
         //--------------------------------------------------------------------------------------------------------------
         // Init canvas
@@ -111,13 +128,17 @@ class SectionPlanesOverview {
         }
 
         this._onViewerCameraMatrix = this._viewer.camera.on("matrix", this._synchCamera);
+
         this._onViewerCameraWorldAxis = this._viewer.camera.on("worldAxis", this._synchCamera);
+
         this._onViewerCameraFOV = this._viewer.camera.perspective.on("fov", (fov) => {
             this._scene.camera.perspective.fov = fov;
         });
+
         this._onViewerCameraProjection = this._viewer.camera.on("projection", (projection) => {
             this._scene.camera.projection = projection;
         });
+
         this._onViewerCameraWorldAxis = this._viewer.camera.on("worldAxis", (worldAxis) => {
             //   this._scene.camera.worldAxis = worldAxis;
         });
@@ -136,37 +157,41 @@ class SectionPlanesOverview {
         //--------------------------------------------------------------------------------------------------------------
 
         {
-            const hoverColorize = [0.0, 1.0, 0.0];
-
             var hoveredEntity = null;
-            var lastColorize = null;
 
-            this._scene.input.on("mousemove", (coords) => {
+            this._onInputMouseMove = this._scene.input.on("mousemove", (coords) => {
                 const hit = this._scene.pick({
                     canvasPos: coords
                 });
                 if (hit) {
                     if (!hoveredEntity || hit.entity.id !== hoveredEntity.id) {
                         if (hoveredEntity) {
-                            hoveredEntity.colorize = lastColorize;
+                            const plane = this._planes[hoveredEntity.id];
+                            if (plane) {
+                                this._onHoverLeavePlane(hoveredEntity.id);
+                            }
                         }
                         hoveredEntity = hit.entity;
-                        lastColorize = hit.entity.colorize.slice();
-                        hit.entity.colorize = hoverColorize;
+                        const plane = this._planes[hoveredEntity.id];
+                        if (plane) {
+                            this._onHoverEnterPlane(hoveredEntity.id);
+                        }
                     }
                 } else {
                     if (hoveredEntity) {
-                        hoveredEntity.colorize = lastColorize;
                         hoveredEntity = null;
                     }
                 }
             });
 
-            this._scene.canvas.canvas.addEventListener("mouseup", () => {
+            this._scene.canvas.canvas.addEventListener("mouseup", this._onCanvasMouseUp = () => {
                 if (hoveredEntity) {
-                    this._onClicked(hoveredEntity.id);
+                    const plane = this._planes[hoveredEntity.id];
+                    if (plane) {
+                        this._onClickedPlane(hoveredEntity.id);
+                    }
                 } else {
-                    this._onNothingClicked();
+                    this._onClickedNothing();
                 }
             });
         }
@@ -215,24 +240,33 @@ class SectionPlanesOverview {
      * @private
      */
     _addSectionPlane(sectionPlane) {
-        this._sectionPlaneHelpers[sectionPlane.id] = new SectionPlanesOverviewHelper(this._scene, sectionPlane);
+        this._planes[sectionPlane.id] = new SectionPlanesOverviewPlane(this, this._scene, sectionPlane);
     }
 
     /** Called by SectionPlanesPlugin#createSectionPlane()
      * @private
      */
     _removeSectionPlane(sectionPlane) {
-        const sectionPlaneHelper = this._sectionPlaneHelpers[sectionPlane.id];
-        if (sectionPlaneHelper) {
-            sectionPlaneHelper.destroy();
-            delete this._sectionPlaneHelpers[sectionPlane.id];
+        const plane = this._planes[sectionPlane.id];
+        if (plane) {
+            plane._destroy();
+            delete this._planes[sectionPlane.id];
         }
     }
 
     /**
-     * Sets if the SectionPlanesOverview is visible.
+     * Returns a map of the {@link SectionPlanesOverviewPlane}s currently in this SectionPlanesOverview.
      *
-     * @param {Boolean} visible Whether or not the SectionPlanesOverview is visible.
+     * @returns {{String:SectionPlanesOverviewPlane}} Map of the {@link SectionPlanesOverviewPlane}s, each mapped to its {@link SectionPlanesOverviewPlane#id}.
+     */
+    get planes() {
+        return this._planes;
+    }
+
+    /**
+     * Sets if this SectionPlanesOverview is visible.
+     *
+     * @param {Boolean} visible Whether or not this SectionPlanesOverview is visible.
      */
     setVisible(visible = true) {
         this._visible = visible;
@@ -241,16 +275,16 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets if the SectionPlanesOverview is visible.
+     * Gets if this SectionPlanesOverview is visible.
      *
-     * @return {Boolean} True when the SectionPlanesOverview is visible.
+     * @return {Boolean} True when this SectionPlanesOverview is visible.
      */
     getVisible() {
         return this._visible;
     }
 
     /**
-     * Sets the canvas size of the SectionPlanesOverview.
+     * Sets the canvas size of this SectionPlanesOverview.
      *
      * Since the canvas is square, the size is given for a single dimension. Default value is ````200````.
      *
@@ -264,7 +298,7 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the canvas size of the SectionPlanesOverview.
+     * Gets the canvas size of this SectionPlanesOverview.
      *
      * Since the canvas is square, the size is given for a single dimension.
      *
@@ -275,7 +309,7 @@ class SectionPlanesOverview {
     };
 
     /**
-     * Sets the alignment of the SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * Sets the alignment of this SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
      *
      * Default value is "bottomRight".
      *
@@ -291,7 +325,7 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the alignment of the SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * Gets the alignment of this SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
      *
      * Default value is "bottomRight".
      *
@@ -302,9 +336,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between the SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topLeft" or "bottomLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topLeft" or "bottomLeft".
+     *
+     * Default value is ````10````.
      *
      * @param {Number} leftMargin The left margin value, in pixels.
      */
@@ -314,9 +350,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between the SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topLeft" or "bottomLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topLeft" or "bottomLeft".
+     *
+     * Default value is ````10````.
      *
      * @return {Number} The left margin value, in pixels.
      */
@@ -325,9 +363,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between the SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topRight" or "bottomRight". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topRight" or "bottomRight".
+     *
+     * Default value is ````10````.
      *
      * @param {Number} rightMargin The right margin value, in pixels.
      */
@@ -337,9 +377,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between the SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topRight" or "bottomRight". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topRight" or "bottomRight".
+     *
+     * Default value is ````10````.
      *
      * @return {Number} The right margin value, in pixels.
      */
@@ -348,9 +390,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between the SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topRight" or "topLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topRight" or "topLeft".
+     *
+     * Default value is ````10````.
      *
      * @param {Number} topMargin The top margin value, in pixels.
      */
@@ -360,9 +404,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between the SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "topRight" or "topLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "topRight" or "topLeft".
+     *
+     * Default value is ````10````.
      *
      * @return {Number} The top margin value, in pixels.
      */
@@ -371,9 +417,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between the SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft".
+     *
+     * Default value is ````10````.
      *
      * @param {Number} bottomMargin The bottom margin value, in pixels.
      */
@@ -383,9 +431,11 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between the SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when the SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft". Default value is ````10````.
+     * This applies when this SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft".
+     *
+     * Default value is ````10````.
      *
      * @return {Number} The bottom margin value, in pixels.
      */
@@ -397,13 +447,18 @@ class SectionPlanesOverview {
      * @private
      */
     _destroy() {
-        this._viewer.scene.canvas.off(this._onViewerCanvasBoundary);
+
         this._viewer.scene.off(this._onViewerSceneTick);
+        this._viewer.scene.canvas.off(this._onViewerCanvasBoundary);
         this._viewer.camera.off(this._onViewerCameraMatrix);
         this._viewer.camera.off(this._onViewerCameraWorldAxis);
         this._viewer.camera.perspective.off(this._onViewerCameraFOV);
         this._viewer.camera.off(this._onViewerCameraProjection);
+
         this._canvas.parentNode.removeChild(this._canvas);
+
+        this._scene.input.off(this._onInputMouseMove);
+        this._scene.canvas.canvas.removeEventListener("mouseup", this._onCanvasMouseUp);
         this._scene.destroy();
     }
 }

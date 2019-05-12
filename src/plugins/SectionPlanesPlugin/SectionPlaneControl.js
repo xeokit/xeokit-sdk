@@ -1,6 +1,9 @@
 import {math} from "../../viewer/scene/math/math.js";
 
+import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
 import {buildTorusGeometry} from "../../viewer/scene/geometry/builders/buildTorusGeometry.js";
+import {buildBoxGeometry} from "../../viewer/scene/geometry/builders/buildBoxGeometry.js";
+
 import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js";
@@ -13,38 +16,57 @@ const quat = new Float32Array(4);
 /**
  * Controls a {@link SectionPlane} with mouse and touch input.
  *
- * {@link SectionPlanesPlugin#sectionPlaneControls} contains a SectionPlaneControl for each of its {@link SectionPlane}s.
+ * Created by {@link SectionPlanesPlugin#createSectionPlane}.
+ *
+ * Registered by {@link SectionPlaneControl#id} in {@link SectionPlanesPlugin#sectionPlaneControls}.
+ *
+ * Has the same {@link SectionPlaneControl#id} as its SectionPlane's {@link SectionPlane#id}.
  */
 class SectionPlaneControl {
 
     /** @private */
-    constructor(viewer, sectionPlane) {
+    constructor(plugin) {
 
-        this.viewer = viewer;
+        /**
+         * ID of this SectionPlaneControl.
+         *
+         * SectionPlaneControls are mapped by this ID in {@link SectionPlanesPlugin#sectionPlaneControls}.
+         *
+         * @property id
+         * @type {String|Number}
+         */
+        this.id = null;
+
+        /**
+         * The {@link SectionPlanesPlugin} that manages this SectionPlaneControl.
+         *
+         * @property plugin
+         * @type {SectionPlanesPlugin}
+         */
+        this.plugin = plugin;
+
+        this._viewer = plugin.viewer;
 
         this._visible = false;
         this._pos = math.vec3(); // Holds the current position of the center of the clip plane.
-        this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging a gizmo arrow or ring.
-        this._gizmoNode = null; // Root of Node graph that represents this control in the 3D scene
+        this._baseDir = math.vec3(); // Saves direction of clip plane when we start dragging an arrow or ring.
+        this._rootNode = null; // Root of Node graph that represents this control in the 3D scene
         this._displayMeshes = null; // Meshes that are always visible
         this._affordanceMeshes = null; // Meshes displayed momentarily for affordance
 
         this._createNodes();
         this._bindEvents();
-
-        if (sectionPlane) {
-            this._setSectionPlane(sectionPlane);
-            this.setVisible(true);
-        }
     }
 
     /**
-     * Called by SectionPlanesPlugin to reuse this SectionPlaneControl for a different SectionPlane.
+     * Called by SectionPlanesPlugin to assign this SectionPlaneControl to a SectionPlane.
+     * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
      * @private
      */
     _setSectionPlane(sectionPlane) {
         this._sectionPlane = sectionPlane;
         if (sectionPlane) {
+            this.id = sectionPlane.id;
             this._setPos(sectionPlane.pos);
             this._setDir(sectionPlane.dir);
         }
@@ -61,19 +83,17 @@ class SectionPlaneControl {
     /** @private */
     _setPos(xyz) {
         this._pos.set(xyz);
-        this._gizmoNode.position = xyz;
+        this._rootNode.position = xyz;
     }
 
     /** @private */
     _setDir(xyz) {
         this._baseDir.set(xyz);
-        this._gizmoNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
+        this._rootNode.quaternion = math.vec3PairToQuaternion(zeroVec, xyz, quat);
     }
 
     /**
      * Sets if this SectionPlaneControl is visible.
-     *
-     * Default value is ````true````.
      *
      * @type {Boolean}
      */
@@ -100,8 +120,6 @@ class SectionPlaneControl {
     /**
      * Gets if this SectionPlaneControl is visible.
      *
-     * Default value is ````true````.
-     *
      * @type {Boolean}
      */
     getVisible() {
@@ -115,52 +133,211 @@ class SectionPlaneControl {
     _createNodes() {
 
         const NO_STATE_INHERIT = false;
-        const scene = this.viewer.scene;
-        const tubeRadius = 0.005;
+        const scene = this._viewer.scene;
+        const radius = 1.0;
+        const handleTubeRadius = 0.06;
+        const hoopRadius = radius - 0.2;
+        const tubeRadius = 0.01;
+        const arrowRadius = 0.07;
 
-        this._gizmoNode = new Node(scene, {
+        this._rootNode = new Node(scene, {
             position: [0, 0, 0],
-            scale: [5, 5, 55]
+            scale: [5, 5, 5]
         });
 
-        const gizmoNode = this._gizmoNode;
+        const rootNode = this._rootNode;
+
+        const shapes = {// Reusable geometries
+
+            arrowHead: new ReadableGeometry(rootNode, buildCylinderGeometry({
+                radiusTop: 0.001,
+                radiusBottom: arrowRadius,
+                radialSegments: 32,
+                heightSegments: 1,
+                height: 0.2,
+                openEnded: false
+            })),
+
+            arrowHeadBig: new ReadableGeometry(rootNode, buildCylinderGeometry({
+                radiusTop: 0.001,
+                radiusBottom: 0.09,
+                radialSegments: 32,
+                heightSegments: 1,
+                height: 0.25,
+                openEnded: false
+            })),
+
+            arrowHeadHandle: new ReadableGeometry(rootNode, buildCylinderGeometry({
+                radiusTop: 0.09,
+                radiusBottom: 0.09,
+                radialSegments: 8,
+                heightSegments: 1,
+                height: 0.37,
+                openEnded: false
+            })),
+
+            curve: new ReadableGeometry(rootNode, buildTorusGeometry({
+                radius: hoopRadius,
+                tube: tubeRadius,
+                radialSegments: 64,
+                tubeSegments: 14,
+                arc: (Math.PI * 2.0) / 4.0
+            })),
+
+            curveHandle: new ReadableGeometry(rootNode, buildTorusGeometry({
+                radius: hoopRadius,
+                tube: handleTubeRadius,
+                radialSegments: 64,
+                tubeSegments: 14,
+                arc: (Math.PI * 2.0) / 4.0
+            })),
+
+            hoop: new ReadableGeometry(rootNode, buildTorusGeometry({
+                radius: hoopRadius,
+                tube: tubeRadius,
+                radialSegments: 64,
+                tubeSegments: 8,
+                arc: (Math.PI * 2.0)
+            })),
+
+            axis: new ReadableGeometry(rootNode, buildCylinderGeometry({
+                radiusTop: tubeRadius,
+                radiusBottom: tubeRadius,
+                radialSegments: 20,
+                heightSegments: 1,
+                height: radius,
+                openEnded: false
+            })),
+
+            axisHandle: new ReadableGeometry(rootNode, buildCylinderGeometry({
+                radiusTop: 0.08,
+                radiusBottom: 0.08,
+                radialSegments: 20,
+                heightSegments: 1,
+                height: radius,
+                openEnded: false
+            }))
+        };
+
+        const materials = { // Reusable materials
+
+            pickable: new PhongMaterial(rootNode, { // Invisible material for pickable handles, which define a pickable 3D area
+                diffuse: [1, 1, 0],
+                alpha: 0, // Invisible
+                alphaMode: "blend"
+            }),
+
+            red: new PhongMaterial(rootNode, {
+                diffuse: [1, 0.0, 0.0],
+                emissive: [1, 0.0, 0.0],
+                ambient: [0.0, 0.0, 0.0],
+                specular: [.6, .6, .3],
+                shininess: 80,
+                lineWidth: 2
+            }),
+
+            highlightRed: new EmphasisMaterial(rootNode, { // Emphasis for red rotation affordance hoop
+                edges: false,
+                fill: true,
+                fillColor: [1, 0, 0],
+                fillAlpha: 0.6
+            }),
+
+            green: new PhongMaterial(rootNode, {
+                diffuse: [0.0, 1, 0.0],
+                emissive: [0.0, 1, 0.0],
+                ambient: [0.0, 0.0, 0.0],
+                specular: [.6, .6, .3],
+                shininess: 80,
+                lineWidth: 2
+            }),
+
+            highlightGreen: new EmphasisMaterial(rootNode, { // Emphasis for green rotation affordance hoop
+                edges: false,
+                fill: true,
+                fillColor: [0, 1, 0],
+                fillAlpha: 0.6
+            }),
+
+            blue: new PhongMaterial(rootNode, {
+                diffuse: [0.0, 0.0, 1],
+                emissive: [0.0, 0.0, 1],
+                ambient: [0.0, 0.0, 0.0],
+                specular: [.6, .6, .3],
+                shininess: 80,
+                lineWidth: 2
+            }),
+
+            highlightBlue: new EmphasisMaterial(rootNode, { // Emphasis for blue rotation affordance hoop
+                edges: false,
+                fill: true,
+                fillColor: [0, 0, 1],
+                fillAlpha: 0.2
+            }),
+
+            ball: new PhongMaterial(rootNode, {
+                diffuse: [0.5, 0.5, 0.5],
+                emissive: [1, 1, 1],
+                ambient: [0.0, 0.0, 0.0],
+                specular: [.6, .6, .3],
+                shininess: 80,
+                lineWidth: 2
+            }),
+
+            highlightBall: new EmphasisMaterial(rootNode, {
+                edges: false,
+                fill: true,
+                fillColor: [0.5, 0.5, 0.5],
+                fillAlpha: 0.5,
+                vertices: false
+            }),
+
+            highlightPlane: new EmphasisMaterial(rootNode, {
+                edges: true,
+                edgeWidth: 3,
+                fill: false,
+                fillColor: [0.5, 0.5, .5],
+                fillAlpha: 0.5,
+                vertices: false
+            })
+        };
 
         this._displayMeshes = {
 
-            plane: gizmoNode.addChild(new Mesh(gizmoNode, {
-                geometry: new ReadableGeometry(gizmoNode, {
-                    primitive: "triangles",
-                    positions: [
-                        0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
-                        -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
-                        0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
-                        -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
-                    ],
-                    indices: [0, 1, 2, 2, 3, 0]
-                }),
-                material: new PhongMaterial(gizmoNode, {
-                    emissive: [0, 0, 0],
-                    diffuse: [0, 0, 0],
-                    backfaces: true
-                }),
-                opacity: 0.5,
-                // ghosted: true,
-                ghostMaterial: new EmphasisMaterial(gizmoNode, {
-                    edges: false,
-                    filled: true,
-                    fillColor: [1, 1, 0],
-                    fillAlpha: 0.2,
-                    backfaces: true
-                }),
-                pickable: false,
-                collidable: true,
-                clippable: false,
-                visible: false,
-                scale: [10.4, 10.4, 1]
-            }), NO_STATE_INHERIT),
+            // plane: rootNode.addChild(new Mesh(rootNode, {
+            //     geometry: new ReadableGeometry(rootNode, {
+            //         primitive: "triangles",
+            //         positions: [
+            //             0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
+            //             -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
+            //             0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
+            //             -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
+            //         ],
+            //         indices: [0, 1, 2, 2, 3, 0]
+            //     }),
+            //     material: new PhongMaterial(rootNode, {
+            //         emissive: [0, 0.0, 0],
+            //         diffuse: [0, 0, 0],
+            //         backfaces: true
+            //     }),
+            //     opacity: 0.6,
+            //      ghosted: true,
+            //     ghostMaterial: new EmphasisMaterial(rootNode, {
+            //         edges: false,
+            //         filled: true,
+            //         fillColor: [1, 1, 0],
+            //         fillAlpha: 0.2,
+            //         backfaces: true
+            //     }),
+            //     pickable: false,
+            //     collidable: true,
+            //     clippable: false,
+            //     visible: false,
+            //     scale: [2.4, 2.4, 1]
+            // }), NO_STATE_INHERIT),
 
-            planeFrame: gizmoNode.addChild(new Mesh(gizmoNode, { // Visible frame
-                geometry: new ReadableGeometry(gizmoNode, buildTorusGeometry({
+            planeFrame: rootNode.addChild(new Mesh(rootNode, { // Visible frame
+                geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
                     center: [0, 0, 0],
                     radius: 1.7,
                     tube: tubeRadius * 2,
@@ -168,11 +345,11 @@ class SectionPlaneControl {
                     tubeSegments: 4,
                     arc: Math.PI * 2.0
                 })),
-                material: new PhongMaterial(gizmoNode, {
+                material: new PhongMaterial(rootNode, {
                     emissive: [1, 1, 0]
                 }),
                 //highlighted: true,
-                highlightMaterial: new EmphasisMaterial(gizmoNode, {
+                highlightMaterial: new EmphasisMaterial(rootNode, {
                     edges: false,
                     edgeColor: [0.8, 0.8, 0.8],
                     filled: true,
@@ -185,12 +362,379 @@ class SectionPlaneControl {
                 visible: false,
                 scale: [1, 1, .1],
                 rotation: [0, 0, 45]
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            xCurve: rootNode.addChild(new Mesh(rootNode, { // Red hoop about Y-axis
+                geometry: shapes.curve,
+                material: materials.red,
+                matrix: (function () {
+                    const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
+                    const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate1, rotate2, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xCurveHandle: rootNode.addChild(new Mesh(rootNode, { // Red hoop about Y-axis
+                geometry: shapes.curveHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
+                    const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate1, rotate2, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.red,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0., -0.07, -0.8, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    const rotate = math.rotationMat4v(0 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.red,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0.0, -0.8, -0.07, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            yCurve: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.curve,
+                material: materials.green,
+                rotation: [-90, 0, 0],
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yCurveHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.curveHandle,
+                material: materials.pickable,
+                rotation: [-90, 0, 0],
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.green,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0.07, 0, -0.8, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.green,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0.8, 0.0, -0.07, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            zCurve: rootNode.addChild(new Mesh(rootNode, { // Blue hoop about Z-axis
+                geometry: shapes.curve,
+                material: materials.blue,
+                matrix: math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zCurveHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.curveHandle,
+                material: materials.pickable,
+                matrix: math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zCurveCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.blue,
+                matrix: (function () {
+                    const translate = math.translateMat4c(.8, -0.07, 0, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    return math.mulMat4(translate, scale, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.blue,
+                matrix: (function () {
+                    const translate = math.translateMat4c(.05, -0.8, 0, math.identityMat4());
+                    const scale = math.scaleMat4v([0.6, 0.6, 0.6], math.identityMat4());
+                    const rotate = math.rotationMat4v(90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(math.mulMat4(translate, scale, math.identityMat4()), rotate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            ball: rootNode.addChild(new Mesh(rootNode, {
+                geometry: new ReadableGeometry(rootNode, buildBoxGeometry({
+                    xSize: 0.05,
+                    ySize: 0.05,
+                    zSize: 0.05
+                })),
+                //highlighted: true,
+                highlightMaterial: materials.highlightBall,
+                material: materials.ball,
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            xAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.red,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xAxis: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axis,
+                material: materials.red,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xAxisHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axisHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            yAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.green,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                opacity: 0.2
+            }), NO_STATE_INHERIT),
+
+            yShaft: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axis,
+                material: materials.green,
+                position: [0, -radius / 2, 0],
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yShaftHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axisHandle,
+                material: materials.pickable,
+                position: [0, -radius / 2, 0],
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            //----------------------------------------------------------------------------------------------------------
+            //
+            //----------------------------------------------------------------------------------------------------------
+
+            zAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHead,
+                material: materials.blue,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: true,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+
+            zShaft: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axis,
+                material: materials.blue,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                clippable: false,
+                pickable: false,
+                collidable: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zAxisHandle: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.axisHandle,
+                material: materials.pickable,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius / 2, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                clippable: false,
+                pickable: true,
+                collidable: true,
+                visible: false
             }), NO_STATE_INHERIT)
         };
 
         this._affordanceMeshes = {
-            planeFrame: gizmoNode.addChild(new Mesh(gizmoNode, {
-                geometry: new ReadableGeometry(gizmoNode, buildTorusGeometry({
+
+            planeFrame: rootNode.addChild(new Mesh(rootNode, {
+                geometry: new ReadableGeometry(rootNode, buildTorusGeometry({
                     center: [0, 0, 0],
                     radius: 2,
                     tube: tubeRadius,
@@ -198,13 +742,13 @@ class SectionPlaneControl {
                     tubeSegments: 4,
                     arc: Math.PI * 2.0
                 })),
-                material: new PhongMaterial(gizmoNode, {
+                material: new PhongMaterial(rootNode, {
                     ambient: [1, 1, 1],
                     diffuse: [0, 0, 0],
                     emissive: [1, 1, 0]
                 }),
                 highlighted: true,
-                highlightMaterial: new EmphasisMaterial(gizmoNode, {
+                highlightMaterial: new EmphasisMaterial(rootNode, {
                     edges: false,
                     filled: true,
                     fillColor: [1, 1, 0],
@@ -216,6 +760,89 @@ class SectionPlaneControl {
                 visible: false,
                 scale: [1, 1, 1],
                 rotation: [0, 0, 45]
+            }), NO_STATE_INHERIT),
+
+            xHoop: rootNode.addChild(new Mesh(rootNode, { // Full 
+                geometry: shapes.hoop,
+                material: materials.red,
+                highlighted: true,
+                highlightMaterial: materials.highlightRed,
+                matrix: (function () {
+                    const rotate2 = math.rotationMat4v(90 * math.DEGTORAD, [0, 1, 0], math.identityMat4());
+                    const rotate1 = math.rotationMat4v(270 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate1, rotate2, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yHoop: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.hoop,
+                material: materials.green,
+                highlighted: true,
+                highlightMaterial: materials.highlightGreen,
+                rotation: [-90, 0, 0],
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zHoop: rootNode.addChild(new Mesh(rootNode, { // Blue hoop about Z-axis
+                geometry: shapes.hoop,
+                material: materials.blue,
+                highlighted: true,
+                highlightMaterial: materials.highlightBlue,
+                matrix: math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4()),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                backfaces: true,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            xAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadBig,
+                material: materials.red,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0, 0, 1], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            yAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadBig,
+                material: materials.green,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(180 * math.DEGTORAD, [1, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
+            }), NO_STATE_INHERIT),
+
+            zAxisArrow: rootNode.addChild(new Mesh(rootNode, {
+                geometry: shapes.arrowHeadBig,
+                material: materials.blue,
+                matrix: (function () {
+                    const translate = math.translateMat4c(0, radius + .1, 0, math.identityMat4());
+                    const rotate = math.rotationMat4v(-90 * math.DEGTORAD, [0.8, 0, 0], math.identityMat4());
+                    return math.mulMat4(rotate, translate, math.identityMat4());
+                })(),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false
             }), NO_STATE_INHERIT)
         };
     }
@@ -227,23 +854,28 @@ class SectionPlaneControl {
         var over = false;
 
         const DRAG_ACTIONS = {
-            none: -1
+            none: -1,
+            xTranslate: 0,
+            yTranslate: 1,
+            zTranslate: 2,
+            xRotate: 3,
+            yRotate: 4,
+            zRotate: 5
         };
 
-        const gizmoNode = this._gizmoNode;
+        const rootNode = this._rootNode;
 
-        var hoverMesh = null;
         var nextDragAction = null; // As we hover over an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
-        var lastCanvasPos = math.vec2();
+        const lastCanvasPos = math.vec2();
 
         const xBaseAxis = math.vec3([1, 0, 0]);
         const yBaseAxis = math.vec3([0, 1, 0]);
         const zBaseAxis = math.vec3([0, 0, 1]);
 
-        const canvas = this.viewer.scene.canvas.canvas;
-        const camera = this.viewer.camera;
-        const scene = this.viewer.scene;
+        const canvas = this._viewer.scene.canvas.canvas;
+        const camera = this._viewer.camera;
+        const scene = this._viewer.scene;
 
         canvas.oncontextmenu = function (e) {
             e.preventDefault();
@@ -253,22 +885,19 @@ class SectionPlaneControl {
             const tempVec3a = math.vec3([0, 0, 0]);
             var distDirty = true;
             var lastDist = -1;
-            self._onCameraViewMatrix = scene.camera.on("viewMatrix", function () {
+            this._onCameraViewMatrix = scene.camera.on("viewMatrix", () => {
                 distDirty = true;
             });
-            self._onCameraProjMatrix = scene.camera.on("projMatrix", function () {
+            this._onCameraProjMatrix = scene.camera.on("projMatrix", () => {
                 distDirty = true;
             });
-            self._onSceneTick = scene.on("tick", function () {
-                //  if (distDirty) {
-                var dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, gizmoNode.position, tempVec3a)));
+            this._onSceneTick = scene.on("tick", () => {
+                var dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, rootNode.position, tempVec3a)));
                 if (dist !== lastDist) {
                     var scale = 10 * (dist / 50);
-                    gizmoNode.scale = [scale, scale, scale];
+                    rootNode.scale = [scale, scale, scale];
                     lastDist = dist;
                 }
-                distDirty = false;
-                //  }
             });
         }
 
@@ -299,7 +928,7 @@ class SectionPlaneControl {
         const localToWorldVec = (function () {
             const mat = math.mat4();
             return function (localVec, worldVec) {
-                math.quaternionToMat4(self._gizmoNode.quaternion, mat);
+                math.quaternionToMat4(self._rootNode.quaternion, mat);
                 math.transformVec3(mat, localVec, worldVec);
                 math.normalizeVec3(worldVec);
                 return worldVec;
@@ -335,10 +964,45 @@ class SectionPlaneControl {
                 self._pos[0] += worldAxis[0] * dot;
                 self._pos[1] += worldAxis[1] * dot;
                 self._pos[2] += worldAxis[2] * dot;
-                self._gizmoNode.position = self._pos;
+                self._rootNode.position = self._pos;
                 if (self.sectionPlane) {
                     self.sectionPlane.pos = self._pos;
                 }
+            }
+        })();
+
+        var dragRotateSectionPlane = (function () {
+            const p1 = math.vec4();
+            const p2 = math.vec4();
+            const c = math.vec4();
+            const worldAxis = math.vec4();
+            return function (baseAxis, fromMouse, toMouse) {
+                localToWorldVec(baseAxis, worldAxis);
+                const hasData = getPointerPlaneIntersect(fromMouse, worldAxis, p1) && getPointerPlaneIntersect(toMouse, worldAxis, p2);
+                if (!hasData) { // Find intersections with view plane and project down to origin
+                    const planeNormal = getTranslationPlane(worldAxis, fromMouse, toMouse);
+                    getPointerPlaneIntersect(fromMouse, planeNormal, p1, 1); // Ensure plane moves closer to camera so angles become workable
+                    getPointerPlaneIntersect(toMouse, planeNormal, p2, 1);
+                    var dot = math.dotVec3(p1, worldAxis);
+                    p1[0] -= dot * worldAxis[0];
+                    p1[1] -= dot * worldAxis[1];
+                    p1[2] -= dot * worldAxis[2];
+                    dot = math.dotVec3(p2, worldAxis);
+                    p2[0] -= dot * worldAxis[0];
+                    p2[1] -= dot * worldAxis[1];
+                    p2[2] -= dot * worldAxis[2];
+                }
+                math.normalizeVec3(p1);
+                math.normalizeVec3(p2);
+                dot = math.dotVec3(p1, p2);
+                dot = math.clamp(dot, -1.0, 1.0); // Rounding errors cause dot to exceed allowed range
+                var incDegrees = Math.acos(dot) * math.RADTODEG;
+                math.cross3Vec3(p1, p2, c);
+                if (math.dotVec3(c, worldAxis) < 0.0) {
+                    incDegrees = -incDegrees;
+                }
+                self._rootNode.rotate(baseAxis, incDegrees);
+                rotateSectionPlane();
             }
         })();
 
@@ -371,13 +1035,100 @@ class SectionPlaneControl {
             }
         })();
 
+        const rotateSectionPlane = (function () {
+            const dir = math.vec3();
+            const mat = math.mat4();
+            return function () {
+                if (self.sectionPlane) {
+                    math.quaternionToMat4(rootNode.quaternion, mat);  // << ---
+                    math.transformVec3(mat, [0, 0, 1], dir);
+                    self._sectionPlane.dir = dir;
+                }
+            };
+        })();
+
         {
             var mouseDownLeft;
             var mouseDownMiddle;
             var mouseDownRight;
             var down = false;
-            var lastHighlightedMesh;
-            var lastShownMesh;
+            var lastAffordanceMesh;
+
+            this._onCameraControlHover = self._viewer.cameraControl.on("hoverEnter", (hit) => {
+                if (down) {
+                    return;
+                }
+                over = false;
+                if (lastAffordanceMesh) {
+                    lastAffordanceMesh.visible = false;
+                }
+                var affordanceMesh;
+                const meshId = hit.entity.id;
+                switch (meshId) {
+
+                    case self._displayMeshes.xAxisArrowHandle.id:
+                        affordanceMesh = self._affordanceMeshes.xAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.xTranslate;
+                        break;
+
+                    case self._displayMeshes.xAxisHandle.id:
+                        affordanceMesh = self._affordanceMeshes.xAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.xTranslate;
+                        break;
+
+                    case self._displayMeshes.yAxisArrowHandle.id:
+                        affordanceMesh = self._affordanceMeshes.yAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.yTranslate;
+                        break;
+
+                    case self._displayMeshes.yShaftHandle.id:
+                        affordanceMesh = self._affordanceMeshes.yAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.yTranslate;
+                        break;
+
+                    case self._displayMeshes.zAxisArrowHandle.id:
+                        affordanceMesh = self._affordanceMeshes.zAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.zTranslate;
+                        break;
+
+                    case self._displayMeshes.zAxisHandle.id:
+                        affordanceMesh = self._affordanceMeshes.zAxisArrow;
+                        nextDragAction = DRAG_ACTIONS.zTranslate;
+                        break;
+
+                    case self._displayMeshes.xCurveHandle.id:
+                        affordanceMesh = self._affordanceMeshes.xHoop;
+                        nextDragAction = DRAG_ACTIONS.xRotate;
+                        break;
+
+                    case self._displayMeshes.yCurveHandle.id:
+                        affordanceMesh = self._affordanceMeshes.yHoop;
+                        nextDragAction = DRAG_ACTIONS.yRotate;
+                        break;
+
+                    case self._displayMeshes.zCurveHandle.id:
+                        affordanceMesh = self._affordanceMeshes.zHoop;
+                        nextDragAction = DRAG_ACTIONS.zRotate;
+                        break;
+
+                    default:
+                        nextDragAction = DRAG_ACTIONS.none;
+                        return; // Not clicked an arrow or hoop
+                }
+                if (affordanceMesh) {
+                    affordanceMesh.visible = true;
+                }
+                lastAffordanceMesh = affordanceMesh;
+                over = true;
+            });
+
+            this._onCameraControlHoverLeave = self._viewer.cameraControl.on("hoverOut", (hit) => {
+                if (lastAffordanceMesh) {
+                    lastAffordanceMesh.visible = false;
+                }
+                lastAffordanceMesh = null;
+                nextDragAction = DRAG_ACTIONS.none;
+            });
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 if (!self._visible) {
@@ -386,7 +1137,7 @@ class SectionPlaneControl {
                 if (!over) {
                     return;
                 }
-                self.viewer.cameraControl.pointerEnabled = (nextDragAction === DRAG_ACTIONS.none);
+                self._viewer.cameraControl.pointerEnabled = (nextDragAction === DRAG_ACTIONS.none);
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = true;
@@ -415,7 +1166,28 @@ class SectionPlaneControl {
                 }
                 const x = canvasPos[0];
                 const y = canvasPos[1];
-                dragTranslateSectionPlane(zBaseAxis, lastCanvasPos, canvasPos);
+
+                switch (dragAction) {
+                    case DRAG_ACTIONS.xTranslate:
+                        dragTranslateSectionPlane(xBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                    case DRAG_ACTIONS.yTranslate:
+                        dragTranslateSectionPlane(yBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                    case DRAG_ACTIONS.zTranslate:
+                        dragTranslateSectionPlane(zBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                    case DRAG_ACTIONS.xRotate:
+                        dragRotateSectionPlane(xBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                    case DRAG_ACTIONS.yRotate:
+                        dragRotateSectionPlane(yBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                    case DRAG_ACTIONS.zRotate:
+                        dragRotateSectionPlane(zBaseAxis, lastCanvasPos, canvasPos);
+                        break;
+                }
+
                 lastCanvasPos[0] = x;
                 lastCanvasPos[1] = y;
             });
@@ -424,7 +1196,7 @@ class SectionPlaneControl {
                 if (!self._visible) {
                     return;
                 }
-                self.viewer.cameraControl.pointerEnabled = true;
+                self._viewer.cameraControl.pointerEnabled = true;
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = false;
@@ -474,11 +1246,31 @@ class SectionPlaneControl {
     }
 
     _unbindEvents() {
-        // TODO
+
+        const viewer = this._viewer;
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+        const camera = viewer.camera;
+        const cameraControl = viewer.cameraControl;
+
+        scene.off(this._onSceneTick);
+
+        canvas.removeEventListener("mousedown", this._canvasMouseDownListener);
+        canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
+        canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
+        canvas.removeEventListener("mouseenter", this._canvasMouseEnterListener);
+        canvas.removeEventListener("mouseleave", this._canvasMouseLeaveListener);
+        canvas.removeEventListener("wheel", this._canvasWheelListener);
+
+        camera.off(this._onCameraViewMatrix);
+        camera.off(this._onCameraProjMatrix);
+
+        cameraControl.off(this._onCameraControlHover);
+        cameraControl.off(this._onCameraControlHoverLeave);
     }
 
     _destroyNodes() {
-        this._gizmoNode.destroy();
+        this._rootNode.destroy();
         this._displayMeshes = {};
         this._affordanceMeshes = {};
     }
