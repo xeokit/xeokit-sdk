@@ -16,19 +16,15 @@ const quat = new Float32Array(4);
 /**
  * Controls a {@link SectionPlane} with mouse and touch input.
  *
- * Created by {@link SectionPlanesPlugin#createSectionPlane}.
- *
- * Registered by {@link SectionPlaneControl#id} in {@link SectionPlanesPlugin#sectionPlaneControls}.
- *
- * Has the same {@link SectionPlaneControl#id} as its SectionPlane's {@link SectionPlane#id}.
+ * @private
  */
-class SectionPlaneControl {
+class Control {
 
     /** @private */
     constructor(plugin) {
 
         /**
-         * ID of this SectionPlaneControl.
+         * ID of this Control.
          *
          * SectionPlaneControls are mapped by this ID in {@link SectionPlanesPlugin#sectionPlaneControls}.
          *
@@ -38,7 +34,7 @@ class SectionPlaneControl {
         this.id = null;
 
         /**
-         * The {@link SectionPlanesPlugin} that manages this SectionPlaneControl.
+         * The {@link SectionPlanesPlugin} that manages this Control.
          *
          * @property plugin
          * @type {SectionPlanesPlugin}
@@ -59,7 +55,7 @@ class SectionPlaneControl {
     }
 
     /**
-     * Called by SectionPlanesPlugin to assign this SectionPlaneControl to a SectionPlane.
+     * Called by SectionPlanesPlugin to assign this Control to a SectionPlane.
      * SectionPlanesPlugin keeps SectionPlaneControls in a reuse pool.
      * @private
      */
@@ -73,7 +69,7 @@ class SectionPlaneControl {
     }
 
     /**
-     * Gets the {@link SectionPlane} controlled by this SectionPlaneControl.
+     * Gets the {@link SectionPlane} controlled by this Control.
      * @returns {SectionPlane} The SectionPlane.
      */
     get sectionPlane() {
@@ -93,7 +89,7 @@ class SectionPlaneControl {
     }
 
     /**
-     * Sets if this SectionPlaneControl is visible.
+     * Sets if this Control is visible.
      *
      * @type {Boolean}
      */
@@ -118,7 +114,7 @@ class SectionPlaneControl {
     }
 
     /**
-     * Gets if this SectionPlaneControl is visible.
+     * Gets if this Control is visible.
      *
      * @type {Boolean}
      */
@@ -127,7 +123,7 @@ class SectionPlaneControl {
     }
 
     /**
-     * Builds the Entities that represent this SectionPlaneControl.
+     * Builds the Entities that represent this Control.
      * @private
      */
     _createNodes() {
@@ -1054,7 +1050,10 @@ class SectionPlaneControl {
             var down = false;
             var lastAffordanceMesh;
 
-            this._onCameraControlHover = self._viewer.cameraControl.on("hoverEnter", (hit) => {
+            this._onCameraControlHover = this._viewer.cameraControl.on("hoverEnter", (hit) => {
+                if (!this._visible) {
+                    return;
+                }
                 if (down) {
                     return;
                 }
@@ -1066,48 +1065,48 @@ class SectionPlaneControl {
                 const meshId = hit.entity.id;
                 switch (meshId) {
 
-                    case self._displayMeshes.xAxisArrowHandle.id:
-                        affordanceMesh = self._affordanceMeshes.xAxisArrow;
+                    case this._displayMeshes.xAxisArrowHandle.id:
+                        affordanceMesh = this._affordanceMeshes.xAxisArrow;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
-                    case self._displayMeshes.xAxisHandle.id:
-                        affordanceMesh = self._affordanceMeshes.xAxisArrow;
+                    case this._displayMeshes.xAxisHandle.id:
+                        affordanceMesh = this._affordanceMeshes.xAxisArrow;
                         nextDragAction = DRAG_ACTIONS.xTranslate;
                         break;
 
-                    case self._displayMeshes.yAxisArrowHandle.id:
-                        affordanceMesh = self._affordanceMeshes.yAxisArrow;
+                    case this._displayMeshes.yAxisArrowHandle.id:
+                        affordanceMesh = this._affordanceMeshes.yAxisArrow;
                         nextDragAction = DRAG_ACTIONS.yTranslate;
                         break;
 
-                    case self._displayMeshes.yShaftHandle.id:
-                        affordanceMesh = self._affordanceMeshes.yAxisArrow;
+                    case this._displayMeshes.yShaftHandle.id:
+                        affordanceMesh = this._affordanceMeshes.yAxisArrow;
                         nextDragAction = DRAG_ACTIONS.yTranslate;
                         break;
 
-                    case self._displayMeshes.zAxisArrowHandle.id:
-                        affordanceMesh = self._affordanceMeshes.zAxisArrow;
+                    case this._displayMeshes.zAxisArrowHandle.id:
+                        affordanceMesh = this._affordanceMeshes.zAxisArrow;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case self._displayMeshes.zAxisHandle.id:
-                        affordanceMesh = self._affordanceMeshes.zAxisArrow;
+                    case this._displayMeshes.zAxisHandle.id:
+                        affordanceMesh = this._affordanceMeshes.zAxisArrow;
                         nextDragAction = DRAG_ACTIONS.zTranslate;
                         break;
 
-                    case self._displayMeshes.xCurveHandle.id:
-                        affordanceMesh = self._affordanceMeshes.xHoop;
+                    case this._displayMeshes.xCurveHandle.id:
+                        affordanceMesh = this._affordanceMeshes.xHoop;
                         nextDragAction = DRAG_ACTIONS.xRotate;
                         break;
 
-                    case self._displayMeshes.yCurveHandle.id:
-                        affordanceMesh = self._affordanceMeshes.yHoop;
+                    case this._displayMeshes.yCurveHandle.id:
+                        affordanceMesh = this._affordanceMeshes.yHoop;
                         nextDragAction = DRAG_ACTIONS.yRotate;
                         break;
 
-                    case self._displayMeshes.zCurveHandle.id:
-                        affordanceMesh = self._affordanceMeshes.zHoop;
+                    case this._displayMeshes.zCurveHandle.id:
+                        affordanceMesh = this._affordanceMeshes.zHoop;
                         nextDragAction = DRAG_ACTIONS.zRotate;
                         break;
 
@@ -1122,7 +1121,10 @@ class SectionPlaneControl {
                 over = true;
             });
 
-            this._onCameraControlHoverLeave = self._viewer.cameraControl.on("hoverOut", (hit) => {
+            this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOut", (hit) => {
+                if (!this._visible) {
+                    return;
+                }
                 if (lastAffordanceMesh) {
                     lastAffordanceMesh.visible = false;
                 }
@@ -1131,13 +1133,13 @@ class SectionPlaneControl {
             });
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
                 if (!over) {
                     return;
                 }
-                self._viewer.cameraControl.pointerEnabled = (nextDragAction === DRAG_ACTIONS.none);
+                this._viewer.cameraControl.pointerEnabled = (nextDragAction === DRAG_ACTIONS.none);
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = true;
@@ -1154,7 +1156,7 @@ class SectionPlaneControl {
             });
 
             canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
                 if (!over) {
@@ -1193,10 +1195,13 @@ class SectionPlaneControl {
             });
 
             canvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
-                self._viewer.cameraControl.pointerEnabled = true;
+                if (!down) {
+                    return;
+                }
+                this._viewer.cameraControl.pointerEnabled = true;
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = false;
@@ -1214,21 +1219,21 @@ class SectionPlaneControl {
             });
 
             canvas.addEventListener("mouseenter", this._canvasMouseEnterListener = () => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
                 over = true;
             });
 
             canvas.addEventListener("mouseleave", this._canvasMouseLeaveListener = () => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
                 over = false;
             });
 
             canvas.addEventListener("wheel", this._canvasWheelListener = (e) => {
-                if (!self._visible) {
+                if (!this._visible) {
                     return;
                 }
                 var delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
@@ -1276,4 +1281,4 @@ class SectionPlaneControl {
     }
 }
 
-export {SectionPlaneControl};
+export {Control};

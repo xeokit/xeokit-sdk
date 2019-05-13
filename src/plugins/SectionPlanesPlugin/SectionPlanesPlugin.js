@@ -1,17 +1,17 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
-import {SectionPlaneControl} from "./SectionPlaneControl.js";
-import {SectionPlanesOverview} from "./SectionPlanesOverview.js";
+import {Control} from "./Control.js";
+import {Overview} from "./Overview.js";
 
 const tempAABB = math.AABB3();
 const tempVec3 = math.vec3();
 
 /**
- * {@link Viewer} plugin that manages user cross-section planes.
+ * {@link Viewer} plugin that manages {@link SectionPlane}s.
  *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
- * to create a {@link SectionPlane} to slice it in half.
+ * to slice it open with two {@link SectionPlane}s.
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Schependomlaan)]
  *
@@ -20,34 +20,73 @@ const tempVec3 = math.vec3();
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
  *
+ * // Create a Viewer and arrange its Camera
+ *
  * const viewer = new Viewer({
- *     canvasId: "myCanvas",
- *     transparent: true
+ *     canvasId: "myCanvas"
  * });
  *
  * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
  * viewer.scene.camera.look = [10.97, 5.82, -11.22];
  * viewer.scene.camera.up = [0.36, 0.83, 0.40];
  *
+ * // Add a GLTFLoaderPlugin
+ *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
- * const sectionPlanes = new SectionPlanesPlugin(viewer);
+ * // Add a SectionPlanesPlugin
+ *
+ * const sectionPlanes = new SectionPlanesPlugin(viewer, {
+ *     overview: {
+ *         visible: true,
+ *         size: 300
+ *     }
+ * });
+ *
+ * // Show the SectionPlanePlugin's SectionPlane overview gizmo at bottom-right of the Viewer canvas.
+ * // The overview gizmo shows a simplified 3D view containing 3D planes that represent the SectionPlanes.
+ * // We can click each plane in the overview to activate the 3D editing gizmo for its SectionPlane.
+ *
+ * sectionPlanes.overview.setVisible(true);
+ * sectionPlanes.overview.setSize(250);
+ * sectionPlanes.overview.setAlignment("bottomRight");
+ * sectionPlanes.overview.setRightMargin(5);
+ * sectionPlanes.overview.setBottomMargin(5);
+ *
+ * // Load a model
  *
  * const model = gltfLoader.load({
  *     id: "myModel",
  *     src: "./models/gltf/schependomlaan/scene.gltf"
  * });
  *
- * const sectionPlane = sectionPlanes.createSectionPlane({
+ * // Create a couple of section planes
+ * // These will be shown in the overview gizmo
+ *
+ * sectionPlanes.createSectionPlane({
  *     id: "mySectionPlane",
- *     pos: [0, 0, 0],
+ *     pos: [10.97, 5.82, -11.22],
  *     dir: [0.5, 0.0, 0.5]
  * });
  *
- * const sectionPlaneControl = sectionPlanes.sectionPlaneControls["mySectionPlane"];
+ * sectionPlanes.createSectionPlane({
+ *     id: "mySectionPlane2",
+ *     pos: [10.97, 5.82, -11.22],
+ *     dir: [0.5, -0.2, -0.5]
+ * });
  *
- * sectionPlaneControl.setVisible(false);
+ * // Show the SectionPlanePlugin's 3D editing gizmo,
+ * // to interactively reposition one of our SectionPlanes
  *
+ * sectionPlanes.showControl("mySectionPlane2");
+ *
+ * const mySectionPlane2 = sectionPlanes.sectionPlanes["mySectionPlane2"];
+ *
+ * // Programmatically reposition one of our SectionPlanes
+ * // This also updates its position as shown in the overview gizmo
+ *
+ * mySectionPlane2.pos = [11.0, 6.-, -12];
+ * mySectionPlane2.dir = [0.4, 0.0, 0.5];
  * ````
  */
 class SectionPlanesPlugin extends Plugin {
@@ -58,20 +97,25 @@ class SectionPlanesPlugin extends Plugin {
      * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id="SectionPlanes"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {*} [cfg.overview={}] Optional initial configuration for the plugin's {@link Overview}.
+     * @param {String} [cfg.overview.visible=true] Initial visibility of the {@link Overview}.
+     * @param {String} [cfg.overview.alignment="bottomRight"] Initial alignment of the {@link Overview} within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * @param {String} [cfg.overview.size=200]
+     * @param {String} [cfg.overview.leftMargin=10] Initial margin between the {@link Overview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
+     * @param {String} [cfg.overview.rightMargin=10] Initial margin between the {@link Overview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
+     * @param {String} [cfg.overview.topMargin=10] Initial margin between the {@link Overview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
+     * @param {String} [cfg.overview.bottomMargin=10] Initial margin between the {@link Overview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
      */
     constructor(viewer, cfg = {}) {
 
         super("SectionPlanes", viewer);
 
-        this._freeSectionPlaneControls = [];
+        this._freeControls = [];
         this._sectionPlanes = viewer.scene.sectionPlanes;
-        this._sectionPlaneControls = {};
+        this._controls = {};
 
         const overviewCfg = cfg.overview || {};
 
-        this._activeControl = null;
-
-        this._overview = new SectionPlanesOverview(this, {
+        this._overview = new Overview(this, {
             alignment: overviewCfg.alignment,
             leftMargin: overviewCfg.leftMargin,
             rightMargin: overviewCfg.rightMargin,
@@ -81,27 +125,17 @@ class SectionPlanesPlugin extends Plugin {
             visible: overviewCfg.visible,
 
             onHoverEnterPlane: ((id) => {
-                this._overview.planes[id]._setHighlighted(true);
+                this._overview._setPlaneHighlighted(id, true);
             }),
 
             onHoverLeavePlane: ((id) => {
-                this._overview.planes[id]._setHighlighted(false);
+                this._overview._setPlaneHighlighted(id, false);
             }),
 
             onClickedPlane: ((id) => {
-                const sectionPlaneControl = this._sectionPlaneControls[id];
-                if (this._activeControl) {
-                    this._overview.planes[id]._setSelected(false);
-                    this._activeControl.setVisible(false);
-                    if (this._activeControl.sectionPlane.id === id) { // Toggle visibility
-                        this._activeControl = null;
-                        return;
-                    }
-                }
-                sectionPlaneControl.setVisible(true);
-                this._overview.planes[id]._setSelected(true);
-                this._activeControl = sectionPlaneControl;
-                const sectionPlanePos = sectionPlaneControl.sectionPlane.pos;
+                this.showControl(id);
+                const sectionPlane = this.sectionPlanes[id];
+                const sectionPlanePos = sectionPlane.pos;
                 tempAABB.set(this.viewer.scene.aabb);
                 math.getAABB3Center(tempAABB, tempVec3);
                 tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
@@ -116,19 +150,16 @@ class SectionPlanesPlugin extends Plugin {
                 })
             }),
 
-            onClickedNothing: cfg.onClickedNothing || (() => {
-                if (this._activeControl) {
-                    this._activeControl.setVisible(false);
-                    this._activeControl = null;
-                }
+            onClickedNothing: (() => {
+                this.hideControl();
             })
         });
     }
 
     /**
-     * Gets the {@link SectionPlanesOverview}, which manages an interactive 3D overview of the {@link SectionPlane}s created by this SectionPlanesPlugin.
+     * Gets the {@link Overview}, which manages an interactive 3D overview of the {@link SectionPlane}s created by this SectionPlanesPlugin.
      *
-     * @type {SectionPlanesOverview}
+     * @type {Overview}
      */
     get overview() {
         return this._overview;
@@ -144,12 +175,95 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     /**
-     * Returns a map of the {@link SectionPlaneControl}s created by this SectionPlanesPlugin.
+     * Creates a {@link SectionPlane}.
      *
-     * @returns {{String:SectionPlaneControl}} A map containing the {@link SectionPlaneControl}s, each mapped to its {@link SectionPlaneControl#id}
+     * The {@link SectionPlane} will be registered by {@link SectionPlane#id} in {@link SectionPlanesPlugin#sectionPlanes}.
+     *
+     * @param {Object} params {@link SectionPlane} configuration.
+     * @param {String} [params.id] Unique ID to assign to the {@link SectionPlane}. Must be unique among all components in the {@link Viewer}'s {@link Scene}. Auto-generated when omitted.
+     * @param {Number[]} [params.pos=0,0,0] World-space position of the {@link SectionPlane}.
+     * @param {Number[]} [params.dir=[0,0,-1]} World-space vector indicating the orientation of the {@link SectionPlane}.
+     * @param {Boolean} [params.active=true] Whether the {@link SectionPlane} is initially active. Only clips while this is true.
+     * @returns {SectionPlane} The new {@link SectionPlane}.
      */
-    get sectionPlaneControls() {
-        return this._sectionPlaneControls;
+    createSectionPlane(params) {
+        if (params.id !== undefined && params.id !== null && this.viewer.scene.components[params.id]) {
+            this.error("Viewer component with this ID already exists: " + params.id);
+            delete params.id;
+        }
+        const sectionPlane = new SectionPlane(this.viewer.scene, {
+            id: params.id,
+            pos: params.pos,
+            dir: params.dir,
+            active: true || params.active
+        });
+        const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this);
+        control._setSectionPlane(sectionPlane);
+        control.setVisible(false);
+        this._controls[sectionPlane.id] = control;
+        this._overview._addSectionPlane(sectionPlane);
+        return sectionPlane;
+    }
+
+    /**
+     * Shows the 3D editing gizmo for a {@link SectionPlane}.
+     *
+     * @param {String} id ID of the {@link SectionPlane}.
+     */
+    showControl(id) {
+        const control = this._controls[id];
+        if (!control) {
+            this.error("Control not found: " + id);
+            return;
+        }
+        this.hideControl();
+        control.setVisible(true);
+        this._overview._setPlaneSelected(id, true);
+    }
+
+    /**
+     * Hides the 3D {@link SectionPlane} editing gizmo if shown.
+     */
+    hideControl() {
+        for (var id in this._controls) {
+            if (this._controls.hasOwnProperty(id)) {
+                this._controls[id].setVisible(false);
+                this._overview._setPlaneSelected(id, false);
+            }
+        }
+    }
+
+    /**
+     * Destroys a {@link SectionPlane} created by this SectionPlanesPlugin.
+     *
+     * @param {String} id ID of the {@link SectionPlane}.
+     */
+    destroySectionPlane(id) {
+        var sectionPlane = this.viewer.scene.sectionPlanes[id];
+        if (!sectionPlane) {
+            this.error("SectionPlane not found: " + id);
+            return;
+        }
+        this._overview._removeSectionPlane(sectionPlane);
+        sectionPlane.destroy();
+        const control = this._controls[id];
+        if (!control) {
+            return;
+        }
+        control.setVisible(false);
+        control._setSectionPlane(null);
+        delete this._controls[sectionPlane.id];
+        this._freeControls.push(control);
+    }
+
+    /**
+     * Destroys all {@link SectionPlane}s created by this SectionPlanesPlugin.
+     */
+    clear() {
+        const ids = Object.keys(this._sectionPlanes);
+        for (var i = 0, len = ids.length; i < len; i++) {
+            this.destroySectionPlane(ids[i]);
+        }
     }
 
     /**
@@ -164,97 +278,22 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     /**
-     * Creates a {@link SectionPlane}.
-     *
-     * This method creates:
-     *
-     * * a {@link SectionPlane} in {@link SectionPlanesPlugin#sectionPlanes},
-     * * a {@link SectionPlaneControl} in {@link SectionPlanesPlugin#sectionPlaneControls}, and
-     * * a {@link SectionPlanesOverviewPlane} within the {@link SectionPlanesOverview}.
-     *
-     * @param {Object} params SectionPlane plane configuration.
-     * @param {String} [params.id] Unique ID to assign to the SectionPlane. Must be unique among all components in the Viewer. Auto-generated when omitted.
-     * @param {Number[]} [params.pos=0,0,0] World-space position of the sectionPlane plane.
-     * @param {Number[]} [params.dir=[0,0,-1]} World-space vector indicating the orientation of the SectionPlane.
-     * @param {Boolean} [params.active=true] Whether the SectionPlane is initially active. Only clips while this is true.
-     * @returns {SectionPlane} The new {@link SectionPlane}.
-     */
-    createSectionPlane(params) {
-        if (params.id !== undefined && params.id !== null && this.viewer.scene.components[params.id]) {
-            this.error("Viewer component with this ID already exists: " + params.id);
-            delete params.id;
-        }
-        const sectionPlane = new SectionPlane(this.viewer.scene, {
-            id: params.id,
-            pos: params.pos,
-            dir: params.dir,
-            active: true || params.active
-        });
-        const sectionPlaneControl = (this._freeSectionPlaneControls.length > 0) ? this._freeSectionPlaneControls.pop() : new SectionPlaneControl(this);
-        sectionPlaneControl._setSectionPlane(sectionPlane);
-        sectionPlaneControl.setVisible(false);
-        this._sectionPlaneControls[sectionPlane.id] = sectionPlaneControl;
-        this._overview._addSectionPlane(sectionPlane);
-        return sectionPlane;
-    }
-
-    /**
-     * Destroys a {@link SectionPlane} created by this SectionPlanesPlugin.
-     *
-     * Also destroys its {@link SectionPlaneControl} and {@link SectionPlanesOverviewPlane}.
-     *
-     * @param {String} id ID of the {@link SectionPlane}.
-     */
-    destroySectionPlane(id) {
-        var sectionPlane = this.viewer.scene.sectionPlanes[id];
-        if (!sectionPlane) {
-            this.error("SectionPlane not found: " + id);
-            return;
-        }
-        this._overview._removeSectionPlane(sectionPlane);
-        sectionPlane.destroy();
-        const sectionPlaneControl = this._sectionPlaneControls[id];
-        if (!sectionPlaneControl) {
-            return;
-        }
-        sectionPlaneControl.setVisible(false);
-        sectionPlaneControl._setSectionPlane(null);
-        delete this._sectionPlaneControls[sectionPlane.id];
-        this._freeSectionPlaneControls.push(sectionPlaneControl);
-        if (this._activeControl && this._activeControl.id === id) {
-            this._activeControl = null;
-        }
-    }
-
-    /**
-     * Destroys all {@link SectionPlane}s created by this SectionPlanesPlugin.
-     *
-     * Also destroys each SectionPlane's {@link SectionPlaneControl} and {@link SectionPlanesOverviewPlane}.
-     */
-    clear() {
-        const ids = Object.keys(this.viewer.scene.sectionPlanes);
-        for (var i = 0, len = ids.length; i < len; i++) {
-            this.destroySectionPlane(ids[i]);
-        }
-    }
-
-    /**
      * Destroys this SectionPlanesPlugin.
      *
-     * Also destroys each {@link SectionPlane}, {@link SectionPlaneControl} and {@link SectionPlanesOverviewPlane} created by this SectionPlanesPlugin.
+     * Also destroys each {@link SectionPlane} created by this SectionPlanesPlugin.
      */
     destroy() {
-        this._overview._destroy();
         this.clear();
-        this._destroyFreeSectionPlaneControls();
+        this._overview._destroy();
+        this._destroyFreeControls();
         super.destroy();
     }
 
-    _destroyFreeSectionPlaneControls() {
-        var sectionPlaneControl = this._freeSectionPlaneControls.pop();
-        while (sectionPlaneControl) {
-            sectionPlaneControl._destroy();
-            sectionPlaneControl = this._freeSectionPlaneControls.pop();
+    _destroyFreeControls() {
+        var control = this._freeControls.pop();
+        while (control) {
+            control._destroy();
+            control = this._freeControls.pop();
         }
     }
 }

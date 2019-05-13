@@ -19,6 +19,7 @@
 <canvas id="myCanvas"></canvas>
 <div id="info">
     <h1>Section planes</h1>
+    <p>Programmatically creating section planes</p>
     <ul>
         <li>
             <a target="_other"
@@ -62,7 +63,7 @@
     viewer.scene.camera.up = [0.36, 0.83, 0.40];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a GLTFModelsPlugin - we'll use this to load the model geometry and IFC metadata
+    // Add a GLTFModelsPlugin - we'll use this to load the model geometry
     //------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -71,7 +72,20 @@
     // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
     //------------------------------------------------------------------------------------------------------------------
 
-    const sectionPlanes = new SectionPlanesPlugin(viewer);
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overview: {
+            visible: true,
+            size: 300
+        }
+    });
+
+    // Show the SectionPlane overview gizmo at bottom-right of the Viewer canvas
+
+    sectionPlanes.overview.setVisible(true);
+    sectionPlanes.overview.setSize(250);
+    sectionPlanes.overview.setAlignment("bottomRight");
+    sectionPlanes.overview.setRightMargin(5);
+    sectionPlanes.overview.setBottomMargin(5);
 
     //------------------------------------------------------------------------------------------------------------------
     // Load the glTF model and IFC metadata
@@ -83,14 +97,39 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a cross-section plane
+    // Create a couple of cross-section planes
     //------------------------------------------------------------------------------------------------------------------
 
     sectionPlanes.createSectionPlane({
-        id: "myClip",
-        pos: [0, 0, 0],
+        id: "mySectionPlane",
+        pos: [10.97, 5.82, -11.22],
         dir: [0.5, 0.0, 0.5]
     });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane2",
+        pos: [10.97, 5.82, -11.22],
+        dir: [0.5, -0.2, -0.5]
+    });
+
+    // viewer.scene.input.on("mouseup", function (coords) {
+    //     var hit = viewer.scene.pick({
+    //         canvasPos: coords,
+    //         pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+    //     });
+    //     if (hit) {
+    //         if (hit.entity.isObject) { // Only create CrossSections on surfaces of model objects, not on gizmos etc
+    //
+    //             const sectionPlane = sectionPlanes.createSectionPlane({
+    //                 canvasPos: hit.canvasPos,
+    //                 pos: hit.worldPos,
+    //                 dir: [-hit.worldNormal[0], -hit.worldNormal[1], -hit.worldNormal[2]]
+    //             });
+    //
+    //             sectionPlanes.showControl(sectionPlane.id);
+    //         }
+    //     }
+    // });
 
 </script>
 

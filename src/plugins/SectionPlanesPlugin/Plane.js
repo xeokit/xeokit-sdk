@@ -5,11 +5,11 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 
 
 /**
- * Renders a 3D plane within a {@link SectionPlanesOverview} to indicate its {@link SectionPlane}'s current position and orientation.
+ * Renders a 3D plane within a {@link Overview} to indicate its {@link SectionPlane}'s current position and orientation.
  *
- * Click the 3D plane to activate or deactivate the SectionPlane's {@link SectionPlaneControl}.
+ * @private
  */
-class SectionPlanesOverviewPlane {
+class Plane {
 
     /** @private */
     constructor(overview, overviewScene, sectionPlane) {
@@ -22,18 +22,11 @@ class SectionPlanesOverviewPlane {
         this.id = sectionPlane.id;
 
         /**
-         * The {@link SectionPlanesOverview} that manages this SectionPlanesOverviewPlane.
-         *
-         * @type {SectionPlanesOverview}
-         */
-        this.overview = overview;
-
-        /**
          * The {@link SectionPlane} represented by this SectionPlanesOverviewPlane.
          *
          * @type {SectionPlane}
          */
-        this.sectionPlane = sectionPlane;
+        this._sectionPlane = sectionPlane;
 
         this._mesh = new Mesh(overviewScene, {
             id: sectionPlane.id,
@@ -67,20 +60,20 @@ class SectionPlanesOverviewPlane {
 
             const update = () => {
 
-                const origin = this.sectionPlane.scene.center;
+                const origin = this._sectionPlane.scene.center;
 
-                const negDir = [-this.sectionPlane.dir[0], -this.sectionPlane.dir[1], -this.sectionPlane.dir[2]];
-                math.subVec3(origin, this.sectionPlane.pos, vec);
+                const negDir = [-this._sectionPlane.dir[0], -this._sectionPlane.dir[1], -this._sectionPlane.dir[2]];
+                math.subVec3(origin, this._sectionPlane.pos, vec);
                 const dist = -math.dotVec3(negDir, vec);
 
                 math.normalizeVec3(negDir);
                 math.mulVec3Scalar(negDir, dist, pos2);
-                this._mesh.quaternion = math.vec3PairToQuaternion(zeroVec, this.sectionPlane.dir, quat);
+                this._mesh.quaternion = math.vec3PairToQuaternion(zeroVec, this._sectionPlane.dir, quat);
                 this._mesh.position = [pos2[0] * 0.1, pos2[1] * 0.1, pos2[2] * 0.1,];
             };
 
-            this._onSectionPlanePos = this.sectionPlane.on("pos", update);
-            this._onSectionPlaneDir = this.sectionPlane.on("dir", update);
+            this._onSectionPlanePos = this._sectionPlane.on("pos", update);
+            this._onSectionPlaneDir = this._sectionPlane.on("dir", update);
 
             // update();
         }
@@ -95,9 +88,9 @@ class SectionPlanesOverviewPlane {
      * @type {Boolean}
      * @private
      */
-    _setHighlighted(highlighted) {
+    setHighlighted(highlighted) {
         this._highlighted = !!highlighted;
-        this._mesh.material.emissive = this._highlighted ? [1, 1, 1] : [0.5, 0.5, 0.5];
+        this._mesh.material.emissive = this._selected ? [0,1,0] : (this._highlighted ? [1, 0, 0] : [1, 1, 1]);
     }
 
     /**
@@ -106,7 +99,7 @@ class SectionPlanesOverviewPlane {
      * @type {Boolean}
      * @private
      */
-    _getHighlighted() {
+    getHighlighted() {
         return this._highlighted;
     }
 
@@ -116,9 +109,9 @@ class SectionPlanesOverviewPlane {
      * @type {Boolean}
      * @private
      */
-    _setSelected(selected) {
+    setSelected(selected) {
         this._selected = !!selected;
-        // this._mesh.material.emissive = this._selected ? [0,1,0] : (this._highlighted ? [1, 0, 0] : [1, 1, 1]);
+        this._mesh.material.emissive = this._selected ? [0,1,0] : (this._highlighted ? [1, 0, 0] : [1, 1, 1]);
     }
 
     /**
@@ -127,20 +120,16 @@ class SectionPlanesOverviewPlane {
      * @type {Boolean}
      * @private
      */
-    _getSelected() {
+    getSelected() {
         return this._selected;
     }
 
-    // rotate(baseAxis, incDegrees) {
-    //     this._mesh.rotate(baseAxis, incDegrees);
-    // }
-
     /** @private */
-    _destroy() {
-        this.sectionPlane.off(this._onSectionPlanePos);
-        this.sectionPlane.off(this._onSectionPlaneDir);
+    destroy() {
+        this._sectionPlane.off(this._onSectionPlanePos);
+        this._sectionPlane.off(this._onSectionPlaneDir);
         this._mesh.destroy();
     }
 }
 
-export {SectionPlanesOverviewPlane};
+export {Plane};

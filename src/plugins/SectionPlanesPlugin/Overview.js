@@ -1,20 +1,17 @@
 import {math} from "../../../src/viewer/scene/math/math.js";
 import {Scene} from "../../../src/viewer/scene/scene/Scene.js";
 import {DirLight} from "./../../../src/viewer/scene/lights/DirLight.js";
-import {SectionPlanesOverviewPlane} from "./SectionPlanesOverviewPlane.js";
+import {Plane} from "./Plane.js";
 
 /**
- * @desc Provides an interactive 3D overview of the {@link SectionPlane}s created by its {@link SectionPlanesPlugin}.
+ * @desc Provides an interactive 3D overview of the {@link SectionPlane}s managed by its {@link SectionPlanesPlugin}.
  *
- * Located at {@link SectionPlanesPlugin#overview}.
+ * The overview contains a 3D plane for each {@link SectionPlane} in the {@link Scene}. Click a 3D plane to toggle
+ * the visibility of a 3D gizmo to edit the position and orientation of its {@link SectionPlane}.
  *
- * Renders the 3D overview on an a separate canvas at a corner of the {@link Viewer}'s {@link Scene} {@link Canvas}.
- *
- * The overview contains a {@link SectionPlanesOverviewPlane} for each {@link SectionPlane} in
- * the {@link Scene}, which renders a 3D plane to indicate the SectionPlane's current position and
- * orientation.  Click each 3D plane to activate or deactivate its {@link SectionPlane}'s {@link SectionPlaneControl}.
+ * Renders the 3D overview on a separate canvas at a corner of the {@link Viewer}'s {@link Scene} {@link Canvas}.
  */
-class SectionPlanesOverview {
+class Overview {
 
     /**
      * @private
@@ -26,7 +23,7 @@ class SectionPlanesOverview {
         }
 
         /**
-         * The {@link SectionPlanesPlugin} that manages this SectionPlanesOverview.
+         * The {@link SectionPlanesPlugin} that owns this Overview.
          *
          * @type {SectionPlanesPlugin}
          */
@@ -240,11 +237,28 @@ class SectionPlanesOverview {
      * @private
      */
     _addSectionPlane(sectionPlane) {
-        this._planes[sectionPlane.id] = new SectionPlanesOverviewPlane(this, this._scene, sectionPlane);
+        this._planes[sectionPlane.id] = new Plane(this, this._scene, sectionPlane);
     }
 
-    /** Called by SectionPlanesPlugin#createSectionPlane()
-     * @private
+    /**  @private
+     */
+    _setPlaneHighlighted(id, highlighted) {
+        const plane = this._planes[id];
+        if (plane) {
+            plane.setHighlighted(highlighted);
+        }
+    }
+
+    /**  @private
+     */
+    _setPlaneSelected(id, selected) {
+        const plane = this._planes[id];
+        if (plane) {
+            plane.setSelected(selected);
+        }
+    }
+
+    /** @private
      */
     _removeSectionPlane(sectionPlane) {
         const plane = this._planes[sectionPlane.id];
@@ -255,18 +269,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Returns a map of the {@link SectionPlanesOverviewPlane}s currently in this SectionPlanesOverview.
+     * Sets if this Overview is visible.
      *
-     * @returns {{String:SectionPlanesOverviewPlane}} Map of the {@link SectionPlanesOverviewPlane}s, each mapped to its {@link SectionPlanesOverviewPlane#id}.
-     */
-    get planes() {
-        return this._planes;
-    }
-
-    /**
-     * Sets if this SectionPlanesOverview is visible.
-     *
-     * @param {Boolean} visible Whether or not this SectionPlanesOverview is visible.
+     * @param {Boolean} visible Whether or not this Overview is visible.
      */
     setVisible(visible = true) {
         this._visible = visible;
@@ -275,16 +280,16 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets if this SectionPlanesOverview is visible.
+     * Gets if this Overview is visible.
      *
-     * @return {Boolean} True when this SectionPlanesOverview is visible.
+     * @return {Boolean} True when this Overview is visible.
      */
     getVisible() {
         return this._visible;
     }
 
     /**
-     * Sets the canvas size of this SectionPlanesOverview.
+     * Sets the canvas size of this Overview.
      *
      * Since the canvas is square, the size is given for a single dimension. Default value is ````200````.
      *
@@ -298,7 +303,7 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the canvas size of this SectionPlanesOverview.
+     * Gets the canvas size of this Overview.
      *
      * Since the canvas is square, the size is given for a single dimension.
      *
@@ -309,7 +314,7 @@ class SectionPlanesOverview {
     };
 
     /**
-     * Sets the alignment of this SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * Sets the alignment of this Overview within the bounds of the {@link Viewer}'s {@link Canvas}.
      *
      * Default value is "bottomRight".
      *
@@ -325,7 +330,7 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the alignment of this SectionPlanesOverview within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * Gets the alignment of this Overview within the bounds of the {@link Viewer}'s {@link Canvas}.
      *
      * Default value is "bottomRight".
      *
@@ -336,9 +341,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between this SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this Overview and the left edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topLeft" or "bottomLeft".
+     * This applies when this Overview's alignment is "topLeft" or "bottomLeft".
      *
      * Default value is ````10````.
      *
@@ -350,9 +355,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between this SectionPlanesOverview and the left edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this Overview and the left edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topLeft" or "bottomLeft".
+     * This applies when this Overview's alignment is "topLeft" or "bottomLeft".
      *
      * Default value is ````10````.
      *
@@ -363,9 +368,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between this SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this Overview and the right edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topRight" or "bottomRight".
+     * This applies when this Overview's alignment is "topRight" or "bottomRight".
      *
      * Default value is ````10````.
      *
@@ -377,9 +382,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between this SectionPlanesOverview and the right edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this Overview and the right edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topRight" or "bottomRight".
+     * This applies when this Overview's alignment is "topRight" or "bottomRight".
      *
      * Default value is ````10````.
      *
@@ -390,9 +395,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between this SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this Overview and the top edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topRight" or "topLeft".
+     * This applies when this Overview's alignment is "topRight" or "topLeft".
      *
      * Default value is ````10````.
      *
@@ -404,9 +409,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between this SectionPlanesOverview and the top edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this Overview and the top edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "topRight" or "topLeft".
+     * This applies when this Overview's alignment is "topRight" or "topLeft".
      *
      * Default value is ````10````.
      *
@@ -417,9 +422,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Sets the margin between this SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     * Sets the margin between this Overview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft".
+     * This applies when this Overview's alignment is "bottomRight" or "bottomLeft".
      *
      * Default value is ````10````.
      *
@@ -431,9 +436,9 @@ class SectionPlanesOverview {
     }
 
     /**
-     * Gets the margin between this SectionPlanesOverview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
+     * Gets the margin between this Overview and the bottom edge of the {@link Viewer}'s {@link Canvas}.
      *
-     * This applies when this SectionPlanesOverview's alignment is "bottomRight" or "bottomLeft".
+     * This applies when this Overview's alignment is "bottomRight" or "bottomLeft".
      *
      * Default value is ````10````.
      *
@@ -443,8 +448,7 @@ class SectionPlanesOverview {
         return this._bottomMargin;
     }
 
-    /** Called by SectionPlanesPlugin#destroySsectionPlane()
-     * @private
+    /**  @private
      */
     _destroy() {
 
@@ -463,5 +467,5 @@ class SectionPlanesOverview {
     }
 }
 
-export {SectionPlanesOverview};
+export {Overview};
 
