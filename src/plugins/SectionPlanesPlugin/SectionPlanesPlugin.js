@@ -13,7 +13,7 @@ const tempVec3 = math.vec3();
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
  * to slice it open with two {@link SectionPlane}s.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Schependomlaan)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Duplex)]
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -26,9 +26,10 @@ const tempVec3 = math.vec3();
  *     canvasId: "myCanvas"
  * });
  *
- * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
- * viewer.scene.camera.look = [10.97, 5.82, -11.22];
- * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ * viewer.camera.eye = [-5.02, 2.22, 15.09];
+ * viewer.camera.look = [4.97, 2.79, 9.89];
+ * viewer.camera.up = [-0.05, 0.99, 0.02];
+*
  *
  * // Add a GLTFLoaderPlugin
  *
@@ -65,14 +66,14 @@ const tempVec3 = math.vec3();
  *
  * sectionPlanes.createSectionPlane({
  *     id: "mySectionPlane",
- *     pos: [10.97, 5.82, -11.22],
- *     dir: [0.5, 0.0, 0.5]
+ *     pos: [1.04, 1.95, 9.74],
+ *     dir: [1.0, 0.0, 0.0]
  * });
  *
  * sectionPlanes.createSectionPlane({
  *     id: "mySectionPlane2",
- *     pos: [10.97, 5.82, -11.22],
- *     dir: [0.5, -0.2, -0.5]
+ *     pos: [2.30, 4.46, 14.93],
+ *     dir: [0.0, -0.09, -0.79]
  * });
  *
  * // Show the SectionPlanePlugin's 3D editing gizmo,
@@ -112,6 +113,7 @@ class SectionPlanesPlugin extends Plugin {
         this._freeControls = [];
         this._sectionPlanes = viewer.scene.sectionPlanes;
         this._controls = {};
+        this._shownControlId = null;
 
         const overviewCfg = cfg.overview || {};
 
@@ -133,6 +135,10 @@ class SectionPlanesPlugin extends Plugin {
             }),
 
             onClickedPlane: ((id) => {
+                if (this.getShownControl() === id) {
+                    this.hideControl();
+                    return;
+                }
                 this.showControl(id);
                 const sectionPlane = this.sectionPlanes[id];
                 const sectionPlanePos = sectionPlane.pos;
@@ -219,6 +225,18 @@ class SectionPlanesPlugin extends Plugin {
         this.hideControl();
         control.setVisible(true);
         this._overview._setPlaneSelected(id, true);
+        this._shownControlId = id;
+    }
+
+    /**
+     * Gets the ID of the {@link SectionPlane} that the 3D editing gizmo is shown for.
+     *
+     * Returns ````null```` when the editing gizmo is not shown.
+     *
+     * @returns {String} ID of the the {@link SectionPlane} that the 3D editing gizmo is shown for, if shown, else ````null````.
+     */
+    getShownControl() {
+        return this._shownControlId;
     }
 
     /**
@@ -231,6 +249,7 @@ class SectionPlanesPlugin extends Plugin {
                 this._overview._setPlaneSelected(id, false);
             }
         }
+        this._shownControlId = null;
     }
 
     /**

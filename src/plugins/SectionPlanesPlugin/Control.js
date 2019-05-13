@@ -33,14 +33,6 @@ class Control {
          */
         this.id = null;
 
-        /**
-         * The {@link SectionPlanesPlugin} that manages this Control.
-         *
-         * @property plugin
-         * @type {SectionPlanesPlugin}
-         */
-        this.plugin = plugin;
-
         this._viewer = plugin.viewer;
 
         this._visible = false;
@@ -1139,7 +1131,7 @@ class Control {
                 if (!over) {
                     return;
                 }
-                this._viewer.cameraControl.pointerEnabled = (nextDragAction === DRAG_ACTIONS.none);
+                this._viewer.cameraControl.pointerEnabled = false;
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = true;
@@ -1162,10 +1154,10 @@ class Control {
                 if (!over) {
                     return;
                 }
-                var canvasPos = getClickCoordsWithinElement(e);
                 if (!down) {
                     return;
                 }
+                var canvasPos = getClickCoordsWithinElement(e);
                 const x = canvasPos[0];
                 const y = canvasPos[1];
 
