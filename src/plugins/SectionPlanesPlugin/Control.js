@@ -292,37 +292,37 @@ class Control {
 
         this._displayMeshes = {
 
-            // plane: rootNode.addChild(new Mesh(rootNode, {
-            //     geometry: new ReadableGeometry(rootNode, {
-            //         primitive: "triangles",
-            //         positions: [
-            //             0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
-            //             -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
-            //             0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
-            //             -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
-            //         ],
-            //         indices: [0, 1, 2, 2, 3, 0]
-            //     }),
-            //     material: new PhongMaterial(rootNode, {
-            //         emissive: [0, 0.0, 0],
-            //         diffuse: [0, 0, 0],
-            //         backfaces: true
-            //     }),
-            //     opacity: 0.6,
-            //      ghosted: true,
-            //     ghostMaterial: new EmphasisMaterial(rootNode, {
-            //         edges: false,
-            //         filled: true,
-            //         fillColor: [1, 1, 0],
-            //         fillAlpha: 0.2,
-            //         backfaces: true
-            //     }),
-            //     pickable: false,
-            //     collidable: true,
-            //     clippable: false,
-            //     visible: false,
-            //     scale: [2.4, 2.4, 1]
-            // }), NO_STATE_INHERIT),
+            plane: rootNode.addChild(new Mesh(rootNode, {
+                geometry: new ReadableGeometry(rootNode, {
+                    primitive: "triangles",
+                    positions: [
+                        0.5, 0.5, 0.0, 0.5, -0.5, 0.0, // 0
+                        -0.5, -0.5, 0.0, -0.5, 0.5, 0.0, // 1
+                        0.5, 0.5, -0.0, 0.5, -0.5, -0.0, // 2
+                        -0.5, -0.5, -0.0, -0.5, 0.5, -0.0 // 3
+                    ],
+                    indices: [0, 1, 2, 2, 3, 0]
+                }),
+                material: new PhongMaterial(rootNode, {
+                    emissive: [0, 0.0, 0],
+                    diffuse: [0, 0, 0],
+                    backfaces: true
+                }),
+                opacity: 0.6,
+                 ghosted: true,
+                ghostMaterial: new EmphasisMaterial(rootNode, {
+                    edges: false,
+                    filled: true,
+                    fillColor: [1, 1, 0],
+                    fillAlpha: 0.2,
+                    backfaces: true
+                }),
+                pickable: false,
+                collidable: true,
+                clippable: false,
+                visible: false,
+                scale: [2.4, 2.4, 1]
+            }), NO_STATE_INHERIT),
 
             planeFrame: rootNode.addChild(new Mesh(rootNode, { // Visible frame
                 geometry: new ReadableGeometry(rootNode, buildTorusGeometry({

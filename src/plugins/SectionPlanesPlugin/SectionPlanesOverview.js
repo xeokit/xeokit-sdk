@@ -176,6 +176,7 @@ class SectionPlanesOverview {
                     }
                 } else {
                     if (hoveredEntity) {
+                        this._onHoverLeavePlane(hoveredEntity.id);
                         hoveredEntity = null;
                     }
                 }
