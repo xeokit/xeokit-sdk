@@ -5,7 +5,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 
 
 /**
- * Renders a 3D plane within a {@link Overview} to indicate its {@link SectionPlane}'s current position and orientation.
+ * Renders a 3D plane within a {@link SectionPlanesOverview} to indicate its {@link SectionPlane}'s current position and orientation.
  *
  * @private
  */

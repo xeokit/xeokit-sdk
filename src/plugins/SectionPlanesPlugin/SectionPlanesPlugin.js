@@ -2,7 +2,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
 import {Control} from "./Control.js";
-import {Overview} from "./Overview.js";
+import {SectionPlanesOverview} from "./SectionPlanesOverview.js";
 
 const tempAABB = math.AABB3();
 const tempVec3 = math.vec3();
@@ -96,14 +96,14 @@ class SectionPlanesPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id="SectionPlanes"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {*} [cfg.overview={}] Optional initial configuration for the plugin's {@link Overview}.
-     * @param {String} [cfg.overview.visible=true] Initial visibility of the {@link Overview}.
-     * @param {String} [cfg.overview.alignment="bottomRight"] Initial alignment of the {@link Overview} within the bounds of the {@link Viewer}'s {@link Canvas}.
-     * @param {Number} [cfg.overview.size=200] Initial size of the {@link Overview} canvas in pixels. The canvas is square, so width and height are the same size.
-     * @param {Number} [cfg.overview.leftMargin=10] Initial margin between the {@link Overview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
-     * @param {Number} [cfg.overview.rightMargin=10] Initial margin between the {@link Overview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
-     * @param {Number} [cfg.overview.topMargin=10] Initial margin between the {@link Overview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
-     * @param {Number} [cfg.overview.bottomMargin=10] Initial margin between the {@link Overview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
+     * @param {*} [cfg.overview={}] Optional initial configuration for the plugin's {@link SectionPlanesOverview}.
+     * @param {String} [cfg.overview.visible=true] Initial visibility of the {@link SectionPlanesOverview}.
+     * @param {String} [cfg.overview.alignment="bottomRight"] Initial alignment of the {@link SectionPlanesOverview} within the bounds of the {@link Viewer}'s {@link Canvas}.
+     * @param {Number} [cfg.overview.size=200] Initial size of the {@link SectionPlanesOverview} canvas in pixels. The canvas is square, so width and height are the same size.
+     * @param {Number} [cfg.overview.leftMargin=10] Initial margin between the {@link SectionPlanesOverview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
+     * @param {Number} [cfg.overview.rightMargin=10] Initial margin between the {@link SectionPlanesOverview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
+     * @param {Number} [cfg.overview.topMargin=10] Initial margin between the {@link SectionPlanesOverview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
+     * @param {Number} [cfg.overview.bottomMargin=10] Initial margin between the {@link SectionPlanesOverview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
      */
     constructor(viewer, cfg = {}) {
 
@@ -115,7 +115,7 @@ class SectionPlanesPlugin extends Plugin {
 
         const overviewCfg = cfg.overview || {};
 
-        this._overview = new Overview(this, {
+        this._overview = new SectionPlanesOverview(this, {
             alignment: overviewCfg.alignment,
             leftMargin: overviewCfg.leftMargin,
             rightMargin: overviewCfg.rightMargin,
@@ -157,9 +157,9 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     /**
-     * Gets the {@link Overview}, which manages an interactive 3D overview of the {@link SectionPlane}s created by this SectionPlanesPlugin.
+     * Gets the {@link SectionPlanesOverview}, which manages an interactive 3D overview of the {@link SectionPlane}s created by this SectionPlanesPlugin.
      *
-     * @type {Overview}
+     * @type {SectionPlanesOverview}
      */
     get overview() {
         return this._overview;

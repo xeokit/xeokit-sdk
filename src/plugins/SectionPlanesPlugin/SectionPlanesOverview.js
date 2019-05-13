@@ -4,14 +4,14 @@ import {DirLight} from "./../../../src/viewer/scene/lights/DirLight.js";
 import {Plane} from "./Plane.js";
 
 /**
- * @desc Provides an interactive 3D overview of the {@link SectionPlane}s managed by its {@link SectionPlanesPlugin}.
+ * @desc An interactive 3D overview of the {@link SectionPlane}s managed by a {@link SectionPlanesPlugin}.
  *
- * The overview contains a 3D plane for each {@link SectionPlane} in the {@link Scene}. Click a 3D plane to toggle
- * the visibility of a 3D gizmo to edit the position and orientation of its {@link SectionPlane}.
- *
- * Renders the 3D overview on a separate canvas at a corner of the {@link Viewer}'s {@link Scene} {@link Canvas}.
+ * * Located at {@link SectionPlanesPlugin#overview}.
+ * * Renders the overview on a separate canvas at a corner of the {@link Viewer}'s {@link Scene} {@link Canvas}.
+ * * The overview shows a 3D plane object for each {@link SectionPlane} in the {@link Scene}.
+ * * Click a plane object in the overview to toggle the visibility of a 3D gizmo to edit the position and orientation of its {@link SectionPlane}.
  */
-class Overview {
+class SectionPlanesOverview {
 
     /**
      * @private
@@ -467,5 +467,5 @@ class Overview {
     }
 }
 
-export {Overview};
+export {SectionPlanesOverview};
 
