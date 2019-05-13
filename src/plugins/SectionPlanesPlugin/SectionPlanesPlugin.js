@@ -99,11 +99,11 @@ class SectionPlanesPlugin extends Plugin {
      * @param {*} [cfg.overview={}] Optional initial configuration for the plugin's {@link Overview}.
      * @param {String} [cfg.overview.visible=true] Initial visibility of the {@link Overview}.
      * @param {String} [cfg.overview.alignment="bottomRight"] Initial alignment of the {@link Overview} within the bounds of the {@link Viewer}'s {@link Canvas}.
-     * @param {String} [cfg.overview.size=200]
-     * @param {String} [cfg.overview.leftMargin=10] Initial margin between the {@link Overview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
-     * @param {String} [cfg.overview.rightMargin=10] Initial margin between the {@link Overview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
-     * @param {String} [cfg.overview.topMargin=10] Initial margin between the {@link Overview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
-     * @param {String} [cfg.overview.bottomMargin=10] Initial margin between the {@link Overview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
+     * @param {Number} [cfg.overview.size=200] Initial size of the {@link Overview} canvas in pixels. The canvas is square, so width and height are the same size.
+     * @param {Number} [cfg.overview.leftMargin=10] Initial margin between the {@link Overview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
+     * @param {Number} [cfg.overview.rightMargin=10] Initial margin between the {@link Overview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
+     * @param {Number} [cfg.overview.topMargin=10] Initial margin between the {@link Overview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
+     * @param {Number} [cfg.overview.bottomMargin=10] Initial margin between the {@link Overview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
      */
     constructor(viewer, cfg = {}) {
 
