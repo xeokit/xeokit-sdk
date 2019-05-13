@@ -125,14 +125,6 @@ class Canvas extends Component {
 
         // Get WebGL context
 
-        if (cfg.simulateWebGLContextLost) {
-            if (window.WebGLDebugUtils) {
-                this.canvas = WebGLDebugUtils.makeLostContextSimulatingCanvas(this.canvas);
-            } else {
-                this.error("To simulate context loss, please include WebGLDebugUtils");
-            }
-        }
-
         this._initWebGL(cfg);
 
         // Bind context loss and recovery handlers
