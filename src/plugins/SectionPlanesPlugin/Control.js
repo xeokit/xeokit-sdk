@@ -839,7 +839,7 @@ class Control {
 
         const self = this;
 
-        var over = false;
+        var grabbed = false;
 
         const DRAG_ACTIONS = {
             none: -1,
@@ -853,7 +853,7 @@ class Control {
 
         const rootNode = this._rootNode;
 
-        var nextDragAction = null; // As we hover over an arrow or hoop, self is the action we would do if we then dragged it.
+        var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
         const lastCanvasPos = math.vec2();
 
@@ -1049,7 +1049,7 @@ class Control {
                 if (down) {
                     return;
                 }
-                over = false;
+                grabbed = false;
                 if (lastAffordanceMesh) {
                     lastAffordanceMesh.visible = false;
                 }
@@ -1110,7 +1110,7 @@ class Control {
                     affordanceMesh.visible = true;
                 }
                 lastAffordanceMesh = affordanceMesh;
-                over = true;
+                grabbed = true;
             });
 
             this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOut", (hit) => {
@@ -1125,10 +1125,11 @@ class Control {
             });
 
             canvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
+                e.preventDefault();
                 if (!this._visible) {
                     return;
                 }
-                if (!over) {
+                if (!grabbed) {
                     return;
                 }
                 this._viewer.cameraControl.pointerEnabled = false;
@@ -1149,9 +1150,6 @@ class Control {
 
             canvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
                 if (!this._visible) {
-                    return;
-                }
-                if (!over) {
                     return;
                 }
                 if (!down) {
@@ -1190,10 +1188,10 @@ class Control {
                 if (!this._visible) {
                     return;
                 }
+                this._viewer.cameraControl.pointerEnabled = true;
                 if (!down) {
                     return;
                 }
-                this._viewer.cameraControl.pointerEnabled = true;
                 switch (e.which) {
                     case 1: // Left button
                         mouseDownLeft = false;
@@ -1208,20 +1206,7 @@ class Control {
                         break;
                 }
                 down = false;
-            });
-
-            canvas.addEventListener("mouseenter", this._canvasMouseEnterListener = () => {
-                if (!this._visible) {
-                    return;
-                }
-                over = true;
-            });
-
-            canvas.addEventListener("mouseleave", this._canvasMouseLeaveListener = () => {
-                if (!this._visible) {
-                    return;
-                }
-                over = false;
+                grabbed = false;
             });
 
             canvas.addEventListener("wheel", this._canvasWheelListener = (e) => {
@@ -1232,7 +1217,6 @@ class Control {
                 if (delta === 0) {
                     return;
                 }
-                e.preventDefault();
             });
         }
     }

@@ -153,7 +153,7 @@ class SectionPlanesPlugin extends Plugin {
                 this.viewer.cameraFlight.flyTo({
                     aabb: tempAABB,
                     fitFOV: 65
-                })
+                });
             }),
 
             onClickedNothing: (() => {
