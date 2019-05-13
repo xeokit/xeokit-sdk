@@ -157,7 +157,7 @@ class SectionPlanesPlugin extends Plugin {
     }
 
     /**
-     * Gets the {@link SectionPlanesOverview}, which manages an interactive 3D overview of the {@link SectionPlane}s created by this SectionPlanesPlugin.
+     * Gets the {@link SectionPlanesOverview}, which manages an interactive 3D overview for navigating the {@link SectionPlane}s created by this SectionPlanesPlugin.
      *
      * @type {SectionPlanesOverview}
      */
