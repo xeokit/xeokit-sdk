@@ -202,7 +202,7 @@ class MetaScene {
         const metaObjects = this.metaObjects;
         const metaObjectsByType = this.metaObjectsByType;
 
-        function visit(metaObject) {
+        let visit = (metaObject) => {
             delete metaObjects[metaObject.id];
             const types = metaObjectsByType[metaObject.type];
             if (types && types[metaObject.id]) {
@@ -219,7 +219,7 @@ class MetaScene {
                     visit(childMetaObject);
                 }
             }
-        }
+        };
 
         visit(metaModel.rootMetaObject);
         delete this.metaModels[id];

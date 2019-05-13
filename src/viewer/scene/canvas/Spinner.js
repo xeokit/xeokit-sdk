@@ -274,13 +274,21 @@ class Spinner extends Component {
      * @private
      */
     _injectSpinnerCSS() {
-        if (spinnerCSSInjected) {
+        const elementId = "xeokit-spinner-css";
+        if (document.getElementById(elementId)) {
             return;
         }
         const node = document.createElement('style');
         node.innerHTML = spinnerCSS;
+        node.id = elementId;
         document.body.appendChild(node);
-        spinnerCSSInjected = true;
+    }
+
+    _destroy() {
+        if (this._element) {
+            this._element.parentNode.removeChild(this._element);
+            this._element = null;
+        }
     }
 }
 

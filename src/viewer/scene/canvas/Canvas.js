@@ -556,6 +556,7 @@ class Canvas extends Component {
 
     destroy() {
         this.scene.off(this._tick);
+        this._spinner._destroy();
         // Memory leak avoidance
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
         this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);

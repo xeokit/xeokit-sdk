@@ -256,8 +256,11 @@ class Viewer {
         }, ok);
     }
 
+    /** Destroys this Viewer.
+     *
+     */
     destroy() {
-
+        this.scene.destroy();
     }
 }
 
