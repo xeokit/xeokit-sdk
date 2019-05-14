@@ -9,6 +9,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js";
 import {Node} from "../../viewer/scene/nodes/Node.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
+import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
 
 const zeroVec = new Float32Array([0, 0, 1]);
 const quat = new Float32Array(4);
@@ -263,13 +264,12 @@ class Control {
                 fillAlpha: 0.2
             }),
 
-            ball: new PhongMaterial(rootNode, {
-                diffuse: [0.5, 0.5, 0.5],
-                emissive: [1, 1, 1],
+            center: new PhongMaterial(rootNode, {
+                diffuse: [0.0, 0.0, 0.0],
+                emissive: [0, 0, 0],
                 ambient: [0.0, 0.0, 0.0],
                 specular: [.6, .6, .3],
-                shininess: 80,
-                lineWidth: 2
+                shininess: 80
             }),
 
             highlightBall: new EmphasisMaterial(rootNode, {
@@ -309,12 +309,13 @@ class Control {
                     backfaces: true
                 }),
                 opacity: 0.6,
-                 ghosted: true,
+                ghosted: true,
                 ghostMaterial: new EmphasisMaterial(rootNode, {
                     edges: false,
                     filled: true,
                     fillColor: [1, 1, 0],
-                    fillAlpha: 0.2,
+                    edgeColor: [0, 0, 0],
+                    fillAlpha: 0.1,
                     backfaces: true
                 }),
                 pickable: false,
@@ -334,12 +335,15 @@ class Control {
                     arc: Math.PI * 2.0
                 })),
                 material: new PhongMaterial(rootNode, {
-                    emissive: [1, 1, 0]
+                    emissive: [0, 0, 0],
+                    diffuse: [0, 0, 0],
+                    specular: [0, 0, 0],
+                    shininess: 0
                 }),
                 //highlighted: true,
                 highlightMaterial: new EmphasisMaterial(rootNode, {
                     edges: false,
-                    edgeColor: [0.8, 0.8, 0.8],
+                    edgeColor: [0.0, 0.0, 0.0],
                     filled: true,
                     fillColor: [0.8, 0.8, 0.8],
                     fillAlpha: 1.0
@@ -529,15 +533,11 @@ class Control {
             //
             //----------------------------------------------------------------------------------------------------------
 
-            ball: rootNode.addChild(new Mesh(rootNode, {
-                geometry: new ReadableGeometry(rootNode, buildBoxGeometry({
-                    xSize: 0.05,
-                    ySize: 0.05,
-                    zSize: 0.05
+            center: rootNode.addChild(new Mesh(rootNode, {
+                geometry: new ReadableGeometry(rootNode, buildSphereGeometry({
+                    radius: 0.05
                 })),
-                //highlighted: true,
-                highlightMaterial: materials.highlightBall,
-                material: materials.ball,
+                material: materials.center,
                 pickable: false,
                 collidable: true,
                 clippable: false,

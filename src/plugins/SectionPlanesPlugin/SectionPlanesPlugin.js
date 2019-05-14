@@ -10,10 +10,19 @@ const tempVec3 = math.vec3();
 /**
  * {@link Viewer} plugin that manages {@link SectionPlane}s.
  *
- * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
- * to slice it open with two {@link SectionPlane}s.
+ * Use the SectionPlanesPlugin to create and edit {@link SectionPlane}s, which slice portions off your models to reveal internal structures.
+ *
+ * The SectionPlanesPlugin shows an overview of your SectionPlanes in a canvas in the corner
+ * of the {@link Viewer}'s canvas. Click the planes in the overview canvas to activate a 3D editing control with
+ * which you can interactively reposition them in the Viewer canvas.
+ *
+ * * ## Usage
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Duplex)]
+ *
+ * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
+ * to slice it open with two {@link SectionPlane}s. We'll show the oviewer in the bottom right of the Viewer
+ * canvas. Finally, we'll programmatically activate the 3D editing control for our second plane.
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -29,7 +38,7 @@ const tempVec3 = math.vec3();
  * viewer.camera.eye = [-5.02, 2.22, 15.09];
  * viewer.camera.look = [4.97, 2.79, 9.89];
  * viewer.camera.up = [-0.05, 0.99, 0.02];
-*
+ *
  *
  * // Add a GLTFLoaderPlugin
  *

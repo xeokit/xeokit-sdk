@@ -192,6 +192,13 @@ class SectionPlanesOverview {
                     this._onClickedNothing();
                 }
             });
+
+            this._scene.canvas.canvas.addEventListener("mouseout", this._onCanvasMouseOout = () => {
+                if (hoveredEntity) {
+                    this._onHoverLeavePlane(hoveredEntity.id);
+                    hoveredEntity = null;
+                }
+            });
         }
 
         //--------------------------------------------------------------------------------------------------------------
@@ -466,6 +473,7 @@ class SectionPlanesOverview {
 
         this._scene.input.off(this._onInputMouseMove);
         this._scene.canvas.canvas.removeEventListener("mouseup", this._onCanvasMouseUp);
+        this._scene.canvas.canvas.removeEventListener("mouseout", this._onCanvasMouseOut);
         this._scene.destroy();
     }
 }
