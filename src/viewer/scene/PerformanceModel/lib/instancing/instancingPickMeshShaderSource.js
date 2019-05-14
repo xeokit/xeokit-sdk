@@ -53,6 +53,7 @@ function buildVertex(layer) {
     src.push("  vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);");
     if (clipping) {
         src.push("  vWorldPosition = worldPosition;");
+        src.push("vFlags2 = flags2;");
     }
     src.push("  gl_Position = projMatrix * viewPosition;");
     src.push("}");
