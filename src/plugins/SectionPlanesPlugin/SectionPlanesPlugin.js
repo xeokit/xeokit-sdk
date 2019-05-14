@@ -16,9 +16,9 @@ const tempVec3 = math.vec3();
  * of the {@link Viewer}'s canvas. Click the planes in the overview canvas to activate a 3D editing control with
  * which you can interactively reposition them in the Viewer canvas.
  *
- * * ## Usage
+ * ## Usage
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Duplex)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
  *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
  * to slice it open with two {@link SectionPlane}s. We'll show the oviewer in the bottom right of the Viewer
