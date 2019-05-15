@@ -76,9 +76,7 @@ class Overview {
         });
 
         this._scene.camera;
-        this._scene.camera.ortho.scale = 7.0;
-        this._scene.camera.ortho.near = 0.1;
-        this._scene.camera.ortho.far = 2000;
+        this._scene.camera.perspective.fov = 70;
 
         this._zUp = false;
 
@@ -97,7 +95,7 @@ class Overview {
                 const eye = this._viewer.camera.eye;
                 const look = this._viewer.camera.look;
                 const up = this._viewer.camera.up;
-                math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
+                math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 7);
                 if (this._zUp) { // +Z up
                     math.transformVec3(matrix, eyeLookVec, eyeLookVecOverview);
                     math.transformVec3(matrix, up, upOverview);
