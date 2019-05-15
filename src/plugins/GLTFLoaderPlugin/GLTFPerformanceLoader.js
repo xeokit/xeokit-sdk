@@ -60,7 +60,6 @@ var loadGLTF = (function () {
         spinner.processes++;
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 spinner.processes--;
-                options.basePath = getBasePath(src);
                 parseGLTF(json, src, options, plugin, performanceModel, ok, error);
             },
             error);
@@ -97,7 +96,6 @@ var parseGLTF = (function () {
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
-            basePath: options.basePath,
             prioritizeGLTFNode: options.prioritizeGLTFNode,
             handleGLTFNode: options.handleGLTFNode,
             json: json,
@@ -142,7 +140,7 @@ var parseGLTF = (function () {
     function loadBuffer(ctx, bufferInfo, ok, err) {
         var uri = bufferInfo.uri;
         if (uri) {
-            ctx.plugin.dataSource.getArrayBuffer(ctx, uri, function (data) {
+            ctx.plugin.dataSource.getArrayBuffer(ctx.src, uri, function (data) {
                     bufferInfo._buffer = data;
                     ok();
                 },
