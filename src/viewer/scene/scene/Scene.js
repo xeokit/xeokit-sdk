@@ -1,7 +1,6 @@
 import {core} from '../core.js';
 import {utils} from '../utils.js';
 import {math} from '../math/math.js';
-import {stats} from '../stats.js';
 import {Component} from '../Component.js';
 import {Canvas} from '../canvas/Canvas.js';
 import {Renderer} from '../webgl/Renderer.js';
@@ -514,7 +513,7 @@ class Scene extends Component {
             backgroundImage: cfg.backgroundImage,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
-            simulateWebGLContextLost: cfg.simulateWebGLContextLost
+            clearColorAmbient: cfg.clearColorAmbient
         });
 
         // Redraw as canvas resized
