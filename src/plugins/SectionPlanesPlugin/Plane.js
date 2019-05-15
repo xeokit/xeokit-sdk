@@ -8,7 +8,7 @@ import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js
 
 
 /**
- * Renders a 3D plane within a {@link SectionPlanesOverview} to indicate its {@link SectionPlane}'s current position and orientation.
+ * Renders a 3D plane within an {@link Overview} to indicate its {@link SectionPlane}'s current position and orientation.
  *
  * @private
  */
