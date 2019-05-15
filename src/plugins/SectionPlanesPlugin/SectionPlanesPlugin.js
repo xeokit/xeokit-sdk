@@ -2,7 +2,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
 import {Control} from "./Control.js";
-import {SectionPlanesOverview} from "./SectionPlanesOverview.js";
+import {Overview} from "./Overview.js";
 
 const tempAABB = math.AABB3();
 const tempVec3 = math.vec3();
@@ -21,7 +21,7 @@ const tempVec3 = math.vec3();
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
  *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
- * to slice it open with two {@link SectionPlane}s. We'll show the oviewer in the bottom right of the Viewer
+ * to slice it open with two {@link SectionPlane}s. We'll show the overview in the bottom right of the Viewer
  * canvas. Finally, we'll programmatically activate the 3D editing control for our second plane.
  *
  * ````JavaScript
@@ -44,24 +44,12 @@ const tempVec3 = math.vec3();
  *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
  *
- * // Add a SectionPlanesPlugin
+ * // Add a SectionPlanesPlugin, with overview visible
  *
  * const sectionPlanes = new SectionPlanesPlugin(viewer, {
- *     overview: {
- *         visible: true,
- *         size: 300
- *     }
+ *     overviewCanvasID: "myOverviewCanvas",
+ *     overviewVisible: true
  * });
- *
- * // Show the SectionPlanePlugin's SectionPlane overview gizmo at bottom-right of the Viewer canvas.
- * // The overview gizmo shows a simplified 3D view containing 3D planes that represent the SectionPlanes.
- * // We can click each plane in the overview to activate the 3D editing gizmo for its SectionPlane.
- *
- * sectionPlanes.overview.setVisible(true);
- * sectionPlanes.overview.setSize(250);
- * sectionPlanes.overview.setAlignment("bottomRight");
- * sectionPlanes.overview.setRightMargin(5);
- * sectionPlanes.overview.setBottomMargin(5);
  *
  * // Load a model
  *
@@ -71,7 +59,7 @@ const tempVec3 = math.vec3();
  * });
  *
  * // Create a couple of section planes
- * // These will be shown in the overview gizmo
+ * // These will be shown in the overview
  *
  * sectionPlanes.createSectionPlane({
  *     id: "mySectionPlane",
@@ -106,14 +94,8 @@ class SectionPlanesPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id="SectionPlanes"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {*} [cfg.overview={}] Optional initial configuration for the plugin's {@link SectionPlanesOverview}.
-     * @param {String} [cfg.overview.visible=true] Initial visibility of the {@link SectionPlanesOverview}.
-     * @param {String} [cfg.overview.alignment="bottomRight"] Initial alignment of the {@link SectionPlanesOverview} within the bounds of the {@link Viewer}'s {@link Canvas}.
-     * @param {Number} [cfg.overview.size=200] Initial size of the {@link SectionPlanesOverview} canvas in pixels. The canvas is square, so width and height are the same size.
-     * @param {Number} [cfg.overview.leftMargin=10] Initial margin between the {@link SectionPlanesOverview} and the left edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "bottomLeft".
-     * @param {Number} [cfg.overview.rightMargin=10] Initial margin between the {@link SectionPlanesOverview} and the right edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topRight" or "bottomRight".
-     * @param {Number} [cfg.overview.topMargin=10] Initial margin between the {@link SectionPlanesOverview} and the top edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "topLeft" or "topRight".
-     * @param {Number} [cfg.overview.bottomMargin=10] Initial margin between the {@link SectionPlanesOverview} and the bottom edge of the {@link Viewer}'s {@link Canvas}. Applies when alignment is "bottomLeft" or "bottomRight".
+     * @param {String} cfg.overviewCanvasId ID of a canvas element to display the overview.
+     * @param {String} [cfg.overviewVisible=true] Initial visibility of the overview canvas.
      */
     constructor(viewer, cfg = {}) {
 
@@ -124,60 +106,79 @@ class SectionPlanesPlugin extends Plugin {
         this._controls = {};
         this._shownControlId = null;
 
-        const overviewCfg = cfg.overview || {};
+        if (!cfg.overviewCanvasId) {
 
-        this._overview = new SectionPlanesOverview(this, {
-            alignment: overviewCfg.alignment,
-            leftMargin: overviewCfg.leftMargin,
-            rightMargin: overviewCfg.rightMargin,
-            topMargin: overviewCfg.topMargin,
-            bottomMargin: overviewCfg.bottomMargin,
-            size: overviewCfg.size,
-            visible: overviewCfg.visible,
+            this.error("Config missing: overviewCanvasId - will create plugin without overview");
 
-            onHoverEnterPlane: ((id) => {
-                this._overview._setPlaneHighlighted(id, true);
-            }),
+        } else {
 
-            onHoverLeavePlane: ((id) => {
-                this._overview._setPlaneHighlighted(id, false);
-            }),
+            const overviewCanvas = document.getElementById(cfg.overviewCanvasId);
+            if (!overviewCanvas) {
+                this.error("Can't find overview canvas: '" + cfg.overviewCanvasId + "' - will create plugin without overview");
+                return;
+            }
 
-            onClickedPlane: ((id) => {
-                if (this.getShownControl() === id) {
+            this._overview = new Overview(this, {
+                overviewCanvas: overviewCanvas,
+                visible: cfg.overviewVisible,
+
+                onHoverEnterPlane: ((id) => {
+                    this._overview._setPlaneHighlighted(id, true);
+                }),
+
+                onHoverLeavePlane: ((id) => {
+                    this._overview._setPlaneHighlighted(id, false);
+                }),
+
+                onClickedPlane: ((id) => {
+                    if (this.getShownControl() === id) {
+                        this.hideControl();
+                        return;
+                    }
+                    this.showControl(id);
+                    const sectionPlane = this.sectionPlanes[id];
+                    const sectionPlanePos = sectionPlane.pos;
+                    tempAABB.set(this.viewer.scene.aabb);
+                    math.getAABB3Center(tempAABB, tempVec3);
+                    tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
+                    tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
+                    tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
+                    tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
+                    tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
+                    tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
+                    this.viewer.cameraFlight.flyTo({
+                        aabb: tempAABB,
+                        fitFOV: 65
+                    });
+                }),
+
+                onClickedNothing: (() => {
                     this.hideControl();
-                    return;
-                }
-                this.showControl(id);
-                const sectionPlane = this.sectionPlanes[id];
-                const sectionPlanePos = sectionPlane.pos;
-                tempAABB.set(this.viewer.scene.aabb);
-                math.getAABB3Center(tempAABB, tempVec3);
-                tempAABB[0] += sectionPlanePos[0] - tempVec3[0];
-                tempAABB[1] += sectionPlanePos[1] - tempVec3[1];
-                tempAABB[2] += sectionPlanePos[2] - tempVec3[2];
-                tempAABB[3] += sectionPlanePos[0] - tempVec3[0];
-                tempAABB[4] += sectionPlanePos[1] - tempVec3[1];
-                tempAABB[5] += sectionPlanePos[2] - tempVec3[2];
-                this.viewer.cameraFlight.flyTo({
-                    aabb: tempAABB,
-                    fitFOV: 65
-                });
-            }),
-
-            onClickedNothing: (() => {
-                this.hideControl();
-            })
-        });
+                })
+            });
+        }
     }
 
     /**
-     * Gets the {@link SectionPlanesOverview}, which manages an interactive 3D overview for navigating the {@link SectionPlane}s created by this SectionPlanesPlugin.
+     * Sets if the overview canvas is visible.
      *
-     * @type {SectionPlanesOverview}
+     * @param {Boolean} visible Whether or not the overview canvas is visible.
      */
-    get overview() {
-        return this._overview;
+    setOverviewVisible(visible) {
+        if (this._overview) {
+            this._overview.setVisible(visible);
+        }
+    }
+
+    /**
+     * Gets if the overview canvas is visible.
+     *
+     * @return {Boolean} True when the overview canvas is visible.
+     */
+    getOverviewVisible() {
+        if (this._overview) {
+            return this._overview.getVisible();
+        }
     }
 
     /**
@@ -216,7 +217,9 @@ class SectionPlanesPlugin extends Plugin {
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;
-        this._overview._addSectionPlane(sectionPlane);
+        if (this._overview) {
+            this._overview._addSectionPlane(sectionPlane);
+        }
         return sectionPlane;
     }
 
@@ -233,7 +236,9 @@ class SectionPlanesPlugin extends Plugin {
         }
         this.hideControl();
         control.setVisible(true);
-        this._overview._setPlaneSelected(id, true);
+        if (this._overview) {
+            this._overview._setPlaneSelected(id, true);
+        }
         this._shownControlId = id;
     }
 
@@ -255,7 +260,9 @@ class SectionPlanesPlugin extends Plugin {
         for (var id in this._controls) {
             if (this._controls.hasOwnProperty(id)) {
                 this._controls[id].setVisible(false);
-                this._overview._setPlaneSelected(id, false);
+                if (this._overview) {
+                    this._overview._setPlaneSelected(id, false);
+                }
             }
         }
         this._shownControlId = null;
@@ -272,7 +279,9 @@ class SectionPlanesPlugin extends Plugin {
             this.error("SectionPlane not found: " + id);
             return;
         }
-        this._overview._removeSectionPlane(sectionPlane);
+        if (this._overview) {
+            this._overview._removeSectionPlane(sectionPlane);
+        }
         sectionPlane.destroy();
         const control = this._controls[id];
         if (!control) {
@@ -312,7 +321,9 @@ class SectionPlanesPlugin extends Plugin {
      */
     destroy() {
         this.clear();
-        this._overview._destroy();
+        if (this._overview) {
+            this._overview._destroy();
+        }
         this._destroyFreeControls();
         super.destroy();
     }
