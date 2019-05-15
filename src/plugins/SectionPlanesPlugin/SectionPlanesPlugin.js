@@ -21,7 +21,7 @@ const tempVec3 = math.vec3();
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
  *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
- * to slice it open with two {@link SectionPlane}s. We'll show the oviewer in the bottom right of the Viewer
+ * to slice it open with two {@link SectionPlane}s. We'll show the overview in the bottom right of the Viewer
  * canvas. Finally, we'll programmatically activate the 3D editing control for our second plane.
  *
  * ````JavaScript
