@@ -156,9 +156,6 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
 };
 
 PickMeshRenderer.prototype._bindProgram = function (frame) {
-    if (!this._program) {
-        this._allocate(mesh);
-    }
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
