@@ -61,7 +61,7 @@ class SectionPlane extends Component {
      * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
      * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.
      * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.
-     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.
+     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.
      */
     constructor(owner, cfg = {}) {
 
