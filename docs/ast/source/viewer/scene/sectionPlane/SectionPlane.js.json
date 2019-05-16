@@ -396,7 +396,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+                  "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
                   "start": 1657,
                   "end": 2314,
                   "loc": {
@@ -1495,7 +1495,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+                  "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
                   "start": 1657,
                   "end": 2314,
                   "loc": {
@@ -4693,7 +4693,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+                    "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
                     "start": 1657,
                     "end": 2314,
                     "loc": {
@@ -5792,7 +5792,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+                    "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
                     "start": 1657,
                     "end": 2314,
                     "loc": {
@@ -8789,7 +8789,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+      "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
       "start": 1657,
       "end": 2314,
       "loc": {
@@ -9731,7 +9731,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0 -1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
+      "value": "*\n     * @constructor\n     * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this SectionPlane as well.\n     * @param {*} [cfg]  SectionPlane configuration\n     * @param  {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n     * @param {Boolean} [cfg.active=true] Indicates whether or not this SectionPlane is active.\n     * @param {Number[]} [cfg.pos=[0,0,0]] World-space position of the SectionPlane.\n     * @param {Number[]} [cfg.dir=[0,0,-1]] Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.\n     ",
       "start": 1657,
       "end": 2314,
       "loc": {

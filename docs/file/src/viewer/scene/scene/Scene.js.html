@@ -115,7 +115,6 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {core} from &apos;../core.js&apos;;
 import {utils} from &apos;../utils.js&apos;;
 import {math} from &apos;../math/math.js&apos;;
-import {stats} from &apos;../stats.js&apos;;
 import {Component} from &apos;../Component.js&apos;;
 import {Canvas} from &apos;../canvas/Canvas.js&apos;;
 import {Renderer} from &apos;../webgl/Renderer.js&apos;;
@@ -628,7 +627,7 @@ class Scene extends Component {
             backgroundImage: cfg.backgroundImage,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
-            simulateWebGLContextLost: cfg.simulateWebGLContextLost
+            clearColorAmbient: cfg.clearColorAmbient
         });
 
         // Redraw as canvas resized
