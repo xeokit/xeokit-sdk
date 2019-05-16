@@ -121,8 +121,6 @@ class Canvas extends Component {
             this.canvas.clientWidth, this.canvas.clientHeight
         ];
 
-        this._createBackground();
-
         // Get WebGL context
 
         this._initWebGL(cfg);
@@ -249,9 +247,7 @@ class Canvas extends Component {
             canvas: this.canvas
         });
 
-        // Set property, see definition further down
-        this.backgroundColor = cfg.backgroundColor;
-        this.backgroundImage = cfg.backgroundImage;
+        this.clearColorAmbient = cfg.clearColorAmbient;
     }
 
     /**
@@ -282,32 +278,6 @@ class Canvas extends Component {
         body.appendChild(div);
 
         this.canvas = document.getElementById(canvasId);
-    }
-
-    /**
-     * Creates a image element behind the canvas, for purpose of showing a custom background.
-     * @private
-     */
-    _createBackground() {
-
-        const div = document.createElement('div');
-        const style = div.style;
-        style.padding = "0";
-        style.margin = "0";
-        style.background = null;
-        style.backgroundImage = null;
-        style.float = "left";
-        style.left = "0";
-        style.top = "0";
-        style.width = "100%";
-        style.height = "100%";
-        style.position = "absolute";
-        style.opacity = 1;
-        style["z-index"] = "-20000";
-
-        this.canvas.parentElement.appendChild(div);
-
-        this._backgroundElement = div;
     }
 
     _getElementXY(e) {
@@ -370,6 +340,35 @@ class Canvas extends Component {
                 this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
             }
         }
+    }
+
+    /**
+     * Sets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set clearColorAmbient(clearColorAmbient) {
+        this._clearColorAmbient = !!clearColorAmbient;
+    }
+
+    /**
+     * Gets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+
+    get clearColorAmbient() {
+        return this._clearColorAmbient;
     }
 
     /**
@@ -485,62 +484,6 @@ class Canvas extends Component {
         if (this.canvas.loseContext) {
             this.canvas.loseContext();
         }
-    }
-
-    /**
-     * A background color for the canvas. This is overridden by {@link Canvas#backgroundImage}.
-     *
-     * You can set this to a new color at any time.
-     *
-     * @property backgroundColor
-     * @type {Number[]}
-     * @default null
-     */
-    set backgroundColor(value) {
-        if (!value) {
-            this._backgroundColor = null;
-        } else {
-            (this._backgroundColor = this._backgroundColor || math.vec4()).set(value || [0, 0, 0, 1]);
-            if (!this._backgroundImageSrc) {
-                const rgb = "rgb(" + Math.round(this._backgroundColor[0] * 255) + ", " + Math.round(this._backgroundColor[1] * 255) + "," + Math.round(this._backgroundColor[2] * 255) + ")";
-                this._backgroundElement.style.background = rgb;
-            }
-        }
-    }
-
-    get backgroundColor() {
-        return this._backgroundColor;
-    }
-
-    /**
-     * URL of a background image for the canvas. This is overrided by {@link Canvas/backgroundColor/property}.
-     *
-     * You can set this to a new file path at any time.
-     *
-     * @property backgroundImage
-     * @type {String}
-     */
-    set backgroundImage(value) {
-        if (!value) {
-            return;
-        }
-        if (!utils.isString(value)) {
-            this.error("Value for 'backgroundImage' should be a string");
-            return;
-        }
-        if (value === this._backgroundImageSrc) { // Already loaded this image
-            return;
-        }
-        this._backgroundElement.style.backgroundImage = "url('" + value + "')";
-        this._backgroundImageSrc = value;
-        if (!this._backgroundImageSrc) {
-            const rgb = "rgb(" + Math.round(this._backgroundColor[0] * 255) + ", " + Math.round(this._backgroundColor[1] * 255) + "," + Math.round(this._backgroundColor[2] * 255) + ")";
-            this._backgroundElement.style.background = rgb;
-        }
-    }
-
-    get backgroundImage() {
-        return this._backgroundImageSrc;
     }
 
     /**

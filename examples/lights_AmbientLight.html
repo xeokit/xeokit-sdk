@@ -79,7 +79,8 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
-        canvasId: "myCanvas"
+        canvasId: "myCanvas",
+        transparent: false
     });
 
     viewer.scene.camera.eye = [0, 0, 5];
@@ -93,7 +94,8 @@
     viewer.scene.clearLights();
 
     new AmbientLight(viewer.scene, {
-        color: [0.0, 0.3, 0.7],
+        id: "myAmbientLight",
+        color: [0.0, 0.7, 0.7],
         intensity: 1.0
     });
 
