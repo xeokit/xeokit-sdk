@@ -12,6 +12,9 @@ import {RenderState} from '../webgl/RenderState.js';
  *
  * ## Usage
  *
+ * In the example below, we'll create two SectionPlanes to slice a model loaded from glTF. Note that we could also create them
+ * using a {@link SectionPlanesPlugin}.
+ *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
