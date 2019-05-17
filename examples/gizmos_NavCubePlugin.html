@@ -4,10 +4,34 @@
     <meta charset="utf-8">
     <title>NavCubePlugin</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+    </style>
+
 </head>
 
 <body>
+
 <canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
 <div id="info">
     <h1>NavCubePlugin</h1>
     <ul>
@@ -42,6 +66,7 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
         visible: true,           // Initially visible (default)
         size: 250,               // NavCube size in pixels (default is 200)
         alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
