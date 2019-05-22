@@ -203,7 +203,6 @@ class AxisGizmoPlugin extends Plugin {
         // style[&quot;background-color&quot;] = &quot;rgba(0,0,0,0.3)&quot;;
         div.innerHTML += &apos;&lt;canvas id=&quot;&apos; + canvasId + &apos;&quot; style=&quot;width: &apos; + size[0] + &apos;px; height: &apos; + size[1] + &apos;px; float: left; margin: 0; padding: 0;&quot;&gt;&lt;/canvas&gt;&apos;;
         body.appendChild(div);
-        var helperCanvas = document.getElementById(canvasId);
 
         canvas.on(&quot;boundary&quot;,
             function (boundary) {
@@ -275,13 +274,6 @@ class AxisGizmoPlugin extends Plugin {
             heightSegments: 1,
             openEnded: false
         }));
-
-        var axisMaterial = new PhongMaterial(scene, { // Red by convention
-            ambient: [0.0, 0.0, 0.0],
-            specular: [.6, .6, .3],
-            shininess: 80,
-            lineWidth: 2
-        });
 
         var xAxisMaterial = new PhongMaterial(scene, { // Red by convention
             diffuse: [1, 0.3, 0.3],

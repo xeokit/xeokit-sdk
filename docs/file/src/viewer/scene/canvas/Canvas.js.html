@@ -114,7 +114,6 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/canvas/Canvas.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Canvas2Image} from &quot;../libs/canvas2image.js&quot;;
 import {core} from &quot;../core.js&quot;;
-import {utils} from &apos;../utils.js&apos;;
 import {math} from &apos;../math/math.js&apos;;
 import {stats} from &apos;../stats.js&apos;;
 import {Component} from &apos;../Component.js&apos;;
@@ -408,21 +407,9 @@ class Canvas extends Component {
      * Initialises the WebGL context
      * @private
      */
-    _initWebGL(cfg) {
+    _initWebGL() {
 
         // Default context attribute values
-
-        if (false &amp;&amp; cfg.webgl2) {
-            try {
-                this.gl = this.canvas.getContext(&quot;webgl2&quot;, this.contextAttr);
-            } catch (e) { // Try with next context name
-            }
-            if (!this.gl) {
-                this.warn(&apos;Failed to get a WebGL 2 context - defaulting to WebGL 1.&apos;);
-            } else {
-                this.webgl2 = true;
-            }
-        }
 
         if (!this.gl) {
             for (let i = 0; !this.gl &amp;&amp; i &lt; WEBGL_CONTEXT_NAMES.length; i++) {
@@ -486,61 +473,20 @@ class Canvas extends Component {
     }
 
     /**
-     * Returns a snapshot of this Canvas as a Base64-encoded image.
-     *
-     * When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
-     * and return it via the callback.
-     *
-     * When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     * possible when you have configured the Canvas&apos;s {@link Scene} to preserve the
-     * WebGL drawing buffer, which has a performance overhead.
-     *
-     * #### Usage:
-     *
-     * ````javascript
-     * // Get snapshot asynchronously
-     * viewer.scene.canvas.getSnapshot({
-     *         width: 500, // Defaults to size of canvas
-     *         height: 500,
-     *         format: &quot;png&quot; // Options are &quot;jpeg&quot; (default), &quot;png&quot; and &quot;bmp&quot;
-     *     }, function(imageDataURL) {
-     *         imageElement.src = imageDataURL;
-     *     });
-     *
-     * // Get snapshot synchronously, requires that Scene be
-     * // configured with preserveDrawingBuffer; true
-     * imageElement.src = viewer.scene.canvas.getSnapshot({
-     *         width: 500,
-     *         height: 500,
-     *         format: &quot;png&quot;
-     *     });
-     * ````
-     * @param {*} [params] Capture options.
-     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
-     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
-     * @param {String} [params.format=&quot;jpeg&quot;] Desired format; &quot;jpeg&quot;, &quot;png&quot; or &quot;bmp&quot;.
-     * @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
-     * @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
+     * @private
+     * @deprecated
      */
-    getSnapshot(params, ok) {
-
-        if (!this.canvas) {
-            this.error(&quot;Can&apos;t get snapshot - no canvas.&quot;);
-            ok(null);
-            return;
-        }
-
-        if (ok) { // Asynchronous
-            const self = this;
-            requestAnimationFrame(function () {
-                self.scene.render(true); // Force-render a frame
-                ok(self._getSnapshot(params));
-            });
-        } else {
-            return this._getSnapshot(params);
-        }
+    getSnapshot(params) {
+        throw &quot;Canvas#getSnapshot() has been replaced by Viewer#getSnapshot() - use that method instead.&quot;;
     }
 
+    /**
+     * Called by Viewer#getSnapshot
+     * @private
+     * @param params
+     * @returns {*}
+     * @private
+     */
     _getSnapshot(params) {
         params = params || {};
         const width = params.width || this.canvas.width;

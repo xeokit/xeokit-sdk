@@ -221,7 +221,6 @@ class SectionPlanesPlugin extends Plugin {
         this._shownControlId = null;
 
         if (!cfg.overviewCanvasId) {
-
             this.error(&quot;Config missing: overviewCanvasId - will create plugin without overview&quot;);
 
         } else {
@@ -237,11 +236,11 @@ class SectionPlanesPlugin extends Plugin {
                 visible: cfg.overviewVisible,
 
                 onHoverEnterPlane: ((id) =&gt; {
-                    this._overview._setPlaneHighlighted(id, true);
+                    this._overview.setPlaneHighlighted(id, true);
                 }),
 
                 onHoverLeavePlane: ((id) =&gt; {
-                    this._overview._setPlaneHighlighted(id, false);
+                    this._overview.setPlaneHighlighted(id, false);
                 }),
 
                 onClickedPlane: ((id) =&gt; {
@@ -271,6 +270,15 @@ class SectionPlanesPlugin extends Plugin {
                 })
             });
         }
+
+        this._onSceneSectionPlaneCreated = viewer.scene.on(&quot;sectionPlaneCreated&quot;, (sectionPlane) =&gt; {
+
+            // SectionPlane created, either via SectionPlanesPlugin#createSectionPlane(), or by directly
+            // instantiating a SectionPlane independently of SectionPlanesPlugin, which can be done
+            // by BCFViewpointsPlugin#loadViewpoint().
+
+            this._sectionPlaneCreated(sectionPlane);
+        });
     }
 
     /**
@@ -317,24 +325,35 @@ class SectionPlanesPlugin extends Plugin {
      * @returns {SectionPlane} The new {@link SectionPlane}.
      */
     createSectionPlane(params) {
+
         if (params.id !== undefined &amp;&amp; params.id !== null &amp;&amp; this.viewer.scene.components[params.id]) {
             this.error(&quot;Viewer component with this ID already exists: &quot; + params.id);
             delete params.id;
         }
+
+        // Note that SectionPlane constructor fires &quot;sectionPlaneCreated&quot; on the Scene,
+        // which SectionPlanesPlugin handles and calls #_sectionPlaneCreated to create gizmo and add to overview canvas.
+
         const sectionPlane = new SectionPlane(this.viewer.scene, {
             id: params.id,
             pos: params.pos,
             dir: params.dir,
             active: true || params.active
         });
+        return sectionPlane;
+    }
+
+    _sectionPlaneCreated(sectionPlane) {
         const control = (this._freeControls.length &gt; 0) ? this._freeControls.pop() : new Control(this);
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;
         if (this._overview) {
-            this._overview._addSectionPlane(sectionPlane);
+            this._overview.addSectionPlane(sectionPlane);
         }
-        return sectionPlane;
+        sectionPlane.once(&quot;destroyed&quot;, () =&gt; {
+            this._sectionPlaneDestroyed(sectionPlane);
+        });
     }
 
     /**
@@ -351,7 +370,7 @@ class SectionPlanesPlugin extends Plugin {
         this.hideControl();
         control.setVisible(true);
         if (this._overview) {
-            this._overview._setPlaneSelected(id, true);
+            this._overview.setPlaneSelected(id, true);
         }
         this._shownControlId = id;
     }
@@ -375,7 +394,7 @@ class SectionPlanesPlugin extends Plugin {
             if (this._controls.hasOwnProperty(id)) {
                 this._controls[id].setVisible(false);
                 if (this._overview) {
-                    this._overview._setPlaneSelected(id, false);
+                    this._overview.setPlaneSelected(id, false);
                 }
             }
         }
@@ -393,11 +412,15 @@ class SectionPlanesPlugin extends Plugin {
             this.error(&quot;SectionPlane not found: &quot; + id);
             return;
         }
-        if (this._overview) {
-            this._overview._removeSectionPlane(sectionPlane);
-        }
+        this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
-        const control = this._controls[id];
+    }
+
+    _sectionPlaneDestroyed(sectionPlane) {
+        if (this._overview) {
+            this._overview.removeSectionPlane(sectionPlane);
+        }
+        const control = this._controls[sectionPlane.id];
         if (!control) {
             return;
         }
@@ -422,6 +445,23 @@ class SectionPlanesPlugin extends Plugin {
      */
     send(name, value) {
         switch (name) {
+
+            case &quot;snapshotStarting&quot;: // Viewer#getSnapshot() about to take snapshot - hide controls
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(true);
+                    }
+                }
+                break;
+
+            case &quot;snapshotFinished&quot;: // Viewer#getSnapshot() finished taking snapshot - show controls again
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(false);
+                    }
+                }
+                break;
+
             case &quot;clearSectionPlanes&quot;:
                 this.clear();
                 break;
@@ -436,7 +476,7 @@ class SectionPlanesPlugin extends Plugin {
     destroy() {
         this.clear();
         if (this._overview) {
-            this._overview._destroy();
+            this._overview.destroy();
         }
         this._destroyFreeControls();
         super.destroy();
@@ -448,6 +488,7 @@ class SectionPlanesPlugin extends Plugin {
             control._destroy();
             control = this._freeControls.pop();
         }
+        this.viewer.scene.off(this._onSceneSectionPlaneCreated);
     }
 }
 

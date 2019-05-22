@@ -112,13 +112,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewer} from &apos;<span><a href="file/src/viewer/Viewer.js.html#lineNumber21">xeokit-sdk/src/viewer/Viewer.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Viewer} from &apos;<span><a href="file/src/viewer/Viewer.js.html#lineNumber18">xeokit-sdk/src/viewer/Viewer.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/Viewer.js.html#lineNumber21">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/Viewer.js.html#lineNumber18">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -143,10 +143,7 @@
 <li>A Viewer wraps a single <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></li>
 <li>Add <span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span>s to a Viewer to extend its functionality.</li>
 <li><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-metaScene">Viewer#metaScene</a></span> holds metadata about <span>Model</span>s in the
-Viewer&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>. Load and unload metadata using <span>Viewer#createMetadata</span>
-and <span>Viewer#destroyMetadata</span>.</li>
-<li>Save and load the state of a Viewer as JSON with <span>Viewer#getBookmark</span> and <span>Viewer#setBookmark</span>. Installed
-<span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span> instances will also save and load their state to and from the JSON.</li>
+Viewer&apos;s <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span>.</li>
 <li>Use <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight">Viewer#cameraFlight</a></span> to fly or jump the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s
 <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to target positions, boundaries or <span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span>s.</li>
 </ul>
@@ -574,13 +571,20 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot">getSnapshot</a></span></span><span class="code" data-ice="signature">(params: {}, ok: <span>*</span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot">getSnapshot</a></span></span><span class="code" data-ice="signature">(params: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns a snapshot of this Viewer&apos;s canvas as a Base64-encoded image.</p>
+<h4 id="usage-">Usage:</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">const imageData = viewer.getSnapshot({
+   width: 500,
+   height: 500,
+   format: &quot;png&quot;
+});</code>
+</code></pre>
+</div>
       </div>
     </td>
     <td>
@@ -726,7 +730,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber39">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
@@ -787,7 +791,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether or not to preserve the WebGL drawing buffer. This needs to be <code>true</code> for canvas snapshots to work.</p>
+      <td data-ice="description"><p>Whether or not to preserve the WebGL drawing buffer. This needs to be <code>true</code> for <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshot">Viewer#getSnapshot</a></span> to work.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -878,7 +882,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber87">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -938,7 +942,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -999,7 +1003,7 @@ controls the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Sc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1060,7 +1064,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -1120,7 +1124,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -1180,7 +1184,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
@@ -1240,7 +1244,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
@@ -1300,7 +1304,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
@@ -1363,7 +1367,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -1407,7 +1411,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber282">source</a></span></span>
     </span>
   </h3>
 
@@ -1451,7 +1455,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -1512,7 +1516,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1576,18 +1580,25 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     
     
     
-    <span class="code" data-ice="name">getSnapshot</span><span class="code" data-ice="signature">(params: {}, ok: <span>*</span>): <span>*</span></span>
+    <span class="code" data-ice="name">getSnapshot</span><span class="code" data-ice="signature">(params: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Returns a snapshot of this Viewer&apos;s canvas as a Base64-encoded image.</p>
+<h4 id="usage-">Usage:</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">const imageData = viewer.getSnapshot({
+   width: 500,
+   height: 500,
+   format: &quot;png&quot;
+});</code>
+</code></pre>
+</div>
 
   
 
@@ -1601,16 +1612,32 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">params</td>
-      <td data-ice="type" class="code">{}</td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: {}</li></ul></td>
-      <td data-ice="description"></td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">ok</td>
       <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Capture options.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.width</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Desired width of result in pixels - defaults to width of canvas.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Desired height of result in pixels - defaults to height of canvas.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.format</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;jpeg&quot;</li></ul></td>
+      <td data-ice="description"><p>Desired format; &quot;jpeg&quot;, &quot;png&quot; or &quot;bmp&quot;.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1622,8 +1649,9 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>String-encoded image data.</p>
+</td>
         </tr>
       </tbody>
     </table>
@@ -1658,7 +1686,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1719,7 +1747,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber155">source</a></span></span>
     </span>
   </h3>
 
@@ -1779,7 +1807,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -1847,7 +1875,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 

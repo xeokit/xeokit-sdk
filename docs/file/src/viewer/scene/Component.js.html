@@ -629,30 +629,6 @@ class Component {
                     this.error(&quot;Component not found: &quot; + utils.inQuotes(id));
                     return;
                 }
-
-            } else if (utils.isObject(component)) {
-
-                // Component config given
-
-                const componentCfg = component;
-                const componentType = componentCfg.type || type || &quot;Component&quot;;
-                const componentClass = componentClasses[componentType];
-
-                if (!componentClass) {
-                    this.error(&quot;Component type not found: &quot; + componentType);
-                    return;
-                }
-
-                if (type) {
-                    if (!core.isComponentType(componentType, type)) {
-                        this.error(&quot;Expected a &quot; + type + &quot; type or subtype, not a &quot; + componentType);
-                        return;
-                    }
-                }
-
-                component = new componentClass(this.scene, componentCfg);
-
-                managingLifecycle = true;
             }
         }
 
