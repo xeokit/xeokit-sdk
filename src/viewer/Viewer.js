@@ -265,19 +265,14 @@ class Viewer {
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
      * @returns {String} String-encoded image data.
      */
-    getSnapshot(params = {}, ok) {
-        this.sendToPlugins("snapshotStarting");
-        const imageData = this.scene.canvas._getSnapshot({
-            width: params.width, // Defaults to size of canvas
-            height: params.height,
-            format: params.format || "png" // Options are "jpeg" (default), "png" and "bmp"
-        }, ok);
+    getSnapshot(params = {}) {
+        this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        const imageData = this.scene.canvas._getSnapshot(params);
         this.sendToPlugins("snapshotFinished");
         return imageData;
     }
 
     /** Destroys this Viewer.
-     *
      */
     destroy() {
         this.scene.destroy();
