@@ -359,8 +359,22 @@ class Canvas extends Component {
     }
 
     /**
-     * @private
-     * @deprecated
+     * Returns a snapshot of this Viewer's canvas as a Base64-encoded image.
+     *
+     * #### Usage:
+     *
+     * ````javascript
+     * const imageData = viewer.getSnapshot({
+     *    width: 500,
+     *    height: 500,
+     *    format: "png"
+     * });
+     * ````
+     * @param {*} [params] Capture options.
+     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @returns {String} String-encoded image data.
      */
     getSnapshot(params) {
         throw "Canvas#getSnapshot() has been replaced by Viewer#getSnapshot() - use that method instead.";
