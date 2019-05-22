@@ -456,7 +456,7 @@ class Mesh extends Component {
             scene.canvas.canvas.id,
             (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
             scene._lightsState.getHash(),
-            scene._sectionPlanesState.getHash(),
+            scene._sectionPlanesState.getHash()
         ];
         const state = this._state;
         if (state.stationary) {
@@ -477,7 +477,11 @@ class Mesh extends Component {
     }
 
     _makePickHash() {
-        const pickHash = [];
+        const scene = this.scene;
+        const pickHash = [
+            scene.canvas.canvas.id,
+            scene._sectionPlanesState.getHash()
+        ];
         const state = this._state;
         if (state.stationary) {
             pickHash.push("/s");
