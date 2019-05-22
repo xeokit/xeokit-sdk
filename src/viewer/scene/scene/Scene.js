@@ -838,6 +838,7 @@ class Scene extends Component {
     _sectionPlaneCreated(sectionPlane) {
         this.sectionPlanes[sectionPlane.id] = sectionPlane;
         this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);
+        this.scene.fire("sectionPlaneCreated", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
     }
 

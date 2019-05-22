@@ -156,6 +156,15 @@ class SectionPlanesPlugin extends Plugin {
                 })
             });
         }
+
+        this._onSceneSectionPlaneCreated = viewer.scene.on("sectionPlaneCreated", (sectionPlane) => {
+
+            // SectionPlane created, either via SectionPlanesPlugin#createSectionPlane(), or by directly
+            // instantiating a SectionPlane independently of SectionPlanesPlugin, which can be done
+            // by BCFViewpointsPlugin#loadViewpoint().
+
+            this._sectionPlaneCreated(sectionPlane);
+        });
     }
 
     /**
@@ -202,16 +211,25 @@ class SectionPlanesPlugin extends Plugin {
      * @returns {SectionPlane} The new {@link SectionPlane}.
      */
     createSectionPlane(params) {
+
         if (params.id !== undefined && params.id !== null && this.viewer.scene.components[params.id]) {
             this.error("Viewer component with this ID already exists: " + params.id);
             delete params.id;
         }
+
+        // Note that SectionPlane constructor fires "sectionPlaneCreated" on the Scene,
+        // which SectionPlanesPlugin handles and calls #_sectionPlaneCreated to create gizmo and add to overview canvas.
+
         const sectionPlane = new SectionPlane(this.viewer.scene, {
             id: params.id,
             pos: params.pos,
             dir: params.dir,
             active: true || params.active
         });
+        return sectionPlane;
+    }
+
+    _sectionPlaneCreated(sectionPlane) {
         const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this);
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
@@ -219,10 +237,9 @@ class SectionPlanesPlugin extends Plugin {
         if (this._overview) {
             this._overview.addSectionPlane(sectionPlane);
         }
-        sectionPlane.on("destroyed", () => {
+        sectionPlane.once("destroyed", () => {
             this._sectionPlaneDestroyed(sectionPlane);
         });
-        return sectionPlane;
     }
 
     /**
@@ -340,6 +357,7 @@ class SectionPlanesPlugin extends Plugin {
             control._destroy();
             control = this._freeControls.pop();
         }
+        this.viewer.scene.off(this._onSceneSectionPlaneCreated);
     }
 }
 
