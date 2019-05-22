@@ -991,6 +991,7 @@ class Scene extends Component {
 
         if (this._needRecompile) {
             this._recompile();
+            this._renderer.imageDirty();
             this._needRecompile = false;
         }
 
