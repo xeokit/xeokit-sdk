@@ -9,6 +9,7 @@ import {BatchingEdgesRenderer} from "./batchingEdgesRenderer.js";
 import {BatchingPickMeshRenderer} from "./batchingPickMeshRenderer.js";
 import {BatchingPickDepthRenderer} from "./batchingPickDepthRenderer.js";
 import {BatchingPickNormalsRenderer} from "./batchingPickNormalsRenderer.js";
+import {BatchingOcclusionRenderer} from "./batchingOcclusionRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -717,6 +718,20 @@ class BatchingLayer {
         }
     }
 
+    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (!this._occlusionRenderer) {
+            this._occlusionRenderer = BatchingOcclusionRenderer.get(this);
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     compileShaders() {
         if (this._drawRenderer && this._drawRenderer.getValid() === false) {
             this._drawRenderer.put();
@@ -742,6 +757,10 @@ class BatchingLayer {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
         }
+        if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
+        }
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
@@ -760,6 +779,8 @@ class BatchingLayer {
         if (!this._pickNormalsRenderer) {
             this._pickNormalsRenderer = BatchingPickNormalsRenderer.get(this);
         }
+
+        // Lazy-get occlusion renderer in drawOcclusion(), only when we need it
     }
 
     destroy() {
@@ -787,6 +808,10 @@ class BatchingLayer {
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
         }
 
         const state = this._state;

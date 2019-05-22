@@ -27,11 +27,9 @@ class Viewer {
      * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
-     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for canvas snapshots to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
-     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
-     * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
-     * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
+     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. When this is not given and canvas is not transparent, then the background will be set to the {@link AmbientLight#color} of any defined {@link AmbientLight}.
+     * @param {Boolean} [cfg.gammaInput=false]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param  {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      */
@@ -54,11 +52,14 @@ class Viewer {
             canvasId: cfg.canvasId,
             webgl2: false,
             contextAttr: {
-                preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
+                preserveDrawingBuffer: false
             },
             transparent: cfg.transparent !== false,
+            backgroundColor: cfg.backgroundColor,
             gammaInput: true,
-            gammaOutput: true
+            gammaOutput: true,
+            ticksPerRender: 1,
+            ticksPerOcclusionTest: 20 /// TODO Change to 20
         });
 
         /**
@@ -258,27 +259,6 @@ class Viewer {
 
     destroy() {
 
-    }
-}
-
-function getPosition(object) {
-    const position = object.position;
-    if (position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
-        return vecToArray(position);
-    }
-}
-
-function getScale(object) {
-    const scale = object.scale;
-    if (scale[0] !== 1 || scale[1] !== 1 || scale[2] !== 1) {
-        return vecToArray(scale);
-    }
-}
-
-function getRotation(object) {
-    const rotation = object.rotation;
-    if (rotation[0] !== 0 || rotation[1] !== 0 || rotation[2] !== 0) {
-        return vecToArray(rotation);
     }
 }
 

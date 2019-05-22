@@ -5,7 +5,7 @@
 /**
  * @private
  */
-class PickMeshShaderSource {
+class OcclusionShaderSource {
     constructor(mesh) {
         this.vertex = buildVertex(mesh);
         this.fragment = buildFragment(mesh);
@@ -19,12 +19,11 @@ function buildVertex(mesh) {
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
     const src = [];
-    src.push("// Mesh picking vertex shader");
+    src.push("// Mesh occlusion vertex shader");
     src.push("attribute vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
-    src.push("varying vec4 vViewPosition;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
@@ -76,9 +75,8 @@ function buildFragment(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Mesh picking fragment shader");
+    src.push("// Mesh occlusion fragment shader");
     src.push("precision lowp float;");
-    src.push("uniform vec4 pickColor;");
     if (clipping) {
         src.push("uniform bool clippable;");
         src.push("varying vec4 vWorldPosition;");
@@ -100,9 +98,9 @@ function buildFragment(mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    src.push("   gl_FragColor = pickColor; ");
+    src.push("   gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0); ");
     src.push("}");
     return src;
 }
 
-export {PickMeshShaderSource};
+export {OcclusionShaderSource};

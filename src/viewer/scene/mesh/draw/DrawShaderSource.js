@@ -101,6 +101,7 @@ function buildVertexLambert(mesh) {
     }
     src.push("uniform vec4 lightAmbient;");
     src.push("uniform vec4 materialColor;");
+    src.push("uniform vec3 materialEmissive;");
     if (geometryState.normalsBuf) {
         src.push("attribute vec3 normal;");
         src.push("uniform mat4 modelNormalMatrix;");
@@ -226,7 +227,7 @@ function buildVertexLambert(mesh) {
         }
     }
     //src.push("vColor = vec4((reflectedColor * materialColor) + (lightAmbient.rgb * lightAmbient.a), 1.0) * colorize;");
-    src.push("vColor = vec4((reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
+    src.push("vColor = vec4(materialEmissive.rgb + (reflectedColor * materialColor.rgb), materialColor.a) * colorize;"); // TODO: How to have ambient bright enough for canvas BG but not too bright for scene?
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
     }

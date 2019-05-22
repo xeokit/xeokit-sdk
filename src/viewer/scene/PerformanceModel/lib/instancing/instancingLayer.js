@@ -11,6 +11,7 @@ import {InstancingEdgesRenderer} from "./instancingEdgesRenderer.js";
 import {InstancingPickMeshRenderer} from "./instancingPickMeshRenderer.js";
 import {InstancingPickDepthRenderer} from "./instancingPickDepthRenderer.js";
 import {InstancingPickNormalsRenderer} from "./instancingPickNormalsRenderer.js";
+import {InstancingOcclusionRenderer} from "./instancingOcclusionRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -711,6 +712,20 @@ class InstancingLayer {
         }
     }
 
+    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (!this._occlusionRenderer) {
+            this._occlusionRenderer = InstancingOcclusionRenderer.get(this);
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     compileShaders() {
         if (this._drawRenderer && this._drawRenderer.getValid() === false) {
             this._drawRenderer.put();
@@ -736,6 +751,10 @@ class InstancingLayer {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
         }
+        if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
+        }
         if (!this._drawRenderer) {
             this._drawRenderer = InstancingDrawRenderer.get(this);
         }
@@ -754,6 +773,8 @@ class InstancingLayer {
         if (!this._pickNormalsRenderer) {
             this._pickNormalsRenderer = InstancingPickNormalsRenderer.get(this);
         }
+
+        // Lazy-get occlusion renderer in occlude(), only when we need it
     }
 
     destroy() {
@@ -777,6 +798,14 @@ class InstancingLayer {
         if (this._pickDepthRenderer) {
             this._pickDepthRenderer.put();
             this._pickDepthRenderer = null;
+        }
+        if (this._pickNormalsRenderer) {
+            this._pickNormalsRenderer.put();
+            this._pickNormalsRenderer = null;
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
         }
 
         const state = this._state;

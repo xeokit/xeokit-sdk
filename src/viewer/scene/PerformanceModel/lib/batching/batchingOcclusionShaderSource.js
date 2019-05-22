@@ -1,7 +1,7 @@
 /**
  * @private
  */
-class BatchingPickMeshShaderSource {
+class BatchingOcclusionShaderSource {
     constructor(layer) {
         this.vertex = buildVertex(layer);
         this.fragment = buildFragment(layer);
@@ -12,35 +12,26 @@ function buildVertex(layer) {
     const scene = layer.model.scene;
     const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-
-    src.push("// Batched geometry picking vertex shader");
-
+    src.push("// Batched occlusion vertex shader");
     src.push("attribute vec3 position;");
+    src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
-
-    src.push("attribute vec4 pickColor;");
-
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
-
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
-
-    src.push("varying vec4 vPickColor;");
-
     src.push("void main(void) {");
     src.push("  bool visible   = (float(flags.x) > 0.0);");
-    src.push("  bool pickable  = (float(flags2.z) > 0.0);");
-    src.push("  if (!visible || !pickable) {");
+    src.push("  bool transparent  = ((float(color.a) / 255.0) < 1.0);");
+    src.push("  if (!visible || transparent) {");
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("  } else {");
     src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); "); // Batched positions are baked in World-space
     src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
-    src.push("      vPickColor = vec4(float(pickColor.r) / 255.0, float(pickColor.g) / 255.0, float(pickColor.b) / 255.0, float(pickColor.a) / 255.0);");
     if (clipping) {
         src.push("      vWorldPosition = worldPosition;");
         src.push("      vFlags2 = flags2;");
@@ -56,7 +47,7 @@ function buildFragment(layer) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Batched geometry picking fragment shader");
+    src.push("// Batched occlusion fragment shader");
     src.push("precision mediump float;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -67,7 +58,6 @@ function buildFragment(layer) {
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
-    src.push("varying vec4 vPickColor;");
     src.push("void main(void) {");
     if (clipping) {
         src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
@@ -81,9 +71,9 @@ function buildFragment(layer) {
         src.push("      if (dist > 0.0) { discard; }");
         src.push("  }");
     }
-    src.push("   gl_FragColor = vPickColor; ");
+    src.push("   gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
     src.push("}");
     return src;
 }
 
-export {BatchingPickMeshShaderSource};
+export {BatchingOcclusionShaderSource};
