@@ -31,6 +31,15 @@
         #myCanvas {
             background: #ffffff;
         }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
     </style>
 
     <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
@@ -42,6 +51,8 @@
 <body>
 
 <canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
 
 <div id="treePanel" class="treePanel"></div>
 
@@ -103,6 +114,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
         visible: true,
         size: 250,
         alignment: "bottomRight",
