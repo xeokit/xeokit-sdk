@@ -1,5 +1,3 @@
-import {MetaObject} from "./MetaObject.js";
-
 /**
  * @desc Metadata corresponding to an {@link Entity} that represents a model.
  *

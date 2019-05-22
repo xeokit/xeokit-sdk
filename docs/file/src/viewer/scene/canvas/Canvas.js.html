@@ -42,8 +42,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
@@ -115,7 +114,6 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/canvas/Canvas.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Canvas2Image} from &quot;../libs/canvas2image.js&quot;;
 import {core} from &quot;../core.js&quot;;
-import {utils} from &apos;../utils.js&apos;;
 import {math} from &apos;../math/math.js&apos;;
 import {stats} from &apos;../stats.js&apos;;
 import {Component} from &apos;../Component.js&apos;;
@@ -235,8 +233,6 @@ class Canvas extends Component {
             this.canvas.offsetLeft, this.canvas.offsetTop,
             this.canvas.clientWidth, this.canvas.clientHeight
         ];
-
-        this._createBackground();
 
         // Get WebGL context
 
@@ -364,9 +360,7 @@ class Canvas extends Component {
             canvas: this.canvas
         });
 
-        // Set property, see definition further down
-        this.backgroundColor = cfg.backgroundColor;
-        this.backgroundImage = cfg.backgroundImage;
+        this.clearColorAmbient = cfg.clearColorAmbient;
     }
 
     /**
@@ -399,32 +393,6 @@ class Canvas extends Component {
         this.canvas = document.getElementById(canvasId);
     }
 
-    /**
-     * Creates a image element behind the canvas, for purpose of showing a custom background.
-     * @private
-     */
-    _createBackground() {
-
-        const div = document.createElement(&apos;div&apos;);
-        const style = div.style;
-        style.padding = &quot;0&quot;;
-        style.margin = &quot;0&quot;;
-        style.background = null;
-        style.backgroundImage = null;
-        style.float = &quot;left&quot;;
-        style.left = &quot;0&quot;;
-        style.top = &quot;0&quot;;
-        style.width = &quot;100%&quot;;
-        style.height = &quot;100%&quot;;
-        style.position = &quot;absolute&quot;;
-        style.opacity = 1;
-        style[&quot;z-index&quot;] = &quot;-20000&quot;;
-
-        this.canvas.parentElement.appendChild(div);
-
-        this._backgroundElement = div;
-    }
-
     _getElementXY(e) {
         let x = 0, y = 0;
         while (e) {
@@ -439,21 +407,9 @@ class Canvas extends Component {
      * Initialises the WebGL context
      * @private
      */
-    _initWebGL(cfg) {
+    _initWebGL() {
 
         // Default context attribute values
-
-        if (false &amp;&amp; cfg.webgl2) {
-            try {
-                this.gl = this.canvas.getContext(&quot;webgl2&quot;, this.contextAttr);
-            } catch (e) { // Try with next context name
-            }
-            if (!this.gl) {
-                this.warn(&apos;Failed to get a WebGL 2 context - defaulting to WebGL 1.&apos;);
-            } else {
-                this.webgl2 = true;
-            }
-        }
 
         if (!this.gl) {
             for (let i = 0; !this.gl &amp;&amp; i &lt; WEBGL_CONTEXT_NAMES.length; i++) {
@@ -488,61 +444,49 @@ class Canvas extends Component {
     }
 
     /**
-     * Returns a snapshot of this Canvas as a Base64-encoded image.
+     * Sets if the canvas background color is derived from an {@link AmbientLight}.
      *
-     * When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
-     * and return it via the callback.
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element&apos;s HTML/CSS background color.
      *
-     * When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     * possible when you have configured the Canvas&apos;s {@link Scene} to preserve the
-     * WebGL drawing buffer, which has a performance overhead.
+     * Default value is ````false````.
      *
-     * #### Usage:
-     *
-     * ````javascript
-     * // Get snapshot asynchronously
-     * viewer.scene.canvas.getSnapshot({
-     *         width: 500, // Defaults to size of canvas
-     *         height: 500,
-     *         format: &quot;png&quot; // Options are &quot;jpeg&quot; (default), &quot;png&quot; and &quot;bmp&quot;
-     *     }, function(imageDataURL) {
-     *         imageElement.src = imageDataURL;
-     *     });
-     *
-     * // Get snapshot synchronously, requires that Scene be
-     * // configured with preserveDrawingBuffer; true
-     * imageElement.src = viewer.scene.canvas.getSnapshot({
-     *         width: 500,
-     *         height: 500,
-     *         format: &quot;png&quot;
-     *     });
-     * ````
-     * @param {*} [params] Capture options.
-     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
-     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
-     * @param {String} [params.format=&quot;jpeg&quot;] Desired format; &quot;jpeg&quot;, &quot;png&quot; or &quot;bmp&quot;.
-     * @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
-     * @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
+     * @type {Boolean}
      */
-    getSnapshot(params, ok) {
-
-        if (!this.canvas) {
-            this.error(&quot;Can&apos;t get snapshot - no canvas.&quot;);
-            ok(null);
-            return;
-        }
-
-        if (ok) { // Asynchronous
-            const self = this;
-            requestAnimationFrame(function () {
-                self.scene.render(true); // Force-render a frame
-                ok(self._getSnapshot(params));
-            });
-        } else {
-            return this._getSnapshot(params);
-        }
+    set clearColorAmbient(clearColorAmbient) {
+        this._clearColorAmbient = !!clearColorAmbient;
     }
 
+    /**
+     * Gets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element&apos;s HTML/CSS background color.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+
+    get clearColorAmbient() {
+        return this._clearColorAmbient;
+    }
+
+    /**
+     * @private
+     * @deprecated
+     */
+    getSnapshot(params) {
+        throw &quot;Canvas#getSnapshot() has been replaced by Viewer#getSnapshot() - use that method instead.&quot;;
+    }
+
+    /**
+     * Called by Viewer#getSnapshot
+     * @private
+     * @param params
+     * @returns {*}
+     * @private
+     */
     _getSnapshot(params) {
         params = params || {};
         const width = params.width || this.canvas.width;
@@ -600,62 +544,6 @@ class Canvas extends Component {
         if (this.canvas.loseContext) {
             this.canvas.loseContext();
         }
-    }
-
-    /**
-     * A background color for the canvas. This is overridden by {@link Canvas#backgroundImage}.
-     *
-     * You can set this to a new color at any time.
-     *
-     * @property backgroundColor
-     * @type {Number[]}
-     * @default null
-     */
-    set backgroundColor(value) {
-        if (!value) {
-            this._backgroundColor = null;
-        } else {
-            (this._backgroundColor = this._backgroundColor || math.vec4()).set(value || [0, 0, 0, 1]);
-            if (!this._backgroundImageSrc) {
-                const rgb = &quot;rgb(&quot; + Math.round(this._backgroundColor[0] * 255) + &quot;, &quot; + Math.round(this._backgroundColor[1] * 255) + &quot;,&quot; + Math.round(this._backgroundColor[2] * 255) + &quot;)&quot;;
-                this._backgroundElement.style.background = rgb;
-            }
-        }
-    }
-
-    get backgroundColor() {
-        return this._backgroundColor;
-    }
-
-    /**
-     * URL of a background image for the canvas. This is overrided by {@link Canvas/backgroundColor/property}.
-     *
-     * You can set this to a new file path at any time.
-     *
-     * @property backgroundImage
-     * @type {String}
-     */
-    set backgroundImage(value) {
-        if (!value) {
-            return;
-        }
-        if (!utils.isString(value)) {
-            this.error(&quot;Value for &apos;backgroundImage&apos; should be a string&quot;);
-            return;
-        }
-        if (value === this._backgroundImageSrc) { // Already loaded this image
-            return;
-        }
-        this._backgroundElement.style.backgroundImage = &quot;url(&apos;&quot; + value + &quot;&apos;)&quot;;
-        this._backgroundImageSrc = value;
-        if (!this._backgroundImageSrc) {
-            const rgb = &quot;rgb(&quot; + Math.round(this._backgroundColor[0] * 255) + &quot;, &quot; + Math.round(this._backgroundColor[1] * 255) + &quot;,&quot; + Math.round(this._backgroundColor[2] * 255) + &quot;)&quot;;
-            this._backgroundElement.style.background = rgb;
-        }
-    }
-
-    get backgroundImage() {
-        return this._backgroundImageSrc;
     }
 
     /**

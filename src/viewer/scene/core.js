@@ -167,17 +167,6 @@ function Core() {
     };
 }
 
-function subclasses(ChildClass, ParentClass) {
-    var c = ChildClass.prototype;
-    while (c !== null) {
-        if (c === ParentClass.prototype) {
-            return true;
-        }
-        c = c.__proto__;
-    }
-    return false;
-}
-
 /**
  * @private
  * @type {Core}

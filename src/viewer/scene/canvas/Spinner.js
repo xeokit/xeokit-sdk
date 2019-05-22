@@ -1,7 +1,5 @@
 import {Component} from '../Component.js';
 
-let spinnerCSSInjected = false; // Ensures lazy-injected CSS only injected once
-
 const spinnerCSS = ".sk-fading-circle {\
         background: transparent;\
         margin: 20px auto;\

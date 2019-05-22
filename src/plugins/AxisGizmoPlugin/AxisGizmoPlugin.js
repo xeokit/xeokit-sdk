@@ -89,7 +89,6 @@ class AxisGizmoPlugin extends Plugin {
         // style["background-color"] = "rgba(0,0,0,0.3)";
         div.innerHTML += '<canvas id="' + canvasId + '" style="width: ' + size[0] + 'px; height: ' + size[1] + 'px; float: left; margin: 0; padding: 0;"></canvas>';
         body.appendChild(div);
-        var helperCanvas = document.getElementById(canvasId);
 
         canvas.on("boundary",
             function (boundary) {
@@ -161,13 +160,6 @@ class AxisGizmoPlugin extends Plugin {
             heightSegments: 1,
             openEnded: false
         }));
-
-        var axisMaterial = new PhongMaterial(scene, { // Red by convention
-            ambient: [0.0, 0.0, 0.0],
-            specular: [.6, .6, .3],
-            shininess: 80,
-            lineWidth: 2
-        });
 
         var xAxisMaterial = new PhongMaterial(scene, { // Red by convention
             diffuse: [1, 0.3, 0.3],

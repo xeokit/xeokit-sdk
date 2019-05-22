@@ -42,8 +42,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
@@ -113,13 +112,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber48">xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlane} from &apos;<span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber51">xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlane.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber48">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber51">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -147,7 +146,9 @@
 <li>Discards elements from the half-space in the direction of <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-dir">SectionPlane#dir</a></span>.</li>
 <li>Can be be enabled or disabled via <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-set-active">SectionPlane#active</a></span>.</li>
 </ul>
-<h2 id="usage">Usage</h2><pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create two SectionPlanes to slice a model loaded from glTF. Note that we could also create them
+using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 import {SectionPlane} from &quot;../src/sectionPlane/SectionPlane.js&quot;;
 
@@ -964,7 +965,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
@@ -1024,7 +1025,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
       <td data-ice="name" class="code" data-depth="1">cfg.dir</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [0,0 -1]</li></ul></td>
+<li>default: [0,0,-1]</li></ul></td>
       <td data-ice="description"><p>Vector perpendicular to the plane surface, indicating the SectionPlane plane orientation.</p>
 </td>
     </tr>
@@ -1065,7 +1066,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -1110,7 +1111,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber112">source</a></span></span>
     </span>
   </h3>
 
@@ -1168,7 +1169,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
@@ -1213,7 +1214,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
@@ -1271,7 +1272,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
@@ -1316,7 +1317,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1377,7 +1378,7 @@ const sectionPlane2 = new SectionPlane(viewer.scene, {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/sectionPlane/SectionPlane.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 

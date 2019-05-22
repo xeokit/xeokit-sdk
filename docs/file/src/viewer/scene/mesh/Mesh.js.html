@@ -42,8 +42,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
@@ -126,7 +125,6 @@ import {DrawRenderer} from &quot;./draw/DrawRenderer.js&quot;;
 import {EmphasisFillRenderer} from &quot;./emphasis/EmphasisFillRenderer.js&quot;;
 import {EmphasisEdgesRenderer} from &quot;./emphasis/EmphasisEdgesRenderer.js&quot;;
 import {PickMeshRenderer} from &quot;./pick/PickMeshRenderer.js&quot;;
-import {PickVertexRenderer} from &quot;./pick/PickVertexRenderer.js&quot;;
 import {PickTriangleRenderer} from &quot;./pick/PickTriangleRenderer.js&quot;;
 
 import {geometryCompressionUtils} from &apos;../math/geometryCompressionUtils.js&apos;;
@@ -283,6 +281,13 @@ const identityMat = math.identityMat4();
 class Mesh extends Component {
 
     /**
+     @private
+     */
+    get type() {
+        return &quot;Mesh&quot;;
+    }
+
+    /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs
@@ -327,7 +332,6 @@ class Mesh extends Component {
             collidable: null,
             castsShadow: null,
             receivesShadow: null,
-            outlined: null,
             xrayed: false,
             highlighted: false,
             selected: false,
@@ -566,7 +570,7 @@ class Mesh extends Component {
             scene.canvas.canvas.id,
             (scene.gammaInput ? &quot;gi;&quot; : &quot;;&quot;) + (scene.gammaOutput ? &quot;go&quot; : &quot;&quot;),
             scene._lightsState.getHash(),
-            scene._sectionPlanesState.getHash(),
+            scene._sectionPlanesState.getHash()
         ];
         const state = this._state;
         if (state.stationary) {
@@ -587,7 +591,11 @@ class Mesh extends Component {
     }
 
     _makePickHash() {
-        const pickHash = [];
+        const scene = this.scene;
+        const pickHash = [
+            scene.canvas.canvas.id,
+            scene._sectionPlanesState.getHash()
+        ];
         const state = this._state;
         if (state.stationary) {
             pickHash.push(&quot;/s&quot;);
@@ -921,10 +929,6 @@ class Mesh extends Component {
             this._emphasisEdgesRenderer.put();
             this._emphasisEdgesRenderer = null;
         }
-        if (this._outlineRenderer) {
-            this._outlineRenderer.put();
-            this._outlineRenderer = null;
-        }
     }
 
     _putPickRenderers() {
@@ -935,10 +939,6 @@ class Mesh extends Component {
         if (this._pickTriangleRenderer) {
             this._pickTriangleRenderer.put();
             this._pickTriangleRenderer = null;
-        }
-        if (this._pickVertexRenderer) {
-            this._pickVertexRenderer.put();
-            this._pickVertexRenderer = null;
         }
     }
 
@@ -1761,9 +1761,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickVertices(frameCtx) {
-        if (this._pickVertexRenderer || (this._pickVertexRenderer = PickVertexRenderer.get(this))) {
-            this._pickVertexRenderer.drawMesh(frameCtx, this);
-        }
+
     }
 
     /**

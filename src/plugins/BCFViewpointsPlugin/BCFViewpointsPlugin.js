@@ -249,7 +249,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         bcfViewpoint.snapshot = {
             snapshot_type: "png",
-            snapshot_data: scene.canvas.canvas.toDataURL()
+            snapshot_data: this.viewer.getSnapshot()
         };
 
         return bcfViewpoint;
@@ -316,7 +316,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         if (bcfViewpoint.components.selection) {
             scene.setObjectsSelected(scene.selectedObjects, false);
-            Object.keys(scene.models).forEach(id => {
+            Object.keys(scene.models).forEach((id) => {
                 bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
             });
         }

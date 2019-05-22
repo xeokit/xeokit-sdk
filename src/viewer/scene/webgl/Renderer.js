@@ -118,6 +118,8 @@ const Renderer = function (scene, options) {
         const drawableInfo = drawableTypeInfo[type];
         if (--drawableInfo.count <= 0) {
             delete drawableTypeInfo[type];
+        } else {
+            delete drawableInfo.drawableMap[id];
         }
         delete drawables[id];
         drawableListDirty = true;

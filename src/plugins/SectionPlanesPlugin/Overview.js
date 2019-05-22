@@ -184,13 +184,13 @@ class Overview {
     /** Called by SectionPlanesPlugin#createSectionPlane()
      * @private
      */
-    _addSectionPlane(sectionPlane) {
+    addSectionPlane(sectionPlane) {
         this._planes[sectionPlane.id] = new Plane(this, this._scene, sectionPlane);
     }
 
     /**  @private
      */
-    _setPlaneHighlighted(id, highlighted) {
+    setPlaneHighlighted(id, highlighted) {
         const plane = this._planes[id];
         if (plane) {
             plane.setHighlighted(highlighted);
@@ -199,7 +199,7 @@ class Overview {
 
     /**  @private
      */
-    _setPlaneSelected(id, selected) {
+    setPlaneSelected(id, selected) {
         const plane = this._planes[id];
         if (plane) {
             plane.setSelected(selected);
@@ -208,10 +208,10 @@ class Overview {
 
     /** @private
      */
-    _removeSectionPlane(sectionPlane) {
+    removeSectionPlane(sectionPlane) {
         const plane = this._planes[sectionPlane.id];
         if (plane) {
-            plane._destroy();
+            plane.destroy();
             delete this._planes[sectionPlane.id];
         }
     }
@@ -237,7 +237,7 @@ class Overview {
 
     /**  @private
      */
-    _destroy() {
+    destroy() {
         this._viewer.camera.off(this._onViewerCameraMatrix);
         this._viewer.camera.off(this._onViewerCameraWorldAxis);
         this._viewer.camera.perspective.off(this._onViewerCameraFOV);

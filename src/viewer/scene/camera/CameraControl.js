@@ -1,6 +1,5 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {Mesh} from '../mesh/Mesh.js';
 import {CameraFlightAnimation} from './CameraFlightAnimation.js';
 
 /**
@@ -444,11 +443,9 @@ class CameraControl extends Component {
         const camera = scene.camera;
         const canvas = this.scene.canvas.canvas;
         let over = false;
-        const mouseHoverDelay = 500;
         const mouseOrbitRate = 0.4;
         const mousePanRate = 0.4;
         const mouseZoomRate = 0.8;
-        const mouseWheelPanRate = 0.4;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -790,9 +787,9 @@ class CameraControl extends Component {
                 if (panVx !== 0 || panVy !== 0 || panVz !== 0) {
                     const f = getEyeLookDist() / 80;
                     if (self._walking) {
-                        var y = camera.eye[1];
+                        let y = camera.eye[1];
                         camera.pan([panVx * f, panVy * f, panVz * f]);
-                        var eye = camera.eye;
+                        let eye = camera.eye;
                         eye[1] = y;
                         camera.eye = eye;
                     } else {
@@ -810,7 +807,7 @@ class CameraControl extends Component {
 
                 if (vZoom !== 0) {
                     if (self._firstPerson) {
-                        var y;
+                        let y;
                         if (self._walking) {
                             y = camera.eye[1];
                         }
@@ -820,7 +817,7 @@ class CameraControl extends Component {
                             camera.pan([0, 0, vZoom]); // Touchscreen input with no cursor
                         }
                         if (self._walking) {
-                            var eye = camera.eye;
+                            let eye = camera.eye;
                             eye[1] = y;
                             camera.eye = eye;
                         }
@@ -1098,7 +1095,7 @@ class CameraControl extends Component {
 
                         // if (!self.ctrlDown && !self.altDown) {
                         let front, back, left, right, up, down;
-                        if (self._keyboardLayout == 'azerty') {
+                        if (self._keyboardLayout === 'azerty') {
                             front = input.keyDown[input.KEY_Z];
                             back = input.keyDown[input.KEY_S];
                             left = input.keyDown[input.KEY_Q];
@@ -1302,7 +1299,7 @@ class CameraControl extends Component {
                     const elapsed = e.deltaTime;
                     let rotateLeft;
                     let rotateRight;
-                    if (self._keyboardLayout == 'azerty') {
+                    if (self._keyboardLayout === 'azerty') {
                         rotateLeft = input.keyDown[input.KEY_A];
                         rotateRight = input.keyDown[input.KEY_E];
                     } else {
@@ -1431,7 +1428,7 @@ class CameraControl extends Component {
 
                         clicks++;
 
-                        if (clicks == 1) {
+                        if (clicks === 1) {
                             timeout = setTimeout(function () {
 
                                 needPickEntity = self._doublePickFlyTo;

@@ -107,7 +107,6 @@ class SectionPlanesPlugin extends Plugin {
         this._shownControlId = null;
 
         if (!cfg.overviewCanvasId) {
-
             this.error("Config missing: overviewCanvasId - will create plugin without overview");
 
         } else {
@@ -123,11 +122,11 @@ class SectionPlanesPlugin extends Plugin {
                 visible: cfg.overviewVisible,
 
                 onHoverEnterPlane: ((id) => {
-                    this._overview._setPlaneHighlighted(id, true);
+                    this._overview.setPlaneHighlighted(id, true);
                 }),
 
                 onHoverLeavePlane: ((id) => {
-                    this._overview._setPlaneHighlighted(id, false);
+                    this._overview.setPlaneHighlighted(id, false);
                 }),
 
                 onClickedPlane: ((id) => {
@@ -157,6 +156,15 @@ class SectionPlanesPlugin extends Plugin {
                 })
             });
         }
+
+        this._onSceneSectionPlaneCreated = viewer.scene.on("sectionPlaneCreated", (sectionPlane) => {
+
+            // SectionPlane created, either via SectionPlanesPlugin#createSectionPlane(), or by directly
+            // instantiating a SectionPlane independently of SectionPlanesPlugin, which can be done
+            // by BCFViewpointsPlugin#loadViewpoint().
+
+            this._sectionPlaneCreated(sectionPlane);
+        });
     }
 
     /**
@@ -197,30 +205,41 @@ class SectionPlanesPlugin extends Plugin {
      *
      * @param {Object} params {@link SectionPlane} configuration.
      * @param {String} [params.id] Unique ID to assign to the {@link SectionPlane}. Must be unique among all components in the {@link Viewer}'s {@link Scene}. Auto-generated when omitted.
-     * @param {Number[]} [params.pos=0,0,0] World-space position of the {@link SectionPlane}.
-     * @param {Number[]} [params.dir=[0,0,-1]} World-space vector indicating the orientation of the {@link SectionPlane}.
+     * @param {Number[]} [params.pos=[0,0,0]] World-space position of the {@link SectionPlane}.
+     * @param {Number[]} [params.dir=[0,0,-1]] World-space vector indicating the orientation of the {@link SectionPlane}.
      * @param {Boolean} [params.active=true] Whether the {@link SectionPlane} is initially active. Only clips while this is true.
      * @returns {SectionPlane} The new {@link SectionPlane}.
      */
     createSectionPlane(params) {
+
         if (params.id !== undefined && params.id !== null && this.viewer.scene.components[params.id]) {
             this.error("Viewer component with this ID already exists: " + params.id);
             delete params.id;
         }
+
+        // Note that SectionPlane constructor fires "sectionPlaneCreated" on the Scene,
+        // which SectionPlanesPlugin handles and calls #_sectionPlaneCreated to create gizmo and add to overview canvas.
+
         const sectionPlane = new SectionPlane(this.viewer.scene, {
             id: params.id,
             pos: params.pos,
             dir: params.dir,
             active: true || params.active
         });
+        return sectionPlane;
+    }
+
+    _sectionPlaneCreated(sectionPlane) {
         const control = (this._freeControls.length > 0) ? this._freeControls.pop() : new Control(this);
         control._setSectionPlane(sectionPlane);
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;
         if (this._overview) {
-            this._overview._addSectionPlane(sectionPlane);
+            this._overview.addSectionPlane(sectionPlane);
         }
-        return sectionPlane;
+        sectionPlane.once("destroyed", () => {
+            this._sectionPlaneDestroyed(sectionPlane);
+        });
     }
 
     /**
@@ -237,7 +256,7 @@ class SectionPlanesPlugin extends Plugin {
         this.hideControl();
         control.setVisible(true);
         if (this._overview) {
-            this._overview._setPlaneSelected(id, true);
+            this._overview.setPlaneSelected(id, true);
         }
         this._shownControlId = id;
     }
@@ -261,7 +280,7 @@ class SectionPlanesPlugin extends Plugin {
             if (this._controls.hasOwnProperty(id)) {
                 this._controls[id].setVisible(false);
                 if (this._overview) {
-                    this._overview._setPlaneSelected(id, false);
+                    this._overview.setPlaneSelected(id, false);
                 }
             }
         }
@@ -279,11 +298,15 @@ class SectionPlanesPlugin extends Plugin {
             this.error("SectionPlane not found: " + id);
             return;
         }
-        if (this._overview) {
-            this._overview._removeSectionPlane(sectionPlane);
-        }
+        this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
-        const control = this._controls[id];
+    }
+
+    _sectionPlaneDestroyed(sectionPlane) {
+        if (this._overview) {
+            this._overview.removeSectionPlane(sectionPlane);
+        }
+        const control = this._controls[sectionPlane.id];
         if (!control) {
             return;
         }
@@ -308,6 +331,23 @@ class SectionPlanesPlugin extends Plugin {
      */
     send(name, value) {
         switch (name) {
+
+            case "snapshotStarting": // Viewer#getSnapshot() about to take snapshot - hide controls
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(true);
+                    }
+                }
+                break;
+
+            case "snapshotFinished": // Viewer#getSnapshot() finished taking snapshot - show controls again
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(false);
+                    }
+                }
+                break;
+
             case "clearSectionPlanes":
                 this.clear();
                 break;
@@ -322,7 +362,7 @@ class SectionPlanesPlugin extends Plugin {
     destroy() {
         this.clear();
         if (this._overview) {
-            this._overview._destroy();
+            this._overview.destroy();
         }
         this._destroyFreeControls();
         super.destroy();
@@ -334,6 +374,7 @@ class SectionPlanesPlugin extends Plugin {
             control._destroy();
             control = this._freeControls.pop();
         }
+        this.viewer.scene.off(this._onSceneSectionPlaneCreated);
     }
 }
 

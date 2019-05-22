@@ -168,6 +168,13 @@ const identityMat = math.identityMat4();
 class Mesh extends Component {
 
     /**
+     @private
+     */
+    get type() {
+        return "Mesh";
+    }
+
+    /**
      * @constructor
      * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
      * @param {*} [cfg] Configs

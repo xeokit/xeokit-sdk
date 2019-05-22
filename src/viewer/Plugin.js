@@ -71,7 +71,7 @@ class Plugin {
      * @param {String} msg The error message
      */
     log(msg) {
-        console.log(`[xeoviewer plugin ${this.id}]: ${msg}`);
+        console.log(`[xeokit plugin ${this.id}]: ${msg}`);
     }
 
     /**
@@ -80,7 +80,7 @@ class Plugin {
      * @param {String} msg The error message
      */
     warn(msg) {
-        console.warn(`[xeoviewer plugin ${this.id}]: ${msg}`);
+        console.warn(`[xeokit plugin ${this.id}]: ${msg}`);
     }
 
     /**
@@ -89,7 +89,7 @@ class Plugin {
      * @param {String} msg The error message
      */
     error(msg) {
-        console.error(`[xeoviewer plugin ${this.id}]: ${msg}`);
+        console.error(`[xeokit plugin ${this.id}]: ${msg}`);
     }
 
     /**

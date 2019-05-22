@@ -13482,7 +13482,7 @@
                         }
                       }
                     ],
-                    "kind": "var"
+                    "kind": "let"
                   },
                   "test": {
                     "type": "BinaryExpression",
@@ -16864,7 +16864,7 @@
                         }
                       }
                     ],
-                    "kind": "var"
+                    "kind": "let"
                   },
                   "test": {
                     "type": "BinaryExpression",
@@ -51622,8 +51622,8 @@
     },
     {
       "type": {
-        "label": "var",
-        "keyword": "var",
+        "label": "let",
+        "keyword": "let",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -51634,7 +51634,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "var",
+      "value": "let",
       "start": 4749,
       "end": 4752,
       "loc": {
@@ -58112,8 +58112,8 @@
     },
     {
       "type": {
-        "label": "var",
-        "keyword": "var",
+        "label": "let",
+        "keyword": "let",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -58124,7 +58124,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "var",
+      "value": "let",
       "start": 6039,
       "end": 6042,
       "loc": {

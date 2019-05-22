@@ -42,8 +42,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
@@ -123,7 +122,6 @@
 class GLTFDefaultDataSource {
 
     constructor() {
-
     }
 
     /**
@@ -142,7 +140,7 @@ class GLTFDefaultDataSource {
                 error(errMsg);
             });
     }
-    
+
     /**
      * Gets glTF JSON.
      *
@@ -151,7 +149,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the glTF JSON asset.
      */
     getGLTF(glTFSrc, ok, error) {
-        utils.loadJSON(glTFSrc, 
+        utils.loadJSON(glTFSrc,
             (gltf) =&gt; {
                 ok(gltf);
             },
@@ -172,7 +170,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the glTF binary asset.
      */
     getArrayBuffer(glTFSrc, binarySrc, ok, error) {
-        utils.loadArraybuffer(binarySrc,
+        loadArraybuffer(glTFSrc, binarySrc,
             (arrayBuffer) =&gt; {
                 ok(arrayBuffer);
             },
@@ -180,6 +178,59 @@ class GLTFDefaultDataSource {
                 error(errMsg);
             });
     }
+}
+
+function loadArraybuffer(glTFSrc, binarySrc, ok, err) {
+    // Check for data: URI
+    var defaultCallback = () =&gt; {
+    };
+    ok = ok || defaultCallback;
+    err = err || defaultCallback;
+    const dataUriRegex = /^data:(.*?)(;base64)?,(.*)$/;
+    const dataUriRegexResult = binarySrc.match(dataUriRegex);
+    if (dataUriRegexResult) { // Safari can&apos;t handle data URIs through XMLHttpRequest
+        const isBase64 = !!dataUriRegexResult[2];
+        var data = dataUriRegexResult[3];
+        data = window.decodeURIComponent(data);
+        if (isBase64) {
+            data = window.atob(data);
+        }
+        try {
+            const buffer = new ArrayBuffer(data.length);
+            const view = new Uint8Array(buffer);
+            for (var i = 0; i &lt; data.length; i++) {
+                view[i] = data.charCodeAt(i);
+            }
+            window.setTimeout(function () {
+                ok(buffer);
+            }, 0);
+        } catch (error) {
+            window.setTimeout(function () {
+                err(error);
+            }, 0);
+        }
+    } else {
+        const basePath = getBasePath(glTFSrc);
+        const url = basePath + binarySrc;
+        const request = new XMLHttpRequest();
+        request.open(&apos;GET&apos;, url, true);
+        request.responseType = &apos;arraybuffer&apos;;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    ok(request.response);
+                } else {
+                    err(&apos;loadArrayBuffer error : &apos; + request.response);
+                }
+            }
+        };
+        request.send(null);
+    }
+}
+
+function getBasePath(src) {
+    var i = src.lastIndexOf(&quot;/&quot;);
+    return (i !== 0) ? src.substring(0, i + 1) : &quot;&quot;;
 }
 
 export {GLTFDefaultDataSource};</code></pre>
