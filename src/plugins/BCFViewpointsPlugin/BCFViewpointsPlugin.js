@@ -249,7 +249,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         bcfViewpoint.snapshot = {
             snapshot_type: "png",
-            snapshot_data: scene.canvas.canvas.toDataURL()
+            snapshot_data: this.viewer.getSnapshot()
         };
 
         return bcfViewpoint;

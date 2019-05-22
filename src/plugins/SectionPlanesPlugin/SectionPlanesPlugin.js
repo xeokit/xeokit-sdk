@@ -331,6 +331,23 @@ class SectionPlanesPlugin extends Plugin {
      */
     send(name, value) {
         switch (name) {
+
+            case "snapshotStarting": // Viewer#getSnapshot() about to take snapshot - hide controls
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(true);
+                    }
+                }
+                break;
+
+            case "snapshotFinished": // Viewer#getSnapshot() finished taking snapshot - show controls again
+                for (let id in this._controls) {
+                    if (this._controls.hasOwnProperty(id)) {
+                        this._controls[id].setCulled(false);
+                    }
+                }
+                break;
+
             case "clearSectionPlanes":
                 this.clear();
                 break;

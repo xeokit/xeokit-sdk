@@ -24,7 +24,7 @@ class Viewer {
      * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
-     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for canvas snapshots to work.
+     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
      * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
      * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
@@ -248,11 +248,14 @@ class Viewer {
     }
 
     getSnapshot(params = {}, ok) {
-        return this.scene.canvas.getSnapshot({
+        this.sendToPlugins("snapshotStarting");
+        const imageData = this.scene.canvas._getSnapshot({
             width: params.width, // Defaults to size of canvas
             height: params.height,
             format: params.format || "png" // Options are "jpeg" (default), "png" and "bmp"
         }, ok);
+        this.sendToPlugins("snapshotFinished");
+        return imageData;
     }
 
     /** Destroys this Viewer.

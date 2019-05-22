@@ -359,61 +359,20 @@ class Canvas extends Component {
     }
 
     /**
-     * Returns a snapshot of this Canvas as a Base64-encoded image.
-     *
-     * When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
-     * and return it via the callback.
-     *
-     * When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     * possible when you have configured the Canvas's {@link Scene} to preserve the
-     * WebGL drawing buffer, which has a performance overhead.
-     *
-     * #### Usage:
-     *
-     * ````javascript
-     * // Get snapshot asynchronously
-     * viewer.scene.canvas.getSnapshot({
-     *         width: 500, // Defaults to size of canvas
-     *         height: 500,
-     *         format: "png" // Options are "jpeg" (default), "png" and "bmp"
-     *     }, function(imageDataURL) {
-     *         imageElement.src = imageDataURL;
-     *     });
-     *
-     * // Get snapshot synchronously, requires that Scene be
-     * // configured with preserveDrawingBuffer; true
-     * imageElement.src = viewer.scene.canvas.getSnapshot({
-     *         width: 500,
-     *         height: 500,
-     *         format: "png"
-     *     });
-     * ````
-     * @param {*} [params] Capture options.
-     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
-     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
-     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
-     * @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
-     * @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
+     * @private
+     * @deprecated
      */
-    getSnapshot(params, ok) {
-
-        if (!this.canvas) {
-            this.error("Can't get snapshot - no canvas.");
-            ok(null);
-            return;
-        }
-
-        if (ok) { // Asynchronous
-            const self = this;
-            requestAnimationFrame(function () {
-                self.scene.render(true); // Force-render a frame
-                ok(self._getSnapshot(params));
-            });
-        } else {
-            return this._getSnapshot(params);
-        }
+    getSnapshot(params) {
+        throw "Canvas#getSnapshot() has been replaced by Viewer#getSnapshot() - use that method instead.";
     }
 
+    /**
+     * Called by Viewer#getSnapshot
+     * @private
+     * @param params
+     * @returns {*}
+     * @private
+     */
     _getSnapshot(params) {
         params = params || {};
         const width = params.width || this.canvas.width;

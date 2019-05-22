@@ -126,22 +126,16 @@ function getEntityIDMap(scene, entityIds) {
  * //...
  * ````
  *
- * ## Managing the canvas, taking snapshots
+ * ## Managing the canvas
  *
  * The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
- * as getting getting snapshots, firing resize events etc:
+ * as firing resize events etc:
  *
  * ````javascript
  * var canvas = scene.canvas;
  *
  * canvas.on("boundary", function(boundary) {
  *     //...
- * });
- *
- * var imageData = canvas.getSnapshot({
- *     width: 500,
- *     height: 500,
- *     format: "png"
  * });
  * ````
  *
@@ -973,8 +967,7 @@ class Scene extends Component {
      * Renders a single frame of this Scene.
      *
      * The Scene will periodically render itself after any updates, but you can call this method to force a render
-     * if required. This method is typically used when we want to synchronously take a snapshot of the canvas and
-     * need everything rendered right at that moment.
+     * if required.
      *
      * @param {Boolean} [forceRender=false] Forces a render when true, otherwise only renders if something has changed in this Scene
      * since the last render.
