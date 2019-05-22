@@ -267,6 +267,7 @@ class Viewer {
      */
     getSnapshot(params = {}) {
         this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        this.scene.render(); // Renders without hidden things
         const imageData = this.scene.canvas._getSnapshot(params);
         this.sendToPlugins("snapshotFinished");
         return imageData;
