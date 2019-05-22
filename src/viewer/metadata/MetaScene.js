@@ -6,7 +6,7 @@ import {MetaObject} from "./MetaObject.js";
  *
  * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
- * * [Scene Graphs user guide](https://github.com/xeolabs/xeokit-sdk/wiki/Scene-Graphs)
+ * * [Scene Graphs user guide](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs)
  * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
  */
 class MetaScene {
@@ -202,7 +202,7 @@ class MetaScene {
         const metaObjects = this.metaObjects;
         const metaObjectsByType = this.metaObjectsByType;
 
-        function visit(metaObject) {
+        let visit = (metaObject) => {
             delete metaObjects[metaObject.id];
             const types = metaObjectsByType[metaObject.type];
             if (types && types[metaObject.id]) {
@@ -219,7 +219,7 @@ class MetaScene {
                     visit(childMetaObject);
                 }
             }
-        }
+        };
 
         visit(metaModel.rootMetaObject);
         delete this.metaModels[id];

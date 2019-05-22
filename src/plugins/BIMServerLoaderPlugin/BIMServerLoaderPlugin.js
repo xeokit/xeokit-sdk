@@ -30,7 +30,7 @@ import {utils} from "../../viewer/scene/utils.js";
  *
  * Note that BIMServerLoaderPlugin works with BIMServer V1.5.120 or later.
  *
- * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
+ * Read more about this example in the user guide on [Viewing Models from BIMServer](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-Models-from-BIMServer).
  *
  *  [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMServer_Schependomlaan)]
  *

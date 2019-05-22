@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/xeolabs/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -42,7 +42,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
@@ -112,13 +113,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlanesPlugin} from &apos;<span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber42">xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlanesPlugin} from &apos;<span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber102">xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber42">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber102">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -138,39 +139,89 @@
 
   
   
-  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that manages user cross-section planes.</p>
-<p>In the example below, we&apos;ll use a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model, and a SectionPlanesPlugin
-to create a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> to slice it in half.</p>
-<ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#SectionPlanes_Schependomlaan">Run this example</a>]</li>
+  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that manages <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s.</p>
+<p>Use the SectionPlanesPlugin to create and edit <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s, which slice portions off your models to reveal internal structures.</p>
+<p>The SectionPlanesPlugin shows an overview of your SectionPlanes in a canvas in the corner
+of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s canvas. Click the planes in the overview canvas to activate a 3D editing control with
+which you can interactively reposition them in the Viewer canvas.</p>
+<h2 id="usage">Usage</h2><ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin">Run this example</a>]</li>
 </ul>
+<p>In the example below, we&apos;ll use a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model, and a SectionPlanesPlugin
+to slice it open with two <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s. We&apos;ll show the oviewer in the bottom right of the Viewer
+canvas. Finally, we&apos;ll programmatically activate the 3D editing control for our second plane.</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
 
+// Create a Viewer and arrange its Camera
+
 const viewer = new Viewer({
-    canvasId: &quot;myCanvas&quot;,
-    transparent: true
+    canvasId: &quot;myCanvas&quot;
 });
 
-viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
-viewer.scene.camera.look = [10.97, 5.82, -11.22];
-viewer.scene.camera.up = [0.36, 0.83, 0.40];
+viewer.camera.eye = [-5.02, 2.22, 15.09];
+viewer.camera.look = [4.97, 2.79, 9.89];
+viewer.camera.up = [-0.05, 0.99, 0.02];
+
+
+// Add a GLTFLoaderPlugin
 
 const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-const sectionPlanes = new SectionPlanesPlugin(viewer);
+// Add a SectionPlanesPlugin
+
+const sectionPlanes = new SectionPlanesPlugin(viewer, {
+    overview: {
+        visible: true,
+        size: 300
+    }
+});
+
+// Show the SectionPlanePlugin&apos;s SectionPlane overview gizmo at bottom-right of the Viewer canvas.
+// The overview gizmo shows a simplified 3D view containing 3D planes that represent the SectionPlanes.
+// We can click each plane in the overview to activate the 3D editing gizmo for its SectionPlane.
+
+sectionPlanes.overview.setVisible(true);
+sectionPlanes.overview.setSize(250);
+sectionPlanes.overview.setAlignment(&quot;bottomRight&quot;);
+sectionPlanes.overview.setRightMargin(5);
+sectionPlanes.overview.setBottomMargin(5);
+
+// Load a model
 
 const model = gltfLoader.load({
     id: &quot;myModel&quot;,
     src: &quot;./models/gltf/schependomlaan/scene.gltf&quot;
 });
 
-const sectionPlane = sectionPlanes.createSectionPlane({
-    id: &quot;myClip&quot;,
-    pos: [0, 0, 0],
-    dir: [0.5, 0.0, 0.5]
-});</code>
+// Create a couple of section planes
+// These will be shown in the overview gizmo
+
+sectionPlanes.createSectionPlane({
+    id: &quot;mySectionPlane&quot;,
+    pos: [1.04, 1.95, 9.74],
+    dir: [1.0, 0.0, 0.0]
+});
+
+sectionPlanes.createSectionPlane({
+    id: &quot;mySectionPlane2&quot;,
+    pos: [2.30, 4.46, 14.93],
+    dir: [0.0, -0.09, -0.79]
+});
+
+// Show the SectionPlanePlugin&apos;s 3D editing gizmo,
+// to interactively reposition one of our SectionPlanes
+
+sectionPlanes.showControl(&quot;mySectionPlane2&quot;);
+
+const mySectionPlane2 = sectionPlanes.sectionPlanes[&quot;mySectionPlane2&quot;];
+
+// Programmatically reposition one of our SectionPlanes
+// This also updates its position as shown in the overview gizmo
+
+mySectionPlane2.pos = [11.0, 6.-, -12];
+mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
 </code></pre>
 </div>
   
@@ -229,7 +280,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <td>
       <span class="access" data-ice="access">public</span>
       
-      
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -239,13 +290,43 @@ const sectionPlane = sectionPlanes.createSectionPlane({
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-member-sectionPlanes">sectionPlanes</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-get-overview">overview</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Gets the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span>, which manages an interactive 3D overview for navigating the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-get-sectionPlanes">sectionPlanes</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>}: <span>*</span></span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Returns a map of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
+</div>
       </div>
     </td>
     <td>
@@ -280,7 +361,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <div>
         
         
-        <div data-ice="description"><p>Destroys all SectionPlanes.</p>
+        <div data-ice="description"><p>Destroys all <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
 </div>
       </div>
     </td>
@@ -309,7 +390,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <div>
         
         
-        <div data-ice="description"><p>Creates a SectionPlane.</p>
+        <div data-ice="description"><p>Creates a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
 </div>
       </div>
     </td>
@@ -338,7 +419,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <div>
         
         
-        <div data-ice="description"><p>Destroys this plugin.</p>
+        <div data-ice="description"><p>Destroys this SectionPlanesPlugin.</p>
 </div>
       </div>
     </td>
@@ -367,7 +448,94 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <div>
         
         
-        <div data-ice="description"><p>Destroys a SectionPlane.</p>
+        <div data-ice="description"><p>Destroys a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> created by this SectionPlanesPlugin.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-method-getShownControl">getShownControl</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the ID of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> that the 3D editing gizmo is shown for.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-method-hideControl">hideControl</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Hides the 3D <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> editing gizmo if shown.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-method-showControl">showControl</a></span></span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Shows the 3D editing gizmo for a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
 </div>
       </div>
     </td>
@@ -636,7 +804,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber50">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 
@@ -678,6 +846,70 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.overview</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: {}</li></ul></td>
+      <td data-ice="description"><p>Optional initial configuration for the plugin&apos;s <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.visible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Initial visibility of the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.alignment</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;bottomRight&quot;</li></ul></td>
+      <td data-ice="description"><p>Initial alignment of the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> within the bounds of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.size</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 200</li></ul></td>
+      <td data-ice="description"><p>Initial size of the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> canvas in pixels. The canvas is square, so width and height are the same size.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.leftMargin</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 10</li></ul></td>
+      <td data-ice="description"><p>Initial margin between the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> and the left edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>. Applies when alignment is &quot;topLeft&quot; or &quot;bottomLeft&quot;.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.rightMargin</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 10</li></ul></td>
+      <td data-ice="description"><p>Initial margin between the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> and the right edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>. Applies when alignment is &quot;topRight&quot; or &quot;bottomRight&quot;.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.topMargin</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 10</li></ul></td>
+      <td data-ice="description"><p>Initial margin between the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> and the top edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>. Applies when alignment is &quot;topLeft&quot; or &quot;topRight&quot;.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">cfg.overview.bottomMargin</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 10</li></ul></td>
+      <td data-ice="description"><p>Initial margin between the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span> and the bottom edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>. Applies when alignment is &quot;bottomLeft&quot; or &quot;bottomRight&quot;.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -704,25 +936,26 @@ const sectionPlane = sectionPlanes.createSectionPlane({
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-sectionPlanes">
+  <h3 data-ice="anchor" id="instance-get-overview">
     <span class="access" data-ice="access">public</span>
     
+    <span class="kind" data-ice="kind">get</span>
     
     
     
-    
-    <span class="code" data-ice="name">sectionPlanes</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">overview</span><span class="code" data-ice="signature">: <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Gets the <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesOverview.js~SectionPlanesOverview.html">SectionPlanesOverview</a></span>, which manages an interactive 3D overview for navigating the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
+</div>
 
   
 
@@ -730,6 +963,63 @@ const sectionPlane = sectionPlanes.createSectionPlane({
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-sectionPlanes">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">sectionPlanes</span><span class="code" data-ice="signature">: {String: <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>}: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber188">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns a map of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType">{String: <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>}</td>
+          <td class="return-desc" data-ice="returnDescription"><p>A map containing the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s, each mapped to its <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">SectionPlane#id</a></span>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -761,14 +1051,14 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber290">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys all SectionPlanes.</p>
+  <div data-ice="description"><p>Destroys all <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s created by this SectionPlanesPlugin.</p>
 </div>
 
   
@@ -805,14 +1095,15 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber77">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber204">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Creates a SectionPlane.</p>
+  <div data-ice="description"><p>Creates a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
+<p>The <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> will be registered by <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">SectionPlane#id</a></span> in <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html#instance-get-sectionPlanes">SectionPlanesPlugin#sectionPlanes</a></span>.</p>
 </div>
 
   
@@ -829,14 +1120,14 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <td data-ice="name" class="code" data-depth="0">params</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>SectionPlane plane configuration.</p>
+      <td data-ice="description"><p><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> configuration.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Unique ID to assign to the SectionPlane. Must be unique among all components in the Viewer.</p>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Unique ID to assign to the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>. Must be unique among all components in the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>. Auto-generated when omitted.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -844,14 +1135,14 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0,0,0</li></ul></td>
-      <td data-ice="description"><p>World-space position of the sectionPlane plane.</p>
+      <td data-ice="description"><p>World-space position of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.dir</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: [0,0,-1]} Vector indicating the orientation of the SectionPlane.</li></ul></td>
+<li>default: [0,0,-1]} World-space vector indicating the orientation of the {@link SectionPlane}.</li></ul></td>
       <td data-ice="description"></td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -859,15 +1150,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether the SectionPlane is initially active. Only clips while this is true.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.shown</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether to show a helper object to indicate the SectionPlane&apos;s position and orientation.</p>
+      <td data-ice="description"><p>Whether the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> is initially active. Only clips while this is true.</p>
 </td>
     </tr>
 </tbody>
@@ -881,7 +1164,7 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>A <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> representing the SectionPlane.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The new <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
 </td>
         </tr>
       </tbody>
@@ -917,15 +1200,15 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber313">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this plugin.</p>
-<p>Destroys all SectionPlanes first.</p>
+  <div data-ice="description"><p>Destroys this SectionPlanesPlugin.</p>
+<p>Also destroys each <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> created by this SectionPlanesPlugin.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/viewer/Plugin.js~Plugin.html#instance-method-destroy">Plugin#destroy</a></span></div>
@@ -962,14 +1245,14 @@ const sectionPlane = sectionPlanes.createSectionPlane({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys a SectionPlane.</p>
+  <div data-ice="description"><p>Destroys a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> created by this SectionPlanesPlugin.</p>
 </div>
 
   
@@ -986,7 +1269,170 @@ const sectionPlane = sectionPlanes.createSectionPlane({
       <td data-ice="name" class="code" data-depth="0">id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>ID of SectionPlane to destroy.</p>
+      <td data-ice="description"><p>ID of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getShownControl">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getShownControl</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber247">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the ID of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> that the 3D editing gizmo is shown for.</p>
+<p>Returns <code>null</code> when the editing gizmo is not shown.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>ID of the the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> that the 3D editing gizmo is shown for, if shown, else <code>null</code>.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-hideControl">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">hideControl</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber254">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Hides the 3D <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> editing gizmo if shown.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-showControl">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">showControl</span><span class="code" data-ice="signature">(id: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber228">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Shows the 3D editing gizmo for a <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">id</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>ID of the <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>.</p>
 </td>
     </tr>
 </tbody>

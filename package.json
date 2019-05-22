@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xeolabs/xeokit-sdk.git"
+    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
   },
   "keywords": [
     "webgl",
@@ -19,9 +19,9 @@
   "author": "Lindsay Kay",
   "license": "SEE LICENSE IN LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/xeolabs/xeokit-sdk/issues"
+    "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
-  "homepage": "https://github.com/xeolabs/xeokit-sdk#readme",
+  "homepage": "https://github.com/xeokit/xeokit-sdk#readme",
   "dependencies": {},
   "devDependencies": {
     "esdoc": "^1.1.0",

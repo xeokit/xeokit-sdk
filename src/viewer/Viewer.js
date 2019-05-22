@@ -28,10 +28,10 @@ class Viewer {
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
-     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. When this is not given and canvas is not transparent, then the background will be set to the {@link AmbientLight#color} of any defined {@link AmbientLight}.
-     * @param {Boolean} [cfg.gammaInput=false]  When true, expects that all textures and colors are premultiplied gamma.
+     * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
-     * @param  {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
+     * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
+     * @param {Boolean}[cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
      */
     constructor(cfg) {
 
@@ -52,12 +52,12 @@ class Viewer {
             canvasId: cfg.canvasId,
             webgl2: false,
             contextAttr: {
-                preserveDrawingBuffer: false
+                preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
             },
             transparent: cfg.transparent !== false,
-            backgroundColor: cfg.backgroundColor,
             gammaInput: true,
             gammaOutput: true,
+            clearColorAmbient: cfg.clearColorAmbient
             ticksPerRender: 1,
             ticksPerOcclusionTest: 20 /// TODO Change to 20
         });
@@ -257,8 +257,11 @@ class Viewer {
         }, ok);
     }
 
+    /** Destroys this Viewer.
+     *
+     */
     destroy() {
-
+        this.scene.destroy();
     }
 }
 

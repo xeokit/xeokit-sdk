@@ -11,7 +11,6 @@ import {DrawRenderer} from "./draw/DrawRenderer.js";
 import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
 import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
-import {PickVertexRenderer} from "./pick/PickVertexRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
 import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
 
@@ -213,7 +212,6 @@ class Mesh extends Component {
             collidable: null,
             castsShadow: null,
             receivesShadow: null,
-            outlined: null,
             xrayed: false,
             highlighted: false,
             selected: false,
@@ -839,10 +837,6 @@ class Mesh extends Component {
             this._emphasisEdgesRenderer.put();
             this._emphasisEdgesRenderer = null;
         }
-        if (this._outlineRenderer) {
-            this._outlineRenderer.put();
-            this._outlineRenderer = null;
-        }
     }
 
     _putPickRenderers() {
@@ -853,10 +847,6 @@ class Mesh extends Component {
         if (this._pickTriangleRenderer) {
             this._pickTriangleRenderer.put();
             this._pickTriangleRenderer = null;
-        }
-        if (this._pickVertexRenderer) {
-            this._pickVertexRenderer.put();
-            this._pickVertexRenderer = null;
         }
     }
 
@@ -1694,9 +1684,7 @@ class Mesh extends Component {
 
     /** @private  */
     drawPickVertices(frameCtx) {
-        if (this._pickVertexRenderer || (this._pickVertexRenderer = PickVertexRenderer.get(this))) {
-            this._pickVertexRenderer.drawMesh(frameCtx, this);
-        }
+
     }
 
     /**

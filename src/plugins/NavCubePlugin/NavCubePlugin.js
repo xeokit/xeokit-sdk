@@ -628,7 +628,7 @@ class NavCubePlugin extends Plugin {
      *
      * This applies when the NavCube's alignment is "topLeft" or "bottomLeft". Default value is ````10````.
      *
-     * @return {Number} leftMargin The left margin value, in pixels.
+     * @return {Number} The left margin value, in pixels.
      */
     getLeftMargin() {
         return this._leftMargin;
@@ -651,7 +651,7 @@ class NavCubePlugin extends Plugin {
      *
      * This applies when the NavCube's alignment is "topRight" or "bottomRight". Default value is ````10````.
      *
-     * @return {Number} rightMargin The right margin value, in pixels.
+     * @return {Number} The right margin value, in pixels.
      */
     getRightMargin() {
         return this._rightMargin;
@@ -674,7 +674,7 @@ class NavCubePlugin extends Plugin {
      *
      * This applies when the NavCube's alignment is "topRight" or "topLeft". Default value is ````10````.
      *
-     * @return {Number} topMargin The top margin value, in pixels.
+     * @return {Number} The top margin value, in pixels.
      */
     getTopMargin() {
         return this._topMargin;
@@ -697,7 +697,7 @@ class NavCubePlugin extends Plugin {
      *
      * This applies when the NavCube's alignment is "bottomRight" or "bottomLeft". Default value is ````10````.
      *
-     * @return {Number} bottomMargin The bottom margin value, in pixels.
+     * @return {Number} The bottom margin value, in pixels.
      */
     getBottomMargin() {
         return this._bottomMargin;

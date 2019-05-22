@@ -247,8 +247,7 @@ class Canvas extends Component {
             canvas: this.canvas
         });
 
-        // Set property, see definition further down
-        this.backgroundColor = cfg.backgroundColor;
+        this.clearColorAmbient = cfg.clearColorAmbient;
     }
 
     /**
@@ -341,6 +340,35 @@ class Canvas extends Component {
                 this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
             }
         }
+    }
+
+    /**
+     * Sets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set clearColorAmbient(clearColorAmbient) {
+        this._clearColorAmbient = !!clearColorAmbient;
+    }
+
+    /**
+     * Gets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+
+    get clearColorAmbient() {
+        return this._clearColorAmbient;
     }
 
     /**
@@ -459,30 +487,6 @@ class Canvas extends Component {
     }
 
     /**
-     * A background color for the canvas. This is overridden by {@link Canvas#backgroundImage}.
-     *
-     * You can set this to a new color at any time.
-     *
-     * @property backgroundColor
-     * @type {Number[]}
-     * @default null
-     */
-    set backgroundColor(value) {
-        if (!value) {
-            this._backgroundColor = null;
-        } else {
-            (this._backgroundColor = this._backgroundColor || math.vec4()).set(value || [0, 0, 0, 1]);
-        }
-        if (this.scene._renderer) {
-            this.scene._renderer.imageDirty();
-        }
-    }
-
-    get backgroundColor() {
-        return this._backgroundColor;
-    }
-
-    /**
      The busy {@link Spinner} for this Canvas.
 
      @property spinner
@@ -495,6 +499,7 @@ class Canvas extends Component {
 
     destroy() {
         this.scene.off(this._tick);
+        this._spinner._destroy();
         // Memory leak avoidance
         this.canvas.removeEventListener("webglcontextlost", this._webglcontextlostListener);
         this.canvas.removeEventListener("webglcontextrestored", this._webglcontextrestoredListener);

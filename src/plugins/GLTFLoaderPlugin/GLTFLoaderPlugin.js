@@ -51,7 +51,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * Since this model contains IFC types, the GLTFModelLoader will set the initial colors of object {@link Entity}s according
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeolabs/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
+ * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
  *
  * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
