@@ -515,30 +515,6 @@ class Component {
                     this.error("Component not found: " + utils.inQuotes(id));
                     return;
                 }
-
-            } else if (utils.isObject(component)) {
-
-                // Component config given
-
-                const componentCfg = component;
-                const componentType = componentCfg.type || type || "Component";
-                const componentClass = componentClasses[componentType];
-
-                if (!componentClass) {
-                    this.error("Component type not found: " + componentType);
-                    return;
-                }
-
-                if (type) {
-                    if (!core.isComponentType(componentType, type)) {
-                        this.error("Expected a " + type + " type or subtype, not a " + componentType);
-                        return;
-                    }
-                }
-
-                component = new componentClass(this.scene, componentCfg);
-
-                managingLifecycle = true;
             }
         }
 

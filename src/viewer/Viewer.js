@@ -9,10 +9,7 @@ import {MetaScene} from "./metadata/MetaScene.js";
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
  * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
- * Viewer's {@link Scene}. Load and unload metadata using {@link Viewer#createMetadata}
- * and {@link Viewer#destroyMetadata}.
- * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
- * {@link Plugin} instances will also save and load their state to and from the JSON.
+ * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
  * {@link Camera} to target positions, boundaries or {@link Node}s.
  *
@@ -165,7 +162,7 @@ class Viewer {
      * @param {String} msg The message
      */
     log(msg) {
-        console.log(`[xeoviewer viewer ${this.id}]: ${msg}`);
+        console.log(`[xeokit viewer ${this.id}]: ${msg}`);
     }
 
     /**
@@ -174,7 +171,7 @@ class Viewer {
      * @param {String} msg The error message
      */
     error(msg) {
-        console.error(`[xeoviewer viewer ${this.id}]: ${msg}`);
+        console.error(`[xeokit viewer ${this.id}]: ${msg}`);
     }
 
     /**
@@ -263,27 +260,6 @@ class Viewer {
      */
     destroy() {
         this.scene.destroy();
-    }
-}
-
-function getPosition(object) {
-    const position = object.position;
-    if (position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
-        return vecToArray(position);
-    }
-}
-
-function getScale(object) {
-    const scale = object.scale;
-    if (scale[0] !== 1 || scale[1] !== 1 || scale[2] !== 1) {
-        return vecToArray(scale);
-    }
-}
-
-function getRotation(object) {
-    const rotation = object.rotation;
-    if (rotation[0] !== 0 || rotation[1] !== 0 || rotation[2] !== 0) {
-        return vecToArray(rotation);
     }
 }
 

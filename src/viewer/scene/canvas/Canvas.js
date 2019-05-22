@@ -1,6 +1,5 @@
 import {Canvas2Image} from "../libs/canvas2image.js";
 import {core} from "../core.js";
-import {utils} from '../utils.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
 import {Component} from '../Component.js';
@@ -294,21 +293,9 @@ class Canvas extends Component {
      * Initialises the WebGL context
      * @private
      */
-    _initWebGL(cfg) {
+    _initWebGL() {
 
         // Default context attribute values
-
-        if (false && cfg.webgl2) {
-            try {
-                this.gl = this.canvas.getContext("webgl2", this.contextAttr);
-            } catch (e) { // Try with next context name
-            }
-            if (!this.gl) {
-                this.warn('Failed to get a WebGL 2 context - defaulting to WebGL 1.');
-            } else {
-                this.webgl2 = true;
-            }
-        }
 
         if (!this.gl) {
             for (let i = 0; !this.gl && i < WEBGL_CONTEXT_NAMES.length; i++) {
