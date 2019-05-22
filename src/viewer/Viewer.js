@@ -55,7 +55,7 @@ class Viewer {
             transparent: cfg.transparent !== false,
             gammaInput: true,
             gammaOutput: true,
-            clearColorAmbient: cfg.clearColorAmbient
+            clearColorAmbient: cfg.clearColorAmbient,
             ticksPerRender: 1,
             ticksPerOcclusionTest: 20 /// TODO Change to 20
         });
