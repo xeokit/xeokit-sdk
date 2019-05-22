@@ -107,7 +107,6 @@ class SectionPlanesPlugin extends Plugin {
         this._shownControlId = null;
 
         if (!cfg.overviewCanvasId) {
-
             this.error("Config missing: overviewCanvasId - will create plugin without overview");
 
         } else {
@@ -123,11 +122,11 @@ class SectionPlanesPlugin extends Plugin {
                 visible: cfg.overviewVisible,
 
                 onHoverEnterPlane: ((id) => {
-                    this._overview._setPlaneHighlighted(id, true);
+                    this._overview.setPlaneHighlighted(id, true);
                 }),
 
                 onHoverLeavePlane: ((id) => {
-                    this._overview._setPlaneHighlighted(id, false);
+                    this._overview.setPlaneHighlighted(id, false);
                 }),
 
                 onClickedPlane: ((id) => {
@@ -218,8 +217,11 @@ class SectionPlanesPlugin extends Plugin {
         control.setVisible(false);
         this._controls[sectionPlane.id] = control;
         if (this._overview) {
-            this._overview._addSectionPlane(sectionPlane);
+            this._overview.addSectionPlane(sectionPlane);
         }
+        sectionPlane.on("destroyed", () => {
+            this._sectionPlaneDestroyed(sectionPlane);
+        });
         return sectionPlane;
     }
 
@@ -237,7 +239,7 @@ class SectionPlanesPlugin extends Plugin {
         this.hideControl();
         control.setVisible(true);
         if (this._overview) {
-            this._overview._setPlaneSelected(id, true);
+            this._overview.setPlaneSelected(id, true);
         }
         this._shownControlId = id;
     }
@@ -261,7 +263,7 @@ class SectionPlanesPlugin extends Plugin {
             if (this._controls.hasOwnProperty(id)) {
                 this._controls[id].setVisible(false);
                 if (this._overview) {
-                    this._overview._setPlaneSelected(id, false);
+                    this._overview.setPlaneSelected(id, false);
                 }
             }
         }
@@ -279,11 +281,15 @@ class SectionPlanesPlugin extends Plugin {
             this.error("SectionPlane not found: " + id);
             return;
         }
-        if (this._overview) {
-            this._overview._removeSectionPlane(sectionPlane);
-        }
+        this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
-        const control = this._controls[id];
+    }
+
+    _sectionPlaneDestroyed(sectionPlane) {
+        if (this._overview) {
+            this._overview.removeSectionPlane(sectionPlane);
+        }
+        const control = this._controls[sectionPlane.id];
         if (!control) {
             return;
         }
@@ -322,7 +328,7 @@ class SectionPlanesPlugin extends Plugin {
     destroy() {
         this.clear();
         if (this._overview) {
-            this._overview._destroy();
+            this._overview.destroy();
         }
         this._destroyFreeControls();
         super.destroy();
