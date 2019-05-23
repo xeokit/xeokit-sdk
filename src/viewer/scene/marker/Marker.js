@@ -7,15 +7,15 @@ const tempVec4b = math.vec4();
 
 
 /**
- * @desc Tracks the World, View and Canvas coordinates and visibility of a position within a {@link Scene}.
+ * @desc Tracks the World, View and Canvas coordinates, and visibility, of a position within a {@link Scene}.
  *
  * ## Position
  *
- * A Marker represents its position in the World, View and Canvas coordinate systems with three properties:
+ * A Marker holds its position in the World, View and Canvas coordinate systems in three properties:
  *
  * * {@link Marker#worldPos} holds the Marker's 3D World-space coordinates. This property can be dynamically updated. The Marker will fire a "worldPos" event whenever this property changes.
- * * {@link Marker#viewPos} holds the Marker's 3D View-space coordinates. This property is read-only, and is automatically updated from {@link Marker#worldPos} and the current {@link Camera} position.
- * * {@link Marker#canvasPos} holds the Marker's 2D Canvas-space coordinates. This property is read-only, and is automatically updated from {@link Marker#viewPos} and the current {@link Camera} position and projection.
+ * * {@link Marker#viewPos} holds the Marker's 3D View-space coordinates. This property is read-only, and is automatically updated from {@link Marker#worldPos} and the current {@link Camera} position. The Marker will fire a "viewPos" event whenever this property changes.
+ * * {@link Marker#canvasPos} holds the Marker's 2D Canvas-space coordinates. This property is read-only, and is automatically updated from {@link Marker#canvasPos} and the current {@link Camera} position and projection. The Marker will fire a "canvasPos" event whenever this property changes.
  *
  * ## Visibility
  *
@@ -121,8 +121,8 @@ class Marker extends Component {
      * @param {Component} [owner]  Owner component. When destroyed, the owner will destroy this Marker as well.
      * @param {*} [cfg]  Marker configuration
      * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
-     * @param {Boolean} [cfg.visible=true] Indicates whether or not this Marker is visible.
-     * @param {Boolean} [cfg.occludable=false] Indicates whether or not this Marker is hidden whenever occluded by {@link Entity}s in the {@link Scene}.
+     * @param {Entity} [cfg.entity] Entity to associate this Marker with. When the Marker has an Entity, then {@link Marker#visible} will always be ````false```` if {@link Entity#visible} is false.
+     * @param {Boolean} [cfg.occludable=false] Indicates whether or not this Marker is hidden (ie. {@link Marker#visible} is ````false```` whenever occluded by {@link Entity}s in the {@link Scene}.
      * @param {Number[]} [cfg.worldPos=[0,0,0]] World-space 3D Marker position.
      */
     constructor(owner, cfg) {
@@ -219,7 +219,7 @@ class Marker extends Component {
                 });
             }
         }
-        this.fire("entity", this._entity);
+        this.fire("entity", this._entity, true /* forget */);
     }
 
     /**
@@ -285,7 +285,9 @@ class Marker extends Component {
     /**
      * View-space 3D coordinates of this Marker.
      *
-     * This is read-only and is automatically calculated.
+     * This property is read-only and is automatically calculated from {@link Marker#worldPos} and the current {@link Camera} position.
+     *
+     * The Marker fires a "viewPos" event whenever this property changes.
      *
      * @type {Number[]}
      * @final
@@ -298,7 +300,9 @@ class Marker extends Component {
     /**
      * Canvas-space 2D coordinates of this Marker.
      *
-     * This is read-only and is automatically calculated.
+     * This property is read-only and is automatically calculated from {@link Marker#worldPos} and the current {@link Camera} position and projection.
+     *
+     * The Marker fires a "canvasPos" event whenever this property changes.
      *
      * @type {Number[]}
      * @final
@@ -313,13 +317,13 @@ class Marker extends Component {
      *
      * This is read-only and is automatically calculated.
      *
-     * The Marker is invisible whenever:
+     * The Marker is **invisible** whenever:
      *
      * * {@link Marker#canvasPos} is currently outside the canvas,
      * * {@link Marker#entity} is set to an {@link Entity} that has {@link Entity#visible} ````false````, or
      * * or {@link Marker#occludable} is ````true```` and the Marker is currently occluded by an Entity in the 3D view.
      *
-     * Fires a "visible" event on change.
+     * The Marker fires a "visible" event whenever this property changes.
      *
      * @type {Boolean}
      * @final
@@ -328,6 +332,9 @@ class Marker extends Component {
         return !!this._visible;
     }
 
+    /**
+     * Destroys this Marker.
+     */
     destroy() {
         this.fire("destroyed", true);
         this.scene.camera.off(this._onCameraViewMatrix);

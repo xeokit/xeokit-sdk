@@ -129,7 +129,7 @@ const tempVec3c = math.vec3();
  * });
  * ````
  *
- * ## Giving each annotation a unique appearance
+ * ## Individual annotation appearances
  *
  * We can override the AnnotationsPlugin's default HTML templates for individual Annotations.
  *

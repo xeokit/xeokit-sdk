@@ -16,7 +16,7 @@ class Annotation extends Marker {
         super(owner, cfg);
 
         /**
-         * The {@link }AnnotationsPlugin} this Annotation belongs to
+         * The {@link AnnotationsPlugin} this Annotation was created by.
          * @type {AnnotationsPlugin}
          */
         this.plugin = cfg.plugin;
@@ -297,6 +297,8 @@ class Annotation extends Marker {
 
     /**
      * Destroys this Annotation.
+     *
+     * You can also call {@link AnnotationsPlugin#destroyAnnotation}.
      */
     destroy() {
         if (this._link) {

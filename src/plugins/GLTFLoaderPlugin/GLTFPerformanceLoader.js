@@ -92,6 +92,8 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
+    const IDENTITY_MATRIX = math.identityMat4();
+
     return function (json, src, options, plugin, performanceModel, ok) {
         var ctx = {
             src: src,
@@ -325,7 +327,7 @@ var parseGLTF = (function () {
         if (glTFNode.mesh !== undefined) {
             const meshInfo = json.meshes[glTFNode.mesh];
             if (meshInfo) {
-                glTFNode.worldMatrix = matrix.slice();
+                glTFNode.worldMatrix = matrix ? matrix.slice() : IDENTITY_MATRIX;
                 glTFNode.priority = priority;
                 ctx.nodes.push(glTFNode);
             }
