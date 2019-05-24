@@ -118,7 +118,7 @@
             <div class='annotation-desc'>{{description}}</div>\
             </div>",
 
-        fields: {
+        values: {
             markerBGColor: "red",
             labelBGColor: "white",
             glyph: "X",
@@ -160,7 +160,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A1",
                 title: "Bed",
                 description: "This is the bed in the top storey bedroom",
@@ -184,7 +184,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A2",
                 title: "Kitchen counter",
                 description: "This is the kitchen counter",
@@ -214,15 +214,12 @@
                 <br><img alt='myImage' width='150px' height='100px' src='{{imageSrc}}'>\
                 </div>",
 
-            fields: {
+            values: {
                 glyph: "A3",
                 title: "The West wall",
                 description: "Annotations can contain<br>custom HTML like this<br>image:",
                 markerBGColor: "red",
                 imageSrc: "https://xeokit.io/img/docs/BIMServerLoaderPlugin/schependomlaan.png"
-            },
-            onMarkerClick: (annotation) => {
-                annotation.setLabelShown(!annotation.getLabelShown());
             }
         });
 
@@ -242,7 +239,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A4",
                 title: "The South entrance landing",
                 description: "A big slab of concrete<br>at the Southern door",
@@ -266,7 +263,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A5",
                 title: "The East upstairs wall",
                 description: "The East-facing upstairs wall",
@@ -290,7 +287,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A6",
                 title: "The North upstairs wall",
                 description: "The North-facing upstairs wall",
@@ -314,7 +311,7 @@
             markerShown: true,
             labelShown: false,
 
-            fields: {
+            values: {
                 glyph: "A7",
                 title: "Sofa",
                 description: "The South appartment sofa",

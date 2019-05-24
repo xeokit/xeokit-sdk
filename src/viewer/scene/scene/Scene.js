@@ -1166,7 +1166,7 @@ class Scene extends Component {
     }
 
     /**
-     * Sets the number of "ticks" that happen between occlusion testing for {@link Markers}s.
+     * Sets the number of "ticks" that happen between occlusion testing for {@link Marker}s.
      *
      * Default value is ````20````.
      *

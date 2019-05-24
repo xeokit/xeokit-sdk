@@ -39,7 +39,7 @@ class Annotation extends Marker {
         this._markerShown = false;
         this._labelShown = false;
 
-        this._fields = cfg.fields || {};
+        this._values = cfg.values || {};
         this._htmlDirty = true;
         this._layoutDirty = true;
         this._visibilityDirty = true;
@@ -168,9 +168,9 @@ class Annotation extends Marker {
      * @private
      */
     _renderTemplate(template) {
-        for (var key in this._fields) {
-            if (this._fields.hasOwnProperty(key)) {
-                const value = this._fields[key];
+        for (var key in this._values) {
+            if (this._values.hasOwnProperty(key)) {
+                const value = this._values[key];
                 template = template.replace(new RegExp('{{' + key + '}}', 'g'), value);
             }
         }
@@ -252,7 +252,7 @@ class Annotation extends Marker {
      * @param {String} value The field's value.
      */
     setField(key, value) {
-        this._fields[key] = value || "";
+        this._values[key] = value || "";
         this._htmlDirty = true;
     }
 
@@ -265,34 +265,34 @@ class Annotation extends Marker {
      * @returns {String} The field's value.
      */
     getField(key) {
-        return this._fields[key];
+        return this._values[key];
     }
 
     /**
-     * Sets values for multiple fields within the Annotation's HTML templates for marker and label.
+     * Sets values for multiple placeholders within the Annotation's HTML templates for marker and label.
      *
      * See {@link AnnotationsPlugin} for more info.
      *
-     * @param {{String:(String|Number)}} fields Map of field values.
+     * @param {{String:(String|Number)}} values Map of field values.
      */
-    setFields(fields) {
-        for (var key in fields) {
-            if (fields.hasOwnProperty(key)) {
-                const value = fields[key];
+    setValues(values) {
+        for (var key in values) {
+            if (values.hasOwnProperty(key)) {
+                const value = values[key];
                 this.setField(key, value);
             }
         }
     }
 
     /**
-     * Gets the values that were set for the fields of this Annotation's HTML marker and label templates.
+     * Gets the values that were set for the placeholders within this Annotation's HTML marker and label templates.
      *
      * See {@link AnnotationsPlugin} for more info.
      *
      * @RETURNS {{String:(String|Number)}} Map of field values.
      */
-    getFields() {
-        return this._fields;
+    getValues() {
+        return this._values;
     }
 
     /**

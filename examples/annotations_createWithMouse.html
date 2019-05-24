@@ -116,9 +116,11 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const annotations = new AnnotationsPlugin(viewer, {
+
         markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
-        fields: {
+
+        values: {
             markerBGColor: "red",
             labelBGColor: "red",
             glyph: "X",
@@ -152,7 +154,7 @@
                 occludable: true,       // Optional, default is true
                 markerShown: true,      // Optional, default is true
                 labelShown: true,       // Optional, default is true
-                fields: {               // HTML template fields
+                values: {               // HTML template values
                     glyph: "A" + i,
                     title: "My annotation " + i,
                     description: "My description " + i

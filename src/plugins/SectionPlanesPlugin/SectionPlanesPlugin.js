@@ -8,21 +8,27 @@ const tempAABB = math.AABB3();
 const tempVec3 = math.vec3();
 
 /**
- * {@link Viewer} plugin that manages {@link SectionPlane}s.
+ * SectionPlanesPlugin is a {@link Viewer} plugin that manages {@link SectionPlane}s.
  *
- * Use the SectionPlanesPlugin to create and edit {@link SectionPlane}s, which slice portions off your models to reveal internal structures.
+ * <img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">
  *
- * The SectionPlanesPlugin shows an overview of your SectionPlanes in a canvas in the corner
- * of the {@link Viewer}'s canvas. Click the planes in the overview canvas to activate a 3D editing control with
- * which you can interactively reposition them in the Viewer canvas.
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
+ *
+ * ## Overview
+ *
+ * * Use the SectionPlanesPlugin to
+ * create and edit {@link SectionPlane}s to slice portions off your models and reveal internal structures.
+ * * As shown in the screen capture above, SectionPlanesPlugin shows an overview of all your SectionPlanes (on the right, in
+ * this example).
+ * * Click a plane in the overview to activate a 3D control with which you can interactively
+ * reposition its SectionPlane in the main canvas.
  *
  * ## Usage
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
- *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and a SectionPlanesPlugin
  * to slice it open with two {@link SectionPlane}s. We'll show the overview in the bottom right of the Viewer
- * canvas. Finally, we'll programmatically activate the 3D editing control for our second plane.
+ * canvas. Finally, we'll programmatically activate the 3D editing control, so that we can use it to interactively
+ * reposition our second SectionPlane.
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -358,6 +364,8 @@ class SectionPlanesPlugin extends Plugin {
      * Destroys this SectionPlanesPlugin.
      *
      * Also destroys each {@link SectionPlane} created by this SectionPlanesPlugin.
+     *
+     * Does not destroy the canvas the SectionPlanesPlugin was configured with.
      */
     destroy() {
         this.clear();
