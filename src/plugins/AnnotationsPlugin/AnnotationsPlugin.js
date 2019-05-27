@@ -10,16 +10,19 @@ const tempVec3c = math.vec3();
 /**
  * AnnotationsPlugin is a {@link Viewer} plugin that creates {@link Annotation}s.
  *
- * <img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">
+ * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickToFlyToPosition)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
+ * * [[Example 1: Create annotations with mouse](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
+ * * [[Example 2: Click annotations to toggle labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
+ * * [[Example 3: Hover annotations to show labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
+ * * [[Example 4: Click annotations to fly to viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)]
  *
  * ## Overview
  *
  * * An {@link Annotation} is a 3D position with a label attached.
- * * Annotations render themselves with HTML elements that float over the canvas. Customize the appearance of
- * individual Annotations using HTML templates. Configure default appearance by setting templates on the AnnotationsPlugin.
- * * Dynamically insert data values into each Annotation's HTML templates. Configure default values on the AnnotationsPlugin.
+ * * Annotations render themselves with HTML elements that float over the canvas; customize the appearance of
+ * individual Annotations using HTML template; configure default appearance by setting templates on the AnnotationsPlugin.
+ * * Dynamically insert data values into each Annotation's HTML templates; configure default values on the AnnotationsPlugin.
  * * Optionally configure Annotations to hide themselves whenever occluded by {@link Entity}s.
  * * Optionally configure each Annotation with a position we can jump or fly the {@link Camera} to.
  *
