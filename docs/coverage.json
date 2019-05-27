@@ -1,7 +1,7 @@
 {
-  "coverage": "49.9%",
+  "coverage": "49.93%",
   "expectCount": 3150,
-  "actualCount": 1572,
+  "actualCount": 1573,
   "files": {
     "src/plugins/AnnotationsPlugin/Annotation.js": {
       "expectCount": 31,
@@ -29,10 +29,10 @@
         6,
         7,
         8,
-        236,
-        237,
-        238,
-        239
+        345,
+        346,
+        347,
+        348
       ]
     },
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
@@ -387,26 +387,25 @@
     },
     "src/plugins/NavCubePlugin/NavCubePlugin.js": {
       "expectCount": 28,
-      "actualCount": 10,
+      "actualCount": 11,
       "undocumentLines": [
-        105,
-        122,
-        127,
-        131,
-        155,
-        156,
-        157,
-        160,
-        181,
-        183,
-        190,
-        224,
-        479,
-        488,
-        528,
-        551,
-        574,
-        588
+        95,
+        112,
+        117,
+        121,
+        145,
+        146,
+        147,
+        150,
+        171,
+        173,
+        180,
+        214,
+        469,
+        478,
+        518,
+        541,
+        564
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
@@ -535,15 +534,15 @@
       "undocumentLines": [
         7,
         8,
-        104,
-        105,
-        106,
-        107,
-        120,
-        160,
-        232,
-        305,
-        371
+        110,
+        111,
+        112,
+        113,
+        126,
+        166,
+        238,
+        311,
+        379
       ]
     },
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {

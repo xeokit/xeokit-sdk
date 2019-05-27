@@ -116,13 +116,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber73">xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber69">xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber73">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber69">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -142,22 +142,22 @@
 
   
   
-  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides a navigation control that lets us look at the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along a chosen axis or diagonal.</p>
-<p>The NavCube is an interactive 3D cube gizmo that appears in a corner of the Viewer&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>.</p>
-<p>Rotating the cube causes the Viewer&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to orbit its current point-of-interest. Orbiting the Camera
-causes the cube to rotate in synch.</p>
-<p>The faces of the cube are aligned with the Viewer&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate axis. Clicking on a face moves
+  <div class="description" data-ice="description"><p>NavCubePlugin is a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides a navigation control that lets us look at the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> from along a chosen axis or diagonal.</p>
+<p> <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif"></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin">Run this example</a>]</p>
+<h2 id="overview">Overview</h2><ul>
+<li>Rotating the NavCube causes the Viewer&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to orbit its current
+point-of-interest. Conversely, orbiting the Camera causes the NavCube to rotate accordingly.</li>
+<li>The faces of the NavCube are aligned with the Viewer&apos;s <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate axis. Clicking on a face moves
 the Camera to look at the entire Scene along the corresponding axis. Clicking on an edge or a corner looks at
-the entire Scene along a diagonal.</p>
-<p>The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
-NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.</p>
-<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the corner of
-Viewer&apos;s Canvas. Then we&apos;ll use the <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model into the Viewer&apos;s Scene. We can then
-use the NavCube to look at the model along each axis or diagonal.</p>
-<ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin">Run this example</a>]</li>
+the entire Scene along a diagonal.</li>
+<li>The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
+NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.</li>
 </ul>
-<pre><code class="lang-JavaScript````"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the canvas
+with the given ID. Then we&apos;ll use the <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model into the Viewer&apos;s Scene. We can then
+use the NavCube to look at the model along each axis or diagonal.</p>
+<pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 import {NavCubePlugin} from &quot;../src/plugins/NavCubePlugin/NavCubePlugin.js&quot;;
 
@@ -174,10 +174,6 @@ const navCube = new NavCubePlugin(viewer, {
      canvasID: &quot;myNavCubeCanvas&quot;,
 
      visible: true,           // Initially visible (default)
-
-     size: 250,               // NavCube size in pixels (default is 200)
-     alignment: &quot;topRight&quot;,   // Align NavCube to top-right of Viewer canvas
-     topMargin: 170,          // 170 pixels margin from top of Viewer canvas
 
      cameraFly: true,       // Fly camera to each selected axis/diagonal
      cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
@@ -267,7 +263,8 @@ const model = gltfLoader.load({
       <div>
         
         
-        
+        <div data-ice="description"><p>Destroys this NavCubePlugin.</p>
+</div>
       </div>
     </td>
     <td>
@@ -797,7 +794,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -852,54 +849,6 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Initial visibility.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.size</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 200</li></ul></td>
-      <td data-ice="description"><p>Size of the NavCube area, in pixels.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.alignment</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;bottomRight&quot;</li></ul></td>
-      <td data-ice="description"><p>The alignment of the NavCube within the bounds of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>. Accepted values are &quot;bottomRight&quot;, &quot;bottomLeft&quot;, &quot;topLeft&quot; and &quot;topRight&quot;.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.leftMargin</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 10</li></ul></td>
-      <td data-ice="description"><p>The margin between the NavCube and the left edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>, in pixels.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.rightMargin</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 10</li></ul></td>
-      <td data-ice="description"><p>The margin between the NavCube and the right edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>, in pixels.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.topMargin</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 10</li></ul></td>
-      <td data-ice="description"><p>The margin between the NavCube and the top edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>, in pixels.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.bottomMargin</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 10</li></ul></td>
-      <td data-ice="description"><p>The margin between the NavCube and the bottom edge of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span>, in pixels.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -964,14 +913,15 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber588">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber583">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this Plugin and removes it from its <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+  <div data-ice="description"><p>Destroys this NavCubePlugin.</p>
+<p>Does not destroy the canvas the NavCubePlugin was configured with.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/viewer/Plugin.js~Plugin.html#instance-method-destroy">Plugin#destroy</a></span></div>
@@ -1008,7 +958,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber552">source</a></span></span>
     </span>
   </h3>
 
@@ -1067,7 +1017,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber538">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber528">source</a></span></span>
     </span>
   </h3>
 
@@ -1125,7 +1075,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber584">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber574">source</a></span></span>
     </span>
   </h3>
 
@@ -1183,7 +1133,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber513">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber503">source</a></span></span>
     </span>
   </h3>
 
@@ -1240,7 +1190,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber479">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber469">source</a></span></span>
     </span>
   </h3>
 
@@ -1305,7 +1255,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber550">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -1368,7 +1318,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber527">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber517">source</a></span></span>
     </span>
   </h3>
 
@@ -1430,7 +1380,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber573">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber563">source</a></span></span>
     </span>
   </h3>
 
@@ -1492,7 +1442,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber499">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber489">source</a></span></span>
     </span>
   </h3>
 

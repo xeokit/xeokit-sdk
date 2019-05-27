@@ -116,13 +116,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlanesPlugin} from &apos;<span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber90">xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SectionPlanesPlugin} from &apos;<span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber96">xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber90">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber96">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -142,17 +142,21 @@
 
   
   
-  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that manages <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s.</p>
-<p>Use the SectionPlanesPlugin to create and edit <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s, which slice portions off your models to reveal internal structures.</p>
-<p>The SectionPlanesPlugin shows an overview of your SectionPlanes in a canvas in the corner
-of the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s canvas. Click the planes in the overview canvas to activate a 3D editing control with
-which you can interactively reposition them in the Viewer canvas.</p>
-<h2 id="usage">Usage</h2><ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin">Run this example</a>]</li>
+  <div class="description" data-ice="description"><p>SectionPlanesPlugin is a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that manages <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s.</p>
+<p><img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif"></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin">Run this example</a>]</p>
+<h2 id="overview">Overview</h2><ul>
+<li>Use the SectionPlanesPlugin to
+create and edit <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s to slice portions off your models and reveal internal structures.</li>
+<li>As shown in the screen capture above, SectionPlanesPlugin shows an overview of all your SectionPlanes (on the right, in
+this example).</li>
+<li>Click a plane in the overview to activate a 3D control with which you can interactively
+reposition its SectionPlane in the main canvas.</li>
 </ul>
-<p>In the example below, we&apos;ll use a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model, and a SectionPlanesPlugin
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll use a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span> to load a model, and a SectionPlanesPlugin
 to slice it open with two <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span>s. We&apos;ll show the overview in the bottom right of the Viewer
-canvas. Finally, we&apos;ll programmatically activate the 3D editing control for our second plane.</p>
+canvas. Finally, we&apos;ll programmatically activate the 3D editing control, so that we can use it to interactively
+reposition our second SectionPlane.</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
 import {SectionPlanesPlugin} from &quot;../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js&quot;;
@@ -824,7 +828,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber100">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -918,7 +922,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber203">source</a></span></span>
     </span>
   </h3>
 
@@ -978,7 +982,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber322">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber328">source</a></span></span>
     </span>
   </h3>
 
@@ -1022,7 +1026,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1128,7 +1132,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -1137,6 +1141,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
   
   <div data-ice="description"><p>Destroys this SectionPlanesPlugin.</p>
 <p>Also destroys each <span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span> created by this SectionPlanesPlugin.</p>
+<p>Does not destroy the canvas the SectionPlanesPlugin was configured with.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/viewer/Plugin.js~Plugin.html#instance-method-destroy">Plugin#destroy</a></span></div>
@@ -1173,7 +1178,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 
@@ -1234,7 +1239,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -1291,7 +1296,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber277">source</a></span></span>
     </span>
   </h3>
 
@@ -1349,7 +1354,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -1393,7 +1398,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber175">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber181">source</a></span></span>
     </span>
   </h3>
 
@@ -1454,7 +1459,7 @@ mySectionPlane2.dir = [0.4, 0.0, 0.5];</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js.html#lineNumber256">source</a></span></span>
     </span>
   </h3>
 
