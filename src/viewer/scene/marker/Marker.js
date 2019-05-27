@@ -236,6 +236,9 @@ class Marker extends Component {
      *
      * When this is ````true````, then {@link Marker#visible} will be ````false```` whenever the Marker is occluded by an {@link Entity} in the 3D view.
      *
+     * The {@link Scene} periodically occlusion-tests all Markers on every 20th "tick" (which represents a rendered frame). We
+     * can adjust that frequency via property {@link Scene#ticksPerOcclusionTest}.
+     *
      * @type {Boolean}
      */
     set occludable(occludable) {

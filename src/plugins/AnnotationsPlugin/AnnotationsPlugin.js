@@ -10,61 +10,38 @@ const tempVec3c = math.vec3();
 /**
  * AnnotationsPlugin is a {@link Viewer} plugin that creates {@link Annotation}s.
  *
- * <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">
+ * <img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
  *
  * ## Overview
  *
- * An {@link Annotation} is a 3D position that has a label attached to it. The position and the label are both
- * represented by HTML elements floating on the canvas. An Annotation can also be configured to hide its elements whenever its
- * 3D position is occluded by any {@link Entity}s.
- *
- * ## Configuring annotation appearance
- *
- * Configure the appearance of {@link Annotation} positions and labels using HTML templates. These can be configured
- * on the AnnotationsPlugin, to set the default appearance for all Annotations, or on each Annotation individually.
- *
- * Each {@link Annotation} uses two templates, one to show its position (the "marker") and a second to show its label. The
- * visibility of the marker and label can be updated independently.
- *
- * ## Inserting dynamic data into annotations
- *
- * We can dynamically provide each {@link Annotation} with new values to insert into its HTML templates. We can also provide
- * the AnnotationsPlugin with a default map of values, for Annotations to fall back on as defaults.
- *
- * ## Customizing annotation behaviour
- *
- * AnnotationsPlugin fires events to indicate when the mouse pointer hovers over or clicks {@link Annotation} marker elements. These events
- * are useful for customizing the behaviour of Annotations, for example showing labels when the mouse hovers over markers.
- *
- * ## Occlusion culling
- *
- * As mentioned, we can configure {@link Annotation}s to become invisible whenever their positions are hidden by any {@link Entity}s in the
- * 3D view. The {@link Scene} periodically tests the occlusion status of all Annotations, in  batch. By default, the Scene
- * performs this test on every 20th "tick" (which represents a rendered frame). We can adjust that frequency via property {@link Scene#ticksPerOcclusionTest}.
- *
- * ## Annotation camera positions
- *
- * TODO TODO TODO
+ * * An {@link Annotation} is a 3D position with a label attached.
+ * * Annotations render themselves with HTML elements that float over the canvas. Customize the appearance of
+ * individual Annotations using HTML templates. Configure default appearance by setting templates on the AnnotationsPlugin.
+ * * Dynamically insert data values into each Annotation's HTML templates. Configure default values on the AnnotationsPlugin.
+ * * Optionally configure Annotations to hide themselves whenever occluded by {@link Entity}s.
+ * * Optionally configure each Annotation with a position we can jump or fly the {@link Camera} to.
  *
  * ## Example 1: Loading a model and creating an annotation
  *
  * In the example below, we'll use a {@link GLTFLoaderPlugin} to load a model, and an AnnotationsPlugin
  * to create an {@link Annotation} on it.
  *
- * We'll configure our AnnotationsPlugin with default HTML templates, along with some default values to insert into them.
+ * We'll configure the AnnotationsPlugin with default HTML templates for each Annotation's position (its "marker") and
+ * label, along with some default data values to insert into them.
  *
- * When we create our Annotation, we'll give it some specific values to insert into the templates, overriding some of
- * the default values configured on the plugin. Note the correspondence between the placeholders in the templates
+ * When we create our Annotation, we'll give it some specific data values to insert into the templates, overriding some of
+ * the defaults we configured on the plugin. Note the correspondence between the placeholders in the templates
  * and the keys in the values map.
  *
- * We'll also configure the Annotation to hide itself whenever it's position occluded by any {@link Entity}s.
+ * We'll also configure the Annotation to hide itself whenever it's position is occluded by any {@link Entity}s (this is default behavior). The
+ * {@link Scene} periodically occlusion-tests all Annotations on every 20th "tick" (which represents a rendered frame). We
+ * can adjust that frequency via property {@link Scene#ticksPerOcclusionTest}.
  *
- * Finally, we'll demonstrate how to query the Annotation's position occlusion/visibility status, and how to subscribe
- * to change events on those properties..
+ * Finally, we'll query the Annotation's position occlusion/visibility status, and subscribe to change events on those properties..
  *
- * * [[Run a similar example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -110,7 +87,7 @@ const tempVec3c = math.vec3();
  *      const entity = viewer.scene.meshes[""];
  *
  *      // Create an annotation
- *      const myAnnotation = annotations.createAnnotation({
+ *      const myAnnotation1 = annotations.createAnnotation({
  *
  *          id: "myAnnotation",
  *
@@ -131,21 +108,21 @@ const tempVec3c = math.vec3();
  *
  *      // Listen for change of the Annotation's 3D World-space position
  *
- *      myAnnotation.on("worldPos", function(worldPos) {
+ *      myAnnotation1.on("worldPos", function(worldPos) {
  *          //...
  *      });
  *
  *      // Listen for change of the Annotation's 3D View-space position, which happens
  *      // when either worldPos was updated or the Camera was moved
  *
- *      myAnnotation.on("viewPos", function(viewPos) {
+ *      myAnnotation1.on("viewPos", function(viewPos) {
  *          //...
  *      });
  *
  *      // Listen for change of the Annotation's 2D Canvas-space position, which happens
  *      // when worldPos or viewPos was updated, or Camera's projection was updated
  *
- *      myAnnotation.on("canvasPos", function(canvasPos) {
+ *      myAnnotation1.on("canvasPos", function(canvasPos) {
  *          //...
  *      });
  *
@@ -153,7 +130,7 @@ const tempVec3c = math.vec3();
  *      // or its position is occluded by some Entity. Note that, when not occluded, the position is only
  *      // shown when Annotation#markerShown is true, and the label is only shown when Annotation#labelShown is true.
  *
- *      myAnnotation.on("visible", function(visible) { // Marker visibility has changed
+ *      myAnnotation1.on("visible", function(visible) { // Marker visibility has changed
  *          if (visible) {
  *              this.log("Annotation is visible");
  *          } else {
@@ -163,7 +140,7 @@ const tempVec3c = math.vec3();
  *
  *      // Listen for destruction of the Annotation
  *
- *      myAnnotation.on("destroyed", () => {
+ *      myAnnotation1.on("destroyed", () => {
  *          //...
  *      });
  * });
@@ -180,29 +157,29 @@ const tempVec3c = math.vec3();
  * We can query it's current visibility, which is ````false```` when its position is occluded by some {@link Entity}:
  *
  * ````
- * const visible = myAnnotation.visible;
+ * const visible = myAnnotation1.visible;
  * ````
  *
  * To listen for change events on our Annotation's position and visibility:
  *
  * ````javascript
  * // World-space position changes when we assign a new value to Annotation#worldPos
- * myAnnotation.on("worldPos", (worldPos) => {
+ * myAnnotation1.on("worldPos", (worldPos) => {
  *     //...
  * });
  *
  * // View-space position changes when either worldPos was updated or the Camera was moved
- * myAnnotation.on("viewPos", (viewPos) => {
+ * myAnnotation1.on("viewPos", (viewPos) => {
  *     //...
  * });
  *
  * // Canvas-space position changes when worldPos or viewPos was updated, or Camera's projection was updated
- * myAnnotation.on("canvasPos", (canvasPos) => {
+ * myAnnotation1.on("canvasPos", (canvasPos) => {
  *     //...
  * });
  *
  * // Annotation is invisible when its position falls off the canvas or is occluded by some Entity
- * myAnnotation.on("visible", (visible) => {
+ * myAnnotation1.on("visible", (visible) => {
  *     //...
  * });
  * ````
@@ -210,14 +187,14 @@ const tempVec3c = math.vec3();
  * Finally, let's dynamically update the values for a couple of placeholders in our Annotation's label:
  *
  * ```` javascript
- * myAnnotation.setValues({
+ * myAnnotation1.setValues({
  *      title: "Here's a new title",
  *      description: "Here's a new description"
  * });
  * ````
  *
  *
- * ## Example 2: Creating an annotation with unique appearance
+ * ## Example 2: Creating an Annotation with a unique appearance
  *
  * Now let's create a second {@link Annotation}, this time with its own custom HTML label template, which includes
  * an image. In the Annotation's values, we'll also provide a new title and description, custom colors for the marker
@@ -225,7 +202,7 @@ const tempVec3c = math.vec3();
  * on the AnnotationPlugin's default marker template.
  *
  * ````javascript
- * annotations.createAnnotation({
+ * const myAnnotation2 = annotations.createAnnotation({
  *
  *      id: "myAnnotation2",
  *
@@ -255,9 +232,56 @@ const tempVec3c = math.vec3();
  * });
  * ````
  *
+ * ## Example 3: Creating an Annotation with a camera position
  *
- * ## Example 3: Annotation camera positions
+ * We can optionally configure each {@link Annotation} with a position to fly or jump the {@link Camera} to.
  *
+ * Let's create another Annotation, this time providing it with ````eye````, ````look```` and ````up```` properties
+ * indicating a viewpoint on whatever it's annotating:
+ *
+ * ````javascript
+ * const myAnnotation3 = annotations.createAnnotation({
+ *
+ *      id: "myAnnotation3",
+ *
+ *      worldPos: [-0.163, 3.810, 7.977],
+ *
+ *      eye: [0,0,-10],
+ *      look: [-0.163, 3.810, 7.977],
+ *      up: [0,1,0];
+ *
+ *      occludable: true,
+ *      markerShown: true,
+ *      labelShown: true,
+ *
+ *      labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'>\
+ *          <div class='annotation-title'>{{title}}</div>\
+ *          <div class='annotation-desc'>{{description}}</div>\
+ *          <br><img alt='myImage' width='150px' height='100px' src='{{imageSrc}}'>\
+ *          </div>",
+ *
+ *      values: {
+ *          glyph: "A3",
+ *          title: "The West wall",
+ *          description: "Annotations can contain<br>custom HTML like this<br>image:",
+ *          markerBGColor: "green",
+ *          labelBGColor: "green",
+ *          imageSrc: "https://xeokit.io/img/docs/BIMServerLoaderPlugin/schependomlaan.png"
+ *      }
+ * });
+ * ````
+ *
+ * Now we can fly the {@link Camera} to the Annotation's viewpoint, like this:
+ *
+ * ````javascript
+ * viewer.cameraFlight.flyTo(myAnnotation3);
+ * ````
+ *
+ * Or jump the Camera, like this:
+ *
+ * ````javascript
+ * viewer.cameraFlight.jumpTo(myAnnotation3);
+ * ````
  *
  * ## Example 4: Creating annotations by clicking on objects
  *
@@ -270,7 +294,7 @@ const tempVec3c = math.vec3();
  *
  * Let's now extend our example to create an Annotation wherever we click on the surface of of our model:
  *
- * * [[Run a similar example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
  *
  * ````javascript
  * var i = 1; // Used to create unique Annotation IDs
@@ -285,7 +309,7 @@ const tempVec3c = math.vec3();
  *     if (pickRecord) {
  *
  *         const annotation = annotations.createAnnotation({
- *              id: "myAnnotation" + i,
+ *              id: "myAnnotationOnClick" + i,
  *              pickRecord: pickRecord,
  *              occludable: true,           // Optional, default is true
  *              markerShown: true,          // Optional, default is true
@@ -353,7 +377,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {Number[]} [params.worldPos=[0,0,0]] World-space position of the Annotation marker, assigned to {@link Annotation#worldPos}.
      * @param {Entity} [params.entity] Optional {@link Entity} to associate the Annotation with. Causes {@link Annotation#visible} to be ````false```` whenever {@link Entity#visible} is also ````false````.
      * @param {PickResult} [params.pickResult] Sets the Annotation's World-space position and direction vector from the given {@link PickResult}'s {@link PickResult#worldPos} and {@link PickResult#worldNormal}, and the Annotation's Entity from {@link PickResult#entity}. Causes ````worldPos```` and ````entity```` parameters to be ignored, if they are also given.
-     * @param {Boolean} [params.occludable=false] Indicates whether or not the {@link Annotation} marker and label are hidden whenever the marker occluded by {@link Entity}s in the {@link Scene}.
+     * @param {Boolean} [params.occludable=false] Indicates whether or not the {@link Annotation} marker and label are hidden whenever the marker occluded by {@link Entity}s in the {@link Scene}. The
+     * {@link Scene} periodically occlusion-tests all Annotations on every 20th "tick" (which represents a rendered frame). We can adjust that frequency via property {@link Scene#ticksPerOcclusionTest}.
      * @param  {{String:(String|Number)}} [params.values={}] Map of values to insert into the HTML templates for the marker and label. These will be inserted in addition to any values given to the AnnotationsPlugin constructor.
      * @param {Boolean} [params.markerShown=true] Whether to initially show the {@link Annotation} marker.
      * @param {Boolean} [params.labelShown=false] Whether to initially show the {@link Annotation} label.

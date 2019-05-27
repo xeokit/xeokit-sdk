@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Creating Annotations Programmatically</title>
+    <title>xeokit Annotations Example</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -26,6 +26,7 @@
 
         .annotation-label {
             position: absolute;
+            max-width: 250px;
             min-height: 50px;
             padding: 8px;
             padding-left: 12px;
@@ -40,6 +41,34 @@
             z-index: 90000;
         }
 
+        .annotation-label:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent white;
+            display: block;
+            width: 0;
+            z-index: 1;
+            margin-top: -11px;
+            left: -12px;
+            top: 20px;
+        }
+
+        .annotation-label:before {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 9px 13px 9px 0;
+            border-color: transparent #ffffff;
+            display: block;
+            width: 0;
+            z-index: 0;
+            margin-top: -12px;
+            left: -15px;
+            top: 20px;
+        }
+
         .annotation-title {
             font: normal 20px arial, serif;
             margin-bottom: 8px;
@@ -48,6 +77,7 @@
         .annotation-desc {
             font: normal 14px arial, serif;
         }
+
 
     </style>
 
