@@ -1299,6 +1299,18 @@ class PerformanceModel extends Component {
     }
 
     /**
+     * @private
+     */
+    drawOcclusion(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].drawOcclusion(frameCtx);
+        }
+    }
+
+    /**
      * Called by xeokit to compile shaders for this PerformanceModel.
      * @private
      */
@@ -1307,6 +1319,7 @@ class PerformanceModel extends Component {
             this._layers[i].compileShaders();
         }
     }
+
 
     //------------------------------------------------------------------------------------------------------------------
     // Component members

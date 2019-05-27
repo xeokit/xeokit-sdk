@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 7569,
+  "end": 7839,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 280,
+      "line": 289,
       "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 7569,
+    "end": 7839,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 280,
+        "line": 289,
         "column": 18
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 93,
-        "end": 7549,
+        "end": 7819,
         "loc": {
           "start": {
             "line": 8,
             "column": 0
           },
           "end": {
-            "line": 278,
+            "line": 287,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 108,
-          "end": 7549,
+          "end": 7819,
           "loc": {
             "start": {
               "line": 8,
               "column": 15
             },
             "end": {
-              "line": 278,
+              "line": 287,
               "column": 1
             }
           },
@@ -2866,7 +2866,9 @@
                   }
                 },
                 "body": [],
-                "directives": []
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
               },
               "leadingComments": [
                 {
@@ -2885,6 +2887,118 @@
                     }
                   }
                 }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 7553,
+                  "end": 7781,
+                  "loc": {
+                    "start": {
+                      "line": 279,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 284,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 7786,
+              "end": 7817,
+              "loc": {
+                "start": {
+                  "line": 285,
+                  "column": 4
+                },
+                "end": {
+                  "line": 286,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 7786,
+                "end": 7799,
+                "loc": {
+                  "start": {
+                    "line": 285,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 285,
+                    "column": 17
+                  },
+                  "identifierName": "drawOcclusion"
+                },
+                "name": "drawOcclusion",
+                "leadingComments": null
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 7800,
+                  "end": 7808,
+                  "loc": {
+                    "start": {
+                      "line": 285,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 285,
+                      "column": 26
+                    },
+                    "identifierName": "frameCtx"
+                  },
+                  "name": "frameCtx"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 7810,
+                "end": 7817,
+                "loc": {
+                  "start": {
+                    "line": 285,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 286,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                  "start": 7553,
+                  "end": 7781,
+                  "loc": {
+                    "start": {
+                      "line": 279,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 284,
+                      "column": 7
+                    }
+                  }
+                }
               ]
             }
           ]
@@ -2895,15 +3009,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7551,
-        "end": 7569,
+        "start": 7821,
+        "end": 7839,
         "loc": {
           "start": {
-            "line": 280,
+            "line": 289,
             "column": 0
           },
           "end": {
-            "line": 280,
+            "line": 289,
             "column": 18
           }
         },
@@ -2911,29 +3025,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 7559,
-            "end": 7567,
+            "start": 7829,
+            "end": 7837,
             "loc": {
               "start": {
-                "line": 280,
+                "line": 289,
                 "column": 8
               },
               "end": {
-                "line": 280,
+                "line": 289,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 7559,
-              "end": 7567,
+              "start": 7829,
+              "end": 7837,
               "loc": {
                 "start": {
-                  "line": 280,
+                  "line": 289,
                   "column": 8
                 },
                 "end": {
-                  "line": 280,
+                  "line": 289,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -2942,15 +3056,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 7559,
-              "end": 7567,
+              "start": 7829,
+              "end": 7837,
               "loc": {
                 "start": {
-                  "line": 280,
+                  "line": 289,
                   "column": 8
                 },
                 "end": {
-                  "line": 280,
+                  "line": 289,
                   "column": 16
                 },
                 "identifierName": "Drawable"
@@ -2963,29 +3077,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 7551,
-        "end": 7569,
+        "start": 7821,
+        "end": 7839,
         "loc": {
           "start": {
-            "line": 280,
+            "line": 289,
             "column": 0
           },
           "end": {
-            "line": 280,
+            "line": 289,
             "column": 18
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 93,
-          "end": 7549,
+          "end": 7819,
           "loc": {
             "start": {
               "line": 8,
               "column": 0
             },
             "end": {
-              "line": 278,
+              "line": 287,
               "column": 1
             }
           },
@@ -3011,14 +3125,14 @@
           "body": {
             "type": "ClassBody",
             "start": 108,
-            "end": 7549,
+            "end": 7819,
             "loc": {
               "start": {
                 "line": 8,
                 "column": 15
               },
               "end": {
-                "line": 278,
+                "line": 287,
                 "column": 1
               }
             },
@@ -5813,7 +5927,9 @@
                     }
                   },
                   "body": [],
-                  "directives": []
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
                 },
                 "leadingComments": [
                   {
@@ -5828,6 +5944,118 @@
                       },
                       "end": {
                         "line": 275,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 7553,
+                    "end": 7781,
+                    "loc": {
+                      "start": {
+                        "line": 279,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 284,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 7786,
+                "end": 7817,
+                "loc": {
+                  "start": {
+                    "line": 285,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 286,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 7786,
+                  "end": 7799,
+                  "loc": {
+                    "start": {
+                      "line": 285,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 285,
+                      "column": 17
+                    },
+                    "identifierName": "drawOcclusion"
+                  },
+                  "name": "drawOcclusion",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 7800,
+                    "end": 7808,
+                    "loc": {
+                      "start": {
+                        "line": 285,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 285,
+                        "column": 26
+                      },
+                      "identifierName": "frameCtx"
+                    },
+                    "name": "frameCtx"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 7810,
+                  "end": 7817,
+                  "loc": {
+                    "start": {
+                      "line": 285,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 286,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+                    "start": 7553,
+                    "end": 7781,
+                    "loc": {
+                      "start": {
+                        "line": 279,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 284,
                         "column": 7
                       }
                     }
@@ -6357,6 +6585,22 @@
         },
         "end": {
           "line": 275,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 7553,
+      "end": 7781,
+      "loc": {
+        "start": {
+          "line": 279,
+          "column": 4
+        },
+        "end": {
+          "line": 284,
           "column": 7
         }
       }
@@ -10639,6 +10883,149 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.\n     *\n     * @param {FrameContext} frameCtx Renderer frame context.\n     * @abstract\n     ",
+      "start": 7553,
+      "end": 7781,
+      "loc": {
+        "start": {
+          "line": 279,
+          "column": 4
+        },
+        "end": {
+          "line": 284,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "drawOcclusion",
+      "start": 7786,
+      "end": 7799,
+      "loc": {
+        "start": {
+          "line": 285,
+          "column": 4
+        },
+        "end": {
+          "line": 285,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7799,
+      "end": 7800,
+      "loc": {
+        "start": {
+          "line": 285,
+          "column": 17
+        },
+        "end": {
+          "line": 285,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "frameCtx",
+      "start": 7800,
+      "end": 7808,
+      "loc": {
+        "start": {
+          "line": 285,
+          "column": 18
+        },
+        "end": {
+          "line": 285,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7808,
+      "end": 7809,
+      "loc": {
+        "start": {
+          "line": 285,
+          "column": 26
+        },
+        "end": {
+          "line": 285,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7810,
+      "end": 7811,
+      "loc": {
+        "start": {
+          "line": 285,
+          "column": 28
+        },
+        "end": {
+          "line": 285,
+          "column": 29
+        }
+      }
+    },
+    {
       "type": {
         "label": "}",
         "beforeExpr": false,
@@ -10650,15 +11037,40 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7548,
-      "end": 7549,
+      "start": 7816,
+      "end": 7817,
       "loc": {
         "start": {
-          "line": 278,
+          "line": 286,
+          "column": 4
+        },
+        "end": {
+          "line": 286,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7818,
+      "end": 7819,
+      "loc": {
+        "start": {
+          "line": 287,
           "column": 0
         },
         "end": {
-          "line": 278,
+          "line": 287,
           "column": 1
         }
       }
@@ -10678,15 +11090,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 7551,
-      "end": 7557,
+      "start": 7821,
+      "end": 7827,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 0
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 6
         }
       }
@@ -10703,15 +11115,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7558,
-      "end": 7559,
+      "start": 7828,
+      "end": 7829,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 7
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 8
         }
       }
@@ -10729,15 +11141,15 @@
         "binop": null
       },
       "value": "Drawable",
-      "start": 7559,
-      "end": 7567,
+      "start": 7829,
+      "end": 7837,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 8
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 16
         }
       }
@@ -10754,15 +11166,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7567,
-      "end": 7568,
+      "start": 7837,
+      "end": 7838,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 16
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 17
         }
       }
@@ -10780,15 +11192,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7568,
-      "end": 7569,
+      "start": 7838,
+      "end": 7839,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 17
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 18
         }
       }
@@ -10806,15 +11218,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7569,
-      "end": 7569,
+      "start": 7839,
+      "end": 7839,
       "loc": {
         "start": {
-          "line": 280,
+          "line": 289,
           "column": 18
         },
         "end": {
-          "line": 280,
+          "line": 289,
           "column": 18
         }
       }

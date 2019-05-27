@@ -275,6 +275,15 @@ class Drawable {
      */
     drawSelectedEdgesTransparent(frameCtx) {
     }
+
+    /**
+     * Renders occludable elements to a frame buffer where they will be tested to see if they occlude any occlusion probe markers.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawOcclusion(frameCtx) {
+    }
 }
 
 export {Drawable};

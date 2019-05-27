@@ -12,6 +12,7 @@ import {EmphasisFillRenderer} from "./emphasis/EmphasisFillRenderer.js";
 import {EmphasisEdgesRenderer} from "./emphasis/EmphasisEdgesRenderer.js";
 import {PickMeshRenderer} from "./pick/PickMeshRenderer.js";
 import {PickTriangleRenderer} from "./pick/PickTriangleRenderer.js";
+import {OcclusionRenderer} from "./occlusion/OcclusionRenderer.js";
 
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
@@ -237,6 +238,7 @@ class Mesh extends Component {
         this._emphasisEdgesRenderer = null;
         this._pickMeshRenderer = null;
         this._pickTriangleRenderer = null;
+        this._occlusionRenderer = null;
 
         this._geometry = cfg.geometry ? this._checkComponent2(["ReadableGeometry", "VBOGeometry"], cfg.geometry) : this.scene.geometry;
         this._material = cfg.material ? this._checkComponent2(["PhongMaterial", "MetallicMaterial", "SpecularMaterial", "LambertMaterial"], cfg.material) : this.scene.material;
@@ -360,7 +362,7 @@ class Mesh extends Component {
      * @private
      */
     compile() {
-        var drawHash = this._makeDrawHash();
+        const drawHash = this._makeDrawHash();
         if (this._state.drawHash !== drawHash) {
             this._state.drawHash = drawHash;
             this._putDrawRenderers();
@@ -369,11 +371,17 @@ class Mesh extends Component {
             this._emphasisFillRenderer = EmphasisFillRenderer.get(this);
             this._emphasisEdgesRenderer = EmphasisEdgesRenderer.get(this);
         }
-        var pickHash = this._makePickHash();
+        const pickHash = this._makePickHash();
         if (this._state.pickHash !== pickHash) {
             this._state.pickHash = pickHash;
             this._putPickRenderers();
             this._pickMeshRenderer = PickMeshRenderer.get(this);
+        }
+        const occlusionHash = this._makeOcclusionHash();
+        if (this._state.occlusionHash !== occlusionHash) {
+            this._state.occlusionHash = occlusionHash;
+            this._putOcclusionRenderer();
+            this._occlusionRenderer = OcclusionRenderer.get(this);
         }
     }
 
@@ -448,11 +456,14 @@ class Mesh extends Component {
         if (this._pickTriangleRenderer) {
             this._pickMeshRenderer.webglContextRestored();
         }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.webglContextRestored();
+        }
     }
 
     _makeDrawHash() {
         const scene = this.scene;
-        const drawHash = [
+        const hash = [
             scene.canvas.canvas.id,
             (scene.gammaInput ? "gi;" : ";") + (scene.gammaOutput ? "go" : ""),
             scene._lightsState.getHash(),
@@ -460,44 +471,62 @@ class Mesh extends Component {
         ];
         const state = this._state;
         if (state.stationary) {
-            drawHash.push("/s");
+            hash.push("/s");
         }
         if (state.billboard === "none") {
-            drawHash.push("/n");
+            hash.push("/n");
         } else if (state.billboard === "spherical") {
-            drawHash.push("/s");
+            hash.push("/s");
         } else if (state.billboard === "cylindrical") {
-            drawHash.push("/c");
+            hash.push("/c");
         }
         if (state.receivesShadow) {
-            drawHash.push("/rs");
+            hash.push("/rs");
         }
-        drawHash.push(";");
-        return drawHash.join("");
+        hash.push(";");
+        return hash.join("");
     }
 
     _makePickHash() {
         const scene = this.scene;
-        const pickHash = [
+        const hash = [
             scene.canvas.canvas.id,
             scene._sectionPlanesState.getHash()
         ];
         const state = this._state;
         if (state.stationary) {
-            pickHash.push("/s");
+            hash.push("/s");
         }
         if (state.billboard === "none") {
-            pickHash.push("/n");
+            hash.push("/n");
         } else if (state.billboard === "spherical") {
-            pickHash.push("/s");
+            hash.push("/s");
         } else if (state.billboard === "cylindrical") {
-            pickHash.push("/c");
+            hash.push("/c");
         }
-        if (state.receivesShadow) {
-            pickHash.push("/rs");
+        hash.push(";");
+        return hash.join("");
+    }
+
+    _makeOcclusionHash() {
+        const scene = this.scene;
+        const hash = [
+            scene.canvas.canvas.id,
+            scene._sectionPlanesState.getHash()
+        ];
+        const state = this._state;
+        if (state.stationary) {
+            hash.push("/s");
         }
-        pickHash.push(";");
-        return pickHash.join("");
+        if (state.billboard === "none") {
+            hash.push("/n");
+        } else if (state.billboard === "spherical") {
+            hash.push("/s");
+        } else if (state.billboard === "cylindrical") {
+            hash.push("/c");
+        }
+        hash.push(";");
+        return hash.join("");
     }
 
     _buildAABB(worldMatrix, boundary) {
@@ -827,6 +856,14 @@ class Mesh extends Component {
             this._pickTriangleRenderer = null;
         }
     }
+
+    _putOcclusionRenderer() {
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
+        }
+    }
+
 
     //------------------------------------------------------------------------------------------------------------------
     // Entity members
@@ -1627,6 +1664,13 @@ class Mesh extends Component {
         }
     }
 
+    /** @private  */
+    drawOcclusion(frameCtx) {
+        if (this._occlusionRenderer || (this._occlusionRenderer = OcclusionRenderer.get(this))) {
+            this._occlusionRenderer.drawMesh(frameCtx, this);
+        }
+    }
+
     /** @private
      */
     canPickTriangle() {
@@ -1669,6 +1713,7 @@ class Mesh extends Component {
         super.destroy(); // xeokit.Object
         this._putDrawRenderers();
         this._putPickRenderers();
+        this._putOcclusionRenderer();
         this.scene._renderer.putPickID(this._state.pickID); // TODO: somehow puch this down into xeokit framework?
         if (this._isObject) {
             this.scene._deregisterObject(this);

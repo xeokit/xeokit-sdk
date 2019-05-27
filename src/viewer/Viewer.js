@@ -26,8 +26,6 @@ class Viewer {
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
      * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
-     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
-     * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
@@ -57,7 +55,9 @@ class Viewer {
             transparent: cfg.transparent !== false,
             gammaInput: true,
             gammaOutput: true,
-            clearColorAmbient: cfg.clearColorAmbient
+            clearColorAmbient: cfg.clearColorAmbient,
+            ticksPerRender: 1,
+            ticksPerOcclusionTest: 20 /// TODO Change to 20
         });
 
         /**
@@ -267,7 +267,7 @@ class Viewer {
      */
     getSnapshot(params = {}) {
         this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-        this.scene.render(); // Renders without hidden things
+        this.scene.render(); // Renders without the hidden things
         const imageData = this.scene.canvas._getSnapshot(params);
         this.sendToPlugins("snapshotFinished");
         return imageData;

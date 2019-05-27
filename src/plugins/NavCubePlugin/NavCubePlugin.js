@@ -10,29 +10,29 @@ import {buildCylinderGeometry} from "../../../src/viewer/scene/geometry/builders
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 
 /**
- * {@link Viewer} plugin that provides a navigation control that lets us look at the {@link Scene} from along a chosen axis or diagonal.
+ * NavCubePlugin is a {@link Viewer} plugin that provides a navigation control that lets us look at the {@link Scene} from along a chosen axis or diagonal.
  *
- * The NavCube is an interactive 3D cube gizmo that appears in a corner of the Viewer's {@link Canvas}.
+ *  <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">
  *
- * Rotating the cube causes the Viewer's {@link Camera} to orbit its current point-of-interest. Orbiting the Camera
- * causes the cube to rotate in synch.
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
  *
- * The faces of the cube are aligned with the Viewer's {@link Scene}'s World-space coordinate axis. Clicking on a face moves
+ * ## Overview
+ *
+ * * Rotating the NavCube causes the Viewer's {@link Camera} to orbit its current
+ * point-of-interest. Conversely, orbiting the Camera causes the NavCube to rotate accordingly.
+ * * The faces of the NavCube are aligned with the Viewer's {@link Scene}'s World-space coordinate axis. Clicking on a face moves
  * the Camera to look at the entire Scene along the corresponding axis. Clicking on an edge or a corner looks at
  * the entire Scene along a diagonal.
- *
- * The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
+ * * The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
  * NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.
  *
  * ## Usage
  *
- * In the example below, we'll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the corner of
- * Viewer's Canvas. Then we'll use the {@link GLTFLoaderPlugin} to load a model into the Viewer's Scene. We can then
+ * In the example below, we'll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the canvas
+ * with the given ID. Then we'll use the {@link GLTFLoaderPlugin} to load a model into the Viewer's Scene. We can then
  * use the NavCube to look at the model along each axis or diagonal.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
- *
- * ````JavaScript````
+ * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
@@ -50,10 +50,6 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *      canvasID: "myNavCubeCanvas",
  *
  *      visible: true,           // Initially visible (default)
- *
- *      size: 250,               // NavCube size in pixels (default is 200)
- *      alignment: "topRight",   // Align NavCube to top-right of Viewer canvas
- *      topMargin: 170,          // 170 pixels margin from top of Viewer canvas
  *
  *      cameraFly: true,       // Fly camera to each selected axis/diagonal
  *      cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
@@ -79,12 +75,6 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.id="NavCube"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} cfg.canvasId ID of a canvas element to display the NavCube.
      * @param {Boolean} [cfg.visible=true] Initial visibility.
-     * @param {Number} [cfg.size=200] Size of the NavCube area, in pixels.
-     * @param {String} [cfg.alignment="bottomRight"] The alignment of the NavCube within the bounds of the {@link Viewer}'s {@link Canvas}. Accepted values are "bottomRight", "bottomLeft", "topLeft" and "topRight".
-     * @param {Number} [cfg.leftMargin=10] The margin between the NavCube and the left edge of the {@link Viewer}'s {@link Canvas}, in pixels.
-     * @param {Number} [cfg.rightMargin=10] The margin between the NavCube and the right edge of the {@link Viewer}'s {@link Canvas}, in pixels.
-     * @param {Number} [cfg.topMargin=10] The margin between the NavCube and the top edge of the {@link Viewer}'s {@link Canvas}, in pixels.
-     * @param {Number} [cfg.bottomMargin=10] The margin between the NavCube and the bottom edge of the {@link Viewer}'s {@link Canvas}, in pixels.
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
      * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
@@ -585,6 +575,11 @@ class NavCubePlugin extends Plugin {
         return this._cameraFlyDuration;
     }
 
+    /**
+     * Destroys this NavCubePlugin.
+     *
+     * Does not destroy the canvas the NavCubePlugin was configured with.
+     */
     destroy() {
         if (this._navCubeCanvas) {
             this.viewer.camera.off(this._onCameraMatrix);

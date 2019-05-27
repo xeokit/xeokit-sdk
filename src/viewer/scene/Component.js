@@ -755,7 +755,7 @@ class Component {
         if (!this._ownedComponents[component.id]) {
             this._ownedComponents[component.id] = component;
         }
-        component.once("destroyed", function () {
+        component.once("destroyed", () => {
             delete this._ownedComponents[component.id];
         }, this);
     }
