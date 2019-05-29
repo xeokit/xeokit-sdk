@@ -243,7 +243,8 @@ class Canvas extends Component {
         };
 
         this._spinner = new Spinner(this.scene, {
-            canvas: this.canvas
+            canvas: this.canvas,
+            elementId: cfg.spinnerElementId
         });
 
         this.clearColorAmbient = cfg.clearColorAmbient;

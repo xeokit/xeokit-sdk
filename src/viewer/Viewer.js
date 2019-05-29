@@ -21,7 +21,8 @@ class Viewer {
      * @constructor
      * @param {Object} cfg  Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
-     * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
+     * @param {String} [cfg.canvasId]  ID of existing HTML canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
+     * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
      * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
@@ -54,6 +55,7 @@ class Viewer {
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
             },
+            spinnerElementId: cfg.spinnerElementId,
             transparent: cfg.transparent !== false,
             gammaInput: true,
             gammaOutput: true,
