@@ -382,7 +382,7 @@ class Canvas extends Component {
         let image;
         switch (format) {
             case "jpeg":
-                image = Canvas2Image.saveAsJPEG(this.canvas, false, width, height);
+                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
                 break;
             case "png":
                 image = Canvas2Image.saveAsPNG(this.canvas, true, width, height);
