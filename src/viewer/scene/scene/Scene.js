@@ -1315,7 +1315,7 @@ class Scene extends Component {
     /**
      * Sets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
@@ -1331,7 +1331,7 @@ class Scene extends Component {
     /**
      * Gets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
