@@ -502,6 +502,7 @@ class Scene extends Component {
         this.canvas = new Canvas(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
             canvas: canvas,
+            spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
             backgroundColor: cfg.backgroundColor,
             webgl2: cfg.webgl2 !== false,
