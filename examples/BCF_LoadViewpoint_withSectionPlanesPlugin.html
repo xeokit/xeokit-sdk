@@ -33,9 +33,13 @@
 <canvas id="mySectionPlanesOverviewCanvas"></canvas>
 
 <div id="info">
-    <h1>Loading a BCF Viewpoint, with SectionPlanesPlugin also installed</h1>
-    <p>Demonstrates how SectionPlanesPlugin can automatically include SectionPlanes loaded by a BCFViewpointsPlugin.</p>
+    <h1>Loading a BCF Viewpoint</h1>
     <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+            - Loads BIM model from the file system
+        </li>
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
@@ -43,13 +47,8 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads model and IFC data from file system
-        </li>
-        <li>
-            <a target="_other"
                href="./../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a>
-            - Visualizes section planes, including those loaded by the BCFViewpointsPlugin
+            - Creates and edits SectionPlanes
         </li>
         <li>See source code to examine the BCF JSON record</li>
         <li>
@@ -162,7 +161,8 @@
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a SectionPlanesPlugin - this will visualize cross-section planes loaded by BCFViewpointsPlugin
+    // Add a SectionPlanesPlugin - this will visualize the cross-section planes loaded by BCFViewpointsPlugin
+    // This is not required by the BCFViewpointsPlugin, we're just demonstrating compatibility
     //------------------------------------------------------------------------------------------------------------------
 
     const sectionPlanes = new SectionPlanesPlugin(viewer, {

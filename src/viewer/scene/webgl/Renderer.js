@@ -6,6 +6,9 @@ import {stats} from '../stats.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
+import {OcclusionTester} from "./OcclusionTester.js";
+
+const TEST_TICKS = 20; // Do Occlusion test per this number of ticks.
 
 /**
  * @private
@@ -17,7 +20,6 @@ const Renderer = function (scene, options) {
     const frameCtx = new FrameContext();
     const canvas = scene.canvas.canvas;
     const gl = scene.canvas.gl;
-    const shadowLightMeshes = {};
     const canvasTransparent = options.transparent === true;
 
     const pickIDs = new Map({});
@@ -41,6 +43,8 @@ const Renderer = function (scene, options) {
 
     const bindOutputFrameBuffer = null;
     const unbindOutputFrameBuffer = null;
+
+    this._occlusionTester = null; // Lazy-created in #addMarker()
 
     this.needStateSort = function () {
         stateSortDirty = true;
@@ -148,7 +152,7 @@ const Renderer = function (scene, options) {
         if (canvasTransparent) { // Canvas is transparent
             gl.clearColor(0, 0, 0, 0);
         } else {
-            const color = params.ambientColor || this.lights.getAmbientColor();
+            const color = params.ambientColor || scene.canvas.backgroundColor || this.lights.getAmbientColor();
             gl.clearColor(color[0], color[1], color[2], 1.0);
         }
         if (bindOutputFrameBuffer) {
@@ -307,7 +311,7 @@ const Renderer = function (scene, options) {
 
         return function (params) {
 
-            var opaqueOnly = !!params.opaqueOnly;
+            const opaqueOnly = !!params.opaqueOnly;
 
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
                 gl.getExtension("OES_element_index_uint");
@@ -324,7 +328,8 @@ const Renderer = function (scene, options) {
             if (canvasTransparent) { // Canvas is transparent
                 gl.clearColor(0, 0, 0, 0);
             } else {
-                gl.clearColor(ambientColor[0], ambientColor[1], ambientColor[2], 1.0);
+                const clearColor = scene.canvas.backgroundColor || ambientColor;
+                gl.clearColor(clearColor[0], clearColor[1], clearColor[2], 1.0);
             }
 
             gl.enable(gl.DEPTH_TEST);
@@ -693,7 +698,7 @@ const Renderer = function (scene, options) {
 
                     if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
                         pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
-                        pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix,  pickProjMatrix, pickResult);
+                        pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
                     }
                 }
             }
@@ -857,7 +862,6 @@ const Renderer = function (scene, options) {
 
             pickResult.worldPos = worldPos;
         }
-
     })();
 
     function unpackDepth(depthZ) {
@@ -893,6 +897,78 @@ const Renderer = function (scene, options) {
 
         pickResult.worldNormal = worldNormal;
     }
+
+    /**
+     * Adds a {@link Marker} for occlusion testing.
+     * @param marker
+     */
+    this.addMarker = function (marker) {
+        this._occlusionTester = this._occlusionTester || new OcclusionTester(scene);
+        this._occlusionTester.addMarker(marker);
+    };
+
+    /**
+     * Notifies that a {@link Marker#worldPos} has updated.
+     * @param marker
+     */
+    this.markerWorldPosUpdated = function (marker) {
+        this._occlusionTester.markerWorldPosUpdated(marker);
+    };
+
+    /**
+     * Removes a {@link Marker} from occlusion testing.
+     * @param marker
+     */
+    this.removeMarker = function (marker) {
+        this._occlusionTester.removeMarker(marker);
+    };
+
+    /**
+     * Performs an occlusion test for all added {@link Marker}s, updating
+     * their {@link Marker#visible} properties accordingly.
+     */
+    this.doOcclusionTest = function () {
+
+        if (this._occlusionTester) {
+
+            updateDrawlist();
+
+            this._occlusionTester.bindRenderBuf();
+
+            frameCtx.reset();
+            frameCtx.backfaces = true;
+            frameCtx.frontface = true; // "ccw"
+
+            const boundary = scene.viewport.boundary;
+
+            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+            gl.clearColor(0, 0, 0, 0);
+            gl.enable(gl.DEPTH_TEST);
+            gl.disable(gl.CULL_FACE);
+            gl.disable(gl.BLEND);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            for (var type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+                    const drawableInfo = drawableTypeInfo[type];
+                    const drawableList = drawableInfo.drawableList;
+                    for (var i = 0, len = drawableList.length; i < len; i++) {
+                        const drawable = drawableList[i];
+                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
+
+                            // nTODO: Exclude transpArent
+                            continue;
+                        }
+                        drawable.drawOcclusion(frameCtx);
+                    }
+                }
+            }
+
+            this._occlusionTester.drawMarkers(frameCtx);
+            this._occlusionTester.doOcclusionTest(); // Updates Marker "visible" properties
+            this._occlusionTester.unbindRenderBuf();
+        }
+    };
 
     /**
      * Read pixels from the renderer's frameCtx buffer. Performs a force-render first
@@ -936,6 +1012,9 @@ const Renderer = function (scene, options) {
         }
         if (readPixelBuf) {
             readPixelBuf.destroy();
+        }
+        if (this._occlusionTester) {
+            this._occlusionTester.destroy();
         }
     };
 };

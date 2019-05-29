@@ -23,7 +23,6 @@ function buildVertex(mesh) {
     src.push("attribute vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 viewMatrix;");
-    src.push("uniform mat4 viewNormalMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("varying vec4 vViewPosition;");
     if (quantizedGeometry) {

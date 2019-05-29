@@ -505,18 +505,16 @@ class Scene extends Component {
             spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
             backgroundColor: cfg.backgroundColor,
-            backgroundImage: cfg.backgroundImage,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
             clearColorAmbient: cfg.clearColorAmbient
         });
 
-        // Redraw as canvas resized
-        this.canvas.on("boundary", function () {
-            self.glRedraw();
+        this.canvas.on("boundary", () => {
+            this.glRedraw();
         });
 
-        this.canvas.on("webglContextFailed", function () {
+        this.canvas.on("webglContextFailed",  ()=> {
             alert("xeokit failed to find WebGL!");
         });
 
@@ -690,6 +688,14 @@ class Scene extends Component {
             element: this.canvas.canvas
         });
 
+        this.ticksPerRender = cfg.ticksPerRender;
+        this.ticksPerOcclusionTest = cfg.ticksPerOcclusionTest;
+        this.passes = cfg.passes;
+        this.clearEachPass = cfg.clearEachPass;
+        this.gammaInput = cfg.gammaInput;
+        this.gammaOutput = cfg.gammaOutput;
+        this.gammaFactor = cfg.gammaFactor;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -712,7 +718,7 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [0.35, 0.35, 0.2],
+            color: [0.3, 0.3, 0.3],
             intensity: 1.0
         });
 
@@ -737,22 +743,9 @@ class Scene extends Component {
             space: "view"
         });
 
-        // Plug global components into renderer
-
-        const viewport = this._viewport;
-        const renderer = this._renderer;
-        const camera = this._camera;
-
-        camera.on("dirty", function () {
-            renderer.imageDirty();
+        this._camera.on("dirty", () => {
+            this._renderer.imageDirty();
         });
-
-        this.ticksPerRender = cfg.ticksPerRender;
-        this.passes = cfg.passes;
-        this.clearEachPass = cfg.clearEachPass;
-        this.gammaInput = cfg.gammaInput;
-        this.gammaOutput = cfg.gammaOutput;
-        this.gammaFactor = cfg.gammaFactor;
     }
 
     _initDefaults() {
@@ -965,6 +958,20 @@ class Scene extends Component {
     }
 
     /**
+     * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
+     *
+     * Sets each {@link Marker#visible} ````true```` if the Marker is currently not occluded by any opaque {@link Entity}s
+     * in the Scene, or ````false```` if an Entity is occluding it.
+     */
+    doOcclusionTest() {
+        if (this._needRecompile) {
+            this._recompile();
+            this._needRecompile = false;
+        }
+        this._renderer.doOcclusionTest();
+    }
+
+    /**
      * Renders a single frame of this Scene.
      *
      * The Scene will periodically render itself after any updates, but you can call this method to force a render
@@ -1157,6 +1164,38 @@ class Scene extends Component {
      */
     get ticksPerRender() {
         return this._ticksPerRender;
+    }
+
+    /**
+     * Sets the number of "ticks" that happen between occlusion testing for {@link Marker}s.
+     *
+     * Default value is ````20````.
+     *
+     * @type {Number}
+     */
+    set ticksPerOcclusionTest(value) {
+        if (value === undefined || value === null) {
+            value = 20;
+        } else if (!utils.isNumeric(value) || value <= 0) {
+            this.error("Unsupported value for 'ticksPerOcclusionTest': '" + value +
+                "' - should be an integer greater than zero.");
+            value = 20;
+        }
+        if (value === this._ticksPerOcclusionTest) {
+            return;
+        }
+        this._ticksPerOcclusionTest = value;
+    }
+
+    /**
+     * Gets the number of "ticks" that happen between each render of this Scene.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
+    get ticksPerOcclusionTest() {
+        return this._ticksPerOcclusionTest;
     }
 
     /**

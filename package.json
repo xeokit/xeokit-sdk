@@ -1,7 +1,7 @@
 {
   "name": "xeokit-sdk",
-  "version": "1.0.0",
-  "description": "SDK for building high-performance visualizations on xeogl",
+  "version": "0.2.0",
+  "description": "SDK for building high-performance AEC visualizations on xeogl",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
