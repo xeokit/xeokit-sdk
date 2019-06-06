@@ -16,6 +16,7 @@ const tempVec3c = math.vec3();
  * * [[Example 2: Click annotations to toggle labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
  * * [[Example 3: Hover annotations to show labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
  * * [[Example 4: Click annotations to fly to viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)]
+ * * [[Example 5: Create Annotations with externally-created elements](https://xeokit.github.io/xeokit-sdk/examples/#annotations_externalElements)]
  *
  * ## Overview
  *
@@ -23,6 +24,7 @@ const tempVec3c = math.vec3();
  * * Annotations render themselves with HTML elements that float over the canvas; customize the appearance of
  * individual Annotations using HTML template; configure default appearance by setting templates on the AnnotationsPlugin.
  * * Dynamically insert data values into each Annotation's HTML templates; configure default values on the AnnotationsPlugin.
+ * * Optionally configure Annotation with externally-created DOM elements for markers and labels; these override templates and data values.
  * * Optionally configure Annotations to hide themselves whenever occluded by {@link Entity}s.
  * * Optionally configure each Annotation with a position we can jump or fly the {@link Camera} to.
  *
@@ -42,7 +44,7 @@ const tempVec3c = math.vec3();
  * {@link Scene} periodically occlusion-tests all Annotations on every 20th "tick" (which represents a rendered frame). We
  * can adjust that frequency via property {@link Scene#ticksPerOcclusionTest}.
  *
- * Finally, we'll query the Annotation's position occlusion/visibility status, and subscribe to change events on those properties..
+ * Finally, we'll query the Annotation's position occlusion/visibility status, and subscribe to change events on those properties.
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
  *
@@ -286,7 +288,29 @@ const tempVec3c = math.vec3();
  * viewer.cameraFlight.jumpTo(myAnnotation3);
  * ````
  *
- * ## Example 4: Creating annotations by clicking on objects
+ * ## Example 4: Creating an Annotation using externally-created DOM elements
+ *
+ * Now let's create another {@link Annotation}, this time providing it with pre-existing DOM elements for its marker
+ * and label. Note that AnnotationsPlugin will ignore any ````markerHTML````, ````labelHTML````
+ * or ````values```` properties when provide  ````markerElementId```` or ````labelElementId````.
+ *
+ * ````javascript
+ * const myAnnotation2 = annotations.createAnnotation({
+ *
+ *      id: "myAnnotation2",
+ *
+ *      worldPos: [-0.163, 1.810, 7.977],
+ *
+ *      occludable: true,
+ *      markerShown: true,
+ *      labelShown: true,
+ *
+ *      markerElementId: "myMarkerElement",
+ *      labelElementId: "myLabelElement"
+ * });
+ * ````
+ *
+ * ## Example 5: Creating annotations by clicking on objects
  *
  * AnnotationsPlugin makes it easy to create {@link Annotation}s on the surfaces of {@link Entity}s as we click on them.
  *
@@ -336,8 +360,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="Annotations"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````<div></div>````.
-     * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````<div></div>````.
+     * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````<div></div>````. Ignored on {@link Annotation}s configured with a ````markerElementId````.
+     * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````<div></div>````.  Ignored on {@link Annotation}s configured with a ````labelElementId````.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param  {{String:(String|Number)}} [cfg.values={}] Map of default values to insert into the HTML templates for the marker and label.
      */
@@ -375,8 +399,10 @@ class AnnotationsPlugin extends Plugin {
      *
      * @param {Object} params Annotation configuration.
      * @param {String} params.id Unique ID to assign to {@link Annotation#id}. The Annotation will be registered by this in {@link AnnotationsPlugin#annotations} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
-     * @param {String} [params.markerHTML] HTML text template for the Annotation marker. Defaults to the marker HTML given to the AnnotationsPlugin constructor.
-     * @param {String} [params.labelHTML] HTML text template for the Annotation label. Defaults to the label HTML given to the AnnotationsPlugin constructor.
+     * @param {String} [params.markerElementId] ID of pre-existing DOM element to render the marker. This overrides ````markerHTML```` and does not support ````values```` (data is baked into the label DOM element).
+     * @param {String} [params.labelElementId] ID of pre-existing DOM element to render the label. This overrides ````labelHTML```` and does not support ````values```` (data is baked into the label DOM element).
+     * @param {String} [params.markerHTML] HTML text template for the Annotation marker. Defaults to the marker HTML given to the AnnotationsPlugin constructor. Ignored if you provide ````markerElementId````.
+     * @param {String} [params.labelHTML] HTML text template for the Annotation label. Defaults to the label HTML given to the AnnotationsPlugin constructor. Ignored if you provide ````labelElementId````.
      * @param {Number[]} [params.worldPos=[0,0,0]] World-space position of the Annotation marker, assigned to {@link Annotation#worldPos}.
      * @param {Entity} [params.entity] Optional {@link Entity} to associate the Annotation with. Causes {@link Annotation#visible} to be ````false```` whenever {@link Entity#visible} is also ````false````.
      * @param {PickResult} [params.pickResult] Sets the Annotation's World-space position and direction vector from the given {@link PickResult}'s {@link PickResult#worldPos} and {@link PickResult#worldNormal}, and the Annotation's Entity from {@link PickResult#entity}. Causes ````worldPos```` and ````entity```` parameters to be ignored, if they are also given.
@@ -397,27 +423,47 @@ class AnnotationsPlugin extends Plugin {
         }
         var worldPos;
         var entity;
-        if (params.pickRecord) {
-            const pickRecord = params.pickRecord;
-            if (!pickRecord.worldPos || !pickRecord.worldNormal) {
-                this.error("Param 'pickRecord' does not have both worldPos and worldNormal");
+        params.pickResult = params.pickResult || params.pickRecord;
+        if (params.pickResult) {
+            const pickResult = params.pickResult;
+            if (!pickResult.worldPos || !pickResult.worldNormal) {
+                this.error("Param 'pickResult' does not have both worldPos and worldNormal");
             } else {
-                const normalizedWorldNormal = math.normalizeVec3(pickRecord.worldNormal, tempVec3a);
+                const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a);
                 const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, 0.2, tempVec3b);
-                const offsetWorldPos = math.addVec3(pickRecord.worldPos, offsetVec, tempVec3c);
+                const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c);
                 worldPos = offsetWorldPos;
-                entity = pickRecord.entity;
+                entity = pickResult.entity;
             }
         } else {
             worldPos = params.worldPos;
             entity = params.entity;
         }
+
+        var markerElement = null;
+        if (params.markerElementId) {
+            markerElement = document.getElementById(params.markerElementId);
+            if (!markerElement) {
+                this.error("Can't find DOM element for 'markerElementId' value '" + params.markerElementId + "' - defaulting to internally-generated empty DIV");
+            }
+        }
+
+        var labelElement = null;
+        if (params.labelElementId) {
+            labelElement = document.getElementById(params.labelElementId);
+            if (!labelElement) {
+                this.error("Can't find DOM element for 'labelElementId' value '" + params.labelElementId + "' - defaulting to internally-generated empty DIV");
+            }
+        }
+
         const annotation = new Annotation(this.viewer.scene, {
             id: params.id,
             plugin: this,
             entity: entity,
             worldPos: worldPos,
             container: this._container,
+            markerElement: markerElement,
+            labelElement: labelElement,
             markerHTML: params.markerHTML || this._markerHTML,
             labelHTML: params.labelHTML || this._labelHTML,
             occludable: params.occludable,

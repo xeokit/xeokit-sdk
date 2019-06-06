@@ -8,12 +8,12 @@
     <style>
 
         .annotation-marker {
-            color: #ffffff;
+            position: absolute;
+            color: #000000;
             line-height: 1.8;
             text-align: center;
             font-family: "monospace";
             font-weight: bold;
-            position: absolute;
             width: 25px;
             height: 25px;
             border-radius: 15px;
@@ -21,7 +21,7 @@
             background: black;
             visibility: hidden;
             box-shadow: 5px 5px 15px 1px #000000;
-            z-index: 0;
+            z-index: -10000;
         }
 
         .annotation-label {
@@ -38,6 +38,7 @@
             border-radius: 8px;
             border: #ffffff solid 2px;
             box-shadow: 5px 5px 15px 1px #000000;
+            visibility: hidden;
             z-index: 90000;
         }
 
@@ -84,11 +85,14 @@
 
 <body>
 <canvas id="myCanvas"></canvas>
-<div id="info">
-    <h1>Click objects to create Annotations</h1>
-    <p><br>Demonstrates how to create Annotations by picking objects.</p><br>
-    <ul>
 
+<!-- Info area -->
+
+<div id="info">
+    <h1>Annotations using pre-existing DOM elements for makers and labels</h1>
+    <p><br>Shows how to provide IDs of pre-existing DOM elements for Annotations. Annotations fall back on auto-generated
+        empty DIVs by default when they can't find elements with our given IDs.</p><br>
+    <ul>
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a>
@@ -99,7 +103,44 @@
         </li>
     </ul>
 </div>
+
+<!-- DOM elements which we'll provide for our Annotation markers and labels -->
+
+<div id="myAnnotation1Marker" class='annotation-marker' style='background-color: white;'>A1</div>
+<div id="myAnnotation1Label" class='annotation-label' style='background-color: white;'>
+    <div class='annotation-title'>Annotation 1</div>
+    <div class='annotation-desc'>Description of Annotation 1</div>
+</div>
+
+<div id="myAnnotation2Marker" class='annotation-marker' style='background-color: white;'>A2</div>
+<div id="myAnnotation2Label" class='annotation-label' style='background-color: white;'>
+    <div class='annotation-title'>Annotation 2</div>
+    <div class='annotation-desc'>Description of Annotation 2</div>
+</div>
+
+
+<div id="myAnnotation3Marker" class='annotation-marker' style='background-color: white;'>A3</div>
+<div id="myAnnotation3Label" class='annotation-label' style='background-color: white;'>
+    <div class='annotation-title'>Annotation 3</div>
+    <div class='annotation-desc'>Description of Annotation 3</div>
+</div>
+
+
+<div id="myAnnotation4Marker" class='annotation-marker' style='background-color: white;'>A4</div>
+<div id="myAnnotation4Label" class='annotation-label' style='background-color: white;'>
+    <div class='annotation-title'>Annotation 4</div>
+    <div class='annotation-desc'>Description of Annotation 4</div>
+</div>
+
+
+<div id="myAnnotation5Marker" class='annotation-marker' style='background-color: white;'>A5</div>
+<div id="myAnnotation5Label" class='annotation-label' style='background-color: white;'>
+    <div class='annotation-title'>Annotation 5</div>
+    <div class='annotation-desc'>Description of Annotation 5</div>
+</div>
+
 </body>
+
 <script type="module">
 
     //------------------------------------------------------------------------------------------------------------------
@@ -128,6 +169,7 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
+
     const model = gltfLoader.load({
         id: "myModel",
         src: "./models/gltf/duplex/scene.gltf",
@@ -139,56 +181,78 @@
     // Create an AnnotationsPlugin, with which we'll create annotations
     //------------------------------------------------------------------------------------------------------------------
 
-    const annotations = new AnnotationsPlugin(viewer, {
+    const annotations = new AnnotationsPlugin(viewer, {});
 
-        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
-        labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
-
-        values: {
-            markerBGColor: "red",
-            glyph: "X",
-            title: "Untitled",
-            description: "No description"
-        }
+    annotations.on("markerMouseEnter", (annotation) => {
+        annotation.setLabelShown(true);
     });
 
-    annotations.on("markerClicked", (annotation) => {
-        annotation.labelShown = !annotation.labelShown;
+    annotations.on("markerMouseLeave", (annotation) => {
+        annotation.setLabelShown(false);
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Use the AnnotationsPlugin to create an annotation wherever we click on an object
-    //------------------------------------------------------------------------------------------------------------------
+    model.on("loaded", () => {
 
-    var i = 1;
+        //------------------------------------------------------------------------------------------------------------------
+        // Create some Annotations
+        // For markers and labels, we'll provide IDs of HTML elements that pre-exist within the document
+        //------------------------------------------------------------------------------------------------------------------
 
-    viewer.scene.input.on("mouseclicked", (coords) => {
+        annotations.createAnnotation({
+            id: "myAnnotation1",
+            worldPos: [2.039, 4.418, 17.965],
+            occludable: true,
+            markerShown: true,
+            labelShown: false,
 
-        var pickResult = viewer.scene.pick({
-            canvasPos: coords,
-            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+            markerElementId: "myAnnotation1Marker",
+            labelElementId: "myAnnotation1Label"
         });
 
-        if (pickResult) {
+        annotations.createAnnotation({
+            id: "myAnnotation2",
+            worldPos: [4.981, 0.469, 12.745],
+            occludable: true,
+            markerShown: true,
+            labelShown: false,
 
-            const annotation = annotations.createAnnotation({
-                id: "myAnnotation" + i,
-                pickResult: pickResult, // <<------- initializes worldPos and entity from PickResult
-                occludable: true,       // Optional, default is true
-                markerShown: true,      // Optional, default is true
-                labelShown: true,       // Optional, default is true
-                values: {               // HTML template values
-                    glyph: "A" + i,
-                    title: "My annotation " + i,
-                    description: "My description " + i
-                },
-            });
+            markerElementId: "myAnnotation2Marker",
+            labelElementId: "myAnnotation2Label"
+        });
 
-            i++;
-        }
+        annotations.createAnnotation({
+            id: "myAnnotation3",
+            worldPos: [-0.163, 1.810, 7.977],
+            occludable: true,
+            markerShown: true,
+            labelShown: true,
+
+            markerElementId: "myAnnotation3Marker",
+            labelElementId: "myAnnotation3Label"
+        });
+
+        annotations.createAnnotation({
+            id: "myAnnotation4",
+            worldPos: [3.796, 0.163, -1.115],
+            occludable: true,
+            markerShown: true,
+            labelShown: false,
+
+            markerElementId: "myAnnotation4Marker",
+            labelElementId: "myAnnotation4Label"
+        });
+
+        annotations.createAnnotation({
+            id: "myAnnotation5",
+            worldPos: [8.947, 4.257, 9.297],
+            occludable: true,
+            markerShown: true,
+            labelShown: false,
+
+            markerElementId: "myAnnotation5Marker",
+            labelElementId: "myAnnotation5Label"
+        });
     });
-
-    window.viewer = viewer;
 
 </script>
 </html>

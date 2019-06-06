@@ -26,21 +26,45 @@ class Annotation extends Marker {
             throw "config missing: container";
         }
 
-        this._markerHTML = cfg.markerHTML;
-        if (!this._markerHTML) {
-            throw "config missing: markerHTML";
+        if ((!cfg.markerElement) && (!cfg.markerHTML)) {
+            throw "config missing: need either markerElement or markerHTML";
+        }
+        if ((!cfg.labelElement) && (!cfg.labelHTML)) {
+            throw "config missing: need either labelElement or labelHTML";
         }
 
-        this._labelHTML = cfg.labelHTML;
-        if (!this._labelHTML) {
-            throw "config missing: labelHTML";
+        this._htmlDirty = false;
+
+        if (cfg.markerElement) {
+            this._marker = cfg.markerElement;
+            this._marker.addEventListener("click", this._onMouseClickedExternalMarker = () => {
+                this.plugin.fire("markerClicked", this);
+            });
+            this._marker.addEventListener("mouseenter", this._onMouseEnterExternalMarker = () => {
+                this.plugin.fire("markerMouseEnter", this);
+            });
+            this._marker.addEventListener("mouseleave", this._onMouseLeaveExternalMarker = () => {
+                this.plugin.fire("markerMouseLeave", this);
+            });
+            this._markerExternal = true; // Don't destroy marker when destroying Annotation
+        } else {
+            this._markerHTML = cfg.markerHTML;
+            this._htmlDirty = true;
+            this._markerExternal = false;
         }
 
-        this._markerShown = false;
-        this._labelShown = false;
+        if (cfg.labelElement) {
+            this._label = cfg.labelElement;
+            this._labelExternal = true; // Don't destroy marker when destroying Annotation
+        } else {
+            this._labelHTML = cfg.labelHTML;
+            this._htmlDirty = true;
+            this._labelExternal = false;
+        }
 
+        this._markerShown = !!cfg.markerShown;
+        this._labelShown = !!cfg.labelShown;
         this._values = cfg.values || {};
-        this._htmlDirty = true;
         this._layoutDirty = true;
         this._visibilityDirty = true;
 
@@ -53,7 +77,7 @@ class Annotation extends Marker {
                 this._layoutDirty = true;
                 this._visibilityDirty = true;
             }
-            if (this._layoutDirty) {
+            if (this._layoutDirty || this._visibilityDirty) {
                 if (this._markerShown || this._labelShown) {
                     this._updatePosition();
                     this._layoutDirty = false;
@@ -109,42 +133,45 @@ class Annotation extends Marker {
      * @private
      */
     _buildHTML() {
-        if (this._link) {
-            this._container.removeChild(this._link);
-            this._link = null;
-            this._container.removeChild(this._label);
-            this._label = null;
+        if (!this._markerExternal) {
+            if (this._marker) {
+                this._container.removeChild(this._marker);
+                this._marker = null;
+            }
+            let markerHTML = this._markerHTML || "<p></p>"; // Make marker
+            if (utils.isArray(markerHTML)) {
+                markerHTML = markerHTML.join("");
+            }
+            markerHTML = this._renderTemplate(markerHTML);
+            const markerFragment = document.createRange().createContextualFragment(markerHTML);
+            this._marker = markerFragment.firstChild;
+            this._container.appendChild(this._marker);
+            this._marker.style.visibility = this._markerShown ? "visible" : "hidden";
+            this._marker.addEventListener("click", () => {
+                this.plugin.fire("markerClicked", this);
+            });
+            this._marker.addEventListener("mouseenter", () => {
+                this.plugin.fire("markerMouseEnter", this);
+            });
+            this._marker.addEventListener("mouseleave", () => {
+                this.plugin.fire("markerMouseLeave", this);
+            });
         }
-        this._link = document.createElement("a");
-        this._link.addEventListener("click", () => {
-            this.plugin.fire("markerClicked", this);
-        });
-        this._link.addEventListener("mouseenter", () => {
-            this.plugin.fire("markerMouseEnter", this);
-        });
-        this._link.addEventListener("mouseleave", () => {
-            this.plugin.fire("markerMouseLeave", this);
-        });
-        this._container.appendChild(this._link);
-        let markerHTML = this._markerHTML || "<p></p>"; // Make marker
-        if (utils.isArray(markerHTML)) {
-            markerHTML = markerHTML.join("");
+        if (!this._labelExternal) {
+            if (this._label) {
+                this._container.removeChild(this._label);
+                this._label = null;
+            }
+            let labelHTML = this._labelHTML || "<p></p>"; // Make label
+            if (utils.isArray(labelHTML)) {
+                labelHTML = labelHTML.join("");
+            }
+            labelHTML = this._renderTemplate(labelHTML);
+            const labelFragment = document.createRange().createContextualFragment(labelHTML);
+            this._label = labelFragment.firstChild;
+            this._container.appendChild(this._label);
+            this._label.style.visibility = (this._markerShown && this._labelShown) ? "visible" : "hidden";
         }
-        markerHTML = this._renderTemplate(markerHTML);
-        const markerFragment = document.createRange().createContextualFragment(markerHTML);
-        this._marker = markerFragment.firstChild;
-        this._link.appendChild(this._marker);
-        this._container.appendChild(this._link);
-        let labelHTML = this._labelHTML || "<p></p>"; // Make label
-        if (utils.isArray(labelHTML)) {
-            labelHTML = labelHTML.join("");
-        }
-        labelHTML = this._renderTemplate(labelHTML);
-        const labelFragment = document.createRange().createContextualFragment(labelHTML);
-        this._label = labelFragment.firstChild;
-        this._container.appendChild(this._label);
-        this._marker.style.visibility = this._markerShown ? "visible" : "hidden";
-        this._label.style.visibility = (this._markerShown && this._labelShown) ? "visible" : "hidden";
     }
 
     /**
@@ -157,11 +184,12 @@ class Annotation extends Marker {
         const canvasPos = this.canvasPos;
         this._marker.style.left = (Math.floor(left + canvasPos[0]) - 12) + "px";
         this._marker.style.top = (Math.floor(top + canvasPos[1]) - 12) + "px";
+        this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2] * 10) + 1;
         const offsetX = 20;
         const offsetY = -17;
         this._label.style.left = 20 + Math.floor(left + canvasPos[0] + offsetX) + "px";
         this._label.style.top = Math.floor(top + canvasPos[1] + offsetY) + "px";
-        this._link.style["z-index"] = 90005 + Math.floor(this._viewPos[2] * 10) + 1;
+        this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2] * 10) + 1;
     }
 
     /**
@@ -301,10 +329,20 @@ class Annotation extends Marker {
      * You can also call {@link AnnotationsPlugin#destroyAnnotation}.
      */
     destroy() {
-        if (this._link) {
-            this._link.parentNode.removeChild(this._link);
-            this._label.parentNode.removeChild(this._label);
-            this._link = null;
+        if (this._marker) {
+            if (!this._markerExternal) {
+                this._marker.parentNode.removeChild(this._marker);
+            } else {
+                this._marker.removeEventListener("click", this._onMouseClickedExternalMarker);
+                this._marker.removeEventListener("mouseenter", this._onMouseEnterExternalMarker);
+                this._marker.removeEventListener("mouseleave", this._onMouseLeaveExternalMarker);
+                this._marker = null;
+            }
+        }
+        if (this._label) {
+            if (!this._labelExternal) {
+                this._label.parentNode.removeChild(this._label);
+            }
             this._label = null;
         }
         this.scene.off(this._onTick);
