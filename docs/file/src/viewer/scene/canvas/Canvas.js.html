@@ -361,7 +361,8 @@ class Canvas extends Component {
         };
 
         this._spinner = new Spinner(this.scene, {
-            canvas: this.canvas
+            canvas: this.canvas,
+            elementId: cfg.spinnerElementId
         });
 
         this.clearColorAmbient = cfg.clearColorAmbient;
@@ -499,7 +500,7 @@ class Canvas extends Component {
         let image;
         switch (format) {
             case &quot;jpeg&quot;:
-                image = Canvas2Image.saveAsJPEG(this.canvas, false, width, height);
+                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
                 break;
             case &quot;png&quot;:
                 image = Canvas2Image.saveAsPNG(this.canvas, true, width, height);

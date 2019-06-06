@@ -116,13 +116,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber332">xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AnnotationsPlugin} from &apos;<span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber356">xeokit-sdk/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber332">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber356">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -149,12 +149,14 @@
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels">Example 2: Click annotations to toggle labels</a>]</li>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels">Example 3: Hover annotations to show labels</a>]</li>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition">Example 4: Click annotations to fly to viewpoint</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_externalElements">Example 5: Create Annotations with externally-created elements</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
 <li>An <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is a 3D position with a label attached.</li>
-<li>Annotations render themselves with HTML elements that float over the canvas. Customize the appearance of
-individual Annotations using HTML templates. Configure default appearance by setting templates on the AnnotationsPlugin.</li>
-<li>Dynamically insert data values into each Annotation&apos;s HTML templates. Configure default values on the AnnotationsPlugin.</li>
+<li>Annotations render themselves with HTML elements that float over the canvas; customize the appearance of
+individual Annotations using HTML template; configure default appearance by setting templates on the AnnotationsPlugin.</li>
+<li>Dynamically insert data values into each Annotation&apos;s HTML templates; configure default values on the AnnotationsPlugin.</li>
+<li>Optionally configure Annotation with externally-created DOM elements for markers and labels; these override templates and data values.</li>
 <li>Optionally configure Annotations to hide themselves whenever occluded by <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
 <li>Optionally configure each Annotation with a position we can jump or fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to.</li>
 </ul>
@@ -168,7 +170,7 @@ and the keys in the values map.</p>
 <p>We&apos;ll also configure the Annotation to hide itself whenever it&apos;s position is occluded by any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s (this is default behavior). The
 <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> periodically occlusion-tests all Annotations on every 20th &quot;tick&quot; (which represents a rendered frame). We
 can adjust that frequency via property <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerOcclusionTest">Scene#ticksPerOcclusionTest</a></span>.</p>
-<p>Finally, we&apos;ll query the Annotation&apos;s position occlusion/visibility status, and subscribe to change events on those properties..</p>
+<p>Finally, we&apos;ll query the Annotation&apos;s position occlusion/visibility status, and subscribe to change events on those properties.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
@@ -377,7 +379,24 @@ indicating a viewpoint on whatever it&apos;s annotating:</p>
 <p>Or jump the Camera, like this:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.cameraFlight.jumpTo(myAnnotation3);</code>
 </code></pre>
-<h2 id="example-4--creating-annotations-by-clicking-on-objects">Example 4: Creating annotations by clicking on objects</h2><p>AnnotationsPlugin makes it easy to create <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>s on the surfaces of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as we click on them.</p>
+<h2 id="example-4--creating-an-annotation-using-externally-created-dom-elements">Example 4: Creating an Annotation using externally-created DOM elements</h2><p>Now let&apos;s create another <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>, this time providing it with pre-existing DOM elements for its marker
+and label. Note that AnnotationsPlugin will ignore any <code>markerHTML</code>, <code>labelHTML</code>
+or <code>values</code> properties when provide  <code>markerElementId</code> or <code>labelElementId</code>.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const myAnnotation2 = annotations.createAnnotation({
+
+     id: &quot;myAnnotation2&quot;,
+
+     worldPos: [-0.163, 1.810, 7.977],
+
+     occludable: true,
+     markerShown: true,
+     labelShown: true,
+
+     markerElementId: &quot;myMarkerElement&quot;,
+     labelElementId: &quot;myLabelElement&quot;
+});</code>
+</code></pre>
+<h2 id="example-5--creating-annotations-by-clicking-on-objects">Example 5: Creating annotations by clicking on objects</h2><p>AnnotationsPlugin makes it easy to create <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>s on the surfaces of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as we click on them.</p>
 <p>The <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-createAnnotation">AnnotationsPlugin#createAnnotation</a></span> method can accept a <span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span> returned
 by <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span>, from which it initializes the <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>&apos;s <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldPos">Annotation#worldPos</a></span> and
 <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-entity">Annotation#entity</a></span>. Note that this only works when <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span> was configured to perform a 3D
@@ -877,7 +896,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber368">source</a></span></span>
     </span>
   </h3>
 
@@ -985,7 +1004,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber357">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber381">source</a></span></span>
     </span>
   </h3>
 
@@ -1032,7 +1051,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber455">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 
@@ -1076,7 +1095,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber393">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber419">source</a></span></span>
     </span>
   </h3>
 
@@ -1109,6 +1128,20 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Unique ID to assign to <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">Annotation#id</a></span>. The Annotation will be registered by this in <span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-member-annotations">AnnotationsPlugin#annotations</a></span> and <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-components">Scene.components</a></span>. Must be unique among all components in the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.markerElementId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID of pre-existing DOM element to render the marker. This overrides <code>markerHTML</code> and does not support <code>values</code> (data is baked into the label DOM element).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.labelElementId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID of pre-existing DOM element to render the label. This overrides <code>labelHTML</code> and does not support <code>values</code> (data is baked into the label DOM element).</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1248,7 +1281,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber467">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber512">source</a></span></span>
     </span>
   </h3>
 
@@ -1293,7 +1326,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber443">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 

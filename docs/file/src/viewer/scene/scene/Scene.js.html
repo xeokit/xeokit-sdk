@@ -620,6 +620,7 @@ class Scene extends Component {
         this.canvas = new Canvas(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
             canvas: canvas,
+            spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
             backgroundColor: cfg.backgroundColor,
             webgl2: cfg.webgl2 !== false,
@@ -1432,7 +1433,7 @@ class Scene extends Component {
     /**
      * Sets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
@@ -1448,7 +1449,7 @@ class Scene extends Component {
     /**
      * Gets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
