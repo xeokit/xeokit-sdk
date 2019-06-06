@@ -183,12 +183,8 @@
 
     const annotations = new AnnotationsPlugin(viewer, {});
 
-    annotations.on("markerMouseEnter", (annotation) => {
-        annotation.setLabelShown(true);
-    });
-
-    annotations.on("markerMouseLeave", (annotation) => {
-        annotation.setLabelShown(false);
+    annotations.on("markerClicked", (annotation) => {
+        annotation.setLabelShown(!annotation.getLabelShown());
     });
 
     model.on("loaded", () => {
@@ -203,7 +199,7 @@
             worldPos: [2.039, 4.418, 17.965],
             occludable: true,
             markerShown: true,
-            labelShown: false,
+            labelShown: true,
 
             markerElementId: "myAnnotation1Marker",
             labelElementId: "myAnnotation1Label"
@@ -214,7 +210,7 @@
             worldPos: [4.981, 0.469, 12.745],
             occludable: true,
             markerShown: true,
-            labelShown: false,
+            labelShown: true,
 
             markerElementId: "myAnnotation2Marker",
             labelElementId: "myAnnotation2Label"
@@ -236,7 +232,7 @@
             worldPos: [3.796, 0.163, -1.115],
             occludable: true,
             markerShown: true,
-            labelShown: false,
+            labelShown: true,
 
             markerElementId: "myAnnotation4Marker",
             labelElementId: "myAnnotation4Label"
@@ -247,7 +243,7 @@
             worldPos: [8.947, 4.257, 9.297],
             occludable: true,
             markerShown: true,
-            labelShown: false,
+            labelShown: true,
 
             markerElementId: "myAnnotation5Marker",
             labelElementId: "myAnnotation5Label"
