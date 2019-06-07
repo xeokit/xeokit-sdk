@@ -478,8 +478,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id=&quot;Annotations&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````&lt;div&gt;&lt;/div&gt;````.
-     * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````&lt;div&gt;&lt;/div&gt;````.
+     * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````&lt;div&gt;&lt;/div&gt;````. Ignored on {@link Annotation}s configured with a ````markerElementId````.
+     * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````&lt;div&gt;&lt;/div&gt;````.  Ignored on {@link Annotation}s configured with a ````labelElementId````.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param  {{String:(String|Number)}} [cfg.values={}] Map of default values to insert into the HTML templates for the marker and label.
      */
@@ -519,8 +519,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {String} params.id Unique ID to assign to {@link Annotation#id}. The Annotation will be registered by this in {@link AnnotationsPlugin#annotations} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
      * @param {String} [params.markerElementId] ID of pre-existing DOM element to render the marker. This overrides ````markerHTML```` and does not support ````values```` (data is baked into the label DOM element).
      * @param {String} [params.labelElementId] ID of pre-existing DOM element to render the label. This overrides ````labelHTML```` and does not support ````values```` (data is baked into the label DOM element).
-     * @param {String} [params.markerHTML] HTML text template for the Annotation marker. Defaults to the marker HTML given to the AnnotationsPlugin constructor.
-     * @param {String} [params.labelHTML] HTML text template for the Annotation label. Defaults to the label HTML given to the AnnotationsPlugin constructor.
+     * @param {String} [params.markerHTML] HTML text template for the Annotation marker. Defaults to the marker HTML given to the AnnotationsPlugin constructor. Ignored if you provide ````markerElementId````.
+     * @param {String} [params.labelHTML] HTML text template for the Annotation label. Defaults to the label HTML given to the AnnotationsPlugin constructor. Ignored if you provide ````labelElementId````.
      * @param {Number[]} [params.worldPos=[0,0,0]] World-space position of the Annotation marker, assigned to {@link Annotation#worldPos}.
      * @param {Entity} [params.entity] Optional {@link Entity} to associate the Annotation with. Causes {@link Annotation#visible} to be ````false```` whenever {@link Entity#visible} is also ````false````.
      * @param {PickResult} [params.pickResult] Sets the Annotation&apos;s World-space position and direction vector from the given {@link PickResult}&apos;s {@link PickResult#worldPos} and {@link PickResult#worldNormal}, and the Annotation&apos;s Entity from {@link PickResult#entity}. Causes ````worldPos```` and ````entity```` parameters to be ignored, if they are also given.
@@ -565,6 +565,7 @@ class AnnotationsPlugin extends Plugin {
                 this.error(&quot;Can&apos;t find DOM element for &apos;markerElementId&apos; value &apos;&quot; + params.markerElementId + &quot;&apos; - defaulting to internally-generated empty DIV&quot;);
             }
         }
+
         var labelElement = null;
         if (params.labelElementId) {
             labelElement = document.getElementById(params.labelElementId);

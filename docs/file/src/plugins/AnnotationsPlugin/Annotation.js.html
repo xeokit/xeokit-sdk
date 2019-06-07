@@ -164,7 +164,7 @@ class Annotation extends Marker {
             this._marker.addEventListener(&quot;mouseleave&quot;, this._onMouseLeaveExternalMarker = () =&gt; {
                 this.plugin.fire(&quot;markerMouseLeave&quot;, this);
             });
-            this._markerExternal = true;
+            this._markerExternal = true; // Don&apos;t destroy marker when destroying Annotation
         } else {
             this._markerHTML = cfg.markerHTML;
             this._htmlDirty = true;
@@ -173,7 +173,7 @@ class Annotation extends Marker {
 
         if (cfg.labelElement) {
             this._label = cfg.labelElement;
-            this._labelExternal = true;
+            this._labelExternal = true; // Don&apos;t destroy marker when destroying Annotation
         } else {
             this._labelHTML = cfg.labelHTML;
             this._htmlDirty = true;
@@ -251,7 +251,6 @@ class Annotation extends Marker {
      * @private
      */
     _buildHTML() {
-        var anythingBuilt = false;
         if (!this._markerExternal) {
             if (this._marker) {
                 this._container.removeChild(this._marker);
@@ -275,7 +274,6 @@ class Annotation extends Marker {
             this._marker.addEventListener(&quot;mouseleave&quot;, () =&gt; {
                 this.plugin.fire(&quot;markerMouseLeave&quot;, this);
             });
-            anythingBuilt = true;
         }
         if (!this._labelExternal) {
             if (this._label) {
@@ -291,9 +289,7 @@ class Annotation extends Marker {
             this._label = labelFragment.firstChild;
             this._container.appendChild(this._label);
             this._label.style.visibility = (this._markerShown &amp;&amp; this._labelShown) ? &quot;visible&quot; : &quot;hidden&quot;;
-            anythingBuilt = true;
         }
-        return anythingBuilt;
     }
 
     /**
