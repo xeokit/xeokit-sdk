@@ -364,9 +364,11 @@ var parseGLTF = (function () {
         }
         var priority = null;
         var tileId = null;
+        var tileOpen = false;
         var nodei = 0;
         var spinnerShowing = true;
         ctx.plugin.viewer.scene.canvas.spinner.processes++;
+
         function nextPriority() {
             for (var i = nodei, len = ctx.nodes.length; i < len; i++) {
                 const glTFNode = ctx.nodes[i];
@@ -378,29 +380,29 @@ var parseGLTF = (function () {
                             spinnerShowing = false;
                         }
                     }
-                    nodei = i + 1;
+                    nodei = i;
                     tileId = "" + glTFNode.priority;
-                    //console.log("loading tile: " + tileId);
                     ctx.performanceModel.createTile({
                         id: tileId
                     });
                     priority = glTFNode.priority;
-                    setTimeout(nextPriority, 150);
+                    tileOpen = true;
+                    setTimeout(nextPriority, 100);
                     return;
                 }
                 loadNode(ctx, glTFNode, tileId);
             }
-            ctx.performanceModel.finalize();
+            if (tileOpen) {
+                ctx.performanceModel.finalizeTile(tileId);
+            }
             if (spinnerShowing) {
                 ctx.plugin.viewer.scene.canvas.spinner.processes--;
                 spinnerShowing = false;
             }
             ok();
         }
-
         nextPriority();
     }
-
 
     function countMeshUsage(ctx, glTFNode) {
         var json = ctx.json;
@@ -583,15 +585,6 @@ var parseGLTF = (function () {
         } else {
             return new TypedArray(bufferViewInfo._buffer, accessorInfo.byteOffset || 0, accessorInfo.count * itemSize);
         }
-    }
-
-    function scalePositionsArray(positions) {
-        for (var i = 0, len = positions.length; i < len; i += 3) {
-            positions[i + 0] *= 1000;
-            positions[i + 1] *= 1000;
-            positions[i + 2] *= 1000;
-        }
-
     }
 
     function error(ctx, msg) {
