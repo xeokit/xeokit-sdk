@@ -11,7 +11,6 @@
 <div id="info">
     <h1>Surface Picking with a Ray</h1>
     <ul>
-
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
@@ -41,9 +40,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [-3.9338698387145996, 2.8559818267822266, 27.018949508666992];
-    viewer.camera.look = [4.400000095367432, 3.7249999046325684, 8.899999618530273];
-    viewer.camera.up = [-0.018190976232290268, 0.999053955078125, 0.0395493358373642];
+    viewer.camera.eye= [-9.54, 13.47, 29.97];
+    viewer.camera.look=[4.40, 3.72, 8.89];
+    viewer.camera.up= [0.21, 0.91, -0.31];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -56,10 +55,6 @@
         src: "./models/gltf/duplex/scene.gltf",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
-    });
-
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -109,7 +104,7 @@
 
         var mesh = new Mesh(viewer.scene, {
             geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
-                radius: 1.5,
+                radius: 0.6,
                 heightSegments: 60,
                 widthSegments: 60
             })),
@@ -133,10 +128,10 @@
     // Dynamically pick surfaces of model with the pointer, show pick intersection with red sphere
     //------------------------------------------------------------------------------------------------------------------
 
-    var rayOrigin = new Float32Array([0.20, 0.02, -0.0]);
-    var rayDirection = new Float32Array([0, 10, 30]);
+    var rayOrigin = new Float32Array([-10, 0, 5.0]);
+    var rayDirection = new Float32Array([20, -10, -10]);
 
-    var xinc = 0.1;
+    var xinc = 0.05;
     var i = 0;
 
     var lastEntity = null;
@@ -150,12 +145,12 @@
             //camera.orbitYaw(xinc < 0 ? 0.2 : -0.2);
             // camera.orbitPitch(xinc < 0 ? 0.1 : -0.1);
 
-            rayOrigin[0] += xinc;
-            rayOrigin[1] = 12 - Math.sin(rayOrigin[0] * 2.0) * 5;
+            rayOrigin[2] += xinc;
+            rayOrigin[1] = 10 + Math.sin(rayOrigin[2] * 2.0) * 5;
 
             i++;
 
-            if (i < 0 || i > 100) {
+            if (i < 0 || i > 450) {
                 xinc = -xinc;
                 i = 0;
             }
@@ -198,6 +193,8 @@
             }
         });
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>

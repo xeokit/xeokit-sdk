@@ -116,7 +116,7 @@ PickTriangleRenderer.prototype.drawMesh = function (frame, mesh) {
         frame.frontface = frontface;
     }
     this._lastMaterialId = materialState.id;
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
+    gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);
     }

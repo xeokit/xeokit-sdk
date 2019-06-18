@@ -95,7 +95,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
  *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
  *      edges: true,
- *      performance: true  // Load the default high-performance scene representation
+ *      performance: true  // Load high-performance scene representation (default is false)
  * });
  *
  * model.on("loaded", () => {

@@ -91,7 +91,7 @@ PickMeshRenderer.prototype.drawMesh = function (frame, mesh) {
     }
     gl.uniformMatrix4fv(this._uViewMatrix, false, frame.pickViewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frame.pickProjMatrix);
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, mesh.worldMatrix);
+    gl.uniformMatrix4fv(this._uModelMatrix, false, mesh.worldMatrix);
     // Mesh state
     if (this._uClippable) {
         gl.uniform1i(this._uClippable, mesh._state.clippable);

@@ -41,9 +41,9 @@
         canvasId: "myCanvas"
     });
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.eye = [-9.54, 13.47, 29.97];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [0.21, 0.91, -0.31];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -53,11 +53,10 @@
 
     const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        src: "./models/gltf/duplex/scene.gltf",
+        metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
-
     //------------------------------------------------------------------------------------------------------------------
     // Display a red line segment to show the picking ray 
     //------------------------------------------------------------------------------------------------------------------
@@ -101,10 +100,10 @@
     // Dynamically pick surfaces of model with the ray, show ray with helper, highlight picked meshes
     //------------------------------------------------------------------------------------------------------------------
 
-    var rayOrigin = new Float32Array([0.20, 0.02, -0.0]);
-    var rayDirection = new Float32Array([0, 10, 30]);
+    var rayOrigin = new Float32Array([-10, 0, 5.0]);
+    var rayDirection = new Float32Array([20, -10, -10]);
 
-    var xinc = 0.1;
+    var xinc = 0.05;
     var i = 0;
 
     var lastEntity = null;
@@ -114,12 +113,16 @@
 
         viewer.scene.on("tick", function () {
 
-            rayOrigin[0] += xinc;
-            rayOrigin[1] = 12 - Math.sin(rayOrigin[0] * 2.0) * 5;
+            // Orbit the camera
+            //camera.orbitYaw(xinc < 0 ? 0.2 : -0.2);
+            // camera.orbitPitch(xinc < 0 ? 0.1 : -0.1);
+
+            rayOrigin[2] += xinc;
+            rayOrigin[1] = 10 + Math.sin(rayOrigin[2] * 2.0) * 5;
 
             i++;
 
-            if (i < 0 || i > 100) {
+            if (i < 0 || i > 450) {
                 xinc = -xinc;
                 i = 0;
             }
@@ -159,6 +162,8 @@
             }
         });
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>
