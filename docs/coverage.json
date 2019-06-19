@@ -46,9 +46,9 @@
       "actualCount": 6,
       "undocumentLines": [
         5,
-        326,
-        330,
-        258
+        399,
+        403,
+        291
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -1343,13 +1343,13 @@
         94,
         95,
         96,
-        290,
-        380,
-        430,
-        483,
-        509,
-        535,
-        559
+        292,
+        382,
+        432,
+        485,
+        511,
+        537,
+        561
       ]
     },
     "src/viewer/scene/camera/CameraPath.js": {
@@ -2052,8 +2052,8 @@
         45,
         55,
         59,
-        122,
-        150
+        127,
+        155
       ]
     },
     "src/viewer/scene/mesh/occlusion/OcclusionShaderSource.js": {
@@ -2293,7 +2293,7 @@
         1500,
         1554,
         1559,
-        1992
+        1998
       ]
     },
     "src/viewer/scene/scene/SceneState.js": {

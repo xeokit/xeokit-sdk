@@ -210,7 +210,7 @@ var model = gltfLoader.load({                                    // Returns an E
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
      metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,     // Creates a MetaModel (see below)
      edges: true,
-     performance: true  // Load the default high-performance scene representation
+     performance: true  // Load high-performance scene representation (default is false)
 });
 
 model.on(&quot;loaded&quot;, () =&gt; {

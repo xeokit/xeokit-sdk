@@ -116,13 +116,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber85">xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber113">xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber85">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber113">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -145,9 +145,9 @@
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that saves and loads BCF viewpoints as JSON objects.</p>
 <p>BCF is a format for managing issues on a BIM project. This plugin&apos;s viewpoints conform to
 the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load a glTF model into it using a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>,
-slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
-which we&apos;ll log to the JavaScript developer console.</p>
+<h2 id="saving-a-bcf-viewpoint">Saving a BCF Viewpoint</h2><p>In the example below we&apos;ll create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, load a glTF model into it using a <span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span>,
+slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span>, then use a <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>
+to save a viewpoint to JSON, which we&apos;ll log to the JavaScript developer console.</p>
 <p>[<a href="http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {GLTFLoaderPlugin} from &quot;../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js&quot;;
@@ -188,10 +188,10 @@ sectionPlanes.createSectionPlane({
 // When model is loaded, set camera, select some objects and capture a BCF viewpoint to the console
 modelNode.on(&quot;loaded&quot;, () =&gt; {
 
-     var scene = viewer.scene;
-     var camera = scene.camera;
+     const scene = viewer.scene;
+     const camera = scene.camera;
 
-camera.eye = [-2.37, 18.97, -26.12];
+     camera.eye = [-2.37, 18.97, -26.12];
      camera.look = [10.97, 5.82, -11.22];
      camera.up = [0.36, 0.83, 0.40];
 
@@ -207,6 +207,22 @@ camera.eye = [-2.37, 18.97, -26.12];
      const viewpointStr = JSON.stringify(viewpoint, null, 4);
 
      console.log(viewpointStr);
+});</code>
+</code></pre>
+<h2 id="loading-a-bcf-viewpoint">Loading a BCF Viewpoint</h2><p>Assuming that we have our BCF viewpoint in a JSON object, let&apos;s now restore it with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span>:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">bcfViewpoints.setViewpoint(viewpoint);</code>
+</code></pre>
+<h2 id="handling-bcf-incompatibility-with-xeokit--39-s-camera">Handling BCF Incompatibility with xeokit&apos;s Camera</h2><p>xeokit&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> is the current 3D <em>point-of-interest</em> (POI). A BCF viewpoint, however, has a <em>direction</em>
+vector instead of a POI, so <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span> needs to save xeokit&apos;s POI as a normalized vector
+from <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>, which unfortunately loses that positional information.</p>
+<p>Loading the viewpoint with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span> will (by default) restore <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to
+the viewpoint&apos;s camera position, offset by the normalized vector.</p>
+<p>That&apos;s not the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> we saved, but as we&apos;ll see in the next section, we can compensate by configuring <code>setViewpoint</code> to
+set <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to the closest surface intersection on the direction vector. Internally, <code>setViewpoint</code>
+supports this option by firing a ray along the vector, and if that hits an
+<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, sets <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to ray&apos;s intersection point with the Entity&apos;s surface.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">bcfViewpoints.setViewpoint(viewpoint, {
+     rayPick: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point
 });</code>
 </code></pre>
 </div>
@@ -645,7 +661,7 @@ camera.eye = [-2.37, 18.97, -26.12];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
@@ -738,7 +754,7 @@ camera.eye = [-2.37, 18.97, -26.12];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber139">source</a></span></span>
     </span>
   </h3>
 
@@ -798,7 +814,7 @@ camera.eye = [-2.37, 18.97, -26.12];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -861,7 +877,7 @@ camera.eye = [-2.37, 18.97, -26.12];
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber213">source</a></span></span>
     </span>
   </h3>
 
@@ -869,6 +885,8 @@ camera.eye = [-2.37, 18.97, -26.12];
   
   
   <div data-ice="description"><p>Saves viewer state to a BCF viewpoint.</p>
+<p>Note that xeokit&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> is the <strong>point-of-interest</strong>, whereas the BCF <code>camera_direction</code> is a
+direction vector. Therefore, we save <code>camera_direction</code> as the vector from <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>.</p>
 </div>
 
   
@@ -986,7 +1004,7 @@ const viewpoint = bcfPlugin.getViewpoint();
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber272">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -994,6 +1012,12 @@ const viewpoint = bcfPlugin.getViewpoint();
   
   
   <div data-ice="description"><p>Sets viewer state to the given BCF viewpoint.</p>
+<p>Note that xeokit&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> is the <strong>point-of-interest</strong>, whereas the BCF <code>camera_direction</code> is a
+direction vector. Therefore, when loading a BCF viewpoint, we set <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to the absolute position
+obtained by offsetting the BCF <code>camera_view_point</code>  along <code>camera_direction</code>.</p>
+<p>When loading a viewpoint, we also have the option to find <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> as the closest point of intersection
+(on the surface of any visible and pickable <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>) with a 3D ray fired from <code>camera_view_point</code> in
+the direction of <code>camera_direction</code>.</p>
 </div>
 
   
@@ -1010,7 +1034,7 @@ const viewpoint = bcfPlugin.getViewpoint();
       <td data-ice="name" class="code" data-depth="0">bcfViewpoint</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>{*} BCF JSON viewpoint object or &quot;reset&quot; / &quot;RESET&quot; to reset the viewer, which clears SectionPlanes,
+      <td data-ice="description"><p>BCF JSON viewpoint object or &quot;reset&quot; / &quot;RESET&quot; to reset the viewer, which clears SectionPlanes,
 shows default visible entities and restores camera to initial default position.</p>
 </td>
     </tr>
