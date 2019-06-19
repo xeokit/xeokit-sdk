@@ -10,11 +10,11 @@ const tempVec3 = math.vec3();
  * BCF is a format for managing issues on a BIM project. This plugin's viewpoints conform to
  * the <a href="https://github.com/buildingSMART/BCF-API">BCF Version 2.1</a> specification.
  *
- * ## Usage
+ * ## Saving a BCF Viewpoint
  *
  * In the example below we'll create a {@link Viewer}, load a glTF model into it using a {@link GLTFLoaderPlugin},
- * slice the model in half using a {@link SectionPlanesPlugin}, then use a BCFViewpointsPlugin to save a viewpoint to JSON,
- * which we'll log to the JavaScript developer console.
+ * slice the model in half using a {@link SectionPlanesPlugin}, then use a {@link BCFViewpointsPlugin#getViewpoint}
+ * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  *
@@ -58,10 +58,10 @@ const tempVec3 = math.vec3();
  * // When model is loaded, set camera, select some objects and capture a BCF viewpoint to the console
  * modelNode.on("loaded", () => {
  *
- *      var scene = viewer.scene;
- *      var camera = scene.camera;
+ *      const scene = viewer.scene;
+ *      const camera = scene.camera;
  *
- * camera.eye = [-2.37, 18.97, -26.12];
+ *      camera.eye = [-2.37, 18.97, -26.12];
  *      camera.look = [10.97, 5.82, -11.22];
  *      camera.up = [0.36, 0.83, 0.40];
  *
@@ -77,6 +77,34 @@ const tempVec3 = math.vec3();
  *      const viewpointStr = JSON.stringify(viewpoint, null, 4);
  *
  *      console.log(viewpointStr);
+ * });
+ * ````
+ *
+ * ## Loading a BCF Viewpoint
+ *
+ * Assuming that we have our BCF viewpoint in a JSON object, let's now restore it with {@link BCFViewpointsPlugin#setViewpoint}:
+ *
+ * ````javascript
+ * bcfViewpoints.setViewpoint(viewpoint);
+ * ````
+ *
+ * ## Handling BCF Incompatibility with xeokit's Camera
+ *
+ * xeokit's {@link Camera#look} is the current 3D *point-of-interest* (POI). A BCF viewpoint, however, has a *direction*
+ * vector instead of a POI, so {@link BCFViewpointsPlugin#getViewpoint} needs to save xeokit's POI as a normalized vector
+ * from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses that positional information.
+ *
+ * Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will (by default) restore {@link Camera#look} to
+ * the viewpoint's camera position, offset by the normalized vector.
+ *
+ * That's not the {@link Camera#look} we saved, but as we'll see in the next section, we can compensate by configuring ````setViewpoint```` to
+ * set {@link Camera#look} to the closest surface intersection on the direction vector. Internally, ````setViewpoint````
+ * supports this option by firing a ray along the vector, and if that hits an
+ * {@link Entity}, sets {@link Camera#look} to ray's intersection point with the Entity's surface.
+ *
+ * ````javascript
+ * bcfViewpoints.setViewpoint(viewpoint, {
+ *      rayCast: true // <<--------------- Attempt to set Camera#look to surface intersection point (default)
  * });
  * ````
  *
@@ -113,6 +141,9 @@ class BCFViewpointsPlugin extends Plugin {
 
     /**
      * Saves viewer state to a BCF viewpoint.
+     *
+     * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
+     * direction vector. Therefore, we save ````camera_direction```` as the vector from {@link Camera#eye} to {@link Camera#look}.
      *
      * @returns {*} BCF JSON viewpoint object
      * @example
@@ -188,16 +219,18 @@ class BCFViewpointsPlugin extends Plugin {
 
         // Camera
 
+        const lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
+
         bcfViewpoint.perspective_camera = {
             camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(camera.look),
+            camera_direction: xyzArrayToObject(lookDirection),
             camera_up_vector: xyzArrayToObject(camera.up),
             field_of_view: camera.perspective.fov,
         };
 
         bcfViewpoint.orthogonal_camera = {
             camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(camera.look),
+            camera_direction: xyzArrayToObject(lookDirection),
             camera_up_vector: xyzArrayToObject(camera.up),
             view_to_world_scale: camera.ortho.scale,
         };
@@ -266,10 +299,21 @@ class BCFViewpointsPlugin extends Plugin {
     /**
      * Sets viewer state to the given BCF viewpoint.
      *
-     * @param bcfViewpoint {*} BCF JSON viewpoint object or "reset" / "RESET" to reset the viewer, which clears SectionPlanes,
+     * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
+     * direction vector. Therefore, when loading a BCF viewpoint, we set {@link Camera#look} to the absolute position
+     * obtained by offsetting the BCF ````camera_view_point````  along ````camera_direction````.
+     *
+     * When loading a viewpoint, we also have the option to find {@link Camera#look} as the closest point of intersection
+     * (on the surface of any visible and pickable {@link Entity}) with a 3D ray fired from ````camera_view_point```` in
+     * the direction of ````camera_direction````.
+     *
+     * @param {*} bcfViewpoint  BCF JSON viewpoint object or "reset" / "RESET" to reset the viewer, which clears SectionPlanes,
      * shows default visible entities and restores camera to initial default position.
+     * @params {*} [options] Options for setting the viewpoint.
+     * @params {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
+     * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
      */
-    setViewpoint(bcfViewpoint) {
+    setViewpoint(bcfViewpoint, options = {}) {
 
         if (!bcfViewpoint) {
             return;
@@ -278,21 +322,7 @@ class BCFViewpointsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-
-
-        if (bcfViewpoint.perspective_camera) {
-            camera.eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);
-            camera.look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);
-            camera.up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
-            camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
-        }
-
-        if (bcfViewpoint.orthogonal_camera) {
-            camera.eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);
-            camera.look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
-            camera.up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
-            camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
-        }
+        const rayCast = (options.rayCast !== false);
 
         if (bcfViewpoint.clipping_planes) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
@@ -319,6 +349,49 @@ class BCFViewpointsPlugin extends Plugin {
             Object.keys(scene.models).forEach((id) => {
                 bcfViewpoint.components.selection.forEach(x => scene.setObjectsSelected(x.ifc_guid, true));
             });
+        }
+
+        if (bcfViewpoint.perspective_camera || bcfViewpoint.orthogonal_camera) {
+
+            let eye;
+            let look;
+            let up;
+
+            if (bcfViewpoint.perspective_camera) {
+
+                eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);
+                look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);
+
+                camera.up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
+                camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
+            }
+
+            if (bcfViewpoint.orthogonal_camera) {
+
+                eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);
+                look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
+
+                camera.up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
+                camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
+            }
+
+            camera.eye = eye;
+            camera.up = up;
+
+            if (rayCast) {
+                const hit = this.viewer.scene.pick({
+                    pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
+                    origin: eye,
+                    direction: look
+                });
+                if (hit) {
+                    camera.look = hit.worldPos;
+                } else {
+                    camera.look = math.addVec3(eye, look, tempVec3);
+                }
+            } else {
+                camera.look = math.addVec3(eye, look, tempVec3);
+            }
         }
     }
 }
