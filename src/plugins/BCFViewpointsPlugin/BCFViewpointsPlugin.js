@@ -90,17 +90,17 @@ const tempVec3 = math.vec3();
  *
  * ## Handling BCF Incompatibility with xeokit's Camera
  *
- * xeokit's {@link Camera#look} is the current 3D *point-of-interest* (POI). A BCF viewpoint, however, has a *direction*
- * vector instead of a POI, so {@link BCFViewpointsPlugin#getViewpoint} needs to save xeokit's POI as a normalized vector
- * from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses that positional information.
+ * xeokit's {@link Camera#look} is the current 3D *point-of-interest* (POI).
  *
- * Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will (by default) restore {@link Camera#look} to
+ * A BCF viewpoint, however, has a *direction vector instead of a POI, and so {@link BCFViewpointsPlugin#getViewpoint} saves
+ * xeokit's POI as a normalized vector from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses
+ * that positional information. Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will restore {@link Camera#look} to
  * the viewpoint's camera position, offset by the normalized vector.
  *
- * That's not the {@link Camera#look} we saved, but as we'll see in the next section, we can compensate by configuring ````setViewpoint```` to
- * set {@link Camera#look} to the closest surface intersection on the direction vector. Internally, ````setViewpoint````
- * supports this option by firing a ray along the vector, and if that hits an
- * {@link Entity}, sets {@link Camera#look} to ray's intersection point with the Entity's surface.
+ * As shown below, providing a ````rayCast```` option to ````setViewpoint```` will set {@link Camera#look} to the closest
+ * surface intersection on the direction vector. Internally, ````setViewpoint```` supports this option by firing a ray
+ * along the vector, and if that hits an {@link Entity}, sets {@link Camera#look} to ray's intersection point with the
+ * Entity's surface.
  *
  * ````javascript
  * bcfViewpoints.setViewpoint(viewpoint, {
