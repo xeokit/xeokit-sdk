@@ -208,21 +208,21 @@ const tempVec3 = math.vec3();
  *
  * ## Handling BCF Incompatibility with xeokit&apos;s Camera
  *
- * xeokit&apos;s {@link Camera#look} is the current 3D *point-of-interest* (POI). A BCF viewpoint, however, has a *direction*
- * vector instead of a POI, so {@link BCFViewpointsPlugin#getViewpoint} needs to save xeokit&apos;s POI as a normalized vector
- * from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses that positional information.
+ * xeokit&apos;s {@link Camera#look} is the current 3D *point-of-interest* (POI).
  *
- * Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will (by default) restore {@link Camera#look} to
+ * A BCF viewpoint, however, has a *direction vector instead of a POI, and so {@link BCFViewpointsPlugin#getViewpoint} saves
+ * xeokit&apos;s POI as a normalized vector from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses
+ * that positional information. Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will restore {@link Camera#look} to
  * the viewpoint&apos;s camera position, offset by the normalized vector.
  *
- * That&apos;s not the {@link Camera#look} we saved, but as we&apos;ll see in the next section, we can compensate by configuring ````setViewpoint```` to
- * set {@link Camera#look} to the closest surface intersection on the direction vector. Internally, ````setViewpoint````
- * supports this option by firing a ray along the vector, and if that hits an
- * {@link Entity}, sets {@link Camera#look} to ray&apos;s intersection point with the Entity&apos;s surface.
+ * As shown below, providing a ````rayCast```` option to ````setViewpoint```` will set {@link Camera#look} to the closest
+ * surface intersection on the direction vector. Internally, ````setViewpoint```` supports this option by firing a ray
+ * along the vector, and if that hits an {@link Entity}, sets {@link Camera#look} to ray&apos;s intersection point with the
+ * Entity&apos;s surface.
  *
  * ````javascript
  * bcfViewpoints.setViewpoint(viewpoint, {
- *      rayPick: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point
+ *      rayCast: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point (default)
  * });
  * ````
  *
@@ -428,7 +428,7 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {*} bcfViewpoint  BCF JSON viewpoint object or &quot;reset&quot; / &quot;RESET&quot; to reset the viewer, which clears SectionPlanes,
      * shows default visible entities and restores camera to initial default position.
      * @params {*} [options] Options for setting the viewpoint.
-     * @params {Boolean} [options.rayCast=false] When ````true````, will attempt to set {@link Camera#look} to the closest
+     * @params {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
      */
     setViewpoint(bcfViewpoint, options = {}) {
@@ -440,7 +440,7 @@ class BCFViewpointsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-        const rayPick = (options.rayPick !== false);
+        const rayCast = (options.rayCast !== false);
 
         if (bcfViewpoint.clipping_planes) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
@@ -496,7 +496,7 @@ class BCFViewpointsPlugin extends Plugin {
             camera.eye = eye;
             camera.up = up;
 
-            if (rayPick) {
+            if (rayCast) {
                 const hit = this.viewer.scene.pick({
                     pickSurface: true,  // &lt;&lt;------ This causes picking to find the intersection point on the entity
                     origin: eye,

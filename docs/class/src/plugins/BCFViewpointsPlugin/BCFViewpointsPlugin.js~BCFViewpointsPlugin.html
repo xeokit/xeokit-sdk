@@ -212,17 +212,17 @@ modelNode.on(&quot;loaded&quot;, () =&gt; {
 <h2 id="loading-a-bcf-viewpoint">Loading a BCF Viewpoint</h2><p>Assuming that we have our BCF viewpoint in a JSON object, let&apos;s now restore it with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">bcfViewpoints.setViewpoint(viewpoint);</code>
 </code></pre>
-<h2 id="handling-bcf-incompatibility-with-xeokit--39-s-camera">Handling BCF Incompatibility with xeokit&apos;s Camera</h2><p>xeokit&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> is the current 3D <em>point-of-interest</em> (POI). A BCF viewpoint, however, has a <em>direction</em>
-vector instead of a POI, so <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span> needs to save xeokit&apos;s POI as a normalized vector
-from <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>, which unfortunately loses that positional information.</p>
-<p>Loading the viewpoint with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span> will (by default) restore <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to
+<h2 id="handling-bcf-incompatibility-with-xeokit--39-s-camera">Handling BCF Incompatibility with xeokit&apos;s Camera</h2><p>xeokit&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> is the current 3D <em>point-of-interest</em> (POI).</p>
+<p>A BCF viewpoint, however, has a *direction vector instead of a POI, and so <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span> saves
+xeokit&apos;s POI as a normalized vector from <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-eye">Camera#eye</a></span> to <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span>, which unfortunately loses
+that positional information. Loading the viewpoint with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span> will restore <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to
 the viewpoint&apos;s camera position, offset by the normalized vector.</p>
-<p>That&apos;s not the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> we saved, but as we&apos;ll see in the next section, we can compensate by configuring <code>setViewpoint</code> to
-set <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to the closest surface intersection on the direction vector. Internally, <code>setViewpoint</code>
-supports this option by firing a ray along the vector, and if that hits an
-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, sets <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to ray&apos;s intersection point with the Entity&apos;s surface.</p>
+<p>As shown below, providing a <code>rayCast</code> option to <code>setViewpoint</code> will set <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to the closest
+surface intersection on the direction vector. Internally, <code>setViewpoint</code> supports this option by firing a ray
+along the vector, and if that hits an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>, sets <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-look">Camera#look</a></span> to ray&apos;s intersection point with the
+Entity&apos;s surface.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">bcfViewpoints.setViewpoint(viewpoint, {
-     rayPick: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point
+     rayCast: true // &lt;&lt;--------------- Attempt to set Camera#look to surface intersection point (default)
 });</code>
 </code></pre>
 </div>

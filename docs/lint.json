@@ -61,7 +61,7 @@
       },
       {
         "lineNumber": 312,
-        "line": "     * @params {Boolean} [options.rayCast=false] When ````true````, will attempt to set {@link Camera#look} to the closest"
+        "line": "     * @params {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest"
       },
       {
         "lineNumber": 313,
