@@ -92,7 +92,7 @@ const tempVec3 = math.vec3();
  *
  * xeokit's {@link Camera#look} is the current 3D *point-of-interest* (POI).
  *
- * A BCF viewpoint, however, has a *direction vector instead of a POI, and so {@link BCFViewpointsPlugin#getViewpoint} saves
+ * A BCF viewpoint, however, has a direction vector instead of a POI, and so {@link BCFViewpointsPlugin#getViewpoint} saves
  * xeokit's POI as a normalized vector from {@link Camera#eye} to {@link Camera#look}, which unfortunately loses
  * that positional information. Loading the viewpoint with {@link BCFViewpointsPlugin#setViewpoint} will restore {@link Camera#look} to
  * the viewpoint's camera position, offset by the normalized vector.
