@@ -487,7 +487,7 @@ class AnnotationsPlugin extends Plugin {
      * @param {String} id ID of Annotation to destroy.
      */
     destroyAnnotation(id) {
-        var annotation = this.viewer.scene.annotations[id];
+        var annotation = this.annotations[id];
         if (!annotation) {
             this.log("Annotation not found: " + id);
             return;
@@ -499,7 +499,7 @@ class AnnotationsPlugin extends Plugin {
      * Destroys all {@link Annotation}s.
      */
     clear() {
-        const ids = Object.keys(this.viewer.scene.annotations);
+        const ids = Object.keys(this.annotations);
         for (var i = 0, len = ids.length; i < len; i++) {
             this.destroyAnnotation(ids[i]);
         }
