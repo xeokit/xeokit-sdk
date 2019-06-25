@@ -117,6 +117,12 @@ class PerformanceModel extends Component {
          */
         this.numPickableLayerPortions = 0;
 
+        /** @private */
+        this.numEntities = 0;
+
+        /** @private */
+        this.numTriangles = 0;
+
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -312,6 +318,7 @@ class PerformanceModel extends Component {
         tile.layers.push(instancingLayer);
         tile.instancingLayers[geometryId] = instancingLayer;
         this.numGeometries++;
+        this.numTriangles += cfg.indices ? cfg.indices.length / 3 : 0;
     }
 
     /**
@@ -330,15 +337,19 @@ class PerformanceModel extends Component {
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
      * @param {String} [cfg.tileId] Optional ID of a tile to add the mesh to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method. If a tile ID is also given, then the geometry must exist within that tile.
-     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
+     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
+     * @param {Boolean} [cfg.positionsAndNormalsCompressed=false] When this is ````true````, ````positions```` are assumed to be
+     * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````,
+     * the ````matrix````, ````position````, ````scale```` and ````rotation```` parameters are ignored.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````. Only used when ````positionsAndNormalsCompressed```` is true.
+     * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
      * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
@@ -375,12 +386,11 @@ class PerformanceModel extends Component {
             }
         }
 
-        var flags = 0;
+        const aabb = (cfg.positionsAndNormalsCompressed) ? cfg.aabb : math.collapseAABB3();
 
+        var flags = 0;
         var layer;
         var portionId;
-        var aabb = math.collapseAABB3();
-
         var matrix;
 
         if (cfg.matrix) {
@@ -419,6 +429,8 @@ class PerformanceModel extends Component {
             portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
 
+            this.numTriangles += layer.numIndices.length / 3;
+
         } else {
 
             var primitive = cfg.primitive || "triangles";
@@ -430,13 +442,16 @@ class PerformanceModel extends Component {
 
             var indices = cfg.indices;
             var edgeIndices = cfg.edgeIndices;
+
             var positions = cfg.positions;
+
             if (!positions) {
                 this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
             var normals = cfg.normals;
+
             if (!normals) {
                 this.error("Config missing: normals (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
@@ -448,14 +463,19 @@ class PerformanceModel extends Component {
             }
 
             if (tile.currentBatchingLayer) {
-                if (!tile.currentBatchingLayer.canCreatePortion(cfg.positions.length)) {
+                if (!tile.currentBatchingLayer.canCreatePortion(positions.length)) {
                     tile.currentBatchingLayer.finalize();
                     tile.currentBatchingLayer = null;
                 }
             }
 
             if (!tile.currentBatchingLayer) {
-                tile.currentBatchingLayer = new BatchingLayer(this, {primitive: "triangles", buffer: tile.buffer});
+                tile.currentBatchingLayer = new BatchingLayer(this, {
+                    primitive: "triangles",
+                    buffer: tile.buffer,
+                    positionsAndNormalsCompressed: cfg.positionsAndNormalsCompressed,
+                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,
+                });
                 tile.layers.push(tile.currentBatchingLayer);
             }
 
@@ -467,6 +487,8 @@ class PerformanceModel extends Component {
             portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
             this.numGeometries++;
+
+            this.numTriangles += indices.length / 3;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
@@ -579,6 +601,7 @@ class PerformanceModel extends Component {
 
         var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         tile.nodes.push(node);
+        this.numEntities++;
         return node;
     }
 

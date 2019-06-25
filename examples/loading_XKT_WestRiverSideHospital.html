@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>XKTLoaderPlugin - Loading multiple Models from XKT</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+    </style>
+
+    <script src="./libs/pako.js"></script>
+</head>
+
+<body>
+<canvas id="myCanvas"></canvas>
+<div id="info">
+    <h1>XKTLoaderPlugin - Loading multiple models from XKT</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript moduless...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads xeokit .XKT model from the file system
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/305">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.orbitPitch(20);
+    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.firstPerson = false;
+    viewer.cameraControl.pivoting = true;
+    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.panToPivot = false;
+    viewer.cameraControl.doublePickFlyTo = true;
+    viewer.cameraControl.inertia = 0.5;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model 1 of 4";
+
+    const structure = xktLoader.load({
+        id: "structure",
+        src: "./models/xkt/WestRiverSideHospital/structure.xkt",
+        //  metaModelSrc: "./metaModels/WestRiverSideHospital/structure.json",
+        edges: true,
+        xrayed: true
+    });
+
+    structure.on("loaded", () => {
+
+        document.getElementById("time").innerHTML = "Loading model 2 of 4";
+
+        const electrical = xktLoader.load({
+            id: "electrical",
+            src: "./models/xkt/WestRiverSideHospital/electrical.xkt",
+            // metaModelSrc: "./metaModels/WestRiverSideHospital/electrical.json",
+            edges: true,
+            xrayed: false
+        });
+
+        electrical.on("loaded", () => {
+
+            document.getElementById("time").innerHTML = "Loading model 3 of 4";
+
+            const fireAlarms = xktLoader.load({
+                id: "fireAlarms",
+                src: "./models/xkt/WestRiverSideHospital/fireAlarms.xkt",
+                //   metaModelSrc: "./metaModels/WestRiverSideHospital/fireAlarms.json",
+                edges: true,
+                xrayed: false
+            });
+
+            fireAlarms.on("loaded", () => {
+
+                document.getElementById("time").innerHTML = "Loading model 4 of 4";
+
+                const sprinklers = xktLoader.load({
+                    id: "sprinklers",
+                    src: "./models/xkt/WestRiverSideHospital/sprinklers.xkt",
+                    //    metaModelSrc: "./metaModels/WestRiverSideHospital/sprinklers.json",
+                    edges: true,
+                    xrayed: false
+                });
+
+                sprinklers.on("loaded", () => {
+
+                    var numEntities = 0;
+                    var numTriangles = 0;
+
+                    for (var id in viewer.scene.models) {
+                        const model = viewer.scene.models[id];
+                        numEntities += model.numEntities;
+                        numTriangles += model.numTriangles;
+                    }
+
+                    var t1 = performance.now();
+
+                    document.getElementById("time").innerHTML = "Loaded 4 models in " + Math.floor(t1 - t0) + " milliseconds<br>Objects: " + numEntities + "<br>Triangles: " + numTriangles;
+
+                });
+
+            });
+        });
+    });
+
+
+    structure.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(structure);
+    });
+
+</script>
+</html>

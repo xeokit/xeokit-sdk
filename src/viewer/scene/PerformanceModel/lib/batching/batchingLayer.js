@@ -95,6 +95,8 @@ class BatchingLayer {
         this._portions = [];
 
         this._finalized = false;
+        this._positionsAndNormalsCompressed = !!cfg.positionsAndNormalsCompressed;
+        this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
 
         this.compileShaders();
     }
@@ -143,31 +145,40 @@ class BatchingLayer {
         const numVerts = positions.length / 3;
         const lenPositions = positions.length;
         { // Positions
-            buffer.positions.set(positions, buffer.lenPositions);
-            if (matrix) {
-                for (var i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
-                    tempVec3a[0] = buffer.positions[i + 0];
-                    tempVec3a[1] = buffer.positions[i + 1];
-                    tempVec3a[2] = buffer.positions[i + 2];
-                    math.transformPoint4(matrix, tempVec3a, tempVec3b);
-                    math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
-                    math.expandAABB3Point3(this._aabb, tempVec3b); // Expand BatchingLayer AABB
-                    buffer.positions[i + 0] = tempVec3b[0];
-                    buffer.positions[i + 1] = tempVec3b[1];
-                    buffer.positions[i + 2] = tempVec3b[2];
-                }
+            if (this._positionsAndNormalsCompressed) {
+                buffer.positions.set(positions, buffer.lenPositions);
+                buffer.lenPositions += lenPositions;
+                math.expandAABB3(this._aabb, aabb);
             } else {
-                for (var i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
-                    tempVec3a[0] = buffer.positions[i + 0];
-                    tempVec3a[1] = buffer.positions[i + 1];
-                    tempVec3a[2] = buffer.positions[i + 2];
-                    math.expandAABB3Point3(aabb, tempVec3a);
-                    math.expandAABB3Point3(this._aabb, tempVec3a);
+                buffer.positions.set(positions, buffer.lenPositions);
+                if (matrix) {
+                    for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                        tempVec3a[0] = buffer.positions[i + 0];
+                        tempVec3a[1] = buffer.positions[i + 1];
+                        tempVec3a[2] = buffer.positions[i + 2];
+                        math.transformPoint4(matrix, tempVec3a, tempVec3b);
+                        math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
+                        math.expandAABB3Point3(this._aabb, tempVec3b); // Expand BatchingLayer AABB
+                        buffer.positions[i + 0] = tempVec3b[0];
+                        buffer.positions[i + 1] = tempVec3b[1];
+                        buffer.positions[i + 2] = tempVec3b[2];
+                    }
+                } else {
+                    for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                        tempVec3a[0] = buffer.positions[i + 0];
+                        tempVec3a[1] = buffer.positions[i + 1];
+                        tempVec3a[2] = buffer.positions[i + 2];
+                        math.expandAABB3Point3(aabb, tempVec3a);
+                        math.expandAABB3Point3(this._aabb, tempVec3a);
+                    }
                 }
+                buffer.lenPositions += lenPositions;
             }
-            buffer.lenPositions += lenPositions;
         }
-        if (normals) {
+        if (this._positionsAndNormalsCompressed) {
+            buffer.normals.set (normals, buffer.lenNormals);
+            buffer.lenNormals += normals.length;
+        } else if (normals) {
             var modelNormalMatrix = tempMat4;
             if (matrix) {
                 // Note: order of inverse and transpose doesn't matter
@@ -289,11 +300,17 @@ class BatchingLayer {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
-        quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
+        if (this._positionsAndNormalsCompressed) {
+            state.positionsDecodeMatrix = this._positionsDecodeMatrix;
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions, buffer.lenPositions, 3, gl.STATIC_DRAW);
+        } else {
+            quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
-        if (buffer.lenPositions > 0) {
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            if (buffer.lenPositions > 0) {
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            }
         }
+
         if (buffer.lenNormals > 0) {
             let normalized = true; // For oct encoded UIn
             //let normalized = false; // For scaled

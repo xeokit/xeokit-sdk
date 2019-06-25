@@ -113,6 +113,9 @@ class InstancingLayer {
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
 
+        /** @private */
+        this.numIndices = (cfg.indices) ? cfg.indices / 3 : 0;
+
         // Vertex arrays
         this._flags = [];
         this._flags2 = [];
@@ -526,11 +529,12 @@ class InstancingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-            tempUint8Vec4[0] = clippable;
-            tempUint8Vec4[1] = edges;
-            tempUint8Vec4[2] = pickable;
+        tempUint8Vec4[0] = clippable;
+        tempUint8Vec4[1] = edges;
+        tempUint8Vec4[2] = pickable;
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
+
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
