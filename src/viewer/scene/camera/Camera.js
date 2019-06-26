@@ -824,6 +824,7 @@ class Camera extends Component {
             this._project = this._perspective;
             value = "perspective";
         }
+        this._project._update();
         this._projectionType = value;
         this.glRedraw();
         this._update(); // Need to rebuild lookat matrix with full eye, look & up
