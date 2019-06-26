@@ -278,6 +278,11 @@ class Viewer {
     /** Destroys this Viewer.
      */
     destroy() {
+        for (let id in this.plugins) {
+            if (this.plugins.hasOwnProperty(id)) {
+                this.plugins[id].destroy();
+            }
+        }
         this.scene.destroy();
     }
 }
