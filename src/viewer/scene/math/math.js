@@ -2648,6 +2648,33 @@ const math = {
         return result;
     },
 
+    /**
+     * Linearly interpolates between two 4x4 matrices.
+     * @method lerpMat4
+     * @static
+     */
+    lerpMat4(t, t1, t2, m1, m2, dest) {
+        const result = dest || math.mat4();
+        const f = (t - t1) / (t2 - t1);
+        result[0] = m1[0] + (f * (m2[0] - m1[0]));
+        result[1] = m1[1] + (f * (m2[1] - m1[1]));
+        result[2] = m1[2] + (f * (m2[2] - m1[2]));
+        result[3] = m1[3] + (f * (m2[3] - m1[3]));
+        result[4] = m1[4] + (f * (m2[4] - m1[4]));
+        result[5] = m1[5] + (f * (m2[5] - m1[5]));
+        result[6] = m1[6] + (f * (m2[6] - m1[6]));
+        result[7] = m1[7] + (f * (m2[7] - m1[7]));
+        result[8] = m1[8] + (f * (m2[8] - m1[8]));
+        result[9] = m1[9] + (f * (m2[9] - m1[9]));
+        result[10] = m1[10] + (f * (m2[10] - m1[10]));
+        result[11] = m1[11] + (f * (m2[11] - m1[11]));
+        result[12] = m1[12] + (f * (m2[12] - m1[12]));
+        result[13] = m1[13] + (f * (m2[13] - m1[13]));
+        result[14] = m1[14] + (f * (m2[14] - m1[14]));
+        result[15] = m1[15] + (f * (m2[15] - m1[15]));
+        return result;
+    },
+
 
     /**
      * Flattens a two-dimensional array into a one-dimensional array.
