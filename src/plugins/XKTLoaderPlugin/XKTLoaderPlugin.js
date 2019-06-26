@@ -4,6 +4,9 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
+import "./lib/pako.js";
+
+
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
     return function (color) {
