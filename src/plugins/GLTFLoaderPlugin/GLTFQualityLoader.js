@@ -47,7 +47,7 @@ class GLTFQualityLoader {
         options = options || {};
         var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, "", options, modelNode, function () {
+        parseGLTF(gltf, "", options, plugin, modelNode, function () {
                 spinner.processes--;
                 modelNode.scene.fire("modelLoaded", modelNode.id); // FIXME: Assumes listeners know order of these two events
                 modelNode.fire("loaded", true, true);
