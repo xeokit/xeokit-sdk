@@ -98,10 +98,12 @@ class NavCubePlugin extends Plugin {
             return;
         }
 
-        var navCubeScene = new Scene({
+        this._navCubeScene = new Scene({
             canvasId: this._navCubeCanvas.id,
             transparent: true
         });
+
+        const navCubeScene = this._navCubeScene;
 
         navCubeScene.clearLights();
 
@@ -581,17 +583,37 @@ class NavCubePlugin extends Plugin {
      * Does not destroy the canvas the NavCubePlugin was configured with.
      */
     destroy() {
+
         if (this._navCubeCanvas) {
+
             this.viewer.camera.off(this._onCameraMatrix);
             this.viewer.camera.off(this._onCameraWorldAxis);
             this.viewer.camera.perspective.off(this._onCameraFOV);
             this.viewer.camera.off(this._onCameraProjection);
+
             this._navCubeCanvas.removeEventListener("mouseenter", this._onMouseEnter);
             this._navCubeCanvas.removeEventListener("mouseleave", this._onMouseLeave);
             this._navCubeCanvas.removeEventListener("mousedown", this._onMouseDown);
+
             document.removeEventListener("mousemove", this._onMouseMove);
             document.removeEventListener("mouseup", this._onMouseUp);
+
+            this._navCubeCanvas = null;
+            this._cubeTextureCanvas.destroy();
+            this._cubeTextureCanvas = null;
+
+            this._onMouseEnter = null;
+            this._onMouseLeave = null;
+            this._onMouseDown = null;
+            this._onMouseMove = null;
+            this._onMouseUp = null;
         }
+
+        this._navCubeScene.destroy();
+        this._navCubeScene = null;
+        this._cubeMesh = null;
+        this._shadow = null;
+
         super.destroy();
     }
 }
