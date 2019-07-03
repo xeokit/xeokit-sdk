@@ -3,8 +3,9 @@ import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceM
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
-
 import "./lib/pako.js";
+
+const XKT_VERSION = 1; // XKT format version supported by this XKTLoaderPlugin
 
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
@@ -282,6 +283,15 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     /**
+     * The *````.xkt````* format version supported by this XKTLoaderPlugin.
+     *
+     * @type {Number}
+     */
+    static get XKTVersion() {
+        return XKT_VERSION;
+    }
+
+    /**
      * Sets a custom data source through which the XKTLoaderPlugin can load models and metadata.
      *
      * Default value is {@link XKTDefaultDataSource}, which loads via HTTP.
@@ -426,6 +436,25 @@ class XKTLoaderPlugin extends Plugin {
 
             const includeTypes = params.includeTypes || this._includeTypes;
             const excludeTypes = params.excludeTypes || this._excludeTypes;
+            const objectDefaults = params.objectDefaults || this._objectDefaults;
+
+            if (includeTypes) {
+                options.includeTypesMap = {};
+                for (let i = 0, len = includeTypes.length; i < len; i++) {
+                    options.includeTypesMap[includeTypes[i]] = true;
+                }
+            }
+
+            if (excludeTypes) {
+                options.excludeTypesMap = {};
+                for (let i = 0, len = excludeTypes.length; i < len; i++) {
+                    options.excludeTypesMap[excludeTypes[i]] = true;
+                }
+            }
+
+            if (objectDefaults) {
+                options.objectDefaults = objectDefaults;
+            }
 
             const processMetaModelData = (metaModelData) => {
 
@@ -436,25 +465,11 @@ class XKTLoaderPlugin extends Plugin {
 
                 this.viewer.scene.canvas.spinner.processes--;
 
-                if (includeTypes) {
-                    options.includeTypesMap = {};
-                    for (let i = 0, len = includeTypes.length; i < len; i++) {
-                        options.includeTypesMap[includeTypes[i]] = true;
-                    }
-                }
-
-                if (excludeTypes) {
-                    options.excludeTypesMap = {};
-                    for (let i = 0, len = excludeTypes.length; i < len; i++) {
-                        options.excludeTypesMap[excludeTypes[i]] = true;
-                    }
-                }
-
                 if (params.src) {
                     this._loadModel(params.src, params, options, performanceModel);
 
                 } else {
-                    XKTLoaderPlugin._parseModel(params.xkt, params, options, performanceModel);
+                    this._parseModel(params.xkt, params, options, performanceModel);
                 }
             };
 
@@ -486,7 +501,7 @@ class XKTLoaderPlugin extends Plugin {
                 this._loadModel(params.src, params, options, performanceModel);
 
             } else {
-                XKTLoaderPlugin._parseModel(params.xkt, params, options, performanceModel);
+                this._parseModel(params.xkt, params, options, performanceModel);
             }
         }
 
@@ -501,7 +516,7 @@ class XKTLoaderPlugin extends Plugin {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                XKTLoaderPlugin._parseModel(arrayBuffer, params, options, performanceModel);
+                this._parseModel(arrayBuffer, params, options, performanceModel);
                 spinner.processes--;
                 this.viewer.scene.once("tick", () => {
                     performanceModel.fire("loaded", true);
@@ -514,20 +529,28 @@ class XKTLoaderPlugin extends Plugin {
             });
     }
 
-    static _parseModel(arrayBuffer, params, options, performanceModel) {
-        const deflatedData = XKTLoaderPlugin._extractData(arrayBuffer);
-        const inflatedData = XKTLoaderPlugin._inflateData(deflatedData);
-        XKTLoaderPlugin._loadDataIntoModel(inflatedData, options, performanceModel);
+    _parseModel(arrayBuffer, params, options, performanceModel) {
+        const deflatedData = this._extractData(arrayBuffer);
+        if (!deflatedData) { // Error
+            return;
+        }
+        const inflatedData = this._inflateData(deflatedData);
+        this._loadDataIntoModel(inflatedData, options, performanceModel);
     }
 
-    static _extractData(arrayBuffer) {
+    _extractData(arrayBuffer) {
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
-        const numElements = dataView.getUint32(0, true);
+        const xktVersion = dataView.getUint32(0, true);
+        if (xktVersion > XKT_VERSION) {
+            this.error("Incompatible .XKT file version; this XKTLoaderPlugin supports versions <= V" + XKT_VERSION);
+            return;
+        }
+        const numElements = dataView.getUint32(4, true);
         const elements = [];
-        let byteOffset = (numElements + 1) * 4;
+        let byteOffset = (numElements + 2) * 4;
         for (let i = 0; i < numElements; i++) {
-            const elementSize = dataView.getUint32((i + 1) * 4, true);
+            const elementSize = dataView.getUint32((i + 2) * 4, true);
             elements.push(dataArray.slice(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
@@ -547,7 +570,7 @@ class XKTLoaderPlugin extends Plugin {
         };
     }
 
-    static _inflateData(deflatedData) {
+    _inflateData(deflatedData) {
         return {
             positions: new Uint16Array(pako.inflate(deflatedData.positions.buffer).buffer),
             normals: new Int8Array(pako.inflate(deflatedData.normals.buffer).buffer),
@@ -564,7 +587,7 @@ class XKTLoaderPlugin extends Plugin {
         };
     }
 
-    static _loadDataIntoModel(inflatedData, options, performanceModel) {
+    _loadDataIntoModel(inflatedData, options, performanceModel) {
 
         const positions = inflatedData.positions;
         const normals = inflatedData.normals;
@@ -580,67 +603,74 @@ class XKTLoaderPlugin extends Plugin {
         const numMeshes = meshPositions.length;
         const numEntities = entityMeshes.length;
 
-        for (let i = 0; i < numMeshes; i++) {
-
-            const last = (i === (numMeshes - 1));
-            const meshId = performanceModel.id + "." + i;
-            const color = decompressColor(meshColors.slice((i * 4), (i * 4) + 3));
-            const opacity = meshColors[(i * 4) + 3] / 255.0;
-
-            performanceModel.createMesh({
-                id: meshId,
-                primitive: "triangles",
-                positions: positions.slice(meshPositions [i], last ? positions.length : meshPositions [i + 1]),
-                normals: normals.slice(meshPositions [i], last ? positions.length : meshPositions [i + 1]),
-                indices: indices.slice(meshIndices [i], last ? indices.length : meshIndices [i + 1]),
-                edgeIndices: edgeIndices.slice(meshEdgesIndices [i], last ? edgeIndices.length : meshEdgesIndices [i + 1]),
-                positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
-                color: color,
-                opacity: opacity
-            });
-        }
-
         for (let i = 0; i < numEntities; i++) {
 
-            const last = (i === numEntities - 1);
-            const meshIds = [];
-
-            for (let j = entityMeshes [i], to = last ? entityMeshes.length : entityMeshes [i + 1]; j < to; j++) {
-                const meshId = performanceModel.id + "." + j;
-                meshIds.push(meshId);
-            }
-
             const entityId = entityIDs [i];
-
-            const entityCfg = {
-                id: entityId,
-                isObject: (entityIsObjects [i] === 1),
-                meshIds: meshIds,
-            };
-
             const metaObject = this.viewer.metaScene.metaObjects[entityId];
+            const entityDefaults = {};
+            const meshDefaults = {};
 
             if (metaObject) {
 
-                const props = this.objectDefaults[metaObject.type || "DEFAULT"];
+                if (options.excludeTypesMap && metaObject.type && options.excludeTypesMap[metaObject.type]) {
+                    continue;
+                }
+
+                if (options.includeTypesMap && metaObject.type && (!options.includeTypesMap[metaObject.type])) {
+                    continue;
+                }
+
+                const props = options.objectDefaults ? options.objectDefaults[metaObject.type || "DEFAULT"] : null;
 
                 if (props) {
                     if (props.visible === false) {
-                        entityCfg.visible = false;
-                    }
-                    if (props.colorize) {
-                        entityCfg.colorize = props.colorize;
+                        entityDefaults.visible = false;
                     }
                     if (props.pickable === false) {
-                        entityCfg.pickable = false;
+                        entityDefaults.pickable = false;
+                    }
+                    if (props.colorize) {
+                        meshDefaults.color = props.colorize;
                     }
                     if (props.opacity !== undefined && props.opacity !== null) {
-                        entityCfg.opacity = props.opacity;
+                        meshDefaults.opacity = props.opacity;
                     }
                 }
+            } else {
+                this.warn("metaobject not found for entity: " + entityId);
             }
 
-            performanceModel.createEntity(entityCfg);
+            const lastEntity = (i === numEntities - 1);
+            const meshIds = [];
+
+            for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+
+                const lastMesh = (j === (numMeshes - 1));
+                const meshId = entityId + ".mesh." + j;
+
+                const color = decompressColor(meshColors.slice((j * 4), (j * 4) + 3));
+                const opacity = meshColors[(j * 4) + 3] / 255.0;
+
+                performanceModel.createMesh(utils.apply(meshDefaults, {
+                    id: meshId,
+                    primitive: "triangles",
+                    positions: positions.slice(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                    normals: normals.slice(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                    indices: indices.slice(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
+                    edgeIndices: edgeIndices.slice(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
+                    positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
+                    color: color,
+                    opacity: opacity
+                }));
+
+                meshIds.push(meshId);
+            }
+
+            performanceModel.createEntity(utils.apply(entityDefaults, {
+                id: entityId,
+                isObject: (entityIsObjects [i] === 1),
+                meshIds: meshIds
+            }));
         }
 
         performanceModel.finalize();
