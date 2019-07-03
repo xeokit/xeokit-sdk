@@ -9,6 +9,7 @@ import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffe
 import {BatchingLayer} from './lib/batching/batchingLayer.js';
 import {InstancingLayer} from './lib/instancing/instancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
+import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -60,10 +61,15 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Boolean} [cfg.preCompressed=false] When this is ````true````, ````positions```` are assumed to be
+     * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````, {@link PerformanceModel#createMesh}
+     * will ignore ````matrix````, ````position````, ````scale```` and ````rotation```` parameters.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this._preCompressed = !!cfg.preCompressed;
 
         this._tiles = {};
         this._aabb = math.collapseAABB3();
@@ -314,6 +320,7 @@ class PerformanceModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
+        cfg.preCompressed = this._preCompressed;
         var instancingLayer = new InstancingLayer(this, cfg);
         tile.layers.push(instancingLayer);
         tile.instancingLayers[geometryId] = instancingLayer;
@@ -340,10 +347,8 @@ class PerformanceModel extends Component {
      * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
      * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
-     * @param {Boolean} [cfg.positionsAndNormalsCompressed=false] When this is ````true````, ````positions```` are assumed to be
-     * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````,
-     * the ````matrix````, ````position````, ````scale```` and ````rotation```` parameters are ignored.
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````. Only used when ````positionsAndNormalsCompressed```` is true.
+
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````. Only used when ````preCompressed```` is true.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
@@ -386,8 +391,6 @@ class PerformanceModel extends Component {
             }
         }
 
-        const aabb = (cfg.positionsAndNormalsCompressed) ? cfg.aabb : math.collapseAABB3();
-
         var flags = 0;
         var layer;
         var portionId;
@@ -423,10 +426,15 @@ class PerformanceModel extends Component {
 
         const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
 
+        const aabb = math.collapseAABB3();
+
         if (instancing) {
+
             var instancingLayer = tile.instancingLayers[geometryId];
             layer = instancingLayer;
+
             portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
+
             math.expandAABB3(this._aabb, aabb);
 
             this.numTriangles += layer.numIndices.length / 3;
@@ -473,21 +481,38 @@ class PerformanceModel extends Component {
                 tile.currentBatchingLayer = new BatchingLayer(this, {
                     primitive: "triangles",
                     buffer: tile.buffer,
-                    positionsAndNormalsCompressed: cfg.positionsAndNormalsCompressed,
+                    preCompressed: this._preCompressed,
                     positionsDecodeMatrix: cfg.positionsDecodeMatrix,
                 });
                 tile.layers.push(tile.currentBatchingLayer);
             }
 
             layer = tile.currentBatchingLayer;
+
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
 
-            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
-            math.expandAABB3(this._aabb, aabb);
-            this.numGeometries++;
+            if (this._preCompressed) {
 
+                const bounds = geometryCompressionUtils.getPositionsBounds(positions);
+
+                const min = geometryCompressionUtils.decompressPosition(bounds.min, cfg.positionsDecodeMatrix, []);
+                const max = geometryCompressionUtils.decompressPosition(bounds.max, cfg.positionsDecodeMatrix, []);
+
+                aabb[0] = min[0];
+                aabb[1] = min[1];
+                aabb[2] = min[2];
+                aabb[3] = max[0];
+                aabb[4] = max[1];
+                aabb[5] = max[2];
+            }
+
+            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
+
+            math.expandAABB3(this._aabb, aabb);
+
+            this.numGeometries++;
             this.numTriangles += indices.length / 3;
         }
 

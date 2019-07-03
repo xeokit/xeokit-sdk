@@ -142,16 +142,6 @@ const queryString = function () {
     return query_string;
 }();
 
-
-/**
- * @private
- */
-var delay = function (dt) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(resolve, dt);
-    });
-};
-
 /**
  * @private
  */

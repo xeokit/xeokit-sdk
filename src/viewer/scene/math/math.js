@@ -4,9 +4,6 @@ const tempMat1 = new Float32Array(16);
 const tempMat2 = new Float32Array(16);
 const tempVec4 = new Float32Array(4);
 
-let caching = false;
-const vec3Cache = [];
-let vec3CacheLen = 0;
 
 /**
  * @private

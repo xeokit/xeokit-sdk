@@ -13,6 +13,7 @@ import {BatchingOcclusionRenderer} from "./batchingOcclusionRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
+import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const tempUint8Vec4 = new Uint8Array((bigIndicesSupported ? 5000000 : 65530) * 4); // Scratch memory for dynamic flags VBO update
@@ -95,7 +96,7 @@ class BatchingLayer {
         this._portions = [];
 
         this._finalized = false;
-        this._positionsAndNormalsCompressed = !!cfg.positionsAndNormalsCompressed;
+        this._preCompressed = !!cfg.preCompressed;
         this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
 
         this.compileShaders();
@@ -133,62 +134,78 @@ class BatchingLayer {
      * @returns {number} Portion ID
      */
     createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor) {
+
         if (this._finalized) {
             throw "Already finalized";
         }
-        if (this._finalized) {
-            throw "BatchingLayer full - check first with canCreatePortion()";
-        }
+
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
         const vertsIndex = positionsIndex / 3;
         const numVerts = positions.length / 3;
         const lenPositions = positions.length;
-        { // Positions
-            if (this._positionsAndNormalsCompressed) {
-                buffer.positions.set(positions, buffer.lenPositions);
-                buffer.lenPositions += lenPositions;
-                math.expandAABB3(this._aabb, aabb);
-            } else {
-                buffer.positions.set(positions, buffer.lenPositions);
-                if (matrix) {
-                    for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
-                        tempVec3a[0] = buffer.positions[i + 0];
-                        tempVec3a[1] = buffer.positions[i + 1];
-                        tempVec3a[2] = buffer.positions[i + 2];
-                        math.transformPoint4(matrix, tempVec3a, tempVec3b);
-                        math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
-                        math.expandAABB3Point3(this._aabb, tempVec3b); // Expand BatchingLayer AABB
-                        buffer.positions[i + 0] = tempVec3b[0];
-                        buffer.positions[i + 1] = tempVec3b[1];
-                        buffer.positions[i + 2] = tempVec3b[2];
-                    }
-                } else {
-                    for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
-                        tempVec3a[0] = buffer.positions[i + 0];
-                        tempVec3a[1] = buffer.positions[i + 1];
-                        tempVec3a[2] = buffer.positions[i + 2];
-                        math.expandAABB3Point3(aabb, tempVec3a);
-                        math.expandAABB3Point3(this._aabb, tempVec3a);
-                    }
-                }
-                buffer.lenPositions += lenPositions;
-            }
-        }
-        if (this._positionsAndNormalsCompressed) {
-            buffer.normals.set (normals, buffer.lenNormals);
-            buffer.lenNormals += normals.length;
-        } else if (normals) {
-            var modelNormalMatrix = tempMat4;
+
+        if (this._preCompressed) {
+
+            buffer.positions.set(positions, buffer.lenPositions);
+            buffer.lenPositions += lenPositions;
+
+            math.collapseAABB3(aabb);
+            math.expandAABB3Points3(aabb, positions);
+            geometryCompressionUtils.decompressAABB(aabb, this._positionsDecodeMatrix);
+            math.expandAABB3(this._aabb, aabb);
+
+        } else {
+
+            buffer.positions.set(positions, buffer.lenPositions);
             if (matrix) {
-                // Note: order of inverse and transpose doesn't matter
-                math.inverseMat4(math.transposeMat4(matrix, tempMat4b), modelNormalMatrix);
+                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                    tempVec3a[0] = buffer.positions[i + 0];
+                    tempVec3a[1] = buffer.positions[i + 1];
+                    tempVec3a[2] = buffer.positions[i + 2];
+                    math.transformPoint4(matrix, tempVec3a, tempVec3b);
+                    math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
+                    math.expandAABB3Point3(this._aabb, tempVec3b); // Expand BatchingLayer AABB
+                    buffer.positions[i + 0] = tempVec3b[0];
+                    buffer.positions[i + 1] = tempVec3b[1];
+                    buffer.positions[i + 2] = tempVec3b[2];
+                }
             } else {
-                math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                    tempVec3a[0] = buffer.positions[i + 0];
+                    tempVec3a[1] = buffer.positions[i + 1];
+                    tempVec3a[2] = buffer.positions[i + 2];
+                    math.expandAABB3Point3(aabb, tempVec3a);
+                    math.expandAABB3Point3(this._aabb, tempVec3a);
+                }
             }
-            buffer.lenNormals = transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.lenNormals); // BOTTLENECK - better to have these precomputed in the pipeline!
+            buffer.lenPositions += lenPositions;
         }
+
+        if (normals) {
+
+            if (this._preCompressed) {
+
+                buffer.normals.set(normals, buffer.lenNormals);
+                buffer.lenNormals += normals.length;
+
+            } else {
+
+                var modelNormalMatrix = tempMat4;
+
+                if (matrix) {
+                    math.inverseMat4(math.transposeMat4(matrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn't matter
+
+                } else {
+                    math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+                }
+
+                buffer.lenNormals = transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.lenNormals);
+            }
+        }
+
         if (flags !== undefined) {
+
             const lenFlags = (numVerts * 4);
             const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
             const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
@@ -197,6 +214,7 @@ class BatchingLayer {
             const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
             const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
             const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+
             for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i < len; i += 4) {
                 buffer.flags[i + 0] = visible;
                 buffer.flags[i + 1] = xrayed;
@@ -300,7 +318,7 @@ class BatchingLayer {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
-        if (this._positionsAndNormalsCompressed) {
+        if (this._preCompressed) {
             state.positionsDecodeMatrix = this._positionsDecodeMatrix;
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions, buffer.lenPositions, 3, gl.STATIC_DRAW);
         } else {
