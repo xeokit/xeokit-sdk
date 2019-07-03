@@ -87,7 +87,7 @@ function CubeTextureCanvas(viewer) {
         {boundaries: [[11, 5, 2, 2]], dir: [-1, -1, -1], up: [-1, 1, -1]}
     ];
 
-    for (var i = 0, len = areasZUp.length; i < len; i++) {
+    for (let i = 0, len = areasZUp.length; i < len; i++) {
         math.normalizeVec3(areasZUp[i].dir, areasZUp[i].dir);
         math.normalizeVec3(areasYUp[i].dir, areasYUp[i].dir);
     }
@@ -95,30 +95,30 @@ function CubeTextureCanvas(viewer) {
     var faces = facesYUp;
     var areas = areasYUp;
 
-    const textureCanvas = document.createElement('canvas');
-    textureCanvas.width = width;
-    textureCanvas.height = height;
-    textureCanvas.style.width = width + "px";
-    textureCanvas.style.height = height + "px";
-    textureCanvas.style.padding = "0";
-    textureCanvas.style.margin = "0";
-    textureCanvas.style.top = "0";
-    textureCanvas.style.background = cubeColor;
-    textureCanvas.style.position = "absolute";
-    textureCanvas.style.opacity = "1.0";
-    textureCanvas.style.visibility = "hidden";
-    textureCanvas.style["z-index"] = 2000000;
+    this._textureCanvas = document.createElement('canvas');
+    this._textureCanvas.width = width;
+    this._textureCanvas.height = height;
+    this._textureCanvas.style.width = width + "px";
+    this._textureCanvas.style.height = height + "px";
+    this._textureCanvas.style.padding = "0";
+    this._textureCanvas.style.margin = "0";
+    this._textureCanvas.style.top = "0";
+    this._textureCanvas.style.background = cubeColor;
+    this._textureCanvas.style.position = "absolute";
+    this._textureCanvas.style.opacity = "1.0";
+    this._textureCanvas.style.visibility = "hidden";
+    this._textureCanvas.style["z-index"] = 2000000;
 
     const body = document.getElementsByTagName("body")[0];
-    body.appendChild(textureCanvas);
+    body.appendChild(this._textureCanvas);
 
-    const context = textureCanvas.getContext("2d");
+    const context = this._textureCanvas.getContext("2d");
 
     var zUp = false;
 
     function paint() {
 
-        for (var i = 0, len = facesZUp.length; i < len; i++) {
+        for (let i = 0, len = facesZUp.length; i < len; i++) {
             const face = facesZUp[i];
             const boundary = face.boundary;
             const xmin = Math.round(boundary[0] * scale);
@@ -129,11 +129,11 @@ function CubeTextureCanvas(viewer) {
             context.fillRect(xmin, ymin, width, height);
         }
 
-        for (var i = 0, len = areas.length; i < len; i++) {
-            var xmin;
-            var ymin;
-            var width;
-            var height;
+        for (let i = 0, len = areas.length; i < len; i++) {
+            let xmin;
+            let ymin;
+            let width;
+            let height;
             const area = areas[i];
 
             const boundaries = area.boundaries;
@@ -160,7 +160,7 @@ function CubeTextureCanvas(viewer) {
     }
 
     var translateLabel = (function () {
-        var dictionaries = {
+        const dictionaries = {
             "yUp": {"front": "+Z", "back": "-Z", "right": "+X", "left": "-X", "top": "+Y", "bottom": "-Y"},
             "en": {"front": "FRONT", "back": "BACK", "right": "RIGHT", "left": "LEFT", "top": "TOP", "bottom": "BOTTOM"}
         };
@@ -245,7 +245,14 @@ function CubeTextureCanvas(viewer) {
     };
 
     this.getImage = function () {
-        return textureCanvas;
+        return this._textureCanvas;
+    };
+
+    this.destroy = function () {
+        if (this._textureCanvas) {
+            this._textureCanvas.parentNode.removeChild(this._textureCanvas);
+            this._textureCanvas = null;
+        }
     };
 
     this.clear();

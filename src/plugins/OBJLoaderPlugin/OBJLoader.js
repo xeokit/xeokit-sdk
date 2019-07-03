@@ -1,6 +1,5 @@
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {VBOGeometry} from "../../viewer/scene/geometry/VBOGeometry.js";
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../viewer/scene/materials/Texture.js";
 import {core} from "../../viewer/scene/core.js";

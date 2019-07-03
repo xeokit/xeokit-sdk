@@ -45,7 +45,7 @@ class GLTFDefaultDataSource {
     }
 
     /**
-     * Gets glTF JSON.
+     * Gets glTF binary attachment.
      *
      * Note that this method requires the source of the glTF JSON asset. This is because the binary attachment
      * source could be relative to the glTF source, IE. it may not be a global ID.
