@@ -57,8 +57,11 @@
 <div id="treePanel" class="treePanel"></div>
 
 <div id="info">
-    <h1>Using GLTFLoaderPlugin to Load a BIM Model from the File System</h1>
+    <h1>GLTFLoaderPlugin - Loading an IFC Model from the File System</h1><br>
     <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
@@ -171,7 +174,14 @@
     // When model loaded, create a tree view that toggles object xraying
     //------------------------------------------------------------------------------------------------------------------
 
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
     model.on("loaded", function () {
+
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) + " milliseconds<br>Objects: " + model.numEntities + "<br>Triangles: " + model.numTriangles;
 
         // Fit model to view
         model.on("loaded", () => {
