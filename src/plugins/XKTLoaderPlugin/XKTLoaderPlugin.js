@@ -26,7 +26,7 @@ const decompressColor = (function () {
  *
  * ## Overview
  *
- * * XKTLoaderPlugin is the most efficient way to load models in xeokit.
+ * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.xkt````* file is a single BLOB, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
  * * The *````.xkt````* format does not support textures or physically-based materials.
