@@ -27,9 +27,9 @@ const decompressColor = (function () {
  * ## Overview
  *
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
- * * An *````.xkt````* file is a single BLOB, compressed using geometry quantization
+ * * An *````.xkt````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
- * * Configure the position, scale and rotation of each model as you load it.
+ * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
@@ -37,7 +37,7 @@ const decompressColor = (function () {
  *
  * ## Creating *````.xkt````* files
  *
- * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to convert your ````glTF```` BIM files to *````.xkt````* format.
+ * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to convert your ````glTF```` IFC files to *````.xkt````* format.
  *
  * ## Scene representation
  *
@@ -58,8 +58,8 @@ const decompressColor = (function () {
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [.xkt file](http://xeokit.github.io/xeokit-sdk/examples/models/xeokit/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/).
+ * In the example below we'll load the Schependomlaan model from a [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
+ * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
@@ -143,8 +143,9 @@ const decompressColor = (function () {
  *
  * ## Including and excluding IFC types
  *
- * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
- * objects that represent walls.
+ * We can also load only those objects that have the specified IFC types.
+ *
+ * In the example below, we'll load only the objects that represent walls.
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
  *
@@ -157,8 +158,9 @@ const decompressColor = (function () {
  * });
  * ````
  *
- * We can also load only those objects that **don't** have the specified IFC types. In the example below, we'll load only the
- * objects that do not represent empty space.
+ * We can also load only those objects that **don't** have the specified IFC types.
+ *
+ * In the example below, we'll load only the objects that do not represent empty space.
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
  *
@@ -173,32 +175,32 @@ const decompressColor = (function () {
  *
  * ## Configuring initial IFC object appearances
  *
+ * We can specify the initial appearance of loaded objects according to their IFC types.
+ *
+ * This is useful for things like:
+ *
+ * * setting the colors to our objects according to their IFC types,
+ * * automatically hiding ````IfcSpace```` objects, and
+ * * ensuring that ````IfcWindow```` objects are always transparent.
+ *
+ * <br>
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
  *
  * ````javascript
  * const myObjectDefaults = {
- *      IfcRoof: {
- *          colorize: [0.337255, 0.803922, 0.270588],
- *          priority: 0
+ *
+ *      IfcSpace: {
+ *          visible: false
  *      },
- *      IfcSlab: {
- *          colorize: [0.837255, 0.603922, 0.670588],
- *          priority: 0
- *      },
- *      IfcWall: {
- *          colorize: [0.537255, 0.537255, 0.837255],
- *          priority: 0
- *      },
- *      IfcWallStandardCase: {
- *          colorize: [0.537255, 0.337255, 0.237255],
- *          priority: 0
+ *      IfcWindow: {
+ *          colorize: [0.337255, 0.303922, 0.870588], // Blue
+ *          opacity: 0.3
  *      },
  *
  *      //...
  *
  *      DEFAULT: {
- *          colorize: [0.5, 0.5, 0.5],
- *          priority: 10
+ *          colorize: [0.5, 0.5, 0.5]
  *      }
  * };
  *
@@ -211,6 +213,11 @@ const decompressColor = (function () {
  * ````
  *
  * ## Configuring a custom data source
+ *
+ * By default, XKTLoaderPlugin will load *````.xkt````* files and metadata JSON over HTTP.
+ *
+ * As shown below, we can customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
+ * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
