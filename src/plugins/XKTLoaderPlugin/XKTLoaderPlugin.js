@@ -20,7 +20,7 @@ const decompressColor = (function () {
 /**
  * A {@link Viewer} plugin that loads models from xeokit's *````.xkt````* format.
  *
- * <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">
+ * <img src="https://user-images.githubusercontent.com/83100/55674305-50d46d80-58b3-11e9-884e-8cf252801ef7.gif">
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex)]
  *
@@ -29,15 +29,15 @@ const decompressColor = (function () {
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.xkt````* file is a single BLOB, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
- * * The *````.xkt````* format does not support textures or physically-based materials.
  * * Configure the position, scale and rotation of each model as you load it.
- * * Configure default initial states for objects by their IFC types.
- * * Filter what objects get loaded according to IFC types.
- * * Configure a custom data source for your *````.xkt````* and IFC metadata files.
+ * * Filter which IFC types get loaded.
+ * * Configure initial default appearances for IFC types.
+ * * Set a custom data source for *````.xkt````* and IFC metadata files.
+ * * Does not support textures or physically-based materials.
  *
  * ## Creating *````.xkt````* files
  *
- * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to convert your ````glTF````BIM files to *````.xkt````* format.
+ * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to convert your ````glTF```` BIM files to *````.xkt````* format.
  *
  * ## Scene representation
  *
