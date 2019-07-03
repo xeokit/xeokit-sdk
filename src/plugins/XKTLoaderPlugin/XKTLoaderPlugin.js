@@ -6,7 +6,6 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
 import "./lib/pako.js";
 
-
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
     return function (color) {
@@ -410,7 +409,8 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+            isModel: true,
+            preCompressed: true
         }));
 
         const modelId = performanceModel.id;  // In case ID was auto-generated
@@ -454,7 +454,7 @@ class XKTLoaderPlugin extends Plugin {
                     this._loadModel(params.src, params, options, performanceModel);
 
                 } else {
-                    this._parseModel(params.xkt, params, options, performanceModel);
+                    XKTLoaderPlugin._parseModel(params.xkt, params, options, performanceModel);
                 }
             };
 
@@ -486,7 +486,7 @@ class XKTLoaderPlugin extends Plugin {
                 this._loadModel(params.src, params, options, performanceModel);
 
             } else {
-                this._parseModel(params.xkt, params, options, performanceModel);
+                XKTLoaderPlugin._parseModel(params.xkt, params, options, performanceModel);
             }
         }
 
@@ -501,7 +501,7 @@ class XKTLoaderPlugin extends Plugin {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, performanceModel);
+                XKTLoaderPlugin._parseModel(arrayBuffer, params, options, performanceModel);
                 spinner.processes--;
                 this.viewer.scene.once("tick", () => {
                     performanceModel.fire("loaded", true);
@@ -514,163 +514,107 @@ class XKTLoaderPlugin extends Plugin {
             });
     }
 
-    _parseModel(arrayBuffer, params, options, performanceModel) {
-        const compressedData = XKTLoaderPlugin._extractData(arrayBuffer);
-        const decompressedData = XKTLoaderPlugin._decompressData(compressedData);
-        this._loadDataIntoModel(decompressedData, options, performanceModel);
+    static _parseModel(arrayBuffer, params, options, performanceModel) {
+        const deflatedData = XKTLoaderPlugin._extractData(arrayBuffer);
+        const inflatedData = XKTLoaderPlugin._inflateData(deflatedData);
+        XKTLoaderPlugin._loadDataIntoModel(inflatedData, options, performanceModel);
     }
 
     static _extractData(arrayBuffer) {
-
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
         const numElements = dataView.getUint32(0, true);
         const elements = [];
-
-        var byteOffset = (numElements + 1) * 4;
-        for (var i = 0; i < numElements; i++) {
+        let byteOffset = (numElements + 1) * 4;
+        for (let i = 0; i < numElements; i++) {
             const elementSize = dataView.getUint32((i + 1) * 4, true);
             elements.push(dataArray.slice(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
-
         return {
-
             positions: elements[0],
             normals: elements[1],
             indices: elements[2],
             edgeIndices: elements[3],
-
-            colors: elements[4],
-            matrices: elements[5],
-            opacities: elements[6],
-            aabbs: elements[7],
-
-            meshPositions: elements[8],
-            meshNormals: elements[9],
-            meshIndices: elements[10],
-            meshEdgesIndices: elements[11],
-
-            meshColors: elements[12],
-            meshMatrices: elements[13],
-            meshOpacities: elements[14],
-            meshAABBs: elements[15],
-
-            entityIDs: elements[16],
-            entityMeshes: elements[17],
-            entityIsObjects: elements[18],
-
-            positionsDecodeMatrix: elements[19]
+            meshPositions: elements[4],
+            meshIndices: elements[5],
+            meshEdgesIndices: elements[6],
+            meshColors: elements[7],
+            entityIDs: elements[8],
+            entityMeshes: elements[9],
+            entityIsObjects: elements[10],
+            positionsDecodeMatrix: elements[11]
         };
     }
 
-    static _decompressData(compressedData) {
-
+    static _inflateData(deflatedData) {
         return {
-
-            positions: pako.inflate(compressedData.positions.buffer),
-            normals: pako.inflate(compressedData.normals.buffer),
-            indices: pako.inflate(compressedData.indices.buffer),
-            edgeIndices: pako.inflate(compressedData.edgeIndices.buffer),
-
-            colors: pako.inflate(compressedData.colors.buffer),
-            matrices: pako.inflate(compressedData.matrices.buffer),
-            opacities: pako.inflate(compressedData.opacities.buffer),
-            aabbs: pako.inflate(compressedData.aabbs.buffer),
-
-            meshPositions: pako.inflate(compressedData.meshPositions.buffer),
-            meshNormals: pako.inflate(compressedData.meshNormals.buffer),
-            meshIndices: pako.inflate(compressedData.meshIndices.buffer),
-            meshEdgesIndices: pako.inflate(compressedData.meshEdgesIndices.buffer),
-
-            meshColors: pako.inflate(compressedData.meshColors.buffer),
-            meshMatrices: pako.inflate(compressedData.meshMatrices.buffer),
-            meshOpacities: pako.inflate(compressedData.meshOpacities.buffer),
-            meshAABBs: pako.inflate(compressedData.meshAABBs.buffer),
-
-            entityIDs: pako.inflate(compressedData.entityIDs, {to: 'string'}),
-            entityMeshes: pako.inflate(compressedData.entityMeshes.buffer),
-            entityIsObjects: pako.inflate(compressedData.entityIsObjects),
-
-            positionsDecodeMatrix: pako.inflate(compressedData.positionsDecodeMatrix),
+            positions: new Uint16Array(pako.inflate(deflatedData.positions.buffer).buffer),
+            normals: new Int8Array(pako.inflate(deflatedData.normals.buffer).buffer),
+            indices: new Uint32Array(pako.inflate(deflatedData.indices.buffer).buffer),
+            edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices.buffer).buffer),
+            meshPositions: new Uint32Array(pako.inflate(deflatedData.meshPositions.buffer).buffer),
+            meshIndices: new Uint32Array(pako.inflate(deflatedData.meshIndices.buffer).buffer),
+            meshEdgesIndices: new Uint32Array(pako.inflate(deflatedData.meshEdgesIndices.buffer).buffer),
+            meshColors: new Uint8Array(pako.inflate(deflatedData.meshColors.buffer).buffer),
+            entityIDs: pako.inflate(deflatedData.entityIDs, {to: 'string'}),
+            entityMeshes: new Uint32Array(pako.inflate(deflatedData.entityMeshes.buffer).buffer),
+            entityIsObjects: new Uint8Array(pako.inflate(deflatedData.entityIsObjects).buffer),
+            positionsDecodeMatrix: new Float32Array(pako.inflate(deflatedData.positionsDecodeMatrix).buffer)
         };
     }
 
-    _loadDataIntoModel(data, options, performanceModel) {
+    static _loadDataIntoModel(inflatedData, options, performanceModel) {
 
-        const positions = new Uint16Array(data.positions.buffer);
-        const normals = new Int8Array(data.normals.buffer);
-        const indices = new Uint32Array(data.indices.buffer);
-        const edgeIndices = new Uint32Array(data.edgeIndices.buffer);
-
-        const colors = new Uint8Array(data.colors.buffer);
-        const matrices = new Float32Array(data.matrices.buffer);
-        const opacities = new Uint8Array(data.opacities.buffer);
-        const aabbs = new Float32Array(data.aabbs.buffer);
-
-        const meshPositions = new Uint32Array(data.meshPositions.buffer);
-        const meshIndices = new Uint32Array(data.meshIndices.buffer);
-        const meshEdgesIndices = new Uint32Array(data.meshEdgesIndices.buffer);
-
-        const meshColors = new Uint32Array(data.meshColors.buffer);
-        const meshMatrices = new Uint32Array(data.meshMatrices.buffer);
-        const meshNormals = new Uint32Array(data.meshNormals.buffer);
-        const meshOpacities = new Uint32Array(data.meshOpacities.buffer);
-        const meshAABBs = new Uint32Array(data.meshAABBs.buffer);
-
-        const entityIDs = JSON.parse(data.entityIDs);
-        const entityMeshes = new Uint32Array(data.entityMeshes.buffer);
-        const entityIsObjects = new Uint8Array(data.entityIsObjects.buffer);
-
-        const positionsDecodeMatrix = new Float32Array(data.positionsDecodeMatrix.buffer);
-
-        const numMeshes = meshColors.length;
+        const positions = inflatedData.positions;
+        const normals = inflatedData.normals;
+        const indices = inflatedData.indices;
+        const edgeIndices = inflatedData.edgeIndices;
+        const meshPositions = inflatedData.meshPositions;
+        const meshIndices = inflatedData.meshIndices;
+        const meshEdgesIndices = inflatedData.meshEdgesIndices;
+        const meshColors = inflatedData.meshColors;
+        const entityIDs = JSON.parse(inflatedData.entityIDs);
+        const entityMeshes = inflatedData.entityMeshes;
+        const entityIsObjects = inflatedData.entityIsObjects;
+        const numMeshes = meshPositions.length;
         const numEntities = entityMeshes.length;
 
-        //------------------------------------------------------------------
-        // TODO: Only load meshes for whitelisted/non-blacklisted entities
-        //------------------------------------------------------------------
+        for (let i = 0; i < numMeshes; i++) {
 
-        for (let meshIdx = 0; meshIdx < numMeshes; meshIdx++) {
+            const last = (i === (numMeshes - 1));
+            const meshId = performanceModel.id + "." + i;
+            const color = decompressColor(meshColors.slice((i * 4), (i * 4) + 3));
+            const opacity = meshColors[(i * 4) + 3] / 255.0;
 
-            const last = (meshIdx === (numMeshes - 1));
-
-            const meshCfg = {
-
-                id: performanceModel.id + "." + meshIdx,
-
+            performanceModel.createMesh({
+                id: meshId,
                 primitive: "triangles",
-                positions: positions.slice(meshPositions [meshIdx], last ? meshPositions.length : meshPositions [meshIdx + 1]),
-                normals: normals.slice(meshNormals [meshIdx], last ? meshNormals.length : meshNormals [meshIdx + 1]),
-                indices: indices.slice(meshIndices [meshIdx], last ? meshIndices.length : meshIndices [meshIdx + 1]),
-                edgeIndices: edgeIndices.slice(meshEdgesIndices [meshIdx], last ? meshEdgesIndices.length : meshEdgesIndices [meshIdx + 1]),
-
-                positionsAndNormalsCompressed: true,
-                positionsDecodeMatrix: positionsDecodeMatrix,
-
-                color: decompressColor(colors.slice(meshColors [meshIdx], last ? meshColors.length : meshColors [meshIdx + 1])),
-                matrix: matrices.slice(meshMatrices [meshIdx], meshMatrices [meshIdx] + 16),
-                opacity: opacities [meshOpacities [meshIdx]] / 255.0,
-
-                aabb: aabbs.slice(meshAABBs [meshIdx], meshAABBs [meshIdx] + 6)
-            };
-
-            performanceModel.createMesh(meshCfg);
+                positions: positions.slice(meshPositions [i], last ? positions.length : meshPositions [i + 1]),
+                normals: normals.slice(meshPositions [i], last ? positions.length : meshPositions [i + 1]),
+                indices: indices.slice(meshIndices [i], last ? indices.length : meshIndices [i + 1]),
+                edgeIndices: edgeIndices.slice(meshEdgesIndices [i], last ? edgeIndices.length : meshEdgesIndices [i + 1]),
+                positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
+                color: color,
+                opacity: opacity
+            });
         }
 
-        for (let entityIdx = 0; entityIdx < numEntities; entityIdx++) {
+        for (let i = 0; i < numEntities; i++) {
 
-            const last = (entityIdx === numEntities - 1);
+            const last = (i === numEntities - 1);
             const meshIds = [];
 
-            for (let meshIdx = entityMeshes [entityIdx], to = last ? entityMeshes.length : entityMeshes [entityIdx + 1]; meshIdx < to; meshIdx++) {
-                meshIds.push(performanceModel.id + "." + meshIdx);
+            for (let j = entityMeshes [i], to = last ? entityMeshes.length : entityMeshes [i + 1]; j < to; j++) {
+                const meshId = performanceModel.id + "." + j;
+                meshIds.push(meshId);
             }
 
-            const entityId = entityIDs [entityIdx];
+            const entityId = entityIDs [i];
+
             const entityCfg = {
                 id: entityId,
-                isObject: (entityIsObjects [entityIdx] === 1),
+                isObject: (entityIsObjects [i] === 1),
                 meshIds: meshIds,
             };
 
