@@ -402,7 +402,14 @@ class BIMServerLoaderPlugin extends Plugin {
         });
 
         return performanceModel;
-    };
+    }
+
+    /**
+     * Destroys this BIMServerLoaderPlugin.
+     */
+    destroy() {
+        super.destroy();
+    }
 }
 
 export {BIMServerLoaderPlugin}

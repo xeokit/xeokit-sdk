@@ -221,7 +221,7 @@ class AxisGizmoPlugin extends Plugin {
 
         // ----------------- Meshes ------------------------------
 
-        var meshes = [
+        this._meshes = [
 
             // Sphere behind gnomon
 
@@ -351,16 +351,23 @@ class AxisGizmoPlugin extends Plugin {
                 billboard: "spherical"
             })
         ];
+    }
 
-        /** Shows or hides this helper
-         *
-         * @param visible
-         */
-        this.setVisible = function (visible) {
-            for (var i = 0; i < meshes.length; i++) {
-                meshes[i].visible = visible;
-            }
+    /** Shows or hides this helper
+     *
+     * @param visible
+     */
+    setVisible(visible) {
+        for (var i = 0; i < this._meshes.length; i++) {
+            this._meshes[i].visible = visible;
         }
+    }
+
+    /**
+     * Destroys this AxisGizmoPlugin.
+     */
+    destroy() {
+        super.destroy();
     }
 }
 

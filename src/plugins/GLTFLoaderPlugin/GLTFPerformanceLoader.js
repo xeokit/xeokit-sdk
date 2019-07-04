@@ -60,7 +60,7 @@ var loadGLTF = (function () {
         spinner.processes++;
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 spinner.processes--;
-                parseGLTF(json, src, options, plugin, performanceModel, ok, error);
+                parseGLTF(plugin, json, src, options, performanceModel, ok, error);
             },
             error);
     };
@@ -92,7 +92,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, performanceModel, ok) {
+    return function (plugin, json, src, options,  performanceModel, ok) {
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,

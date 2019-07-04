@@ -68,7 +68,7 @@ class OBJLoaderPlugin extends Plugin {
      * @constructor
      *
      * @param {Viewer} viewer The Viewer.
-     * @param {Object} cfg  Plugin configuration.
+     * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id="OBJLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
@@ -78,7 +78,7 @@ class OBJLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new OBJLoader(cfg);
+        this._loader = new OBJLoader();
     }
 
     /**
@@ -96,8 +96,6 @@ class OBJLoaderPlugin extends Plugin {
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
-
-        const self = this;
 
         if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
@@ -118,12 +116,14 @@ class OBJLoaderPlugin extends Plugin {
 
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
-            utils.loadJSON(metaModelSrc, function (modelMetadata) {
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
-                self._loader.load(modelNode, src, params);
-            }, function (errMsg) {
-                self.error(`load(): Failed to load model modelMetadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
-            });
+            utils.loadJSON(metaModelSrc,
+                (modelMetadata) => {
+                    this.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                    this._loader.load(modelNode, src, params);
+                },
+                (errMsg) => {
+                    this.error(`load(): Failed to load model modelMetadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
+                });
         } else {
             this._loader.load(modelNode, src, params);
         }
@@ -133,6 +133,13 @@ class OBJLoaderPlugin extends Plugin {
         });
 
         return modelNode;
+    }
+
+    /**
+     * Destroys this OBJLoaderPlugin.
+     */
+    destroy() {
+        super.destroy();
     }
 }
 

@@ -9,6 +9,7 @@ import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffe
 import {BatchingLayer} from './lib/batching/batchingLayer.js';
 import {InstancingLayer} from './lib/instancing/instancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
+import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
@@ -60,10 +61,15 @@ class PerformanceModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the PerformanceModel's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] PerformanceModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] PerformanceModel's initial opacity factor, multiplies by the rendered fragment alpha.
+     * @param {Boolean} [cfg.preCompressed=false] When this is ````true````, ````positions```` are assumed to be
+     * quantized and in World-space, and ````normals```` are also assumed to be oct-encoded and in World-space. When ````true````, {@link PerformanceModel#createMesh}
+     * will ignore ````matrix````, ````position````, ````scale```` and ````rotation```` parameters.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this._preCompressed = !!cfg.preCompressed;
 
         this._tiles = {};
         this._aabb = math.collapseAABB3();
@@ -116,6 +122,12 @@ class PerformanceModel extends Component {
          * @private
          */
         this.numPickableLayerPortions = 0;
+
+        /** @private */
+        this.numEntities = 0;
+
+        /** @private */
+        this.numTriangles = 0;
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -308,10 +320,12 @@ class PerformanceModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
+        cfg.preCompressed = this._preCompressed;
         var instancingLayer = new InstancingLayer(this, cfg);
         tile.layers.push(instancingLayer);
         tile.instancingLayers[geometryId] = instancingLayer;
         this.numGeometries++;
+        this.numTriangles += cfg.indices ? cfg.indices.length / 3 : 0;
     }
 
     /**
@@ -330,15 +344,17 @@ class PerformanceModel extends Component {
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
      * @param {String} [cfg.tileId] Optional ID of a tile to add the mesh to. The tile must have been created with {@link PerformanceModel#createTile} and not yet finalized with {@link PerformanceModel#finalizeTile}.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link PerformanceModel#createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method. If a tile ID is also given, then the geometry must exist within that tile.
-     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when geometryId is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
-     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when geometryId is given.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when geometryId is given.
+     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'.
+     * @param {Number[]} [cfg.positions] Flat array of geometry positions. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Ignored when ````geometryId```` is given.
+
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````. Only used when ````preCompressed```` is true.
+     * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
      * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
      * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the position, scale and rotation parameters.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
      * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
@@ -376,11 +392,8 @@ class PerformanceModel extends Component {
         }
 
         var flags = 0;
-
         var layer;
         var portionId;
-        var aabb = math.collapseAABB3();
-
         var matrix;
 
         if (cfg.matrix) {
@@ -413,11 +426,18 @@ class PerformanceModel extends Component {
 
         const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
 
+        const aabb = math.collapseAABB3();
+
         if (instancing) {
+
             var instancingLayer = tile.instancingLayers[geometryId];
             layer = instancingLayer;
+
             portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
+
             math.expandAABB3(this._aabb, aabb);
+
+            this.numTriangles += layer.numIndices.length / 3;
 
         } else {
 
@@ -430,13 +450,16 @@ class PerformanceModel extends Component {
 
             var indices = cfg.indices;
             var edgeIndices = cfg.edgeIndices;
+
             var positions = cfg.positions;
+
             if (!positions) {
                 this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
 
             var normals = cfg.normals;
+
             if (!normals) {
                 this.error("Config missing: normals (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
@@ -448,25 +471,49 @@ class PerformanceModel extends Component {
             }
 
             if (tile.currentBatchingLayer) {
-                if (!tile.currentBatchingLayer.canCreatePortion(cfg.positions.length)) {
+                if (!tile.currentBatchingLayer.canCreatePortion(positions.length)) {
                     tile.currentBatchingLayer.finalize();
                     tile.currentBatchingLayer = null;
                 }
             }
 
             if (!tile.currentBatchingLayer) {
-                tile.currentBatchingLayer = new BatchingLayer(this, {primitive: "triangles", buffer: tile.buffer});
+                tile.currentBatchingLayer = new BatchingLayer(this, {
+                    primitive: "triangles",
+                    buffer: tile.buffer,
+                    preCompressed: this._preCompressed,
+                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,
+                });
                 tile.layers.push(tile.currentBatchingLayer);
             }
 
             layer = tile.currentBatchingLayer;
+
             if (!edgeIndices && indices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
 
+            if (this._preCompressed) {
+
+                const bounds = geometryCompressionUtils.getPositionsBounds(positions);
+
+                const min = geometryCompressionUtils.decompressPosition(bounds.min, cfg.positionsDecodeMatrix, []);
+                const max = geometryCompressionUtils.decompressPosition(bounds.max, cfg.positionsDecodeMatrix, []);
+
+                aabb[0] = min[0];
+                aabb[1] = min[1];
+                aabb[2] = min[2];
+                aabb[3] = max[0];
+                aabb[4] = max[1];
+                aabb[5] = max[2];
+            }
+
             portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
+
             math.expandAABB3(this._aabb, aabb);
+
             this.numGeometries++;
+            this.numTriangles += indices.length / 3;
         }
 
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
@@ -579,6 +626,7 @@ class PerformanceModel extends Component {
 
         var node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         tile.nodes.push(node);
+        this.numEntities++;
         return node;
     }
 

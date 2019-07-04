@@ -19,6 +19,10 @@ BIMserver-JavaScript-API
 Copyright (c) The open source BIM collective
 GNU Lesser General Public License v3.0
 [https://github.com/opensourceBIM/BIMserver-JavaScript-API/blob/master/license.txt]
+
+Pako
+Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
+MIT License [http://www.opensource.org/licenses/mit-license.php]
 -------------------------------------------------------------------------
 
                     GNU AFFERO GENERAL PUBLIC LICENSE

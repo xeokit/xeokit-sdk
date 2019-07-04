@@ -41,6 +41,8 @@ class CustomProjection extends Component {
 
         this._state.matrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 
+        this.glRedraw();
+
         /**
          Fired whenever this CustomProjection's {@link CustomProjection/matrix} property changes.
 

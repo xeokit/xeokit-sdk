@@ -42,19 +42,21 @@
 
         "BIM Offline": [
 
-            "#Loading BIM models from file system",
+            "#Loading BIM models from .XKT files",
+            "BIMOffline_XKT_Duplex",
+            "BIMOffline_XKT_Schependomlaan",
+            "BIMOffline_XKT_OTCConferenceCenter",
+            "BIMOffline_XKT_includeTypes",
+            "BIMOffline_XKT_objectDefaults",
+            "BIMOffline_XKT_metadata_Schependomlaan",
+
+            "#Loading BIM models from glTF files",
             "BIMOffline_Duplex",
             "BIMOffline_Schependomlaan",
             "BIMOffline_OTCConferenceCenter",
-
-            "#Load masking",
             "BIMOffline_includeTypes_PlanView",
-
-            "#Custom initial object states",
             "BIMOffline_objectDefaults",
-
-            "#Using the metadata API",
-            "BIMOffline_metadata_Schependomlaan",
+            "BIMOffline_metadata_Schependomlaan"
         ],
 
         "BIMServer": [
@@ -78,7 +80,8 @@
         "Camera": [
             "camera_CameraPathAnimation",
             "camera_fitToModel",
-            "camera_CameraControl_modes"
+            "camera_CameraControl_modes",
+            "camera_CameraFlightAnimation_projection"
         ],
 
         "Geometry": [
@@ -121,12 +124,21 @@
 
         "Loaders": [
 
+            "#Loading models from xeokit .XKT format",
+            "loading_XKT_Duplex",
+            "loading_XKT_Schependomlaan",
+            "loading_XKT_OTCConferenceCenter",
+            "loading_XKT_WestRiverSideHospital",
+            "loading_XKT_dataSource",
+
             "#Loading models from various formats",
             "loading_3DXML_Widget",
             "loading_glTF_Schependomlaan",
             "loading_glTF_dataSource",
             "loading_OBJ_SportsCar",
             "loading_STL_SpurGear",
+
+            "#Loading multiple models, from various formats",
             "loading_MultipleModels"
         ],
 

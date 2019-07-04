@@ -8,20 +8,25 @@ const newLook = math.vec3();
 const newEye = math.vec3();
 const newUp = math.vec3();
 const newLookEyeVec = math.vec3();
-const lookEyeVec = math.vec3();
 
 /**
- * @desc Jumps or flies the {@link Scene}'s {@link Camera} to look at a given target.
+ * @desc Jumps or flies the {@link Scene}'s {@link Camera} to a given target.
  *
  * * Located at {@link Viewer#cameraFlight}
  * * Can fly or jump to its target.
  * * While flying, can be stopped, or redirected to a different target.
+ * * Can also smoothly transition between ortho and perspective projections.
+ *
  *
  * A CameraFlightAnimation's target can be:
  *
  * * specific ````eye````, ````look```` and ````up```` positions,
  * * an axis-aligned World-space bounding box (AABB), or
  * * an instance or ID of any {@link Component} subtype that provides a World-space AABB.
+ *
+ * A target can also contain a ````projection```` type to transition into. For example, if your {@link Camera#projection} is
+ * currently ````"perspective"```` and you supply {@link CameraFlightAnimation#flyTo} with a ````projection```` property
+ * equal to "ortho", then CameraFlightAnimation will smoothly transition the Camera into an orthographic projection.
  *
  * Configure {@link CameraFlightAnimation#fit} and {@link CameraFlightAnimation#fitFOV} to make it stop at the point
  * where the target occupies a certain amount of the field-of-view.
@@ -36,7 +41,7 @@ const lookEyeVec = math.vec3();
  * // Fly to the Entity's World-space AABB
  * viewer.cameraFlight.flyTo(entity);
  * ````
- * ## Flying to a position
+ * ## Flying to a Position
  *
  * Flying the CameraFlightAnimation from the previous example to specified eye, look and up positions:
  *
@@ -46,9 +51,9 @@ const lookEyeVec = math.vec3();
  *    look: [0,0,0]
  *    up: [0,1,0],
  *    duration: 1 // Default, seconds
- * }, function() {
- *          // Arrived
- *      });
+ * },() => {
+ *      // Done
+ * });
  * ````
  *
  * ## Flying to an AABB
@@ -58,6 +63,41 @@ const lookEyeVec = math.vec3();
  *
  * ````Javascript
  * viewer.cameraFlight.flyTo(entity.aabb);
+ * ````
+ *
+ * ## Transitioning Between Projections
+ *
+ * CameraFlightAnimation also allows us to smoothly transition between Camera projections. We can do that by itself, or
+ * in addition to flying the Camera to a target.
+ *
+ * Let's transition the Camera to orthographic projection:
+ *
+ * [[Run example](http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraFlightAnimation_projection)]
+ *
+ * ````Javascript
+ * viewer.cameraFlight.flyTo({ projection: "ortho", () => {
+ *      // Done
+ * });
+ * ````
+ *
+ * Now let's transition the Camera back to perspective projection:
+ *
+ * ````Javascript
+ * viewer.cameraFlight.flyTo({ projection: "perspective"}, () => {
+ *      // Done
+ * });
+ * ````
+ *
+ * Fly Camera to a position, while transitioning to orthographic projection:
+ *
+ * ````Javascript
+ * viewer.cameraFlight.flyTo({
+ *     eye: [-100,20,2],
+ *     look: [0,0,-40],
+ *     up: [0,1,0],
+ *     projection: "ortho", () => {
+ *        // Done
+ * });
  * ````
  */
 class CameraFlightAnimation extends Component {
@@ -73,7 +113,7 @@ class CameraFlightAnimation extends Component {
      @constructor
      @private
      */
-    constructor(owner, cfg={}) {
+    constructor(owner, cfg = {}) {
 
         super(owner, cfg);
 
@@ -102,14 +142,13 @@ class CameraFlightAnimation extends Component {
     }
 
     /**
-     * Begins flying the {@link Camera} to the given target.
+     * Flies the {@link Camera} to a target.
      *
-     *  * When the target is a boundary, the {@link Camera} will fly towards the target
-     *    and stop when the target fills most of the canvas.
-     *  * When the target is an explicit {@link Camera} position, given as ````eye````, ````look```` and ````up````
-     *    vectors, then this CameraFlightAnimation will interpolate the {@link Camera} to that target and stop there.
+     *  * When the target is a boundary, the {@link Camera} will fly towards the target and stop when the target fills most of the canvas.
+     *  * When the target is an explicit {@link Camera} position, given as ````eye````, ````look```` and ````up````, then CameraFlightAnimation will interpolate the {@link Camera} to that target and stop there.
      *
-     * @param {Number} [params=scene] Either a parameters object or a {@link Component} subtype that has an AABB.
+     * @param {Object|Component} [params=Scene] Either a parameters object or a {@link Component} subtype that has
+     * an AABB. Defaults to the {@link Scene}, which causes the {@link Camera} to fit the Scene in view.
      * @param {Number} [params.arc=0] Factor in range ````[0..1]```` indicating how much the {@link Camera#eye} position
      * will swing away from its {@link Camera#look} position as it flies to the target.
      * @param {Number|String|Component} [params.component] ID or instance of a component to fly to. Defaults to the entire {@link Scene}.
@@ -117,13 +156,14 @@ class CameraFlightAnimation extends Component {
      * @param {Number[]} [params.eye] Position to fly the eye position to.
      * @param {Number[]} [params.look] Position to fly the look position to.
      * @param {Number[]} [params.up] Position to fly the up vector to.
+     * @param {String} [params.projection] Projection type to transition into as we fly. Can be any of the values of {@link Camera.projection}.
      * @param {Boolean} [params.fit=true] Whether to fit the target to the view volume. Overrides {@link CameraFlightAnimation#fit}.
      * @param {Number} [params.fitFOV] How much of field-of-view, in degrees, that a target {@link Entity} or its AABB should
      * fill the canvas on arrival. Overrides {@link CameraFlightAnimation#fitFOV}.
      * @param {Number} [params.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
-     * @param {Number} [params.orthoScale] TODO: document this
-     * @param {Function} [callback] Callback fired on arrival
-     * @param {Object} [scope] Optional scope for callback
+     * @param {Number} [params.orthoScale] Animate the Camera's orthographic scale to this target value. See {@link Ortho#scale}.
+     * @param {Function} [callback] Callback fired on arrival.
+     * @param {Object} [scope] Optional scope for callback.
      */
     flyTo(params, callback, scope) {
 
@@ -134,11 +174,15 @@ class CameraFlightAnimation extends Component {
         }
 
         this._flying = false;
+        this._flyingEye = false;
+        this._flyingLook = false;
+        this._flyingEyeLookUp = false;
 
         this._callback = callback;
         this._callbackScope = scope;
 
         const camera = this.scene.camera;
+        const flyToProjection = (!!params.projection) && (params.projection !== camera.projection);
 
         this._eye1[0] = camera.eye[0];
         this._eye1[1] = camera.eye[1];
@@ -181,9 +225,12 @@ class CameraFlightAnimation extends Component {
         } else { // Argument must be an instance or ID of a Component (subtype)
 
             let component = params;
+
             if (utils.isNumeric(component) || utils.isString(component)) {
+
                 componentId = component;
                 component = this.scene.components[componentId];
+
                 if (!component) {
                     this.error("Component not found: " + utils.inQuotes(componentId));
                     if (callback) {
@@ -196,15 +243,19 @@ class CameraFlightAnimation extends Component {
                     return;
                 }
             }
-            aabb = component.aabb || this.scene.aabb;
+            if (!flyToProjection) {
+                aabb = component.aabb || this.scene.aabb;
+            }
         }
 
         const poi = params.poi;
 
         if (aabb) {
+
             if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
                 return;
             }
+
             if (aabb[3] === aabb[0] && aabb[4] === aabb[1] && aabb[5] === aabb[2]) { // Don't fly to an empty boundary
                 return;
             }
@@ -230,19 +281,13 @@ class CameraFlightAnimation extends Component {
             this._up2[1] = this._up1[1];
             this._up2[2] = this._up1[2];
 
-            this._flyEyeLookUp = false;
+            this._flyingEyeLookUp = true;
 
         } else if (eye || look || up) {
 
-            this._flyEyeLookUp = !!eye && !!look && !!up;
+            this._flyingEyeLookUp = !!eye && !!look && !!up;
             this._flyingEye = !!eye && !look;
             this._flyingLook = !!look && !eye;
-
-            if (look) {
-                this._look2[0] = look[0];
-                this._look2[1] = look[1];
-                this._look2[2] = look[2];
-            }
 
             if (eye) {
                 this._eye2[0] = eye[0];
@@ -250,10 +295,34 @@ class CameraFlightAnimation extends Component {
                 this._eye2[2] = eye[2];
             }
 
+            if (look) {
+                this._look2[0] = look[0];
+                this._look2[1] = look[1];
+                this._look2[2] = look[2];
+            }
+
             if (up) {
                 this._up2[0] = up[0];
                 this._up2[1] = up[1];
                 this._up2[2] = up[2];
+            }
+        }
+
+        if (flyToProjection) {
+
+            if (params.projection === "ortho" && camera.projection !== "ortho") {
+                this._projection2 = "ortho";
+                this._projMatrix1 = camera.projMatrix.slice();
+                camera.ortho.scale = this._orthoScale2;
+                this._projMatrix2 = camera.ortho.matrix.slice();
+                camera.projection = "customProjection";
+            }
+
+            if (params.projection === "perspective" && camera.projection !== "perspective") {
+                this._projection2 = "perspective";
+                this._projMatrix1 = camera.projMatrix.slice();
+                this._projMatrix2 = camera.perspective.matrix.slice();
+                camera.projection = "customProjection";
             }
         }
 
@@ -384,42 +453,41 @@ class CameraFlightAnimation extends Component {
         const time = Date.now();
         let t = (time - this._time1) / (this._time2 - this._time1);
         const stopping = (t >= 1);
+
         if (t > 1) {
             t = 1;
         }
-        t = this.easing ? this._ease(t, 0, 1, 1) : t;
+
+        const tFlight = this.easing ? CameraFlightAnimation._ease(t, 0, 1, 1) : t;
         const camera = this.scene.camera;
+
         if (this._flyingEye || this._flyingLook) {
+
             if (this._flyingEye) {
                 math.subVec3(camera.eye, camera.look, newLookEyeVec);
-                camera.eye = math.lerpVec3(t, 0, 1, this._eye1, this._eye2, newEye);
+                camera.eye = math.lerpVec3(tFlight, 0, 1, this._eye1, this._eye2, newEye);
                 camera.look = math.subVec3(newEye, newLookEyeVec, newLook);
             } else if (this._flyingLook) {
-                camera.look = math.lerpVec3(t, 0, 1, this._look1, this._look2, newLook);
+                camera.look = math.lerpVec3(tFlight, 0, 1, this._look1, this._look2, newLook);
                 //    camera.eye = math.addVec3(newLook, newLookEyeVec, newEye);
-                camera.up = math.lerpVec3(t, 0, 1, this._up1, this._up2, newUp);
+                camera.up = math.lerpVec3(tFlight, 0, 1, this._up1, this._up2, newUp);
             }
-        } else if (this._flyEyeLookUp) {
-            camera.eye = math.lerpVec3(t, 0, 1, this._eye1, this._eye2, newEye);
-            camera.look = math.lerpVec3(t, 0, 1, this._look1, this._look2, newLook);
-            camera.up = math.lerpVec3(t, 0, 1, this._up1, this._up2, newUp);
-        } else {
-            math.lerpVec3(t, 0, 1, this._look1, this._look2, newLook);
-            let dist;
-            if (this._trail) {
-                math.subVec3(newLook, camera.look, newLookEyeVec);
-            } else {
-                math.subVec3(camera.eye, camera.look, newLookEyeVec);
-            }
-            math.normalizeVec3(newLookEyeVec);
-            math.lerpVec3(t, 0, 1, this._eye1, this._eye2, newEye);
-            math.subVec3(newEye, newLook, lookEyeVec);
-            dist = math.lenVec3(lookEyeVec);
-            math.mulVec3Scalar(newLookEyeVec, dist);
-            camera.eye = math.addVec3(newLook, newLookEyeVec, newEye);
-            camera.look = newLook;
+
+        } else if (this._flyingEyeLookUp) {
+
+            camera.eye = math.lerpVec3(tFlight, 0, 1, this._eye1, this._eye2, newEye);
+            camera.look = math.lerpVec3(tFlight, 0, 1, this._look1, this._look2, newLook);
+            camera.up = math.lerpVec3(tFlight, 0, 1, this._up1, this._up2, newUp);
         }
-        this.scene.camera.ortho.scale = this._orthoScale1 + (t * (this._orthoScale2 - this._orthoScale1));
+
+        if (this._projection2) {
+            const tProj = (this._projection2 === "ortho") ? CameraFlightAnimation._easeOutExpo(t, 0, 1, 1) : CameraFlightAnimation._easeInCubic(t, 0, 1, 1);
+            camera.customProjection.matrix = math.lerpMat4(tProj, 0, 1, this._projMatrix1, this._projMatrix2);
+
+        } else {
+            camera.ortho.scale = this._orthoScale1 + (t * (this._orthoScale2 - this._orthoScale1));
+        }
+
         if (stopping) {
             this.stop();
             return;
@@ -427,9 +495,18 @@ class CameraFlightAnimation extends Component {
         core.scheduleTask(this._update, this); // Keep flying
     }
 
-    _ease(t, b, c, d) { // Quadratic easing out - decelerating to zero velocity http://gizma.com/easing
+    static _ease(t, b, c, d) { // Quadratic easing out - decelerating to zero velocity http://gizma.com/easing
         t /= d;
         return -c * t * (t - 2) + b;
+    }
+
+    static _easeInCubic(t, b, c, d) {
+        t /= d;
+        return c * t * t * t + b;
+    }
+
+    static _easeOutExpo(t, b, c, d) {
+        return c * (-Math.pow(2, -10 * t / d) + 1) + b;
     }
 
     /**
@@ -442,6 +519,9 @@ class CameraFlightAnimation extends Component {
         this._flying = false;
         this._time1 = null;
         this._time2 = null;
+        if (this._projection2) {
+            this.scene.camera.projection = this._projection2;
+        }
         const callback = this._callback;
         if (callback) {
             this._callback = null;

@@ -71,7 +71,7 @@ var loadGLTF = (function () {
     return function (plugin, modelNode, src, options, ok, error) {
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, modelNode, ok, error);
+                parseGLTF(plugin, json, src, options, modelNode, ok, error);
             },
             error);
     };
@@ -103,7 +103,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, modelNode, ok) {
+    return function (plugin, json, src, options, modelNode, ok) {
         modelNode.clear();
         var ctx = {
             src: src,
