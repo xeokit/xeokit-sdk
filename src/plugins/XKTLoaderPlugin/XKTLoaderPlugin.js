@@ -20,9 +20,9 @@ const decompressColor = (function () {
 /**
  * A {@link Viewer} plugin that loads models from xeokit's optimized *````.xkt````* format.
  *
- * <img src="http://xeokit.io/img/docs/GLTFLoaderPlugin/duplex.png">
+ * <img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png">
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter)]
  *
  * ## Overview
  *
