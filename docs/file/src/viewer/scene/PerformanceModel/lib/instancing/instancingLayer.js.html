@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -130,6 +132,7 @@ import {InstancingPickMeshRenderer} from &quot;./instancingPickMeshRenderer.js&q
 import {InstancingPickDepthRenderer} from &quot;./instancingPickDepthRenderer.js&quot;;
 import {InstancingPickNormalsRenderer} from &quot;./instancingPickNormalsRenderer.js&quot;;
 import {InstancingOcclusionRenderer} from &quot;./instancingOcclusionRenderer.js&quot;;
+import {geometryCompressionUtils} from &quot;../../../math/geometryCompressionUtils.js&quot;;
 
 import {RENDER_FLAGS} from &apos;../renderFlags.js&apos;;
 import {RENDER_PASSES} from &apos;../renderPasses.js&apos;;
@@ -197,26 +200,53 @@ class InstancingLayer {
             obb: math.OBB3()
         };
         if (cfg.positions) {
-            var lenPositions = cfg.positions.length;
-            var localAABB = math.collapseAABB3();
-            math.expandAABB3Points3(localAABB, cfg.positions);
-            math.AABB3ToOBB3(localAABB, stateCfg.obb);
-            quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
-            let normalized = false;
-            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+
+            if (cfg.preCompressed) {
+
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
+
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+
+            } else {
+
+                let lenPositions = cfg.positions.length;
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+                quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+            }
         }
         if (cfg.normals) {
-            var lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
-            var normalized = true; // For oct-encoded UInt8
-            stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
+
+            if (cfg.preCompressed) {
+
+                let normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
+
+            } else {
+
+                var lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
+                let normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
+            }
         }
+
         if (cfg.indices) {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
+
         var edgeIndices = cfg.edgeIndices;
         if (!edgeIndices) {
             edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 10);
         }
+
         stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
 
         this._state = new RenderState(stateCfg);
@@ -230,6 +260,9 @@ class InstancingLayer {
         this._numSelectedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
+
+        /** @private */
+        this.numIndices = (cfg.indices) ? cfg.indices / 3 : 0;
 
         // Vertex arrays
         this._flags = [];
@@ -250,6 +283,8 @@ class InstancingLayer {
         this._portions = [];
 
         this._finalized = false;
+
+        this._preCompressed = !!cfg.preCompressed;
 
         this.compileShaders();
     }
@@ -644,11 +679,12 @@ class InstancingLayer {
         var clippable = !!(flags &amp; RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags &amp; RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags &amp; RENDER_FLAGS.PICKABLE) ? 255 : 0;
-            tempUint8Vec4[0] = clippable;
-            tempUint8Vec4[1] = edges;
-            tempUint8Vec4[2] = pickable;
+        tempUint8Vec4[0] = clippable;
+        tempUint8Vec4[1] = edges;
+        tempUint8Vec4[2] = pickable;
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
+
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {

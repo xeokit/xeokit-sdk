@@ -164,6 +164,72 @@
     ]
   },
   {
+    "name": "SceneState#restore",
+    "filePath": "src/viewer/scene/scene/SceneState.js",
+    "lines": [
+      {
+        "lineNumber": 115,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 116,
+        "line": "     * Restores a {@link Scene} to state previously captured with {@link SceneState#save}."
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param {Scene} scene The scene."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 119,
+        "line": "    restore(scene, done) {"
+      }
+    ],
+    "codeParams": [
+      "scene",
+      "done"
+    ],
+    "docParams": [
+      "scene"
+    ]
+  },
+  {
+    "name": "SceneState#restoreCamera",
+    "filePath": "src/viewer/scene/scene/SceneState.js",
+    "lines": [
+      {
+        "lineNumber": 124,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * Restores a {@link Scene}'s {@link Camera} to its state previously captured with {@link SceneState#save}."
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param {Scene} scene The scene."
+      },
+      {
+        "lineNumber": 127,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 128,
+        "line": "    restoreCamera(scene, done) {"
+      }
+    ],
+    "codeParams": [
+      "scene",
+      "done"
+    ],
+    "docParams": [
+      "scene"
+    ]
+  },
+  {
     "name": "PickResult#reset",
     "filePath": "src/viewer/scene/webgl/PickResult.js",
     "lines": [

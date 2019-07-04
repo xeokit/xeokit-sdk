@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -205,7 +207,7 @@ function CubeTextureCanvas(viewer) {
         {boundaries: [[11, 5, 2, 2]], dir: [-1, -1, -1], up: [-1, 1, -1]}
     ];
 
-    for (var i = 0, len = areasZUp.length; i &lt; len; i++) {
+    for (let i = 0, len = areasZUp.length; i &lt; len; i++) {
         math.normalizeVec3(areasZUp[i].dir, areasZUp[i].dir);
         math.normalizeVec3(areasYUp[i].dir, areasYUp[i].dir);
     }
@@ -213,30 +215,30 @@ function CubeTextureCanvas(viewer) {
     var faces = facesYUp;
     var areas = areasYUp;
 
-    const textureCanvas = document.createElement(&apos;canvas&apos;);
-    textureCanvas.width = width;
-    textureCanvas.height = height;
-    textureCanvas.style.width = width + &quot;px&quot;;
-    textureCanvas.style.height = height + &quot;px&quot;;
-    textureCanvas.style.padding = &quot;0&quot;;
-    textureCanvas.style.margin = &quot;0&quot;;
-    textureCanvas.style.top = &quot;0&quot;;
-    textureCanvas.style.background = cubeColor;
-    textureCanvas.style.position = &quot;absolute&quot;;
-    textureCanvas.style.opacity = &quot;1.0&quot;;
-    textureCanvas.style.visibility = &quot;hidden&quot;;
-    textureCanvas.style[&quot;z-index&quot;] = 2000000;
+    this._textureCanvas = document.createElement(&apos;canvas&apos;);
+    this._textureCanvas.width = width;
+    this._textureCanvas.height = height;
+    this._textureCanvas.style.width = width + &quot;px&quot;;
+    this._textureCanvas.style.height = height + &quot;px&quot;;
+    this._textureCanvas.style.padding = &quot;0&quot;;
+    this._textureCanvas.style.margin = &quot;0&quot;;
+    this._textureCanvas.style.top = &quot;0&quot;;
+    this._textureCanvas.style.background = cubeColor;
+    this._textureCanvas.style.position = &quot;absolute&quot;;
+    this._textureCanvas.style.opacity = &quot;1.0&quot;;
+    this._textureCanvas.style.visibility = &quot;hidden&quot;;
+    this._textureCanvas.style[&quot;z-index&quot;] = 2000000;
 
     const body = document.getElementsByTagName(&quot;body&quot;)[0];
-    body.appendChild(textureCanvas);
+    body.appendChild(this._textureCanvas);
 
-    const context = textureCanvas.getContext(&quot;2d&quot;);
+    const context = this._textureCanvas.getContext(&quot;2d&quot;);
 
     var zUp = false;
 
     function paint() {
 
-        for (var i = 0, len = facesZUp.length; i &lt; len; i++) {
+        for (let i = 0, len = facesZUp.length; i &lt; len; i++) {
             const face = facesZUp[i];
             const boundary = face.boundary;
             const xmin = Math.round(boundary[0] * scale);
@@ -247,11 +249,11 @@ function CubeTextureCanvas(viewer) {
             context.fillRect(xmin, ymin, width, height);
         }
 
-        for (var i = 0, len = areas.length; i &lt; len; i++) {
-            var xmin;
-            var ymin;
-            var width;
-            var height;
+        for (let i = 0, len = areas.length; i &lt; len; i++) {
+            let xmin;
+            let ymin;
+            let width;
+            let height;
             const area = areas[i];
 
             const boundaries = area.boundaries;
@@ -278,7 +280,7 @@ function CubeTextureCanvas(viewer) {
     }
 
     var translateLabel = (function () {
-        var dictionaries = {
+        const dictionaries = {
             &quot;yUp&quot;: {&quot;front&quot;: &quot;+Z&quot;, &quot;back&quot;: &quot;-Z&quot;, &quot;right&quot;: &quot;+X&quot;, &quot;left&quot;: &quot;-X&quot;, &quot;top&quot;: &quot;+Y&quot;, &quot;bottom&quot;: &quot;-Y&quot;},
             &quot;en&quot;: {&quot;front&quot;: &quot;FRONT&quot;, &quot;back&quot;: &quot;BACK&quot;, &quot;right&quot;: &quot;RIGHT&quot;, &quot;left&quot;: &quot;LEFT&quot;, &quot;top&quot;: &quot;TOP&quot;, &quot;bottom&quot;: &quot;BOTTOM&quot;}
         };
@@ -363,13 +365,21 @@ function CubeTextureCanvas(viewer) {
     };
 
     this.getImage = function () {
-        return textureCanvas;
+        return this._textureCanvas;
+    };
+
+    this.destroy = function () {
+        if (this._textureCanvas) {
+            this._textureCanvas.parentNode.removeChild(this._textureCanvas);
+            this._textureCanvas = null;
+        }
     };
 
     this.clear();
 }
 
-export {CubeTextureCanvas};</code></pre>
+export {CubeTextureCanvas};
+</code></pre>
 
 </div>
 

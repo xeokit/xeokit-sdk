@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -216,10 +218,12 @@ class NavCubePlugin extends Plugin {
             return;
         }
 
-        var navCubeScene = new Scene({
+        this._navCubeScene = new Scene({
             canvasId: this._navCubeCanvas.id,
             transparent: true
         });
+
+        const navCubeScene = this._navCubeScene;
 
         navCubeScene.clearLights();
 
@@ -699,17 +703,37 @@ class NavCubePlugin extends Plugin {
      * Does not destroy the canvas the NavCubePlugin was configured with.
      */
     destroy() {
+
         if (this._navCubeCanvas) {
+
             this.viewer.camera.off(this._onCameraMatrix);
             this.viewer.camera.off(this._onCameraWorldAxis);
             this.viewer.camera.perspective.off(this._onCameraFOV);
             this.viewer.camera.off(this._onCameraProjection);
+
             this._navCubeCanvas.removeEventListener(&quot;mouseenter&quot;, this._onMouseEnter);
             this._navCubeCanvas.removeEventListener(&quot;mouseleave&quot;, this._onMouseLeave);
             this._navCubeCanvas.removeEventListener(&quot;mousedown&quot;, this._onMouseDown);
+
             document.removeEventListener(&quot;mousemove&quot;, this._onMouseMove);
             document.removeEventListener(&quot;mouseup&quot;, this._onMouseUp);
+
+            this._navCubeCanvas = null;
+            this._cubeTextureCanvas.destroy();
+            this._cubeTextureCanvas = null;
+
+            this._onMouseEnter = null;
+            this._onMouseLeave = null;
+            this._onMouseDown = null;
+            this._onMouseMove = null;
+            this._onMouseUp = null;
         }
+
+        this._navCubeScene.destroy();
+        this._navCubeScene = null;
+        this._cubeMesh = null;
+        this._shadow = null;
+
         super.destroy();
     }
 }

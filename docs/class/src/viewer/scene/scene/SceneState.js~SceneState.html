@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -532,6 +534,64 @@
         
         
         <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> to state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-restoreCamera">restoreCamera</a></span></span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to its state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-restoreObjects">restoreObjects</a></span></span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>&apos;s to their state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
 </div>
       </div>
     </td>
@@ -1121,6 +1181,128 @@
   
   
   <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> to state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">scene</td>
+      <td data-ice="type" class="code"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The scene.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-restoreCamera">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">restoreCamera</span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/SceneState.js.html#lineNumber129">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to its state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">scene</td>
+      <td data-ice="type" class="code"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The scene.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-restoreObjects">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">restoreObjects</span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/SceneState.js.html#lineNumber192">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Restores a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>&apos;s to their state previously captured with <span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html#instance-method-save">SceneState#save</a></span>.</p>
 </div>
 
   

@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -165,7 +167,7 @@ class GLTFQualityLoader {
         options = options || {};
         var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, &quot;&quot;, options, modelNode, function () {
+        parseGLTF(gltf, &quot;&quot;, options, plugin, modelNode, function () {
                 spinner.processes--;
                 modelNode.scene.fire(&quot;modelLoaded&quot;, modelNode.id); // FIXME: Assumes listeners know order of these two events
                 modelNode.fire(&quot;loaded&quot;, true, true);
@@ -189,7 +191,7 @@ var loadGLTF = (function () {
     return function (plugin, modelNode, src, options, ok, error) {
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, modelNode, ok, error);
+                parseGLTF(plugin, json, src, options, modelNode, ok, error);
             },
             error);
     };
@@ -221,7 +223,7 @@ var parseGLTF = (function () {
         &apos;MAT4&apos;: 16
     };
 
-    return function (json, src, options, plugin, modelNode, ok) {
+    return function (plugin, json, src, options, modelNode, ok) {
         modelNode.clear();
         var ctx = {
             src: src,
@@ -1037,7 +1039,8 @@ var parseGLTF = (function () {
     }
 })();
 
-export {GLTFQualityLoader}</code></pre>
+export {GLTFQualityLoader}
+</code></pre>
 
 </div>
 

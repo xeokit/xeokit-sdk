@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -732,6 +734,99 @@
 </div>
     </div>
 <div data-ice="dirSummaryWrap">
+      <h2 data-ice="dirPath" id="plugins-xktloaderplugin">plugins/XKTLoaderPlugin</h2>
+      <div data-ice="dirSummary"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Default data access strategy for <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          <span data-ice="kind-icon" class="kind-class">C</span>
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from xeokit&apos;s optimized <em><code>.xkt</code></em> format.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter">Run this example</a>]</p>
+<h2 id="overview">Overview</h2><ul>
+<li>XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.</li>
+<li>An <em><code>.xkt</code></em> file is a single BLOB containing a model, compressed using geometry quantization
+and <a href="https://nodeca.github.io/pako/">pako</a>.</li>
+<li>Set the position, scale and rotation of each model as you load it.</li>
+<li>Filter which IFC types get loaded.</li>
+<li>Configure initial default appearances for IFC types.</li>
+<li>Set a custom data source for <em><code>.xkt</code></em> and IFC metadata files.</li>
+<li>Does not support textures or physically-based materials.</li>
+</ul>
+<h2 id="creating--em--code--xkt--code---em--files">Creating <em><code>.xkt</code></em> files</h2><p>Use the node.js-based <a href="https://github.com/xeokit/xeokit-gltf-to-xkt">xeokit-gltf-to-xkt</a> tool to convert your <code>glTF</code> IFC files to <em><code>.xkt</code></em> format.</p>
+<h2 id="scene-representation">Scene representation</h2><p>When loading a model, XKTLoaderPlugin creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents the model, which
+will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span>
+in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>. The XKTLoaderPlugin also creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the
+model. Those Entities will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered
+by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</p>
+<h2 id="metadata">Metadata</h2><p>XKTLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> corresponding
+to the model <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> and a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> corresponding to each object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
+<p>Each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span> has a <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span>, which indicates the classification of its corresponding <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. When loading
+metadata, we can also configure XKTLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. By default, XKTLoaderPlugin
+uses its own map of default colors and visibilities for IFC element types.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll load the Schependomlaan model from a <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>, along
+with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+    </div>
+<div data-ice="dirSummaryWrap">
       <h2 data-ice="dirPath" id="plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</h2>
       <div data-ice="dirSummary"><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">summary</td></tr></thead>
@@ -1156,11 +1251,12 @@ highlighted, xrayed, culled, picked, clipped and bounded.</p>
       <div>
         
         
-        <div data-ice="description"><p>Jumps or flies the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to look at a given target.</p>
+        <div data-ice="description"><p>Jumps or flies the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to a given target.</p>
 <ul>
 <li>Located at <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-cameraFlight">Viewer#cameraFlight</a></span></li>
 <li>Can fly or jump to its target.</li>
 <li>While flying, can be stopped, or redirected to a different target.</li>
+<li>Can also smoothly transition between ortho and perspective projections.</li>
 </ul>
 <p>A CameraFlightAnimation&apos;s target can be:</p>
 </div>
@@ -2876,6 +2972,7 @@ connected into a scene graph using <span><a href="class/src/viewer/scene/nodes/N
 <div style="padding-left: 1em"><a href="#plugins-stlloaderplugin">STLLoaderPlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-sectionplanesplugin">SectionPlanesPlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-skyboxesplugin">SkyboxesPlugin</a></div>
+<div style="padding-left: 1em"><a href="#plugins-xktloaderplugin">XKTLoaderPlugin</a></div>
 <div style="padding-left: 1em"><a href="#plugins-xml3dloaderplugin">XML3DLoaderPlugin</a></div>
 <div style="padding-left: 0em"><a href="#viewer">viewer</a></div>
 <div style="padding-left: 1em"><a href="#viewer-metadata">metadata</a></div>

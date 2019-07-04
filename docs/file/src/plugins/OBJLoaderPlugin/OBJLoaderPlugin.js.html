@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -186,7 +188,7 @@ class OBJLoaderPlugin extends Plugin {
      * @constructor
      *
      * @param {Viewer} viewer The Viewer.
-     * @param {Object} cfg  Plugin configuration.
+     * @param {Object} cfg Plugin configuration.
      * @param {String} [cfg.id=&quot;OBJLoader&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      */
     constructor(viewer, cfg) {
@@ -196,7 +198,7 @@ class OBJLoaderPlugin extends Plugin {
         /**
          * @private
          */
-        this._loader = new OBJLoader(cfg);
+        this._loader = new OBJLoader();
     }
 
     /**
@@ -214,8 +216,6 @@ class OBJLoaderPlugin extends Plugin {
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
-
-        const self = this;
 
         if (params.id &amp;&amp; this.viewer.scene.components[params.id]) {
             this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);
@@ -236,12 +236,14 @@ class OBJLoaderPlugin extends Plugin {
 
         if (params.metaModelSrc) {
             const metaModelSrc = params.metaModelSrc;
-            utils.loadJSON(metaModelSrc, function (modelMetadata) {
-                self.viewer.metaScene.createMetaModel(modelId, modelMetadata);
-                self._loader.load(modelNode, src, params);
-            }, function (errMsg) {
-                self.error(`load(): Failed to load model modelMetadata for model &apos;${modelId} from  &apos;${metaModelSrc}&apos; - ${errMsg}`);
-            });
+            utils.loadJSON(metaModelSrc,
+                (modelMetadata) =&gt; {
+                    this.viewer.metaScene.createMetaModel(modelId, modelMetadata);
+                    this._loader.load(modelNode, src, params);
+                },
+                (errMsg) =&gt; {
+                    this.error(`load(): Failed to load model modelMetadata for model &apos;${modelId} from  &apos;${metaModelSrc}&apos; - ${errMsg}`);
+                });
         } else {
             this._loader.load(modelNode, src, params);
         }
@@ -251,6 +253,13 @@ class OBJLoaderPlugin extends Plugin {
         });
 
         return modelNode;
+    }
+
+    /**
+     * Destroys this OBJLoaderPlugin.
+     */
+    destroy() {
+        super.destroy();
     }
 }
 

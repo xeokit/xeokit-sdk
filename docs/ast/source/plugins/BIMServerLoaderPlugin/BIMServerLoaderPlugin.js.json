@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 17894,
+  "end": 18001,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 409,
+      "line": 416,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 17894,
+    "end": 18001,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 409,
+        "line": 416,
         "column": 0
       }
     },
@@ -565,14 +565,14 @@
       {
         "type": "Identifier",
         "start": 5541,
-        "end": 17861,
+        "end": 17968,
         "loc": {
           "start": {
             "line": 116,
             "column": 0
           },
           "end": {
-            "line": 406,
+            "line": 413,
             "column": 1
           }
         },
@@ -614,14 +614,14 @@
         "body": {
           "type": "ClassBody",
           "start": 5584,
-          "end": 17861,
+          "end": 17968,
           "loc": {
             "start": {
               "line": 116,
               "column": 43
             },
             "end": {
-              "line": 406,
+              "line": 413,
               "column": 1
             }
           },
@@ -15829,7 +15829,8 @@
                     }
                   }
                 ],
-                "directives": []
+                "directives": [],
+                "trailingComments": null
               },
               "leadingComments": [
                 {
@@ -15848,6 +15849,180 @@
                     }
                   }
                 }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+                  "start": 17864,
+                  "end": 17919,
+                  "loc": {
+                    "start": {
+                      "line": 407,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 409,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 17924,
+              "end": 17966,
+              "loc": {
+                "start": {
+                  "line": 410,
+                  "column": 4
+                },
+                "end": {
+                  "line": 412,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 17924,
+                "end": 17931,
+                "loc": {
+                  "start": {
+                    "line": 410,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 410,
+                    "column": 11
+                  },
+                  "identifierName": "destroy"
+                },
+                "name": "destroy",
+                "leadingComments": null
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 17934,
+                "end": 17966,
+                "loc": {
+                  "start": {
+                    "line": 410,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 412,
+                    "column": 5
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 17944,
+                    "end": 17960,
+                    "loc": {
+                      "start": {
+                        "line": 411,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 411,
+                        "column": 24
+                      }
+                    },
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 17944,
+                      "end": 17959,
+                      "loc": {
+                        "start": {
+                          "line": 411,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 411,
+                          "column": 23
+                        }
+                      },
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start": 17944,
+                        "end": 17957,
+                        "loc": {
+                          "start": {
+                            "line": 411,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 411,
+                            "column": 21
+                          }
+                        },
+                        "object": {
+                          "type": "Super",
+                          "start": 17944,
+                          "end": 17949,
+                          "loc": {
+                            "start": {
+                              "line": 411,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 411,
+                              "column": 13
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 17950,
+                          "end": 17957,
+                          "loc": {
+                            "start": {
+                              "line": 411,
+                              "column": 14
+                            },
+                            "end": {
+                              "line": 411,
+                              "column": 21
+                            },
+                            "identifierName": "destroy"
+                          },
+                          "name": "destroy"
+                        },
+                        "computed": false
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+                  "start": 17864,
+                  "end": 17919,
+                  "loc": {
+                    "start": {
+                      "line": 407,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 409,
+                      "column": 7
+                    }
+                  }
+                }
               ]
             }
           ]
@@ -15858,15 +16033,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 17863,
-        "end": 17893,
+        "start": 17970,
+        "end": 18000,
         "loc": {
           "start": {
-            "line": 408,
+            "line": 415,
             "column": 0
           },
           "end": {
-            "line": 408,
+            "line": 415,
             "column": 30
           }
         },
@@ -15874,29 +16049,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 17871,
-            "end": 17892,
+            "start": 17978,
+            "end": 17999,
             "loc": {
               "start": {
-                "line": 408,
+                "line": 415,
                 "column": 8
               },
               "end": {
-                "line": 408,
+                "line": 415,
                 "column": 29
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 17871,
-              "end": 17892,
+              "start": 17978,
+              "end": 17999,
               "loc": {
                 "start": {
-                  "line": 408,
+                  "line": 415,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 415,
                   "column": 29
                 },
                 "identifierName": "BIMServerLoaderPlugin"
@@ -15905,15 +16080,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 17871,
-              "end": 17892,
+              "start": 17978,
+              "end": 17999,
               "loc": {
                 "start": {
-                  "line": 408,
+                  "line": 415,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 415,
                   "column": 29
                 },
                 "identifierName": "BIMServerLoaderPlugin"
@@ -15926,29 +16101,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 17863,
-        "end": 17893,
+        "start": 17970,
+        "end": 18000,
         "loc": {
           "start": {
-            "line": 408,
+            "line": 415,
             "column": 0
           },
           "end": {
-            "line": 408,
+            "line": 415,
             "column": 30
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 5541,
-          "end": 17861,
+          "end": 17968,
           "loc": {
             "start": {
               "line": 116,
               "column": 0
             },
             "end": {
-              "line": 406,
+              "line": 413,
               "column": 1
             }
           },
@@ -15990,14 +16165,14 @@
           "body": {
             "type": "ClassBody",
             "start": 5584,
-            "end": 17861,
+            "end": 17968,
             "loc": {
               "start": {
                 "line": 116,
                 "column": 43
               },
               "end": {
-                "line": 406,
+                "line": 413,
                 "column": 1
               }
             },
@@ -31205,7 +31380,8 @@
                       }
                     }
                   ],
-                  "directives": []
+                  "directives": [],
+                  "trailingComments": null
                 },
                 "leadingComments": [
                   {
@@ -31220,6 +31396,180 @@
                       },
                       "end": {
                         "line": 201,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+                    "start": 17864,
+                    "end": 17919,
+                    "loc": {
+                      "start": {
+                        "line": 407,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 409,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 17924,
+                "end": 17966,
+                "loc": {
+                  "start": {
+                    "line": 410,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 412,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 17924,
+                  "end": 17931,
+                  "loc": {
+                    "start": {
+                      "line": 410,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 410,
+                      "column": 11
+                    },
+                    "identifierName": "destroy"
+                  },
+                  "name": "destroy",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 17934,
+                  "end": 17966,
+                  "loc": {
+                    "start": {
+                      "line": 410,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 412,
+                      "column": 5
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 17944,
+                      "end": 17960,
+                      "loc": {
+                        "start": {
+                          "line": 411,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 411,
+                          "column": 24
+                        }
+                      },
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 17944,
+                        "end": 17959,
+                        "loc": {
+                          "start": {
+                            "line": 411,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 411,
+                            "column": 23
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 17944,
+                          "end": 17957,
+                          "loc": {
+                            "start": {
+                              "line": 411,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 411,
+                              "column": 21
+                            }
+                          },
+                          "object": {
+                            "type": "Super",
+                            "start": 17944,
+                            "end": 17949,
+                            "loc": {
+                              "start": {
+                                "line": 411,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 411,
+                                "column": 13
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 17950,
+                            "end": 17957,
+                            "loc": {
+                              "start": {
+                                "line": 411,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 411,
+                                "column": 21
+                              },
+                              "identifierName": "destroy"
+                            },
+                            "name": "destroy"
+                          },
+                          "computed": false
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+                    "start": 17864,
+                    "end": 17919,
+                    "loc": {
+                      "start": {
+                        "line": 407,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 409,
                         "column": 7
                       }
                     }
@@ -31510,6 +31860,22 @@
         "end": {
           "line": 394,
           "column": 69
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+      "start": 17864,
+      "end": 17919,
+      "loc": {
+        "start": {
+          "line": 407,
+          "column": 4
+        },
+        "end": {
+          "line": 409,
+          "column": 7
         }
       }
     }
@@ -63869,6 +64235,253 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this BIMServerLoaderPlugin.\n     ",
+      "start": 17864,
+      "end": 17919,
+      "loc": {
+        "start": {
+          "line": 407,
+          "column": 4
+        },
+        "end": {
+          "line": 409,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "destroy",
+      "start": 17924,
+      "end": 17931,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 4
+        },
+        "end": {
+          "line": 410,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17931,
+      "end": 17932,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 11
+        },
+        "end": {
+          "line": 410,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17932,
+      "end": 17933,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 12
+        },
+        "end": {
+          "line": 410,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17934,
+      "end": 17935,
+      "loc": {
+        "start": {
+          "line": 410,
+          "column": 14
+        },
+        "end": {
+          "line": 410,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "super",
+        "keyword": "super",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "super",
+      "start": 17944,
+      "end": 17949,
+      "loc": {
+        "start": {
+          "line": 411,
+          "column": 8
+        },
+        "end": {
+          "line": 411,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 17949,
+      "end": 17950,
+      "loc": {
+        "start": {
+          "line": 411,
+          "column": 13
+        },
+        "end": {
+          "line": 411,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "destroy",
+      "start": 17950,
+      "end": 17957,
+      "loc": {
+        "start": {
+          "line": 411,
+          "column": 14
+        },
+        "end": {
+          "line": 411,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17957,
+      "end": 17958,
+      "loc": {
+        "start": {
+          "line": 411,
+          "column": 21
+        },
+        "end": {
+          "line": 411,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17958,
+      "end": 17959,
+      "loc": {
+        "start": {
+          "line": 411,
+          "column": 22
+        },
+        "end": {
+          "line": 411,
+          "column": 23
+        }
+      }
+    },
+    {
       "type": {
         "label": ";",
         "beforeExpr": true,
@@ -63881,16 +64494,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 17858,
-      "end": 17859,
+      "start": 17959,
+      "end": 17960,
       "loc": {
         "start": {
-          "line": 405,
-          "column": 5
+          "line": 411,
+          "column": 23
         },
         "end": {
-          "line": 405,
-          "column": 6
+          "line": 411,
+          "column": 24
         }
       }
     },
@@ -63906,15 +64519,40 @@
         "postfix": false,
         "binop": null
       },
-      "start": 17860,
-      "end": 17861,
+      "start": 17965,
+      "end": 17966,
       "loc": {
         "start": {
-          "line": 406,
+          "line": 412,
+          "column": 4
+        },
+        "end": {
+          "line": 412,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 17967,
+      "end": 17968,
+      "loc": {
+        "start": {
+          "line": 413,
           "column": 0
         },
         "end": {
-          "line": 406,
+          "line": 413,
           "column": 1
         }
       }
@@ -63934,15 +64572,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 17863,
-      "end": 17869,
+      "start": 17970,
+      "end": 17976,
       "loc": {
         "start": {
-          "line": 408,
+          "line": 415,
           "column": 0
         },
         "end": {
-          "line": 408,
+          "line": 415,
           "column": 6
         }
       }
@@ -63959,15 +64597,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 17870,
-      "end": 17871,
+      "start": 17977,
+      "end": 17978,
       "loc": {
         "start": {
-          "line": 408,
+          "line": 415,
           "column": 7
         },
         "end": {
-          "line": 408,
+          "line": 415,
           "column": 8
         }
       }
@@ -63985,15 +64623,15 @@
         "binop": null
       },
       "value": "BIMServerLoaderPlugin",
-      "start": 17871,
-      "end": 17892,
+      "start": 17978,
+      "end": 17999,
       "loc": {
         "start": {
-          "line": 408,
+          "line": 415,
           "column": 8
         },
         "end": {
-          "line": 408,
+          "line": 415,
           "column": 29
         }
       }
@@ -64010,15 +64648,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 17892,
-      "end": 17893,
+      "start": 17999,
+      "end": 18000,
       "loc": {
         "start": {
-          "line": 408,
+          "line": 415,
           "column": 29
         },
         "end": {
-          "line": 408,
+          "line": 415,
           "column": 30
         }
       }
@@ -64036,15 +64674,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 17894,
-      "end": 17894,
+      "start": 18001,
+      "end": 18001,
       "loc": {
         "start": {
-          "line": 409,
+          "line": 416,
           "column": 0
         },
         "end": {
-          "line": 409,
+          "line": 416,
           "column": 0
         }
       }

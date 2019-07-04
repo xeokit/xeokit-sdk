@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -187,6 +189,17 @@ function decompressPosition(position, decodeMatrix, dest) {
     dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
     dest[2] = position[2] * decodeMatrix[10] + decodeMatrix[14];
+    return dest;
+}
+
+function decompressAABB(aabb, decodeMatrix, dest=aabb) {
+    dest[0] = aabb[0] * decodeMatrix[0] + decodeMatrix[12];
+    dest[1] = aabb[1] * decodeMatrix[5] + decodeMatrix[13];
+    dest[2] = aabb[2] * decodeMatrix[10] + decodeMatrix[14];
+    dest[3] = aabb[3] * decodeMatrix[0] + decodeMatrix[12];
+    dest[4] = aabb[4] * decodeMatrix[5] + decodeMatrix[13];
+    dest[5] = aabb[5] * decodeMatrix[10] + decodeMatrix[14];
+    return dest;
 }
 
 /**
@@ -424,6 +437,7 @@ const geometryCompressionUtils = {
     compressPositions: compressPositions,
     decompressPositions: decompressPositions,
     decompressPosition: decompressPosition,
+    decompressAABB: decompressAABB,
 
     getUVBounds: getUVBounds,
     compressUVs: compressUVs,

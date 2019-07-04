@@ -46,6 +46,8 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -116,13 +118,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber40">xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PerformanceModel} from &apos;<span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber41">xeokit-sdk/src/viewer/scene/PerformanceModel/PerformanceModel.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber40">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber41">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -2188,7 +2190,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,6 +2356,16 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
       <td data-ice="description"><p>PerformanceModel&apos;s initial opacity factor, multiplies by the rendered fragment alpha.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.preCompressed</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When this is <code>true</code>, <code>positions</code> are assumed to be
+quantized and in World-space, and <code>normals</code> are also assumed to be oct-encoded and in World-space. When <code>true</code>, <span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-method-createMesh">PerformanceModel#createMesh</a></span>
+will ignore <code>matrix</code>, <code>position</code>, <code>scale</code> and <code>rotation</code> parameters.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -2391,7 +2403,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber689">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber737">source</a></span></span>
     </span>
   </h3>
 
@@ -2437,7 +2449,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber968">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1016">source</a></span></span>
     </span>
   </h3>
 
@@ -2481,7 +2493,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber976">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1024">source</a></span></span>
     </span>
   </h3>
 
@@ -2525,7 +2537,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber859">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber907">source</a></span></span>
     </span>
   </h3>
 
@@ -2570,7 +2582,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber843">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber891">source</a></span></span>
     </span>
   </h3>
 
@@ -2615,7 +2627,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber868">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber916">source</a></span></span>
     </span>
   </h3>
 
@@ -2659,7 +2671,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber881">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber929">source</a></span></span>
     </span>
   </h3>
 
@@ -2703,7 +2715,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber934">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber982">source</a></span></span>
     </span>
   </h3>
 
@@ -2748,7 +2760,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber920">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber968">source</a></span></span>
     </span>
   </h3>
 
@@ -2794,7 +2806,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber832">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber880">source</a></span></span>
     </span>
   </h3>
 
@@ -2839,7 +2851,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber867">source</a></span></span>
     </span>
   </h3>
 
@@ -2884,7 +2896,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1197">source</a></span></span>
     </span>
   </h3>
 
@@ -2929,7 +2941,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber808">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber856">source</a></span></span>
     </span>
   </h3>
 
@@ -2973,7 +2985,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber794">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber842">source</a></span></span>
     </span>
   </h3>
 
@@ -3017,7 +3029,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1175">source</a></span></span>
     </span>
   </h3>
 
@@ -3062,7 +3074,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber762">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber810">source</a></span></span>
     </span>
   </h3>
 
@@ -3106,7 +3118,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber748">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber796">source</a></span></span>
     </span>
   </h3>
 
@@ -3150,7 +3162,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1006">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1054">source</a></span></span>
     </span>
   </h3>
 
@@ -3194,7 +3206,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber704">source</a></span></span>
     </span>
   </h3>
 
@@ -3238,7 +3250,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber668">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber716">source</a></span></span>
     </span>
   </h3>
 
@@ -3284,7 +3296,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber677">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber725">source</a></span></span>
     </span>
   </h3>
 
@@ -3328,7 +3340,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber170">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber182">source</a></span></span>
     </span>
   </h3>
 
@@ -3372,7 +3384,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -3417,7 +3429,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber945">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber993">source</a></span></span>
     </span>
   </h3>
 
@@ -3462,7 +3474,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber959">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1007">source</a></span></span>
     </span>
   </h3>
 
@@ -3507,7 +3519,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber892">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber940">source</a></span></span>
     </span>
   </h3>
 
@@ -3552,7 +3564,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber907">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber955">source</a></span></span>
     </span>
   </h3>
 
@@ -3597,7 +3609,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber193">source</a></span></span>
     </span>
   </h3>
 
@@ -3642,7 +3654,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber215">source</a></span></span>
     </span>
   </h3>
 
@@ -3687,7 +3699,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber993">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1041">source</a></span></span>
     </span>
   </h3>
 
@@ -3731,7 +3743,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber985">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1033">source</a></span></span>
     </span>
   </h3>
 
@@ -3775,7 +3787,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber204">source</a></span></span>
     </span>
   </h3>
 
@@ -3820,7 +3832,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber226">source</a></span></span>
     </span>
   </h3>
 
@@ -3865,7 +3877,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber833">source</a></span></span>
     </span>
   </h3>
 
@@ -3909,7 +3921,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber771">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber819">source</a></span></span>
     </span>
   </h3>
 
@@ -3953,7 +3965,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1186">source</a></span></span>
     </span>
   </h3>
 
@@ -3998,7 +4010,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber700">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber748">source</a></span></span>
     </span>
   </h3>
 
@@ -4044,7 +4056,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber716">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber764">source</a></span></span>
     </span>
   </h3>
 
@@ -4089,7 +4101,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -4149,7 +4161,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber256">source</a></span></span>
     </span>
   </h3>
 
@@ -4193,7 +4205,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1116">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1164">source</a></span></span>
     </span>
   </h3>
 
@@ -4238,7 +4250,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber739">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber787">source</a></span></span>
     </span>
   </h3>
 
@@ -4282,7 +4294,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber725">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber773">source</a></span></span>
     </span>
   </h3>
 
@@ -4329,7 +4341,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber502">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber549">source</a></span></span>
     </span>
   </h3>
 
@@ -4512,7 +4524,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber303">source</a></span></span>
     </span>
   </h3>
 
@@ -4625,7 +4637,7 @@ axis-aligned volume, ie. <code>[xmin, ymin,zmin,xmax,ymax, zmax]</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -4683,35 +4695,42 @@ geometr data arrays to create a unique geometry belong to the mesh.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: &quot;triangles&quot;</li></ul></td>
-      <td data-ice="description"><p>Geometry primitive type. Ignored when geometryId is given. Accepted values are &apos;points&apos;, &apos;lines&apos;, &apos;line-loop&apos;, &apos;line-strip&apos;, &apos;triangles&apos;, &apos;triangle-strip&apos; and &apos;triangle-fan&apos;.</p>
+      <td data-ice="description"><p>Geometry primitive type. Ignored when <code>geometryId</code> is given. Accepted values are &apos;points&apos;, &apos;lines&apos;, &apos;line-loop&apos;, &apos;line-strip&apos;, &apos;triangles&apos;, &apos;triangle-strip&apos; and &apos;triangle-fan&apos;.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.positions</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Flat array of geometry positions. Ignored when geometryId is given.</p>
+      <td data-ice="description"><p>Flat array of geometry positions. Ignored when <code>geometryId</code> is given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.normals</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Flat array of normal vectors. Ignored when geometryId is given.</p>
+      <td data-ice="description"><p>Flat array of normal vectors. Ignored when <code>geometryId</code> is given.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.positionsDecodeMatrix</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>A 4x4 matrix for decompressing <code>positions</code>. Only used when <code>preCompressed</code> is true.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.indices</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Array of triangle indices. Ignored when geometryId is given.</p>
+      <td data-ice="description"><p>Array of triangle indices. Ignored when <code>geometryId</code> is given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.edgeIndices</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Array of edge line indices. Ignored when geometryId is given.</p>
+      <td data-ice="description"><p>Array of edge line indices. Ignored when <code>geometryId</code> is given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -4743,7 +4762,7 @@ geometr data arrays to create a unique geometry belong to the mesh.</p>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]</li></ul></td>
-      <td data-ice="description"><p>Mesh modelling transform matrix. Overrides the position, scale and rotation parameters.</p>
+      <td data-ice="description"><p>Mesh modelling transform matrix. Overrides the <code>position</code>, <code>scale</code> and <code>rotation</code> parameters.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -4808,7 +4827,7 @@ geometr data arrays to create a unique geometry belong to the mesh.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber270">source</a></span></span>
     </span>
   </h3>
 
@@ -4879,7 +4898,7 @@ tile is then finalized, then all its <span><a href="class/src/viewer/scene/Entit
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1331">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber1379">source</a></span></span>
     </span>
   </h3>
 
@@ -4923,7 +4942,7 @@ tile is then finalized, then all its <span><a href="class/src/viewer/scene/Entit
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber640">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber688">source</a></span></span>
     </span>
   </h3>
 
@@ -4970,7 +4989,7 @@ tile is then finalized, then all its <span><a href="class/src/viewer/scene/Entit
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/PerformanceModel/PerformanceModel.js.html#lineNumber642">source</a></span></span>
     </span>
   </h3>
 
