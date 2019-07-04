@@ -55,7 +55,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *
  * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -138,7 +138,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
  * objects that represent walls.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_includeTypes_PlanView)]
  *
  * ````javascript
  * const model = gltfLoader.load({
