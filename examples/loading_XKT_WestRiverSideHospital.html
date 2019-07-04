@@ -11,12 +11,25 @@
             height: 100%;
             background: lightBlue;
         }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
     </style>
 
 </head>
 
 <body>
+
 <canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
 <div id="info">
     <h1>XKTLoaderPlugin - Loading Five IFC Models from the File System</h1><br>
     <ul>
@@ -25,12 +38,14 @@
         </li>
         <li>
             Fire Alarm, Electrical, Plumbing, Sprinkler and Structure models are from the Autodesk <a target="_other"
-                                                   href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/305">West RiverSide
+                                                                                                      href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/305">West
+            RiverSide
             Hospital</a> example
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a> docs
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            docs
         </li>
         <li>
             <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Importing-Models">User Guide</a>
@@ -46,6 +61,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange camera
@@ -59,6 +75,19 @@
     viewer.camera.eye = [110.27, 172.88, -6.49];
     viewer.camera.look = [33.88, 177.99, -101.79];
     viewer.camera.up = [0.02, 0.99, 0.03];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube gizmo
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load model and fit it to view
@@ -137,7 +166,7 @@
 
                         var t1 = performance.now();
 
-                        document.getElementById("time").innerHTML = "Loaded 5 models in " + Math.floor((t1 - t0))/1000 + " seconds<br>Objects: " + numEntities + "<br>Triangles: " + numTriangles;
+                        document.getElementById("time").innerHTML = "Loaded 5 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities + "<br>Triangles: " + numTriangles;
 
                     });
                 });
