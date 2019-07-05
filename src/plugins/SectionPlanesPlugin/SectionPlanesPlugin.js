@@ -306,6 +306,10 @@ class SectionPlanesPlugin extends Plugin {
         }
         this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
+        
+        if (id === this._shownControlId) {
+            this._shownControlId = null;
+        }
     }
 
     _sectionPlaneDestroyed(sectionPlane) {
