@@ -35,9 +35,15 @@ const decompressColor = (function () {
  * * Set a custom data source for *````.xkt````* and IFC metadata files.
  * * Does not support textures or physically-based materials.
  *
+ * ## Credits
+ *
+ * XKTLoaderPlugin and the ````xeokit-gltf-to-xkt```` tool (see below) are based on prototypes
+ * by [Toni Marti](https://github.com/tmarti) at [uniZite](https://www.unizite.com/login).
+ *
  * ## Creating *````.xkt````* files
  *
- * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to convert your ````glTF```` IFC files to *````.xkt````* format.
+ * Use the node.js-based [xeokit-gltf-to-xkt](https://github.com/xeokit/xeokit-gltf-to-xkt) tool to
+ * convert your ````glTF```` IFC files to *````.xkt````* format.
  *
  * ## Scene representation
  *
