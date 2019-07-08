@@ -37,7 +37,7 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
             - Loads BIM model from the file system
         </li>
         <li>
@@ -66,7 +66,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
     import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
 
@@ -155,10 +155,10 @@
     camera.up = [0.36, 0.83, 0.40];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a GLTFModelsPlugin - we'll use this to load the model geometry and IFC metadata
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a SectionPlanesPlugin - this will visualize the cross-section planes loaded by BCFViewpointsPlugin
@@ -177,12 +177,12 @@
     const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Load the glTF model and IFC metadata
+    // Load the .xkt model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true // Emphasise edges
     });
