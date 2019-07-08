@@ -2087,7 +2087,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Number} [opacity=1.0] RGB colorize factors, multiplied by the rendered pixel colors.
+     * @param {Number} [opacity=1.0] Opacity factor, multiplied by the rendered pixel alphas.
      * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
     setObjectsOpacity(ids, opacity) {
