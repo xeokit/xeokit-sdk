@@ -216,7 +216,7 @@ class SectionPlanesPlugin extends Plugin {
      * @param {Boolean} [params.active=true] Whether the {@link SectionPlane} is initially active. Only clips while this is true.
      * @returns {SectionPlane} The new {@link SectionPlane}.
      */
-    createSectionPlane(params) {
+    createSectionPlane(params = {}) {
 
         if (params.id !== undefined && params.id !== null && this.viewer.scene.components[params.id]) {
             this.error("Viewer component with this ID already exists: " + params.id);
@@ -306,6 +306,10 @@ class SectionPlanesPlugin extends Plugin {
         }
         this._sectionPlaneDestroyed(sectionPlane);
         sectionPlane.destroy();
+        
+        if (id === this._shownControlId) {
+            this._shownControlId = null;
+        }
     }
 
     _sectionPlaneDestroyed(sectionPlane) {
