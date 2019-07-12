@@ -693,7 +693,7 @@ var parseGLTF = (function () {
         var createEntity;
 
         if (ctx.prioritizeGLTFNode) {
-            const priority = ctx.prioritizeGLTFNode(ctx.performanceModel.id, glTFNode);
+            const priority = ctx.prioritizeGLTFNode(ctx.modelNode.id, glTFNode);
             if (priority === undefined || priority === null) {
                 return;
             }
