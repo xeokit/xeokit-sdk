@@ -6,11 +6,12 @@ import {utils} from "../../viewer/scene/utils.js";
 /**
  * {@link Viewer} plugin that loads models from <a href="https://en.wikipedia.org/wiki/STL_(file_format)">STL</a> files.
  *
+ * ## Overview
+ *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
- *
- * Supports both binary and ASCII formats.
+ * * Supports both binary and ASCII formats.
  *
  * ## Smoothing STL Normals
  *
@@ -27,7 +28,7 @@ import {utils} from "../../viewer/scene/utils.js";
  *
  * ## Creating Entities for Objects
  *
- * An STL model is normally one single mesh, however providing a ````splitMeshes```` parameter when loading
+ * An STL model is normally a single mesh, however providing a ````splitMeshes```` parameter when loading
  * will create a separate object {@link Entity} for each group of faces that share the same vertex colors. This option
  * only works with binary STL files.
  *

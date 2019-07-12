@@ -1,5 +1,4 @@
 import {utils} from '../../utils.js';
-import {ReadableGeometry} from '../ReadableGeometry.js';
 
 /**
  * @desc Creates a plane-shaped {@link Geometry}.

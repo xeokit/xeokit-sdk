@@ -1,6 +1,5 @@
 import {Canvas2Image} from "../libs/canvas2image.js";
 import {core} from "../core.js";
-import {utils} from '../utils.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
 import {Component} from '../Component.js';
@@ -244,7 +243,8 @@ class Canvas extends Component {
         };
 
         this._spinner = new Spinner(this.scene, {
-            canvas: this.canvas
+            canvas: this.canvas,
+            elementId: cfg.spinnerElementId
         });
 
         this.clearColorAmbient = cfg.clearColorAmbient;
@@ -294,21 +294,9 @@ class Canvas extends Component {
      * Initialises the WebGL context
      * @private
      */
-    _initWebGL(cfg) {
+    _initWebGL() {
 
         // Default context attribute values
-
-        if (false && cfg.webgl2) {
-            try {
-                this.gl = this.canvas.getContext("webgl2", this.contextAttr);
-            } catch (e) { // Try with next context name
-            }
-            if (!this.gl) {
-                this.warn('Failed to get a WebGL 2 context - defaulting to WebGL 1.');
-            } else {
-                this.webgl2 = true;
-            }
-        }
 
         if (!this.gl) {
             for (let i = 0; !this.gl && i < WEBGL_CONTEXT_NAMES.length; i++) {
@@ -372,61 +360,20 @@ class Canvas extends Component {
     }
 
     /**
-     * Returns a snapshot of this Canvas as a Base64-encoded image.
-     *
-     * When a callback is given, this method will capture the snapshot asynchronously, on the next animation frame,
-     * and return it via the callback.
-     *
-     * When no callback is given, this method captures and returns the snapshot immediately. Note that is only
-     * possible when you have configured the Canvas's {@link Scene} to preserve the
-     * WebGL drawing buffer, which has a performance overhead.
-     *
-     * #### Usage:
-     *
-     * ````javascript
-     * // Get snapshot asynchronously
-     * viewer.scene.canvas.getSnapshot({
-     *         width: 500, // Defaults to size of canvas
-     *         height: 500,
-     *         format: "png" // Options are "jpeg" (default), "png" and "bmp"
-     *     }, function(imageDataURL) {
-     *         imageElement.src = imageDataURL;
-     *     });
-     *
-     * // Get snapshot synchronously, requires that Scene be
-     * // configured with preserveDrawingBuffer; true
-     * imageElement.src = viewer.scene.canvas.getSnapshot({
-     *         width: 500,
-     *         height: 500,
-     *         format: "png"
-     *     });
-     * ````
-     * @param {*} [params] Capture options.
-     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
-     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
-     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
-     * @param {Function} [ok] Callback to return the image data when taking a snapshot asynchronously.
-     * @returns {String} String-encoded image data when taking the snapshot synchronously. Returns null when the ````ok```` callback is given.
+     * @private
+     * @deprecated
      */
-    getSnapshot(params, ok) {
-
-        if (!this.canvas) {
-            this.error("Can't get snapshot - no canvas.");
-            ok(null);
-            return;
-        }
-
-        if (ok) { // Asynchronous
-            const self = this;
-            requestAnimationFrame(function () {
-                self.scene.render(true); // Force-render a frame
-                ok(self._getSnapshot(params));
-            });
-        } else {
-            return this._getSnapshot(params);
-        }
+    getSnapshot(params) {
+        throw "Canvas#getSnapshot() has been replaced by Viewer#getSnapshot() - use that method instead.";
     }
 
+    /**
+     * Called by Viewer#getSnapshot
+     * @private
+     * @param params
+     * @returns {*}
+     * @private
+     */
     _getSnapshot(params) {
         params = params || {};
         const width = params.width || this.canvas.width;
@@ -435,7 +382,7 @@ class Canvas extends Component {
         let image;
         switch (format) {
             case "jpeg":
-                image = Canvas2Image.saveAsJPEG(this.canvas, false, width, height);
+                image = Canvas2Image.saveAsJPEG(this.canvas, true, width, height);
                 break;
             case "png":
                 image = Canvas2Image.saveAsPNG(this.canvas, true, width, height);

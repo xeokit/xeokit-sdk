@@ -17,10 +17,12 @@
             position: absolute;
             width: 250px;
             height: 250px;
-            bottom: 50px;
+            bottom: 70px;
             right: 10px;
             z-index: 200000;
+            /*border: 1px solid blue;*/
         }
+
     </style>
 
 </head>
@@ -39,7 +41,7 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
             - Loads model from file system
         </li>
         <li>
@@ -62,7 +64,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {SectionPlanesPlugin} from "../src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -82,10 +84,10 @@
     viewer.camera.zoom(5);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a GLTFModelsPlugin - we'll use this to load the model geometry
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
     //------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
@@ -97,12 +99,12 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Load the glTF model and IFC metadata
+    // Load the .xkt model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/duplex/scene.gltf",
+        src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });

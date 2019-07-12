@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Minimal BIM Viewer for glTF Models</title>
+    <title>Minimal BIM Viewer for .xkt Models</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -22,7 +22,7 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
             - Loads model and IFC data from file system
         </li>
         <li>
@@ -42,7 +42,7 @@
 
 <script type="module">
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -52,11 +52,11 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/duplex/scene.gltf",
+        src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
         edges: true
     });

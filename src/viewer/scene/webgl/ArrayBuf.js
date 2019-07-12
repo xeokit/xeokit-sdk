@@ -82,7 +82,7 @@ class ArrayBuf {
         }
         if (data.length + (offset || 0) > this.length) {            // Needs reallocation
             this.destroy();
-            this._allocate(data, data.length);
+            this._allocate(data);
         } else {            // No reallocation needed
             this._gl.bindBuffer(this.type, this._handle);
             if (offset || offset === 0) {

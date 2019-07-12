@@ -53,7 +53,7 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
             - Loads model and IFC data from file system
         </li>
         <li>
@@ -76,7 +76,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {PlanViewsPlugin} from "../src/plugins/PlanViewsPlugin/PlanViewsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -96,11 +96,11 @@
     // Load a model and fit it to view
     //----------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });

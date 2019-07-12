@@ -9,10 +9,7 @@ import {MetaScene} from "./metadata/MetaScene.js";
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
  * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
- * Viewer's {@link Scene}. Load and unload metadata using {@link Viewer#createMetadata}
- * and {@link Viewer#destroyMetadata}.
- * * Save and load the state of a Viewer as JSON with {@link Viewer#getBookmark} and {@link Viewer#setBookmark}. Installed
- * {@link Plugin} instances will also save and load their state to and from the JSON.
+ * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
  * {@link Camera} to target positions, boundaries or {@link Node}s.
  *
@@ -24,13 +21,12 @@ class Viewer {
      * @constructor
      * @param {Object} cfg  Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
-     * @param {String} [cfg.canvasId]  ID of existing HTML5 canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
+     * @param {String} [cfg.canvasId]  ID of existing HTML canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
+     * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
-     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for canvas snapshots to work.
+     * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
-     * @param {Number[]} [cfg.backgroundColor]  RGBA color for canvas background, when canvas is not transparent. Overridden by backgroundImage.
-     * @param {String} [cfg.backgroundImage]  URL of an image to show as the canvas background, when canvas is not transparent. Overrides backgroundImage.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
@@ -57,10 +53,13 @@ class Viewer {
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false
             },
+            spinnerElementId: cfg.spinnerElementId,
             transparent: cfg.transparent !== false,
             gammaInput: true,
             gammaOutput: true,
-            clearColorAmbient: cfg.clearColorAmbient
+            clearColorAmbient: cfg.clearColorAmbient,
+            ticksPerRender: 1,
+            ticksPerOcclusionTest: 20 /// TODO Change to 20
         });
 
         /**
@@ -165,7 +164,7 @@ class Viewer {
      * @param {String} msg The message
      */
     log(msg) {
-        console.log(`[xeoviewer viewer ${this.id}]: ${msg}`);
+        console.log(`[xeokit viewer ${this.id}]: ${msg}`);
     }
 
     /**
@@ -174,7 +173,7 @@ class Viewer {
      * @param {String} msg The error message
      */
     error(msg) {
-        console.error(`[xeoviewer viewer ${this.id}]: ${msg}`);
+        console.error(`[xeokit viewer ${this.id}]: ${msg}`);
     }
 
     /**
@@ -250,40 +249,41 @@ class Viewer {
         // this.hide("DEFAULT");
     }
 
-    getSnapshot(params = {}, ok) {
-        return this.scene.canvas.getSnapshot({
-            width: params.width, // Defaults to size of canvas
-            height: params.height,
-            format: params.format || "png" // Options are "jpeg" (default), "png" and "bmp"
-        }, ok);
+    /**
+     * Returns a snapshot of this Viewer's canvas as a Base64-encoded image.
+     *
+     * #### Usage:
+     *
+     * ````javascript
+     * const imageData = viewer.getSnapshot({
+     *    width: 500,
+     *    height: 500,
+     *    format: "png"
+     * });
+     * ````
+     * @param {*} [params] Capture options.
+     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @returns {String} String-encoded image data.
+     */
+    getSnapshot(params = {}) {
+        this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        this.scene.render(); // Renders without the hidden things
+        const imageData = this.scene.canvas._getSnapshot(params);
+        this.sendToPlugins("snapshotFinished");
+        return imageData;
     }
 
     /** Destroys this Viewer.
-     *
      */
     destroy() {
+        for (let id in this.plugins) {
+            if (this.plugins.hasOwnProperty(id)) {
+                this.plugins[id].destroy();
+            }
+        }
         this.scene.destroy();
-    }
-}
-
-function getPosition(object) {
-    const position = object.position;
-    if (position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
-        return vecToArray(position);
-    }
-}
-
-function getScale(object) {
-    const scale = object.scale;
-    if (scale[0] !== 1 || scale[1] !== 1 || scale[2] !== 1) {
-        return vecToArray(scale);
-    }
-}
-
-function getRotation(object) {
-    const rotation = object.rotation;
-    if (rotation[0] !== 0 || rotation[1] !== 0 || rotation[2] !== 0) {
-        return vecToArray(rotation);
     }
 }
 

@@ -1,8 +1,6 @@
 import {Component} from '../Component.js';
 
-let spinnerCSSInjected = false; // Ensures lazy-injected CSS only injected once
-
-const spinnerCSS = ".sk-fading-circle {\
+const defaultCSS = ".sk-fading-circle {\
         background: transparent;\
         margin: 20px auto;\
         width: 50px;\
@@ -175,14 +173,37 @@ class Spinner extends Component {
      @private
      */
     constructor(owner, cfg = {}) {
+
         super(owner, cfg);
+
         this._canvas = cfg.canvas;
-        this._injectSpinnerCSS();
-        const div = document.createElement('div');
-        const style = div.style;
+        this._element = null;
+        this._isCustom = false; // True when the element is custom HTML
+
+        if (cfg.elementId) { // Custom spinner element supplied
+            this._element = document.getElementById(cfg.elementId);
+            if (!this._element) {
+                this.error("Can't find given Spinner HTML element: '" + cfg.elementId + "' - will automatically create default element");
+            } else {
+                this._adjustPosition();
+            }
+        }
+
+        if (!this._element) {
+            this._createDefaultSpinner();
+        }
+
+        this.processes = 0;
+    }
+
+    /** @private */
+    _createDefaultSpinner() {
+        this._injectDefaultCSS();
+        const element = document.createElement('div');
+        const style = element.style;
         style["z-index"] = "9000";
         style.position = "absolute";
-        div.innerHTML = '<div class="sk-fading-circle">\
+        element.innerHTML = '<div class="sk-fading-circle">\
                 <div class="sk-circle1 sk-circle"></div>\
                 <div class="sk-circle2 sk-circle"></div>\
                 <div class="sk-circle3 sk-circle"></div>\
@@ -196,10 +217,38 @@ class Spinner extends Component {
                 <div class="sk-circle11 sk-circle"></div>\
                 <div class="sk-circle12 sk-circle"></div>\
                 </div>';
-        this._canvas.parentElement.appendChild(div);
-        this._element = div;
+        this._canvas.parentElement.appendChild(element);
+        this._element = element;
+        this._isCustom = false;
         this._adjustPosition();
-        this.processes = 0;
+    }
+
+    /**
+     * @private
+     */
+    _injectDefaultCSS() {
+        const elementId = "xeokit-spinner-css";
+        if (document.getElementById(elementId)) {
+            return;
+        }
+        const defaultCSSNode = document.createElement('style');
+        defaultCSSNode.innerHTML = defaultCSS;
+        defaultCSSNode.id = elementId;
+        document.body.appendChild(defaultCSSNode);
+    }
+
+    /**
+     * @private
+     */
+    _adjustPosition() { // (Re)positions spinner DIV over the center of the canvas - called by Canvas
+        if (this._isCustom) {
+            return;
+        }
+        const canvas = this._canvas;
+        const element = this._element;
+        const style = element.style;
+        style["left"] = (canvas.offsetLeft + (canvas.clientWidth * 0.5) - (element.clientWidth * 0.5)) + "px";
+        style["top"] = (canvas.offsetTop + (canvas.clientHeight * 0.5) - (element.clientHeight * 0.5)) + "px";
     }
 
     /**
@@ -227,7 +276,10 @@ class Spinner extends Component {
         }
         const prevValue = this._processes;
         this._processes = value;
-        this._element.style["visibility"] = (this._processes > 0) ? "visible" : "hidden";
+        const element = this._element;
+        if (element) {
+            element.style["visibility"] = (this._processes > 0) ? "visible" : "hidden";
+        }
         /**
          Fired whenever this Spinner's {@link Spinner#visible} property changes.
 
@@ -256,36 +308,8 @@ class Spinner extends Component {
         return this._processes;
     }
 
-    /**
-     * @private
-     */
-    _adjustPosition() { // (Re)positions spinner DIV over the center of the canvas
-        if (!this._canvas || !this._element) {
-            return;
-        }
-        const canvas = this._canvas;
-        const spinner = this._element;
-        const spinnerStyle = spinner.style;
-        spinnerStyle["left"] = (canvas.offsetLeft + (canvas.clientWidth * 0.5) - (spinner.clientWidth * 0.5)) + "px";
-        spinnerStyle["top"] = (canvas.offsetTop + (canvas.clientHeight * 0.5) - (spinner.clientHeight * 0.5)) + "px";
-    }
-
-    /**
-     * @private
-     */
-    _injectSpinnerCSS() {
-        const elementId = "xeokit-spinner-css";
-        if (document.getElementById(elementId)) {
-            return;
-        }
-        const node = document.createElement('style');
-        node.innerHTML = spinnerCSS;
-        node.id = elementId;
-        document.body.appendChild(node);
-    }
-
     _destroy() {
-        if (this._element) {
+        if (this._element && (!this._isCustom)) {
             this._element.parentNode.removeChild(this._element);
             this._element = null;
         }

@@ -20,12 +20,12 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
  *
  * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
- * metadata, we can also provide GLTFModelLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, GLTFLoaderPlugin
+ * metadata, we can also provide GLTFLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, GLTFLoaderPlugin
  * uses its own map of default colors and visibilities for IFC element types.
  *
  * ## Quality Setting
  *
- * By default, GLTFModelLoaderPlugin will load a high-performance scene representation that's optimized for low memory usage and
+ * By default, GLTFLoaderPlugin will load a high-performance scene representation that's optimized for low memory usage and
  * optimal rendering. The high-performance representation renders large numbers of objects efficiently, using geometry
  * batching and instancing, with simple Lambertian shading that ignores any textures and realistic materials in the glTF.
  *
@@ -48,14 +48,14 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
  *
- * Since this model contains IFC types, the GLTFModelLoader will set the initial colors of object {@link Entity}s according
+ * Since this model contains IFC types, the GLTFLoaderPlugin will set the initial colors of object {@link Entity}s according
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline).
  *
  * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_OTCConferenceCenter)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -95,7 +95,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
  *      metaModelSrc: "./metaModels/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
  *      edges: true,
- *      performance: true  // Load the default high-performance scene representation
+ *      performance: true  // Load high-performance scene representation (default is false)
  * });
  *
  * model.on("loaded", () => {
@@ -138,7 +138,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
  * objects that represent walls.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_includeTypes_PlanView)]
+ * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_includeTypes_PlanView)]
  *
  * ````javascript
  * const model = gltfLoader.load({
@@ -149,7 +149,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * });
  * ````
  *
- * We can also load only those objects that **don't have the specified IFC types. In the example below, we'll load only the
+ * We can also load only those objects that **don't** have the specified IFC types. In the example below, we'll load only the
  * objects that do not represent empty space.
  *
  * ````javascript
@@ -171,7 +171,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="GLTFLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
-     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads using XMLHttpRequest.
+     * @param {Object} [cfg.dataSource] A custom data source through which the GLTFLoaderPlugin can load metadata, glTF and binary attachments. Defaults to an instance of {@link GLTFDefaultDataSource}, which loads uover HTTP.
      */
     constructor(viewer, cfg = {}) {
 
@@ -259,8 +259,6 @@ class GLTFLoaderPlugin extends Plugin {
      */
     load(params = {}) {
 
-        const self = this;
-
         if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
             delete params.id;
@@ -296,14 +294,14 @@ class GLTFLoaderPlugin extends Plugin {
 
             const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
 
-            const processMetaModelData = function (metaModelData) {
+            const processMetaModelData = (metaModelData) => {
 
-                self.viewer.metaScene.createMetaModel(modelId, metaModelData, {
+                this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: params.includeTypes,
                     excludeTypes: params.excludeTypes
                 });
 
-                self.viewer.scene.canvas.spinner.processes--;
+                this.viewer.scene.canvas.spinner.processes--;
 
                 var includeTypes;
                 if (params.includeTypes) {
@@ -323,7 +321,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 params.readableGeometry = false;
 
-                params.prioritizeGLTFNode = function (modelId, glTFNode) {
+                params.prioritizeGLTFNode = (modelId, glTFNode) => {
 
                     // The "name" property of the glTF scene node contains the object ID, with which we can find a MetaObject
                     // in the MetaModel we just loaded. We'll create Node components in the Scene for all the nodes as we
@@ -337,7 +335,7 @@ class GLTFLoaderPlugin extends Plugin {
                     }
 
                     const nodeId = name;
-                    const metaObject = self.viewer.metaScene.metaObjects[nodeId];
+                    const metaObject = this.viewer.metaScene.metaObjects[nodeId];
                     const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
 
                     if (metaObject) {
@@ -358,7 +356,7 @@ class GLTFLoaderPlugin extends Plugin {
                     return props ? (props.priority || 0) : 0;
                 };
 
-                params.handleGLTFNode = function (modelId, glTFNode, actions) {
+                params.handleGLTFNode = (modelId, glTFNode, actions) => {
 
                     const name = glTFNode.name;
 
@@ -367,7 +365,7 @@ class GLTFLoaderPlugin extends Plugin {
                     }
 
                     const nodeId = name;
-                    const metaObject = self.viewer.metaScene.metaObjects[nodeId];
+                    const metaObject = this.viewer.metaScene.metaObjects[nodeId];
                     const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
 
                     actions.createEntity = {
@@ -400,9 +398,9 @@ class GLTFLoaderPlugin extends Plugin {
                 };
 
                 if (params.src) {
-                    loader.load(self, model, params.src, params);
+                    loader.load(this, model, params.src, params);
                 } else {
-                    loader.parse(self, model, params.gltf, params);
+                    loader.parse(this, model, params.gltf, params);
                 }
             };
 
@@ -410,17 +408,17 @@ class GLTFLoaderPlugin extends Plugin {
 
                 const metaModelSrc = params.metaModelSrc;
 
-                self.viewer.scene.canvas.spinner.processes++;
+                this.viewer.scene.canvas.spinner.processes++;
 
-                self._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
+                this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
-                    self.viewer.scene.canvas.spinner.processes--;
+                    this.viewer.scene.canvas.spinner.processes--;
 
                     processMetaModelData(metaModelData);
 
-                }, function (errMsg) {
-                    self.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
-                    self.viewer.scene.canvas.spinner.processes--;
+                }, (errMsg) => {
+                    this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
+                    this.viewer.scene.canvas.spinner.processes--;
                 });
 
             } else if (params.metaModelData) {
@@ -430,7 +428,7 @@ class GLTFLoaderPlugin extends Plugin {
 
         } else {
 
-            params.handleGLTFNode = function (modelId, glTFNode, actions) {
+            params.handleGLTFNode = (modelId, glTFNode, actions) => {
 
                 const name = glTFNode.name;
 
@@ -449,9 +447,9 @@ class GLTFLoaderPlugin extends Plugin {
             };
 
             if (params.src) {
-                loader.load(self, model, params.src, params);
+                loader.load(this, model, params.src, params);
             } else {
-                loader.parse(self, model, params.gltf, params);
+                loader.parse(this, model, params.gltf, params);
             }
         }
 
@@ -460,6 +458,13 @@ class GLTFLoaderPlugin extends Plugin {
         });
 
         return model;
+    }
+
+    /**
+     * Destroys this GLTFLoaderPlugin.
+     */
+    destroy() {
+        super.destroy();
     }
 }
 

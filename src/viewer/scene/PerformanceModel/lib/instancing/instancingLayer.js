@@ -11,6 +11,8 @@ import {InstancingEdgesRenderer} from "./instancingEdgesRenderer.js";
 import {InstancingPickMeshRenderer} from "./instancingPickMeshRenderer.js";
 import {InstancingPickDepthRenderer} from "./instancingPickDepthRenderer.js";
 import {InstancingPickNormalsRenderer} from "./instancingPickNormalsRenderer.js";
+import {InstancingOcclusionRenderer} from "./instancingOcclusionRenderer.js";
+import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -78,26 +80,53 @@ class InstancingLayer {
             obb: math.OBB3()
         };
         if (cfg.positions) {
-            var lenPositions = cfg.positions.length;
-            var localAABB = math.collapseAABB3();
-            math.expandAABB3Points3(localAABB, cfg.positions);
-            math.AABB3ToOBB3(localAABB, stateCfg.obb);
-            quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
-            let normalized = false;
-            stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+
+            if (cfg.preCompressed) {
+
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.positions, cfg.positions.length, 3, gl.STATIC_DRAW, normalized);
+                stateCfg.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
+
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                geometryCompressionUtils.decompressAABB(localAABB, stateCfg.positionsDecodeMatrix);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+
+            } else {
+
+                let lenPositions = cfg.positions.length;
+                let localAABB = math.collapseAABB3();
+                math.expandAABB3Points3(localAABB, cfg.positions);
+                math.AABB3ToOBB3(localAABB, stateCfg.obb);
+                quantizePositions(cfg.positions, lenPositions, localAABB, quantizedPositions, stateCfg.positionsDecodeMatrix);
+                let normalized = false;
+                stateCfg.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
+            }
         }
         if (cfg.normals) {
-            var lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
-            var normalized = true; // For oct-encoded UInt8
-            stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
+
+            if (cfg.preCompressed) {
+
+                let normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, cfg.normals, cfg.normals.length, 3, gl.STATIC_DRAW, normalized);
+
+            } else {
+
+                var lenCompressedNormals = octEncodeNormals(cfg.normals, cfg.normals.length, compressedNormals, 0);
+                let normalized = true; // For oct-encoded UInt8
+                stateCfg.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, compressedNormals, lenCompressedNormals, 3, gl.STATIC_DRAW, normalized);
+            }
         }
+
         if (cfg.indices) {
             stateCfg.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(cfg.indices) : new Uint16Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
         }
+
         var edgeIndices = cfg.edgeIndices;
         if (!edgeIndices) {
             edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 10);
         }
+
         stateCfg.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, bigIndicesSupported ? new Uint32Array(edgeIndices) : new Uint16Array(edgeIndices), edgeIndices.length, 1, gl.STATIC_DRAW);
 
         this._state = new RenderState(stateCfg);
@@ -111,6 +140,9 @@ class InstancingLayer {
         this._numSelectedLayerPortions = 0;
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
+
+        /** @private */
+        this.numIndices = (cfg.indices) ? cfg.indices / 3 : 0;
 
         // Vertex arrays
         this._flags = [];
@@ -131,6 +163,8 @@ class InstancingLayer {
         this._portions = [];
 
         this._finalized = false;
+
+        this._preCompressed = !!cfg.preCompressed;
 
         this.compileShaders();
     }
@@ -525,11 +559,12 @@ class InstancingLayer {
         var clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
         var edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
         var pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
-            tempUint8Vec4[0] = clippable;
-            tempUint8Vec4[1] = edges;
-            tempUint8Vec4[2] = pickable;
+        tempUint8Vec4[0] = clippable;
+        tempUint8Vec4[1] = edges;
+        tempUint8Vec4[2] = pickable;
         this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
     }
+
     //-- NORMAL --------------------------------------------------------------------------------------------------------
 
     drawNormalFillOpaque(frameCtx) {
@@ -711,6 +746,20 @@ class InstancingLayer {
         }
     }
 
+    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (!this._occlusionRenderer) {
+            this._occlusionRenderer = InstancingOcclusionRenderer.get(this);
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     compileShaders() {
         if (this._drawRenderer && this._drawRenderer.getValid() === false) {
             this._drawRenderer.put();
@@ -736,6 +785,10 @@ class InstancingLayer {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
         }
+        if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
+        }
         if (!this._drawRenderer) {
             this._drawRenderer = InstancingDrawRenderer.get(this);
         }
@@ -754,6 +807,8 @@ class InstancingLayer {
         if (!this._pickNormalsRenderer) {
             this._pickNormalsRenderer = InstancingPickNormalsRenderer.get(this);
         }
+
+        // Lazy-get occlusion renderer in occlude(), only when we need it
     }
 
     destroy() {
@@ -777,6 +832,14 @@ class InstancingLayer {
         if (this._pickDepthRenderer) {
             this._pickDepthRenderer.put();
             this._pickDepthRenderer = null;
+        }
+        if (this._pickNormalsRenderer) {
+            this._pickNormalsRenderer.put();
+            this._pickNormalsRenderer = null;
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
         }
 
         const state = this._state;

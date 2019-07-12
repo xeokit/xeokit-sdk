@@ -69,6 +69,17 @@ function decompressPosition(position, decodeMatrix, dest) {
     dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
     dest[2] = position[2] * decodeMatrix[10] + decodeMatrix[14];
+    return dest;
+}
+
+function decompressAABB(aabb, decodeMatrix, dest=aabb) {
+    dest[0] = aabb[0] * decodeMatrix[0] + decodeMatrix[12];
+    dest[1] = aabb[1] * decodeMatrix[5] + decodeMatrix[13];
+    dest[2] = aabb[2] * decodeMatrix[10] + decodeMatrix[14];
+    dest[3] = aabb[3] * decodeMatrix[0] + decodeMatrix[12];
+    dest[4] = aabb[4] * decodeMatrix[5] + decodeMatrix[13];
+    dest[5] = aabb[5] * decodeMatrix[10] + decodeMatrix[14];
+    return dest;
 }
 
 /**
@@ -306,6 +317,7 @@ const geometryCompressionUtils = {
     compressPositions: compressPositions,
     decompressPositions: decompressPositions,
     decompressPosition: decompressPosition,
+    decompressAABB: decompressAABB,
 
     getUVBounds: getUVBounds,
     compressUVs: compressUVs,

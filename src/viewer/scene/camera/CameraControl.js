@@ -1,6 +1,5 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {Mesh} from '../mesh/Mesh.js';
 import {CameraFlightAnimation} from './CameraFlightAnimation.js';
 
 /**
@@ -444,11 +443,9 @@ class CameraControl extends Component {
         const camera = scene.camera;
         const canvas = this.scene.canvas.canvas;
         let over = false;
-        const mouseHoverDelay = 500;
         const mouseOrbitRate = 0.4;
         const mousePanRate = 0.4;
         const mouseZoomRate = 0.8;
-        const mouseWheelPanRate = 0.4;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -484,7 +481,7 @@ class CameraControl extends Component {
         let needPickEntity = false;
         let needPickSurface = false;
         let lastPickedEntityId;
-        let hit;
+        let pickResult;
         let picked = false;
         let pickedSurface = false;
 
@@ -498,18 +495,18 @@ class CameraControl extends Component {
             picked = false;
             pickedSurface = false;
             if (needPickSurface || self.hasSubs("hoverSurface")) {
-                hit = scene.pick({
+                pickResult = scene.pick({
                     pickSurface: true,
                     canvasPos: pickCursorPos
                 });
             } else { // needPickEntity == true
-                hit = scene.pick({
+                pickResult = scene.pick({
                     canvasPos: pickCursorPos
                 });
             }
-            if (hit) {
+            if (pickResult) {
                 picked = true;
-                const pickedEntityId = hit.entity.id;
+                const pickedEntityId = pickResult.entity.id;
                 if (lastPickedEntityId !== pickedEntityId) {
                     if (lastPickedEntityId !== undefined) {
 
@@ -526,18 +523,18 @@ class CameraControl extends Component {
                     /**
                      * Fired when the pointer is over a new {@link Entity}.
                      * @event hoverEnter
-                     * @param hit A pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                     * @param pickResult A pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
-                    self.fire("hoverEnter", hit);
+                    self.fire("hoverEnter", pickResult);
                     lastPickedEntityId = pickedEntityId;
                 }
                 /**
                  * Fired continuously while the pointer is moving while hovering over an {@link Entity}.
                  * @event hover
-                 * @param hit A pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                 * @param pickResult A pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                  */
-                self.fire("hover", hit);
-                if (hit.worldPos) {
+                self.fire("hover", pickResult);
+                if (pickResult.worldPos) {
                     pickedSurface = true;
 
                     /**
@@ -547,10 +544,10 @@ class CameraControl extends Component {
                      * hovering over.
                      *
                      * @event hoverSurface
-                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
+                     * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                      * surface position - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
-                    self.fire("hoverSurface", hit);
+                    self.fire("hoverSurface", pickResult);
                 }
             } else {
                 if (lastPickedEntityId !== undefined) {
@@ -790,9 +787,9 @@ class CameraControl extends Component {
                 if (panVx !== 0 || panVy !== 0 || panVz !== 0) {
                     const f = getEyeLookDist() / 80;
                     if (self._walking) {
-                        var y = camera.eye[1];
+                        let y = camera.eye[1];
                         camera.pan([panVx * f, panVy * f, panVz * f]);
-                        var eye = camera.eye;
+                        let eye = camera.eye;
                         eye[1] = y;
                         camera.eye = eye;
                     } else {
@@ -810,7 +807,7 @@ class CameraControl extends Component {
 
                 if (vZoom !== 0) {
                     if (self._firstPerson) {
-                        var y;
+                        let y;
                         if (self._walking) {
                             y = camera.eye[1];
                         }
@@ -820,7 +817,7 @@ class CameraControl extends Component {
                             camera.pan([0, 0, vZoom]); // Touchscreen input with no cursor
                         }
                         if (self._walking) {
-                            var eye = camera.eye;
+                            let eye = camera.eye;
                             eye[1] = y;
                             camera.eye = eye;
                         }
@@ -828,8 +825,8 @@ class CameraControl extends Component {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
                             updatePick();
-                            if (pickedSurface && hit.worldPos) {
-                                panToWorldPos(hit.worldPos, -vZoom);
+                            if (pickedSurface && pickResult.worldPos) {
+                                panToWorldPos(pickResult.worldPos, -vZoom);
                             } else {
                                 camera.zoom(vZoom);
                             }
@@ -1098,7 +1095,7 @@ class CameraControl extends Component {
 
                         // if (!self.ctrlDown && !self.altDown) {
                         let front, back, left, right, up, down;
-                        if (self._keyboardLayout == 'azerty') {
+                        if (self._keyboardLayout === 'azerty') {
                             front = input.keyDown[input.KEY_Z];
                             back = input.keyDown[input.KEY_S];
                             left = input.keyDown[input.KEY_Q];
@@ -1117,12 +1114,12 @@ class CameraControl extends Component {
                             if (down) {
                                 panVy += elapsed * keyboardPanRate;
                             } else if (up) {
-                                panVy -= -elapsed * keyboardPanRate;
+                                panVy += -elapsed * keyboardPanRate;
                             }
                             if (right) {
                                 panVx += -elapsed * keyboardPanRate;
                             } else if (left) {
-                                panVx = elapsed * keyboardPanRate;
+                                panVx += elapsed * keyboardPanRate;
                             }
                             if (back) {
                                 panVz = elapsed * keyboardPanRate;
@@ -1302,7 +1299,7 @@ class CameraControl extends Component {
                     const elapsed = e.deltaTime;
                     let rotateLeft;
                     let rotateRight;
-                    if (self._keyboardLayout == 'azerty') {
+                    if (self._keyboardLayout === 'azerty') {
                         rotateLeft = input.keyDown[input.KEY_A];
                         rotateRight = input.keyDown[input.KEY_E];
                     } else {
@@ -1361,8 +1358,8 @@ class CameraControl extends Component {
                     needPickSurface = self._pivoting;
                     updatePick();
                     if (self._pivoting) {
-                        if (hit) {
-                            self._pivoter.startPivot(hit.worldPos);
+                        if (pickResult) {
+                            self._pivoter.startPivot(pickResult.worldPos);
                         } else {
                             self._pivoter.startPivot(); // Continue to use last pivot point
                         }
@@ -1394,15 +1391,15 @@ class CameraControl extends Component {
 
                             updatePick();
 
-                            if (hit) {
+                            if (pickResult) {
 
                                 /**
                                  * Fired whenever the pointer has picked (ie. clicked or tapped) an {@link Entity}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param pickResult A surface pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
-                                self.fire("picked", hit);
+                                self.fire("picked", pickResult);
                                 if (pickedSurface) {
 
                                     /**
@@ -1411,15 +1408,15 @@ class CameraControl extends Component {
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event pickedSurface
-                                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
+                                     * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
-                                    self.fire("pickedSurface", hit);
+                                    self.fire("pickedSurface", pickResult);
                                 }
                             } else {
 
                                 /**
-                                 * Fired when the pointer attempted a pick (ie. clicked or tapped), but has hit nothing.
+                                 * Fired when the pointer attempted a pick (ie. clicked or tapped), but has pickResult nothing.
                                  *
                                  * @event pickedNothing
                                  */
@@ -1431,7 +1428,7 @@ class CameraControl extends Component {
 
                         clicks++;
 
-                        if (clicks == 1) {
+                        if (clicks === 1) {
                             timeout = setTimeout(function () {
 
                                 needPickEntity = self._doublePickFlyTo;
@@ -1441,10 +1438,10 @@ class CameraControl extends Component {
 
                                 updatePick();
 
-                                if (hit) {
-                                    self.fire("picked", hit);
+                                if (pickResult) {
+                                    self.fire("picked", pickResult);
                                     if (pickedSurface) {
-                                        self.fire("pickedSurface", hit);
+                                        self.fire("pickedSurface", pickResult);
                                     }
                                 } else {
                                     self.fire("pickedNothing");
@@ -1462,14 +1459,14 @@ class CameraControl extends Component {
 
                             updatePick();
 
-                            if (hit) {
+                            if (pickResult) {
                                 /**
                                  * Fired whenever the pointer has double-picked (ie. double-clicked or double-tapped) an {@link Entity}.
                                  *
                                  * @event picked
-                                 * @param hit A surface pick hit result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
+                                 * @param pickResult A surface pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
-                                self.fire("doublePicked", hit);
+                                self.fire("doublePicked", pickResult);
                                 if (pickedSurface) {
                                     /**
                                      * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {@link Entity}.
@@ -1477,18 +1474,18 @@ class CameraControl extends Component {
                                      * This event provides 3D information about the point on the surface that the pointer has picked.
                                      *
                                      * @event doublePickedSurface
-                                     * @param hit A surface pick hit result, containing the ID of the Entity and 3D info on the
+                                     * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
-                                    self.fire("doublePickedSurface", hit);
+                                    self.fire("doublePickedSurface", pickResult);
                                 }
                                 if (self._doublePickFlyTo) {
-                                    self._flyTo(hit);
+                                    self._flyTo(pickResult);
                                 }
                             } else {
 
                                 /**
-                                 * Fired when the pointer attempted a double-pick (ie. double-clicked or double-tapped), but has hit nothing.
+                                 * Fired when the pointer attempted a double-pick (ie. double-clicked or double-tapped), but has pickResult nothing.
                                  *
                                  * @event doublePickedNothing
                                  */
@@ -1583,13 +1580,13 @@ class CameraControl extends Component {
 
                                 updatePick();
 
-                                if (hit) {
-                                    self.fire("doublePicked", hit);
+                                if (pickResult) {
+                                    self.fire("doublePicked", pickResult);
                                     if (pickedSurface) {
-                                        self.fire("doublePickedSurface", hit);
+                                        self.fire("doublePickedSurface", pickResult);
                                     }
                                     if (self._doublePickFlyTo) {
-                                        self._flyTo(hit);
+                                        self._flyTo(pickResult);
                                     }
                                 } else {
                                     self.fire("doublePickedNothing");
@@ -1611,10 +1608,10 @@ class CameraControl extends Component {
 
                                 updatePick();
 
-                                if (hit) {
-                                    self.fire("picked", hit);
+                                if (pickResult) {
+                                    self.fire("picked", pickResult);
                                     if (pickedSurface) {
-                                        self.fire("pickedSurface", hit);
+                                        self.fire("pickedSurface", pickResult);
                                     }
                                 } else {
                                     self.fire("pickedNothing");
@@ -1755,16 +1752,15 @@ class CameraControl extends Component {
         })();
     }
 
-    _flyTo(hit) {
+    _flyTo(pickResult) {
 
         let pos;
 
-        if (hit && hit.worldPos) {
-            pos = hit.worldPos
+        if (pickResult && pickResult.worldPos) {
+            pos = pickResult.worldPos
         }
 
-        const aabb = hit ? hit.entity.aabb : this.scene.aabb;
-
+        const aabb = pickResult ? pickResult.entity.aabb : this.scene.aabb;
 
         if (pos) {
 

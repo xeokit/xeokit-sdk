@@ -117,48 +117,79 @@ class SceneState {
      * Restores a {@link Scene} to state previously captured with {@link SceneState#save}.
      * @param {Scene} scene The scene.
      */
-    restore(scene) {
+    restore(scene, done) {
+        this.restoreCamera(scene, done);
+        this.restoreObjects(scene);
+    }
+
+    /**
+     * Restores a {@link Scene}'s {@link Camera} to its state previously captured with {@link SceneState#save}.
+     * @param {Scene} scene The scene.
+     */
+    restoreCamera(scene, done) {
 
         const camera = scene.camera;
-
-        camera.eye = this.camera.eye;
-        camera.look = this.camera.look;
-        camera.up = this.camera.up;
-
         const savedProjection = this.camera.projection;
 
-        camera.projection = savedProjection.projection;
+        function restoreProjection() {
 
-        const project = camera.project;
+            switch (savedProjection.type) {
 
-        switch (savedProjection.type) {
+                case "perspective":
+                    camera.perspective.fov = savedProjection.fov;
+                    camera.perspective.fovAxis = savedProjection.fovAxis;
+                    camera.perspective.near = savedProjection.near;
+                    camera.perspective.far = savedProjection.far;
+                    break;
 
-            case "perspective":
-                camera.perspective.fov = savedProjection.fov;
-                camera.perspective.fovAxis = savedProjection.fovAxis;
-                camera.perspective.near = savedProjection.near;
-                camera.perspective.far = savedProjection.far;
-                break;
+                case "ortho":
+                    camera.ortho.scale = savedProjection.scale;
+                    camera.ortho.near = savedProjection.near;
+                    camera.ortho.far = savedProjection.far;
+                    break;
 
-            case "ortho":
-                camera.ortho.scale = savedProjection.scale;
-                camera.ortho.near = savedProjection.near;
-                camera.ortho.far = savedProjection.far;
-                break;
+                case "frustum":
+                    camera.frustum.left = savedProjection.left;
+                    camera.frustum.right = savedProjection.right;
+                    camera.frustum.top = savedProjection.top;
+                    camera.frustum.bottom = savedProjection.bottom;
+                    camera.frustum.near = savedProjection.near;
+                    camera.frustum.far = savedProjection.far;
+                    break;
 
-            case "frustum":
-               camera.frustum.left = savedProjection.left;
-                camera.frustum.right = savedProjection.right;
-                camera.frustum.top = savedProjection.top;
-                camera.frustum.bottom = savedProjection.bottom;
-                camera.frustum.near = savedProjection.near;
-                camera.frustum.far = savedProjection.far;
-                break;
-
-            case "custom":
-                camera.customProjection.matrix = savedProjection.matrix;
-                break;
+                case "custom":
+                    camera.customProjection.matrix = savedProjection.matrix;
+                    break;
+            }
         }
+
+        if (done) {
+            scene.viewer.cameraFlight.flyTo({
+                eye: this.camera.eye,
+                look: this.camera.look,
+                up: this.camera.up,
+                orthoScale: this.camera.projection.scale,
+                projection: savedProjection.projection
+            }, () => {
+                restoreProjection();
+                done();
+            });
+        } else {
+            camera.eye = this.camera.eye;
+            camera.look = this.camera.look;
+            camera.up = this.camera.up;
+            restoreProjection();
+            camera.projection = savedProjection.projection;
+        }
+
+
+    }
+
+    /**
+     * Restores a {@link Scene}'s {@link Entity}'s to their state previously captured with {@link SceneState#save}.
+     * @param {Scene} scene The scene.
+     */
+    restoreObjects(scene) {
 
         var i = 0;
 

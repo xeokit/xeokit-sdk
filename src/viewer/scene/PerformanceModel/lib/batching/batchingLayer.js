@@ -9,9 +9,11 @@ import {BatchingEdgesRenderer} from "./batchingEdgesRenderer.js";
 import {BatchingPickMeshRenderer} from "./batchingPickMeshRenderer.js";
 import {BatchingPickDepthRenderer} from "./batchingPickDepthRenderer.js";
 import {BatchingPickNormalsRenderer} from "./batchingPickNormalsRenderer.js";
+import {BatchingOcclusionRenderer} from "./batchingOcclusionRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
+import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 const tempUint8Vec4 = new Uint8Array((bigIndicesSupported ? 5000000 : 65530) * 4); // Scratch memory for dynamic flags VBO update
@@ -94,6 +96,8 @@ class BatchingLayer {
         this._portions = [];
 
         this._finalized = false;
+        this._preCompressed = !!cfg.preCompressed;
+        this._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
 
         this.compileShaders();
     }
@@ -130,21 +134,32 @@ class BatchingLayer {
      * @returns {number} Portion ID
      */
     createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor) {
+
         if (this._finalized) {
             throw "Already finalized";
         }
-        if (this._finalized) {
-            throw "BatchingLayer full - check first with canCreatePortion()";
-        }
+
         const buffer = this._buffer;
         const positionsIndex = buffer.lenPositions;
         const vertsIndex = positionsIndex / 3;
         const numVerts = positions.length / 3;
         const lenPositions = positions.length;
-        { // Positions
+
+        if (this._preCompressed) {
+
+            buffer.positions.set(positions, buffer.lenPositions);
+            buffer.lenPositions += lenPositions;
+
+            math.collapseAABB3(aabb);
+            math.expandAABB3Points3(aabb, positions);
+            geometryCompressionUtils.decompressAABB(aabb, this._positionsDecodeMatrix);
+            math.expandAABB3(this._aabb, aabb);
+
+        } else {
+
             buffer.positions.set(positions, buffer.lenPositions);
             if (matrix) {
-                for (var i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
                     tempVec3a[2] = buffer.positions[i + 2];
@@ -156,7 +171,7 @@ class BatchingLayer {
                     buffer.positions[i + 2] = tempVec3b[2];
                 }
             } else {
-                for (var i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
+                for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i < len; i += 3) {
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
                     tempVec3a[2] = buffer.positions[i + 2];
@@ -166,17 +181,31 @@ class BatchingLayer {
             }
             buffer.lenPositions += lenPositions;
         }
+
         if (normals) {
-            var modelNormalMatrix = tempMat4;
-            if (matrix) {
-                // Note: order of inverse and transpose doesn't matter
-                math.inverseMat4(math.transposeMat4(matrix, tempMat4b), modelNormalMatrix);
+
+            if (this._preCompressed) {
+
+                buffer.normals.set(normals, buffer.lenNormals);
+                buffer.lenNormals += normals.length;
+
             } else {
-                math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+
+                var modelNormalMatrix = tempMat4;
+
+                if (matrix) {
+                    math.inverseMat4(math.transposeMat4(matrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn't matter
+
+                } else {
+                    math.identityMat4(modelNormalMatrix, modelNormalMatrix);
+                }
+
+                buffer.lenNormals = transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.lenNormals);
             }
-            buffer.lenNormals = transformAndOctEncodeNormals(modelNormalMatrix, normals, normals.length, buffer.normals, buffer.lenNormals); // BOTTLENECK - better to have these precomputed in the pipeline!
         }
+
         if (flags !== undefined) {
+
             const lenFlags = (numVerts * 4);
             const visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
             const xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
@@ -185,6 +214,7 @@ class BatchingLayer {
             const clippable = !!(flags & RENDER_FLAGS.CLIPPABLE) ? 255 : 0;
             const edges = !!(flags & RENDER_FLAGS.EDGES) ? 255 : 0;
             const pickable = !!(flags & RENDER_FLAGS.PICKABLE) ? 255 : 0;
+
             for (var i = buffer.lenFlags, len = buffer.lenFlags + lenFlags; i < len; i += 4) {
                 buffer.flags[i + 0] = visible;
                 buffer.flags[i + 1] = xrayed;
@@ -288,11 +318,17 @@ class BatchingLayer {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
-        quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
+        if (this._preCompressed) {
+            state.positionsDecodeMatrix = this._positionsDecodeMatrix;
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions, buffer.lenPositions, 3, gl.STATIC_DRAW);
+        } else {
+            quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
-        if (buffer.lenPositions > 0) {
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            if (buffer.lenPositions > 0) {
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+            }
         }
+
         if (buffer.lenNormals > 0) {
             let normalized = true; // For oct encoded UIn
             //let normalized = false; // For scaled
@@ -717,6 +753,20 @@ class BatchingLayer {
         }
     }
 
+    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
+
+    drawOcclusion(frameCtx) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (!this._occlusionRenderer) {
+            this._occlusionRenderer = BatchingOcclusionRenderer.get(this);
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     compileShaders() {
         if (this._drawRenderer && this._drawRenderer.getValid() === false) {
             this._drawRenderer.put();
@@ -742,6 +792,10 @@ class BatchingLayer {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
         }
+        if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
+        }
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
@@ -760,6 +814,8 @@ class BatchingLayer {
         if (!this._pickNormalsRenderer) {
             this._pickNormalsRenderer = BatchingPickNormalsRenderer.get(this);
         }
+
+        // Lazy-get occlusion renderer in drawOcclusion(), only when we need it
     }
 
     destroy() {
@@ -787,6 +843,10 @@ class BatchingLayer {
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.put();
             this._pickNormalsRenderer = null;
+        }
+        if (this._occlusionRenderer) {
+            this._occlusionRenderer.put();
+            this._occlusionRenderer = null;
         }
 
         const state = this._state;

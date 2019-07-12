@@ -1,5 +1,4 @@
 import {Component} from "../Component.js"
-import {CameraPath} from "./CameraPath.js"
 import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
 
 
@@ -126,7 +125,8 @@ class CameraPathAnimation extends Component {
         }
 
         const f = 0.002;
-        //var f = 1.0;
+        let numFrames;
+        let t;
 
         switch (this.state) {
 
@@ -137,7 +137,7 @@ class CameraPathAnimation extends Component {
 
                 this._t += this._playingRate * f;
 
-                const numFrames = this._cameraPath.frames.length;
+                numFrames = this._cameraPath.frames.length;
                 if (numFrames === 0 || (this._playingDir < 0 && this._t <= 0) || (this._playingDir > 0 && this._t >= this._cameraPath.frames[numFrames - 1].t)) {
                     this.state = CameraPathAnimation.SCRUBBING;
                     this._t = this._cameraPath.frames[numFrames - 1].t;
@@ -150,7 +150,7 @@ class CameraPathAnimation extends Component {
 
             case CameraPathAnimation.PLAYING_TO:
 
-                let t = this._t + (this._playingRate * f * this._playingDir);
+                t = this._t + (this._playingRate * f * this._playingDir);
 
                 //t = this._ease(t, this._playingFromT, this._playingToT, this._playingToT - this._playingFromT);
 

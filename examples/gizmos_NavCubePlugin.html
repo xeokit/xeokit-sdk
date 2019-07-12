@@ -4,10 +4,34 @@
     <meta charset="utf-8">
     <title>NavCubePlugin</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+    </style>
+
 </head>
 
 <body>
+
 <canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
 <div id="info">
     <h1>NavCubePlugin</h1>
     <ul>
@@ -19,8 +43,8 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads glTF model from file system
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads .xkt model from file system
         </li>
 
     </ul>
@@ -28,7 +52,7 @@
 </body>
 <script type="module">
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
 
     const viewer = new Viewer({
@@ -39,9 +63,10 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
     new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
         visible: true,           // Initially visible (default)
         size: 250,               // NavCube size in pixels (default is 200)
         alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
@@ -51,9 +76,9 @@
         cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
     });
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/duplex/scene.gltf",
+        src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
         edges: true
     });

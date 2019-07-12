@@ -107,8 +107,6 @@ class ReadableGeometry extends Geometry {
 
         super(owner, cfg);
 
-        const self = this;
-
         this._state = new RenderState({ // Arrays for emphasis effects are got from xeokit.Geometry friend methods
             compressGeometry: !!cfg.compressGeometry,
             primitive: null, // WebGL enum
@@ -404,7 +402,7 @@ class ReadableGeometry extends Geometry {
      */
     get positions() {
         if (!this._state.positions) {
-            return;
+            return null;
         }
         if (!this._state.compressGeometry) {
             return this._state.positions;
@@ -496,7 +494,7 @@ class ReadableGeometry extends Geometry {
      */
     get uv() {
         if (!this._state.uv) {
-            return;
+            return null;
         }
         if (!this._state.compressGeometry) {
             return this._state.uv;

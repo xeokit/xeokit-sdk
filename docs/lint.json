@@ -1,5 +1,90 @@
 [
   {
+    "name": "BCFViewpointsPlugin#setViewpoint",
+    "filePath": "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js",
+    "lines": [
+      {
+        "lineNumber": 298,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 299,
+        "line": "     * Sets viewer state to the given BCF viewpoint."
+      },
+      {
+        "lineNumber": 300,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 301,
+        "line": "     * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a"
+      },
+      {
+        "lineNumber": 302,
+        "line": "     * direction vector. Therefore, when loading a BCF viewpoint, we set {@link Camera#look} to the absolute position"
+      },
+      {
+        "lineNumber": 303,
+        "line": "     * obtained by offsetting the BCF ````camera_view_point````  along ````camera_direction````."
+      },
+      {
+        "lineNumber": 304,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 305,
+        "line": "     * When loading a viewpoint, we also have the option to find {@link Camera#look} as the closest point of intersection"
+      },
+      {
+        "lineNumber": 306,
+        "line": "     * (on the surface of any visible and pickable {@link Entity}) with a 3D ray fired from ````camera_view_point```` in"
+      },
+      {
+        "lineNumber": 307,
+        "line": "     * the direction of ````camera_direction````."
+      },
+      {
+        "lineNumber": 308,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 309,
+        "line": "     * @param {*} bcfViewpoint  BCF JSON viewpoint object or \"reset\" / \"RESET\" to reset the viewer, which clears SectionPlanes,"
+      },
+      {
+        "lineNumber": 310,
+        "line": "     * shows default visible entities and restores camera to initial default position."
+      },
+      {
+        "lineNumber": 311,
+        "line": "     * @params {*} [options] Options for setting the viewpoint."
+      },
+      {
+        "lineNumber": 312,
+        "line": "     * @params {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest"
+      },
+      {
+        "lineNumber": 313,
+        "line": "     * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````."
+      },
+      {
+        "lineNumber": 314,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 315,
+        "line": "    setViewpoint(bcfViewpoint, options = {}) {"
+      }
+    ],
+    "codeParams": [
+      "bcfViewpoint",
+      "options"
+    ],
+    "docParams": [
+      "bcfViewpoint"
+    ]
+  },
+  {
     "name": "BimServerClient#call",
     "filePath": "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js",
     "lines": [
@@ -76,6 +161,72 @@
       "showBusy",
       "showDone",
       "showError"
+    ]
+  },
+  {
+    "name": "SceneState#restore",
+    "filePath": "src/viewer/scene/scene/SceneState.js",
+    "lines": [
+      {
+        "lineNumber": 115,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 116,
+        "line": "     * Restores a {@link Scene} to state previously captured with {@link SceneState#save}."
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param {Scene} scene The scene."
+      },
+      {
+        "lineNumber": 118,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 119,
+        "line": "    restore(scene, done) {"
+      }
+    ],
+    "codeParams": [
+      "scene",
+      "done"
+    ],
+    "docParams": [
+      "scene"
+    ]
+  },
+  {
+    "name": "SceneState#restoreCamera",
+    "filePath": "src/viewer/scene/scene/SceneState.js",
+    "lines": [
+      {
+        "lineNumber": 124,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * Restores a {@link Scene}'s {@link Camera} to its state previously captured with {@link SceneState#save}."
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param {Scene} scene The scene."
+      },
+      {
+        "lineNumber": 127,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 128,
+        "line": "    restoreCamera(scene, done) {"
+      }
+    ],
+    "codeParams": [
+      "scene",
+      "done"
+    ],
+    "docParams": [
+      "scene"
     ]
   },
   {

@@ -47,7 +47,7 @@ class GLTFQualityLoader {
         options = options || {};
         var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, "", options, modelNode, function () {
+        parseGLTF(gltf, "", options, plugin, modelNode, function () {
                 spinner.processes--;
                 modelNode.scene.fire("modelLoaded", modelNode.id); // FIXME: Assumes listeners know order of these two events
                 modelNode.fire("loaded", true, true);
@@ -71,7 +71,7 @@ var loadGLTF = (function () {
     return function (plugin, modelNode, src, options, ok, error) {
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(json, src, options, plugin, modelNode, ok, error);
+                parseGLTF(plugin, json, src, options, modelNode, ok, error);
             },
             error);
     };
@@ -103,7 +103,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, modelNode, ok) {
+    return function (plugin, json, src, options, modelNode, ok) {
         modelNode.clear();
         var ctx = {
             src: src,

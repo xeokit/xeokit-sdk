@@ -126,22 +126,16 @@ function getEntityIDMap(scene, entityIds) {
  * //...
  * ````
  *
- * ## Managing the canvas, taking snapshots
+ * ## Managing the canvas
  *
  * The Scene's {@link Canvas} component provides various conveniences relevant to the WebGL canvas, such
- * as getting getting snapshots, firing resize events etc:
+ * as firing resize events etc:
  *
  * ````javascript
  * var canvas = scene.canvas;
  *
  * canvas.on("boundary", function(boundary) {
  *     //...
- * });
- *
- * var imageData = canvas.getSnapshot({
- *     width: 500,
- *     height: 500,
- *     format: "png"
  * });
  * ````
  *
@@ -508,20 +502,19 @@ class Scene extends Component {
         this.canvas = new Canvas(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
             canvas: canvas,
+            spinnerElementId: cfg.spinnerElementId,
             transparent: transparent,
             backgroundColor: cfg.backgroundColor,
-            backgroundImage: cfg.backgroundImage,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
             clearColorAmbient: cfg.clearColorAmbient
         });
 
-        // Redraw as canvas resized
-        this.canvas.on("boundary", function () {
-            self.glRedraw();
+        this.canvas.on("boundary", () => {
+            this.glRedraw();
         });
 
-        this.canvas.on("webglContextFailed", function () {
+        this.canvas.on("webglContextFailed",  ()=> {
             alert("xeokit failed to find WebGL!");
         });
 
@@ -695,6 +688,14 @@ class Scene extends Component {
             element: this.canvas.canvas
         });
 
+        this.ticksPerRender = cfg.ticksPerRender;
+        this.ticksPerOcclusionTest = cfg.ticksPerOcclusionTest;
+        this.passes = cfg.passes;
+        this.clearEachPass = cfg.clearEachPass;
+        this.gammaInput = cfg.gammaInput;
+        this.gammaOutput = cfg.gammaOutput;
+        this.gammaFactor = cfg.gammaFactor;
+
         // Register Scene on xeokit
         // Do this BEFORE we add components below
         core._addScene(this);
@@ -717,7 +718,7 @@ class Scene extends Component {
         // Default lights
 
         new AmbientLight(this, {
-            color: [0.35, 0.35, 0.2],
+            color: [0.3, 0.3, 0.3],
             intensity: 1.0
         });
 
@@ -742,22 +743,9 @@ class Scene extends Component {
             space: "view"
         });
 
-        // Plug global components into renderer
-
-        const viewport = this._viewport;
-        const renderer = this._renderer;
-        const camera = this._camera;
-
-        camera.on("dirty", function () {
-            renderer.imageDirty();
+        this._camera.on("dirty", () => {
+            this._renderer.imageDirty();
         });
-
-        this.ticksPerRender = cfg.ticksPerRender;
-        this.passes = cfg.passes;
-        this.clearEachPass = cfg.clearEachPass;
-        this.gammaInput = cfg.gammaInput;
-        this.gammaOutput = cfg.gammaOutput;
-        this.gammaFactor = cfg.gammaFactor;
     }
 
     _initDefaults() {
@@ -838,6 +826,7 @@ class Scene extends Component {
     _sectionPlaneCreated(sectionPlane) {
         this.sectionPlanes[sectionPlane.id] = sectionPlane;
         this.scene._sectionPlanesState.addSectionPlane(sectionPlane._state);
+        this.scene.fire("sectionPlaneCreated", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
     }
 
@@ -969,11 +958,24 @@ class Scene extends Component {
     }
 
     /**
+     * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
+     *
+     * Sets each {@link Marker#visible} ````true```` if the Marker is currently not occluded by any opaque {@link Entity}s
+     * in the Scene, or ````false```` if an Entity is occluding it.
+     */
+    doOcclusionTest() {
+        if (this._needRecompile) {
+            this._recompile();
+            this._needRecompile = false;
+        }
+        this._renderer.doOcclusionTest();
+    }
+
+    /**
      * Renders a single frame of this Scene.
      *
      * The Scene will periodically render itself after any updates, but you can call this method to force a render
-     * if required. This method is typically used when we want to synchronously take a snapshot of the canvas and
-     * need everything rendered right at that moment.
+     * if required.
      *
      * @param {Boolean} [forceRender=false] Forces a render when true, otherwise only renders if something has changed in this Scene
      * since the last render.
@@ -991,6 +993,7 @@ class Scene extends Component {
 
         if (this._needRecompile) {
             this._recompile();
+            this._renderer.imageDirty();
             this._needRecompile = false;
         }
 
@@ -1164,6 +1167,38 @@ class Scene extends Component {
     }
 
     /**
+     * Sets the number of "ticks" that happen between occlusion testing for {@link Marker}s.
+     *
+     * Default value is ````20````.
+     *
+     * @type {Number}
+     */
+    set ticksPerOcclusionTest(value) {
+        if (value === undefined || value === null) {
+            value = 20;
+        } else if (!utils.isNumeric(value) || value <= 0) {
+            this.error("Unsupported value for 'ticksPerOcclusionTest': '" + value +
+                "' - should be an integer greater than zero.");
+            value = 20;
+        }
+        if (value === this._ticksPerOcclusionTest) {
+            return;
+        }
+        this._ticksPerOcclusionTest = value;
+    }
+
+    /**
+     * Gets the number of "ticks" that happen between each render of this Scene.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
+    get ticksPerOcclusionTest() {
+        return this._ticksPerOcclusionTest;
+    }
+
+    /**
      * Sets the number of times this Scene renders per frame.
      *
      * Default value is ````1````.
@@ -1280,7 +1315,7 @@ class Scene extends Component {
     /**
      * Sets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
@@ -1296,7 +1331,7 @@ class Scene extends Component {
     /**
      * Gets the gamma factor to use when {@link Scene#gammaOutput} is set true.
      *
-     * Default value is ````1.0````.
+     * Default value is ````2.2````.
      *
      * @type {Number}
      */
@@ -1655,6 +1690,12 @@ class Scene extends Component {
             params.excludeEntityIds = getEntityIDMap(this, excludeEntities);
         }
 
+        if (this._needRecompile) {
+            this._recompile();
+            this._renderer.imageDirty();
+            this._needRecompile = false;
+        }
+
         pickResult = this._renderer.pick(params, pickResult);
 
         if (pickResult) {
@@ -1926,7 +1967,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Number} [opacity=1.0] RGB colorize factors, multiplied by the rendered pixel colors.
+     * @param {Number} [opacity=1.0] Opacity factor, multiplied by the rendered pixel alphas.
      * @returns {Boolean} True if any {@link Entity}s changed opacity, else false if all updates were redundant and not applied.
      */
     setObjectsOpacity(ids, opacity) {

@@ -14,8 +14,8 @@
 
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads glTF model from file system
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads xKT model from file system
         </li>
         <li>
             <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Picking">User Guide</a>
@@ -31,7 +31,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -48,11 +48,11 @@
     // Load a model and fit it to view
     //------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/duplex/scene.gltf",
+        src: "./models/xkt/duplex/duplex.xkt",
         metaModelSrc: "./metaModels/duplex/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });

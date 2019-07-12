@@ -34,7 +34,7 @@ class GLTFPerformanceLoader {
 
     parse(plugin, performanceModel, gltf, options, ok, error) {
         options = options || {};
-        parseGLTF(plugin, gltf, "", options, performanceModel, function () {
+        parseGLTF(gltf, "", options, plugin, performanceModel, function () {
                 performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
                 performanceModel.fire("loaded", true, true);
                 if (ok) {
@@ -60,7 +60,7 @@ var loadGLTF = (function () {
         spinner.processes++;
         plugin.dataSource.getGLTF(src, function (json) { // OK
                 spinner.processes--;
-                parseGLTF(json, src, options, plugin, performanceModel, ok, error);
+                parseGLTF(plugin, json, src, options, performanceModel, ok, error);
             },
             error);
     };
@@ -92,7 +92,7 @@ var parseGLTF = (function () {
         'MAT4': 16
     };
 
-    return function (json, src, options, plugin, performanceModel, ok) {
+    return function (plugin, json, src, options,  performanceModel, ok) {
         var ctx = {
             src: src,
             loadBuffer: options.loadBuffer,
@@ -325,7 +325,7 @@ var parseGLTF = (function () {
         if (glTFNode.mesh !== undefined) {
             const meshInfo = json.meshes[glTFNode.mesh];
             if (meshInfo) {
-                glTFNode.worldMatrix = matrix.slice();
+                glTFNode.worldMatrix = matrix ? matrix.slice() : math.identityMat4();
                 glTFNode.priority = priority;
                 ctx.nodes.push(glTFNode);
             }
@@ -364,9 +364,11 @@ var parseGLTF = (function () {
         }
         var priority = null;
         var tileId = null;
+        var tileOpen = false;
         var nodei = 0;
         var spinnerShowing = true;
         ctx.plugin.viewer.scene.canvas.spinner.processes++;
+
         function nextPriority() {
             for (var i = nodei, len = ctx.nodes.length; i < len; i++) {
                 const glTFNode = ctx.nodes[i];
@@ -378,29 +380,29 @@ var parseGLTF = (function () {
                             spinnerShowing = false;
                         }
                     }
-                    nodei = i + 1;
+                    nodei = i;
                     tileId = "" + glTFNode.priority;
-                    //console.log("loading tile: " + tileId);
                     ctx.performanceModel.createTile({
                         id: tileId
                     });
                     priority = glTFNode.priority;
-                    setTimeout(nextPriority, 150);
+                    tileOpen = true;
+                    setTimeout(nextPriority, 100);
                     return;
                 }
                 loadNode(ctx, glTFNode, tileId);
             }
-            ctx.performanceModel.finalize();
+            if (tileOpen) {
+                ctx.performanceModel.finalizeTile(tileId);
+            }
             if (spinnerShowing) {
                 ctx.plugin.viewer.scene.canvas.spinner.processes--;
                 spinnerShowing = false;
             }
             ok();
         }
-
         nextPriority();
     }
-
 
     function countMeshUsage(ctx, glTFNode) {
         var json = ctx.json;
@@ -583,15 +585,6 @@ var parseGLTF = (function () {
         } else {
             return new TypedArray(bufferViewInfo._buffer, accessorInfo.byteOffset || 0, accessorInfo.count * itemSize);
         }
-    }
-
-    function scalePositionsArray(positions) {
-        for (var i = 0, len = positions.length; i < len; i += 3) {
-            positions[i + 0] *= 1000;
-            positions[i + 1] *= 1000;
-            positions[i + 2] *= 1000;
-        }
-
     }
 
     function error(ctx, msg) {

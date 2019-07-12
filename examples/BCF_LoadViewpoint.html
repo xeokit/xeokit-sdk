@@ -22,13 +22,13 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
-            - Saves and loads BCF viewpoints
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads BIM model from the file system
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
-            - Loads model and IFC data from file system
+               href="./../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a>
+            - Saves and loads BCF viewpoints
         </li>
         <li>See source code to examine the BCF JSON record</li>
         <li>
@@ -46,7 +46,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {BCFViewpointsPlugin} from "../src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -56,13 +56,13 @@
     const bcfViewpoint = {
         "perspective_camera": {
             "camera_view_point": {"x": -2.36, "y": 18.96, "z": -26.12},
-            "camera_direction": {"x": 10.97, "y": 5.82, "z": -11.22},
+            "camera_direction": {"x": 0.55, "y": -0.54, "z": 0.62},
             "camera_up_vector": {"x": 0.36, "y": 0.82, "z": 0.40},
             "field_of_view": 60
         },
         "orthogonal_camera": {
             "camera_view_point": {"x": -2.36, "y": 18.96, "z": -26.12},
-            "camera_direction": {"x": 10.97, "y": 5.82, "z": -11.22},
+            "camera_direction": {"x": 0.55, "y": -0.54, "z": 0.62},
             "camera_up_vector": {"x": 0.36, "y": 0.82, "z": 0.40},
             "view_to_world_scale": 1
         },
@@ -137,7 +137,7 @@
     // Add a GLTFModelsPlugin - we'll use this to load the model geometry and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const gltfLoader = new GLTFLoaderPlugin(viewer);
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a BCFViewpointsPlugin - we'll use this to load the BCF viewpoint
@@ -146,12 +146,12 @@
     const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Load the glTF model and IFC metadata
+    // Load the XKT model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
+    const model = xktLoader.load({
         id: "myModel",
-        src: "./models/gltf/schependomlaan/scene.gltf",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true // Emphasise edges
     });
