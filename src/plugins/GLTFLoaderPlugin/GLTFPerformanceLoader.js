@@ -34,7 +34,7 @@ class GLTFPerformanceLoader {
 
     parse(plugin, performanceModel, gltf, options, ok, error) {
         options = options || {};
-        parseGLTF(gltf, "", options, plugin, performanceModel, function () {
+        parseGLTF(plugin, gltf, "", options, performanceModel, function () {
                 performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
                 performanceModel.fire("loaded", true, true);
                 if (ok) {
