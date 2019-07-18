@@ -33,7 +33,7 @@ DrawRenderer.get = function (mesh) {
         scene._sectionPlanesState.getHash(),
         mesh._geometry._state.hash,
         mesh._material._state.hash,
-        mesh._state.hash
+        mesh._state.drawHash
     ].join(";");
     let renderer = drawRenderers[hash];
     if (!renderer) {
