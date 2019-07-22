@@ -182,6 +182,7 @@ class CameraControl extends Component {
             duration: 0.5
         });
 
+        this.planView = cfg.planView;
         this.firstPerson = cfg.firstPerson;
         this.walking = cfg.walking;
         this.keyboardLayout = cfg.keyboardLayout;
@@ -288,6 +289,32 @@ class CameraControl extends Component {
      */
     get panToPivot() {
         return this._panToPivot;
+    }
+
+    /**
+     * Sets whether this CameraControl is in plan-view mode.
+     *
+     * When in plan-view mode, rotation is disabled.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable plan-view mode.
+     */
+    set planView(value) {
+        this._planView = !!value;
+    }
+
+    /**
+     * Gets whether this CameraControl is in plan-view mode.
+     *
+     * When in plan-view mode, rotation is disabled.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if plan-view mode is enabled.
+     */
+    get planView() {
+        return this._planView;
     }
 
     /**
@@ -1028,10 +1055,13 @@ class CameraControl extends Component {
 
                     } else {
 
-                        // Orbiting
+                        if (!self._planView) {
 
-                        rotateVy = -xDelta * mouseOrbitRate;
-                        rotateVx = yDelta * mouseOrbitRate;
+                            // Orbiting
+
+                            rotateVy = -xDelta * mouseOrbitRate;
+                            rotateVx = yDelta * mouseOrbitRate;
+                        }
                     }
 
                     xDelta = 0;
@@ -1263,6 +1293,9 @@ class CameraControl extends Component {
                     if (!over) {
                         return;
                     }
+                    if (self._planView) {
+                        return;
+                    }
                     const elapsed = e.deltaTime;
                     const left = input.keyDown[input.KEY_LEFT_ARROW];
                     const right = input.keyDown[input.KEY_RIGHT_ARROW];
@@ -1333,7 +1366,7 @@ class CameraControl extends Component {
                     if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
-                    
+
                     getCanvasPosFromEvent(e, pickCursorPos);
 
                     if (self.hasSubs("hover") || self.hasSubs("hoverOut") || self.hasSubs("hoverOff") || self.hasSubs("hoverSurface")) {
