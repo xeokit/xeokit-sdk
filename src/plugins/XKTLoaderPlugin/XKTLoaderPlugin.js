@@ -532,7 +532,8 @@ class XKTLoaderPlugin extends Plugin {
                 this._parseModel(arrayBuffer, params, options, performanceModel);
                 spinner.processes--;
                 this.viewer.scene.once("tick", () => {
-                    performanceModel.fire("loaded", true);
+                    performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
+                    performanceModel.fire("loaded", true, true);
                 });
             },
             (errMsg) => {
