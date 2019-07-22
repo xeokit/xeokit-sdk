@@ -414,6 +414,7 @@ class AnnotationsPlugin extends Plugin {
      * @param {Number[]} [params.eye] Optional World-space position for {@link Camera#eye}, used when this Annotation is associated with a {@link Camera} position.
      * @param {Number[]} [params.look] Optional World-space position for {@link Camera#look}, used when this Annotation is associated with a {@link Camera} position.
      * @param {Number[]} [params.up] Optional World-space position for {@link Camera#up}, used when this Annotation is associated with a {@link Camera} position.
+     * @param {String} [params.projection] Optional projection type for {@link Camera#projection}, used when this Annotation is associated with a {@link Camera} position.
      * @returns {Annotation} The new {@link Annotation}.
      */
     createAnnotation(params) {
@@ -472,7 +473,8 @@ class AnnotationsPlugin extends Plugin {
             labelShown: params.labelShown,
             eye: params.eye,
             look: params.look,
-            up: params.up
+            up: params.up,
+            projection: params.projection
         });
         this.annotations[annotation.id] = annotation;
         annotation.on("destroyed", () => {

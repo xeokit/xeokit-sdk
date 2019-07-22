@@ -127,6 +127,15 @@ class Annotation extends Marker {
          * @type {Number[]} The "up" vector.
          */
         this.up = cfg.up;
+
+        /**
+         * Optional projection type for {@link Camera#projection}, used when this Annotation is associated with a {@link Camera} position.
+         *
+         * Undefined by default.
+         *
+         * @type {String} The projection type - "perspective" or "ortho"..
+         */
+        this.projection = cfg.projection;
     }
 
     /**
