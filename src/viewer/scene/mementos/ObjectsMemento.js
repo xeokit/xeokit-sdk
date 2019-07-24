@@ -7,6 +7,48 @@ const colorize = math.vec3();
  *
  * * An Entity represents an object when {@link Entity#isObject} is ````true````.
  * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.
+ *
+ * ## Usage
+ *
+ * In the example below, we'll create a {@link Viewer} and use an {@link XKTLoaderPlugin} to load an ````.xkt```` model. When the model has loaded, we'll hide a couple of {@link Entity}s and save a snapshot of the visual states of all the Entitys in an ObjectsMemento. Then we'll show all the Entitys
+ * again, and then we'll restore the visual states of all the Entitys again from the ObjectsMemento, which will hide those two Entitys again.
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {ObjectsMemento} from "../src/scene/mementos/ObjectsMemento.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * // Load a model
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./models/xkt/schependomlaan/schependomlaan.xkt"
+ * });
+ *
+ * model.on("loaded", () => {
+ *
+ *      // Model has loaded
+ *
+ *      // Hide a couple of objects
+ *      viewer.scene.objects["0u4wgLe6n0ABVaiXyikbkA"].visible = false;
+ *      viewer.scene.objects["3u4wgLe3n0AXVaiXyikbYO"].visible = false;
+ *
+ *      // Save memento of all object states, which includes those two hidden objects
+ *      const objectsMemento = new ObjectsMemento();
+ *
+ *      objectsMemento.saveObjects(viewer.scene);
+ *
+ *      // Show all objects
+ *      viewer.scene.setObjectsVisible(viewer.scene.objectIds, true);
+ *
+ *      // Restore the objects states again, which involves hiding those two objects again
+ *      objectsMemento.restoreObjects(viewer.scene);
+ * });
+ * `````
  */
 class ObjectsMemento {
 

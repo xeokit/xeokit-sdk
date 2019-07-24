@@ -2,6 +2,50 @@ import {math} from "../math/math.js";
 
 /**
  * @desc Saves and restores the state of a {@link Camera} within a {@link Scene}.
+ *
+ * ## Usage
+ *
+ * In the example below, we'll create a {@link Viewer} and use an {@link XKTLoaderPlugin} to load an ````.xkt```` model. When the model has loaded, we'll save a snapshot of the {@link Camera} state in an CameraMemento. Then we'll move the Camera, and then we'll restore its original state again from the CameraMemento.
+ *
+ * ````javascript
+ * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {CameraMemento} from "../src/scene/mementos/CameraMemento.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * // Load a model
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./models/xkt/schependomlaan/schependomlaan.xkt"
+ * });
+ *
+ * // Set camera
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * model.on("loaded", () => {
+ *
+ *      // Model has loaded
+ *
+ *      // Save memento of camera state
+ *      const cameraMemento = new CameraMemento();
+ *
+ *      cameraMemento.saveCamera(viewer.scene);
+ *
+ *      // Move the camera
+ *      viewer.camera.eye = [45.3, 2.00, 5.13];
+ *      viewer.camera.look = [0.0, 5.5, 10.0];
+ *      viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ *      // Restore the camera state again
+ *      objectsMemento.restoreCamera(viewer.scene);
+ * });
+ * ````
  */
 class CameraMemento {
 
