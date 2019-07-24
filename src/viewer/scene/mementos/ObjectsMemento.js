@@ -17,16 +17,34 @@ class ObjectsMemento {
      */
     constructor(scene) {
 
+        /** @private */
         this.objectsVisible = [];
+
+        /** @private */
         this.objectsEdges = [];
+
+        /** @private */
         this.objectsXrayed = [];
+
+        /** @private */
         this.objectsHighlighted = [];
+
+        /** @private */
         this.objectsSelected = [];
+
+        /** @private */
         this.objectsClippable = [];
+
+        /** @private */
         this.objectsPickable = [];
+
+        /** @private */
         this.objectsColorize = [];
+
+        /** @private */
         this.objectsOpacity = [];
 
+        /** @private */
         this.numObjects = 0;
 
         if (scene) {

@@ -8,17 +8,21 @@ class CameraMemento {
     /**
      * Creates a CameraState.
      *
-     * @param {Scene} [scene] When given, immediately saves the given {@link Scene}'s {@link Entity} states to this ObjectsState.
+     * @param {Scene} [scene] When given, immediately saves the state of the given {@link Scene}'s {@link Camera}.
      */
     constructor(scene) {
 
-        this.eye = math.vec3();
+        /** @private */
+        this._eye = math.vec3();
 
-        this.look = math.vec3();
+        /** @private */
+        this._look = math.vec3();
 
-        this.up = math.vec3();
+        /** @private */
+        this._up = math.vec3();
 
-        this.projection = {};
+        /** @private */
+        this._projection = {};
 
         if (scene) {
             this.saveCamera(scene);
@@ -35,14 +39,14 @@ class CameraMemento {
         const camera = scene.camera;
         const project = camera.project;
 
-        this.eye.set(camera.eye);
-        this.look.set(camera.look);
-        this.up.set(camera.up);
+        this._eye.set(camera.eye);
+        this._look.set(camera.look);
+        this._up.set(camera.up);
 
         switch (camera.projection) {
 
             case "perspective":
-                this.projection = {
+                this._projection = {
                     projection: "perspective",
                     fov: project.fov,
                     fovAxis: project.fovAxis,
@@ -52,7 +56,7 @@ class CameraMemento {
                 break;
 
             case "ortho":
-                this.projection = {
+                this._projection = {
                     projection: "ortho",
                     scale: project.scale,
                     near: project.near,
@@ -61,7 +65,7 @@ class CameraMemento {
                 break;
 
             case "frustum":
-                this.projection = {
+                this._projection = {
                     projection: "frustum",
                     left: project.left,
                     right: project.right,
@@ -73,7 +77,7 @@ class CameraMemento {
                 break;
 
             case "custom":
-                this.projection = {
+                this._projection = {
                     projection: "custom",
                     matrix: project.matrix.slice()
                 };
@@ -90,7 +94,7 @@ class CameraMemento {
     restoreCamera(scene, done) {
 
         const camera = scene.camera;
-        const savedProjection = this.projection;
+        const savedProjection = this._projection;
 
         function restoreProjection() {
 
@@ -126,9 +130,9 @@ class CameraMemento {
 
         if (done) {
             scene.viewer.cameraFlight.flyTo({
-                eye: this.eye,
-                look: this.look,
-                up: this.up,
+                eye: this._eye,
+                look: this._look,
+                up: this._up,
                 orthoScale: savedProjection.scale,
                 projection: savedProjection.projection
             }, () => {
@@ -136,9 +140,9 @@ class CameraMemento {
                 done();
             });
         } else {
-            camera.eye = this.eye;
-            camera.look = this.look;
-            camera.up = this.up;
+            camera.eye = this._eye;
+            camera.look = this._look;
+            camera.up = this._up;
             restoreProjection();
             camera.projection = savedProjection.projection;
         }
