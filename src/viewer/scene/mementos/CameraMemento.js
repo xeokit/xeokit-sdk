@@ -1,7 +1,7 @@
 import {math} from "../math/math.js";
 
 /**
- * @desc Saves and restores the state of a {@link Camera} within a {@link Scene}.
+ * @desc Saves and restores the state of a {@link Scene}'s {@link Camera}.
  *
  * ## Usage
  *
