@@ -1,10 +1,10 @@
-import {ObjectStates} from "../../viewer/scene/state/ObjectStates.js";
+import {ObjectsMemento} from "../../viewer/scene/mementos/ObjectsMemento.js";
 
 import {Plugin} from "../../viewer/Plugin.js";
 import {PlanView} from "./PlanView.js";
 import {IFCPlanViewObjectStates} from "./IFCPlanViewObjectStates.js";
 
-const objectStates = new ObjectStates();
+const objectsMemento = new ObjectsMemento();
 
 /**
  * @desc A {@link Viewer} plugin that provides plan view images of storeys within IFC building models.
@@ -294,7 +294,7 @@ class PlanViewsPlugin extends Plugin {
 
         // 1. Save state of scene objects
 
-        objectStates.saveObjects(scene);
+        objectsMemento.saveObjects(scene);
 
         // 2. Save canvas size
 
@@ -396,7 +396,7 @@ class PlanViewsPlugin extends Plugin {
 
                 // 6. Restore scene state
 
-                objectStates.restoreObjects(scene);
+                objectsMemento.restoreObjects(scene);
 
                 // 7. Restore canvas size
 

@@ -3,7 +3,7 @@ import {math} from "../math/math.js";
 /**
  * @desc Saves and restores the state of a {@link Camera} within a {@link Scene}.
  */
-class CameraState {
+class CameraMemento {
 
     /**
      * Creates a CameraState.
@@ -82,7 +82,7 @@ class CameraState {
     }
 
     /**
-     * Restores a {@link Scene}'s {@link Camera} to the state previously captured with {@link CameraState#saveCamera}.
+     * Restores a {@link Scene}'s {@link Camera} to the state previously captured with {@link CameraMemento#saveCamera}.
      *
      * @param {Scene} scene The scene.
      * @param {Function} [done] When this callback is given, will fly the {@link Camera} to the saved state then fire the callback. Otherwise will just jump the Camera to the saved state.
@@ -145,4 +145,4 @@ class CameraState {
     }
 }
 
-export {CameraState};
+export {CameraMemento};

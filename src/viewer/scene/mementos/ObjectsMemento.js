@@ -8,7 +8,7 @@ const colorize = math.vec3();
  * * An Entity represents an object when {@link Entity#isObject} is ````true````.
  * * Each object-Entity is registered by {@link Entity#id} in {@link Scene#objects}.
  */
-class ObjectStates {
+class ObjectsMemento {
 
     /**
      * Creates an ObjectsState.
@@ -72,7 +72,7 @@ class ObjectStates {
     }
 
     /**
-     * Restores a {@link Scene}'s {@link Entity}'s to their state previously captured with {@link ObjectStates#saveObjects}.
+     * Restores a {@link Scene}'s {@link Entity}'s to their state previously captured with {@link ObjectsMemento#saveObjects}.
      * @param {Scene} scene The scene.
      */
     restoreObjects(scene) {
@@ -108,4 +108,4 @@ class ObjectStates {
     }
 }
 
-export {ObjectStates};
+export {ObjectsMemento};
