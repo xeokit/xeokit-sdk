@@ -99,6 +99,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
@@ -107,7 +109,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -302,6 +303,7 @@ class CameraControl extends Component {
             duration: 0.5
         });
 
+        this.planView = cfg.planView;
         this.firstPerson = cfg.firstPerson;
         this.walking = cfg.walking;
         this.keyboardLayout = cfg.keyboardLayout;
@@ -408,6 +410,32 @@ class CameraControl extends Component {
      */
     get panToPivot() {
         return this._panToPivot;
+    }
+
+    /**
+     * Sets whether this CameraControl is in plan-view mode.
+     *
+     * When in plan-view mode, rotation is disabled.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value Set ````true```` to enable plan-view mode.
+     */
+    set planView(value) {
+        this._planView = !!value;
+    }
+
+    /**
+     * Gets whether this CameraControl is in plan-view mode.
+     *
+     * When in plan-view mode, rotation is disabled.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} Returns ````true```` if plan-view mode is enabled.
+     */
+    get planView() {
+        return this._planView;
     }
 
     /**
@@ -928,6 +956,7 @@ class CameraControl extends Component {
                 if (vZoom !== 0) {
                     if (self._firstPerson) {
                         let y;
+                        var yUp = viewer.camera.getYUp();
                         if (self._walking) {
                             y = camera.eye[1];
                         }
@@ -1148,10 +1177,13 @@ class CameraControl extends Component {
 
                     } else {
 
-                        // Orbiting
+                        if (!self._planView) {
 
-                        rotateVy = -xDelta * mouseOrbitRate;
-                        rotateVx = yDelta * mouseOrbitRate;
+                            // Orbiting
+
+                            rotateVy = -xDelta * mouseOrbitRate;
+                            rotateVx = yDelta * mouseOrbitRate;
+                        }
                     }
 
                     xDelta = 0;
@@ -1383,6 +1415,9 @@ class CameraControl extends Component {
                     if (!over) {
                         return;
                     }
+                    if (self._planView) {
+                        return;
+                    }
                     const elapsed = e.deltaTime;
                     const left = input.keyDown[input.KEY_LEFT_ARROW];
                     const right = input.keyDown[input.KEY_RIGHT_ARROW];
@@ -1453,7 +1488,7 @@ class CameraControl extends Component {
                     if (!(self._active &amp;&amp; self._pointerEnabled)) {
                         return;
                     }
-                    
+
                     getCanvasPosFromEvent(e, pickCursorPos);
 
                     if (self.hasSubs(&quot;hover&quot;) || self.hasSubs(&quot;hoverOut&quot;) || self.hasSubs(&quot;hoverOff&quot;) || self.hasSubs(&quot;hoverSurface&quot;)) {

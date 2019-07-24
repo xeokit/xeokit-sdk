@@ -99,6 +99,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
@@ -107,7 +109,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/SceneState.js~SceneState.html">SceneState</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
@@ -1053,7 +1054,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber501">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber503">source</a></span></span>
     </span>
   </h3>
 
@@ -1097,7 +1098,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber419">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber420">source</a></span></span>
     </span>
   </h3>
 
@@ -1236,6 +1237,13 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
       <td data-ice="description"><p>Optional World-space position for <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span>, used when this Annotation is associated with a <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.projection</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Optional projection type for <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span>, used when this Annotation is associated with a <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> position.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1283,7 +1291,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber513">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber515">source</a></span></span>
     </span>
   </h3>
 
@@ -1328,7 +1336,7 @@ viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber489">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js.html#lineNumber491">source</a></span></span>
     </span>
   </h3>
 
