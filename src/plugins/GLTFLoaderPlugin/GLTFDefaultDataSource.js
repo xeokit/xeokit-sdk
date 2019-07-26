@@ -96,7 +96,7 @@ function loadArraybuffer(glTFSrc, binarySrc, ok, err) {
             }, 0);
         }
     } else {
-        const basePath = getBasePath(glTFSrc);
+        const basePath = getBasePath(glTFSrc.basePath);
         const url = basePath + binarySrc;
         const request = new XMLHttpRequest();
         request.open('GET', url, true);
