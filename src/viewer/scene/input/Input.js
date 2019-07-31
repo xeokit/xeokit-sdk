@@ -2219,7 +2219,7 @@ class Input extends Component {
             window.removeEventListener('devicemotion', this._deviceMotionListener);
         }
         if (window.DeviceOrientationEvent) {
-            window.addEventListener("deviceorientation", this._deviceOrientListener);
+            window.removeEventListener("deviceorientation", this._deviceOrientListener);
         }
     }
 }
