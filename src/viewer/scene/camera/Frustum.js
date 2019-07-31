@@ -62,7 +62,7 @@ class Frustum extends Component {
      */
     set left(value) {
         this._left = (value !== undefined && value !== null) ? value : -1.0;
-        this._needUpdate();
+        this._needUpdate(0);
 
         /**
          Fired whenever the Frustum's {@link Frustum#left} property changes.
@@ -91,7 +91,7 @@ class Frustum extends Component {
      */
     set right(value) {
         this._right = (value !== undefined && value !== null) ? value : 1.0;
-        this._needUpdate();
+        this._needUpdate(0);
 
         /**
          Fired whenever the Frustum's {@link Frustum#right} property changes.
@@ -122,7 +122,7 @@ class Frustum extends Component {
      */
     set top(value) {
         this._top = (value !== undefined && value !== null) ? value : 1.0;
-        this._needUpdate();
+        this._needUpdate(0);
 
         /**
          Fired whenever the Frustum's   {@link Frustum#top} property changes.
@@ -155,7 +155,7 @@ class Frustum extends Component {
      */
     set bottom(value) {
         this._bottom = (value !== undefined && value !== null) ? value : -1.0;
-        this._needUpdate();
+        this._needUpdate(0);
 
         this.fire("bottom", this._bottom);
     }
@@ -182,7 +182,7 @@ class Frustum extends Component {
      */
     set near(value) {
         this._state.near = (value !== undefined && value !== null) ? value : 0.1;
-        this._needUpdate();
+        this._needUpdate(0);
 
         /**
          Fired whenever the Frustum's {@link Frustum#near} property changes.
@@ -217,7 +217,7 @@ class Frustum extends Component {
      */
     set far(value) {
         this._state.far = (value !== undefined && value !== null) ? value : 10000.0;
-        this._needUpdate();
+        this._needUpdate(0);
 
         /**
          Fired whenever the Frustum's  {@link Frustum#far} property changes.

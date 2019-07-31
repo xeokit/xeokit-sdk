@@ -99,7 +99,7 @@ class Ortho extends Component {
             value = 0.01;
         }
         this._scale = value;
-        this._needUpdate();
+        this._needUpdate(0);
         /**
          Fired whenever this Ortho's {@link Ortho#scale} property changes.
 
@@ -133,7 +133,7 @@ class Ortho extends Component {
      */
     set near(value) {
         this._state.near = (value !== undefined && value !== null) ? value : 0.1;
-        this._needUpdate();
+        this._needUpdate(0);
         /**
          Fired whenever this Ortho's  {@link Ortho#near} property changes.
 
@@ -165,7 +165,7 @@ class Ortho extends Component {
      */
     set far(value) {
         this._state.far = (value !== undefined && value !== null) ? value : 10000.0;
-        this._needUpdate();
+        this._needUpdate(0);
         /**
          Fired whenever this Ortho's {@link Ortho#far} property changes.
 
