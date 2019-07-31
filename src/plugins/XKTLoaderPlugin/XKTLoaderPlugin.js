@@ -3,7 +3,8 @@ import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceM
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
-import "./lib/pako.js";
+import * as p from "./lib/pako.js";
+const pako = window.pako || p;
 
 const XKT_VERSION = 1; // XKT format version supported by this XKTLoaderPlugin
 
