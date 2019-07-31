@@ -1245,8 +1245,8 @@ class CameraControl extends Component {
                             const deltaY = touch0.pageY - lastTouches[0][1];
                             const rotateX = deltaX * touchRotateRate;
                             const rotateY = deltaY * touchRotateRate;
-                            rotateVx = rotateY;
-                            rotateVy = -rotateX;
+                            rotateVx += rotateY;
+                            rotateVy += -rotateX;
                         }
 
                     } else if (numTouches === 2) {
@@ -1261,8 +1261,8 @@ class CameraControl extends Component {
 
                         if (panning && checkMode(MODE_PAN)) {
                             math.subVec2([touch0.pageX, touch0.pageY], lastTouches[0], touch0Vec);
-                            panVx = touch0Vec[0] * touchPanRate;
-                            panVy = touch0Vec[1] * touchPanRate;
+                            panVx += touch0Vec[0] * touchPanRate;
+                            panVy += touch0Vec[1] * touchPanRate;
                         }
 
                         if (!panning && checkMode(MODE_ZOOM)) {
