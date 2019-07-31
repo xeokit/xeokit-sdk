@@ -357,7 +357,7 @@ class Component {
     /**
      * Cancels an event subscription that was previously made with {@link Component#on} or {@link Component#once}.
      *
-     * @param {String} subId Publication subId
+     * @param {String} subId Subscription ID
      */
     off(subId) {
         if (subId === undefined || subId === null) {
