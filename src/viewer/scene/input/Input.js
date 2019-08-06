@@ -958,23 +958,21 @@ class Input extends Component {
 
             if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
 
-                if (e.ctrlKey) {
+                if (e.keyCode === self.KEY_CTRL) {
                     self.ctrlDown = true;
-
-                } else if (e.altKey) {
+                } else if (e.keyCode === self.KEY_ALT) {
                     self.altDown = true;
-
-                } else {
-                    self.keyDown[e.keyCode] = true;
-
-                    /**
-                     * Fired whenever a key is pressed while the parent
-                     * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
-                     * @event keydown
-                     * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
-                     */
-                    self.fire("keydown", e.keyCode, true);
                 }
+
+                self.keyDown[e.keyCode] = true;
+
+                /**
+                 * Fired whenever a key is pressed while the parent
+                 * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
+                 * @event keydown
+                 * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
+                 */
+                self.fire("keydown", e.keyCode, true);
             }
 
             if (self.mouseover) {
@@ -991,23 +989,21 @@ class Input extends Component {
 
             if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
 
-                if (e.ctrlKey) {
+                if (e.keyCode === self.KEY_CTRL) {
                     self.ctrlDown = false;
-
-                } else if (e.altKey) {
+                } else if (e.keyCode === self.KEY_ALT) {
                     self.altDown = false;
-
-                } else {
-                    self.keyDown[e.keyCode] = false;
-
-                    /**
-                     * Fired whenever a key is released while the parent
-                     * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
-                     * @event keyup
-                     * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
-                     */
-                    self.fire("keyup", e.keyCode, true);
                 }
+
+                self.keyDown[e.keyCode] = false;
+
+                /**
+                 * Fired whenever a key is released while the parent
+                 * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}} has input focus.
+                 * @event keyup
+                 * @param value {Number} The key code, for example {@link Input/KEY_LEFT_ARROW},
+                 */
+                self.fire("keyup", e.keyCode, true);
             }
         });
 
