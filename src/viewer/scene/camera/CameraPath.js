@@ -130,6 +130,7 @@ class CameraPath extends Component {
 
         const camera = this.scene.camera;
 
+        t = t / (this._frames[this._frames.length - 1].t - this._frames[0].t);
         t = t < 0.0 ? 0.0 : (t > 1.0 ? 1.0 : t);
 
         camera.eye = this._eyeCurve.getPoint(t, tempVec3a);

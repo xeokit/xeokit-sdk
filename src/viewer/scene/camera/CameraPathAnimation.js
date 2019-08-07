@@ -13,7 +13,7 @@ import {CameraFlightAnimation} from "./CameraFlightAnimation.js"
  *  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraPathAnimation)]
  *
  * ````Javascript
- * import {Viewer} from "../src/viewer/Viewer.js";
+ * import {Viewer} from "viewer/Viewer.js";
  * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
  * import {CameraPath} from "../src/scene/camera/CameraPath.js";
  * import {CameraPathAnimation} from "../src/scene/camera/CameraPathAnimation.js";
@@ -135,7 +135,7 @@ class CameraPathAnimation extends Component {
 
             case CameraPathAnimation.PLAYING:
 
-                this._t += this._playingRate * f;
+                this._t += this._playingRate;
 
                 numFrames = this._cameraPath.frames.length;
                 if (numFrames === 0 || (this._playingDir < 0 && this._t <= 0) || (this._playingDir > 0 && this._t >= this._cameraPath.frames[numFrames - 1].t)) {
@@ -150,7 +150,7 @@ class CameraPathAnimation extends Component {
 
             case CameraPathAnimation.PLAYING_TO:
 
-                t = this._t + (this._playingRate * f * this._playingDir);
+                t = this._t + (this._playingRate * this._playingDir);
 
                 //t = this._ease(t, this._playingFromT, this._playingToT, this._playingToT - this._playingFromT);
 
@@ -252,8 +252,7 @@ class CameraPathAnimation extends Component {
             this.error("playToFrame - frame index out of range: " + frameIdx);
             return;
         }
-        const t = (1.0 / cameraPath.frames.length) * frameIdx;
-        this.playToT(t);
+        this.playToT(frame.t);
     }
 
     /**
@@ -291,7 +290,7 @@ class CameraPathAnimation extends Component {
             return;
         }
         this._t = t;
-        cameraPath.loadFrame(this._t, camera);
+        cameraPath.loadFrame(this._t);
         this.state = CameraPathAnimation.SCRUBBING;
     }
 
@@ -314,8 +313,7 @@ class CameraPathAnimation extends Component {
             this.error("playToFrame - frame index out of range: " + frameIdx);
             return;
         }
-        this._t = (1.0 / cameraPath.frames.length) * frameIdx;
-        cameraPath.loadFrame(this._t, camera);
+        cameraPath.loadFrame(this._t);
         this.state = CameraPathAnimation.SCRUBBING;
     }
 
