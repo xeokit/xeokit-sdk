@@ -154,6 +154,31 @@ class CameraPath extends Component {
     }
 
     /**
+     * Given a total duration (in seconds) for this CameraPath, recomputes the time instant at each frame so that,
+     * when animated by {@link CameraPathAnimation}, the {@link Camera} will move along the path at a constant rate.
+     *
+     * @param {Number} duration The total duration for this CameraPath.
+     */
+    smoothFrameTimes(duration) {
+        const numFrames = this._frames.length;
+        if (numFrames === 0) {
+            return;
+        }
+        const vec = math.vec3();
+        var totalLen = 0;
+        this._frames[0].t = 0;
+        const lens = [];
+        for (let i = 1, len = this._frames.length; i < len; i++) {
+            var lenVec = math.lenVec3(math.subVec3(this._frames[i].eye, this._frames[i - 1].eye, vec));
+            lens[i] = lenVec;
+            totalLen += lenVec;
+        }
+        for (let i = 1, len = this._frames.length; i < len; i++) {
+            this._frames[i].t = this._frames[i-1]. t + (lens[i] / totalLen) * duration;
+        }
+    }
+
+    /**
      * Removes all frames from this CameraPath.
      */
     clearFrames() {
