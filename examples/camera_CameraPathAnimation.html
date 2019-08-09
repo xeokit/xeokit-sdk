@@ -229,9 +229,11 @@
         ]
     });
 
+    cameraPath.smoothFrameTimes(1);
+
     var cameraPathAnimation = new CameraPathAnimation(viewer.scene, {
         cameraPath: cameraPath,
-        playingRate: 0.3
+        playingRate: 0.0005
     });
 
     model.on("loaded", function () {
