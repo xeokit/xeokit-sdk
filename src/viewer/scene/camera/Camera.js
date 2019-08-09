@@ -258,24 +258,24 @@ class Camera extends Component {
 
         this._perspective.on("matrix", () => {
             if (this._projectionType === "perspective") {
-            this.fire("projMatrix", this._perspective.matrix);
-        }
-    });
+                this.fire("projMatrix", this._perspective.matrix);
+            }
+        });
         this._ortho.on("matrix", () => {
             if (this._projectionType === "ortho") {
-            this.fire("projMatrix", this._ortho.matrix);
-        }
-    });
+                this.fire("projMatrix", this._ortho.matrix);
+            }
+        });
         this._frustum.on("matrix", () => {
             if (this._projectionType === "frustum") {
-            this.fire("projMatrix", this._frustum.matrix);
-        }
-    });
+                this.fire("projMatrix", this._frustum.matrix);
+            }
+        });
         this._customProjection.on("matrix", () => {
             if (this._projectionType === "customProjection") {
-            this.fire("projMatrix", this._customProjection.matrix);
-        }
-    });
+                this.fire("projMatrix", this._customProjection.matrix);
+            }
+        });
     }
 
     _update() {
