@@ -1,3 +1,4 @@
+/** @private */
 class Dot {
 
     constructor(parentElement, cfg = {}) {
@@ -5,6 +6,7 @@ class Dot {
         this._x = 0;
         this._y = 0;
 
+        this._visible = true;
         this._dot = document.createElement('div');
         this._dot.className += this._dot.className ? ' viewer-ruler-dot' : 'viewer-ruler-dot';
 
@@ -54,6 +56,10 @@ class Dot {
     }
 
     setVisible(visible) {
+        if (this._visible === visible) {
+            return;
+        }
+        this._visible = !!visible;
         this._dot.style.visibility = visible ? "visible" : "hidden";
     }
 

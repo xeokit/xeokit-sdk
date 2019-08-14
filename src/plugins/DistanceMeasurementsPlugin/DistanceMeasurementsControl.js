@@ -8,7 +8,12 @@ const MOVING_ORIGIN = 3;
 const MOVING_TARGET = 4;
 
 /**
- * Creates and edits simple distance rulers using mouse and touch input.
+ * Creates {@link DistanceMeasurement}s from mouse and touch input.
+ *
+ * Located at {@link DistanceMeasurementsPlugin#control}.
+ *
+ * Once the DistanceMeasurementControl is activated, the first click on any {@link Entity} begins constructing a {@link DistanceMeasurement}, fixing its
+ * origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity. The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing another DistanceMeasurement, and so on, until deactivated.
  *
  * See {@link DistanceMeasurementsPlugin} for more info.
  */
@@ -21,23 +26,26 @@ class DistanceMeasurementsControl extends Component {
 
         super(plugin.viewer.scene);
 
+        /**
+         * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurementsControl.
+         * @type {DistanceMeasurementsPlugin}
+         */
         this.plugin = plugin;
+
         this._active = false;
 
         this._state = HOVERING;
         this._currentMeasurement = null;
         this._prevRuler = null;
 
-        this._onMouseDownRuler = null;
-        this._onMouseDownRulerOrigin = null;
-        this._onMouseDownRulerTarget = null;
         this._onhoverSurface = null;
         this._onPickedSurface = null;
         this._onHoverNothing = null;
         this._onPickedNothing = null;
     }
 
-    /** Gets if this DistanceMeasureCcontrol is currently active, where it is responding to mouse and touch input.
+    /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
+     *
      * @returns {boolean}
      */
     get active() {
@@ -45,7 +53,7 @@ class DistanceMeasurementsControl extends Component {
     }
 
     /**
-     * Activates this DistanceMeasurementPlugin, making it respond to mouse and touch input.
+     * Activates this DistanceMeasurementsControl, ready to respond to input.
      */
     activate() {
 
@@ -53,54 +61,76 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
 
-        //=============================================================================================================
-        // TODO: Replace these handlers with mouseEventListeners?
-        // FIXME: After choosing target position, we can still move the target around until "pickSurface" fires, which snaps it back to where we clicks, which is ugly.
-        // TODO: Configurable units
-        // TODO: Scene scale factor (how many real world units (meter/inch/centimeter etc) per world-space unit)
-        //=============================================================================================================
-
         const cameraControl = this.plugin.viewer.cameraControl;
 
         this._onhoverSurface = cameraControl.on("hoverSurface", e => {
+            if (this._state === HOVERING) {
+                document.body.style.cursor = "pointer";
+                return;
+            }
+            if (this._currentMeasurement) {
+                switch (this._state) {
+                    case FINDING_ORIGIN:
+                        this._currentMeasurement.wireVisible = true;
+                        this._currentMeasurement.axisVisible = true;
+                        this._currentMeasurement.origin.entity = e.entity;
+                        this._currentMeasurement.origin.worldPos = e.worldPos;
+                        document.body.style.cursor = "pointer";
+                        break;
+                    case MOVING_ORIGIN:
+                        this._currentMeasurement.originVisible = true;
+                        this._currentMeasurement.wireVisible = true;
+                        this._currentMeasurement.axisVisible = true;
+                        this._currentMeasurement.origin.entity = e.entity;
+                        this._currentMeasurement.origin.worldPos = e.worldPos;
+                        document.body.style.cursor = "move";
+                        break;
+                    case FINDING_TARGET:
+                        this._currentMeasurement.wireVisible = true;
+                        this._currentMeasurement.axisVisible = true;
+                        this._currentMeasurement.target.entity = e.entity;
+                        this._currentMeasurement.target.worldPos = e.worldPos;
+                        document.body.style.cursor = "pointer";
+                        break;
+                    case MOVING_TARGET:
+                        this._currentMeasurement.targetVisible = true;
+                        this._currentMeasurement.wireVisible = true;
+                        this._currentMeasurement.axisVisible = true;
+                        this._currentMeasurement.target.entity = e.entity;
+                        this._currentMeasurement.target.worldPos = e.worldPos;
+                        document.body.style.cursor = "move";
+                        break;
+                }
+            }
+        });
+
+        var bail = false;
+
+        this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", () => {
             switch (this._state) {
-                case HOVERING:
-                    document.body.style.cursor = "pointer";
-                    break;
-                case FINDING_ORIGIN:
-                    this._currentMeasurement.wireVisible = true;
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.origin.entity = e.entity;
-                    this._currentMeasurement.origin.worldPos = e.worldPos;
-                    document.body.style.cursor = "pointer";
-                    break;
-                case MOVING_ORIGIN:
-                    this._currentMeasurement.originVisible = true;
-                    this._currentMeasurement.wireVisible = true;
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.origin.entity = e.entity;
-                    this._currentMeasurement.origin.worldPos = e.worldPos;
-                    document.body.style.cursor = "move";
-                    break;
                 case FINDING_TARGET:
-                    this._currentMeasurement.wireVisible = true;
                     this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.target.entity = e.entity;
-                    this._currentMeasurement.target.worldPos = e.worldPos;
-                    document.body.style.cursor = "pointer";
+                    this._currentMeasurement.targetVisible = true;
+                    this._currentMeasurement = null;
+                    this._prevRuler = null;
+                    this._state = HOVERING;
+                    bail = true;
                     break;
                 case MOVING_TARGET:
-                    this._currentMeasurement.targetVisible = true;
-                    this._currentMeasurement.wireVisible = true;
                     this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.target.entity = e.entity;
-                    this._currentMeasurement.target.worldPos = e.worldPos;
-                    document.body.style.cursor = "move";
+                    this._currentMeasurement = null;
+                    this._state = HOVERING;
+                    this._prevRuler = null;
+                    bail = true;
                     break;
             }
         });
 
         this._onPickedSurface = cameraControl.on("pickedSurface", e => {
+            if (bail) {
+                bail = false;
+                return;
+            }
             switch (this._state) {
                 case HOVERING:
                     if (this._prevRuler) {
@@ -135,122 +165,55 @@ class DistanceMeasurementsControl extends Component {
                     this._currentMeasurement = null;
                     this._state = HOVERING;
                     break;
-                case FINDING_TARGET:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.targetVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    break;
-                case MOVING_TARGET:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    break;
             }
         });
 
         this._onHoverNothing = cameraControl.on("hoverOff", e => {
-            switch (this._state) {
-                case HOVERING:
-                    break;
-                case FINDING_ORIGIN:
-                case MOVING_ORIGIN:
-                    this._currentMeasurement.wireVisible = false;
-                    this._currentMeasurement.originVisible = false;
-                    this._currentMeasurement.axisVisible = false;
-                    break;
-                case FINDING_TARGET:
-                case MOVING_TARGET:
-                    this._currentMeasurement.wireVisible = false;
-                    this._currentMeasurement.targetVisible = false;
-                    this._currentMeasurement.axisVisible = false;
-                    break;
+            if (this._currentMeasurement) {
+                switch (this._state) {
+                    case HOVERING:
+                        break;
+                    case FINDING_ORIGIN:
+                    case MOVING_ORIGIN:
+                        this._currentMeasurement.wireVisible = false;
+                        this._currentMeasurement.originVisible = false;
+                        this._currentMeasurement.axisVisible = false;
+                        break;
+                    case FINDING_TARGET:
+                    case MOVING_TARGET:
+                        this._currentMeasurement.wireVisible = false;
+                        this._currentMeasurement.targetVisible = false;
+                        this._currentMeasurement.axisVisible = false;
+                        break;
+                }
             }
             document.body.style.cursor = "default";
         });
 
         this._onPickedNothing = cameraControl.on("pickedNothing", e => {
-            switch (this._state) {
-                case FINDING_ORIGIN:
-                case FINDING_TARGET:
-                    if (this._currentMeasurement) {
-                        this._currentMeasurement.destroy();
+            if (this._currentMeasurement) {
+                switch (this._state) {
+                    case FINDING_ORIGIN:
+                    case FINDING_TARGET:
+                        if (this._currentMeasurement) {
+                            this._currentMeasurement.destroy();
+                            this._currentMeasurement = null;
+                            this._prevRuler = null;
+                            this._state = HOVERING
+                        }
+                        break;
+                    case MOVING_ORIGIN:
+                    case MOVING_TARGET:
+                        if (this._currentMeasurement) {
+                            this._currentMeasurement.axisVisible = true;
+                            this._currentMeasurement.originVisible = true;
+                            this._currentMeasurement.targetVisible = true;
+                        }
                         this._currentMeasurement = null;
                         this._prevRuler = null;
-                        this._state = HOVERING
-                    }
-                    break;
-                case MOVING_ORIGIN:
-                case MOVING_TARGET:
-                    if (this._currentMeasurement) {
-                        this._currentMeasurement.axisVisible = true;
-                        this._currentMeasurement.originVisible = true;
-                        this._currentMeasurement.targetVisible = true;
-                    }
-                    this._currentMeasurement = null;
-                    this._prevRuler = null;
-                    this._state = HOVERING;
-                    break;
-            }
-        });
-
-        this._onMouseDownRuler = this.plugin.on("mouseDownRuler", e => {
-
-            //switch (state) {
-            //    case HOVERING:
-            //        currentRuler = _rulerId;
-            //        state = MOVING_ORIGIN;
-            //        viewer.hideRulerAxis(currentRuler);
-            //        break;
-            //    case MOVING_ORIGIN:
-            //        viewer.showRulerAxis(currentRuler);
-            //        viewer.showRulerOrigin(currentRuler);
-            //        currentRuler = null;
-            //        state = HOVERING;
-            //        break;
-            //    case FINDING_TARGET:
-            //        break;
-            //}
-
-            this._currentMeasurement.originVisible = true;
-            this._currentMeasurement.targetVisible = true;
-            this._currentMeasurement.wireVisible = true;
-            this._currentMeasurement.axisVisible = true;
-        });
-
-        this._onMouseDownRulerOrigin = this.plugin.on("mouseDownRulerOrigin", e => {
-            switch (this._state) {
-                case HOVERING:
-                    this._currentMeasurement = e.ruler;
-                    this._state = MOVING_ORIGIN;
-                    //   this._currentMeasurement.axisVisible = false;
-                    break;
-                case MOVING_ORIGIN:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.originVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    break;
-                case FINDING_TARGET:
-                    break;
-            }
-        });
-
-        this._onMouseDownRulerTarget = this.plugin.on("mouseDownRulerTarget", e => {
-            switch (this._state) {
-                case HOVERING:
-                    this._currentMeasurement = e.ruler;
-                    //this._currentMeasurement.axisVisible = false;
-                    this._state = MOVING_TARGET;
-                    break;
-                case FINDING_ORIGIN:
-                    break;
-                case MOVING_TARGET:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement.targetVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    break;
+                        this._state = HOVERING;
+                        break;
+                }
             }
         });
 
@@ -258,7 +221,9 @@ class DistanceMeasurementsControl extends Component {
     }
 
     /**
-     * Deactivates this DistanceMeasurementPlugin, making it unresponsive to mouse and touch input.
+     * Deactivates this DistanceMeasurementsControl, making it unresponsive to input.
+     *
+     * Destroys any {@link DistanceMeasurement} under construction.
      */
     deactivate() {
 
@@ -266,12 +231,12 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
 
-        const cameraControl = this.plugin.viewer.cameraControl;
-        const plugin = this.plugin;
+        this.reset();
 
-        plugin.off(this._onMouseDownRuler);
-        plugin.off(this._onMouseDownRulerOrigin);
-        plugin.off(this._onMouseDownRulerTarget);
+        const cameraControl = this.plugin.viewer.cameraControl;
+        const input = this.plugin.viewer.scene.input;
+
+        input.off(this._onInputMouseDown);
 
         cameraControl.off(this._onhoverSurface);
         cameraControl.off(this._onPickedSurface);
@@ -282,9 +247,24 @@ class DistanceMeasurementsControl extends Component {
     }
 
     /**
-     * Resets this DistanceMeasurementPlugin.
+     * Resets this DistanceMeasurementsControl.
+     *
+     * Destroys any {@link DistanceMeasurement} under construction.
+     *
+     * Does nothing if the DistanceMeasurementsControl is not active.
      */
     reset() {
+
+        if (!this._active) {
+            return;
+        }
+
+        if (this._currentMeasurement) {
+            this._currentMeasurement.destroy();
+            this._currentMeasurement = null;
+        }
+        this._prevRuler = null;
+        this._state = HOVERING;
     }
 
     /**

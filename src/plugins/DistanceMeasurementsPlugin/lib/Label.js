@@ -1,3 +1,4 @@
+/** @private */
 class Label {
 
     constructor(parentElement, cfg = {}) {
@@ -5,6 +6,7 @@ class Label {
         this._prefix = cfg.prefix || "";
         this._x = 0;
         this._y = 0;
+        this._visible = true;
 
         this._label = document.createElement('div');
         this._label.className += this._label.className ? ' viewer-ruler-label' : 'viewer-ruler-label';
@@ -64,6 +66,10 @@ class Label {
     }
 
     setVisible(visible) {
+        if (this._visible === visible) {
+            return;
+        }
+        this._visible = !!visible;
         this._label.style.visibility = visible ? "visible" : "hidden";
     }
 

@@ -1,9 +1,11 @@
+/** @private */
 class Wire {
 
     constructor(parentElement, cfg = {}) {
 
         this._wire = document.createElement('div');
         this._wire.className += this._wire.className ? ' viewer-ruler-wire' : 'viewer-ruler-wire';
+        this._visible = true;
 
         var wire = this._wire;
         var style = wire.style;
@@ -70,6 +72,10 @@ class Wire {
     }
 
     setVisible(visible) {
+        if (this._visible === visible) {
+            return;
+        }
+        this._visible = !!visible;
         this._wire.style.visibility = visible ? "visible" : "hidden";
     }
 

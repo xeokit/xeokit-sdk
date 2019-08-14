@@ -1,38 +1,40 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {DistanceMeasurement} from "./DistanceMeasurement.js";
-import {utils} from "../../viewer/scene/utils.js";
-import {math} from "../../viewer/scene/math/math.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
-const tempVec3a = math.vec3();
-const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
-
 /**
- * {@link Viewer} plugin for measuring point-to-point distances.
+ * {@link Viewer} distance measurement plugin.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_clickToFlyToPosition)
+ * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse)
  *
- * * [[Example 1: Model with measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
- * * [[Example 2: Create measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
- * * [[Example 3: Click measurements to toggle axis wires](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_clickToggleAxisWires)]
+ * * [[Example 1: Model with measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_modelWithMeasurements)]
+ * * [[Example 2: Create measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_unitsAndScale)]
  *
  * ## Overview
  *
- * * A {@link DistanceMeasurement} represents a distance measurement between two 3D points.
- * * TODO
+ * * A {@link DistanceMeasurement} represents a point-to-point measurement between two 3D points on one or two {@link Entity}s.
+ * * As shown on the screen capture above, a DistanceMeasurement has one wire (light blue) that shows the direct point-to-point measurement,
+ * and three more wires (red, green and blue) that show the distance on each of the Wworld-space X, Y and Z axis.
+ * * Create DistanceMeasurements programmatically with {@link DistanceMeasurementsPlugin#createMeasurement}.
+ * * Create DistanceMeasurements interactively using the {@link DistanceMeasurementsControl}, located at {@link DistanceMeasurementsPlugin#control}.
+ * * Existing DistanceMeasurements are registered by ID in {@link DistanceMeasurementsPlugin#measurements}.
+ * * Destroy DistanceMeasurements using {@link DistanceMeasurementsPlugin#destroyMeasurement}.
+ * * Configure global measurement units and scale via {@link Metrics}, located at {@link Scene#metrics}.
  *
- * ## Example 1: Creating a DistanceMeasurement programmatically
+ * ## Example 1: Creating DistanceMeasurements Programmatically
  *
- * In the example below, we'll use a {@link XKTLoaderPlugin} to load a model, and an DistanceMeasurementPlugin
- * to create an {@link DistanceMeasurement} on it.
+ * In our first example, we'll use an {@link XKTLoaderPlugin} to load a model, and then use a DistanceMeasurementsPlugin to programmatically create two {@link DistanceMeasurement}s.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
+ * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {DistanceMeasurementPlugin} from "../src/plugins/DistanceMeasurementPlugin/DistanceMeasurementPlugin.js";
+ * import {DistanceMeasurementsPlugin} from "../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -45,7 +47,7 @@ const tempVec3c = math.vec3();
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * const distanceMeasurements = new DistanceMeasurementPlugin(viewer);
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
  *
  * const model = xktLoader.load({
  *      src: "./models/xkt/duplex/duplex.xkt"
@@ -80,22 +82,25 @@ const tempVec3c = math.vec3();
  *          visible: true,
  *          wireVisible: true
  *      });
- *
  * });
  * ````
  *
- * ## Example 2: Creating DistanceMeasurements with mouse or touch
+ * ## Example 2: Creating DistanceMeasurements Interactively
  *
- * DistanceMeasurementPlugin makes it easy to create {@link DistanceMeasurement}s by clicking on {@link Entity}s.
+ * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the DistanceMeasurementPlugin's {@link DistanceMeasurementsControl} to interactively create {@link DistanceMeasurement}s with mouse or touch input.
  *
- * Let's now extend our example to create an DistanceMeasurement wherever we click on the surface of of our model:
+ * After we've activated the DistanceMeasurementsControl, the first click on any {@link Entity} begins constructing a DistanceMeasurement, fixing its
+ * origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
+ * The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
+ * another DistanceMeasurement, and so on, until deactivated again.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse)]
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {DistanceMeasurementPlugin} from "../src/plugins/DistanceMeasurementPlugin/DistanceMeasurementPlugin.js";
+ * import {DistanceMeasurementsPlugin} from "../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -108,13 +113,28 @@ const tempVec3c = math.vec3();
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * const distanceMeasurements = new DistanceMeasurementPlugin(viewer);
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
  *
  * const model = xktLoader.load({
  *     src: "./models/xkt/duplex/duplex.xkt"
  * });
  *
- * distanceMeasurements.control.activate();
+ * distanceMeasurements.control.activate();  // <------------ Activate the DistanceMeasurementsControl
+ * ````
+ *
+ * ## Example 3: Configuring Measurement Units and Scale
+ *
+ * In our third example, we'll use the  {@link Scene}'s {@link Metrics} to set the global unit of measurement to ````"meters"````. We'll also specify that a unit within the World-space coordinate system represents ten meters.
+ *
+ * The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_unitsAndScale)]
+ *
+ * ````JavaScript
+ * const metrics = viewer.scene.metrics;
+
+ * metrics.units = "meters";
+ * metrics.scale = 10.0;
  * ````
  */
 class DistanceMeasurementsPlugin extends Plugin {
@@ -124,6 +144,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
      */
     constructor(viewer, cfg = {}) {
 
@@ -144,8 +165,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
-     *
-     * Gets the {@link DistanceMeasurementsControl}.
+     * Gets the {@link DistanceMeasurementsControl}, which creates {@link DistanceMeasurement}s from user input.
      *
      * @type {DistanceMeasurementsControl}
      */
@@ -154,7 +174,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
-     * Gets existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
+     * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
      *
      * @type {{String:DistanceMeasurement}}
      */
@@ -163,16 +183,31 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
+     * Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.
      *
+     * The axis wire's label is not shown when its length is less than this value.
+     *
+     * This is ````25```` pixels by default.
+     *
+     * Must not be less than ````1````.
+     *
+     * @type {number}
      */
     set labelMinAxisLength(labelMinAxisLength) {
+        if (labelMinAxisLength < 1) {
+            this.error("labelMinAxisLength must be >= 1; defaulting to 25");
+            labelMinAxisLength = 25;
+        }
         this._labelMinAxisLength = labelMinAxisLength || 25;
     }
 
+    /**
+     * Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+     * @returns {number}
+     */
     get labelMinAxisLength() {
         return this._labelMinAxisLength;
     }
-
 
     /**
      * Creates a {@link DistanceMeasurement}.
@@ -225,7 +260,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
-     * Destroys an\ {@link DistanceMeasurement}.
+     * Destroys a {@link DistanceMeasurement}.
      *
      * @param {String} id ID of DistanceMeasurement to destroy.
      */
@@ -249,7 +284,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
-     * Destroys this DistanceMeasurementPlugin.
+     * Destroys this DistanceMeasurementsPlugin.
      *
      * Destroys all {@link DistanceMeasurement}s first.
      */

@@ -27,6 +27,10 @@ class DistanceMeasurement extends Component {
 
         super(plugin.viewer.scene, cfg);
 
+        /**
+         * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurement.
+         * @type {DistanceMeasurementsPlugin}
+         */
         this.plugin = plugin;
 
         this._eventSubs = {};
@@ -74,19 +78,19 @@ class DistanceMeasurement extends Component {
 
         this._xAxisWire = new Wire(parentElement, {
             color: "red",
-            thickness: 2,
+            thickness: 1,
             mouseDown: mouseDownDistanceMeasurement
         });
 
         this._yAxisWire = new Wire(parentElement, {
             color: "green",
-            thickness: 2,
+            thickness: 1,
             mouseDown: mouseDownDistanceMeasurement
         });
 
         this._zAxisWire = new Wire(parentElement, {
             color: "blue",
-            thickness: 2,
+            thickness: 1,
             mouseDown: mouseDownDistanceMeasurement
         });
 
@@ -131,23 +135,43 @@ class DistanceMeasurement extends Component {
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
             this._wpDirty = true;
-            this._needUpdate(0);
+            this._needUpdate(0); // No lag
         });
 
         this._targetMarker.on("worldPos", (value) => {
             this._targetWorld.set(value || [0, 0, 0]);
             this._wpDirty = true;
-            this._needUpdate(0);
+            this._needUpdate(0); // No lag
         });
 
         this._onViewMatrix = scene.camera.on("viewMatrix", () => {
             this._vpDirty = true;
-            this._needUpdate(0);
+            this._needUpdate(0); // No lag
         });
 
-        this._onCanvasBoundary = scene.camera.on("projMatrix", () => {
+        this._onProjMatrix = scene.camera.on("projMatrix", () => {
             this._cpDirty = true;
-            this._needUpdate(0);
+            this._needUpdate();
+        });
+
+        this._onCanvasBoundary = scene.canvas.on("boundary", () => {
+            this._cpDirty = true;
+            this._needUpdate(0); // No lag
+        });
+
+        this._onMetricsUnits = scene.metrics.on("units", () => {
+            this._cpDirty = true;
+            this._needUpdate();
+        });
+
+        this._onMetricsScale = scene.metrics.on("scale", () => {
+            this._cpDirty = true;
+            this._needUpdate();
+        });
+
+        this._onMetricsOrigin = scene.metrics.on("origin", () => {
+            this._cpDirty = true;
+            this._needUpdate();
         });
 
         this.visible = cfg.visible;
@@ -158,6 +182,10 @@ class DistanceMeasurement extends Component {
     }
 
     _update() {
+
+        if (!this._visible) {
+            return;
+        }
 
         const scene = this.plugin.viewer.scene;
 
@@ -189,10 +217,37 @@ class DistanceMeasurement extends Component {
 
         if (this._vpDirty) {
 
-            math.transformPositions4(scene.camera.matrix, this._wp, this._vp);
+            math.transformPositions4(scene.camera.viewMatrix, this._wp, this._vp);
+
+            this._vp[3] = 1.0;
+            this._vp[7] = 1.0;
+            this._vp[11] = 1.0;
+            this._vp[15] = 1.0;
 
             this._vpDirty = false;
             this._cpDirty = true;
+        }
+
+        const near = -0.3;
+        const vpz1 = this._originMarker.viewPos[2];
+        const vpz2 = this._targetMarker.viewPos[2];
+
+        if (vpz1 > near || vpz2 > near) {
+
+            this._xAxisLabel.setVisible(false);
+            this._yAxisLabel.setVisible(false);
+            this._zAxisLabel.setVisible(false);
+            this._lengthLabel.setVisible(false);
+
+            this._xAxisWire.setVisible(false);
+            this._yAxisWire.setVisible(false);
+            this._zAxisWire.setVisible(false);
+            this._lengthWire.setVisible(false);
+
+            this._originDot.setVisible(false);
+            this._targetDot.setVisible(false);
+
+            return;
         }
 
         if (this._cpDirty) {
@@ -209,6 +264,12 @@ class DistanceMeasurement extends Component {
             var canvasWidth = aabb[2];
             var canvasHeight = aabb[3];
             var j = 0;
+
+            const metrics = this.plugin.viewer.scene.metrics;
+            const scale = metrics.scale;
+            const units = metrics.units;
+            const unitInfo = metrics.unitsInfo[units];
+            const unitAbbrev = unitInfo.abbrev;
 
             for (var i = 0, len = pp.length; i < len; i += 4) {
                 cp[j] = Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
@@ -230,7 +291,7 @@ class DistanceMeasurement extends Component {
             this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
             this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
 
-            this._lengthLabel.setText(Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3))).toFixed(2) + "'");
+            this._lengthLabel.setText((Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)) * scale).toFixed(2)) + unitAbbrev);
 
             const xAxisCanvasLength = Math.abs(lengthWire(cp[0], cp[1], cp[2], cp[3]));
             const yAxisCanvasLength = Math.abs(lengthWire(cp[2], cp[3], cp[4], cp[5]));
@@ -243,25 +304,32 @@ class DistanceMeasurement extends Component {
             this._zAxisLabelCulled = (zAxisCanvasLength < labelMinAxisLength);
 
             if (!this._xAxisLabelCulled) {
-                this._xAxisLabel.setText(Math.abs(this._targetWorld[0] - this._originWorld[0]).toFixed(2) + "'");
+                this._xAxisLabel.setText(Math.abs(this._targetWorld[0] - this._originWorld[0] * scale).toFixed(2) + unitAbbrev);
                 this._xAxisLabel.setVisible(true);
             } else {
                 this._xAxisLabel.setVisible(false);
             }
 
             if (!this._yAxisLabelCulled) {
-                this._yAxisLabel.setText(Math.abs(this._targetWorld[1] - this._originWorld[1]).toFixed(2) + "'");
+                this._yAxisLabel.setText(Math.abs(this._targetWorld[1] - this._originWorld[1] * scale).toFixed(2) + unitAbbrev);
                 this._yAxisLabel.setVisible(true);
             } else {
                 this._yAxisLabel.setVisible(false);
             }
 
             if (!this._zAxisLabelCulled) {
-                this._zAxisLabel.setText(Math.abs(this._targetWorld[2] - this._originWorld[2]).toFixed(2) + "'");
+                this._zAxisLabel.setText(Math.abs(this._targetWorld[2] - this._originWorld[2] * scale).toFixed(2) + unitAbbrev);
                 this._zAxisLabel.setVisible(true);
             } else {
                 this._zAxisLabel.setVisible(false);
             }
+
+            this._originDot.setVisible(this._visible && this._originVisible);
+            this._targetDot.setVisible(this._visible && this._targetVisible);
+            this._xAxisWire.setVisible(true);
+            this._yAxisWire.setVisible(true);
+            this._zAxisWire.setVisible(true);
+            this._lengthWire.setVisible(true);
 
             this._cpDirty = false;
         }
@@ -286,13 +354,14 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Gets the World-space direct point-to-point distance between {@link DistanceMeasurement#source} and {@link DistanceMeasurement#target}.
+     * Gets the World-space direct point-to-point distance between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      *
      * @type {Number}
      */
     get length() {
         this._update();
-        return this._length;
+        const scale = this.plugin.viewer.scene.metrics.scale;
+        return this._length * scale;
     }
 
     /**
@@ -419,11 +488,26 @@ class DistanceMeasurement extends Component {
     destroy() {
 
         const scene = this.plugin.viewer.scene;
+        const metrics = scene.metrics;
+
         if (this._onViewMatrix) {
             scene.camera.off(this._onViewMatrix);
         }
-        if (this._onProjectMatrix) {
-            scene.camera.off(this._onProjectMatrix);
+        if (this._onProjMatrix) {
+            scene.camera.off(this._onProjMatrix);
+        }
+        if (this._onCanvasBoundary) {
+            scene.canvas.off(this._onCanvasBoundary);
+        }
+
+        if (this._onMetricsUnits) {
+            metrics.off(this._onMetricsUnits);
+        }
+        if (this._onMetricsScale) {
+            metrics.off(this._onMetricsScale);
+        }
+        if (this._onMetricsOrigin) {
+            metrics.off(this._onMetricsOrigin);
         }
 
         this._originDot.destroy();
