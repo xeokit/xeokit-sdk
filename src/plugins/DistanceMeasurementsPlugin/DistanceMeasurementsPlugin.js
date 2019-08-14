@@ -15,7 +15,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  *
  * * A {@link DistanceMeasurement} represents a point-to-point measurement between two 3D points on one or two {@link Entity}s.
  * * As shown on the screen capture above, a DistanceMeasurement has one wire (light blue) that shows the direct point-to-point measurement,
- * and three more wires (red, green and blue) that show the distance on each of the Wworld-space X, Y and Z axis.
+ * and three more wires (red, green and blue) that show the distance on each of the World-space X, Y and Z axis.
  * * Create DistanceMeasurements programmatically with {@link DistanceMeasurementsPlugin#createMeasurement}.
  * * Create DistanceMeasurements interactively using the {@link DistanceMeasurementsControl}, located at {@link DistanceMeasurementsPlugin#control}.
  * * Existing DistanceMeasurements are registered by ID in {@link DistanceMeasurementsPlugin#measurements}.
