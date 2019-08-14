@@ -31,6 +31,9 @@ class Viewer {
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      * @param {Boolean}[cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
+     * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
+     * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
+     * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
      */
     constructor(cfg) {
 
@@ -59,7 +62,10 @@ class Viewer {
             gammaOutput: true,
             clearColorAmbient: cfg.clearColorAmbient,
             ticksPerRender: 1,
-            ticksPerOcclusionTest: 20 /// TODO Change to 20
+            ticksPerOcclusionTest: 20,
+            units: cfg.units,
+            scale: cfg.scale,
+            origin: cfg.origin
         });
 
         /**
