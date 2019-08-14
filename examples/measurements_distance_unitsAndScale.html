@@ -2,12 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>DistanceMeasurementPlugin - Programmatically create distance measurements</title>
+    <title>DistanceMeasurementPlugin - Configuring units and scale</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
-
+        #my-gui-container {
+            position: absolute;
+            top: 260px;
+            right:020px;
+            z-index: 10;
+        }
     </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
 
 </head>
 
@@ -15,7 +22,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>DistanceMeasurementPlugin - Programmatically create distance measurements</h1><br>
+    <h1>DistanceMeasurementPlugin - Configuring units and scale</h1><br>
     <ul>
         <li>
             <a target="_other"
@@ -28,7 +35,9 @@
             - Loads model from file system
         </li>
     </ul>
+
 </div>
+<div id="my-gui-container"></div>
 </body>
 <script type="module">
 
@@ -51,6 +60,10 @@
     viewer.camera.eye = [-3.93, 2.85, 27.01];
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
+
+    viewer.scene.metrics.units = "meters";
+    viewer.scene.metrics.scale = 10;
+    viewer.scene.metrics.origin = [100, 0, 200];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -80,12 +93,12 @@
         const myMeasurement1 = distanceMeasurements.createMeasurement({
             id: "distanceMeasurement1",
             origin: {
-                entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
-                worldPos: [0.04815268516540527, 6.0054426193237305, 17.76587677001953]
+                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+                worldPos: [0.044, 5.998, 17.767]
             },
             target: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
-                worldPos: [4.70150089263916, 3.09493088722229, 17.766956329345703]
+                worldPos: [4.738, 3.172, 17.768]
             },
             visible: true,
             wireVisible: true
@@ -95,18 +108,35 @@
             id: "distanceMeasurement2",
             origin: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
-                worldPos: [5.268430233001709, 2.5119516849517822, 17.761802673339844]
+                worldPos: [0.457, 2.532, 17.766]
             },
             target: {
                 entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [0.3977813720703125, 0.0014836788177490234, 22.1480712890625]
+                worldPos: [0.436, 0.001, 22.135]
             },
             visible: true,
             wireVisible: true
         });
     });
 
-    window.viewer = viewer;
+    var metrics = new function () {
+        this.scale = 1.0;
+        this.units = "meters";
+    }();
 
+    var update = function () {
+        viewer.scene.metrics.scale = metrics.scale;
+        viewer.scene.metrics.units = metrics.units;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    var gui = new dat.GUI({ autoPlace: false });
+    gui.add(metrics, 'scale', 0.1, 10.0);
+    gui.add(metrics, 'units', ["meters", "centimeters", "millimeters", "yards", "feet", "inches"])
+
+    var customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
 </script>
 </html>
