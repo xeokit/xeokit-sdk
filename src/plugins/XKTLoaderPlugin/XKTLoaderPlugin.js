@@ -650,7 +650,7 @@ class XKTLoaderPlugin extends Plugin {
                     }
                 }
             } else {
-                this.warn("metaobject not found for entity: " + entityId);
+            //    this.warn("metaobject not found for entity: " + entityId);
             }
 
             const lastEntity = (i === numEntities - 1);
