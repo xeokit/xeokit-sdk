@@ -11,7 +11,7 @@ import {MetaScene} from "./metadata/MetaScene.js";
  * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
  * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
- * {@link Camera} to target positions, boundaries or {@link Node}s.
+ * {@link Camera} to target positions, boundaries or {@link Entity}s.
  *
  * @public
  */
