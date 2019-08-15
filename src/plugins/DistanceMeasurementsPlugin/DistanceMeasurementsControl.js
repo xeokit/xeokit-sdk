@@ -4,8 +4,6 @@ import {math} from "../../viewer/scene/math/math.js";
 const HOVERING = 0;
 const FINDING_ORIGIN = 1;
 const FINDING_TARGET = 2;
-const MOVING_ORIGIN = 3;
-const MOVING_TARGET = 4;
 
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
@@ -32,11 +30,9 @@ class DistanceMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
-
         this._state = HOVERING;
         this._currentMeasurement = null;
         this._prevRuler = null;
-
         this._onhoverSurface = null;
         this._onPickedSurface = null;
         this._onHoverNothing = null;
@@ -76,28 +72,12 @@ class DistanceMeasurementsControl extends Component {
                         this._currentMeasurement.origin.worldPos = e.worldPos;
                         document.body.style.cursor = "pointer";
                         break;
-                    case MOVING_ORIGIN:
-                        this._currentMeasurement.originVisible = true;
-                        this._currentMeasurement.wireVisible = true;
-                        this._currentMeasurement.axisVisible = true;
-                        this._currentMeasurement.origin.entity = e.entity;
-                        this._currentMeasurement.origin.worldPos = e.worldPos;
-                        document.body.style.cursor = "move";
-                        break;
                     case FINDING_TARGET:
                         this._currentMeasurement.wireVisible = true;
                         this._currentMeasurement.axisVisible = true;
                         this._currentMeasurement.target.entity = e.entity;
                         this._currentMeasurement.target.worldPos = e.worldPos;
                         document.body.style.cursor = "pointer";
-                        break;
-                    case MOVING_TARGET:
-                        this._currentMeasurement.targetVisible = true;
-                        this._currentMeasurement.wireVisible = true;
-                        this._currentMeasurement.axisVisible = true;
-                        this._currentMeasurement.target.entity = e.entity;
-                        this._currentMeasurement.target.worldPos = e.worldPos;
-                        document.body.style.cursor = "move";
                         break;
                 }
             }
@@ -113,13 +93,6 @@ class DistanceMeasurementsControl extends Component {
                     this._currentMeasurement = null;
                     this._prevRuler = null;
                     this._state = HOVERING;
-                    bail = true;
-                    break;
-                case MOVING_TARGET:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    this._prevRuler = null;
                     bail = true;
                     break;
             }
@@ -159,11 +132,6 @@ class DistanceMeasurementsControl extends Component {
                     this._currentMeasurement = null;
                     this._state = HOVERING;
                     break;
-                case MOVING_ORIGIN:
-                    this._currentMeasurement.axisVisible = true;
-                    this._currentMeasurement = null;
-                    this._state = HOVERING;
-                    break;
             }
         });
 
@@ -173,13 +141,11 @@ class DistanceMeasurementsControl extends Component {
                     case HOVERING:
                         break;
                     case FINDING_ORIGIN:
-                    case MOVING_ORIGIN:
                         this._currentMeasurement.wireVisible = false;
                         this._currentMeasurement.originVisible = false;
                         this._currentMeasurement.axisVisible = false;
                         break;
                     case FINDING_TARGET:
-                    case MOVING_TARGET:
                         this._currentMeasurement.wireVisible = false;
                         this._currentMeasurement.targetVisible = false;
                         this._currentMeasurement.axisVisible = false;
@@ -200,17 +166,6 @@ class DistanceMeasurementsControl extends Component {
                             this._prevRuler = null;
                             this._state = HOVERING
                         }
-                        break;
-                    case MOVING_ORIGIN:
-                    case MOVING_TARGET:
-                        if (this._currentMeasurement) {
-                            this._currentMeasurement.axisVisible = true;
-                            this._currentMeasurement.originVisible = true;
-                            this._currentMeasurement.targetVisible = true;
-                        }
-                        this._currentMeasurement = null;
-                        this._prevRuler = null;
-                        this._state = HOVERING;
                         break;
                 }
             }

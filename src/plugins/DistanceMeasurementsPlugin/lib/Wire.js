@@ -20,7 +20,7 @@ class Wire {
         style.visibility = "visible";
         style.top = 0 + "px";
         style.left = 0 + "px";
-        // style["pointer-events"] = "none";
+        style["pointer-events"] = "none";
         style['-webkit-transform-origin'] = "0 0";
         style['-moz-transform-origin'] = "0 0";
         style['-ms-transform-origin'] = "0 0";

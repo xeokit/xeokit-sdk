@@ -24,6 +24,7 @@ class Dot {
         style.top = 0 + "px";
         style.left = 0 + "px";
         style["box-shadow"] = "0 2px 5px 0 #182A3D;";
+        style["pointer-events"] = "none";
 
         parentElement.appendChild(dot);
 

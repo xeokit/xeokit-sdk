@@ -55,71 +55,53 @@ class DistanceMeasurement extends Component {
         var parentElement = document.body;
 
         this._originDot = new Dot(parentElement, {
-            mouseDown: () => {
-                this.fire("mouseDownOrigin", {distanceMeasurement: this});
-            }
         });
 
         this._targetDot = new Dot(parentElement, {
-            mouseDown: () => {
-                this.fire("mouseDownTarget", {distanceMeasurement: this});
-            }
         });
-
-        const mouseDownDistanceMeasurement = () => {
-            this.fire("mouseDownDistanceMeasurement", {distanceMeasurement: this});
-        };
 
         this._lengthWire = new Wire(parentElement, {
             color: "#00BBFF",
-            thickness: 2,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 2
         });
 
         this._xAxisWire = new Wire(parentElement, {
             color: "red",
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._yAxisWire = new Wire(parentElement, {
             color: "green",
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._zAxisWire = new Wire(parentElement, {
             color: "blue",
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._lengthLabel = new Label(parentElement, {
             fillColor: "#00BBFF",
             prefix: "",
-            text: "",
-            mouseDown: mouseDownDistanceMeasurement
+            text: ""
         });
 
         this._xAxisLabel = new Label(parentElement, {
             fillColor: "red",
             prefix: "X",
-            text: "",
-            mouseDown: mouseDownDistanceMeasurement
+            text: ""
         });
 
         this._yAxisLabel = new Label(parentElement, {
             fillColor: "green",
             prefix: "Y",
-            text: "",
-            mouseDown: mouseDownDistanceMeasurement
+            text: ""
         });
 
         this._zAxisLabel = new Label(parentElement, {
             fillColor: "blue",
             prefix: "Z",
-            text: "",
-            mouseDown: mouseDownDistanceMeasurement
+            text: ""
         });
 
         this._wpDirty = false;
