@@ -32,16 +32,21 @@ const unitsInfo = {
 };
 
 /**
- * @desc Configures its {@link Scene}'s units of measurement and coordinate mapping between Real-space and World-space 3D coordinate systems.
+ * @desc Configures its {@link Scene}'s unit of measurement and mapping between the Real-space and World-space 3D Cartesian coordinate systems.
+ *
+ *
+ * ## Overview
  *
  * * Located at {@link Scene#metrics}.
+ * * {@link Metrics#units} configures the unit of measurement, which is ````"meters"```` by default.
+ * * {@link Metrics#scale} configures the number of measurement units represented by each unit within the World-space 3D coordinate system. This is ````1.0```` by default.
+ * * {@link Metrics#origin} configures the  3D Real-space origin, in current measurement units, at which this {@link Scene}'s World-space coordinate origin sits, This is ````[0,0,0]```` by default.
  *
  * ## Usage
  *
- * Let's configure the unit of measurement and the coordinate mapping between the
- * Real-space and World-space 3D coordinate systems.
+ * Let's load a model using an {@link XKTLoaderPlugin}, then configure the unit of measurement and the coordinate
+ * mapping between the Real-space and World-space 3D coordinate systems.
  *
- * We'll start by
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
@@ -61,24 +66,9 @@ const unitsInfo = {
  * });
  *
  * const metrics = viewer.scene.metrics;
+ *
  * metrics.units = "meters";
- * ````
- *
- * {@link Metrics#scale} is the number of measurement units per World-space unit.
- *
- * We'll set it to ten meters per World-space unit:
- *
- * ````JavaScript
  * metrics.scale = 10.0;
- * ````
- *
- * {@link Metrics#origin} is the Real-space 3D origin, in the current measurement units, at which this {@link Scene}'s
- * World-space coordinate origin ````[0,0,0]```` sits.
- *
- * We'll center our World-space at ````100```` meters on the
- * Real-space ````X```` axis and ````200```` on the Real-space ````Z```` axis:
- *
- * ````JavaScript
  * metrics.origin = [100.0, 0.0, 200.0];
  * ````
  */
@@ -149,9 +139,9 @@ class Metrics extends Component {
     /**
      * Sets the {@link Scene}'s current measurement units.
      *
-     * Accepted values are ````"meters"````, ````"centimeters"````, ````"millimeters"````, ````"yards"````, ````"feet"```` and ````"inches"````.
+     * Accepted values are ````"meters"````, ````"centimeters"````, ````"millimeters"````, ````"metres"````, ````"centimetres"````, ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
      *
-     * @emits "units" event on change, with the value of this property.
+     * @emits ````"units"```` event on change, with the value of this property.
      * @type {String}
      */
     set units(value) {
@@ -182,7 +172,7 @@ class Metrics extends Component {
      * For example, if {@link Metrics#units} is ````"meters"````, and there are ten meters per
      * World-space coordinate system unit, then ````scale```` would have a value of ````10.0````.
      *
-     * @emits "scale" event on change, with the value of this property.
+     * @emits ````"scale"```` event on change, with the value of this property.
      * @type {Number}
      */
     set scale(value) {
