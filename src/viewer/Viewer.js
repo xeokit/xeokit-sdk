@@ -4,7 +4,7 @@ import {CameraControl} from "./scene/camera/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 
 /**
- * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
+ * The 3D Viewer at the heart of the xeokit SDK.
  *
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
@@ -19,7 +19,7 @@ class Viewer {
 
     /**
      * @constructor
-     * @param {Object} cfg  Viewer configuration.
+     * @param {Object} cfg Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of existing HTML canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted
