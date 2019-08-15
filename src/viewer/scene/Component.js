@@ -139,7 +139,9 @@ class Component {
         if (this.type === "Scene") {
             this.scene = this;
             /**
-             * @property {Viewer} viewer The viewer that contains this Scene.
+             * The viewer that contains this Scene.
+             * @property viewer
+             * @type {Viewer}
              */
             this.viewer = cfg.viewer;
         } else {
@@ -357,7 +359,7 @@ class Component {
     /**
      * Cancels an event subscription that was previously made with {@link Component#on} or {@link Component#once}.
      *
-     * @param {String} subId Publication subId
+     * @param {String} subId Subscription ID
      */
     off(subId) {
         if (subId === undefined || subId === null) {

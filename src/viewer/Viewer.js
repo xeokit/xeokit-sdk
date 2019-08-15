@@ -4,14 +4,14 @@ import {CameraControl} from "./scene/camera/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 
 /**
- * The WebGL-based 3D Viewer class at the heart of the xeokit SDK.
+ * The 3D Viewer at the heart of the xeokit SDK.
  *
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
  * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
  * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
- * {@link Camera} to target positions, boundaries or {@link Node}s.
+ * {@link Camera} to target positions, boundaries or {@link Entity}s.
  *
  * @public
  */
@@ -19,7 +19,7 @@ class Viewer {
 
     /**
      * @constructor
-     * @param {Object} cfg  Viewer configuration.
+     * @param {Object} cfg Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of existing HTML canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
      * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted
@@ -31,6 +31,9 @@ class Viewer {
      * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
      * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
      * @param {Boolean}[cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
+     * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
+     * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
+     * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
      */
     constructor(cfg) {
 
@@ -59,7 +62,10 @@ class Viewer {
             gammaOutput: true,
             clearColorAmbient: cfg.clearColorAmbient,
             ticksPerRender: 1,
-            ticksPerOcclusionTest: 20 /// TODO Change to 20
+            ticksPerOcclusionTest: 20,
+            units: cfg.units,
+            scale: cfg.scale,
+            origin: cfg.origin
         });
 
         /**

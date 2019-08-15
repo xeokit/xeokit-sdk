@@ -8,7 +8,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
 
 /**
- * A {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
+ * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
  *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.

@@ -279,8 +279,10 @@ class OcclusionTester {
 
     _buildOcclusionTestList() {
         const canvas = this._scene.canvas;
+        const near = this._scene.camera.perspective.near; // Assume near enough to ortho near
         let marker;
         let canvasPos;
+        let viewPos;
         let canvasX;
         let canvasY;
         let lenPixels = 0;
@@ -291,6 +293,11 @@ class OcclusionTester {
         this._lenOcclusionTestList = 0;
         for (i = 0; i < this._numMarkers; i++) {
             marker = this._markerList[i];
+            viewPos = marker.viewPos;
+            if (viewPos[2] > -near) { // Clipped by near plane
+                marker._setVisible(false);
+                continue;
+            }
             canvasPos = marker.canvasPos;
             canvasX = canvasPos[0];
             canvasY = canvasPos[1];
