@@ -3,7 +3,7 @@ import {DistanceMeasurement} from "./DistanceMeasurement.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
 /**
- * {@link Viewer} distance measurement plugin.
+ * {@link Viewer} plugin for measuring point-to-point distances.
  *
  * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse)
  *
