@@ -8,7 +8,7 @@ const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 
 /**
- * AnnotationsPlugin is a {@link Viewer} plugin that creates {@link Annotation}s.
+ * {@link Viewer} plugin that creates {@link Annotation}s.
  *
  * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickToFlyToPosition)
  *

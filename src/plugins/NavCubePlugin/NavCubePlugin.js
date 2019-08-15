@@ -10,7 +10,7 @@ import {buildCylinderGeometry} from "../../../src/viewer/scene/geometry/builders
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 
 /**
- * NavCubePlugin is a {@link Viewer} plugin that provides a navigation control that lets us look at the {@link Scene} from along a chosen axis or diagonal.
+ * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
  *
  *  <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">
  *
@@ -47,13 +47,13 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *
  * const navCube = new NavCubePlugin(viewer, {
  *
- *      canvasID: "myNavCubeCanvas",
+ *     canvasID: "myNavCubeCanvas",
  *
- *      visible: true,           // Initially visible (default)
+ *     visible: true,         // Initially visible (default)
  *
- *      cameraFly: true,       // Fly camera to each selected axis/diagonal
- *      cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
- *      cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+ *     cameraFly: true,       // Fly camera to each selected axis/diagonal
+ *     cameraFitFOV: 45,      // How much field-of-view the scene takes once camera has fitted it to view
+ *     cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
  * });
  *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);

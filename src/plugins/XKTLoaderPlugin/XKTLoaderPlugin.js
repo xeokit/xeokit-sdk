@@ -18,7 +18,7 @@ const decompressColor = (function () {
 })();
 
 /**
- * A {@link Viewer} plugin that loads models from xeokit's optimized *````.xkt````* format.
+ * {@link Viewer} plugin that loads models from xeokit's optimized *````.xkt````* format.
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
