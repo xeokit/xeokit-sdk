@@ -328,21 +328,20 @@ class Scene extends Component {
 
     /**
      * @constructor
+     * @param {Object} cfg Scene configuration.
+     * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(cfg = {}) {
 
         super(null, cfg);
 
-        if (!cfg.canvasId) {
-            throw "Mandatory config expected: canvasId";
-        }
+        const canvas = cfg.canvasElement || document.getElementById(cfg.canvasId);
 
-        const canvas = document.getElementById(cfg.canvasId);
-        if (!canvas) {
-            throw "Canvas not found: '" + cfg.canvasId + "'";
+        if (!(canvas instanceof HTMLCanvasElement)) {
+            throw "Mandatory config expected: valid canvasId or canvasElement";
         }
-
-        const self = this;
 
         const transparent = !!cfg.transparent;
 
