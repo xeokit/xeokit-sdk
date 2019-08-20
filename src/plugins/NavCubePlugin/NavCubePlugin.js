@@ -73,7 +73,8 @@ class NavCubePlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg NavCubePlugin configuration.
      * @param {String} [cfg.id="NavCube"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} cfg.canvasId ID of a canvas element to display the NavCube.
+     * @param {String} [cfg.canvasId] ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas to display the NavCube - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {Boolean} [cfg.visible=true] Initial visibility.
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
@@ -87,21 +88,18 @@ class NavCubePlugin extends Plugin {
 
         var visible = true;
 
-        if (!cfg.canvasId) {
-            this.error("Config missing: canvasId");
+        try {
+            this._navCubeScene = new Scene({
+                canvasId: cfg.canvasId,
+                canvasElement: cfg.canvasElement,
+                transparent: true
+            });
+
+            this._navCubeCanvas = this._navCubeScene.canvas.canvas;
+        } catch (error) {
+            this.error(error);
             return;
         }
-
-        this._navCubeCanvas = document.getElementById(cfg.canvasId);
-        if (!this._navCubeCanvas) {
-            this.error("Can't find NavCube canvas: '" + cfg.canvasId + "'");
-            return;
-        }
-
-        this._navCubeScene = new Scene({
-            canvasId: this._navCubeCanvas.id,
-            transparent: true
-        });
 
         const navCubeScene = this._navCubeScene;
 

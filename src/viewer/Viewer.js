@@ -21,19 +21,21 @@ class Viewer {
      * @constructor
      * @param {Object} cfg Viewer configuration.
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
-     * @param {String} [cfg.canvasId]  ID of existing HTML canvas for the {@link Viewer#scene} - creates a full-page canvas automatically if this is omitted
-     * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted
+     * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted.
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
      * @param {Boolean} [cfg.preserveDrawingBuffer=true]  Whether or not to preserve the WebGL drawing buffer. This needs to be ````true```` for {@link Viewer#getSnapshot} to work.
      * @param {Boolean} [cfg.transparent=true]  Whether or not the canvas is transparent.
      * @param {Boolean} [cfg.gammaInput=true]  When true, expects that all textures and colors are premultiplied gamma.
-     * @param {Boolean}[cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
-     * @param {Number}[cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
-     * @param {Boolean}[cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
+     * @param {Boolean} [cfg.gammaOutput=true]  Whether or not to render with pre-multiplied gama.
+     * @param {Number} [cfg.gammaFactor=2.2] The gamma factor to use when rendering with pre-multiplied gamma.
+     * @param {Boolean} [cfg.clearColorAmbient=false] Sets if the canvas background color is derived from an {@link AmbientLight}. This only has effect when the canvas is not transparent. When not enabled, the background color will be the canvas element's HTML/CSS background color.
      * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
      * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
      * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
+     * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(cfg) {
 
@@ -52,6 +54,7 @@ class Viewer {
         this.scene = new Scene({
             viewer: this,
             canvasId: cfg.canvasId,
+            canvasElement: cfg.canvasElement,
             webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false

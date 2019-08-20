@@ -32,19 +32,19 @@ const unitsInfo = {
 };
 
 /**
- * @desc Configures its {@link Scene}'s unit of measurement and mapping between the Real-space and World-space 3D Cartesian coordinate systems.
+ * @desc Configures its {@link Scene}'s measurement unit and mapping between the Real-space and World-space 3D Cartesian coordinate systems.
  *
  *
  * ## Overview
  *
  * * Located at {@link Scene#metrics}.
- * * {@link Metrics#units} configures the unit of measurement, which is ````"meters"```` by default.
- * * {@link Metrics#scale} configures the number of measurement units represented by each unit within the World-space 3D coordinate system. This is ````1.0```` by default.
- * * {@link Metrics#origin} configures the  3D Real-space origin, in current measurement units, at which this {@link Scene}'s World-space coordinate origin sits, This is ````[0,0,0]```` by default.
+ * * {@link Metrics#units} configures the Real-space unit type, which is ````"meters"```` by default.
+ * * {@link Metrics#scale} configures the number of Real-space units represented by each unit within the World-space 3D coordinate system. This is ````1.0```` by default.
+ * * {@link Metrics#origin} configures the 3D Real-space origin, in current Real-space units, at which this {@link Scene}'s World-space coordinate origin sits, This is ````[0,0,0]```` by default.
  *
  * ## Usage
  *
- * Let's load a model using an {@link XKTLoaderPlugin}, then configure the unit of measurement and the coordinate
+ * Let's load a model using an {@link XKTLoaderPlugin}, then configure the Real-space unit type and the coordinate
  * mapping between the Real-space and World-space 3D coordinate systems.
  *
  * ````JavaScript
@@ -92,7 +92,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Gets info about supported measurement units.
+     * Gets info about the supported Real-space unit types.
      *
      * This will be:
      *
@@ -137,7 +137,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Sets the {@link Scene}'s current measurement units.
+     * Sets the {@link Scene}'s Real-space unit type.
      *
      * Accepted values are ````"meters"````, ````"centimeters"````, ````"millimeters"````, ````"metres"````, ````"centimetres"````, ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
      *
@@ -158,7 +158,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Gets the {@link Scene}'s current measurement units.
+     * Gets the {@link Scene}'s Real-space unit type.
      *
      * @type {String}
      */
@@ -167,10 +167,9 @@ class Metrics extends Component {
     }
 
     /**
-     * Sets the number of measurement units represented by each of the {@link Scene}'s World-space coordinate system units.
+     * Sets the number of Real-space units represented by each unit of the {@link Scene}'s World-space coordinate system.
      *
-     * For example, if {@link Metrics#units} is ````"meters"````, and there are ten meters per
-     * World-space coordinate system unit, then ````scale```` would have a value of ````10.0````.
+     * For example, if {@link Metrics#units} is ````"meters"````, and there are ten meters per World-space coordinate system unit, then ````scale```` would have a value of ````10.0````.
      *
      * @emits ````"scale"```` event on change, with the value of this property.
      * @type {Number}
@@ -186,7 +185,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Gets the number of measurement units represented by each of the {@link Scene}'s World-space coordinate system units.
+     * Gets the number of Real-space units represented by each unit of the {@link Scene}'s World-space coordinate system.
      *
      * @type {Number}
      */
@@ -195,8 +194,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Sets the Real-space 3D origin, in the current measurement units, at which this {@link Scene}'s
-     * World-space coordinate origin ````[0,0,0]```` sits.
+     * Sets the Real-space 3D origin, in Real-space units, at which this {@link Scene}'s World-space coordinate origin ````[0,0,0]```` sits.
      *
      * @emits "origin" event on change, with the value of this property.
      * @type {Number[]}
@@ -215,8 +213,7 @@ class Metrics extends Component {
     }
 
     /**
-     * Gets the 3D Real-space origin, in current measurement units, at which this {@link Scene}'s
-     * World-space coordinate origin ````[0,0,0]```` sits.
+     * Gets the 3D Real-space origin, in Real-space units, at which this {@link Scene}'s World-space coordinate origin ````[0,0,0]```` sits.
      *
      * @type {Number[]}
      */
@@ -225,12 +222,12 @@ class Metrics extends Component {
     }
 
     /**
-     * Converts a 3D World-space position within the {@link Scene} to 3D Real-space.
+     * Converts a 3D position from World-space to Real-space.
      *
-     * This is equivalent to ````#origin + (worldPos * #scale)````.
+     * This is equivalent to ````realPos = #origin + (worldPos * #scale)````.
      *
      * @param {Number[]} worldPos World-space 3D position, in World coordinate system units.
-     * @param {Number[]} [realPos] Destination for Real-space 3D position, in the current measurement {@link Metrics#units}.
+     * @param {Number[]} [realPos] Destination for Real-space 3D position.
      * @returns {Number[]} Real-space 3D position, in units indicated by {@link Metrics#units}.
      */
     worldToRealPos(worldPos, realPos = new Float32Array(3)) {
@@ -240,13 +237,13 @@ class Metrics extends Component {
     }
 
     /**
-     * Converts a 3D Real-space position to the  {@link Scene}'s 3D World-space.
+     * Converts a 3D position from Real-space to World-space.
      *
-     * This is equivalent to ````(worldPos - #origin) / #scale````.
+     * This is equivalent to ````worldPos = (worldPos - #origin) / #scale````.
      *
-     * @param {Number[]} realPos Real-space 3D position, in the current measurement {@link Metrics#units}.
-     * @param {Number[]} [worldPos] Destination for World-space 3D position, in World coordinate system units.
-     * @returns {Number[]} World-space 3D position, in World coordinate system units.
+     * @param {Number[]} realPos Real-space 3D position.
+     * @param {Number[]} [worldPos] Destination for World-space 3D position.
+     * @returns {Number[]} World-space 3D position.
      */
     realToWorldPos(realPos, worldPos = new Float32Array(3)) {
         worldPos[0] = (realPos[0] - this._origin[0]) / this._scale;
