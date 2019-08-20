@@ -1,4 +1,4 @@
-import {math} from "../../../src/viewer/scene/math/math.js";
+import {math} from "../../viewer/scene/math/math.js";
 
 function CubeTextureCanvas(viewer) {
 

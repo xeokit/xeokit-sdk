@@ -1,6 +1,6 @@
-import {math} from "../../../src/viewer/scene/math/math.js";
-import {Scene} from "../../../src/viewer/scene/scene/Scene.js";
-import {DirLight} from "./../../../src/viewer/scene/lights/DirLight.js";
+import {math} from "../../viewer/scene/math/math.js";
+import {Scene} from "../../viewer/scene/scene/Scene.js";
+import {DirLight} from "./../../viewer/scene/lights/DirLight.js";
 import {Plane} from "./Plane.js";
 
 /**
