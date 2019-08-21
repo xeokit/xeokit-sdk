@@ -28,12 +28,6 @@ class Dot {
 
         parentElement.appendChild(dot);
 
-        if (cfg.mouseDown) {
-            dot.addEventListener("mousedown", () => {
-                cfg.mouseDown();
-            });
-        }
-
         this.setPos(cfg.x || 0, cfg.y || 0);
         this.setFillColor(cfg.fillColor);
         this.setBorderColor(cfg.borderColor);
@@ -69,6 +63,7 @@ class Dot {
     }
 
     destroy() {
+        this.setVisible(false);
         this._dot.parentElement.removeChild(this._dot);
     }
 }

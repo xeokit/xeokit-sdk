@@ -1,9 +1,10 @@
 import {Marker} from "../../viewer/scene/marker/Marker.js";
-import {Wire} from "./lib/Wire.js";
-import {Dot} from "./lib/Dot.js";
-import {Label} from "./lib/Label.js";
+import {Wire} from "../lib/html/Wire.js";
+import {Dot} from "../lib/html/Dot.js";
+import {Label} from "../lib/html/Label.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
+
 
 var distVec3 = new Float32Array(3);
 

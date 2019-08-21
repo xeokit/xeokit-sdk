@@ -32,7 +32,7 @@ class DistanceMeasurementsControl extends Component {
         this._active = false;
         this._state = HOVERING;
         this._currentMeasurement = null;
-        this._prevRuler = null;
+        this._prevMeasurement = null;
         this._onhoverSurface = null;
         this._onPickedSurface = null;
         this._onHoverNothing = null;
@@ -91,7 +91,7 @@ class DistanceMeasurementsControl extends Component {
                     this._currentMeasurement.axisVisible = true;
                     this._currentMeasurement.targetVisible = true;
                     this._currentMeasurement = null;
-                    this._prevRuler = null;
+                    this._prevMeasurement = null;
                     this._state = HOVERING;
                     bail = true;
                     break;
@@ -105,10 +105,10 @@ class DistanceMeasurementsControl extends Component {
             }
             switch (this._state) {
                 case HOVERING:
-                    if (this._prevRuler) {
-                        this._prevRuler.originVisible = true;
-                        this._prevRuler.targetVisible = true;
-                        this._prevRuler.axisVisible = true;
+                    if (this._prevMeasurement) {
+                        this._prevMeasurement.originVisible = true;
+                        this._prevMeasurement.targetVisible = true;
+                        this._prevMeasurement.axisVisible = true;
                     }
                     this._currentMeasurement = this.plugin.createMeasurement({
                         id: math.createUUID(),
@@ -123,7 +123,7 @@ class DistanceMeasurementsControl extends Component {
                     });
                     this._currentMeasurement.axisVisible = false;
                     this._currentMeasurement.targetVisible = true;
-                    this._prevRuler = this._currentMeasurement;
+                    this._prevMeasurement = this._currentMeasurement;
                     this._state = FINDING_TARGET;
                     break;
                 case FINDING_ORIGIN:
@@ -157,17 +157,10 @@ class DistanceMeasurementsControl extends Component {
 
         this._onPickedNothing = cameraControl.on("pickedNothing", e => {
             if (this._currentMeasurement) {
-                switch (this._state) {
-                    case FINDING_ORIGIN:
-                    case FINDING_TARGET:
-                        if (this._currentMeasurement) {
-                            this._currentMeasurement.destroy();
-                            this._currentMeasurement = null;
-                            this._prevRuler = null;
-                            this._state = HOVERING
-                        }
-                        break;
-                }
+                this._currentMeasurement.destroy();
+                this._currentMeasurement = null;
+                this._prevMeasurement = null;
+                this._state = HOVERING
             }
         });
 
@@ -217,7 +210,7 @@ class DistanceMeasurementsControl extends Component {
             this._currentMeasurement.destroy();
             this._currentMeasurement = null;
         }
-        this._prevRuler = null;
+        this._prevMeasurement = null;
         this._state = HOVERING;
     }
 
