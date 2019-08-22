@@ -72,11 +72,12 @@ class Wire {
     }
 
     setVisible(visible) {
+        visible = !!visible;
         if (this._visible === visible) {
             return;
         }
-        this._visible = !!visible;
-        this._wire.style.visibility = visible ? "visible" : "hidden";
+        this._visible = visible;
+        this._wire.style.visibility = this._visible ? "visible" : "hidden";
     }
 
     destroy(visible) {

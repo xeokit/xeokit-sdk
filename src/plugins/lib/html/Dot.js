@@ -55,7 +55,7 @@ class Dot {
             return;
         }
         this._visible = !!visible;
-        this._dot.style.visibility = visible ? "visible" : "hidden";
+        this._dot.style.visibility = this._visible ? "visible" : "hidden";
     }
 
     setClickable(clickable) {

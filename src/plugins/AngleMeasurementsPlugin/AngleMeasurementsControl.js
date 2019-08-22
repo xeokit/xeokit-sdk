@@ -76,7 +76,9 @@ class AngleMeasurementsControl extends Component {
                 switch (this._state) {
                     case FINDING_CORNER:
                         this._currentAngleMeasurement.originWireVisible = true;
+                        this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.cornerVisible = true;
+                        this._currentAngleMeasurement.angleVisible = false;
                         this._currentAngleMeasurement.corner.entity = e.entity;
                         this._currentAngleMeasurement.corner.worldPos = e.worldPos;
                         document.body.style.cursor = "pointer";
@@ -84,6 +86,7 @@ class AngleMeasurementsControl extends Component {
                     case FINDING_TARGET:
                         this._currentAngleMeasurement.targetWireVisible = true;
                         this._currentAngleMeasurement.targetVisible = true;
+                        this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement.target.entity = e.entity;
                         this._currentAngleMeasurement.target.worldPos = e.worldPos;
                         document.body.style.cursor = "pointer";
@@ -93,8 +96,21 @@ class AngleMeasurementsControl extends Component {
         });
 
         var bail = false;
+        var lastX;
+        var lastY;
+        const tolerance = 2;
 
-        this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", () => {
+        this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", (coords) => {
+            lastX = coords[0];
+            lastY = coords[1];
+        });
+
+        this._onInputMouseUp = this.plugin.viewer.scene.input.on("mouseup", (coords) => {
+
+            if (coords[0] > lastX + tolerance || coords[0] < lastX - tolerance || coords[1] > lastY + tolerance || coords[1] < lastY - tolerance) {
+                return;
+            }
+
             switch (this._state) {
 
                 case HOVERING:
@@ -124,6 +140,7 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.cornerVisible = false;
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
+                        this._currentAngleMeasurement.angleVisible = false;
                         this._previousAngleMeasurement = this._currentAngleMeasurement;
                         this._state = FINDING_CORNER;
                     }
@@ -131,8 +148,9 @@ class AngleMeasurementsControl extends Component {
 
                 case FINDING_CORNER:
                     if (over) {
-                        this._currentAngleMeasurement.targetWireVisible = true;
+                        this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = true;
+                        this._currentAngleMeasurement.angleVisible = true;
                         this._state = FINDING_TARGET;
                         bail = true;
                     } else {
@@ -148,6 +166,7 @@ class AngleMeasurementsControl extends Component {
                 case FINDING_TARGET:
                     if (over) {
                         this._currentAngleMeasurement.targetVisible = true;
+                        this._currentAngleMeasurement.angleVisible = true;
                         this._currentAngleMeasurement = null;
                         this._previousAngleMeasurement = null;
                         this._state = HOVERING;
@@ -177,10 +196,12 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.originWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.targetWireVisible = false;
+                        this._currentAngleMeasurement.angleVisible = false;
                         break;
                     case FINDING_TARGET:
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.targetWireVisible = false;
+                        this._currentAngleMeasurement.angleVisible = false;
                         break;
 
                 }
@@ -208,6 +229,7 @@ class AngleMeasurementsControl extends Component {
         const input = this.plugin.viewer.scene.input;
 
         input.off(this._onInputMouseDown);
+        input.off(this._onInputMouseUp);
 
         cameraControl.off(this._onhoverSurface);
         cameraControl.off(this._onPickedSurface);

@@ -49,7 +49,7 @@ class AngleMeasurement extends Component {
         this._targetDot = new Dot(parentElement, {});
 
         this._originWire = new Wire(parentElement, {color: "blue", thickness: 1});
-        this._targetWire = new Wire(parentElement, {color: "blue", thickness: 1});
+        this._targetWire = new Wire(parentElement, {color: "red", thickness: 1});
 
         this._angleLabel = new Label(parentElement, {fillColor: "#00BBFF", prefix: "", text: ""});
 
@@ -64,6 +64,8 @@ class AngleMeasurement extends Component {
 
         this._originWireVisible = false;
         this._targetWireVisible = false;
+
+        this._angleVisible = false;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
@@ -202,17 +204,17 @@ class AngleMeasurement extends Component {
             this._originWire.setStartAndEnd(cp[0], cp[1], cp[2], cp[3]);
             this._targetWire.setStartAndEnd(cp[2], cp[3], cp[4], cp[5]);
 
-            this._angleLabel.setPosOnWire(cp[0], cp[1], cp[2], cp[3]);
+            this._angleLabel.setPosBetweenWires(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5]);
             this._angleLabel.setText((Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)) * scale).toFixed(2)) + unitAbbrev);
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._cornerDot.setVisible(this._visible && this._cornerVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);
 
-            this._originWire.setVisible(true);
-            this._targetWire.setVisible(true);
+            this._originWire.setVisible(this._visible && this._originWireVisible);
+            this._targetWire.setVisible(this._visible && this._targetWireVisible);
 
-            this._angleLabel.setVisible(true);
+            this._angleLabel.setVisible(this._visible && this._angleVisible);
 
             this._cpDirty = false;
         }
