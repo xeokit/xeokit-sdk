@@ -153,11 +153,11 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin for measuring angles.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif"></a></p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif"></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_modelWithMeasurements">Example 1: Model with angle measurements</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_createWithMouse">Example 2: Create angle measurements with mouse</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements">Example 1: Model with angle measurements</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse">Example 2: Create angle measurements with mouse</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
 <li>An <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span> shows the angle between two connected 3D line segments, given
@@ -172,7 +172,7 @@ as three positions on the surface(s) of one or more <span><a href="class/src/vie
 <h2 id="example-1--creating-anglemeasurements-programmatically">Example 1: Creating AngleMeasurements Programmatically</h2><p>In our first example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, and then use a AngleMeasurementsPlugin to programmatically create two <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s.</p>
 <p>Note how each AngleMeasurement has <code>origin</code>, <code>corner</code> and  <code>target</code>, which each indicate a 3D World-space
 position on the surface of an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. These can be aon the same Entity, or on different Entitys.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_modelWithMeasurements">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
 import {AngleMeasurementsPlugin} from &quot;../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js&quot;;
@@ -237,7 +237,7 @@ origin to that Entity. The next click on any Entity will fix the AngleMeasuremen
 that will fix its target and complete the AngleMeasurement.</p>
 <p>The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing
 another AngleMeasurement, and so on, until deactivated again.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_createWithMouse">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
 import {AngleMeasurementsPlugin} from &quot;../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js&quot;;
