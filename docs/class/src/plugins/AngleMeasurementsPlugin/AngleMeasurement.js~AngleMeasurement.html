@@ -126,13 +126,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AngleMeasurement} from &apos;<span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber21">xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AngleMeasurement} from &apos;<span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber16">xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber21">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber16">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -187,42 +187,14 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-axisVisible">axisVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-angle">angle</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets if the axis-aligned wires between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> are visible.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-axisVisible">axisVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if the axis-aligned wires between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> are visible.</p>
+        <div data-ice="description"><p>Gets the angle between two connected 3D line segments, given
+as three positions on the surface(s) of one or more <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
 </div>
       </div>
     </td>
@@ -245,13 +217,129 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-length">length</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-angleVisible">angleVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets the World-space direct point-to-point distance between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span>.</p>
+        <div data-ice="description"><p>Gets if the angle label is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-angleVisible">angleVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if the angle label is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-corner">corner</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-cornerVisible">cornerVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-cornerVisible">cornerVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
 </div>
       </div>
     </td>
@@ -351,6 +439,64 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-originWireVisible">originWireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if the wire between the origin and the corner is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-originWireVisible">originWireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if the wire between the origin and the corner is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -367,7 +513,7 @@
       <div>
         
         
-        <div data-ice="description"><p>The <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span> that owns this DistanceMeasurement.</p>
+        <div data-ice="description"><p>The <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span> that owns this AngleMeasurement.</p>
 </div>
       </div>
     </td>
@@ -467,6 +613,35 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-targetWireVisible">targetWireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets if the wire between the target and the corner is visible.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -477,13 +652,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-visible">visible</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-targetWireVisible">targetWireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets whether this DistanceMeasurement is visible or not.</p>
+        <div data-ice="description"><p>Gets if the wire between the target and the corner is visible.</p>
 </div>
       </div>
     </td>
@@ -512,36 +687,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Sets whether this DistanceMeasurement is visible or not.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-set-wireVisible">wireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets if the direct point-to-point wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> is visible.</p>
+        <div data-ice="description"><p>Sets whether this AngleMeasurement is visible or not.</p>
 </div>
       </div>
     </td>
@@ -564,13 +710,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-wireVisible">wireVisible</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-visible">visible</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Gets if the direct point-to-point wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> is visible.</p>
+        <div data-ice="description"><p>Gets whether this AngleMeasurement is visible or not.</p>
 </div>
       </div>
     </td>
@@ -1091,25 +1237,26 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-axisVisible">
+  <h3 data-ice="anchor" id="instance-get-angle">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">axisVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">angle</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber458">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets if the axis-aligned wires between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> are visible.</p>
+  <div data-ice="description"><p>Gets the angle between two connected 3D line segments, given
+as three positions on the surface(s) of one or more <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
 </div>
 
   
@@ -1135,25 +1282,69 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-axisVisible">
+  <h3 data-ice="anchor" id="instance-get-angleVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">angleVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber422">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the angle label is visible.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-angleVisible">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">axisVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">angleVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber441">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber411">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets if the axis-aligned wires between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> are visible.</p>
+  <div data-ice="description"><p>Sets if the angle label is visible.</p>
 </div>
 
   
@@ -1179,25 +1370,113 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-length">
+  <h3 data-ice="anchor" id="instance-get-corner">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">length</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">corner</span><span class="code" data-ice="signature">: <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber360">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber257">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the World-space direct point-to-point distance between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span>.</p>
+  <div data-ice="description"><p>Gets the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-cornerVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">cornerVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber331">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-cornerVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">cornerVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber342">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the corner <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
 </div>
 
   
@@ -1234,7 +1513,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
@@ -1278,7 +1557,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber322">source</a></span></span>
     </span>
   </h3>
 
@@ -1322,7 +1601,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber311">source</a></span></span>
     </span>
   </h3>
 
@@ -1330,6 +1609,94 @@
   
   
   <div data-ice="description"><p>Sets if the origin <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-originWireVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">originWireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber371">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets if the wire between the origin and the corner is visible.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-originWireVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">originWireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber382">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the wire between the origin and the corner is visible.</p>
 </div>
 
   
@@ -1366,14 +1733,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span> that owns this DistanceMeasurement.</p>
+  <div data-ice="description"><p>The <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span> that owns this AngleMeasurement.</p>
 </div>
 
   
@@ -1410,7 +1777,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber351">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -1454,7 +1821,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber421">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -1498,7 +1865,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber432">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber362">source</a></span></span>
     </span>
   </h3>
 
@@ -1531,25 +1898,69 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-visible">
+  <h3 data-ice="anchor" id="instance-set-targetWireVisible">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">get</span>
+    <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">visible</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">targetWireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber392">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets whether this DistanceMeasurement is visible or not.</p>
+  <div data-ice="description"><p>Sets if the wire between the target and the corner is visible.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-targetWireVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">targetWireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber402">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the wire between the target and the corner is visible.</p>
 </div>
 
   
@@ -1586,14 +1997,14 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber371">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber286">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets whether this DistanceMeasurement is visible or not.</p>
+  <div data-ice="description"><p>Sets whether this AngleMeasurement is visible or not.</p>
 </div>
 
   
@@ -1619,69 +2030,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-wireVisible">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">wireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber467">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets if the direct point-to-point wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> is visible.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-wireVisible">
+  <h3 data-ice="anchor" id="instance-get-visible">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">wireVisible</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">visible</span><span class="code" data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js.html#lineNumber302">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets if the direct point-to-point wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span> is visible.</p>
+  <div data-ice="description"><p>Gets whether this AngleMeasurement is visible or not.</p>
 </div>
 
   

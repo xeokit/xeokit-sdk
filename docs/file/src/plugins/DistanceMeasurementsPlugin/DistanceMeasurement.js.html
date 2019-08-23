@@ -29,7 +29,10 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
@@ -124,11 +127,12 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Marker} from &quot;../../viewer/scene/marker/Marker.js&quot;;
-import {Wire} from &quot;./lib/Wire.js&quot;;
-import {Dot} from &quot;./lib/Dot.js&quot;;
-import {Label} from &quot;./lib/Label.js&quot;;
+import {Wire} from &quot;../lib/html/Wire.js&quot;;
+import {Dot} from &quot;../lib/html/Dot.js&quot;;
+import {Label} from &quot;../lib/html/Label.js&quot;;
 import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 import {Component} from &quot;../../viewer/scene/Component.js&quot;;
+
 
 var distVec3 = new Float32Array(3);
 
@@ -180,71 +184,53 @@ class DistanceMeasurement extends Component {
         var parentElement = document.body;
 
         this._originDot = new Dot(parentElement, {
-            mouseDown: () =&gt; {
-                this.fire(&quot;mouseDownOrigin&quot;, {distanceMeasurement: this});
-            }
         });
 
         this._targetDot = new Dot(parentElement, {
-            mouseDown: () =&gt; {
-                this.fire(&quot;mouseDownTarget&quot;, {distanceMeasurement: this});
-            }
         });
-
-        const mouseDownDistanceMeasurement = () =&gt; {
-            this.fire(&quot;mouseDownDistanceMeasurement&quot;, {distanceMeasurement: this});
-        };
 
         this._lengthWire = new Wire(parentElement, {
             color: &quot;#00BBFF&quot;,
-            thickness: 2,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 2
         });
 
         this._xAxisWire = new Wire(parentElement, {
             color: &quot;red&quot;,
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._yAxisWire = new Wire(parentElement, {
             color: &quot;green&quot;,
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._zAxisWire = new Wire(parentElement, {
             color: &quot;blue&quot;,
-            thickness: 1,
-            mouseDown: mouseDownDistanceMeasurement
+            thickness: 1
         });
 
         this._lengthLabel = new Label(parentElement, {
             fillColor: &quot;#00BBFF&quot;,
             prefix: &quot;&quot;,
-            text: &quot;&quot;,
-            mouseDown: mouseDownDistanceMeasurement
+            text: &quot;&quot;
         });
 
         this._xAxisLabel = new Label(parentElement, {
             fillColor: &quot;red&quot;,
             prefix: &quot;X&quot;,
-            text: &quot;&quot;,
-            mouseDown: mouseDownDistanceMeasurement
+            text: &quot;&quot;
         });
 
         this._yAxisLabel = new Label(parentElement, {
             fillColor: &quot;green&quot;,
             prefix: &quot;Y&quot;,
-            text: &quot;&quot;,
-            mouseDown: mouseDownDistanceMeasurement
+            text: &quot;&quot;
         });
 
         this._zAxisLabel = new Label(parentElement, {
             fillColor: &quot;blue&quot;,
             prefix: &quot;Z&quot;,
-            text: &quot;&quot;,
-            mouseDown: mouseDownDistanceMeasurement
+            text: &quot;&quot;
         });
 
         this._wpDirty = false;

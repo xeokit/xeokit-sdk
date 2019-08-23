@@ -29,7 +29,10 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
@@ -801,7 +804,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -846,8 +849,15 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.canvasId</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>ID of a canvas element to display the NavCube.</p>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.canvasElement</td>
+      <td data-ice="type" class="code"><span>HTMLCanvasElement</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Reference of an existing HTML canvas to display the NavCube - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -920,7 +930,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber585">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber583">source</a></span></span>
     </span>
   </h3>
 
@@ -965,7 +975,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber554">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber552">source</a></span></span>
     </span>
   </h3>
 
@@ -1024,7 +1034,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber530">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber528">source</a></span></span>
     </span>
   </h3>
 
@@ -1082,7 +1092,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber576">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber574">source</a></span></span>
     </span>
   </h3>
 
@@ -1140,7 +1150,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber505">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber503">source</a></span></span>
     </span>
   </h3>
 
@@ -1197,7 +1207,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber471">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber469">source</a></span></span>
     </span>
   </h3>
 
@@ -1262,7 +1272,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber542">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber540">source</a></span></span>
     </span>
   </h3>
 
@@ -1325,7 +1335,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber519">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber517">source</a></span></span>
     </span>
   </h3>
 
@@ -1387,7 +1397,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber565">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber563">source</a></span></span>
     </span>
   </h3>
 
@@ -1449,7 +1459,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber491">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber489">source</a></span></span>
     </span>
   </h3>
 

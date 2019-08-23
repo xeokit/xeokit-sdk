@@ -29,7 +29,10 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
@@ -123,15 +126,15 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/NavCubePlugin/NavCubePlugin.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;././../../../src/viewer/Plugin.js&quot;;
-import {math} from &quot;../../../src/viewer/scene/math/math.js&quot;;
-import {Scene} from &quot;../../../src/viewer/scene/scene/Scene.js&quot;;
-import {DirLight} from &quot;./../../../src/viewer/scene/lights/DirLight.js&quot;;
-import {Mesh} from &quot;./../../../src/viewer/scene/mesh/Mesh.js&quot;;
-import {ReadableGeometry} from &quot;../../../src/viewer/scene/geometry/ReadableGeometry.js&quot;;
-import {PhongMaterial} from &quot;../../../src/viewer/scene/materials/PhongMaterial.js&quot;;
-import {Texture} from &quot;../../../src/viewer/scene/materials/Texture.js&quot;;
-import {buildCylinderGeometry} from &quot;../../../src/viewer/scene/geometry/builders/buildCylinderGeometry.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;././../../viewer/Plugin.js&quot;;
+import {math} from &quot;../../viewer/scene/math/math.js&quot;;
+import {Scene} from &quot;../../viewer/scene/scene/Scene.js&quot;;
+import {DirLight} from &quot;./../../viewer/scene/lights/DirLight.js&quot;;
+import {Mesh} from &quot;./../../viewer/scene/mesh/Mesh.js&quot;;
+import {ReadableGeometry} from &quot;../../viewer/scene/geometry/ReadableGeometry.js&quot;;
+import {PhongMaterial} from &quot;../../viewer/scene/materials/PhongMaterial.js&quot;;
+import {Texture} from &quot;../../viewer/scene/materials/Texture.js&quot;;
+import {buildCylinderGeometry} from &quot;../../viewer/scene/geometry/builders/buildCylinderGeometry.js&quot;;
 import {CubeTextureCanvas} from &quot;./CubeTextureCanvas.js&quot;;
 
 /**
@@ -198,7 +201,8 @@ class NavCubePlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg NavCubePlugin configuration.
      * @param {String} [cfg.id=&quot;NavCube&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {String} cfg.canvasId ID of a canvas element to display the NavCube.
+     * @param {String} [cfg.canvasId] ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas to display the NavCube - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {Boolean} [cfg.visible=true] Initial visibility.
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
@@ -212,21 +216,18 @@ class NavCubePlugin extends Plugin {
 
         var visible = true;
 
-        if (!cfg.canvasId) {
-            this.error(&quot;Config missing: canvasId&quot;);
+        try {
+            this._navCubeScene = new Scene({
+                canvasId: cfg.canvasId,
+                canvasElement: cfg.canvasElement,
+                transparent: true
+            });
+
+            this._navCubeCanvas = this._navCubeScene.canvas.canvas;
+        } catch (error) {
+            this.error(error);
             return;
         }
-
-        this._navCubeCanvas = document.getElementById(cfg.canvasId);
-        if (!this._navCubeCanvas) {
-            this.error(&quot;Can&apos;t find NavCube canvas: &apos;&quot; + cfg.canvasId + &quot;&apos;&quot;);
-            return;
-        }
-
-        this._navCubeScene = new Scene({
-            canvasId: this._navCubeCanvas.id,
-            transparent: true
-        });
 
         const navCubeScene = this._navCubeScene;
 

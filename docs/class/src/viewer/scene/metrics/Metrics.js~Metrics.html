@@ -29,7 +29,10 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
@@ -149,14 +152,14 @@
 
   
   
-  <div class="description" data-ice="description"><p>Configures its <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s unit of measurement and mapping between the Real-space and World-space 3D Cartesian coordinate systems.</p>
+  <div class="description" data-ice="description"><p>Configures its <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s measurement unit and mapping between the Real-space and World-space 3D Cartesian coordinate systems.</p>
 <h2 id="overview">Overview</h2><ul>
 <li>Located at <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-metrics">Scene#metrics</a></span>.</li>
-<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> configures the unit of measurement, which is <code>&quot;meters&quot;</code> by default.</li>
-<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-scale">Metrics#scale</a></span> configures the number of measurement units represented by each unit within the World-space 3D coordinate system. This is <code>1.0</code> by default.</li>
-<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-origin">Metrics#origin</a></span> configures the  3D Real-space origin, in current measurement units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin sits, This is <code>[0,0,0]</code> by default.</li>
+<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> configures the Real-space unit type, which is <code>&quot;meters&quot;</code> by default.</li>
+<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-scale">Metrics#scale</a></span> configures the number of Real-space units represented by each unit within the World-space 3D coordinate system. This is <code>1.0</code> by default.</li>
+<li><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-origin">Metrics#origin</a></span> configures the 3D Real-space origin, in current Real-space units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin sits, This is <code>[0,0,0]</code> by default.</li>
 </ul>
-<h2 id="usage">Usage</h2><p>Let&apos;s load a model using an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>, then configure the unit of measurement and the coordinate
+<h2 id="usage">Usage</h2><p>Let&apos;s load a model using an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>, then configure the Real-space unit type and the coordinate
 mapping between the Real-space and World-space 3D coordinate systems.</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
@@ -220,8 +223,7 @@ metrics.origin = [100.0, 0.0, 200.0];</code>
       <div>
         
         
-        <div data-ice="description"><p>Sets the Real-space 3D origin, in the current measurement units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s
-World-space coordinate origin <code>[0,0,0]</code> sits.</p>
+        <div data-ice="description"><p>Sets the Real-space 3D origin, in Real-space units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin <code>[0,0,0]</code> sits.</p>
 </div>
       </div>
     </td>
@@ -250,8 +252,7 @@ World-space coordinate origin <code>[0,0,0]</code> sits.</p>
       <div>
         
         
-        <div data-ice="description"><p>Gets the 3D Real-space origin, in current measurement units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s
-World-space coordinate origin <code>[0,0,0]</code> sits.</p>
+        <div data-ice="description"><p>Gets the 3D Real-space origin, in Real-space units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin <code>[0,0,0]</code> sits.</p>
 </div>
       </div>
     </td>
@@ -280,9 +281,8 @@ World-space coordinate origin <code>[0,0,0]</code> sits.</p>
       <div>
         
         
-        <div data-ice="description"><p>Sets the number of measurement units represented by each of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system units.</p>
-<p>For example, if <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> is <code>&quot;meters&quot;</code>, and there are ten meters per
-World-space coordinate system unit, then <code>scale</code> would have a value of <code>10.0</code>.</p>
+        <div data-ice="description"><p>Sets the number of Real-space units represented by each unit of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system.</p>
+<p>For example, if <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> is <code>&quot;meters&quot;</code>, and there are ten meters per World-space coordinate system unit, then <code>scale</code> would have a value of <code>10.0</code>.</p>
 </div>
       </div>
     </td>
@@ -311,7 +311,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Gets the number of measurement units represented by each of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system units.</p>
+        <div data-ice="description"><p>Gets the number of Real-space units represented by each unit of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system.</p>
 </div>
       </div>
     </td>
@@ -340,7 +340,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Sets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s current measurement units.</p>
+        <div data-ice="description"><p>Sets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s Real-space unit type.</p>
 <p>Accepted values are <code>&quot;meters&quot;</code>, <code>&quot;centimeters&quot;</code>, <code>&quot;millimeters&quot;</code>, <code>&quot;metres&quot;</code>, <code>&quot;centimetres&quot;</code>, <code>&quot;millimetres&quot;</code>, <code>&quot;yards&quot;</code>, <code>&quot;feet&quot;</code> and <code>&quot;inches&quot;</code>.</p>
 </div>
       </div>
@@ -370,7 +370,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Gets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s current measurement units.</p>
+        <div data-ice="description"><p>Gets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s Real-space unit type.</p>
 </div>
       </div>
     </td>
@@ -399,7 +399,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Gets info about supported measurement units.</p>
+        <div data-ice="description"><p>Gets info about the supported Real-space unit types.</p>
 </div>
       </div>
     </td>
@@ -435,8 +435,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Converts a 3D Real-space position to the  <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s 3D World-space.</p>
-<p>This is equivalent to <code>(worldPos - #origin) / #scale</code>.</p>
+        <div data-ice="description"><p>Converts a 3D position from Real-space to World-space.</p>
 </div>
       </div>
     </td>
@@ -465,7 +464,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <div>
         
         
-        <div data-ice="description"><p>Converts a 3D World-space position within the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> to 3D Real-space.</p>
+        <div data-ice="description"><p>Converts a 3D position from World-space to Real-space.</p>
 </div>
       </div>
     </td>
@@ -996,15 +995,14 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber202">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the Real-space 3D origin, in the current measurement units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s
-World-space coordinate origin <code>[0,0,0]</code> sits.</p>
+  <div data-ice="description"><p>Sets the Real-space 3D origin, in Real-space units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin <code>[0,0,0]</code> sits.</p>
 </div>
 
   
@@ -1053,15 +1051,14 @@ World-space coordinate origin <code>[0,0,0]</code> sits.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the 3D Real-space origin, in current measurement units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s
-World-space coordinate origin <code>[0,0,0]</code> sits.</p>
+  <div data-ice="description"><p>Gets the 3D Real-space origin, in Real-space units, at which this <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate origin <code>[0,0,0]</code> sits.</p>
 </div>
 
   
@@ -1098,16 +1095,15 @@ World-space coordinate origin <code>[0,0,0]</code> sits.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber178">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber177">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the number of measurement units represented by each of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system units.</p>
-<p>For example, if <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> is <code>&quot;meters&quot;</code>, and there are ten meters per
-World-space coordinate system unit, then <code>scale</code> would have a value of <code>10.0</code>.</p>
+  <div data-ice="description"><p>Sets the number of Real-space units represented by each unit of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system.</p>
+<p>For example, if <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span> is <code>&quot;meters&quot;</code>, and there are ten meters per World-space coordinate system unit, then <code>scale</code> would have a value of <code>10.0</code>.</p>
 </div>
 
   
@@ -1156,14 +1152,14 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Gets the number of measurement units represented by each of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system units.</p>
+  <div data-ice="description"><p>Gets the number of Real-space units represented by each unit of the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s World-space coordinate system.</p>
 </div>
 
   
@@ -1207,7 +1203,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
   
   
   
-  <div data-ice="description"><p>Sets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s current measurement units.</p>
+  <div data-ice="description"><p>Sets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s Real-space unit type.</p>
 <p>Accepted values are <code>&quot;meters&quot;</code>, <code>&quot;centimeters&quot;</code>, <code>&quot;millimeters&quot;</code>, <code>&quot;metres&quot;</code>, <code>&quot;centimetres&quot;</code>, <code>&quot;millimetres&quot;</code>, <code>&quot;yards&quot;</code>, <code>&quot;feet&quot;</code> and <code>&quot;inches&quot;</code>.</p>
 </div>
 
@@ -1264,7 +1260,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
   
   
   
-  <div data-ice="description"><p>Gets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s current measurement units.</p>
+  <div data-ice="description"><p>Gets the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s Real-space unit type.</p>
 </div>
 
   
@@ -1308,7 +1304,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
   
   
   
-  <div data-ice="description"><p>Gets info about supported measurement units.</p>
+  <div data-ice="description"><p>Gets info about the supported Real-space unit types.</p>
 <p>This will be:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">{
      {
@@ -1381,15 +1377,15 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber251">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Converts a 3D Real-space position to the  <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s 3D World-space.</p>
-<p>This is equivalent to <code>(worldPos - #origin) / #scale</code>.</p>
+  <div data-ice="description"><p>Converts a 3D position from Real-space to World-space.</p>
+<p>This is equivalent to <code>worldPos = (worldPos - #origin) / #scale</code>.</p>
 </div>
 
   
@@ -1406,14 +1402,14 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <td data-ice="name" class="code" data-depth="0">realPos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Real-space 3D position, in the current measurement <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span>.</p>
+      <td data-ice="description"><p>Real-space 3D position.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">worldPos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Destination for World-space 3D position, in World coordinate system units.</p>
+      <td data-ice="description"><p>Destination for World-space 3D position.</p>
 </td>
     </tr>
 </tbody>
@@ -1427,7 +1423,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>World-space 3D position, in World coordinate system units.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>World-space 3D position.</p>
 </td>
         </tr>
       </tbody>
@@ -1463,15 +1459,15 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/metrics/Metrics.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Converts a 3D World-space position within the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> to 3D Real-space.</p>
-<p>This is equivalent to <code>#origin + (worldPos * #scale)</code>.</p>
+  <div data-ice="description"><p>Converts a 3D position from World-space to Real-space.</p>
+<p>This is equivalent to <code>realPos = #origin + (worldPos * #scale)</code>.</p>
 </div>
 
   
@@ -1495,7 +1491,7 @@ World-space coordinate system unit, then <code>scale</code> would have a value o
       <td data-ice="name" class="code" data-depth="0">realPos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Destination for Real-space 3D position, in the current measurement <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html#instance-set-units">Metrics#units</a></span>.</p>
+      <td data-ice="description"><p>Destination for Real-space 3D position.</p>
 </td>
     </tr>
 </tbody>

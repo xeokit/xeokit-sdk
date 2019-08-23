@@ -126,13 +126,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AngleMeasurementsPlugin} from &apos;<span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber140">xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {AngleMeasurementsPlugin} from &apos;<span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber132">xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber140">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber132">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -152,30 +152,30 @@
 
   
   
-  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin for measuring point-to-point distances.</p>
+  <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin for measuring angles.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif"></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_modelWithMeasurements">Example 1: Model with measurements</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse">Example 2: Create measurements with mouse</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_modelWithMeasurements">Example 1: Model with angle measurements</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_createWithMouse">Example 2: Create angle measurements with mouse</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_unitsAndScale">Example 3: Configuring units and scale</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
-<li>A <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span> represents a point-to-point measurement between two 3D points on one or two <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
-<li>As shown on the screen capture above, a DistanceMeasurement has one wire (light blue) that shows the direct point-to-point measurement,
-and three more wires (red, green and blue) that show the distance on each of the World-space X, Y and Z axis.</li>
-<li>Create DistanceMeasurements programmatically with <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-method-createMeasurement">AngleMeasurementsPlugin#createMeasurement</a></span>.</li>
-<li>Create DistanceMeasurements interactively using the <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span>, located at <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-control">AngleMeasurementsPlugin#control</a></span>.</li>
-<li>Existing DistanceMeasurements are registered by ID in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span>.</li>
-<li>Destroy DistanceMeasurements using <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-method-destroyMeasurement">AngleMeasurementsPlugin#destroyMeasurement</a></span>.</li>
-<li>Configure global measurement units and scale via <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html">Metrics</a></span>, located at <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-metrics">Scene#metrics</a></span>.</li>
+<li>An <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span> shows the angle between two connected 3D line segments, given
+as three positions on the surface(s) of one or more <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
+<li>As shown on the screen capture above, a AngleMeasurement has two wires that show the line segments, with a label that shows the angle between them.</li>
+<li>Create AngleMeasurements programmatically with <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-method-createMeasurement">AngleMeasurementsPlugin#createMeasurement</a></span>.</li>
+<li>Create AngleMeasurements interactively using the <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span>, located at <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-control">AngleMeasurementsPlugin#control</a></span>.</li>
+<li>Existing AngleMeasurements are registered by ID in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span>.</li>
+<li>Destroy AngleMeasurements using <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-method-destroyMeasurement">AngleMeasurementsPlugin#destroyMeasurement</a></span>.</li>
+<li>Configure global measurement units and scale via <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html">Metrics</a></span>, located at <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-metrics">Scene#metrics</a></span></li>
 </ul>
-<h2 id="example-1--creating-distancemeasurements-programmatically">Example 1: Creating DistanceMeasurements Programmatically</h2><p>In our first example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, and then use a DistanceMeasurementsPlugin to programmatically create two <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s.</p>
-<p>Note how each DistanceMeasurement has <code>origin</code> and <code>target</code> endpoints, which each indicate a 3D World-space
-position on the surface of an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. The endpoints can be attached to the same Entity, or to different Entitys.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_modelWithMeasurements">Run example</a>]</p>
+<h2 id="example-1--creating-anglemeasurements-programmatically">Example 1: Creating AngleMeasurements Programmatically</h2><p>In our first example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, and then use a AngleMeasurementsPlugin to programmatically create two <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s.</p>
+<p>Note how each AngleMeasurement has <code>origin</code>, <code>corner</code> and  <code>target</code>, which each indicate a 3D World-space
+position on the surface of an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>. These can be aon the same Entity, or on different Entitys.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_modelWithMeasurements">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
-import {DistanceMeasurementsPlugin} from &quot;../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js&quot;;
+import {AngleMeasurementsPlugin} from &quot;../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
@@ -188,7 +188,7 @@ viewer.scene.camera.up = [0.36, 0.83, 0.40];
 
 const xktLoader = new XKTLoaderPlugin(viewer);
 
-const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
 const model = xktLoader.load({
      src: &quot;./models/xkt/duplex/duplex.xkt&quot;
@@ -196,9 +196,13 @@ const model = xktLoader.load({
 
 model.on(&quot;loaded&quot;, () =&gt; {
 
-     const myMeasurement1 = distanceMeasurements.createMeasurement({
-         id: &quot;distanceMeasurement1&quot;,
+     const myMeasurement1 = angleMeasurements.createMeasurement({
+         id: &quot;myAngleMeasurement1&quot;,
          origin: {
+             entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FLOH&quot;],
+             worldPos: [0.044, 5.998, 17.767]
+         },
+         corner: {
              entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FLOH&quot;],
              worldPos: [0.044, 5.998, 17.767]
          },
@@ -206,13 +210,16 @@ model.on(&quot;loaded&quot;, () =&gt; {
              entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FLOH&quot;],
              worldPos: [4.738, 3.172, 17.768]
          },
-         visible: true,
-         wireVisible: true
+         visible: true
      });
 
-     const myMeasurement2 = distanceMeasurements.createMeasurement({
-         id: &quot;distanceMeasurement2&quot;,
+     const myMeasurement2 = angleMeasurements.createMeasurement({
+         id: &quot;myAngleMeasurement2&quot;,
          origin: {
+             entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FNr2&quot;],
+             worldPos: [0.457, 2.532, 17.766]
+         },
+         corner: {
              entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FNr2&quot;],
              worldPos: [0.457, 2.532, 17.766]
          },
@@ -220,20 +227,20 @@ model.on(&quot;loaded&quot;, () =&gt; {
              entity: viewer.scene.objects[&quot;1CZILmCaHETO8tf3SgGEXu&quot;],
              worldPos: [0.436, 0.001, 22.135]
          },
-         visible: true,
-         wireVisible: true
+         visible: true
      });
 });</code>
 </code></pre>
-<h2 id="example-2--creating-distancemeasurements-interactively">Example 2: Creating DistanceMeasurements Interactively</h2><p>In our second example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, then we&apos;ll use the DistanceMeasurementPlugin&apos;s <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span> to interactively create <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s with mouse or touch input.</p>
-<p>After we&apos;ve activated the DistanceMeasurementsControl, the first click on any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> begins constructing a DistanceMeasurement, fixing its
-origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity.</p>
-<p>The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
-another DistanceMeasurement, and so on, until deactivated again.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_createWithMouse">Run example</a>]</p>
+<h2 id="example-2--creating-anglemeasurements-interactively">Example 2: Creating AngleMeasurements Interactively</h2><p>In our second example, we&apos;ll use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model, then we&apos;ll use the AngleMeasurementPlugin&apos;s <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span> to interactively create <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s with mouse or touch input.</p>
+<p>After we&apos;ve activated the AngleMeasurementsControl, the first click on any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> begins constructing a AngleMeasurement, fixing its
+origin to that Entity. The next click on any Entity will fix the AngleMeasurement&apos;s corner, and the next click after
+that will fix its target and complete the AngleMeasurement.</p>
+<p>The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing
+another AngleMeasurement, and so on, until deactivated again.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_angle_createWithMouse">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
-import {DistanceMeasurementsPlugin} from &quot;../src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js&quot;;
+import {AngleMeasurementsPlugin} from &quot;../src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js&quot;;
 
 const viewer = new Viewer({
     canvasId: &quot;myCanvas&quot;,
@@ -246,23 +253,13 @@ viewer.scene.camera.up = [0.36, 0.83, 0.40];
 
 const xktLoader = new XKTLoaderPlugin(viewer);
 
-const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
 const model = xktLoader.load({
     src: &quot;./models/xkt/duplex/duplex.xkt&quot;
 });
 
-distanceMeasurements.control.activate();  // &lt;------------ Activate the DistanceMeasurementsControl</code>
-</code></pre>
-<h2 id="example-3--configuring-measurement-units-and-scale">Example 3: Configuring Measurement Units and Scale</h2><p>In our third example, we&apos;ll use the  <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>&apos;s <span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html">Metrics</a></span> to set the global unit of measurement to <code>&quot;meters&quot;</code>. We&apos;ll also specify that a unit within the World-space coordinate system represents ten meters.</p>
-<p>The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.</p>
-<ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#measurement_distance_unitsAndScale">Run example</a>]</li>
-</ul>
-<pre><code class="lang-JavaScript"><code class="source-code prettyprint">const metrics = viewer.scene.metrics;
-
-metrics.units = &quot;meters&quot;;
-metrics.scale = 10.0;</code>
+angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMeasurementsControl</code>
 </code></pre>
 </div>
   
@@ -338,64 +335,6 @@ metrics.scale = 10.0;</code>
         
         
         <div data-ice="description"><p>Gets the <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span>, which creates <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s from user input.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-set-labelMinAxisLength">labelMinAxisLength</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-labelMinAxisLength">labelMinAxisLength</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.</p>
 </div>
       </div>
     </td>
@@ -489,7 +428,7 @@ metrics.scale = 10.0;</code>
       <div>
         
         
-        <div data-ice="description"><p>Creates a <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>.</p>
+        <div data-ice="description"><p>Creates an <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>.</p>
 </div>
       </div>
     </td>
@@ -518,7 +457,7 @@ metrics.scale = 10.0;</code>
       <div>
         
         
-        <div data-ice="description"><p>Destroys this DistanceMeasurementsPlugin.</p>
+        <div data-ice="description"><p>Destroys this AngleMeasurementsPlugin.</p>
 </div>
       </div>
     </td>
@@ -816,7 +755,7 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
@@ -854,16 +793,8 @@ metrics.scale = 10.0;</code>
       <td data-ice="name" class="code" data-depth="1">cfg.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;DistanceMeasurements&quot;</li></ul></td>
+<li>default: &quot;AngleMeasurements&quot;</li></ul></td>
       <td data-ice="description"><p>Optional ID for this plugin, so that we can find it within <span><a href="class/src/viewer/Viewer.js~Viewer.html#instance-member-plugins">Viewer#plugins</a></span>.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.labelMinAxisLength</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 25</li></ul></td>
-      <td data-ice="description"><p>The minimum length, in pixels, of an axis wire beyond which its label is shown.</p>
 </td>
     </tr>
 </tbody>
@@ -903,7 +834,7 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -936,109 +867,6 @@ metrics.scale = 10.0;</code>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-labelMinAxisLength">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">labelMinAxisLength</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber196">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.</p>
-<p>The axis wire&apos;s label is not shown when its length is less than this value.</p>
-<p>This is <code>25</code> pixels by default.</p>
-<p>Must not be less than <code>1</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-labelMinAxisLength">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">labelMinAxisLength</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber208">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-measurements">
     <span class="access" data-ice="access">public</span>
     
@@ -1050,7 +878,7 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 
@@ -1097,7 +925,7 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber250">source</a></span></span>
     </span>
   </h3>
 
@@ -1141,15 +969,15 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber230">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Creates a <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>.</p>
-<p>The DistanceMeasurement is then registered by <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span> in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span>.</p>
+  <div data-ice="description"><p>Creates an <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>.</p>
+<p>The AngleMeasurement is then registered by <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span> in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span>.</p>
 </div>
 
   
@@ -1173,7 +1001,7 @@ metrics.scale = 10.0;</code>
       <td data-ice="name" class="code" data-depth="1">params.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Unique ID to assign to <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span>. The DistanceMeasurement will be registered by this in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span> and <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-components">Scene.components</a></span>. Must be unique among all components in the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
+      <td data-ice="description"><p>Unique ID to assign to <span><a href="class/src/viewer/scene/Component.js~Component.html#instance-member-id">AngleMeasurement#id</a></span>. The AngleMeasurement will be registered by this in <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements">AngleMeasurementsPlugin#measurements</a></span> and <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-components">Scene.components</a></span>. Must be unique among all components in the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="2">
@@ -1188,6 +1016,20 @@ metrics.scale = 10.0;</code>
       <td data-ice="type" class="code"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Origin Entity.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">params.corner.worldPos</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Corner World-space 3D position.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="2">
+      <td data-ice="name" class="code" data-depth="2">params.corner.entity</td>
+      <td data-ice="type" class="code"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Corner Entity.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="2">
@@ -1221,6 +1063,14 @@ metrics.scale = 10.0;</code>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.cornerVisible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Whether to initially show the <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span> corner.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.targetVisible</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1233,15 +1083,7 @@ metrics.scale = 10.0;</code>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether to initially show the direct point-to-point wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span>.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.axisVisible</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether to initially show the axis-aligned wires between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span>.</p>
+      <td data-ice="description"><p>Whether to initially show the wire between <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-origin">AngleMeasurement#origin</a></span>, <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-corner">AngleMeasurement#corner</a></span> and <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html#instance-get-target">AngleMeasurement#target</a></span>.</p>
 </td>
     </tr>
 </tbody>
@@ -1291,14 +1133,14 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber262">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Destroys this DistanceMeasurementsPlugin.</p>
+  <div data-ice="description"><p>Destroys this AngleMeasurementsPlugin.</p>
 <p>Destroys all <span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span>s first.</p>
 </div>
 
@@ -1336,7 +1178,7 @@ metrics.scale = 10.0;</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -1360,7 +1202,7 @@ metrics.scale = 10.0;</code>
       <td data-ice="name" class="code" data-depth="0">id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>ID of DistanceMeasurement to destroy.</p>
+      <td data-ice="description"><p>ID of AngleMeasurement to destroy.</p>
 </td>
     </tr>
 </tbody>
