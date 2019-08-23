@@ -53,6 +53,14 @@ class Label {
         style["top"] = (Math.round(y) - 12) + 'px';
     }
 
+    setPosBetweenWires(x1, y1, x2, y2, x3, y3) {
+        var x = (x1 + x2 + x3) / 3;
+        var y = (y1 + y2 + y3) / 3;
+        var style = this._label.style;
+        style["left"] = (Math.round(x) - 20) + 'px';
+        style["top"] = (Math.round(y) - 12) + 'px';
+    }
+
     setText(text) {
         this._label.innerText = this._prefix + "~" + (text || "");
     }
@@ -70,7 +78,7 @@ class Label {
             return;
         }
         this._visible = !!visible;
-        this._label.style.visibility = visible ? "visible" : "hidden";
+        this._label.style.visibility = this._visible ? "visible" : "hidden";
     }
 
     destroy() {

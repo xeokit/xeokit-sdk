@@ -24,14 +24,9 @@ class Dot {
         style.top = 0 + "px";
         style.left = 0 + "px";
         style["box-shadow"] = "0 2px 5px 0 #182A3D;";
+        style["pointer-events"] = "none";
 
         parentElement.appendChild(dot);
-
-        if (cfg.mouseDown) {
-            dot.addEventListener("mousedown", () => {
-                cfg.mouseDown();
-            });
-        }
 
         this.setPos(cfg.x || 0, cfg.y || 0);
         this.setFillColor(cfg.fillColor);
@@ -60,7 +55,7 @@ class Dot {
             return;
         }
         this._visible = !!visible;
-        this._dot.style.visibility = visible ? "visible" : "hidden";
+        this._dot.style.visibility = this._visible ? "visible" : "hidden";
     }
 
     setClickable(clickable) {
@@ -68,6 +63,7 @@ class Dot {
     }
 
     destroy() {
+        this.setVisible(false);
         this._dot.parentElement.removeChild(this._dot);
     }
 }
