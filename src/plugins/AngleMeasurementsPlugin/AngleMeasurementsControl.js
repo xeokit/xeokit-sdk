@@ -58,11 +58,13 @@ class AngleMeasurementsControl extends Component {
         }
 
         const cameraControl = this.plugin.viewer.cameraControl;
+
         let over = false;
         let entity = null;
         let worldPos = math.vec3();
 
         this._onhoverSurface = cameraControl.on("hoverSurface", e => {
+
             over = true;
             entity = e.entity;
             worldPos.set(e.worldPos);
@@ -95,12 +97,14 @@ class AngleMeasurementsControl extends Component {
             }
         });
 
-        var bail = false;
         var lastX;
         var lastY;
         const tolerance = 2;
 
         this._onInputMouseDown = this.plugin.viewer.scene.input.on("mousedown", (coords) => {
+            if (!over) {
+                return;
+            }
             lastX = coords[0];
             lastY = coords[1];
         });
@@ -152,7 +156,6 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this._state = FINDING_TARGET;
-                        bail = true;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
@@ -170,13 +173,12 @@ class AngleMeasurementsControl extends Component {
                         this._currentAngleMeasurement = null;
                         this._previousAngleMeasurement = null;
                         this._state = HOVERING;
-                        bail = true;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
                             this._previousAngleMeasurement = null;
-                            this._state = HOVERING
+                            this._state = HOVERING;
                         }
                     }
                     break;
