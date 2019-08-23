@@ -5,7 +5,8 @@ import {Label} from "../lib/html/Label.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
 
-var distVec3 = new Float32Array(3);
+var originVec = new Float32Array(3);
+var targetVec = new Float32Array(3);
 
 /**
  * @desc Measures the angle indicated by three 3D points.
@@ -205,7 +206,26 @@ class AngleMeasurement extends Component {
             this._targetWire.setStartAndEnd(cp[2], cp[3], cp[4], cp[5]);
 
             this._angleLabel.setPosBetweenWires(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5]);
-            this._angleLabel.setText((Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)) * scale).toFixed(2)) + unitAbbrev);
+
+
+            math.subVec3(this._originWorld, this._cornerWorld, originVec);
+            math.subVec3(this._targetWorld, this._cornerWorld, targetVec);
+
+            var validVecs =
+                (originVec[0] !== 0 || originVec[1] !== 0 || originVec[2] !== 0) &&
+                (targetVec[0] !== 0 || targetVec[1] !== 0 || targetVec[2] !== 0);
+
+            if (validVecs) {
+                math.normalizeVec3(originVec);
+                math.normalizeVec3(targetVec);
+                var angle = Math.abs(math.angleVec3(originVec, targetVec));
+                this._angle = angle / math.DEGTORAD;
+                this._angleLabel.setText("" + this._angle.toFixed(2) + "°");
+            } else {
+                this._angleLabel.setText("");
+            }
+
+            // this._angleLabel.setText((Math.abs(math.lenVec3(math.subVec3(this._targetWorld, this._originWorld, distVec3)) * scale).toFixed(2)) + unitAbbrev);
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._cornerDot.setVisible(this._visible && this._cornerVisible);
