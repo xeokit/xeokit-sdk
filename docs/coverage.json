@@ -1,6 +1,6 @@
 {
-  "coverage": "49.56%",
-  "expectCount": 3450,
+  "coverage": "49.55%",
+  "expectCount": 3451,
   "actualCount": 1710,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -58,16 +58,16 @@
         38,
         39,
         40,
-        103,
-        108
+        104,
+        112
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js": {
       "expectCount": 11,
       "actualCount": 9,
       "undocumentLines": [
-        144,
-        146
+        143,
+        145
       ]
     },
     "src/plugins/AnnotationsPlugin/Annotation.js": {
@@ -454,7 +454,7 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js": {
-      "expectCount": 20,
+      "expectCount": 21,
       "actualCount": 8,
       "undocumentLines": [
         4,
@@ -468,7 +468,8 @@
         37,
         38,
         39,
-        88
+        93,
+        98
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
