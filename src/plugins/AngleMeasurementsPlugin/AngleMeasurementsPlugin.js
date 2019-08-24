@@ -184,10 +184,6 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {Number[]} params.target.worldPos Target World-space 3D position.
      * @param {Entity} params.target.entity Target Entity.
      * @param {Boolean} [params.visible=true] Whether to initially show the {@link AngleMeasurement}.
-     * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link AngleMeasurement} origin.
-     * @param {Boolean} [params.cornerVisible=true] Whether to initially show the {@link AngleMeasurement} corner.
-     * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link AngleMeasurement} target.
-     * @param {Boolean} [params.wireVisible=true] Whether to initially show the wire between {@link AngleMeasurement#origin}, {@link AngleMeasurement#corner} and {@link AngleMeasurement#target}.
      * @returns {AngleMeasurement} The new {@link AngleMeasurement}.
      */
     createMeasurement(params = {}) {
@@ -216,11 +212,13 @@ class AngleMeasurementsPlugin extends Plugin {
                 worldPos: target.worldPos,
                 occludable: false
             },
+
             visible: params.visible,
-            wireVisible: params.wireVisible,
-            originVisible: params.originVisible,
-            cornerVisible: params.cornerVisible,
-            targetVisible: params.targetVisible,
+            originVisible: true,
+            originWireVisible: true,
+            cornerVisible: true,
+            targetWireVisible: true,
+            targetVisible: true,
         });
         this._measurements[measurement.id] = measurement;
         measurement.on("destroyed", () => {
