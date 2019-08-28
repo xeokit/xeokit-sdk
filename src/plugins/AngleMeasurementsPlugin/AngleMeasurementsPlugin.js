@@ -199,18 +199,15 @@ class AngleMeasurementsPlugin extends Plugin {
             plugin: this,
             origin: {
                 entity: origin.entity,
-                worldPos: origin.worldPos,
-                occludable: false
+                worldPos: origin.worldPos
             },
             corner: {
                 entity: corner.entity,
-                worldPos: corner.worldPos,
-                occludable: false
+                worldPos: corner.worldPos
             },
             target: {
                 entity: target.entity,
-                worldPos: target.worldPos,
-                occludable: false
+                worldPos: target.worldPos
             },
 
             visible: params.visible,

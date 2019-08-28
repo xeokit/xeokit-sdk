@@ -239,13 +239,11 @@ class DistanceMeasurementsPlugin extends Plugin {
             plugin: this,
             origin: {
                 entity: origin.entity,
-                worldPos: origin.worldPos,
-                occludable: false
+                worldPos: origin.worldPos
             },
             target: {
                 entity: target.entity,
-                worldPos: target.worldPos,
-                occludable: false
+                worldPos: target.worldPos
             },
             visible: params.visible,
             wireVisible: params.wireVisible,
