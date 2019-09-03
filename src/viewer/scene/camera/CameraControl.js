@@ -544,7 +544,7 @@ class CameraControl extends Component {
                          */
                         self.fire("hoverOut", {
                             entity: scene.components[lastPickedEntityId]
-                        });
+                        }, true);
                     }
 
                     /**
@@ -552,7 +552,7 @@ class CameraControl extends Component {
                      * @event hoverEnter
                      * @param pickResult A pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
-                    self.fire("hoverEnter", pickResult);
+                    self.fire("hoverEnter", pickResult, true);
                     lastPickedEntityId = pickedEntityId;
                 }
                 /**
@@ -560,7 +560,7 @@ class CameraControl extends Component {
                  * @event hover
                  * @param pickResult A pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                  */
-                self.fire("hover", pickResult);
+                self.fire("hover", pickResult, true);
                 if (pickResult.worldPos) {
                     pickedSurface = true;
 
@@ -574,7 +574,7 @@ class CameraControl extends Component {
                      * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                      * surface position - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                      */
-                    self.fire("hoverSurface", pickResult);
+                    self.fire("hoverSurface", pickResult, true);
                 }
             } else {
                 if (lastPickedEntityId !== undefined) {
@@ -585,7 +585,7 @@ class CameraControl extends Component {
                      */
                     self.fire("hoverOut", {
                         entity: scene.components[lastPickedEntityId]
-                    });
+                    }, true);
                     lastPickedEntityId = undefined;
                 }
                 /**
@@ -595,7 +595,7 @@ class CameraControl extends Component {
                  */
                 self.fire("hoverOff", {
                     canvasPos: pickCursorPos
-                });
+                }, true);
             }
             needPickEntity = false;
             needPickSurface = false;
@@ -1432,7 +1432,7 @@ class CameraControl extends Component {
                                  * @event picked
                                  * @param pickResult A surface pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
-                                self.fire("picked", pickResult);
+                                self.fire("picked", pickResult, true);
                                 if (pickedSurface) {
 
                                     /**
@@ -1444,7 +1444,7 @@ class CameraControl extends Component {
                                      * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
-                                    self.fire("pickedSurface", pickResult);
+                                    self.fire("pickedSurface", pickResult, true);
                                 }
                             } else {
 
@@ -1453,7 +1453,7 @@ class CameraControl extends Component {
                                  *
                                  * @event pickedNothing
                                  */
-                                self.fire("pickedNothing");
+                                self.fire("pickedNothing", {}, true);
                             }
 
                             return;
@@ -1472,12 +1472,12 @@ class CameraControl extends Component {
                                 updatePick();
 
                                 if (pickResult) {
-                                    self.fire("picked", pickResult);
+                                    self.fire("picked", pickResult, true);
                                     if (pickedSurface) {
-                                        self.fire("pickedSurface", pickResult);
+                                        self.fire("pickedSurface", pickResult, true);
                                     }
                                 } else {
-                                    self.fire("pickedNothing");
+                                    self.fire("pickedNothing", {}, true);
                                 }
 
                                 clicks = 0;
@@ -1499,7 +1499,7 @@ class CameraControl extends Component {
                                  * @event picked
                                  * @param pickResult A surface pick pickResult result containing the ID of the Entity - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                  */
-                                self.fire("doublePicked", pickResult);
+                                self.fire("doublePicked", pickResult, true);
                                 if (pickedSurface) {
                                     /**
                                      * Fired when the pointer has double-picked (ie. double-clicked or double-tapped) the surface of an {@link Entity}.
@@ -1510,7 +1510,7 @@ class CameraControl extends Component {
                                      * @param pickResult A surface pick pickResult result, containing the ID of the Entity and 3D info on the
                                      * surface possition - see {@link Scene/pick:method"}}Scene#pick(){{/crossLink}}.
                                      */
-                                    self.fire("doublePickedSurface", pickResult);
+                                    self.fire("doublePickedSurface", pickResult, true);
                                 }
                                 if (self._doublePickFlyTo) {
                                     self._flyTo(pickResult);
@@ -1522,7 +1522,7 @@ class CameraControl extends Component {
                                  *
                                  * @event doublePickedNothing
                                  */
-                                self.fire("doublePickedNothing");
+                                self.fire("doublePickedNothing", true);
                                 if (self._doublePickFlyTo) {
                                     self._flyTo();
                                 }
@@ -1614,15 +1614,15 @@ class CameraControl extends Component {
                                 updatePick();
 
                                 if (pickResult) {
-                                    self.fire("doublePicked", pickResult);
+                                    self.fire("doublePicked", pickResult, true);
                                     if (pickedSurface) {
-                                        self.fire("doublePickedSurface", pickResult);
+                                        self.fire("doublePickedSurface", pickResult, true);
                                     }
                                     if (self._doublePickFlyTo) {
                                         self._flyTo(pickResult);
                                     }
                                 } else {
-                                    self.fire("doublePickedNothing");
+                                    self.fire("doublePickedNothing", true);
                                     if (self._doublePickFlyTo) {
                                         self._flyTo();
                                     }
@@ -1642,12 +1642,12 @@ class CameraControl extends Component {
                                 updatePick();
 
                                 if (pickResult) {
-                                    self.fire("picked", pickResult);
+                                    self.fire("picked", pickResult, true);
                                     if (pickedSurface) {
-                                        self.fire("pickedSurface", pickResult);
+                                        self.fire("pickedSurface", pickResult, true);
                                     }
                                 } else {
-                                    self.fire("pickedNothing");
+                                    self.fire("pickedNothing", {}, true);
                                 }
 
                                 lastTapTime = currentTime;
