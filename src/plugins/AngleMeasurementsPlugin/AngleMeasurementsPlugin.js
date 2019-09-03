@@ -135,10 +135,13 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
     */
     constructor(viewer, cfg = {}) {
 
         super("AngleMeasurements", viewer);
+
+        this._container = cfg.container || document.body;
 
         this._control = new AngleMeasurementsControl(this);
 
@@ -197,6 +200,7 @@ class AngleMeasurementsPlugin extends Plugin {
         const measurement = new AngleMeasurement(this, {
             id: params.id,
             plugin: this,
+            container: this._container,
             origin: {
                 entity: origin.entity,
                 worldPos: origin.worldPos

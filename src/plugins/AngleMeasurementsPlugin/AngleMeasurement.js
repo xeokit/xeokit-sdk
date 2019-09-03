@@ -28,6 +28,11 @@ class AngleMeasurement extends Component {
          */
         this.plugin = plugin;
 
+        this._container = cfg.container;
+        if (!this._container) {
+            throw "config missing: container";
+        }
+
         var scene = this.plugin.viewer.scene;
 
         this._originMarker = new Marker(scene, cfg.origin);
@@ -43,16 +48,14 @@ class AngleMeasurement extends Component {
         this._pp = new Float32Array(12);
         this._cp = new Int16Array(6);
 
-        var parentElement = document.body;
+        this._originDot = new Dot(this._container, {});
+        this._cornerDot = new Dot(this._container, {});
+        this._targetDot = new Dot(this._container, {});
 
-        this._originDot = new Dot(parentElement, {});
-        this._cornerDot = new Dot(parentElement, {});
-        this._targetDot = new Dot(parentElement, {});
+        this._originWire = new Wire(this._container, {color: "blue", thickness: 1});
+        this._targetWire = new Wire(this._container, {color: "red", thickness: 1});
 
-        this._originWire = new Wire(parentElement, {color: "blue", thickness: 1});
-        this._targetWire = new Wire(parentElement, {color: "red", thickness: 1});
-
-        this._angleLabel = new Label(parentElement, {fillColor: "#00BBFF", prefix: "", text: ""});
+        this._angleLabel = new Label(this._container, {fillColor: "#00BBFF", prefix: "", text: ""});
 
         this._wpDirty = false;
         this._vpDirty = false;
@@ -181,6 +184,9 @@ class AngleMeasurement extends Component {
             var cp = this._cp;
 
             var canvas = scene.canvas.canvas;
+            var offsets = canvas.getBoundingClientRect();
+            var top = offsets.top;
+            var left = offsets.left;
             var aabb = scene.canvas.boundary;
             var canvasWidth = aabb[2];
             var canvasHeight = aabb[3];
@@ -193,8 +199,8 @@ class AngleMeasurement extends Component {
             const unitAbbrev = unitInfo.abbrev;
 
             for (var i = 0, len = pp.length; i < len; i += 4) {
-                cp[j] = Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
-                cp[j + 1] = Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
+                cp[j] = left + Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
+                cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
                 j += 2;
             }
 

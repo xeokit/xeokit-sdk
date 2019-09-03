@@ -145,10 +145,13 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Object} [cfg]  Plugin configuration.
      * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
+     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      */
     constructor(viewer, cfg = {}) {
 
         super("DistanceMeasurements", viewer);
+
+        this._container = cfg.container || document.body;
 
         this._control = new DistanceMeasurementsControl(this);
 
@@ -237,6 +240,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         const measurement = new DistanceMeasurement(this, {
             id: params.id,
             plugin: this,
+            container: this._container,
             origin: {
                 entity: origin.entity,
                 worldPos: origin.worldPos

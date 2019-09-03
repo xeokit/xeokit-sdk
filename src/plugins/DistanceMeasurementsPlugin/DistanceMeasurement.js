@@ -34,6 +34,11 @@ class DistanceMeasurement extends Component {
          */
         this.plugin = plugin;
 
+        this._container = cfg.container;
+        if (!this._container) {
+            throw "config missing: container";
+        }
+
         this._eventSubs = {};
 
         var scene = this.plugin.viewer.scene;
@@ -53,53 +58,51 @@ class DistanceMeasurement extends Component {
         this._yAxisLabelCulled = false;
         this._zAxisLabelCulled = false;
 
-        var parentElement = document.body;
-
-        this._originDot = new Dot(parentElement, {
+        this._originDot = new Dot(this._container, {
         });
 
-        this._targetDot = new Dot(parentElement, {
+        this._targetDot = new Dot(this._container, {
         });
 
-        this._lengthWire = new Wire(parentElement, {
+        this._lengthWire = new Wire(this._container, {
             color: "#00BBFF",
             thickness: 2
         });
 
-        this._xAxisWire = new Wire(parentElement, {
+        this._xAxisWire = new Wire(this._container, {
             color: "red",
             thickness: 1
         });
 
-        this._yAxisWire = new Wire(parentElement, {
+        this._yAxisWire = new Wire(this._container, {
             color: "green",
             thickness: 1
         });
 
-        this._zAxisWire = new Wire(parentElement, {
+        this._zAxisWire = new Wire(this._container, {
             color: "blue",
             thickness: 1
         });
 
-        this._lengthLabel = new Label(parentElement, {
+        this._lengthLabel = new Label(this._container, {
             fillColor: "#00BBFF",
             prefix: "",
             text: ""
         });
 
-        this._xAxisLabel = new Label(parentElement, {
+        this._xAxisLabel = new Label(this._container, {
             fillColor: "red",
             prefix: "X",
             text: ""
         });
 
-        this._yAxisLabel = new Label(parentElement, {
+        this._yAxisLabel = new Label(this._container, {
             fillColor: "green",
             prefix: "Y",
             text: ""
         });
 
-        this._zAxisLabel = new Label(parentElement, {
+        this._zAxisLabel = new Label(this._container, {
             fillColor: "blue",
             prefix: "Z",
             text: ""
@@ -241,8 +244,9 @@ class DistanceMeasurement extends Component {
             var cp = this._cp;
 
             var canvas = scene.canvas.canvas;
-            var left = canvas.offsetLeft;
-            var top = canvas.offsetTop;
+            var offsets = canvas.getBoundingClientRect();
+            var top = offsets.top;
+            var left = offsets.left;
             var aabb = scene.canvas.boundary;
             var canvasWidth = aabb[2];
             var canvasHeight = aabb[3];
@@ -255,8 +259,8 @@ class DistanceMeasurement extends Component {
             const unitAbbrev = unitInfo.abbrev;
 
             for (var i = 0, len = pp.length; i < len; i += 4) {
-                cp[j] = Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
-                cp[j + 1] = Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
+                cp[j] = left +  Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
+                cp[j + 1] = top = Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
                 j += 2;
             }
 

@@ -27,6 +27,7 @@ class Label {
         style.top = 0 + "px";
         style.left = 0 + "px";
         style["pointer-events"] = "none";
+        style["opacity"] = 1.0;
         label.innerText = "";
 
         parentElement.appendChild(label);
@@ -71,6 +72,10 @@ class Label {
 
     setBorderColor(color) {
         this._label.style.border = "solid 2px" + (color || "black");
+    }
+
+    setOpacity(opacity) {
+        this._label.style.opacity = opacity;
     }
 
     setVisible(visible) {
