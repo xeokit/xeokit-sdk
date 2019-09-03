@@ -566,7 +566,7 @@ class XKTLoaderPlugin extends Plugin {
         let byteOffset = (numElements + 2) * 4;
         for (let i = 0; i < numElements; i++) {
             const elementSize = dataView.getUint32((i + 2) * 4, true);
-            elements.push(dataArray.slice(byteOffset, byteOffset + elementSize));
+            elements.push(dataArray.subarray(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
         return {
@@ -587,16 +587,16 @@ class XKTLoaderPlugin extends Plugin {
 
     _inflateData(deflatedData) {
         return {
-            positions: new Uint16Array(pako.inflate(deflatedData.positions.buffer).buffer),
-            normals: new Int8Array(pako.inflate(deflatedData.normals.buffer).buffer),
-            indices: new Uint32Array(pako.inflate(deflatedData.indices.buffer).buffer),
-            edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices.buffer).buffer),
-            meshPositions: new Uint32Array(pako.inflate(deflatedData.meshPositions.buffer).buffer),
-            meshIndices: new Uint32Array(pako.inflate(deflatedData.meshIndices.buffer).buffer),
-            meshEdgesIndices: new Uint32Array(pako.inflate(deflatedData.meshEdgesIndices.buffer).buffer),
-            meshColors: new Uint8Array(pako.inflate(deflatedData.meshColors.buffer).buffer),
+            positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
+            normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
+            indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
+            edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices).buffer),
+            meshPositions: new Uint32Array(pako.inflate(deflatedData.meshPositions).buffer),
+            meshIndices: new Uint32Array(pako.inflate(deflatedData.meshIndices).buffer),
+            meshEdgesIndices: new Uint32Array(pako.inflate(deflatedData.meshEdgesIndices).buffer),
+            meshColors: new Uint8Array(pako.inflate(deflatedData.meshColors).buffer),
             entityIDs: pako.inflate(deflatedData.entityIDs, {to: 'string'}),
-            entityMeshes: new Uint32Array(pako.inflate(deflatedData.entityMeshes.buffer).buffer),
+            entityMeshes: new Uint32Array(pako.inflate(deflatedData.entityMeshes).buffer),
             entityIsObjects: new Uint8Array(pako.inflate(deflatedData.entityIsObjects).buffer),
             positionsDecodeMatrix: new Float32Array(pako.inflate(deflatedData.positionsDecodeMatrix).buffer)
         };
@@ -663,16 +663,16 @@ class XKTLoaderPlugin extends Plugin {
                 const lastMesh = (j === (numMeshes - 1));
                 const meshId = entityId + ".mesh." + j;
 
-                const color = decompressColor(meshColors.slice((j * 4), (j * 4) + 3));
+                const color = decompressColor(meshColors.subarray((j * 4), (j * 4) + 3));
                 const opacity = meshColors[(j * 4) + 3] / 255.0;
 
                 performanceModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     primitive: "triangles",
-                    positions: positions.slice(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
-                    normals: normals.slice(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
-                    indices: indices.slice(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
-                    edgeIndices: edgeIndices.slice(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
+                    positions: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                    normals: normals.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                    indices: indices.subarray(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
+                    edgeIndices: edgeIndices.subarray(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
                     positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
                     color: color,
                     opacity: opacity
