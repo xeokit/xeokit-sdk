@@ -73,7 +73,7 @@ BatchingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-    gl.uniformMatrix4fv(this._uModelMatrix, gl.FALSE, model.worldMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
     if (this._aFlags) {
@@ -105,7 +105,6 @@ BatchingPickMeshRenderer.prototype._allocate = function (layer) {
     }
     const program = this._program;
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-    this._uModelMatrix = program.getLocation("modelMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
@@ -129,10 +128,8 @@ BatchingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const program = this._program;
     const sectionPlanesState = scene._sectionPlanesState;
     const camera = scene.camera;
-    const cameraState = camera._state;
     program.bind();
     frameCtx.useProgram++;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix || cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;

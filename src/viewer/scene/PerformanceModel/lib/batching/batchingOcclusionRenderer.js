@@ -66,7 +66,6 @@ BatchingOcclusionRenderer.prototype.drawLayer = function (frameCtx, layer) {
     const gl = scene.canvas.gl;
     const state = layer._state;
     const camera = scene.camera;
-    const cameraState = camera._state;
     if (!this._program) {
         this._allocate(layer);
     }
@@ -74,7 +73,7 @@ BatchingOcclusionRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);

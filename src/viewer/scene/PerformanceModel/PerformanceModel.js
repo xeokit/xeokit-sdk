@@ -9,12 +9,10 @@ import {getBatchingBuffer, putBatchingBuffer} from "./lib/batching/batchingBuffe
 import {BatchingLayer} from './lib/batching/batchingLayer.js';
 import {InstancingLayer} from './lib/instancing/instancingLayer.js';
 import {RENDER_FLAGS} from './lib/renderFlags.js';
-import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 
 const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
 
 var tempMat4 = math.mat4();
-var tempMat4b = math.mat4();
 
 const defaultScale = math.vec3([1, 1, 1]);
 const defaultPosition = math.vec3([0, 0, 0]);
@@ -155,8 +153,13 @@ class PerformanceModel extends Component {
         this._worldMatrix = math.mat4();
         math.composeMat4(this._position, this._quaternion, this._scale, this._worldMatrix);
         this._worldNormalMatrix = math.mat4();
-        math.inverseMat4(this._worldMatrix, this._worldNormalMatrix);
-        math.transposeMat4(this._worldNormalMatrix);
+
+        if (cfg.matrix || cfg.position || cfg.rotation || cfg.scale || cfg.quaternion) {
+            this._viewMatrix = math.mat4();
+            this._viewNormalMatrix = math.mat4();
+            this._viewMatrixDirty = true;
+            this._worldMatrixNonIdentity = true;
+        }
 
         this._opacity = 1.0;
         this._colorize = [1, 1, 1];
@@ -168,6 +171,10 @@ class PerformanceModel extends Component {
 
         this.createTile({ // Create geometries, meshes and entities in this tile by default
             id: DEFAULT_TILE_ID
+        });
+
+        this._onCameraViewMatrix = this.scene.camera.on("matrix", () => {
+            this._viewMatrixDirty = true;
         });
     }
 
@@ -255,6 +262,57 @@ class PerformanceModel extends Component {
      */
     get worldNormalMatrix() {
         return this._worldNormalMatrix;
+    }
+
+    /**
+     * Called by private renderers in ./lib, returns the view matrix with which to
+     * render this PerformanceModel. The view matrix is the concatenation of the
+     * Camera view matrix with the Performance model's world (modeling) matrix.
+     *
+     * @private
+     */
+    get viewMatrix() {
+        if (!this._viewMatrix) {
+            return this.scene.camera.viewMatrix;
+        }
+        if (this._viewMatrixDirty) {
+            math.mulMat4(this.scene.camera.viewMatrix, this._worldMatrix, this._viewMatrix);
+            math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
+            math.transposeMat4(this._viewNormalMatrix);
+            this._viewMatrixDirty = false;
+        }
+        return this._viewMatrix;
+    }
+
+    /**
+     * Called by private renderers in ./lib, returns the picking view matrix with which to
+     * ray-pick on this PerformanceModel.
+     *
+     * @private
+     */
+    getPickViewMatrix(pickViewMatrix) {
+        if (!this._viewMatrix) {
+            return pickViewMatrix;
+        }
+        return this._viewMatrix;
+    }
+
+    /**
+     * Called by private renderers in ./lib, returns the view normal matrix with which to render this PerformanceModel.
+     *
+     * @private
+     */
+    get viewNormalMatrix() {
+        if (!this._viewNormalMatrix) {
+            return this.scene.camera.viewNormalMatrix;
+        }
+        if (this._viewMatrixDirty) {
+            math.mulMat4(this.scene.camera.viewMatrix, this._worldMatrix, this._viewMatrix);
+            math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
+            math.transposeMat4(this._viewNormalMatrix);
+            this._viewMatrixDirty = false;
+        }
+        return this._viewNormalMatrix;
     }
 
     /**
@@ -394,19 +452,6 @@ class PerformanceModel extends Component {
         var flags = 0;
         var layer;
         var portionId;
-        var matrix;
-
-        if (cfg.matrix) {
-            matrix = cfg.matrix;
-        } else {
-            const scale = cfg.scale || defaultScale;
-            const position = cfg.position || defaultPosition;
-            const rotation = cfg.rotation || defaultRotation;
-            math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
-            matrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
-        }
-
-        matrix = math.mulMat4(this._worldMatrix, matrix, tempMat4b);
 
         const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
         const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
@@ -430,14 +475,24 @@ class PerformanceModel extends Component {
 
         if (instancing) {
 
+            let meshMatrix;
+            let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
+
+            if (cfg.matrix) {
+                meshMatrix = cfg.matrix;
+            } else {
+                const scale = cfg.scale || defaultScale;
+                const position = cfg.position || defaultPosition;
+                const rotation = cfg.rotation || defaultRotation;
+                math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
+                meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
+            }
+
             var instancingLayer = tile.instancingLayers[geometryId];
             layer = instancingLayer;
-
-            portionId = instancingLayer.createPortion(flags, color, opacity, matrix, aabb, pickColor);
-
+            portionId = instancingLayer.createPortion(flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
             math.expandAABB3(this._aabb, aabb);
-
-            this.numTriangles += layer.numIndices.length / 3;
+            this.numTriangles += instancingLayer.numIndices.length / 3;
 
         } else {
 
@@ -493,22 +548,21 @@ class PerformanceModel extends Component {
                 edgeIndices = buildEdgeIndices(positions, indices, null, 10);
             }
 
-            if (this._preCompressed) {
-
-                const bounds = geometryCompressionUtils.getPositionsBounds(positions);
-
-                const min = geometryCompressionUtils.decompressPosition(bounds.min, cfg.positionsDecodeMatrix, []);
-                const max = geometryCompressionUtils.decompressPosition(bounds.max, cfg.positionsDecodeMatrix, []);
-
-                aabb[0] = min[0];
-                aabb[1] = min[1];
-                aabb[2] = min[2];
-                aabb[3] = max[0];
-                aabb[4] = max[1];
-                aabb[5] = max[2];
+            let meshMatrix;
+            let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
+            if (!this._preCompressed) {
+                if (cfg.matrix) {
+                    meshMatrix = cfg.matrix;
+                } else {
+                    const scale = cfg.scale || defaultScale;
+                    const position = cfg.position || defaultPosition;
+                    const rotation = cfg.rotation || defaultRotation;
+                    math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
+                    meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
+                }
             }
 
-            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor);
+            portionId = tile.currentBatchingLayer.createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, meshMatrix, worldMatrix, aabb, pickColor);
 
             math.expandAABB3(this._aabb, aabb);
 
@@ -1387,6 +1441,7 @@ class PerformanceModel extends Component {
                 putBatchingBuffer(tile.buffer);
             }
         }
+        this.scene.camera.off(this._onCameraViewMatrix);
         super.destroy();
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].destroy();

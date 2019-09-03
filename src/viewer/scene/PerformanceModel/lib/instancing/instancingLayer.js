@@ -24,6 +24,7 @@ const compressedNormals = new Int8Array(MAX_VERTS * 3);
 const tempUint8Vec4 = new Uint8Array(4);
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
+const tempVec3c = math.vec4([0, 0, 0, 1]);
 
 /**
  * @private
@@ -179,18 +180,19 @@ class InstancingLayer {
      * @param flags Unsigned long int
      * @param rgbaInt Quantized RGBA color
      * @param opacity Opacity [0..255]
-     * @param matrix Flat float 4x4 matrix
-     * @param aabb Flat float AABB
+     * @param meshMatrix Flat float 4x4 matrix
+     * @param [worldMatrix] Flat float 4x4 matrix
+     * @param worldAABB Flat float AABB
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(flags, rgbaInt, opacity, matrix, aabb, pickColor) {
+    createPortion(flags, rgbaInt, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
 
         if (this._finalized) {
             throw "Already finalized";
         }
 
-        // TODO: find AABB for portion by transforming the geometry local AABB by the given matrix?
+        // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
         var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
@@ -248,24 +250,24 @@ class InstancingLayer {
         this._colors.push(b);
         this._colors.push(opacity);
 
-        this._modelMatrixCol0.push(matrix[0]);
-        this._modelMatrixCol0.push(matrix[4]);
-        this._modelMatrixCol0.push(matrix[8]);
-        this._modelMatrixCol0.push(matrix[12]);
+        this._modelMatrixCol0.push(meshMatrix[0]);
+        this._modelMatrixCol0.push(meshMatrix[4]);
+        this._modelMatrixCol0.push(meshMatrix[8]);
+        this._modelMatrixCol0.push(meshMatrix[12]);
 
-        this._modelMatrixCol1.push(matrix[1]);
-        this._modelMatrixCol1.push(matrix[5]);
-        this._modelMatrixCol1.push(matrix[9]);
-        this._modelMatrixCol1.push(matrix[13]);
+        this._modelMatrixCol1.push(meshMatrix[1]);
+        this._modelMatrixCol1.push(meshMatrix[5]);
+        this._modelMatrixCol1.push(meshMatrix[9]);
+        this._modelMatrixCol1.push(meshMatrix[13]);
 
-        this._modelMatrixCol2.push(matrix[2]);
-        this._modelMatrixCol2.push(matrix[6]);
-        this._modelMatrixCol2.push(matrix[10]);
-        this._modelMatrixCol2.push(matrix[14]);
+        this._modelMatrixCol2.push(meshMatrix[2]);
+        this._modelMatrixCol2.push(meshMatrix[6]);
+        this._modelMatrixCol2.push(meshMatrix[10]);
+        this._modelMatrixCol2.push(meshMatrix[14]);
 
         // Note: order of inverse and transpose doesn't matter
 
-        let transposedMat = math.transposeMat4(matrix, math.mat4()); // TODO: Use cached matrix
+        let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
         let normalMatrix = math.inverseMat4(transposedMat);
 
         this._modelNormalMatrixCol0.push(normalMatrix[0]);
@@ -292,15 +294,20 @@ class InstancingLayer {
 
         // Expand AABB
 
-        math.collapseAABB3(aabb);
+        math.collapseAABB3(worldAABB);
         var obb = this._state.obb;
         var lenPositions = obb.length;
         for (var i = 0; i < lenPositions; i += 4) {
             tempVec3a[0] = obb[i + 0];
             tempVec3a[1] = obb[i + 1];
             tempVec3a[2] = obb[i + 2];
-            math.transformPoint4(matrix, tempVec3a, tempVec3b);
-            math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
+            math.transformPoint4(meshMatrix, tempVec3a, tempVec3b);
+            if (worldMatrix) {
+                math.transformPoint4(worldMatrix, tempVec3b, tempVec3c);
+                math.expandAABB3Point3(worldAABB, tempVec3c);
+            } else {
+                math.expandAABB3Point3(worldAABB, tempVec3b);
+            }
         }
 
         this._state.numInstances++;

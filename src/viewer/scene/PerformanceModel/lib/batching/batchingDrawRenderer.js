@@ -75,6 +75,8 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
         this._bindProgram(frameCtx, layer);
     }
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
     gl.uniform1i(this._uRenderPass, renderPass);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
@@ -190,9 +192,6 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
-    const cameraState = camera._state;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, cameraState.normalMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     for (var i = 0, len = lights.length; i < len; i++) {
         light = lights[i];

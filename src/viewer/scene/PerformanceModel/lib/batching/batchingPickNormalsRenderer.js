@@ -72,7 +72,7 @@ BatchingPickNormalsRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);

@@ -73,7 +73,7 @@ BatchingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniform1f(this._uZNear, projectState.near);
     gl.uniform1f(this._uZFar, projectState.far);

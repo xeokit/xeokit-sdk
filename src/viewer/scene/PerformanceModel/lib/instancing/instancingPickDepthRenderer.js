@@ -81,7 +81,7 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     const camera = scene.camera;
     const projectState = camera.project._state;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniform1f(this._uZNear, projectState.near);
     gl.uniform1f(this._uZFar, projectState.far);
