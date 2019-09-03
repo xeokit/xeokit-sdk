@@ -184,6 +184,7 @@ class MetaScene {
             }
         }
 
+        this.fire("metaModelCreated", id);
         return metaModel;
     }
 
