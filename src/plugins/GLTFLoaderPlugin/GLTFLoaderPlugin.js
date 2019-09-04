@@ -133,6 +133,27 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * model.destroy();
  * ````
  *
+ * ## Transforming
+ *
+ * We have the option to rotate, scale and translate each  *````.glTF````* model as we load it.
+ *
+ * This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.
+ *
+ * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+ * translate it 100 units along its X axis.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_glTF_Duplex_transform)]
+ *
+ * ````javascript
+ * const model = gltfLoader.load({
+ *      src: "./models/gltf/duplex/scene.gltf",
+ *      metaModelSrc: "./metaModels/duplex/metaModel.json",
+ *      rotation: [90,0,0],
+ *      scale: [0.5, 0.5, 0.5],
+ *      position: [100, 0, 0]
+ * });
+ * ````
+ *
  * ## Including and excluding IFC types
  *
  * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
