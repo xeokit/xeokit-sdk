@@ -153,6 +153,7 @@ class Dot {
         style.left = 0 + &quot;px&quot;;
         style[&quot;box-shadow&quot;] = &quot;0 2px 5px 0 #182A3D;&quot;;
         style[&quot;pointer-events&quot;] = &quot;none&quot;;
+        style[&quot;opacity&quot;] = 1.0;
 
         parentElement.appendChild(dot);
 
@@ -176,6 +177,10 @@ class Dot {
 
     setBorderColor(color) {
         this._dot.style.border = &quot;solid 2px&quot; + (color || &quot;black&quot;);
+    }
+
+    setOpacity(opacity) {
+        this._dot.style.opacity = opacity;
     }
 
     setVisible(visible) {

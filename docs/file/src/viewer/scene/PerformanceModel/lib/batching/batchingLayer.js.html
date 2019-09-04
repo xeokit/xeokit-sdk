@@ -149,6 +149,8 @@ const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec3a = math.vec4([0, 0, 0, 1]);
 const tempVec3b = math.vec4([0, 0, 0, 1]);
+const tempVec3c = math.vec4([0, 0, 0, 1]);
+const tempOBB3 = math.OBB3();
 
 /**
  * @private
@@ -220,7 +222,7 @@ class BatchingLayer {
 
         //this.pickObjectBaseIndex = cfg.pickObjectBaseIndex;
 
-        this._aabb = math.collapseAABB3();
+        this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
 
         this._finalized = false;
@@ -256,12 +258,13 @@ class BatchingLayer {
      * @param flags Unsigned long int
      * @param color Quantized RGB color [0..255,0..255,0..255,0..255]
      * @param opacity Opacity [0..255]
-     * @param matrix Flat float 4x4 matrix
-     * @param aabb Flat float AABB
+     * @param [meshMatrix] Flat float 4x4 matrix
+     * @param [worldMatrix] Flat float 4x4 matrix
+     * @param worldAABB Flat float AABB World-space AABB
      * @param pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, matrix, aabb, pickColor) {
+    createPortion(positions, normals, indices, edgeIndices, flags, color, opacity, meshMatrix, worldMatrix, worldAABB, pickColor) {
 
         if (this._finalized) {
             throw &quot;Already finalized&quot;;
@@ -278,35 +281,71 @@ class BatchingLayer {
             buffer.positions.set(positions, buffer.lenPositions);
             buffer.lenPositions += lenPositions;
 
-            math.collapseAABB3(aabb);
-            math.expandAABB3Points3(aabb, positions);
-            geometryCompressionUtils.decompressAABB(aabb, this._positionsDecodeMatrix);
-            math.expandAABB3(this._aabb, aabb);
+            const bounds = geometryCompressionUtils.getPositionsBounds(positions);
+
+            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._positionsDecodeMatrix, []);
+            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._positionsDecodeMatrix, []);
+
+            worldAABB[0] = min[0];
+            worldAABB[1] = min[1];
+            worldAABB[2] = min[2];
+            worldAABB[3] = max[0];
+            worldAABB[4] = max[1];
+            worldAABB[5] = max[2];
+
+            if (worldMatrix) {
+                math.AABB3ToOBB3(worldAABB, tempOBB3);
+                math.transformOBB3(worldMatrix, tempOBB3);
+                math.OBB3ToAABB3(tempOBB3, worldAABB);
+            }
 
         } else {
 
             buffer.positions.set(positions, buffer.lenPositions);
-            if (matrix) {
+
+            if (meshMatrix) {
+
                 for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i &lt; len; i += 3) {
+
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
                     tempVec3a[2] = buffer.positions[i + 2];
-                    math.transformPoint4(matrix, tempVec3a, tempVec3b);
-                    math.expandAABB3Point3(aabb, tempVec3b); // Expand portion AABB
-                    math.expandAABB3Point3(this._aabb, tempVec3b); // Expand BatchingLayer AABB
+
+                    math.transformPoint4(meshMatrix, tempVec3a, tempVec3b);
+
                     buffer.positions[i + 0] = tempVec3b[0];
                     buffer.positions[i + 1] = tempVec3b[1];
                     buffer.positions[i + 2] = tempVec3b[2];
+
+                    math.expandAABB3Point3(this._modelAABB, tempVec3b);
+
+                    if (worldMatrix) {
+                        math.transformPoint4(worldMatrix, tempVec3b, tempVec3c);
+                        math.expandAABB3Point3(worldAABB, tempVec3c);
+                    } else {
+                        math.expandAABB3Point3(worldAABB, tempVec3b);
+                    }
                 }
+
             } else {
+
                 for (let i = buffer.lenPositions, len = buffer.lenPositions + lenPositions; i &lt; len; i += 3) {
+
                     tempVec3a[0] = buffer.positions[i + 0];
                     tempVec3a[1] = buffer.positions[i + 1];
                     tempVec3a[2] = buffer.positions[i + 2];
-                    math.expandAABB3Point3(aabb, tempVec3a);
-                    math.expandAABB3Point3(this._aabb, tempVec3a);
+
+                    math.expandAABB3Point3(this._modelAABB, tempVec3a);
+
+                    if (worldMatrix) {
+                        math.transformPoint4(worldMatrix, tempVec3a, tempVec3b);
+                        math.expandAABB3Point3(worldAABB, tempVec3b);
+                    } else {
+                        math.expandAABB3Point3(worldAABB, tempVec3a);
+                    }
                 }
             }
+
             buffer.lenPositions += lenPositions;
         }
 
@@ -321,8 +360,8 @@ class BatchingLayer {
 
                 var modelNormalMatrix = tempMat4;
 
-                if (matrix) {
-                    math.inverseMat4(math.transposeMat4(matrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn&apos;t matter
+                if (meshMatrix) {
+                    math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), modelNormalMatrix); // Note: order of inverse and transpose doesn&apos;t matter
 
                 } else {
                     math.identityMat4(modelNormalMatrix, modelNormalMatrix);
@@ -450,36 +489,36 @@ class BatchingLayer {
             state.positionsDecodeMatrix = this._positionsDecodeMatrix;
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.positions, buffer.lenPositions, 3, gl.STATIC_DRAW);
         } else {
-            quantizePositions(buffer.positions, buffer.lenPositions, this._aabb, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
+            quantizePositions(buffer.positions, buffer.lenPositions, this._modelAABB, buffer.quantizedPositions, state.positionsDecodeMatrix); // BOTTLENECK
 
             if (buffer.lenPositions &gt; 0) {
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.slice(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
+                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.quantizedPositions.subarray(0, buffer.lenPositions), buffer.lenPositions, 3, gl.STATIC_DRAW);
             }
         }
 
         if (buffer.lenNormals &gt; 0) {
             let normalized = true; // For oct encoded UIn
             //let normalized = false; // For scaled
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals.slice(0, buffer.lenNormals), buffer.lenNormals, 3, gl.STATIC_DRAW, normalized);
+            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.normals.subarray(0, buffer.lenNormals), buffer.lenNormals, 3, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenColors &gt; 0) {
             let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.slice(0, buffer.lenColors), buffer.lenColors, 4, gl.STATIC_DRAW, normalized);
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.colors.subarray(0, buffer.lenColors), buffer.lenColors, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenFlags &gt; 0) {
             let normalized = true;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
-            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.slice(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags.subarray(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
+            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.flags2.subarray(0, buffer.lenFlags), buffer.lenFlags, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenPickColors &gt; 0) {
             let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.pickColors.slice(0, buffer.lenPickColors), buffer.lenPickColors, 4, gl.STATIC_DRAW, normalized);
+            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.pickColors.subarray(0, buffer.lenPickColors), buffer.lenPickColors, 4, gl.STATIC_DRAW, normalized);
         }
         if (buffer.lenIndices &gt; 0) {
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices.slice(0, buffer.lenIndices), buffer.lenIndices, 1, gl.STATIC_DRAW);
+            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.indices.subarray(0, buffer.lenIndices), buffer.lenIndices, 1, gl.STATIC_DRAW);
         }
         if (buffer.lenEdgeIndices &gt; 0) {
-            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.slice(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
+            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.subarray(0, buffer.lenEdgeIndices), buffer.lenEdgeIndices, 1, gl.STATIC_DRAW);
         }
 
         buffer.lenPositions = 0;
@@ -652,7 +691,7 @@ class BatchingLayer {
                 this.model.numTransparentLayerPortions--;
             }
         }
-        this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColor), firstColor, lenColor);
+        this._state.colorsBuf.setData(tempUint8Vec4.subarray(0, lenColor), firstColor, lenColor);
     }
 
     // setMatrix(portionId, matrix) { // TODO
@@ -677,7 +716,7 @@ class BatchingLayer {
             tempUint8Vec4[i + 2] = highlighted;
             tempUint8Vec4[i + 3] = selected;
         }
-        this._state.flagsBuf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
+        this._state.flagsBuf.setData(tempUint8Vec4.subarray(0, lenFlags), firstFlag, lenFlags);
     }
 
     _setFlags2(portionId, flags) {
@@ -697,7 +736,7 @@ class BatchingLayer {
             tempUint8Vec4[i + 1] = edges;
             tempUint8Vec4[i + 2] = pickable;
         }
-        this._state.flags2Buf.setData(tempUint8Vec4.slice(0, lenFlags), firstFlag, lenFlags);
+        this._state.flags2Buf.setData(tempUint8Vec4.subarray(0, lenFlags), firstFlag, lenFlags);
     }
 
     //-- NORMAL --------------------------------------------------------------------------------------------------------

@@ -213,6 +213,9 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
 
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
 
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+
     this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
     this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
     this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
@@ -381,8 +384,6 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     frameCtx.useProgram++;
     const camera = scene.camera;
     const cameraState = camera._state;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
-    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, cameraState.normalMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     for (var i = 0, len = lights.length; i &lt; len; i++) {
         light = lights[i];

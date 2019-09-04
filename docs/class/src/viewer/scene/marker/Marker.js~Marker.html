@@ -505,6 +505,35 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-worldNormal">worldNormal</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p> Sets the 3D occlusion offset.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -515,13 +544,42 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldPos">worldPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldNormal">worldNormal</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Sets the World-space 3D position of this Marker.</p>
+        <div data-ice="description"><p>Sets the World-space 3D normal vector of this Marker.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-get-worldOffset">worldOffset</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the 3D occlusion offset.</p>
 </div>
       </div>
     </td>
@@ -551,6 +609,35 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
         
         
         <div data-ice="description"><p>Gets the World-space 3D position of this Marker.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldPos">worldPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the World-space 3D position of this Marker.</p>
 </div>
       </div>
     </td>
@@ -1116,7 +1203,7 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber128">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1179,6 +1266,17 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
       <td data-ice="description"><p>World-space 3D Marker position.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.worldNormal</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>Optional World-space 3D normal. This normal vector is scaled and added
+to <code>worldPos</code> to determine the actual World-space position that is occlusion tested when determining
+if this Marker is visible. The normal vector raises the occlusion position just far enough away from the surface
+to prevent it from falling within the surface and incorrectly causing occlusion tests to fail.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1216,7 +1314,7 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber313">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber366">source</a></span></span>
     </span>
   </h3>
 
@@ -1262,7 +1360,7 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber205">source</a></span></span>
     </span>
   </h3>
 
@@ -1308,7 +1406,7 @@ if <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber230">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber241">source</a></span></span>
     </span>
   </h3>
 
@@ -1352,7 +1450,7 @@ if <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visi
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber255">source</a></span></span>
     </span>
   </h3>
 
@@ -1399,7 +1497,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber259">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber270">source</a></span></span>
     </span>
   </h3>
 
@@ -1444,7 +1542,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber298">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -1490,7 +1588,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber334">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -1531,26 +1629,118 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-worldPos">
+  <h3 data-ice="anchor" id="instance-get-worldNormal">
     <span class="access" data-ice="access">public</span>
     
-    <span class="kind" data-ice="kind">set</span>
+    <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">worldPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">worldNormal</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber270">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber328">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Sets the World-space 3D position of this Marker.</p>
-<p>Fires a &quot;worldPos&quot; event with new World position.</p>
+  <div data-ice="description"><p> Sets the 3D occlusion offset.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-worldNormal">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">worldNormal</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber312">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the World-space 3D normal vector of this Marker.</p>
+<p>This normal vector is scaled and added to <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-worldPos">Marker#worldPos</a></span> to determine the actual World-space position that is occlusion
+tested when determining if this Marker is visible.</p>
+<p>The normal vector raises the occlusion position just far enough away from the surface to prevent
+it from falling within the surface and incorrectly causing occlusion tests to fail.</p>
+<p>Fires an &quot;worldNormal&quot; event with new value.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-worldOffset">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">worldOffset</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber337">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the 3D occlusion offset.</p>
 </div>
 
   
@@ -1587,7 +1777,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber284">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -1595,6 +1785,51 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
   
   
   <div data-ice="description"><p>Gets the World-space 3D position of this Marker.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-worldPos">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">worldPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber281">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the World-space 3D position of this Marker.</p>
+<p>Fires a &quot;worldPos&quot; event with new World position.</p>
 </div>
 
   
@@ -1634,7 +1869,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber341">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 

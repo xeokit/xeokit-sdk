@@ -155,6 +155,7 @@ class Label {
         style.top = 0 + &quot;px&quot;;
         style.left = 0 + &quot;px&quot;;
         style[&quot;pointer-events&quot;] = &quot;none&quot;;
+        style[&quot;opacity&quot;] = 1.0;
         label.innerText = &quot;&quot;;
 
         parentElement.appendChild(label);
@@ -199,6 +200,10 @@ class Label {
 
     setBorderColor(color) {
         this._label.style.border = &quot;solid 2px&quot; + (color || &quot;black&quot;);
+    }
+
+    setOpacity(opacity) {
+        this._label.style.opacity = opacity;
     }
 
     setVisible(visible) {

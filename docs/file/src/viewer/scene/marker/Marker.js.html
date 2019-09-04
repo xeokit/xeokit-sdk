@@ -130,9 +130,9 @@
 import {Component} from &apos;../Component.js&apos;;
 import {PerformanceNode} from &quot;../PerformanceModel/lib/PerformanceNode.js&quot;;
 
+const tempVec3a = math.vec3();
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
-
 
 /**
  * @desc Tracks the World, View and Canvas coordinates, and visibility, of a position within a {@link Scene}.
@@ -252,6 +252,10 @@ class Marker extends Component {
      * @param {Entity} [cfg.entity] Entity to associate this Marker with. When the Marker has an Entity, then {@link Marker#visible} will always be ````false```` if {@link Entity#visible} is false.
      * @param {Boolean} [cfg.occludable=false] Indicates whether or not this Marker is hidden (ie. {@link Marker#visible} is ````false```` whenever occluded by {@link Entity}s in the {@link Scene}.
      * @param {Number[]} [cfg.worldPos=[0,0,0]] World-space 3D Marker position.
+     * @param {Number[]} [cfg.worldNormal=[0,0,0]] Optional World-space 3D normal. This normal vector is scaled and added
+     * to ````worldPos```` to determine the actual World-space position that is occlusion tested when determining
+     * if this Marker is visible. The normal vector raises the occlusion position just far enough away from the surface
+     * to prevent it from falling within the surface and incorrectly causing occlusion tests to fail.
      */
     constructor(owner, cfg) {
 
@@ -260,6 +264,8 @@ class Marker extends Component {
         this._entity = null;
         this._visible = null;
         this._worldPos = new Float32Array(3);
+        this._worldNormal = new Float32Array(3);
+        this._worldOffset = new Float32Array(3);
         this._viewPos = new Float32Array(3);
         this._canvasPos = new Float32Array(2);
         this._occludable = false;
@@ -281,12 +287,17 @@ class Marker extends Component {
 
         this.entity = cfg.entity;
         this.worldPos = cfg.worldPos;
+        this.worldNormal = cfg.worldNormal;
         this.occludable = cfg.occludable;
     }
 
     _update() { // this._needUpdate() schedules this for next tick
         if (this._viewPosDirty) {
-            math.transformPoint3(this.scene.camera.viewMatrix, this._worldPos, this._viewPos);
+            const offsetWorldPos = tempVec3a;
+            offsetWorldPos[0] = this._worldPos[0] + this._worldOffset[0]; // View and canvas positions need to be offset also
+            offsetWorldPos[1] = this._worldPos[1] + this._worldOffset[1];
+            offsetWorldPos[2] = this._worldPos[2] + this._worldOffset[2];
+            math.transformPoint3(this.scene.camera.viewMatrix, offsetWorldPos, this._viewPos);
             this._viewPosDirty = false;
             this._canvasPosDirty = true;
             this.fire(&quot;viewPos&quot;, this._viewPos);
@@ -303,9 +314,9 @@ class Marker extends Component {
         }
     }
 
-    _setVisible(visible) { // Called by VisibilityTester and this._entity.on(&quot;destroyed&quot;..)
+    _setVisible(visible) { // Called by Renderer&apos;s OcclusionTester and this._entity.on(&quot;destroyed&quot;..)
         if (this._visible === visible) {
-            //  return;
+            return;
         }
         this._visible = visible;
         this.fire(&quot;visible&quot;, this._visible);
@@ -411,6 +422,48 @@ class Marker extends Component {
      */
     get worldPos() {
         return this._worldPos;
+    }
+
+    /**
+     * Sets the World-space 3D normal vector of this Marker.
+     *
+     * This normal vector is scaled and added to {@link Marker#worldPos} to determine the actual World-space position that is occlusion
+     * tested when determining if this Marker is visible.
+     *
+     * The normal vector raises the occlusion position just far enough away from the surface to prevent
+     * it from falling within the surface and incorrectly causing occlusion tests to fail.
+     *
+     * Fires an &quot;worldNormal&quot; event with new value.
+     *
+     * @type {Number[]}
+     */
+    set worldNormal(worldNormal) {
+        this._worldNormal.set(worldNormal || [0, 0, 1]);
+        if (this._occludable) {
+            math.normalizeVec3(this._worldNormal, this._worldOffset);
+            math.mulVec3Scalar(this._worldOffset, 1.1);
+            this._renderer.markerWorldPosUpdated(this);
+        }
+        this._viewPosDirty = true;
+        this.fire(&quot;worldNormal&quot;, this._worldNormal);
+    }
+
+    /**
+     *  Sets the 3D occlusion offset.
+     *
+     * @type {Number[]}
+     */
+    get worldNormal() {
+        return this._worldNormal;
+    }
+
+    /**
+     * Gets the 3D occlusion offset.
+     *
+     * @type {Number[]}
+     */
+    get worldOffset() {
+        return this._worldOffset;
     }
 
     /**

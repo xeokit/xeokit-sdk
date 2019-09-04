@@ -562,7 +562,7 @@ class Camera extends Component {
      */
     set eye(eye) {
         this._eye.set(eye || [0, 0, 10]);
-        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
+        this._needUpdate(1); // Ensure matrix built on next &quot;tick&quot;
         this.fire(&quot;eye&quot;, this._eye);
     }
 
@@ -588,7 +588,7 @@ class Camera extends Component {
      */
     set look(look) {
         this._look.set(look || [0, 0, 0]);
-        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
+        this._needUpdate(1); // Ensure matrix built on next &quot;tick&quot;
         this.fire(&quot;look&quot;, this._look);
     }
 
@@ -612,7 +612,7 @@ class Camera extends Component {
      */
     set up(up) {
         this._up.set(up || [0, 1, 0]);
-        this._needUpdate(0);
+        this._needUpdate(1);
         this.fire(&quot;up&quot;, this._up);
     }
 
@@ -635,7 +635,7 @@ class Camera extends Component {
     set deviceMatrix(matrix) {
         this._state.deviceMatrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
         this._state.hasDeviceMatrix = !!matrix;
-        this._needUpdate(0);
+        this._needUpdate(1);
 
         /**
          Fired whenever this CustomProjection&apos;s {@link CustomProjection/matrix} property changes.

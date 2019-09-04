@@ -126,13 +126,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber165">xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber186">xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber165">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber186">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -256,6 +256,19 @@ model = viewer.scene.models[&quot;myModel&quot;];
 
 // Destroy the model
 model.destroy();</code>
+</code></pre>
+<h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each  <em><code>.glTF</code></em> model as we load it.</p>
+<p>This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.</p>
+<p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+translate it 100 units along its X axis.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_glTF_Duplex_transform">Run example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const model = gltfLoader.load({
+     src: &quot;./models/gltf/duplex/scene.gltf&quot;,
+     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;,
+     rotation: [90,0,0],
+     scale: [0.5, 0.5, 0.5],
+     position: [100, 0, 0]
+});</code>
 </code></pre>
 <h2 id="including-and-excluding-ifc-types">Including and excluding IFC types</h2><p>We can also load only those objects that have the specified IFC types. In the example below, we&apos;ll load only the
 objects that represent walls.</p>
@@ -770,7 +783,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
@@ -863,7 +876,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -908,7 +921,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
@@ -953,7 +966,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -998,7 +1011,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber255">source</a></span></span>
     </span>
   </h3>
 
@@ -1046,7 +1059,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber487">source</a></span></span>
     </span>
   </h3>
 
@@ -1090,7 +1103,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber260">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber281">source</a></span></span>
     </span>
   </h3>
 

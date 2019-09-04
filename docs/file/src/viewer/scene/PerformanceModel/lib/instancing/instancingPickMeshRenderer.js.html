@@ -207,6 +207,7 @@ InstancingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
 
+    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
 
     this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
@@ -304,7 +305,6 @@ InstancingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     frameCtx.useProgram++;
     const camera = scene.camera;
     const cameraState = camera._state;
-    gl.uniformMatrix4fv(this._uViewMatrix, false, cameraState.matrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length &gt; 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;

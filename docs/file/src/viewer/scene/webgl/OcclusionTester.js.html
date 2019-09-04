@@ -191,7 +191,7 @@ class OcclusionTester {
     }
 
     /**
-     * Notifies OcclusionTester that a Marker has updated its World-space position.
+     * Notifies OcclusionTester that a Marker has updated its World-space position and/or worldNormal
      * @param marker
      */
     markerWorldPosUpdated(marker) {
@@ -199,10 +199,12 @@ class OcclusionTester {
             return;
         }
         const i = this._markerIndices[marker.id];
-        this._positions[i * 3 + 0] = marker.worldPos[0];
-        this._positions[i * 3 + 1] = marker.worldPos[1];
-        this._positions[i * 3 + 2] = marker.worldPos[2];
-
+        if (i === undefined) {
+            return;
+        }
+        this._positions[i * 3 + 0] = marker.worldPos[0] + marker.worldOffset[0];
+        this._positions[i * 3 + 1] = marker.worldPos[1] + marker.worldOffset[1];
+        this._positions[i * 3 + 2] = marker.worldPos[2] + marker.worldOffset[2];
         this._positionsDirty = true; // TODO: avoid reallocating VBO each time
     }
 
@@ -369,6 +371,7 @@ class OcclusionTester {
             }
         }
         this._markerList.length = this._numMarkers;
+        this._markerIndices.length = this._numMarkers;
     }
 
     _buildPositions() {
@@ -377,13 +380,15 @@ class OcclusionTester {
             if (this._markerList[i]) {
                 const marker = this._markerList[i];
                 const worldPos = marker.worldPos;
-                this._positions[j++] = worldPos[0];
-                this._positions[j++] = worldPos[1];
-                this._positions[j++] = worldPos[2];
+                const worldOffset = marker.worldOffset;
+                this._positions[j++] = worldPos[0] + worldOffset[0];
+                this._positions[j++] = worldPos[1] + worldOffset[1];
+                this._positions[j++] = worldPos[2] + worldOffset[2];
                 this._indices[i] = i;
             }
         }
         this._positions.length = this._numMarkers * 3;
+        this._indices.length = this._numMarkers;
     }
 
     _buildVBOs() {
@@ -501,7 +506,6 @@ class OcclusionTester {
             for (var i = 0; i &lt; this._lenOcclusionTestList; i++) {
                 const marker = this._occlusionTestList[i];
                 const j = i * 2;
-                const k = i * 4;
                 const color = this._readPixelBuf.read(this._pixels[j], this._pixels[j + 1]);
                 const visible = (color[0] === markerR) &amp;&amp; (color[1] === markerG) &amp;&amp; (color[2] === markerB);
                 marker._setVisible(visible);

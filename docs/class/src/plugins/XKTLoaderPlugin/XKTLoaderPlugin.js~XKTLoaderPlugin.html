@@ -126,13 +126,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber276">xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber297">xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber276">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber297">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -254,6 +254,19 @@ model = viewer.scene.models[&quot;myModel&quot;];
 
 // Destroy the model
 model.destroy();</code>
+</code></pre>
+<h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each  <em><code>.xkt</code></em> model as we load it.</p>
+<p>This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.</p>
+<p>In the example below, we&apos;ll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+translate it 100 units along its X axis.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform">Run example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">xktLoader.load({
+     src: &quot;./models/xkt/duplex/duplex.xkt&quot;,
+     metaModelSrc: &quot;./metaModels/duplex/metaModel.json&quot;,
+     rotation: [90,0,0],
+     scale: [0.5, 0.5, 0.5],
+     position: [100, 0, 0]
+});</code>
 </code></pre>
 <h2 id="including-and-excluding-ifc-types">Including and excluding IFC types</h2><p>We can also load only those objects that have the specified IFC types.</p>
 <p>In the example below, we&apos;ll load only the objects that represent walls.</p>
@@ -968,7 +981,7 @@ const model5 = xktLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber304">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber325">source</a></span></span>
     </span>
   </h3>
 
@@ -1016,7 +1029,7 @@ const model5 = xktLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber289">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 
@@ -1123,7 +1136,7 @@ const model5 = xktLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber315">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1168,7 +1181,7 @@ const model5 = xktLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -1213,7 +1226,7 @@ const model5 = xktLoader2.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber390">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber411">source</a></span></span>
     </span>
   </h3>
 
@@ -1260,7 +1273,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber425">source</a></span></span>
     </span>
   </h3>
 
@@ -1307,7 +1320,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -1354,7 +1367,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber397">source</a></span></span>
     </span>
   </h3>
 
@@ -1401,7 +1414,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber337">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
@@ -1446,7 +1459,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber348">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber369">source</a></span></span>
     </span>
   </h3>
 
@@ -1494,7 +1507,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber428">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber449">source</a></span></span>
     </span>
   </h3>
 

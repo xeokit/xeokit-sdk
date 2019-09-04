@@ -159,6 +159,7 @@ class Wire {
         style[&apos;-ms-transform&apos;] = &apos;rotate(0deg)&apos;;
         style[&apos;-o-transform&apos;] = &apos;rotate(0deg)&apos;;
         style[&apos;transform&apos;] = &apos;rotate(0deg)&apos;;
+        style[&quot;opacity&quot;] = 1.0;
 
         parentElement.appendChild(wire);
 
@@ -197,6 +198,10 @@ class Wire {
 
     setColor(color) {
         this._wire.style.border = &quot;solid &quot; + this._thickness + &quot;px &quot; + (color || &quot;black&quot;);
+    }
+
+    setOpacity(opacity) {
+        this._wire.style.opacity = opacity;
     }
 
     setVisible(visible) {
