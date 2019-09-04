@@ -361,8 +361,8 @@ class BCFViewpointsPlugin extends Plugin {
 
                 eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);
                 look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);
+                up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
 
-                camera.up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
                 camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
             }
 
@@ -370,27 +370,28 @@ class BCFViewpointsPlugin extends Plugin {
 
                 eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);
                 look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
+                up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
-                camera.up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
                 camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
             }
 
-            camera.eye = eye;
-            camera.up = up;
-
             if (rayCast) {
+
                 const hit = this.viewer.scene.pick({
                     pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                     origin: eye,
                     direction: look
                 });
-                if (hit) {
-                    camera.look = hit.worldPos;
-                } else {
-                    camera.look = math.addVec3(eye, look, tempVec3);
-                }
+
+                camera.eye = eye;
+                camera.look = (hit ? hit.worldPos : math.addVec3(eye, look, tempVec3));
+                camera.up = up;
+
             } else {
+
+                camera.eye = eye;
                 camera.look = math.addVec3(eye, look, tempVec3);
+                camera.up = up;
             }
         }
     }
