@@ -239,6 +239,8 @@ class AngleMeasurementsControl extends Component {
         cameraControl.off(this._onPickedNothing);
 
         this._currentAngleMeasurement = null;
+
+        this._active = false;
     }
 
     /**

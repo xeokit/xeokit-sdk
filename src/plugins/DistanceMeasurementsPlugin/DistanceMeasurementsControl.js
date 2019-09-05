@@ -204,6 +204,8 @@ class DistanceMeasurementsControl extends Component {
         cameraControl.off(this._onPickedNothing);
 
         this._currentDistMeasurement = null;
+
+        this._active = false;
     }
 
     /**
