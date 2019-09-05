@@ -260,7 +260,7 @@ class DistanceMeasurement extends Component {
 
             for (var i = 0, len = pp.length; i < len; i += 4) {
                 cp[j] = left +  Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
-                cp[j + 1] = top = Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
+                cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
                 j += 2;
             }
 
