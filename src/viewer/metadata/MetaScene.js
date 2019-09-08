@@ -176,11 +176,13 @@ class MetaScene {
             }
             if (newObject.parent === undefined || newObject.parent === null) {
                 metaModel.rootMetaObject = metaObject;
-            } else {
+            } else if (newObject.parent) {
                 let parentMetaObject = this.metaObjects[newObject.parent];
-                metaObject.parent = parentMetaObject;
-                parentMetaObject.children = parentMetaObject.children || [];
-                parentMetaObject.children.push(metaObject);
+                if (parentMetaObject) {
+                    metaObject.parent = parentMetaObject;
+                    parentMetaObject.children = parentMetaObject.children || [];
+                    parentMetaObject.children.push(metaObject);
+                }
             }
         }
 
