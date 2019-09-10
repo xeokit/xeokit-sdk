@@ -947,8 +947,8 @@ class Control {
         var getTranslationPlane = (function () {
             const planeNormal = math.vec3();
             return function (worldAxis) {
-                const absX = Math.abs(worldAxis.x);
-                if (absX > Math.abs(worldAxis.y) && absX > Math.abs(worldAxis.z)) {
+                const absX = Math.abs(worldAxis[0]);
+                if (absX > Math.abs(worldAxis[1]) && absX > Math.abs(worldAxis[2])) {
                     math.cross3Vec3(worldAxis, [0, 1, 0], planeNormal);
                 } else {
                     math.cross3Vec3(worldAxis, [1, 0, 0], planeNormal);
