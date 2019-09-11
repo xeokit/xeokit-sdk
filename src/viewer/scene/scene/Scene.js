@@ -1748,7 +1748,7 @@ class Scene extends Component {
     /**
      * Destroys all {@link SectionPlane}s in this Scene.
      */
-    clearClips() {
+    clearSectionPlanes() {
         const ids = Object.keys(this.sectionPlanes);
         for (let i = 0, len = ids.length; i < len; i++) {
             this.sectionPlanes[ids[i]].destroy();

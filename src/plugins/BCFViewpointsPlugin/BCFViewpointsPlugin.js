@@ -324,9 +324,11 @@ class BCFViewpointsPlugin extends Plugin {
         const camera = scene.camera;
         const rayCast = (options.rayCast !== false);
 
+        scene.clearSectionPlanes();
+
         if (bcfViewpoint.clipping_planes) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
-                new SectionPlane(viewer.scene, {
+                new SectionPlane(scene, {
                     pos: xyzObjectToArray(e.location, tempVec3),
                     dir: xyzObjectToArray(e.direction, tempVec3)
                 });
@@ -377,7 +379,7 @@ class BCFViewpointsPlugin extends Plugin {
 
             if (rayCast) {
 
-                const hit = this.viewer.scene.pick({
+                const hit = scene.pick({
                     pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                     origin: eye,
                     direction: look
