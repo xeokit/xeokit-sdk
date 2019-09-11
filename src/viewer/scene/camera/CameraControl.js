@@ -171,8 +171,11 @@ class CameraControl extends Component {
                 spot.style.visibility = "visible";
             };
 
-            this.endPivot = function () {
+            this.hidePivot = function () {
                 spot.style.visibility = "hidden";
+            };
+
+            this.endPivot = function () {
                 pivoting = false;
             };
 
@@ -797,6 +800,8 @@ class CameraControl extends Component {
 
                     rotateVx *= cameraInertia;
                     rotateVy *= cameraInertia;
+                } else {
+                    self._pivoter.hidePivot();
                 }
 
                 if (Math.abs(panVx) < EPSILON) {
@@ -1410,7 +1415,7 @@ class CameraControl extends Component {
                             return;
                         }
 
-                        self._pivoter.endPivot();
+                        self._pivoter.hidePivot();
 
                         if (Math.abs(e.clientX - downX) > 3 || Math.abs(e.clientY - downY) > 3) {
                             return;
