@@ -331,6 +331,10 @@ class CameraControl extends Component {
      */
     set firstPerson(value) {
         this._firstPerson = !!value;
+        if (this._firstPerson) {
+            this._pivoter.hidePivot();
+            this._pivoter.endPivot();
+        }
     }
 
     /**
@@ -935,6 +939,7 @@ class CameraControl extends Component {
                     switch (e.which) {
                         case 1: // Left button
                             mouseDownLeft = true;
+                            self.scene.canvas.canvas.style.cursor = "move";
                             down = true;
                             xDelta = 0;
                             yDelta = 0;
@@ -943,9 +948,11 @@ class CameraControl extends Component {
                             lastY = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
+                            self.scene.canvas.canvas.style.cursor = "move";
                             mouseDownMiddle = true;
                             break;
                         case 3: // Right button
+                            self.scene.canvas.canvas.style.cursor = "move";
                             mouseDownRight = true;
                             down = true;
                             xDelta = 0;
@@ -976,6 +983,7 @@ class CameraControl extends Component {
                         default:
                             break;
                     }
+                    self.scene.canvas.canvas.style.cursor = "default";
                     down = false;
                     xDelta = 0;
                     yDelta = 0;
