@@ -912,6 +912,7 @@ class Scene extends Component {
             delete this.visibleObjects[entity.id];
         }
         this._visibleObjectIds = null; // Lazy regenerate
+        this.fire("objectVisibility", entity, true);
     }
 
     _objectXRayedUpdated(entity) {
