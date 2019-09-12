@@ -108,7 +108,7 @@ class Annotation extends Marker {
          *
          * @type {Number[]} Eye position.
          */
-        this.eye = cfg.eye;
+        this.eye = cfg.eye ? cfg.eye.slice() : null;
 
         /**
          * Optional World-space position for {@link Camera#look}, used when this Annotation is associated with a {@link Camera} position.
@@ -117,7 +117,7 @@ class Annotation extends Marker {
          *
          * @type {Number[]} The "look" vector.
          */
-        this.look = cfg.look;
+        this.look = cfg.look ? cfg.look.slice() : null;
 
         /**
          * Optional World-space position for {@link Camera#up}, used when this Annotation is associated with a {@link Camera} position.
@@ -126,7 +126,7 @@ class Annotation extends Marker {
          *
          * @type {Number[]} The "up" vector.
          */
-        this.up = cfg.up;
+        this.up = cfg.up ? cfg.up.slice() : null;
 
         /**
          * Optional projection type for {@link Camera#projection}, used when this Annotation is associated with a {@link Camera} position.
