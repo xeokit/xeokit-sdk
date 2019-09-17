@@ -350,7 +350,7 @@ class Marker extends Component {
                 this._entity.model.off(this._onEntityModelDestroyed);
             }
         }
-        this._renderer.removeMarker(this.id);
+        this._renderer.removeMarker(this);
         super.destroy();
     }
 }

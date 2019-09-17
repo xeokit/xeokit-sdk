@@ -256,6 +256,7 @@ class OcclusionTester {
             }
         }
         this._positions.length = this._numMarkers * 3;
+        this._indices.length = this._numMarkers;
     }
 
     _buildVBOs() {
