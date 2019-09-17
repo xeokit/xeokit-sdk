@@ -4,9 +4,10 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import * as p from "./lib/pako.js";
+
 const pako = window.pako || p;
 
-const XKT_VERSION = 1; // XKT format version supported by this XKTLoaderPlugin
+const XKT_VERSION = 2; // XKT format version supported by this XKTLoaderPlugin
 
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
@@ -590,7 +591,28 @@ class XKTLoaderPlugin extends Plugin {
             elements.push(dataArray.subarray(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
-        return {
+        if (xktVersion >= 2) {
+            return {
+                xktVersion: xktVersion,
+                positions: elements[0],
+                normals: elements[1],
+                indices: elements[2],
+                edgeIndices: elements[3],
+                meshPositions: elements[4],
+                meshIndices: elements[5],
+                meshEdgesIndices: elements[6],
+                meshColors: elements[7],
+                entityIDs: elements[8],
+                entityMeshes: elements[9],
+                entityIsObjects: elements[10],
+                positionsDecodeMatrix: elements[11],
+                entityMeshIds: elements[12],
+                entityMatrices: elements[13],
+                entityUsesInstancing: elements[14],
+            };
+        }
+        return { // XKT version < 2
+            xktVersion: xktVersion,
             positions: elements[0],
             normals: elements[1],
             indices: elements[2],
@@ -607,7 +629,28 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     _inflateData(deflatedData) {
-        return {
+        if (deflatedData.xktVersion >= 2) {
+            return {
+                xktVersion: deflatedData.xktVersion,
+                positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
+                normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
+                indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
+                edgeIndices: new Uint32Array(pako.inflate(deflatedData.edgeIndices).buffer),
+                meshPositions: new Uint32Array(pako.inflate(deflatedData.meshPositions).buffer),
+                meshIndices: new Uint32Array(pako.inflate(deflatedData.meshIndices).buffer),
+                meshEdgesIndices: new Uint32Array(pako.inflate(deflatedData.meshEdgesIndices).buffer),
+                meshColors: new Uint8Array(pako.inflate(deflatedData.meshColors).buffer),
+                entityIDs: pako.inflate(deflatedData.entityIDs, {to: 'string'}),
+                entityMeshes: new Uint32Array(pako.inflate(deflatedData.entityMeshes).buffer),
+                entityIsObjects: new Uint8Array(pako.inflate(deflatedData.entityIsObjects).buffer),
+                positionsDecodeMatrix: new Float32Array(pako.inflate(deflatedData.positionsDecodeMatrix).buffer),
+                entityMeshIds: new Uint32Array(pako.inflate(deflatedData.entityMeshIds).buffer),
+                entityMatrices: new Float32Array(pako.inflate(deflatedData.entityMatrices).buffer),
+                entityUsesInstancing: new Uint8Array(pako.inflate(deflatedData.entityUsesInstancing).buffer),
+            };
+        }
+        return { // XKT version < 2
+            xktVersion: deflatedData.xktVersion,
             positions: new Uint16Array(pako.inflate(deflatedData.positions).buffer),
             normals: new Int8Array(pako.inflate(deflatedData.normals).buffer),
             indices: new Uint32Array(pako.inflate(deflatedData.indices).buffer),
@@ -625,88 +668,222 @@ class XKTLoaderPlugin extends Plugin {
 
     _loadDataIntoModel(inflatedData, options, performanceModel) {
 
-        const positions = inflatedData.positions;
-        const normals = inflatedData.normals;
-        const indices = inflatedData.indices;
-        const edgeIndices = inflatedData.edgeIndices;
-        const meshPositions = inflatedData.meshPositions;
-        const meshIndices = inflatedData.meshIndices;
-        const meshEdgesIndices = inflatedData.meshEdgesIndices;
-        const meshColors = inflatedData.meshColors;
-        const entityIDs = JSON.parse(inflatedData.entityIDs);
-        const entityMeshes = inflatedData.entityMeshes;
-        const entityIsObjects = inflatedData.entityIsObjects;
-        const numMeshes = meshPositions.length;
-        const numEntities = entityMeshes.length;
+        if (inflatedData.xktVersion >= 2) {
 
-        for (let i = 0; i < numEntities; i++) {
+            const positions = inflatedData.positions;
+            const normals = inflatedData.normals;
+            const indices = inflatedData.indices;
+            const edgeIndices = inflatedData.edgeIndices;
+            const meshPositions = inflatedData.meshPositions;
+            const meshIndices = inflatedData.meshIndices;
+            const meshEdgesIndices = inflatedData.meshEdgesIndices;
+            const meshColors = inflatedData.meshColors;
+            const entityIDs = JSON.parse(inflatedData.entityIDs);
+            const entityMeshes = inflatedData.entityMeshes;
+            const entityIsObjects = inflatedData.entityIsObjects;
+            const entityMeshIds = inflatedData.entityMeshIds;
+            const entityMatrices = inflatedData.entityMatrices;
+            const entityUsesInstancing = inflatedData.entityUsesInstancing;
 
-            const entityId = entityIDs [i];
-            const metaObject = this.viewer.metaScene.metaObjects[entityId];
-            const entityDefaults = {};
-            const meshDefaults = {};
+            const numMeshes = meshPositions.length;
+            const numEntities = entityMeshes.length;
 
-            if (metaObject) {
+            const _alreadyCreatedGeometries = {};
 
-                if (options.excludeTypesMap && metaObject.type && options.excludeTypesMap[metaObject.type]) {
-                    continue;
+            for (let i = 0; i < numEntities; i++) {
+
+                const entityId = entityIDs [i];
+                const metaObject = this.viewer.metaScene.metaObjects[entityId];
+                const entityDefaults = {};
+                const meshDefaults = {};
+                const entityMatrix = entityMatrices.subarray((i * 16), (i * 16) + 16);
+
+                if (metaObject) {
+
+                    if (options.excludeTypesMap && metaObject.type && options.excludeTypesMap[metaObject.type]) {
+                        continue;
+                    }
+
+                    if (options.includeTypesMap && metaObject.type && (!options.includeTypesMap[metaObject.type])) {
+                        continue;
+                    }
+
+                    const props = options.objectDefaults ? options.objectDefaults[metaObject.type || "DEFAULT"] : null;
+
+                    if (props) {
+                        if (props.visible === false) {
+                            entityDefaults.visible = false;
+                        }
+                        if (props.pickable === false) {
+                            entityDefaults.pickable = false;
+                        }
+                        if (props.colorize) {
+                            meshDefaults.color = props.colorize;
+                        }
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            meshDefaults.opacity = props.opacity;
+                        }
+                    }
+                } else {
+                    //this.warn("metaobject not found for entity: " + entityId);
                 }
 
-                if (options.includeTypesMap && metaObject.type && (!options.includeTypesMap[metaObject.type])) {
-                    continue;
+                const lastEntity = (i === numEntities - 1);
+
+                const meshIds = [];
+
+                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+                    var jj = entityMeshIds [j];
+
+                    const lastMesh = (jj === (numMeshes - 1));
+                    const meshId = entityId + ".mesh." + jj;
+
+                    const color = decompressColor(meshColors.subarray((jj * 4), (jj * 4) + 3));
+                    const opacity = meshColors[(jj * 4) + 3] / 255.0;
+
+                    var tmpPositions = positions.subarray(meshPositions [jj], lastMesh ? positions.length : meshPositions [jj + 1]);
+                    var tmpNormals = normals.subarray(meshPositions [jj], lastMesh ? positions.length : meshPositions [jj + 1]);
+                    var tmpIndices = indices.subarray(meshIndices [jj], lastMesh ? indices.length : meshIndices [jj + 1]);
+                    var tmpEdgeIndices = edgeIndices.subarray(meshEdgesIndices [jj], lastMesh ? edgeIndices.length : meshEdgesIndices [jj + 1]);
+
+                    if (entityUsesInstancing [i] == 1) {
+                        var geometryId = "geometry." + jj;
+
+                        if (!(geometryId in _alreadyCreatedGeometries)) {
+
+                            performanceModel.createGeometry({
+                                id: geometryId,
+                                positions: tmpPositions,
+                                normals: tmpNormals,
+                                indices: tmpIndices,
+                                edgeIndices: tmpEdgeIndices,
+                                primitive: "triangles",
+                                positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
+                            });
+
+                            _alreadyCreatedGeometries [geometryId] = true;
+                        }
+
+                        performanceModel.createMesh({
+                            id: meshId,
+                            color: color,
+                            opacity: opacity,
+                            matrix: entityMatrix,
+                            geometryId: geometryId,
+                        });
+
+                        meshIds.push(meshId);
+                    } else {
+                        performanceModel.createMesh(utils.apply(meshDefaults, {
+                            id: meshId,
+                            primitive: "triangles",
+                            positions: tmpPositions,
+                            normals: tmpNormals,
+                            indices: tmpIndices,
+                            edgeIndices: tmpEdgeIndices,
+                            positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
+                            color: color,
+                            opacity: opacity
+                        }));
+
+                        meshIds.push(meshId);
+                    }
                 }
 
-                const props = options.objectDefaults ? options.objectDefaults[metaObject.type || "DEFAULT"] : null;
-
-                if (props) {
-                    if (props.visible === false) {
-                        entityDefaults.visible = false;
-                    }
-                    if (props.pickable === false) {
-                        entityDefaults.pickable = false;
-                    }
-                    if (props.colorize) {
-                        meshDefaults.color = props.colorize;
-                    }
-                    if (props.opacity !== undefined && props.opacity !== null) {
-                        meshDefaults.opacity = props.opacity;
-                    }
+                if (meshIds.length) {
+                    performanceModel.createEntity(utils.apply(entityDefaults, {
+                        id: entityId,
+                        isObject: (entityIsObjects [i] === 1),
+                        meshIds: meshIds
+                    }));
                 }
-            } else {
-            //    this.warn("metaobject not found for entity: " + entityId);
             }
 
-            const lastEntity = (i === numEntities - 1);
-            const meshIds = [];
+        } else { // XKT version <= 2
 
-            for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+            const positions = inflatedData.positions;
+            const normals = inflatedData.normals;
+            const indices = inflatedData.indices;
+            const edgeIndices = inflatedData.edgeIndices;
+            const meshPositions = inflatedData.meshPositions;
+            const meshIndices = inflatedData.meshIndices;
+            const meshEdgesIndices = inflatedData.meshEdgesIndices;
+            const meshColors = inflatedData.meshColors;
+            const entityIDs = JSON.parse(inflatedData.entityIDs);
+            const entityMeshes = inflatedData.entityMeshes;
+            const entityIsObjects = inflatedData.entityIsObjects;
+            const numMeshes = meshPositions.length;
+            const numEntities = entityMeshes.length;
 
-                const lastMesh = (j === (numMeshes - 1));
-                const meshId = entityId + ".mesh." + j;
+            for (let i = 0; i < numEntities; i++) {
 
-                const color = decompressColor(meshColors.subarray((j * 4), (j * 4) + 3));
-                const opacity = meshColors[(j * 4) + 3] / 255.0;
+                const entityId = entityIDs [i];
+                const metaObject = this.viewer.metaScene.metaObjects[entityId];
+                const entityDefaults = {};
+                const meshDefaults = {};
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
-                    id: meshId,
-                    primitive: "triangles",
-                    positions: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
-                    normals: normals.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
-                    indices: indices.subarray(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
-                    edgeIndices: edgeIndices.subarray(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
-                    positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
-                    color: color,
-                    opacity: opacity
+                if (metaObject) {
+
+                    if (options.excludeTypesMap && metaObject.type && options.excludeTypesMap[metaObject.type]) {
+                        continue;
+                    }
+
+                    if (options.includeTypesMap && metaObject.type && (!options.includeTypesMap[metaObject.type])) {
+                        continue;
+                    }
+
+                    const props = options.objectDefaults ? options.objectDefaults[metaObject.type || "DEFAULT"] : null;
+
+                    if (props) {
+                        if (props.visible === false) {
+                            entityDefaults.visible = false;
+                        }
+                        if (props.pickable === false) {
+                            entityDefaults.pickable = false;
+                        }
+                        if (props.colorize) {
+                            meshDefaults.color = props.colorize;
+                        }
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            meshDefaults.opacity = props.opacity;
+                        }
+                    }
+                } else {
+                    //    this.warn("metaobject not found for entity: " + entityId);
+                }
+
+                const lastEntity = (i === numEntities - 1);
+                const meshIds = [];
+
+                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+
+                    const lastMesh = (j === (numMeshes - 1));
+                    const meshId = entityId + ".mesh." + j;
+
+                    const color = decompressColor(meshColors.subarray((j * 4), (j * 4) + 3));
+                    const opacity = meshColors[(j * 4) + 3] / 255.0;
+
+                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                        id: meshId,
+                        primitive: "triangles",
+                        positions: positions.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                        normals: normals.subarray(meshPositions [j], lastMesh ? positions.length : meshPositions [j + 1]),
+                        indices: indices.subarray(meshIndices [j], lastMesh ? indices.length : meshIndices [j + 1]),
+                        edgeIndices: edgeIndices.subarray(meshEdgesIndices [j], lastMesh ? edgeIndices.length : meshEdgesIndices [j + 1]),
+                        positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
+                        color: color,
+                        opacity: opacity
+                    }));
+
+                    meshIds.push(meshId);
+                }
+
+                performanceModel.createEntity(utils.apply(entityDefaults, {
+                    id: entityId,
+                    isObject: (entityIsObjects [i] === 1),
+                    meshIds: meshIds
                 }));
-
-                meshIds.push(meshId);
             }
-
-            performanceModel.createEntity(utils.apply(entityDefaults, {
-                id: entityId,
-                isObject: (entityIsObjects [i] === 1),
-                meshIds: meshIds
-            }));
         }
 
         performanceModel.finalize();
