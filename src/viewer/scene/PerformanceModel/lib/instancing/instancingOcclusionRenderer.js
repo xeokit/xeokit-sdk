@@ -179,6 +179,7 @@ InstancingOcclusionRenderer.prototype._bindProgram = function (frameCtx, layer) 
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
+    const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
