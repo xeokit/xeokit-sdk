@@ -161,12 +161,11 @@
                         for (var id in viewer.scene.models) {
                             const model = viewer.scene.models[id];
                             numEntities += model.numEntities;
-                            numTriangles += model.numTriangles;
                         }
 
                         var t1 = performance.now();
 
-                        document.getElementById("time").innerHTML = "Loaded 5 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities + "<br>Triangles: " + numTriangles;
+                        document.getElementById("time").innerHTML = "Loaded 5 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
 
                     });
                 });
