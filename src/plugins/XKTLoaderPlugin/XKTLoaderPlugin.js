@@ -7,7 +7,7 @@ import * as p from "./lib/pako.js";
 
 const pako = window.pako || p;
 
-const XKT_VERSION = 1; // XKT format version supported by this XKTLoaderPlugin
+const XKT_VERSION = 2; // XKT format version supported by this XKTLoaderPlugin
 
 const decompressColor = (function () {
     const color2 = new Float32Array(3);
