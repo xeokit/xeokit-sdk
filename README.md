@@ -7,7 +7,7 @@ use for non-commercial purposes, with the option to buy a licence for commercial
 
 ![](http://xeokit.io/img/splash-slim.png)
 
-## Resources
+## Resources 
 
 * [Website](https://xeokit.io/)
 * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
