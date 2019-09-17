@@ -143,7 +143,7 @@ class InstancingLayer {
         this._numPickableLayerPortions = 0;
 
         /** @private */
-        this.numIndices = (cfg.indices) ? cfg.indices / 3 : 0;
+        this.numIndices = (cfg.indices) ? cfg.indices.length / 3 : 0;
 
         // Vertex arrays
         this._flags = [];
@@ -328,13 +328,13 @@ class InstancingLayer {
         const gl = this.model.scene.canvas.gl;
         if (this._colors.length > 0) {
             let normalized = false;
-            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._colors = []; // Release memory
         }
         if (this._flags.length > 0) {
             let normalized = true;
-            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags), this._flags.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.STATIC_DRAW, normalized);
+            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags), this._flags.length, 4, gl.DYNAMIC_DRAW, normalized);
+            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._flags2), this._flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
             this._flags = [];
             this._flags2 = [];
         }
