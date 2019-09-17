@@ -746,7 +746,7 @@ class XKTLoaderPlugin extends Plugin {
                     var tmpIndices = indices.subarray(meshIndices [jj], lastMesh ? indices.length : meshIndices [jj + 1]);
                     var tmpEdgeIndices = edgeIndices.subarray(meshEdgesIndices [jj], lastMesh ? edgeIndices.length : meshEdgesIndices [jj + 1]);
 
-                    if (entityUsesInstancing [i] == 1) {
+                    if (entityUsesInstancing [i] === 1) {
                         var geometryId = "geometry." + jj;
 
                         if (!(geometryId in _alreadyCreatedGeometries)) {
@@ -764,13 +764,13 @@ class XKTLoaderPlugin extends Plugin {
                             _alreadyCreatedGeometries [geometryId] = true;
                         }
 
-                        performanceModel.createMesh({
+                        performanceModel.createMesh(utils.apply(meshDefaults,{
                             id: meshId,
                             color: color,
                             opacity: opacity,
                             matrix: entityMatrix,
                             geometryId: geometryId,
-                        });
+                        }));
 
                         meshIds.push(meshId);
                     } else {
