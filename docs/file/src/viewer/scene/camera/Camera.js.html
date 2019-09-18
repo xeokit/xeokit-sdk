@@ -108,7 +108,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metrics">viewer/scene/metrics</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
@@ -562,7 +562,7 @@ class Camera extends Component {
      */
     set eye(eye) {
         this._eye.set(eye || [0, 0, 10]);
-        this._needUpdate(1); // Ensure matrix built on next &quot;tick&quot;
+        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
         this.fire(&quot;eye&quot;, this._eye);
     }
 
@@ -588,7 +588,7 @@ class Camera extends Component {
      */
     set look(look) {
         this._look.set(look || [0, 0, 0]);
-        this._needUpdate(1); // Ensure matrix built on next &quot;tick&quot;
+        this._needUpdate(0); // Ensure matrix built on next &quot;tick&quot;
         this.fire(&quot;look&quot;, this._look);
     }
 
@@ -612,7 +612,7 @@ class Camera extends Component {
      */
     set up(up) {
         this._up.set(up || [0, 1, 0]);
-        this._needUpdate(1);
+        this._needUpdate(0);
         this.fire(&quot;up&quot;, this._up);
     }
 
@@ -635,7 +635,7 @@ class Camera extends Component {
     set deviceMatrix(matrix) {
         this._state.deviceMatrix.set(matrix || [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
         this._state.hasDeviceMatrix = !!matrix;
-        this._needUpdate(1);
+        this._needUpdate(0);
 
         /**
          Fired whenever this CustomProjection&apos;s {@link CustomProjection/matrix} property changes.

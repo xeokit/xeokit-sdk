@@ -1,7 +1,7 @@
 {
   "coverage": "49.39%",
-  "expectCount": 3474,
-  "actualCount": 1716,
+  "expectCount": 3468,
+  "actualCount": 1713,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -117,8 +117,8 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        407,
-        411,
+        409,
+        413,
         291
       ]
     },
@@ -717,18 +717,18 @@
       "expectCount": 24,
       "actualCount": 12,
       "undocumentLines": [
-        7,
-        9,
-        11,
-        337,
-        359,
-        384,
-        412,
-        550,
-        568,
-        577,
-        609,
-        626
+        8,
+        10,
+        12,
+        338,
+        360,
+        385,
+        413,
+        551,
+        565,
+        574,
+        627,
+        665
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
@@ -1547,21 +1547,21 @@
       "actualCount": 25,
       "undocumentLines": [
         42,
-        181,
-        208,
-        230,
-        252,
-        254,
-        304,
-        330,
-        359,
-        386,
-        415,
-        437,
-        455,
-        465,
-        1788,
-        1824
+        184,
+        211,
+        233,
+        255,
+        257,
+        307,
+        333,
+        366,
+        393,
+        422,
+        444,
+        462,
+        472,
+        1801,
+        1837
       ]
     },
     "src/viewer/scene/camera/CameraFlightAnimation.js": {
@@ -1983,28 +1983,25 @@
       ]
     },
     "src/viewer/scene/marker/Marker.js": {
-      "expectCount": 34,
-      "actualCount": 15,
+      "expectCount": 28,
+      "actualCount": 12,
       "undocumentLines": [
         5,
         6,
-        7,
+        132,
+        133,
+        134,
+        135,
         136,
         137,
-        138,
         139,
         140,
-        141,
-        142,
-        143,
+        144,
         145,
-        146,
+        149,
         150,
-        151,
-        155,
-        156,
-        166,
-        189
+        159,
+        178
       ]
     },
     "src/viewer/scene/materials/EdgeMaterial.js": {
@@ -2405,14 +2402,14 @@
         11
       ]
     },
-    "src/viewer/scene/metrics/Metrics.js": {
+    "src/viewer/scene/metriqs/Metriqs.js": {
       "expectCount": 15,
       "actualCount": 11,
       "undocumentLines": [
-        4,
-        85,
-        86,
-        87
+        8,
+        89,
+        90,
+        91
       ]
     },
     "src/viewer/scene/nodes/Node.js": {
@@ -2553,23 +2550,23 @@
         898,
         903,
         908,
-        917,
-        926,
-        935,
-        944,
-        958,
-        1050,
-        1058,
-        1069,
-        1168,
-        1200,
-        1232,
-        1259,
-        1493,
-        1513,
-        1567,
-        1572,
-        2011
+        918,
+        927,
+        936,
+        945,
+        959,
+        1051,
+        1059,
+        1070,
+        1169,
+        1201,
+        1233,
+        1260,
+        1494,
+        1514,
+        1568,
+        1573,
+        2012
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
@@ -2714,20 +2711,20 @@
         38,
         39,
         41,
-        139,
-        145,
-        152,
-        176,
-        209,
-        218,
+        137,
+        143,
+        150,
+        174,
+        207,
+        216,
+        220,
+        221,
         222,
-        223,
-        224,
-        233,
-        236,
-        249,
-        266,
-        285
+        231,
+        234,
+        246,
+        262,
+        281
       ]
     },
     "src/viewer/scene/webgl/PickResult.js": {

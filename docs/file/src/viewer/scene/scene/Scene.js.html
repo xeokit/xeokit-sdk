@@ -108,7 +108,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metrics">viewer/scene/metrics</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metrics/Metrics.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
@@ -142,7 +142,7 @@ import {buildBoxGeometry} from &apos;../geometry/builders/buildBoxGeometry.js&ap
 import {PhongMaterial} from &apos;../materials/PhongMaterial.js&apos;;
 import {EmphasisMaterial} from &apos;../materials/EmphasisMaterial.js&apos;;
 import {EdgeMaterial} from &apos;../materials/EdgeMaterial.js&apos;;
-import {Metrics} from &quot;../metrics/Metrics.js&quot;;
+import {Metrics} from &quot;../metriqs/Metriqs.js&quot;;
 
 // Cached vars to avoid garbage collection
 
@@ -1040,6 +1040,7 @@ class Scene extends Component {
             delete this.visibleObjects[entity.id];
         }
         this._visibleObjectIds = null; // Lazy regenerate
+        this.fire(&quot;objectVisibility&quot;, entity, true);
     }
 
     _objectXRayedUpdated(entity) {
@@ -1875,7 +1876,7 @@ class Scene extends Component {
     /**
      * Destroys all {@link SectionPlane}s in this Scene.
      */
-    clearClips() {
+    clearSectionPlanes() {
         const ids = Object.keys(this.sectionPlanes);
         for (let i = 0, len = ids.length; i &lt; len; i++) {
             this.sectionPlanes[ids[i]].destroy();
