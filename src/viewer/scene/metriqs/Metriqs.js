@@ -1,3 +1,7 @@
+//----------------------------------------------------------------------------------------------------------------------
+// This file is named "Metriqs.js" because "Metrics.js" is blocked by uBlock Origin (https://en.wikipedia.org/wiki/UBlock_Origin)
+//----------------------------------------------------------------------------------------------------------------------
+
 import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 

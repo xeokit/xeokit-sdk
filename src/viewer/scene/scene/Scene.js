@@ -14,7 +14,7 @@ import {buildBoxGeometry} from '../geometry/builders/buildBoxGeometry.js';
 import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
-import {Metrics} from "../metrics/Metrics.js";
+import {Metrics} from "../metriqs/Metriqs.js";
 
 // Cached vars to avoid garbage collection
 
