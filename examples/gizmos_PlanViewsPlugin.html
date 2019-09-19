@@ -53,7 +53,7 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+               href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads model and IFC data from file system
         </li>
         <li>
@@ -76,8 +76,8 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {PlanViewsPlugin} from "../src/plugins/PlanViewsPlugin/PlanViewsPlugin.js";
+    import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -96,14 +96,16 @@
     // Load a model and fit it to view
     //----------------------------------------------------------------------------------------------------------------------
 
-    const xktLoader = new XKTLoaderPlugin(viewer);
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const model = gltfLoader.load({
         id: "myModel",
-        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
-        metaModelSrc: "./metaModels/schependomlaan/metaModel.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
-        edges: true
+        src: "./models/gltf/schependomlaan/scene.gltf",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true,
+        performance: false
     });
+
 
     //----------------------------------------------------------------------------------------------------------------------
     // Add a PlanViewsPlugin
