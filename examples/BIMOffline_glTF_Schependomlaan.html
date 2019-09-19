@@ -252,14 +252,14 @@
 
             treeView.on('node.selected', function (event, node) {
                 const objectId = event.id;
-                viewer.scene.setObjectsXRayed(objectId, false);
-                viewer.scene.setObjectsPickable(objectId, true);
+                viewer.scene.setObjectsVisible(objectId, true);
+                // viewer.scene.setObjectsPickable(objectId, true);
             });
 
             treeView.on('node.deselected', function (event, node) {
                 const objectId = event.id;
-                viewer.scene.setObjectsXRayed(objectId, true);
-                viewer.scene.setObjectsPickable(objectId, false);
+                viewer.scene.setObjectsVisible(objectId, false);
+                // viewer.scene.setObjectsPickable(objectId, false);
             });
         });
     });
