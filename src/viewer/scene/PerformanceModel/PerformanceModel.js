@@ -1121,17 +1121,13 @@ class PerformanceModel extends Component {
     /** @private */
     getRenderFlags(renderFlags) {
 
-        // Unlike Mesh, rendering modes are less mutually exclusive because a PerformanceModel contains multiple PerformanceModelMesh
-        // objects, which can have a mixture of rendering states.
-
-        // TODO: can we optimize to avoid tests for xrayed objects from also being
-        // highlighted in shader etc?
-
         renderFlags.reset();
 
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
+
+        renderFlags.normalFillOpaque = true;
 
         if (this.numXRayedLayerPortions > 0) {
             const xrayMaterial = this.scene.xrayMaterial._state;
@@ -1158,11 +1154,6 @@ class PerformanceModel extends Component {
             } else {
                 renderFlags.normalEdgesOpaque = true;
             }
-        }
-
-        if (this.numXRayedLayerPortions < this.numVisibleLayerPortions && // Make highlight & selected effects not exclude normal fill
-            this.numTransparentLayerPortions < this.numVisibleLayerPortions) {
-            renderFlags.normalFillOpaque = true;
         }
 
         if (this.numTransparentLayerPortions > 0) {
