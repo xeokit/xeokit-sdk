@@ -11,7 +11,7 @@ import {CameraFlightAnimation} from './CameraFlightAnimation.js';
  *
  * @emits "hover" - pointer hovers over a new object
  * @emits "hoverSurface" - Hover continues over an object surface - fired continuously as mouse moves over an object
- * @emits "hoverLeave"  - Hover has left the last object we were hovering over
+ * @emits "hoverOut"  - Hover has left the last object we were hovering over
  * @emits "hoverOff" - Hover continues over empty space - fired continuously as mouse moves over nothing
  * @emits "picked" - Clicked or tapped object
  * @emits "pickedSurface" -  Clicked or tapped object, with event containing surface intersection details
