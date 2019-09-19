@@ -550,7 +550,7 @@ class CameraControl extends Component {
                          * @param entity The Entity
                          */
                         self.fire("hoverOut", {
-                            entity: scene.components[lastPickedEntityId]
+                            entity: scene.objects[lastPickedEntityId]
                         }, true);
                     }
 
@@ -591,7 +591,7 @@ class CameraControl extends Component {
                      * @param entity The Entity
                      */
                     self.fire("hoverOut", {
-                        entity: scene.components[lastPickedEntityId]
+                        entity: scene.objects[lastPickedEntityId]
                     }, true);
                     lastPickedEntityId = undefined;
                 }
