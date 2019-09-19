@@ -1160,9 +1160,7 @@ class PerformanceModel extends Component {
             }
         }
 
-        if (this.numXRayedLayerPortions < this.numVisibleLayerPortions &&
-            this.numHighlightedLayerPortions < this.numVisibleLayerPortions &&
-            this.numSelectedLayerPortions < this.numVisibleLayerPortions &&
+        if (this.numXRayedLayerPortions < this.numVisibleLayerPortions && // Make highlight & selected effects not exclude normal fill
             this.numTransparentLayerPortions < this.numVisibleLayerPortions) {
             renderFlags.normalFillOpaque = true;
         }

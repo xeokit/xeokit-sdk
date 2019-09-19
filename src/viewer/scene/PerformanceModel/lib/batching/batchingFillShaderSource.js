@@ -48,7 +48,7 @@ function buildVertex(layer) {
     src.push(`if (
     !visible || 
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
-    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
+    (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.HIGHLIGHTED} && !highlighted) ||
     (renderPass == ${RENDER_PASSES.SELECTED} && !selected)) {`);
