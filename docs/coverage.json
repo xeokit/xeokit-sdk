@@ -1,7 +1,7 @@
 {
-  "coverage": "49.01%",
-  "expectCount": 3554,
-  "actualCount": 1742,
+  "coverage": "49.38%",
+  "expectCount": 3469,
+  "actualCount": 1713,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -103,80 +103,6 @@
         373,
         374,
         375
-      ]
-    },
-    "src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js": {
-      "expectCount": 51,
-      "actualCount": 12,
-      "undocumentLines": [
-        8,
-        9,
-        31,
-        38,
-        39,
-        40,
-        42,
-        43,
-        44,
-        46,
-        47,
-        48,
-        49,
-        51,
-        52,
-        53,
-        55,
-        56,
-        58,
-        60,
-        61,
-        62,
-        64,
-        65,
-        66,
-        67,
-        69,
-        70,
-        72,
-        92,
-        97,
-        102,
-        109,
-        110,
-        111,
-        113,
-        114,
-        119,
-        228
-      ]
-    },
-    "src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js": {
-      "expectCount": 22,
-      "actualCount": 8,
-      "undocumentLines": [
-        4,
-        5,
-        6,
-        7,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        104,
-        112
-      ]
-    },
-    "src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js": {
-      "expectCount": 12,
-      "actualCount": 9,
-      "undocumentLines": [
-        144,
-        146,
-        148
       ]
     },
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
