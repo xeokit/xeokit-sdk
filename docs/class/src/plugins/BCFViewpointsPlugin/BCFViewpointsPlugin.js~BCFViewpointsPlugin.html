@@ -126,13 +126,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber113">xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BCFViewpointsPlugin} from &apos;<span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber128">xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber113">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber128">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -217,6 +217,15 @@ modelNode.on(&quot;loaded&quot;, () =&gt; {
      const viewpointStr = JSON.stringify(viewpoint, null, 4);
 
      console.log(viewpointStr);
+});</code>
+</code></pre>
+<h2 id="saving-view-setup-hints">Saving View Setup Hints</h2><p>BCFViewpointsPlugin can optionally save hints in the viewpoint, which indicate how to set up the view when
+loading it again.</p>
+<p>Here&apos;s the <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span> call again, this time saving some hints:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const viewpoint = bcfViewpoints.getViewpoint({ // Options
+    spacesVisible: true, // Force IfcSpace types visible in the viewpoint (default is false)
+    spaceBoundariesVisible: false, // Show IfcSpace boundaries in the viewpoint (default is false)
+    openingsVisible: true // Force IfcOpening types visible in the viewpoint (default is false)
 });</code>
 </code></pre>
 <h2 id="loading-a-bcf-viewpoint">Loading a BCF Viewpoint</h2><p>Assuming that we have our BCF viewpoint in a JSON object, let&apos;s now restore it with <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint">BCFViewpointsPlugin#setViewpoint</a></span>:</p>
@@ -700,7 +709,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber138">source</a></span></span>
     </span>
   </h3>
 
@@ -793,7 +802,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber154">source</a></span></span>
     </span>
   </h3>
 
@@ -853,7 +862,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
@@ -916,7 +925,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber425">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber440">source</a></span></span>
     </span>
   </h3>
 
@@ -960,7 +969,7 @@ Entity&apos;s surface.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -1132,7 +1141,7 @@ const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 

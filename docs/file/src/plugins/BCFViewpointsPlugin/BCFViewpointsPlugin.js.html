@@ -208,6 +208,21 @@ const tempVec3 = math.vec3();
  * });
  * ````
  *
+ * ## Saving View Setup Hints
+ *
+ * BCFViewpointsPlugin can optionally save hints in the viewpoint, which indicate how to set up the view when
+ * loading it again.
+ *
+ * Here&apos;s the {@link BCFViewpointsPlugin#getViewpoint} call again, this time saving some hints:
+ *
+ * ````javascript
+ * const viewpoint = bcfViewpoints.getViewpoint({ // Options
+ *     spacesVisible: true, // Force IfcSpace types visible in the viewpoint (default is false)
+ *     spaceBoundariesVisible: false, // Show IfcSpace boundaries in the viewpoint (default is false)
+ *     openingsVisible: true // Force IfcOpening types visible in the viewpoint (default is false)
+ * });
+ * ````
+ *
  * ## Loading a BCF Viewpoint
  *
  * Assuming that we have our BCF viewpoint in a JSON object, let&apos;s now restore it with {@link BCFViewpointsPlugin#setViewpoint}:
