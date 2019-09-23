@@ -131,7 +131,12 @@
             "1uDn0xT8LBkP15zQc9MVDW"
         ], true);
 
-        const viewpoint = bcfViewpoints.getViewpoint();
+        const viewpoint = bcfViewpoints.getViewpoint({ // Options
+            spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+            spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+            openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+        });
+
         const viewpointStr = JSON.stringify(viewpoint, null, 4);
 
         console.log(viewpointStr);

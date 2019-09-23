@@ -145,6 +145,10 @@ class BCFViewpointsPlugin extends Plugin {
      * Note that xeokit's {@link Camera#look} is the **point-of-interest**, whereas the BCF ````camera_direction```` is a
      * direction vector. Therefore, we save ````camera_direction```` as the vector from {@link Camera#eye} to {@link Camera#look}.
      *
+     * @param {*} [options] Options for getting the viewpoint.
+     * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
+     * @param {Boolean} [options.openingsVisible=false] Indicates whether ````IfcOpening```` types should be forced visible in the viewpoint.
+     * @param {Boolean} [options.spaceBoundariesVisible=false] Indicates whether the boundaries of ````IfcSpace```` types should be visible in the viewpoint.
      * @returns {*} BCF JSON viewpoint object
      * @example
      *
@@ -154,7 +158,11 @@ class BCFViewpointsPlugin extends Plugin {
      *     //...
      * });
      *
-     * const viewpoint = bcfPlugin.getViewpoint();
+     * const viewpoint = bcfPlugin.getViewpoint({ // Options - see constructor
+     *     spacesVisible: false,          // Default
+     *     spaceBoundariesVisible: false, // Default
+     *     openingsVisible: false         // Default
+     * });
      *
      * // viewpoint will resemble the following:
      *
@@ -210,7 +218,7 @@ class BCFViewpointsPlugin extends Plugin {
      *     }
      * }
      */
-    getViewpoint() {
+    getViewpoint(options={}) {
 
         const scene = this.viewer.scene;
         const camera = scene.camera;
@@ -257,9 +265,9 @@ class BCFViewpointsPlugin extends Plugin {
         bcfViewpoint.components = {
             visibility: {
                 view_setup_hints: {
-                    spaces_visible: false,
-                    space_boundaries_visible: false,
-                    openings_visible: false
+                    spaces_visible: !!options.spacesVisible,
+                    space_boundaries_visible: !!options.spaceBoundariesVisible,
+                    openings_visible: !!options.openingsVisible
                 }
             }
         };
@@ -309,8 +317,8 @@ class BCFViewpointsPlugin extends Plugin {
      *
      * @param {*} bcfViewpoint  BCF JSON viewpoint object or "reset" / "RESET" to reset the viewer, which clears SectionPlanes,
      * shows default visible entities and restores camera to initial default position.
-     * @params {*} [options] Options for setting the viewpoint.
-     * @params {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
+     * @param {*} [options] Options for setting the viewpoint.
+     * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
      */
     setViewpoint(bcfViewpoint, options = {}) {
@@ -336,13 +344,26 @@ class BCFViewpointsPlugin extends Plugin {
         }
 
         if (bcfViewpoint.components) {
+
             if (!bcfViewpoint.components.visibility.default_visibility) {
                 scene.setObjectsVisible(scene.objectIds, false);
                 bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, true));
             } else {
                 scene.setObjectsVisible(scene.objectIds, true);
-                scene.setObjectsVisible("space", false);
                 bcfViewpoint.components.visibility.exceptions.forEach(x => scene.setObjectsVisible(x.ifc_guid, false));
+            }
+
+            const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
+            if (view_setup_hints) {
+                if (view_setup_hints.spaces_visible !== undefined) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), !!view_setup_hints.spaces_visible);
+                }
+                if (view_setup_hints.openings_visible !== undefined) {
+                    scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), !!view_setup_hints.openings_visible);
+                }
+                if (view_setup_hints.space_boundaries_visible !== undefined) {
+                    // TODO: Ability to show boundaries
+                }
             }
         }
 
