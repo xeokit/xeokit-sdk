@@ -34,6 +34,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-areameasurementsplugin">plugins/AreaMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js~AreaMeasurement.html">AreaMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js~AreaMeasurementsControl.html">AreaMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js~AreaMeasurementsPlugin.html">AreaMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
@@ -804,7 +807,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber91">source</a></span></span>
     </span>
   </h3>
 
@@ -892,6 +895,70 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
       <td data-ice="description"><p>When flying the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.color</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;lightgrey</li></ul></td>
+      <td data-ice="description"><p>Custom uniform color for the faces of the NavCube.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.frontColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#55FF55&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the front face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.backColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#55FF55&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the back face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.leftColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#FF5555&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the left face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.rightColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#FF5555&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the right face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.topColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#5555FF&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the top face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.bottomColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;#5555FF&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for the bottom face of the NavCube. Overrides <code>color</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.hoverColor</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;rgba(0,0,0,0.4)&quot;</li></ul></td>
+      <td data-ice="description"><p>Custom color for highlighting regions on the NavCube as we hover the pointer over them.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -930,7 +997,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber583">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber591">source</a></span></span>
     </span>
   </h3>
 
@@ -975,7 +1042,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber560">source</a></span></span>
     </span>
   </h3>
 
@@ -1034,7 +1101,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber528">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber536">source</a></span></span>
     </span>
   </h3>
 
@@ -1092,7 +1159,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber574">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber582">source</a></span></span>
     </span>
   </h3>
 
@@ -1150,7 +1217,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber511">source</a></span></span>
     </span>
   </h3>
 
@@ -1207,7 +1274,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber469">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber477">source</a></span></span>
     </span>
   </h3>
 
@@ -1272,7 +1339,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber540">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber548">source</a></span></span>
     </span>
   </h3>
 
@@ -1335,7 +1402,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber517">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber525">source</a></span></span>
     </span>
   </h3>
 
@@ -1397,7 +1464,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber563">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber571">source</a></span></span>
     </span>
   </h3>
 
@@ -1459,7 +1526,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber489">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber497">source</a></span></span>
     </span>
   </h3>
 

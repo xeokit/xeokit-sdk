@@ -34,6 +34,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-areameasurementsplugin">plugins/AreaMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js~AreaMeasurement.html">AreaMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js~AreaMeasurementsControl.html">AreaMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js~AreaMeasurementsPlugin.html">AreaMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
@@ -128,28 +131,28 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/NavCubePlugin/CubeTextureCanvas.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
-function CubeTextureCanvas(viewer) {
+function CubeTextureCanvas(viewer, cfg = {}) {
 
     var axisLabels = false;
 
     const cubeColor = &quot;lightgrey&quot;;
-    const cubeHighlightColor = &quot;rgba(0,0,0,0.4)&quot;;
+    const cubeHighlightColor = cfg.hoverColor || &quot;rgba(0,0,0,0.4)&quot;;
 
     var height = 500;
     var width = height + (height / 3);
     var scale = width / 24;
 
     const facesZUp = [
-        {boundary: [6, 6, 6, 6], color: &quot;#55FF55&quot;},
-        {boundary: [18, 6, 6, 6], color: &quot;#55FF55&quot;},
-        {boundary: [12, 6, 6, 6], color: &quot;#FF5555&quot;},
-        {boundary: [0, 6, 6, 6], color: &quot;#FF5555&quot;},
-        {boundary: [6, 0, 6, 6], color: &quot;#7777FF&quot;},
-        {boundary: [6, 12, 6, 6], color: &quot;#7777FF&quot;}
+        {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || &quot;#55FF55&quot;},
+        {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || &quot;#55FF55&quot;},
+        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || &quot;#FF5555&quot;},
+        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || &quot;#FF5555&quot;},
+        {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || &quot;#7777FF&quot;},
+        {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || &quot;#7777FF&quot;}
     ];
 
     const areasZUp = [
-        {label: &quot;front&quot;, boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1], color: &quot;lightgreen&quot;},
+        {label: &quot;front&quot;, boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
         {label: &quot;back&quot;, boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
         {label: &quot;right&quot;, boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
         {label: &quot;left&quot;, boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
@@ -178,20 +181,20 @@ function CubeTextureCanvas(viewer) {
     ];
 
     const facesYUp = [
-        {boundary: [6, 6, 6, 6], color: &quot;#55FF55&quot;},
-        {boundary: [18, 6, 6, 6], color: &quot;#55FF55&quot;},
-        {boundary: [12, 6, 6, 6], color: &quot;#FF5555&quot;},
-        {boundary: [0, 6, 6, 6], color: &quot;#FF5555&quot;},
-        {boundary: [6, 0, 6, 6], color: &quot;#7777FF&quot;},
-        {boundary: [6, 12, 6, 6], color: &quot;#7777FF&quot;}
+        {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || &quot;#55FF55&quot;},
+        {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || &quot;#55FF55&quot;},
+        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || &quot;#FF5555&quot;},
+        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || &quot;#FF5555&quot;},
+        {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || &quot;#7777FF&quot;},
+        {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || &quot;#7777FF&quot;}
     ];
 
     const areasYUp = [
-        {label: &quot;front&quot;, boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0], color: &quot;lightgreen&quot;},
-        {label: &quot;back&quot;, boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0], color: &quot;lightgreen&quot;},
-        {label: &quot;right&quot;, boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0], color: &quot;#FF5555&quot;},
-        {label: &quot;left&quot;, boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0], color: &quot;#FF5555&quot;},
-        {label: &quot;top&quot;, boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1], color: &quot;#5555FF&quot;},
+        {label: &quot;front&quot;, boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: &quot;back&quot;, boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
+        {label: &quot;right&quot;, boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
+        {label: &quot;left&quot;, boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
+        {label: &quot;top&quot;, boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
         {label: &quot;bottom&quot;, boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
         {boundaries: [[7, 5, 4, 2]], dir: [0, -1, -1], up: [0, 1, -1]},
         {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, -1, 0], up: [1, 1, 0]},

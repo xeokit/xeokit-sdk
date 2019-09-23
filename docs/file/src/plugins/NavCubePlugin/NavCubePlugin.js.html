@@ -34,6 +34,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-areameasurementsplugin">plugins/AreaMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js~AreaMeasurement.html">AreaMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js~AreaMeasurementsControl.html">AreaMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js~AreaMeasurementsPlugin.html">AreaMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
@@ -207,6 +210,14 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
      * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
+     * @param {String} [cfg.color=&quot;lightgrey] Custom uniform color for the faces of the NavCube.
+     * @param {String} [cfg.frontColor=&quot;#55FF55&quot;] Custom color for the front face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.backColor=&quot;#55FF55&quot;] Custom color for the back face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.leftColor=&quot;#FF5555&quot;] Custom color for the left face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.rightColor=&quot;#FF5555&quot;] Custom color for the right face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.topColor=&quot;#5555FF&quot;] Custom color for the top face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.bottomColor=&quot;#5555FF&quot;] Custom color for the bottom face of the NavCube. Overrides ````color````.
+     * @param {String} [cfg.hoverColor=&quot;rgba(0,0,0,0.4)&quot;] Custom color for highlighting regions on the NavCube as we hover the pointer over them.
      */
     constructor(viewer, cfg = {}) {
 
@@ -296,7 +307,7 @@ class NavCubePlugin extends Plugin {
             */
         });
 
-        this._cubeTextureCanvas = new CubeTextureCanvas(viewer);
+        this._cubeTextureCanvas = new CubeTextureCanvas(viewer, cfg);
 
         this._cubeSampler = new Texture(navCubeScene, {
             image: this._cubeTextureCanvas.getImage(),

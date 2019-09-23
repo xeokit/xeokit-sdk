@@ -34,6 +34,9 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-areameasurementsplugin">plugins/AreaMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js~AreaMeasurement.html">AreaMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js~AreaMeasurementsControl.html">AreaMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js~AreaMeasurementsPlugin.html">AreaMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
@@ -131,6 +134,7 @@
 import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
 import {PlanView} from &quot;./PlanView.js&quot;;
 import {IFCPlanViewObjectStates} from &quot;./IFCPlanViewObjectStates.js&quot;;
+import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
 const objectsMemento = new ObjectsMemento();
 
@@ -378,6 +382,20 @@ class PlanViewsPlugin extends Plugin {
         return this._bgColor;
     }
 
+    convertPlanToWorldPos(planViewId, planPos, worldPos) {
+        const planView = this._planViews[planViewId];
+        if (!planView) {
+            this.error(&quot;PlanView not found: &quot; + planViewId);
+            return;
+        }
+        worldPos = worldPos || math.vec3();
+        const aabb = planView.aabb;
+        const xratio = this._size[0] / (aabb[3] - aabb[0]);
+        const yratio = this._size[2] / (aabb[5] - aabb[2]);
+     //   worldPos[0] = aabb[0] +
+
+    }
+
     _rebuildPlanViews() {
         const models = this.viewer.scene.models;
         for (var modelId in models) {
@@ -538,7 +556,7 @@ class PlanViewsPlugin extends Plugin {
         createNextPlanView();
 
         var t1 = performance.now();
-        console.log(&quot;StoreViewsPlugin._rebuildPlanViews() took &quot; + (t1 - t0) + &quot; milliseconds.&quot;)
+        console.log(&quot;PlanViewsPlugin._rebuildPlanViews() took &quot; + (t1 - t0) + &quot; milliseconds.&quot;)
     }
 
     _destroyModelPlanViews(modelId) {

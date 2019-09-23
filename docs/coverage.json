@@ -1,7 +1,7 @@
 {
-  "coverage": "49.39%",
-  "expectCount": 3468,
-  "actualCount": 1713,
+  "coverage": "49.01%",
+  "expectCount": 3554,
+  "actualCount": 1742,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -105,6 +105,80 @@
         375
       ]
     },
+    "src/plugins/AreaMeasurementsPlugin/AreaMeasurement.js": {
+      "expectCount": 51,
+      "actualCount": 12,
+      "undocumentLines": [
+        8,
+        9,
+        31,
+        38,
+        39,
+        40,
+        42,
+        43,
+        44,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        55,
+        56,
+        58,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        69,
+        70,
+        72,
+        92,
+        97,
+        102,
+        109,
+        110,
+        111,
+        113,
+        114,
+        119,
+        228
+      ]
+    },
+    "src/plugins/AreaMeasurementsPlugin/AreaMeasurementsControl.js": {
+      "expectCount": 22,
+      "actualCount": 8,
+      "undocumentLines": [
+        4,
+        5,
+        6,
+        7,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        104,
+        112
+      ]
+    },
+    "src/plugins/AreaMeasurementsPlugin/AreaMeasurementsPlugin.js": {
+      "expectCount": 12,
+      "actualCount": 9,
+      "undocumentLines": [
+        144,
+        146,
+        148
+      ]
+    },
     "src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js": {
       "expectCount": 5,
       "actualCount": 4,
@@ -117,9 +191,9 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        409,
-        413,
-        291
+        430,
+        434,
+        299
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -536,29 +610,29 @@
       "expectCount": 34,
       "actualCount": 11,
       "undocumentLines": [
-        92,
-        98,
-        112,
-        117,
-        121,
-        145,
-        146,
-        147,
-        150,
-        171,
-        173,
-        180,
-        214,
-        469,
-        478,
-        518,
-        541,
-        564,
-        603,
-        604,
-        605,
-        606,
-        607
+        100,
+        106,
+        120,
+        125,
+        129,
+        153,
+        154,
+        155,
+        158,
+        179,
+        181,
+        188,
+        222,
+        477,
+        486,
+        526,
+        549,
+        572,
+        611,
+        612,
+        613,
+        614,
+        615
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
@@ -590,23 +664,24 @@
       "undocumentLines": []
     },
     "src/plugins/PlanViewsPlugin/PlanViewsPlugin.js": {
-      "expectCount": 28,
+      "expectCount": 29,
       "actualCount": 14,
       "undocumentLines": [
-        7,
-        126,
-        133,
-        139,
-        155,
+        8,
+        127,
+        134,
+        140,
         156,
-        176,
-        197,
-        218,
-        240,
-        253,
-        262,
-        416,
-        434
+        157,
+        177,
+        198,
+        219,
+        241,
+        254,
+        268,
+        277,
+        431,
+        449
       ]
     },
     "src/plugins/STLLoaderPlugin/STLLoader.js": {
@@ -1836,8 +1911,8 @@
         104,
         904,
         907,
-        1372,
-        1406
+        1413,
+        1447
       ]
     },
     "src/viewer/scene/libs/canvas2image.js": {
