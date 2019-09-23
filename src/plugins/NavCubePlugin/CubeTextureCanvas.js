@@ -1,27 +1,27 @@
 import {math} from "../../viewer/scene/math/math.js";
 
-function CubeTextureCanvas(viewer) {
+function CubeTextureCanvas(viewer, cfg = {}) {
 
     var axisLabels = false;
 
     const cubeColor = "lightgrey";
-    const cubeHighlightColor = "rgba(0,0,0,0.4)";
+    const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
 
     var height = 500;
     var width = height + (height / 3);
     var scale = width / 24;
 
     const facesZUp = [
-        {boundary: [6, 6, 6, 6], color: "#55FF55"},
-        {boundary: [18, 6, 6, 6], color: "#55FF55"},
-        {boundary: [12, 6, 6, 6], color: "#FF5555"},
-        {boundary: [0, 6, 6, 6], color: "#FF5555"},
-        {boundary: [6, 0, 6, 6], color: "#7777FF"},
-        {boundary: [6, 12, 6, 6], color: "#7777FF"}
+        {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
+        {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || "#55FF55"},
+        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
+        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || "#7777FF"},
+        {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || "#7777FF"}
     ];
 
     const areasZUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1], color: "lightgreen"},
+        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
         {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, -1, 0], up: [0, 0, 1]},
         {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 0, 1]},
         {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 0, 1]},
@@ -50,20 +50,20 @@ function CubeTextureCanvas(viewer) {
     ];
 
     const facesYUp = [
-        {boundary: [6, 6, 6, 6], color: "#55FF55"},
-        {boundary: [18, 6, 6, 6], color: "#55FF55"},
-        {boundary: [12, 6, 6, 6], color: "#FF5555"},
-        {boundary: [0, 6, 6, 6], color: "#FF5555"},
-        {boundary: [6, 0, 6, 6], color: "#7777FF"},
-        {boundary: [6, 12, 6, 6], color: "#7777FF"}
+        {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
+        {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || "#55FF55"},
+        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
+        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || "#7777FF"},
+        {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || "#7777FF"}
     ];
 
     const areasYUp = [
-        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0], color: "lightgreen"},
-        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0], color: "lightgreen"},
-        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0], color: "#FF5555"},
-        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0], color: "#FF5555"},
-        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1], color: "#5555FF"},
+        {label: "front", boundaries: [[7, 7, 4, 4]], dir: [0, 0, -1], up: [0, 1, 0]},
+        {label: "back", boundaries: [[19, 7, 4, 4]], dir: [0, 0, 1], up: [0, 1, 0]},
+        {label: "right", boundaries: [[13, 7, 4, 4]], dir: [-1, 0, 0], up: [0, 1, 0]},
+        {label: "left", boundaries: [[1, 7, 4, 4]], dir: [1, 0, 0], up: [0, 1, 0]},
+        {label: "top", boundaries: [[7, 1, 4, 4]], dir: [0, -1, 0], up: [0, 0, -1]},
         {label: "bottom", boundaries: [[7, 13, 4, 4]], dir: [0, 1, 0], up: [0, 0, 1]},
         {boundaries: [[7, 5, 4, 2]], dir: [0, -1, -1], up: [0, 1, -1]},
         {boundaries: [[1, 6, 4, 1], [6, 1, 1, 4]], dir: [1, -1, 0], up: [1, 1, 0]},
