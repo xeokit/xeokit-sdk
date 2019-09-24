@@ -1,5 +1,8 @@
 import {math} from "../../viewer/scene/math/math.js";
 
+/**
+ * @private
+ */
 function CubeTextureCanvas(viewer, cfg = {}) {
 
     var axisLabels = false;
