@@ -887,7 +887,7 @@ class CameraControl extends Component {
                 return max / 30;
             }
 
-            document.addEventListener("keyDown", function (e) {
+            document.addEventListener("keydown", function (e) {
                 if (!self._active) {
                     return;
                 }
