@@ -5,7 +5,11 @@ import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import * as p from "./lib/pako.js";
 
-const pako = window.pako || p;
+let pako = window.pako || p;
+if(!pako.inflate) {
+    // See https://github.com/nodeca/pako/issues/97
+    pako = pako.default;
+}
 
 const XKT_VERSION = 2; // XKT format version supported by this XKTLoaderPlugin
 
