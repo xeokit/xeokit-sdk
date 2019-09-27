@@ -1126,6 +1126,47 @@ class Input extends Component {
             }
         }, true);
 
+        document.addEventListener("click", this._clickListener = function (e) {
+
+            if (!self.enabled) {
+                return;
+            }
+
+            switch (e.which) {
+
+                case 1:// Left button
+                    self.mouseDownLeft = false;
+                    self.mouseDownRight = false;
+                    break;
+
+                case 2:// Middle/both buttons
+                    self.mouseDownMiddle = false;
+                    break;
+
+                case 3:// Right button
+                    self.mouseDownLeft = false;
+                    self.mouseDownRight = false;
+                    break;
+
+                default:
+                    break;
+            }
+
+            const coords = self._getClickCoordsWithinElement(e);
+
+            /**
+             * Fired whenever the mouse is clicked over the parent
+             * {@link Scene}'s {@link Canvas"}}Canvas{{/crossLink}}.
+             * @event dblclick
+             * @param value {[Number, Number]} The mouse coordinates within the {@link Canvas"}}Canvas{{/crossLink}},
+             */
+            self.fire("click", coords, true);
+
+            if (self.mouseover) {
+                e.preventDefault();
+            }
+        });
+
         document.addEventListener("dblclick", this._dblClickListener = function (e) {
 
             if (!self.enabled) {
@@ -1412,6 +1453,7 @@ class Input extends Component {
         this._element.removeEventListener("mouseleave", this._mouseLeaveListener);
         this._element.removeEventListener("mousedown", this._mouseDownListener);
         document.removeEventListener("mouseup", this._mouseDownListener);
+        document.removeEventListener("click", this._clickListener);
         document.removeEventListener("dblclick", this._dblClickListener);
         this._element.removeEventListener("mousemove", this._mouseMoveListener);
         this._element.removeEventListener("wheel", this._mouseWheelListener);
