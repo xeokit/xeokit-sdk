@@ -732,7 +732,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 const meshIds = [];
 
-                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshIds.length : entityMeshes [i + 1]; j < jlen; j++) {
                     var jj = entityMeshIds [j];
 
                     const lastMesh = (jj === (numMeshes - 1));
@@ -855,7 +855,7 @@ class XKTLoaderPlugin extends Plugin {
                 const lastEntity = (i === numEntities - 1);
                 const meshIds = [];
 
-                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) {
+                for (let j = entityMeshes [i], jlen = lastEntity ? entityMeshes.length : entityMeshes [i + 1]; j < jlen; j++) { {
 
                     const lastMesh = (j === (numMeshes - 1));
                     const meshId = entityId + ".mesh." + j;
