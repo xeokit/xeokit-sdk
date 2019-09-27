@@ -23,15 +23,15 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * StoreyPlansPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.
  *
- * The first two methods are for setting up 3D views of storeys:
+ * Use the first two methods to set up 3D views of storeys:
  *
- * * [showStoreyObjects](#instance-method-showStoreyObjects) shows the {@link Entity}s within the given storey, and
- * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) positions the {@link Camera} for a plan view of the Entitys within the given storey.
+ * * [showStoreyObjects](#instance-method-showStoreyObjects) shows the {@link Entity}s within a storey, and
+ * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) positions the {@link Camera} for a plan view of the Entitys within a storey.
  * <br> <br>
  *
- * The second two methods are for creating 2D plan view images:
+ * Use the second two methods to create and navigate 2D plan view images:
  *
- * * [createStoreyImage](#instance-method-createStoreyImage) creates a 2D plan view image of the given storey, and
+ * * [createStoreyImage](#instance-method-createStoreyImage) creates a 2D plan view image of a storey, and
  * * [pickStoreyImage](#instance-method-pickStoreyImage) picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
  *
  * ## Usage
@@ -108,7 +108,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * });
  * ````
  *
- * We can customize the appearance of the Entitys according to their IFC types, using
+ * We can also customize the appearance of the Entitys according to their IFC types, using
  * the lookup table configured on {@link StoreyPlansPlugin#objectStates}.
  *
  * Let's show our storey Entitys again, this time applying those custom appearances:
@@ -392,9 +392,15 @@ class StoreyPlansPlugin extends Plugin {
 
         const aabb = this.viewer.scene.aabb;
         if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
+            if (done) {
+                done();
+            }
             return;
         }
         if (aabb[3] === aabb[0] && aabb[4] === aabb[1] && aabb[5] === aabb[2]) { // Don't fly to an empty boundary
+            if (done) {
+                done();
+            }
             return;
         }
         const look2 = math.getAABB3Center(aabb);
