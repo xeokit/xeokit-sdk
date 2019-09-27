@@ -13,7 +13,7 @@ const tempMat4 = math.mat4();
 const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
 
 /**
- * @desc A {@link Viewer} plugin that Provides tools for visualizing IfcBuildingStoreys.
+ * @desc A {@link Viewer} plugin that Provides methods for visualizing IfcBuildingStoreys.
  *
  *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
@@ -21,7 +21,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * ## Overview
  *
- * StoreyPlansPlugin provides a flexible set of methods for visualizing building storeys, in both 3D and 2D.
+ * StoreyPlansPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.
  *
  * The first two methods are for setting up 3D views of storeys:
  *
@@ -29,7 +29,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) positions the {@link Camera} for a plan view of the Entitys within the given storey.
  * <br> <br>
  *
- * The second two methods are for creating interactive 2D plan views:
+ * The second two methods are for creating 2D plan view images:
  *
  * * [createStoreyImage](#instance-method-createStoreyImage) creates a 2D plan view image of the given storey, and
  * * [pickStoreyImage](#instance-method-pickStoreyImage) picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
@@ -38,7 +38,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * Let's start by creating a {@link Viewer} with a StoreyPlansPlugin and an {@link XKTLoaderPlugin}.
  *
- * Then we'll load a BIM model from an  ```.xkt``` file.
+ * Then we'll load a BIM building model from an  ```.xkt``` file.
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -76,7 +76,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * ## Finding Storeys
  *
- * Assuming our model has finished loading, let's get some basic information about one of its building storeys:
+ * Assuming our building model has finished loading, let's query the StoreyPlansPlugin for some basic information about one of its storeys:
  *
  * ````javascript
  * const storey = storeyPlansPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"]; // ID of the IfcBuildingStorey
@@ -403,6 +403,8 @@ class StoreyPlansPlugin extends Plugin {
         const sca = Math.abs(diag / Math.tan(fitFOV * math.DEGTORAD));
 
         const orthoScale2 = diag * 1.3;
+
+        console.log(orthoScale2);
 
         const eye2 = tempVec3a;
 
