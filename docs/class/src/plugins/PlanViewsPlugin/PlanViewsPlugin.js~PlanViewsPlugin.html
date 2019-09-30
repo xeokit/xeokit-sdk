@@ -44,7 +44,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-CubeTextureCanvas">CubeTextureCanvas</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
@@ -52,6 +51,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyplansplugin">plugins/StoreyPlansPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html">StoreyImage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
@@ -126,13 +129,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PlanViewsPlugin} from &apos;<span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber90">xeokit-sdk/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {PlanViewsPlugin} from &apos;<span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber89">xeokit-sdk/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber90">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber89">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -644,34 +647,6 @@ model.on(&quot;loaded&quot;, function () {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html#instance-method-convertPlanToWorldPos">convertPlanToWorldPos</a></span></span><span class="code" data-ice="signature">(planViewId: <span>*</span>, planPos: <span>*</span>, worldPos: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html#instance-method-destroy">destroy</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
@@ -946,7 +921,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber103">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1056,7 +1031,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1112,7 +1087,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
@@ -1157,7 +1132,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber217">source</a></span></span>
     </span>
   </h3>
 
@@ -1202,7 +1177,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber228">source</a></span></span>
     </span>
   </h3>
 
@@ -1258,7 +1233,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
@@ -1302,7 +1277,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber154">source</a></span></span>
     </span>
   </h3>
 
@@ -1347,7 +1322,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber166">source</a></span></span>
     </span>
   </h3>
 
@@ -1392,7 +1367,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber176">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1436,7 +1411,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -1492,7 +1467,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -1536,7 +1511,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -1592,7 +1567,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -1629,77 +1604,6 @@ model.on(&quot;loaded&quot;, function () {
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-convertPlanToWorldPos">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">convertPlanToWorldPos</span><span class="code" data-ice="signature">(planViewId: <span>*</span>, planPos: <span>*</span>, worldPos: <span>*</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber254">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">planViewId</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">planPos</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">worldPos</td>
-      <td data-ice="type" class="code"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-destroy">
     <span class="access" data-ice="access">public</span>
     
@@ -1711,7 +1615,7 @@ model.on(&quot;loaded&quot;, function () {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js.html#lineNumber434">source</a></span></span>
     </span>
   </h3>
 

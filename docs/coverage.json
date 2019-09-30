@@ -1,7 +1,7 @@
 {
-  "coverage": "49.38%",
-  "expectCount": 3469,
-  "actualCount": 1713,
+  "coverage": "49.64%",
+  "expectCount": 3503,
+  "actualCount": 1739,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -527,10 +527,8 @@
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {
       "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        3
-      ]
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/plugins/NavCubePlugin/NavCubePlugin.js": {
       "expectCount": 34,
@@ -590,24 +588,23 @@
       "undocumentLines": []
     },
     "src/plugins/PlanViewsPlugin/PlanViewsPlugin.js": {
-      "expectCount": 29,
+      "expectCount": 28,
       "actualCount": 14,
       "undocumentLines": [
-        8,
-        127,
-        134,
-        140,
+        7,
+        126,
+        133,
+        139,
+        155,
         156,
-        157,
-        177,
-        198,
-        219,
-        241,
-        254,
-        268,
-        277,
-        431,
-        449
+        176,
+        197,
+        218,
+        240,
+        253,
+        262,
+        416,
+        434
       ]
     },
     "src/plugins/STLLoaderPlugin/STLLoader.js": {
@@ -707,6 +704,37 @@
         63
       ]
     },
+    "src/plugins/StoreyPlansPlugin/IFCStoreyPlanObjectStates.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/plugins/StoreyPlansPlugin/Storey.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/plugins/StoreyPlansPlugin/StoreyImage.js": {
+      "expectCount": 7,
+      "actualCount": 7,
+      "undocumentLines": []
+    },
+    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js": {
+      "expectCount": 21,
+      "actualCount": 11,
+      "undocumentLines": [
+        10,
+        11,
+        13,
+        273,
+        274,
+        298,
+        303,
+        327,
+        353,
+        568
+      ]
+    },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
       "expectCount": 4,
       "actualCount": 3,
@@ -719,17 +747,17 @@
       "actualCount": 12,
       "undocumentLines": [
         8,
-        10,
-        12,
-        338,
-        360,
-        385,
-        413,
-        551,
-        565,
-        574,
-        627,
-        665
+        14,
+        16,
+        342,
+        364,
+        389,
+        417,
+        555,
+        569,
+        578,
+        631,
+        669
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
