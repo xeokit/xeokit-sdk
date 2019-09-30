@@ -410,8 +410,6 @@ class StoreyPlansPlugin extends Plugin {
 
         const orthoScale2 = diag * 1.3;
 
-        console.log(orthoScale2);
-
         const eye2 = tempVec3a;
 
         eye2[0] = look2[0] + (camera.worldUp[0] * sca);
