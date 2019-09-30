@@ -23,29 +23,29 @@
 
 <canvas id="myCanvas"></canvas>
 
-<!--<div id="info">-->
-<!--    <h1>StoreyPlansPlugin gotoStoreyCamera() and showStoreyObjects()</h1>-->
+<div id="info">
+    <h1>StoreyPlansPlugin gotoStoreyCamera() and showStoreyObjects()</h1>
 
-<!--    <br>-->
-<!--    <p>Positioning the camera for an orthographic plan view, while showing only the objects within a given IfcBuildingStorey.</p>-->
-<!--<br>-->
-<!--    <ul>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>-->
-<!--            - Provides tools for visualizing IfcBuildingStoreys-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>-->
-<!--            - Loads model and IFC data from file system-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a target="_other"-->
-<!--               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</div>-->
+    <br>
+    <p>Positioning the camera for an orthographic plan view, while showing only the objects within a given IfcBuildingStorey.</p>
+<br>
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>
+            - Provides tools for visualizing IfcBuildingStoreys
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+    </ul>
+</div>
 
 </body>
 
@@ -90,7 +90,8 @@
             });
 
             storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
-                duration: 2.5,
+                projection: "ortho", // Orthographic projection
+                duration: 2.5,       // 2.5 second transition
                 done: () => {
 
                     viewer.cameraControl.planView = true; // Disable rotation

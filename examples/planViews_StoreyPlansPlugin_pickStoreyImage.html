@@ -129,7 +129,10 @@
                     eye: worldPos,
                     up: viewer.camera.worldUp,
                     look: viewer.camera.worldForward
-                });
+                    },
+                    () => {
+                        viewer.cameraControl.firstPerson = true;
+                    });
             }
         };
     });
