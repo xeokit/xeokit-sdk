@@ -905,8 +905,8 @@ class Scene extends Component {
         this._objectIds = null; // Lazy regenerate
     }
 
-    _objectVisibilityUpdated(entity) {
-        if (entity.visible) {
+    _objectVisibilityUpdated(entity, visible = entity.visible) {
+        if (visible) {
             this.visibleObjects[entity.id] = entity;
         } else {
             delete this.visibleObjects[entity.id];
@@ -915,8 +915,8 @@ class Scene extends Component {
         this.fire("objectVisibility", entity, true);
     }
 
-    _objectXRayedUpdated(entity) {
-        if (entity.xrayed) {
+    _objectXRayedUpdated(entity, xrayed = entity.xrayed) {
+        if (xrayed) {
             this.xrayedObjects[entity.id] = entity;
         } else {
             delete this.xrayedObjects[entity.id];
@@ -924,8 +924,8 @@ class Scene extends Component {
         this._xrayedObjectIds = null; // Lazy regenerate
     }
 
-    _objectHighlightedUpdated(entity) {
-        if (entity.highlighted) {
+    _objectHighlightedUpdated(entity, highlighted = entity.highlighted) {
+        if (highlighted) {
             this.highlightedObjects[entity.id] = entity;
         } else {
             delete this.highlightedObjects[entity.id];
@@ -933,8 +933,8 @@ class Scene extends Component {
         this._highlightedObjectIds = null; // Lazy regenerate
     }
 
-    _objectSelectedUpdated(entity) {
-        if (entity.selected) {
+    _objectSelectedUpdated(entity, selected = entity.selected) {
+        if (selected) {
             this.selectedObjects[entity.id] = entity;
         } else {
             delete this.selectedObjects[entity.id];
