@@ -7,7 +7,7 @@ use for non-commercial purposes, with the option to buy a licence for commercial
 
 ![](http://xeokit.io/img/splash-slim.png)
 
-## Resources 
+## Links 
 
 * [Website](https://xeokit.io/)
 * [Features](https://github.com/xeokit/xeokit-sdk/wiki/Features)
@@ -17,3 +17,4 @@ use for non-commercial purposes, with the option to buy a licence for commercial
 * [Roadmap](https://github.com/xeokit/xeokit-sdk/wiki/Roadmap)
 * [License](https://github.com/xeokit/xeokit-sdk/wiki/License)
 * [Contact](http://xeolabs.com/contact/)
+
