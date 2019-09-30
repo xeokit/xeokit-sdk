@@ -278,9 +278,37 @@ class Viewer {
      */
     getSnapshot(params = {}) {
         this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-        this.scene.render(); // Renders without the hidden things
+
+        const resize = (params.width !== undefined && params.height !== undefined);
+        const canvas = this.scene.canvas.canvas;
+        const saveWidth = canvas.clientWidth;
+        const saveHeight = canvas.clientHeight;
+        const saveCssWidth = canvas.style.width;
+        const saveCssHeight = canvas.style.height;
+
+        const width = params.width ? Math.floor(params.width) : canvas.width;
+        const height = params.height ? Math.floor(params.height) : canvas.height;
+
+        if (resize) {
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+        }
+
+        this.scene.render(true);
+
         const imageData = this.scene.canvas._getSnapshot(params);
+
+        if (resize) {
+            canvas.style.width = saveCssWidth;
+            canvas.style.height = saveCssHeight;
+            canvas.width = saveWidth;
+            canvas.height = saveHeight;
+
+            this.scene.glRedraw();
+        }
+
         this.sendToPlugins("snapshotFinished");
+
         return imageData;
     }
 

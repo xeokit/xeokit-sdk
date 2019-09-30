@@ -18,9 +18,9 @@ body {
 
 #viewer {
     position: absolute;
-    left: 300px;
-    width: -webkit-calc(100% - 300px); /* Safari */
-    width: calc(100% - 300px);
+    left: 340px;
+    width: -webkit-calc(100% - 340px); /* Safari */
+    width: calc(100% - 340px);
     height: 100%;
     border: 0px;
     background-color: black;
@@ -400,7 +400,7 @@ ul ul {
 
 #contents {
     position: absolute;
-    width: 300px;
+    width: 340px;
     height: calc(100% - 50px);
     /*overflow-Y: scroll;*/
     /*overflow-x: hidden;*/
