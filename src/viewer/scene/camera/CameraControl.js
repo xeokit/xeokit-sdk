@@ -190,6 +190,7 @@ class CameraControl extends Component {
         this.walking = cfg.walking;
         this.keyboardLayout = cfg.keyboardLayout;
         this.doublePickFlyTo = cfg.doublePickFlyTo;
+        this.panRightClick = cfg.panRightClick;
         this.active = cfg.active;
         this.pivoting = cfg.pivoting;
         this.panToPointer = cfg.panToPointer;
@@ -392,7 +393,6 @@ class CameraControl extends Component {
     set doublePickFlyTo(value) {
         this._doublePickFlyTo = value !== false;
     }
-
     /**
      * Gets whether double-picking an {@link Entity} causes the {@link Camera} to fly to its boundary.
      *
@@ -402,6 +402,27 @@ class CameraControl extends Component {
      */
     get doublePickFlyTo() {
         return this._doublePickFlyTo;
+    }
+
+    /**
+     * Sets whether right-clicking pans the {@link Camera}.
+     *
+     * Default value is ````true````.
+     *
+     * @param {Boolean} value Set ````false```` to disable pan on right-click.
+     */
+    set panRightClick(value) {
+        this._panRightClick = value !== false;
+    }
+    /**
+     * Gets whether right-clicking pans the {@link Camera}.
+     *
+     * Default value is ````true````.
+     *
+     * @returns {Boolean} Returns ````false```` when pan on right-click is disabled.
+     */
+    get panRightClick() {
+        return this._panRightClick;
     }
 
     /**
@@ -1062,9 +1083,10 @@ class CameraControl extends Component {
                     if (panning) {
 
                         // Panning
-
-                        panVx = xDelta * mousePanRate;
-                        panVy = yDelta * mousePanRate;
+                        if (self.panRightClick) {
+                            panVx = xDelta * mousePanRate;
+                            panVy = yDelta * mousePanRate;
+                        }
 
                     } else {
 
