@@ -63,6 +63,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {StoreyPlansPlugin} from "../src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -108,33 +109,58 @@
 
         storeyImageDiv.appendChild(img);
 
-        img.onclick = (e) => {
+        const worldPos = math.vec3();
+        let lastEntity = null;
+        let over = false;
+
+        img.onmousemove = (e) => {
 
             const imagePos = [e.offsetX, e.offsetY];
-
-            storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
-                hideOthers: true,
-                useObjectStates: false
-            });
 
             const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {
                 pickSurface: true
             });
 
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+
             if (pickResult) {
 
-                const worldPos = pickResult.worldPos;
-
+                worldPos.set(pickResult.worldPos);
                 worldPos[1] += 1.5;
+
+                pickResult.entity.highlighted = true;
+
+                lastEntity = pickResult.entity;
+                over = true;
+
+                img.style.cursor="pointer";
+
+            } else {
+                over = false;
+
+                img.style.cursor="default";
+            }
+
+        };
+
+        img.onclick = (e) => {
+
+            if (over) {
+                // storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+                //     hideOthers: true,
+                //     useObjectStates: false
+                // });
 
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
                     up: viewer.camera.worldUp,
                     look: viewer.camera.worldForward
-                    },
-                    () => {
-                        viewer.cameraControl.firstPerson = true;
-                    });
+                }, () => {
+                    viewer.cameraControl.firstPerson = true;
+                });
             }
         };
     });

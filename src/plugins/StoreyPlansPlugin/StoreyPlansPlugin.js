@@ -497,8 +497,8 @@ class StoreyPlansPlugin extends Plugin {
                         object.visible = props.visible;
                         object.edges = props.edges;
                         // object.xrayed = props.xrayed; // FIXME: Buggy
-                        object.highlighted = props.highlighted;
-                        object.selected = props.selected;
+                        // object.highlighted = props.highlighted;
+                        // object.selected = props.selected;
 
                         if (props.colorize) {
                             object.colorize = props.colorize;
@@ -635,13 +635,12 @@ class StoreyPlansPlugin extends Plugin {
             zmin + (aabbWidthZ * normZ)
         ]);
 
-        const direction = math.vec3([.01, -1, .01]);
+        const direction = math.vec3([.001, -1, .001]);
 
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
             origin: origin,
-            direction: direction,
-            XincludeEntityIds: this.viewer.metaScene.getObjectIDsInSubtree(storeyId)
+            direction: direction
         });
 
         return pickResult;
