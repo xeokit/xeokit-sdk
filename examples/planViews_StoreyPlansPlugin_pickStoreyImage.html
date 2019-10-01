@@ -125,6 +125,8 @@
 
                 const worldPos = pickResult.worldPos;
 
+                worldPos[1] += 1.5;
+
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
                     up: viewer.camera.worldUp,
@@ -136,6 +138,8 @@
             }
         };
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>
