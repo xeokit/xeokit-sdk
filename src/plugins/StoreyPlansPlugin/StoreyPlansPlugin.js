@@ -12,8 +12,10 @@ const tempMat4 = math.mat4();
 
 const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
 
+
+
 /**
- * @desc A {@link Viewer} plugin that Provides methods for visualizing IfcBuildingStoreys.
+ * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
  *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
@@ -25,14 +27,14 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * Use the first two methods to set up 3D views of storeys:
  *
- * * [showStoreyObjects](#instance-method-showStoreyObjects) shows the {@link Entity}s within a storey, and
- * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) positions the {@link Camera} for a plan view of the Entitys within a storey.
+ * * [showStoreyObjects](#instance-method-showStoreyObjects) - shows the {@link Entity}s within a storey, and
+ * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) - positions the {@link Camera} for a plan view of the Entitys within a storey.
  * <br> <br>
  *
  * Use the second two methods to create and navigate 2D plan view images:
  *
- * * [createStoreyImage](#instance-method-createStoreyImage) creates a 2D plan view image of a storey, and
- * * [pickStoreyImage](#instance-method-pickStoreyImage) picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
+ * * [createStoreyImage](#instance-method-createStoreyImage) - creates a 2D plan view image of a storey, and
+ * * [pickStoreyImage](#instance-method-pickStoreyImage) - picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
  *
  * ## Usage
  *
@@ -76,7 +78,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * ## Finding Storeys
  *
- * Assuming our building model has finished loading, let's query the StoreyPlansPlugin for some basic information about one of its storeys:
+ * Getting information on a storey in our model:
  *
  * ````javascript
  * const storey = storeyPlansPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"]; // ID of the IfcBuildingStorey
@@ -88,30 +90,20 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * ## Showing Entitys within Storeys
  *
- * The {@link StoreyPlansPlugin#showStoreyObjects} method shows the {@link Entity}s within the given storey.
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/showStoreyObjects.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects)]
- *
- * Let's show the {@link Entity}s within our storey:
+ * Showing the {@link Entity}s within a storey:
  *
  * ````javascript
  * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1");
  * ````
  *
- * Let's show **only** the Entitys in our storey, hiding all others:
+ * Showing **only** the Entitys in a storey, hiding all others:
  *
  * ````javascript
  * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
  *     hideOthers: true
  * });
  * ````
- *
- * We can also customize the appearance of the Entitys according to their IFC types, using
- * the lookup table configured on {@link StoreyPlansPlugin#objectStates}.
- *
- * Let's show our storey Entitys again, this time applying those custom appearances:
+ * Showing only the storey Entitys, applying custom appearances configured on {@link StoreyPlansPlugin#objectStates}:
  *
  * ````javascript
  * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
@@ -119,6 +111,10 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *     useObjectStates: true
  * });
  * ````
+ *
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/showStoreyObjects.gif"></a>
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects)]
  *
  * When using this option, at some point later you'll probably want to restore all Entitys to their original visibilities and
  * appearances.
@@ -312,7 +308,10 @@ class StoreyPlansPlugin extends Plugin {
         const storeyIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
         for (let i = 0, len = storeyIds.length; i < len; i++) {
             const storeyId = storeyIds[i];
-            const storey = new Storey(this, scene.aabb, modelId, storeyId);
+            const metaObject = metaScene.metaObjects[storeyId];
+            const childObjectIds = metaObject.getObjectIDsInSubtree();
+            const aabb = scene.getAABB(childObjectIds);
+            const storey = new Storey(this, aabb, modelId, storeyId);
             storey._onModelDestroyed = model.once("destroyed", () => {
                 this._deregisterModelStoreys(modelId);
             });
@@ -518,14 +517,14 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Creates a plan image of the given storey.
+     * Creates a 2D plan image of the given storey.
      *
      * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
      * @param {*} [options] Options for creating the image.
      * @param {Number[]} [options.width=300] Image width in pixels. Height will be automatically determined.
      * @param {String} [options.format="png"] Image format. Allowed values are "png" and "jpeg".
      * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyPlansPlugin#objectStates}.
-     * @returns {StoreyImage} Contains the plan image.
+     * @returns {StoreyImage} Represents the 2D storey plan image.
      */
     createStoreyImage(storeyId, options = {}) {
 
@@ -592,13 +591,13 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Attempts to pick an {@link Entity} at the given 2D pixel coordinates within a {@link StoreyImage}.
+     * Attempts to pick an {@link Entity} at the given pixel coordinates within a 2D storey plan image.
      *
-     * @param {StoreyImage} storeyImage The StoreyImage.
-     * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link }StoreyImage#img.
+     * @param {StoreyImage} storeyImage The 2D storey plan image.
+     * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link StoreyImage#imageData}.
      * @param {*} [options] Picking options.
-     * @param {Boolean} [options.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-     * @returns {PickResult} The pick result, if an Entity was picked.
+     * @param {Boolean} [options.pickSurface=false] Whether to return the picked position on the surface of the Entity.
+     * @returns {PickResult} The pick result, if an Entity was successfully picked, else null.
      */
     pickStoreyImage(storeyImage, imagePos, options={}) {
 
@@ -607,7 +606,7 @@ class StoreyPlansPlugin extends Plugin {
 
         if (!storey) {
             this.error("IfcBuildingStorey not found with this ID: " + storeyId);
-            return worldPos
+            return null
         }
 
         const worldUp = this.viewer.camera.worldUp;
@@ -636,30 +635,16 @@ class StoreyPlansPlugin extends Plugin {
             zmin + (aabbWidthZ * normZ)
         ]);
 
-        const direction = math.vec3([0, -1, 0]);
-
-        console.log("origin = " + origin + ", direction = " + direction);
+        const direction = math.vec3([.01, -1, .01]);
 
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
-            origin: [15, 60, -15],
-            direction: [0, -1, 0],
-            includeEntityIds: this.viewer.metaScene.getObjectIDsInSubtree(storeyId)
+            origin: origin,
+            direction: direction,
+            XincludeEntityIds: this.viewer.metaScene.getObjectIDsInSubtree(storeyId)
         });
 
-        if (pickResult) {
-            alert("yes!");
-
-        }
         return pickResult;
-        //
-        // if (pickResult) { // Picked an Entity with the ray
-        //
-        //     var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
-        //     var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
-        // }
-        //
-        // return worldPos;
     }
 
     /**
