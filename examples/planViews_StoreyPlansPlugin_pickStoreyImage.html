@@ -113,6 +113,8 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
+    viewer.camera.perspective.fov = 75;
+
     viewer.camera.orbitPitch(20);
 
     viewer.cameraControl.panToPointer = true;
@@ -141,6 +143,9 @@
 
     model.on("loaded",  () =>{
 
+        // Make all doors transparent
+        viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
+        
         const storeyImage = storeyPlansPlugin.createStoreyImage("2SWZMQPyD9pfT9q87pgXa1", {
             format: "png",
             width: 400,
@@ -171,7 +176,7 @@
 
         const worldPos = math.vec3();
 
-        const standableTypes = {
+        const canStandOnTypes = { 
             IfcSlab: true,
             IfcStair: true,
             IfcFloor: true,
@@ -191,20 +196,16 @@
 
             pointer.style.left = (pagePos[0] - 7) + "px";
             pointer.style.top = (pagePos[1] - 15) + "px";
-
             pointer.style.visibility = "hidden";
 
             const imagePos = [e.offsetX, e.offsetY];
-
-            console.log("imagePos = " + imagePos);
-
             const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {});
 
             if (pickResult) {
                 const entity = pickResult.entity;
                 const metaObject = viewer.metaScene.metaObjects[entity.id];
                 if (metaObject) {
-                    if (standableTypes[metaObject.type]) {
+                    if (canStandOnTypes[metaObject.type]) {
                         img.style.cursor = "none";
                         pointer.style.visibility = "visible";
                     }
