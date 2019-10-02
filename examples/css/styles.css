@@ -58,7 +58,7 @@ body {
 #info {
     position: absolute;
     top: 0;
-    z-index: 200000;
+    /*z-index: 200000;*/
     float: right;
     right: 0;
     padding: 10px;

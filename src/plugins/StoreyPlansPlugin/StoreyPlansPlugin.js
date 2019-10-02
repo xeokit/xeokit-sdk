@@ -625,17 +625,13 @@ class StoreyPlansPlugin extends Plugin {
         const ymax = aabb[4];
         const zmax = aabb[5];
 
-        const aabbWidthX = xmax - xmin;
-        const aabbWidthY = ymax - ymin;
-        const aabbWidthZ = zmax - zmin;
+        const xwidth = xmax - xmin;
+        const ywidth = ymax - ymin;
+        const zwidth = zmax - zmin;
 
-        const origin = math.vec3([
-            xmin + (aabbWidthX * normX),
-            ymax,
-            zmin + (aabbWidthZ * normZ)
-        ]);
+        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
 
-        const direction = math.vec3([.001, -1, .001]);
+        const direction = math.vec3([-.001, -1, -.001]);
 
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
