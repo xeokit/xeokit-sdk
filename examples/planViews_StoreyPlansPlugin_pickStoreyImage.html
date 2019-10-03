@@ -9,7 +9,7 @@
     <style>
 
         #myCanvas {
-            background: lightblue;
+            /*background: lightblue;*/
         }
 
         #info {
@@ -22,6 +22,7 @@
             height: auto;
             pointer-events: all;
             width: auto;
+            background: rgba(0, 0, 0, 0);
         }
 
         #myNavCubeCanvas {
@@ -33,29 +34,18 @@
             z-index: 200000;
         }
 
-        /*#planPointer {*/
-        /*    transform: rotate(00deg);*/
-        /*    position: absolute;*/
-        /*    left: 0;*/
-        /*    top: 0;*/
-        /*    z-index: 90000;*/
-        /*}*/
-
         #planPointer {
-            color: #ffffff;
+            color: #000000;
             line-height: 1.8;
             text-align: center;
             font-family: "monospace";
             font-weight: bold;
-            /*position: absolute;*/
+            position: absolute;
             width: 25px;
             height: 25px;
-            /*border-radius: 15px;*/
-            /*border: 2px solid #ffffff;*/
-            background-image: url('images/standingPersonIcon.png');
-
-            /*box-shadow: 5px 5px 15px 1px #000000;*/
-            /*z-index: 0;*/
+            background-image: url(images/standingPersonIcon.png);
+            background-repeat: no-repeat;
+            background-size: 25px 25px;
         }
 
     </style>
@@ -154,8 +144,6 @@
 
         const img = document.createElement("img");
         img.src = storeyImage.imageData;
-        img.style.border = "1px solid #000000";
-        img.style.background = "lightblue";
         img.style.width = storeyImage.width + "px";
         img.style.height = storeyImage.height + "px";
 
