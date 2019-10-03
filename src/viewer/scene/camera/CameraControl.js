@@ -1078,15 +1078,13 @@ class CameraControl extends Component {
                         return;
                     }
 
-                    const panning = shiftDown || mouseDownRight;
+                    const panning = shiftDown || (self.panRightClick && mouseDownRight);
 
                     if (panning) {
 
                         // Panning
-                        if (self.panRightClick) {
-                            panVx = xDelta * mousePanRate;
-                            panVy = yDelta * mousePanRate;
-                        }
+                        panVx = xDelta * mousePanRate;
+                        panVy = yDelta * mousePanRate;
 
                     } else {
 
