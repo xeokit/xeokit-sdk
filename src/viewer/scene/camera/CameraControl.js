@@ -1083,7 +1083,7 @@ class CameraControl extends Component {
                     if (panning) {
 
                         // Panning
-                        if (self.panRightClick) {
+                        if (shiftDown || (self.panRightClick && mouseDownRight)) {
                             panVx = xDelta * mousePanRate;
                             panVy = yDelta * mousePanRate;
                         }
