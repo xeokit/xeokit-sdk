@@ -138,6 +138,14 @@ class FrameContext {
          */
         this.pickProjMatrix = null;
 
+        /**
+         * Whether or not the renderer is currently picking invisible objects.
+         *
+         * @property pickInvisible
+         * @type {Number}
+         */
+        this.pickInvisible = false;
+
         /** The current line width.
          *
          * @property lineWidth

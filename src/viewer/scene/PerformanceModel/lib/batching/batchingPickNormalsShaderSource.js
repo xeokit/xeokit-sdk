@@ -17,6 +17,7 @@ function buildVertex(layer) {
     src.push("attribute vec3 normal;");
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
+    src.push("uniform bool pickInvisible;");
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
@@ -35,7 +36,7 @@ function buildVertex(layer) {
     src.push("void main(void) {");
     src.push("  bool visible   = (float(flags.x) > 0.0);");
     src.push("  bool pickable  = (float(flags2.z) > 0.0);");
-    src.push("  if (!visible || !pickable) {");
+    src.push("  if ((!pickInvisible && !visible) || !pickable) {");
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
     src.push("  } else {");
     src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); "); // Batched positions are baked in World-space

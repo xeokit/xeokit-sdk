@@ -104,6 +104,7 @@ BatchingPickMeshRenderer.prototype._allocate = function (layer) {
         return;
     }
     const program = this._program;
+    this._uPickInvisible = program.getLocation("pickInvisible");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
@@ -130,6 +131,7 @@ BatchingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const camera = scene.camera;
     program.bind();
     frameCtx.useProgram++;
+    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;

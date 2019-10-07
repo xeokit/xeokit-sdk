@@ -81,6 +81,9 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     const camera = scene.camera;
     const projectState = camera.project._state;
+    // In practice, these binds will only happen once per frame
+    // because we pick normals on a single previously-picked mesh
+    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
     gl.uniform1f(this._uZNear, projectState.near);
@@ -143,7 +146,7 @@ InstancingPickDepthRenderer.prototype._allocate = function (layer) {
     this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
     const program = this._program;
-
+    this._uPickInvisible = program.getLocation("pickInvisible");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
