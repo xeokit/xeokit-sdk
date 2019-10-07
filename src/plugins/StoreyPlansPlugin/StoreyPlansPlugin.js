@@ -516,6 +516,7 @@ class StoreyPlansPlugin extends Plugin {
         }
     }
 
+
     /**
      * Creates a 2D plan image of the given storey.
      *
@@ -635,6 +636,7 @@ class StoreyPlansPlugin extends Plugin {
 
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
+            pickInvisible: true,
             origin: origin,
             direction: direction
         });
