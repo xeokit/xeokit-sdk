@@ -379,8 +379,8 @@ class StoreyPlansPlugin extends Plugin {
 
         if (!storey) {
             this.error("IfcBuildingStorey not found with this ID: " + storeyId);
-            if (done) {
-                done();
+            if (options.done) {
+                options.done();
             }
             return;
         }
@@ -391,14 +391,14 @@ class StoreyPlansPlugin extends Plugin {
 
         const aabb = this.viewer.scene.aabb;
         if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
-            if (done) {
-                done();
+            if (options.done) {
+                options.done();
             }
             return;
         }
         if (aabb[3] === aabb[0] && aabb[4] === aabb[1] && aabb[5] === aabb[2]) { // Don't fly to an empty boundary
-            if (done) {
-                done();
+            if (options.done) {
+                options.done();
             }
             return;
         }
@@ -442,11 +442,11 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Shows only the {@link Entity}s within the given storey.
+     * Shows the {@link Entity}s within the given storey.
      *
-     * Hides all other Entitys.
+     * Optionally hides all other Entitys.
      *
-     * Sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
+     * Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
      * IFC types in plan views is configured by {@link StoreyPlansPlugin#objectStates}.
      *
      * See also: {@link ObjectsMemento}, which saves and restores a memento of the visual state
@@ -460,6 +460,7 @@ class StoreyPlansPlugin extends Plugin {
     showStoreyObjects(storeyId, options = {}) {
 
         const storey = this.storeys[storeyId];
+
         if (!storey) {
             this.error("IfcBuildingStorey not found with this ID: " + storeyId);
             return;
@@ -478,44 +479,68 @@ class StoreyPlansPlugin extends Plugin {
             scene.setObjectsVisible(viewer.scene.visibleObjectIds, false);
         }
 
-        const storeySubObjects = storeyMetaObject.getObjectIDsInSubtree();
-
-        for (var i = 0, len = storeySubObjects.length; i < len; i++) {
-
-            const objectId = storeySubObjects[i];
-            const metaObject = metaScene.metaObjects[objectId];
-            const object = scene.objects[objectId];
-
-            if (object) {
-
+        this.withStoreyObjects(storeyId, (entity, metaObject) => {
+            if (entity) {
                 if (options.useObjectStates) {
-
                     const props = this._objectStates[metaObject.type] || this._objectStates["DEFAULT"];
-
                     if (props) {
-
-                        object.visible = props.visible;
-                        object.edges = props.edges;
-                        // object.xrayed = props.xrayed; // FIXME: Buggy
-                        // object.highlighted = props.highlighted;
-                        // object.selected = props.selected;
-
+                        entity.visible = props.visible;
+                        entity.edges = props.edges;
+                        // entity.xrayed = props.xrayed; // FIXME: Buggy
+                        // entity.highlighted = props.highlighted;
+                        // entity.selected = props.selected;
                         if (props.colorize) {
-                            object.colorize = props.colorize;
+                            entity.colorize = props.colorize;
                         }
-
                         if (props.opacity !== null && props.opacity !== undefined) {
-                            object.opacity = props.opacity;
+                            entity.opacity = props.opacity;
                         }
                     }
-
                 } else {
-                    object.visible = true;
+                    entity.visible = true;
                 }
+            }
+        });
+    }
+
+    /**
+     * Executes a callback on each of the objects within the given storey.
+     *
+     * ## Usage
+     * 
+     * In the example below, we'll show all the {@link Entity}s, within the given ````IfcBuildingStorey````,
+     * that have {@link MetaObject}s with type ````IfcSpace````. Note that the callback will only be given
+     * an {@link Entity} when one exists for the given {@link MetaObject}.
+     * 
+     * ````JavaScript
+     * myStoreyPlansPlugin.withStoreyObjects(storeyId, (entity, metaObject) => {
+     *      if (entity && metaObject && metaObject.type === "IfcSpace") {
+     *          entity.visible = true;
+     *      }
+     * });
+     * ````
+     * 
+     * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
+     * @param {Function} callback The callback.
+     */
+    withStoreyObjects(storeyId, callback) {
+        const viewer = this.viewer;
+        const scene = viewer.scene;
+        const metaScene = viewer.metaScene;
+        const rootMetaObject = metaScene.metaObjects[storeyId];
+        if (!rootMetaObject) {
+            return;
+        }
+        const storeySubObjects = rootMetaObject.getObjectIDsInSubtree();
+        for (var i = 0, len = storeySubObjects.length; i < len; i++) {
+            const objectId = storeySubObjects[i];
+            const metaObject = metaScene.metaObjects[objectId];
+            const entity = scene.objects[objectId];
+            if (entity) {
+                callback(entity, metaObject);
             }
         }
     }
-
 
     /**
      * Creates a 2D plan image of the given storey.
@@ -610,10 +635,6 @@ class StoreyPlansPlugin extends Plugin {
             return null
         }
 
-        const worldUp = this.viewer.camera.worldUp;
-        const worldForward = this.viewer.camera.worldForward;
-        const worldRight = this.viewer.camera.worldRight;
-
         const normX = 1.0 - (imagePos[0] / storeyImage.width);
         const normZ = 1.0 - (imagePos[1] / storeyImage.height);
 
@@ -631,14 +652,15 @@ class StoreyPlansPlugin extends Plugin {
         const zwidth = zmax - zmin;
 
         const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
-
-        const direction = math.vec3([-.001, -1, -.001]);
+        const direction = math.vec3([0, -1, 0]);
+        const look = math.addVec3(origin, direction, tempVec3a);
+        const worldForward = this.viewer.camera.worldForward;
+        const matrix = math.lookAtMat4v(origin, look, worldForward, tempMat4);
 
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
             pickInvisible: true,
-            origin: origin,
-            direction: direction
+            matrix: matrix
         });
 
         return pickResult;
