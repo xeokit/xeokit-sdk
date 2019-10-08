@@ -1667,13 +1667,30 @@ class Scene extends Component {
      *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
      *         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
      *     }
-     *  ````
+     * }
+     * ````
+     *
+     * Picking the {@link Entity} that intersects an arbitrarily-aligned World-space ray, implicitly given as a 4x4 matrix:
+     *
+     * ````javascript
+     * const pickMatrix = math.lookAtMat4v([0,10,0], [0,-1,0], [0,0,-1]); // Eye, look and up vectors
+     *
+     * const pickResult = scene.pick({
+     *       pickSurface: true,   // Picking with arbitrarily-positioned ray
+     *       pickMatrix: pickMatrix
+     * });
+     *
+     * if (pickResult) { // Picked an Entity with the ray
+     *      ....
+     * }
+     * ````
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
-     * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
-     * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
+     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the ````origin````, ````direction```` and ````pickMatrix```` parameters. Effectively fires a ray through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when ````canvasPos```` given.
+     * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Ignored when ````canvasPos```` given.
+     * @param {Number[]} [params.pickMatrix] Alternative way to indicate ray origin and direction when ray-picking. Overrides ````origin```` and ````direction````. Ignored when ````canvasPos```` given.
      * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
      * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
      * @param {Boolean} [params.pickInvisible=false] When ````true````, will pick all Entities, including those that are currently invisible.
