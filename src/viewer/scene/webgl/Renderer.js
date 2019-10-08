@@ -605,6 +605,11 @@ const Renderer = function (scene, options) {
             gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
             gl.bindTexture(gl.TEXTURE_2D, null);
 
+            const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+            for (let ii = 0; ii < numVertexAttribs; ii++) {
+                gl.disableVertexAttribArray(ii);
+            }
+
             // Set the backbuffer's alpha to 1.0
             // gl.clearColor(1, 1, 1, 1);
             // gl.colorMask(false, false, false, true);
@@ -664,18 +669,26 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
-                origin = params.origin || math.vec3([0, 0, 0]);
-                direction = params.direction || math.vec3([0, 0, 1]);
-                look = math.addVec3(origin, direction, tempVec3a);
+                if (params.matrix) {
 
-                pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4a);
-                pickProjMatrix = pickFrustumMatrix;
+                    pickViewMatrix = params.matrix;
+                    pickProjMatrix = pickFrustumMatrix;
+
+                } else {
+
+                    origin = params.origin || math.vec3([0, 0, 0]);
+                    direction = params.direction || math.vec3([0, 0, 1]);
+                    look = math.addVec3(origin, direction, tempVec3a);
+
+                    pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4a);
+                    pickProjMatrix = pickFrustumMatrix;
+
+                    pickResult.origin = origin;
+                    pickResult.direction = direction;
+                }
 
                 canvasX = canvas.clientWidth * 0.5;
                 canvasY = canvas.clientHeight * 0.5;
-
-                pickResult.origin = origin;
-                pickResult.direction = direction;
             }
 
             pickBuf = pickBuf || new RenderBuffer(canvas, gl);
@@ -718,6 +731,7 @@ const Renderer = function (scene, options) {
         frameCtx.frontface = true; // "ccw"
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
+        frameCtx.pickInvisible = !!params.pickInvisible;
 
         const boundary = scene.viewport.boundary;
         gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
@@ -743,7 +757,7 @@ const Renderer = function (scene, options) {
 
                     const drawable = drawableList[i];
 
-                    if (!drawable.drawPickMesh || drawable.culled === true || drawable.visible === false || drawable.pickable === false) {
+                    if (!drawable.drawPickMesh || drawable.culled === true || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
                         continue;
                     }
                     if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
@@ -781,6 +795,7 @@ const Renderer = function (scene, options) {
         frameCtx.frontface = true; // "ccw"
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
+        // frameCtx.pickInvisible = !!params.pickInvisible;
 
         const boundary = scene.viewport.boundary;
         gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
