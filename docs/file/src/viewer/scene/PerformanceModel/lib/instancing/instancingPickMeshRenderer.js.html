@@ -274,6 +274,7 @@ InstancingPickMeshRenderer.prototype._allocate = function (layer) {
 
     const program = this._program;
 
+    this._uPickInvisible = program.getLocation(&quot;pickInvisible&quot;);
     this._uPositionsDecodeMatrix = program.getLocation(&quot;positionsDecodeMatrix&quot;);
     this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
     this._uProjMatrix = program.getLocation(&quot;projMatrix&quot;);
@@ -309,6 +310,7 @@ InstancingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const camera = scene.camera;
     const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
+    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     if (sectionPlanesState.sectionPlanes.length &gt; 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;

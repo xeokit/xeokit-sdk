@@ -5162,7 +5162,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1726">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1744">source</a></span></span>
     </span>
   </h3>
 
@@ -5206,7 +5206,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1741">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1759">source</a></span></span>
     </span>
   </h3>
 
@@ -5250,7 +5250,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1751">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1769">source</a></span></span>
     </span>
   </h3>
 
@@ -5294,7 +5294,7 @@ leave that enabled:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2031">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2049">source</a></span></span>
     </span>
   </h3>
 
@@ -5384,7 +5384,7 @@ in the Scene, or <code>false</code> if an Entity is occluding it.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1772">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1790">source</a></span></span>
     </span>
   </h3>
 
@@ -5462,7 +5462,7 @@ in the Scene, or <code>false</code> if an Entity is occluding it.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1682">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1700">source</a></span></span>
     </span>
   </h3>
 
@@ -5546,7 +5546,20 @@ if (pickResult) { // Picked an Entity with the ray
 
         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
-    }</code>
+    }
+}</code>
+</code></pre>
+<p>Picking the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that intersects an arbitrarily-aligned World-space ray, implicitly given as a 4x4 matrix:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const matrix = math.lookAtMat4v([0,10,0], [0,-1,0], [0,0,-1]); // Eye, look and up vectors
+
+const pickResult = scene.pick({
+      pickSurface: true,   // Picking with arbitrarily-positioned ray
+      matrix: matrix
+});
+
+if (pickResult) { // Picked an Entity with the ray
+     ....
+}</code>
 </code></pre>
 </div>
 
@@ -5579,21 +5592,28 @@ if (pickResult) { // Picked an Entity with the ray
       <td data-ice="name" class="code" data-depth="1">params.canvasPos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Canvas-space coordinates. When ray-picking, this will override the <strong>origin</strong> and <strong> direction</strong> parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.</p>
+      <td data-ice="description"><p>Canvas-space coordinates. When ray-picking, this will override the <code>origin</code>, <code>direction</code> and <code>matrix</code> parameters. Effectively fires a ray through the canvas at this position, directly along the negative View-space Z-axis.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.origin</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>World-space ray origin when ray-picking. Ignored when canvasPos given.</p>
+      <td data-ice="description"><p>World-space ray origin when ray-picking. Ignored when <code>canvasPos</code> given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">params.direction</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.</p>
+      <td data-ice="description"><p>World-space ray direction when ray-picking. Ignored when <code>canvasPos</code> given.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.matrix</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Alternative way to indicate ray origin and direction when ray-picking. Overrides <code>origin</code> and <code>direction</code>. Ignored when <code>canvasPos</code> given.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -5608,6 +5628,14 @@ if (pickResult) { // Picked an Entity with the ray
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>IDs of <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s to ignore. When given, will pick <em>through</em> these <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s, as if they were not there.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.pickInvisible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When <code>true</code>, will pick all Entities, including those that are currently invisible.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -5729,7 +5757,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1861">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1879">source</a></span></span>
     </span>
   </h3>
 
@@ -5811,7 +5839,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1972">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1990">source</a></span></span>
     </span>
   </h3>
 
@@ -5894,7 +5922,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1878">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1896">source</a></span></span>
     </span>
   </h3>
 
@@ -5976,7 +6004,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1955">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1973">source</a></span></span>
     </span>
   </h3>
 
@@ -6058,7 +6086,7 @@ since the last render.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1918">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1936">source</a></span></span>
     </span>
   </h3>
 
@@ -6142,7 +6170,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1987">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2005">source</a></span></span>
     </span>
   </h3>
 
@@ -6225,7 +6253,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2004">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber2022">source</a></span></span>
     </span>
   </h3>
 
@@ -6307,7 +6335,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1898">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1916">source</a></span></span>
     </span>
   </h3>
 
@@ -6391,7 +6419,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1844">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1862">source</a></span></span>
     </span>
   </h3>
 
@@ -6475,7 +6503,7 @@ registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1938">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/scene/Scene.js.html#lineNumber1956">source</a></span></span>
     </span>
   </h3>
 

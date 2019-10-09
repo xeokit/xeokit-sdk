@@ -158,6 +158,7 @@ function buildVertex(layer) {
     src.push(&quot;attribute vec4 modelMatrixCol1;&quot;);
     src.push(&quot;attribute vec4 modelMatrixCol2;&quot;);
 
+    src.push(&quot;uniform bool pickInvisible;&quot;);
     src.push(&quot;uniform mat4 viewMatrix;&quot;);
     src.push(&quot;uniform mat4 projMatrix;&quot;);
     src.push(&quot;uniform mat4 positionsDecodeMatrix;&quot;);
@@ -170,7 +171,7 @@ function buildVertex(layer) {
     src.push(&quot;void main(void) {&quot;);
     src.push(&quot;bool visible   = (float(flags.x) &gt; 0.0);&quot;);
     src.push(&quot;bool pickable  = (float(flags2.z) &gt; 0.0);&quot;);
-    src.push(`if (!visible || !pickable) {`);
+    src.push(`if ((!pickInvisible &amp;&amp; !visible) || !pickable) {`);
     src.push(&quot;   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);&quot;); // Cull vertex
     src.push(&quot;} else {&quot;);
 
