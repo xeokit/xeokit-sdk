@@ -323,6 +323,23 @@ class StoreyPlansPlugin extends Plugin {
         }
     }
 
+    // _hasVisibleObjects(objectIds) {
+    //     const viewer = this.viewer;
+    //     const scene = viewer.scene;
+    //     const metaScene = viewer.metaScene;
+    //     for (var i = 0, len = objectIds.length; i < len; i++) {
+    //         const objectId = objectIds[i];
+    //         const metaObject = metaScene.metaObjects[objectId];
+    //         if (metaObject) {
+    //             const objectState = this.objectStates[metaObject.type];
+    //             if (objectState && objectState.visible) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
+
     _deregisterModelStoreys(modelId) {
         const storeys = this.modelStoreys[modelId];
         if (storeys) {
@@ -430,12 +447,12 @@ class StoreyPlansPlugin extends Plugin {
 
         } else {
 
-            viewer.cameraFlight.jumpTo({
+            viewer.cameraFlight.jumpTo(utils.apply(options, {
                 eye: eye2,
                 look: look2,
                 up: up2,
                 orthoScale: orthoScale2
-            });
+            }));
 
             viewer.camera.ortho.scale = orthoScale2;
         }
@@ -549,7 +566,6 @@ class StoreyPlansPlugin extends Plugin {
      * @param {*} [options] Options for creating the image.
      * @param {Number[]} [options.width=300] Image width in pixels. Height will be automatically determined.
      * @param {String} [options.format="png"] Image format. Allowed values are "png" and "jpeg".
-     * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyPlansPlugin#objectStates}.
      * @returns {StoreyImage} Represents the 2D storey plan image.
      */
     createStoreyImage(storeyId, options = {}) {
@@ -572,7 +588,10 @@ class StoreyPlansPlugin extends Plugin {
         this._objectsMemento.saveObjects(scene);
         this._cameraMemento.saveCamera(scene);
 
-        this.showStoreyObjects(storeyId, utils.apply(options, { hideOthers: true }));
+        this.showStoreyObjects(storeyId, utils.apply(options, {
+            useObjectStates: true,
+            hideOthers: true
+        }));
 
         this._arrangeImageCamera();
 
@@ -662,6 +681,14 @@ class StoreyPlansPlugin extends Plugin {
             pickInvisible: true,
             matrix: matrix
         });
+
+        if (pickResult) {
+            const metaObject = this.viewer.metaScene.metaObjects[pickResult.entity.id];
+            const objectState = this.objectStates[metaObject.type];
+            if (!objectState || !objectState.visible) {
+                return null;
+            }
+        }
 
         return pickResult;
     }
