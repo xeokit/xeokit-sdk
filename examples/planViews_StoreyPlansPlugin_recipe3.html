@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit StoreyPlansPlugin</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #storeys {
+            margin-top: 20px;
+            overflow-y: scroll;
+            height: 500px;
+            pointer-events: all;
+        }
+
+        #info {
+            position: absolute;
+            top: 0;
+            z-index: 200000;
+            float: right;
+            right: 0;
+            padding: 10px;
+            height: auto;
+            text-align: left;
+            pointer-events: none;
+            background: RGBA(0, 0, 0, 0.4);
+            max-width: 500px;
+            color: white;
+        }
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>StoreyPlansPlugin UX Recipe #3</h1>
+
+    <br>
+    <p>Click a room in the plan images below to go there in <b>first-person mode</b>.</p>
+    <p>Click empty space in the images to return.</p>
+
+    <div id="storeys"></div>
+
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>
+            - Provides tools for visualizing IfcBuildingStoreys
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {StoreyPlansPlugin} from "../src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {CameraMemento} from "../src/viewer/scene/mementos/CameraMemento.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.orbitYaw(180);
+
+    viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.pivoting = true;
+
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Add a StoreyPlansPlugin
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const storeyPlansPlugin = new StoreyPlansPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, build a clickable set of storey plan images from the StoreyPlansPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    model.on("loaded", function () {
+
+        // Make all doors transparent
+        viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
+
+        buildStoreysMenu();
+    });
+
+    function buildStoreysMenu() {
+
+        const cameraMemento = new CameraMemento();
+        cameraMemento.saveCamera(viewer.scene);
+
+        const storeyDiv = document.getElementById("storeys");
+        const storeyIds = Object.keys(storeyPlansPlugin.storeys);
+
+        const canStandOnTypes = {
+            IfcSlab: true,
+            IfcStair: true,
+            IfcFloor: true,
+            IfcFooting: true
+        };
+
+        for (var i = 0, len = storeyIds.length; i < len; i++) {
+
+            const storeyId = storeyIds[i];
+
+            const storeyImage = storeyPlansPlugin.createStoreyImage(storeyId, {
+                format: "png",
+                width: 300,
+                useObjectStates: true
+            });
+
+            const img = document.createElement("img");
+            img.src = storeyImage.imageData;
+            img.style.border = "1px solid #000000";
+            img.style.background = "lightblue";
+            img.style.width = storeyImage.width + "px";
+            img.style.height = storeyImage.height + "px";
+
+            storeyDiv.appendChild(img);
+
+            img.onmouseenter = () => {
+                img.style.cursor = "default";
+            };
+
+            img.onmousemove = (e) => {
+                img.style.cursor = "default";
+                const imagePos = [e.offsetX, e.offsetY];
+                const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {});
+                if (pickResult) {
+                    const entity = pickResult.entity;
+                    const metaObject = viewer.metaScene.metaObjects[entity.id];
+                    if (metaObject) {
+                        if (canStandOnTypes[metaObject.type]) {
+                            img.style.cursor = "pointer";
+                        }
+                    }
+                }
+            };
+
+            img.onmouseleave = (e) => {
+                img.style.cursor = "default";
+            };
+
+            const worldPos = math.vec3();
+
+            img.onclick = (e) => {
+
+                const imagePos = [e.offsetX, e.offsetY];
+
+                const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {
+                    pickSurface: true
+                });
+
+                if (pickResult) {
+                    worldPos.set(pickResult.worldPos);
+                    worldPos[1] += 1.5;
+
+                    viewer.cameraFlight.flyTo({
+                        eye: worldPos,
+                        up: viewer.camera.worldUp,
+                        look: math.addVec3(worldPos, viewer.camera.worldForward, []),
+                        projection: "perspective",
+                        duration: 1.5
+                    }, () => {
+                        viewer.cameraControl.firstPerson = true;
+                        viewer.cameraControl.pivoting = false;
+                    });
+                } else {
+                    cameraMemento.restoreCamera(viewer.scene, () => {
+                        viewer.cameraControl.firstPerson = false;
+                    });
+                }
+            };
+        }
+    }
+
+</script>
+</html>

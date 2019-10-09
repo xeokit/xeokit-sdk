@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit StoreyPlansPlugin createStoreyImage()</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            /*background: lightblue;*/
+        }
+
+        #info {
+            max-width: 410px;
+        }
+
+        #storeyImage {
+            margin-top: 20px;
+            overflow-y: hidden;
+            height: auto;
+            pointer-events: all;
+            width: auto;
+        }
+
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="info">
+    <h1>StoreyPlansPlugin UX Recipe #2</h1>
+
+    <br>
+    <p>Click anywhere in the 2D plan to go there in <b>first-person mode</b> in the 3D view.</p>
+    <p>Click empty space in the 2D plan to return to ortho view.</p>
+
+
+    <div id="storeyImage"></div>
+
+    <ul>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>
+            - Provides tools for visualizing IfcBuildingStoreys
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {StoreyPlansPlugin} from "../src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {math} from "../src/viewer/scene/math/math.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.camera.perspective.fov = 65;
+    viewer.camera.orbitPitch(20);
+
+    viewer.cameraControl.panToPointer = true;
+
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    const storeyPlansPlugin = new StoreyPlansPlugin(viewer);
+
+    model.on("loaded", () => {
+
+        // Make all doors transparent
+        viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
+
+        storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+            hideOthers: true,
+            useObjectStates: false
+        });
+
+        storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
+            projection: "ortho"
+        });
+
+        const storeyImage = storeyPlansPlugin.createStoreyImage("2SWZMQPyD9pfT9q87pgXa1", {
+            format: "png",
+            width: 400,
+            useObjectStates: true
+        });
+
+        const img = document.createElement("img");
+        img.src = storeyImage.imageData;
+        img.style.width = storeyImage.width + "px";
+        img.style.height = storeyImage.height + "px";
+
+        const storeyImageDiv = document.getElementById("storeyImage");
+        storeyImageDiv.appendChild(img);
+
+        const pointer = document.createElement("div");
+        pointer.id = "planPointer";
+        pointer.style.width = "25px";
+        pointer.style.height = "25px";
+        pointer.style.position = "absolute";
+        pointer.style["z-index"] = 100000;
+        pointer.style.left = "0px";
+        pointer.style.top = "0px";
+        pointer.style.cursor = "none";
+        pointer.style["pointer-events"] = "none";
+        document.body.appendChild(pointer);
+
+        const canStandOnTypes = {
+            IfcSlab: true,
+            IfcStair: true,
+            IfcFloor: true,
+            IfcFooting: true
+        };
+
+        img.onmouseenter = (e) => {
+            img.style.cursor = "default";
+        };
+
+        img.onmousemove = (e) => {
+            img.style.cursor = "default";
+            const imagePos = [e.offsetX, e.offsetY];
+            const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {});
+            if (pickResult) {
+                const entity = pickResult.entity;
+                const metaObject = viewer.metaScene.metaObjects[entity.id];
+                if (metaObject) {
+                    if (canStandOnTypes[metaObject.type]) {
+                        img.style.cursor = "pointer";
+                    }
+                }
+            }
+        };
+
+        img.onmouseleave = (e) => {
+            pointer.style.visibility = "hidden";
+            img.style.cursor = "default";
+        };
+
+        const worldPos = math.vec3();
+
+        img.onclick = (e) => {
+            const imagePos = [e.offsetX, e.offsetY];
+            const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {
+                pickSurface: true
+            });
+            if (pickResult) {
+                worldPos.set(pickResult.worldPos);
+                worldPos[1] += 1.5;
+
+                viewer.cameraFlight.flyTo({
+                    eye: worldPos,
+                    up: viewer.camera.worldUp,
+                    look: math.addVec3(worldPos, viewer.camera.worldForward, []),
+                    projection: "perspective",
+                    duration: 1.5
+                }, () => {
+                    viewer.cameraControl.firstPerson = true;
+                    viewer.cameraControl.planView = false;
+                });
+            } else {
+                storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
+                    projection: "ortho",
+                    duration: 1.5,
+                    done: () => {
+                        viewer.cameraControl.firstPerson = false;
+                        viewer.cameraControl.planView = true;
+                    }
+                });
+            }
+        };
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+        if (hit) {
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>
