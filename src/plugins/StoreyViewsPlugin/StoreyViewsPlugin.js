@@ -4,7 +4,7 @@ import {IFCStoreyPlanObjectStates} from "./IFCStoreyPlanObjectStates.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {ObjectsMemento} from "../../viewer/scene/mementos/ObjectsMemento.js";
 import {CameraMemento} from "../../viewer/scene/mementos/CameraMemento.js";
-import {StoreyImage} from "./StoreyImage.js";
+import {StoreyMap} from "./StoreyMap.js";
 import {utils} from "../../viewer/scene/utils.js";
 
 const tempVec3a = math.vec3();
@@ -17,13 +17,13 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
 /**
  * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
- *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/recipe2.gif"></a>
+ *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_recipe2)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *
  * ## Overview
  *
- * StoreyPlansPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.
+ * StoreyViewsPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.
  *
  * Use the first two methods to set up 3D views of storeys:
  *
@@ -31,21 +31,21 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * * [gotoStoreyCamera](#instance-method-gotoStoreyCamera) - positions the {@link Camera} for a plan view of the Entitys within a storey.
  * <br> <br>
  *
- * Use the second two methods to create and navigate 2D plan view images:
+ * Use the second two methods to create 2D plan view mini-map images:
  *
- * * [createStoreyImage](#instance-method-createStoreyImage) - creates a 2D plan view image of a storey, and
- * * [pickStoreyImage](#instance-method-pickStoreyImage) - picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
+ * * [createStoreyMap](#instance-method-createStoreyMap) - creates a 2D plan view image of a storey, and
+ * * [pickStoreyMap](#instance-method-pickStoreyMap) - picks the {@link Entity} at the given 2D pixel coordinates within a plan view image.
  *
  * ## Usage
  *
- * Let's start by creating a {@link Viewer} with a StoreyPlansPlugin and an {@link XKTLoaderPlugin}.
+ * Let's start by creating a {@link Viewer} with a StoreyViewsPlugin and an {@link XKTLoaderPlugin}.
  *
  * Then we'll load a BIM building model from an  ```.xkt``` file.
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
  * import {XKTLoaderPlugin} from "../src/viewer/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
- * import {StoreyPlansPlugin} from "../src/viewer/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
+ * import {StoreyViewsPlugin} from "../src/viewer/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
  *
  * // Create a Viewer, arrange the camera
  *
@@ -62,9 +62,9 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * // Add a StoreyPlansPlugin
+ * // Add a StoreyViewsPlugin
  *
- * const storeyPlansPlugin = new StoreyPlansPlugin(viewer);
+ * const storeyViewsPlugin = new StoreyViewsPlugin(viewer);
  *
  * // Load a BIM model from .xkt format
  *
@@ -81,7 +81,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * Getting information on a storey in our model:
  *
  * ````javascript
- * const storey = storeyPlansPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"]; // ID of the IfcBuildingStorey
+ * const storey = storeyViewsPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"]; // ID of the IfcBuildingStorey
  *
  * const modelId  = storey.modelId;  // "myModel"
  * const storeyId = storey.storeyId; // "2SWZMQPyD9pfT9q87pgXa1"
@@ -93,28 +93,28 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * Showing the {@link Entity}s within a storey:
  *
  * ````javascript
- * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1");
+ * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1");
  * ````
  *
  * Showing **only** the Entitys in a storey, hiding all others:
  *
  * ````javascript
- * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+ * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
  *     hideOthers: true
  * });
  * ````
- * Showing only the storey Entitys, applying custom appearances configured on {@link StoreyPlansPlugin#objectStates}:
+ * Showing only the storey Entitys, applying custom appearances configured on {@link StoreyViewsPlugin#objectStates}:
  *
  * ````javascript
- * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+ * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
  *     hideOthers: true,
  *     useObjectStates: true
  * });
  * ````
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/showStoreyObjects.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_showStoreyObjects)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects)]
  *
  * When using this option, at some point later you'll probably want to restore all Entitys to their original visibilities and
  * appearances.
@@ -131,7 +131,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * // Show storey view Entitys, with custom appearances as configured for IFC types
  *
- * storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+ * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
  *     useObjectStates: true // <<--------- Apply custom appearances
  * });
  *
@@ -143,17 +143,17 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * ## Arranging the Camera for Storey Plan Views
  *
- * The {@link StoreyPlansPlugin#gotoStoreyCamera} method positions the {@link Camera} for a plan view of
+ * The {@link StoreyViewsPlugin#gotoStoreyCamera} method positions the {@link Camera} for a plan view of
  * the {@link Entity}s within the given storey.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/gotoStoreyCamera.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_gotoStoreyCamera)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera)]
  *
  * Let's fly the {@link Camera} to a downward-looking orthographic view of the Entitys within our storey.
  *
  * ````javascript
- * storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
+ * storeyViewsPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
  *     projection: "ortho", // Orthographic projection
  *     duration: 2.5,       // 2.5 second transition
  *     done: () => {
@@ -178,7 +178,7 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * // Position camera for a downward-looking orthographic view of our storey
  *
- * storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
+ * storeyViewsPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
  *     projection: "ortho",
  *     duration: 2.5,
  *     done: () => {
@@ -192,79 +192,79 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * cameraMemento.restoreCamera(viewer.scene);
  * ````
  *
- * ## Creating 2D Storey Plan Images
+ * ## Creating StoreyMaps
  *
- * The {@link StoreyPlansPlugin#createStoreyImage} method creates a 2D orthographic plan image of the given storey.
+ * The {@link StoreyViewsPlugin#createStoreyMap} method creates a 2D orthographic plan image of the given storey.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_createStoreyImage"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/createStoreyImage.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_createStoreyImage)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap)]
  *
- * This method creates a {@link StoreyImage}, which provides the plan image as a Base64-encoded string.
+ * This method creates a {@link StoreyMap}, which provides the plan image as a Base64-encoded string.
  *
  * Let's create a 2D plan image of our building storey:
  *
  * ````javascript
- * const storeyImage = storeyPlansPlugin.createStoreyImage("2SWZMQPyD9pfT9q87pgXa1", {
+ * const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
  *     width: 300,
  *     format: "png"
  * });
  *
- * const imageData = storeyImage.imageData; // Base64-encoded image data string
- * const width     = storeyImage.width; // 300
- * const height    = storeyImage.height; // Automatically derived from width
- * const format    = storeyImage.format; // "png"
+ * const imageData = storeyMap.imageData; // Base64-encoded image data string
+ * const width     = storeyMap.width; // 300
+ * const height    = storeyMap.height; // Automatically derived from width
+ * const format    = storeyMap.format; // "png"
  * ````
  *
  * As with ````showStoreyEntitys````,  We also have the option to customize the appearance of the Entitys in our plan
- * images according to their IFC types, using the lookup table configured on {@link StoreyPlansPlugin#objectStates}.
+ * images according to their IFC types, using the lookup table configured on {@link StoreyViewsPlugin#objectStates}.
  *
  * For example, we usually want to show only element types like ````IfcWall````,  ````IfcDoor```` and
  * ````IfcFloor```` in our plan images.
  *
- * Let's create another StoreyImage, this time applying the custom appearances:
+ * Let's create another StoreyMap, this time applying the custom appearances:
  *
  * ````javascript
- * const storeyImage = storeyPlansPlugin.createStoreyImage("2SWZMQPyD9pfT9q87pgXa1", {
+ * const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
  *     width: 300,
  *     format: "png",
  *     useObjectStates: true // <<--------- Apply custom appearances
  * });
  *````
  *
- * ## Picking Entities in 2D Storey Plan Images
+ * ## Picking Entities in StoreyMaps
  *
- * We can use {@link StoreyPlansPlugin#pickStoreyImage} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyImage}'s 2D plan image.
+ * We can use {@link StoreyViewsPlugin#pickStoreyMap} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyMap}'s 2D plan image.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_pickStoreyImage"><img src="http://xeokit.io/img/docs/StoreyPlansPlugin/pickStoreyImage.gif"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/pickStoreyMap.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyPlansPlugin_pickStoreyImage)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap)]
  *
  * Let's programmatically pick the Entity at the given 2D pixel coordinates within our image:
  *
  * ````javascript
  * const mouseCoords = [65, 120]; // Mouse coords within the image extents
  *
- * const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, mouseCoords);
+ * const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, mouseCoords);
  *
  * if (pickResult && pickResult.entity) {
  *     pickResult.entity.highlighted = true;
  * }
  * ````
  */
-class StoreyPlansPlugin extends Plugin {
+class StoreyViewsPlugin extends Plugin {
 
     /**
      * @constructor
      *
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
-     * @param {String} [cfg.id="PlanViews"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {String} [cfg.id="StoreyViews"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Object} [cfg.objectStates] Map of visual states for the {@link Entity}s as rendered within each {@link Storey}.  Default value is {@link IFCStoreyPlanObjectStates}.
      */
     constructor(viewer, cfg = {}) {
 
-        super("PlanViews", viewer);
+        super("StoreyViews", viewer);
 
         this._objectsMemento = new ObjectsMemento();
         this._cameraMemento = new CameraMemento();
@@ -385,9 +385,9 @@ class StoreyPlansPlugin extends Plugin {
      *
      * See also: {@link CameraMemento}, which saves and restores the state of the {@link Scene}'s {@link Camera}
      *
-     * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
+     * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for arranging the Camera.
-     * @param {String} [options.projection] Projection type to transition the Camera to - "perspective" or "ortho".
+     * @param {String} [options.projection] Projection type to transition the Camera to. Accepted values are "perspective" and "ortho".
      * @param {Function} [options.done] Callback to fire when the Camera has arrived. When provided, causes an animated flight to the saved state. Otherwise jumps to the saved state.
      */
     gotoStoreyCamera(storeyId, options = {}) {
@@ -464,15 +464,15 @@ class StoreyPlansPlugin extends Plugin {
      * Optionally hides all other Entitys.
      *
      * Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
-     * IFC types in plan views is configured by {@link StoreyPlansPlugin#objectStates}.
+     * IFC types in plan views is configured by {@link StoreyViewsPlugin#objectStates}.
      *
      * See also: {@link ObjectsMemento}, which saves and restores a memento of the visual state
      * of the {@link Entity}'s that represent objects within a {@link Scene}.
      *
-     * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
+     * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for showing the Entitys within the storey.
      * @param {Boolean} [options.hideOthers=false] When ````true````, hide all other {@link Entity}s.
-     * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyPlansPlugin#objectStates}.
+     * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyViewsPlugin#objectStates}.
      */
     showStoreyObjects(storeyId, options = {}) {
 
@@ -530,14 +530,14 @@ class StoreyPlansPlugin extends Plugin {
      * an {@link Entity} when one exists for the given {@link MetaObject}.
      * 
      * ````JavaScript
-     * myStoreyPlansPlugin.withStoreyObjects(storeyId, (entity, metaObject) => {
+     * myStoreyViewsPlugin.withStoreyObjects(storeyId, (entity, metaObject) => {
      *      if (entity && metaObject && metaObject.type === "IfcSpace") {
      *          entity.visible = true;
      *      }
      * });
      * ````
      * 
-     * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
+     * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {Function} callback The callback.
      */
     withStoreyObjects(storeyId, callback) {
@@ -560,15 +560,15 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Creates a 2D plan image of the given storey.
+     * Creates a 2D map of the given storey.
      *
-     * @param {String} storeyId ID of the ````IfcbuildingStorey```` object.
+     * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for creating the image.
-     * @param {Number[]} [options.width=300] Image width in pixels. Height will be automatically determined.
-     * @param {String} [options.format="png"] Image format. Allowed values are "png" and "jpeg".
-     * @returns {StoreyImage} Represents the 2D storey plan image.
+     * @param {Number} [options.width=300] Image width in pixels. Height will be automatically determined.
+     * @param {String} [options.format="png"] Image format. Accepted values are "png" and "jpeg".
+     * @returns {StoreyMap} The StoreyMap.
      */
-    createStoreyImage(storeyId, options = {}) {
+    createStoreyMap(storeyId, options = {}) {
 
         const storey = this.storeys[storeyId];
         if (!storey) {
@@ -593,7 +593,7 @@ class StoreyPlansPlugin extends Plugin {
             hideOthers: true
         }));
 
-        this._arrangeImageCamera();
+        this._arrangeStoreyMapCamera();
 
         scene.render(true); // Force-render a frame
 
@@ -606,10 +606,10 @@ class StoreyPlansPlugin extends Plugin {
         this._objectsMemento.restoreObjects(scene);
         this._cameraMemento.restoreCamera(scene);
 
-        return new StoreyImage(storeyId, src, format, width, height, padding);
+        return new StoreyMap(storeyId, src, format, width, height, padding);
     }
 
-    _arrangeImageCamera() {
+    _arrangeStoreyMapCamera() {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
@@ -636,17 +636,17 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Attempts to pick an {@link Entity} at the given pixel coordinates within a 2D storey plan image.
+     * Attempts to pick an {@link Entity} at the given pixel coordinates within a StoreyMap image.
      *
-     * @param {StoreyImage} storeyImage The 2D storey plan image.
-     * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link StoreyImage#imageData}.
+     * @param {StoreyMap} storeyMap The StoreyMap.
+     * @param {Number[]} imagePos 2D pixel coordinates within the bounds of {@link StoreyMap#imageData}.
      * @param {*} [options] Picking options.
      * @param {Boolean} [options.pickSurface=false] Whether to return the picked position on the surface of the Entity.
      * @returns {PickResult} The pick result, if an Entity was successfully picked, else null.
      */
-    pickStoreyImage(storeyImage, imagePos, options={}) {
+    pickStoreyMap(storeyMap, imagePos, options={}) {
 
-        const storeyId = storeyImage.storeyId;
+        const storeyId = storeyMap.storeyId;
         const storey = this.storeys[storeyId];
 
         if (!storey) {
@@ -654,8 +654,8 @@ class StoreyPlansPlugin extends Plugin {
             return null
         }
 
-        const normX = 1.0 - (imagePos[0] / storeyImage.width);
-        const normZ = 1.0 - (imagePos[1] / storeyImage.height);
+        const normX = 1.0 - (imagePos[0] / storeyMap.width);
+        const normZ = 1.0 - (imagePos[1] / storeyMap.height);
 
         const aabb = storey.aabb;
 
@@ -694,7 +694,7 @@ class StoreyPlansPlugin extends Plugin {
     }
 
     /**
-     * Destroys this StoreyPlansPlugin.
+     * Destroys this StoreyViewsPlugin.
      */
     destroy() {
         this.viewer.scene.off(this._onModelLoaded);
@@ -702,4 +702,4 @@ class StoreyPlansPlugin extends Plugin {
     }
 }
 
-export {StoreyPlansPlugin}
+export {StoreyViewsPlugin}

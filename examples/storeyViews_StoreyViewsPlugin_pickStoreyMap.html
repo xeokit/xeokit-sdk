@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit StoreyPlansPlugin createStoreyImage()</title>
+    <title>xeokit StoreyViewsPlugin createStoreyMap()</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -16,7 +16,7 @@
            max-width: 410px;
         }
 
-        #storeyImage {
+        #storeyMap {
             margin-top: 20px;
             overflow-y: hidden;
             height: auto;
@@ -60,16 +60,16 @@
 <div id="planPointer">T</div>
 
 <div id="info">
-    <h1>StoreyPlansPlugin pickStoreyImage()</h1>
+    <h1>StoreyViewsPlugin pickStoreyMap()</h1>
 
     <br>
     <p>Click anywhere in the 2D plan to go there in the 3D view.</p>
-    <div id="storeyImage"></div>
+    <div id="storeyMap"></div>
 
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>
+               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
             - Provides tools for visualizing IfcBuildingStoreys
         </li>
         <li>
@@ -89,7 +89,7 @@
 <script type="module">
 
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {StoreyPlansPlugin} from "../src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
+    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
     import {math} from "../src/viewer/scene/math/math.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
@@ -129,26 +129,26 @@
         cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
     });
 
-    const storeyPlansPlugin = new StoreyPlansPlugin(viewer);
+    const storeyViewsPlugin = new StoreyViewsPlugin(viewer);
 
     model.on("loaded",  () =>{
 
         // Make all doors transparent
         viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
         
-        const storeyImage = storeyPlansPlugin.createStoreyImage("2SWZMQPyD9pfT9q87pgXa1", {
+        const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
             format: "png",
             width: 400,
             useObjectStates: true
         });
 
         const img = document.createElement("img");
-        img.src = storeyImage.imageData;
-        img.style.width = storeyImage.width + "px";
-        img.style.height = storeyImage.height + "px";
+        img.src = storeyMap.imageData;
+        img.style.width = storeyMap.width + "px";
+        img.style.height = storeyMap.height + "px";
 
-        const storeyImageDiv = document.getElementById("storeyImage");
-        storeyImageDiv.appendChild(img);
+        const storeyMapDiv = document.getElementById("storeyMap");
+        storeyMapDiv.appendChild(img);
 
         const pointer = document.createElement("div");
         pointer.id = "planPointer";
@@ -187,7 +187,7 @@
             pointer.style.visibility = "hidden";
 
             const imagePos = [e.offsetX, e.offsetY];
-            const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {});
+            const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {});
 
             if (pickResult) {
                 const entity = pickResult.entity;
@@ -210,7 +210,7 @@
 
             const imagePos = [e.offsetX, e.offsetY];
 
-            const pickResult = storeyPlansPlugin.pickStoreyImage(storeyImage, imagePos, {
+            const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {
                 pickSurface: true
             });
 

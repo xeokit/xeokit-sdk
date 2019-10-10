@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit StoreyPlansPlugin gotoStoreyCamera()</title>
+    <title>xeokit StoreyViewsPlugin gotoStoreyCamera()</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -24,7 +24,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div id="info">
-    <h1>StoreyPlansPlugin gotoStoreyCamera() and showStoreyObjects()</h1>
+    <h1>StoreyViewsPlugin gotoStoreyCamera() and showStoreyObjects()</h1>
 
     <br>
     <p>Positioning the camera for an orthographic plan view, while showing only the objects within a given IfcBuildingStorey.</p>
@@ -32,7 +32,7 @@
     <ul>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html">StoreyPlansPlugin</a>
+               href="./../docs/class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a>
             - Provides tools for visualizing IfcBuildingStoreys
         </li>
         <li>
@@ -51,9 +51,17 @@
 
 <script type="module">
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
     import {Viewer} from "../src/viewer/Viewer.js";
-    import {StoreyPlansPlugin} from "../src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js";
+    import {StoreyViewsPlugin} from "../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the Camera
+    //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -69,6 +77,10 @@
 
     viewer.cameraControl.panToPointer = true;
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Add an XKTLoaderPlugin and load a model
+    //------------------------------------------------------------------------------------------------------------------
+
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     const model = xktLoader.load({
@@ -78,23 +90,32 @@
         edges: true
     });
 
-    const storeyPlansPlugin = new StoreyPlansPlugin(viewer);
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a StoreyViewsPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    const storeyViewsPlugin = new StoreyViewsPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When the model has loaded, create a StoreyMap, show the objects within a given IfcBuildingStorey,
+    // arrange the camera for a 2D orthographic plan view of the objects
+    //------------------------------------------------------------------------------------------------------------------
 
     model.on("loaded",  () =>{
 
         setTimeout(() => {
 
-            storeyPlansPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
+            storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
                 hideOthers: true,
                 useObjectStates: false
             });
 
-            storeyPlansPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
+            storeyViewsPlugin.gotoStoreyCamera("2SWZMQPyD9pfT9q87pgXa1", {
                 projection: "ortho", // Orthographic projection
                 duration: 2.5,       // 2.5 second transition
                 done: () => {
 
-                    viewer.cameraControl.planView = true; // Disable rotation
+                    viewer.cameraControl.planView = true; // Disable camera rotation
                 }
             });
 

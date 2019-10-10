@@ -1,5 +1,5 @@
 /**
- * @desc Property states for {@link Entity}s in {@link Storey}s capture by a {@link StoreyPlansPlugin}.
+ * @desc Property states for {@link Entity}s in {@link Storey}s capture by a {@link StoreyViewsPlugin}.
  *
  * @type {{String:Object}}
  */

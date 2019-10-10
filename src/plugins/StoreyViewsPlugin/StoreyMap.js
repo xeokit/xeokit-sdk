@@ -1,9 +1,9 @@
 /**
  * @desc A 2D plan view image of an ````IfcBuildingStorey````.
  *
- * These are created by a {@link StoreyPlansPlugin}.
+ * These are created by a {@link StoreyViewsPlugin}.
  */
-class StoreyImage {
+class StoreyMap {
 
     /**
      * @private
@@ -54,4 +54,4 @@ class StoreyImage {
     }
 }
 
-export {StoreyImage};
+export {StoreyMap};

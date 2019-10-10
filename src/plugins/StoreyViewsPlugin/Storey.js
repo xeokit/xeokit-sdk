@@ -1,7 +1,7 @@
 /**
  * @desc Information about an ````IfcBuildingStorey````.
  *
- * These are provided by a {@link StoreyPlansPlugin}.
+ * These are provided by a {@link StoreyViewsPlugin}.
  */
 class Storey {
 
@@ -11,10 +11,10 @@ class Storey {
     constructor(plugin, aabb, modelId, storeyId) {
 
         /**
-         * The {@link StoreyPlansPlugin} this Storey belongs to.
+         * The {@link StoreyViewsPlugin} this Storey belongs to.
          *
          * @property plugin
-         * @type {StoreyPlansPlugin}
+         * @type {StoreyViewsPlugin}
          */
         this.plugin = plugin;
 
