@@ -156,8 +156,8 @@
   
   
   <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides methods for visualizing IfcBuildingStoreys.</p>
-<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_recipe2">Run this example</a>]</p>
+<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><p>StoreyViewsPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.</p>
 <p>Use the first two methods to set up 3D views of storeys:</p>
 <ul>
@@ -225,8 +225,8 @@ const aabb     = storey.aabb;     // Axis-aligned 3D World-space boundary of the
     useObjectStates: true
 });</code>
 </code></pre>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_showStoreyObjects">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects">Run this example</a>]</p>
 <p>When using this option, at some point later you&apos;ll probably want to restore all Entitys to their original visibilities and
 appearances.</p>
 <p>To do that, save their visibility and appearance states in an <span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span> beforehand, from
@@ -250,8 +250,8 @@ objectsMemento.restoreObjects(viewer.scene);</code>
 </code></pre>
 <h2 id="arranging-the-camera-for-storey-plan-views">Arranging the Camera for Storey Plan Views</h2><p>The <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-gotoStoreyCamera">StoreyViewsPlugin#gotoStoreyCamera</a></span> method positions the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> for a plan view of
 the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within the given storey.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_gotoStoreyCamera">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera">Run this example</a>]</p>
 <p>Let&apos;s fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to a downward-looking orthographic view of the Entitys within our storey.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">storeyViewsPlugin.gotoStoreyCamera(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
     projection: &quot;ortho&quot;, // Orthographic projection
@@ -288,8 +288,8 @@ storeyViewsPlugin.gotoStoreyCamera(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
 cameraMemento.restoreCamera(viewer.scene);</code>
 </code></pre>
 <h2 id="creating-storeymaps">Creating StoreyMaps</h2><p>The <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-createStoreyMap">StoreyViewsPlugin#createStoreyMap</a></span> method creates a 2D orthographic plan image of the given storey.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_createStoreyMap">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap">Run this example</a>]</p>
 <p>This method creates a <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, which provides the plan image as a Base64-encoded string.</p>
 <p>Let&apos;s create a 2D plan image of our building storey:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const storeyMap = storeyViewsPlugin.createStoreyMap(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
@@ -314,8 +314,8 @@ images according to their IFC types, using the lookup table configured on <span>
 });</code>
 </code></pre>
 <h2 id="picking-entities-in-storeymaps">Picking Entities in StoreyMaps</h2><p>We can use <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap">StoreyViewsPlugin#pickStoreyMap</a></span> to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>&apos;s 2D plan image.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_pickStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/pickStoreyMap.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#planViews_StoreyViewsPlugin_pickStoreyMap">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/pickStoreyMap.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap">Run this example</a>]</p>
 <p>Let&apos;s programmatically pick the Entity at the given 2D pixel coordinates within our image:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const mouseCoords = [65, 120]; // Mouse coords within the image extents
 
