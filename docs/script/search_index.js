@@ -216,9 +216,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "xeokit-sdk/src/plugins/storeyplansplugin/ifcstoreyplanobjectstates.js~ifcstoreyplanobjectstates",
+    "xeokit-sdk/src/plugins/storeyviewsplugin/ifcstoreyplanobjectstates.js~ifcstoreyplanobjectstates",
     "variable/index.html#static-variable-IFCStoreyPlanObjectStates",
-    "<span>IFCStoreyPlanObjectStates</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyPlansPlugin/IFCStoreyPlanObjectStates.js</span>",
+    "<span>IFCStoreyPlanObjectStates</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js</span>",
     "variable"
   ],
   [
@@ -462,21 +462,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "xeokit-sdk/src/plugins/storeyplansplugin/storey.js~storey",
-    "class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html",
-    "<span>Storey</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyPlansPlugin/Storey.js</span>",
+    "xeokit-sdk/src/plugins/storeyviewsplugin/storey.js~storey",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html",
+    "<span>Storey</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyViewsPlugin/Storey.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/src/plugins/storeyplansplugin/storeyimage.js~storeyimage",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html",
-    "<span>StoreyImage</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyPlansPlugin/StoreyImage.js</span>",
+    "xeokit-sdk/src/plugins/storeyviewsplugin/storeymap.js~storeymap",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html",
+    "<span>StoreyMap</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyMap.js</span>",
     "class"
   ],
   [
-    "xeokit-sdk/src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html",
-    "<span>StoreyPlansPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js</span>",
+    "xeokit-sdk/src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html",
+    "<span>StoreyViewsPlugin</span> <span class=\"search-result-import-path\">xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</span>",
     "class"
   ],
   [
@@ -2508,147 +2508,147 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/ifcstoreyplanobjectstates.js",
-    "file/src/plugins/StoreyPlansPlugin/IFCStoreyPlanObjectStates.js.html",
-    "src/plugins/StoreyPlansPlugin/IFCStoreyPlanObjectStates.js",
+    "src/plugins/storeyviewsplugin/ifcstoreyplanobjectstates.js",
+    "file/src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js.html",
+    "src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js",
     "file"
   ],
   [
-    "src/plugins/storeyplansplugin/storey.js",
-    "file/src/plugins/StoreyPlansPlugin/Storey.js.html",
-    "src/plugins/StoreyPlansPlugin/Storey.js",
+    "src/plugins/storeyviewsplugin/storey.js",
+    "file/src/plugins/StoreyViewsPlugin/Storey.js.html",
+    "src/plugins/StoreyViewsPlugin/Storey.js",
     "file"
   ],
   [
-    "src/plugins/storeyplansplugin/storey.js~storey#aabb",
-    "class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html#instance-member-aabb",
-    "src/plugins/StoreyPlansPlugin/Storey.js~Storey#aabb",
+    "src/plugins/storeyviewsplugin/storey.js~storey#aabb",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-aabb",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#aabb",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storey.js~storey#modelid",
-    "class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html#instance-member-modelId",
-    "src/plugins/StoreyPlansPlugin/Storey.js~Storey#modelId",
+    "src/plugins/storeyviewsplugin/storey.js~storey#modelid",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-modelId",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#modelId",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storey.js~storey#plugin",
-    "class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html#instance-member-plugin",
-    "src/plugins/StoreyPlansPlugin/Storey.js~Storey#plugin",
+    "src/plugins/storeyviewsplugin/storey.js~storey#plugin",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-plugin",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#plugin",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storey.js~storey#storeyid",
-    "class/src/plugins/StoreyPlansPlugin/Storey.js~Storey.html#instance-member-storeyId",
-    "src/plugins/StoreyPlansPlugin/Storey.js~Storey#storeyId",
+    "src/plugins/storeyviewsplugin/storey.js~storey#storeyid",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-storeyId",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#storeyId",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js",
-    "file/src/plugins/StoreyPlansPlugin/StoreyImage.js.html",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js",
+    "src/plugins/storeyviewsplugin/storeymap.js",
+    "file/src/plugins/StoreyViewsPlugin/StoreyMap.js.html",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js",
     "file"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js~storeyimage#format",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html#instance-member-format",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage#format",
+    "src/plugins/storeyviewsplugin/storeymap.js~storeymap#format",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-format",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap#format",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js~storeyimage#height",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html#instance-member-height",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage#height",
+    "src/plugins/storeyviewsplugin/storeymap.js~storeymap#height",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-height",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap#height",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js~storeyimage#imagedata",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html#instance-member-imageData",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage#imageData",
+    "src/plugins/storeyviewsplugin/storeymap.js~storeymap#imagedata",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-imageData",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap#imageData",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js~storeyimage#storeyid",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html#instance-member-storeyId",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage#storeyId",
+    "src/plugins/storeyviewsplugin/storeymap.js~storeymap#storeyid",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-storeyId",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap#storeyId",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyimage.js~storeyimage#width",
-    "class/src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage.html#instance-member-width",
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js~StoreyImage#width",
+    "src/plugins/storeyviewsplugin/storeymap.js~storeymap#width",
+    "class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-width",
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap#width",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js",
-    "file/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js.html",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js",
+    "file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js",
     "file"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#constructor",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-constructor-constructor",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#constructor",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#constructor",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-constructor-constructor",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#constructor",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#createstoreyimage",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-createStoreyImage",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#createStoreyImage",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#createstoreymap",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-createStoreyMap",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#createStoreyMap",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#destroy",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-destroy",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#destroy",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#destroy",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-destroy",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#destroy",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#gotostoreycamera",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-gotoStoreyCamera",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#gotoStoreyCamera",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#gotostoreycamera",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-gotoStoreyCamera",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#gotoStoreyCamera",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#modelstoreys",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-member-modelStoreys",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#modelStoreys",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#modelstoreys",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-member-modelStoreys",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#modelStoreys",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#objectstates",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-set-objectStates",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#objectStates",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#objectstates",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-get-objectStates",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#objectStates",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#pickstoreyimage",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-pickStoreyImage",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#pickStoreyImage",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#pickstoreymap",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#pickStoreyMap",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#showstoreyobjects",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-showStoreyObjects",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#showStoreyObjects",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#showstoreyobjects",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-showStoreyObjects",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#showStoreyObjects",
     "method"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#storeys",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-member-storeys",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#storeys",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#storeys",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-member-storeys",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#storeys",
     "member"
   ],
   [
-    "src/plugins/storeyplansplugin/storeyplansplugin.js~storeyplansplugin#withstoreyobjects",
-    "class/src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin.html#instance-method-withStoreyObjects",
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js~StoreyPlansPlugin#withStoreyObjects",
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#withstoreyobjects",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-withStoreyObjects",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#withStoreyObjects",
     "method"
   ],
   [

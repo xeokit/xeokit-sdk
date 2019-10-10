@@ -704,22 +704,22 @@
         63
       ]
     },
-    "src/plugins/StoreyPlansPlugin/IFCStoreyPlanObjectStates.js": {
+    "src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/plugins/StoreyPlansPlugin/Storey.js": {
+    "src/plugins/StoreyViewsPlugin/Storey.js": {
       "expectCount": 6,
       "actualCount": 6,
       "undocumentLines": []
     },
-    "src/plugins/StoreyPlansPlugin/StoreyImage.js": {
+    "src/plugins/StoreyViewsPlugin/StoreyMap.js": {
       "expectCount": 7,
       "actualCount": 7,
       "undocumentLines": []
     },
-    "src/plugins/StoreyPlansPlugin/StoreyPlansPlugin.js": {
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js": {
       "expectCount": 22,
       "actualCount": 12,
       "undocumentLines": [
