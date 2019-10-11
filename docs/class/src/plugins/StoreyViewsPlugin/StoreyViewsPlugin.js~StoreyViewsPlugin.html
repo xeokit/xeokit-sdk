@@ -45,9 +45,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
@@ -314,8 +311,8 @@ images according to their IFC types, using the lookup table configured on <span>
 });</code>
 </code></pre>
 <h2 id="picking-entities-in-storeymaps">Picking Entities in StoreyMaps</h2><p>We can use <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap">StoreyViewsPlugin#pickStoreyMap</a></span> to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>&apos;s 2D plan image.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/pickStoreyMap.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2">Run this example</a>]</p>
 <p>Let&apos;s programmatically pick the Entity at the given 2D pixel coordinates within our image:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const mouseCoords = [65, 120]; // Mouse coords within the image extents
 
@@ -573,6 +570,35 @@ if (pickResult &amp;&amp; pickResult.entity) {
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-getStoreyContainingWorldPos">getStoreyContainingWorldPos</a></span></span><span class="code" data-ice="signature">(worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the ID of the storey that contains the given 3D World-space position.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-gotoStoreyCamera">gotoStoreyCamera</a></span></span><span class="code" data-ice="signature">(storeyId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, options: <span>*</span>)</span>
         </p>
       </div>
@@ -667,6 +693,64 @@ if (pickResult &amp;&amp; pickResult.entity) {
         
         
         <div data-ice="description"><p>Executes a callback on each of the objects within the given storey.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldDirToStoreyMap">worldDirToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, worldDir: <span>*</span>, imageDir: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldPosToStoreyMap">worldPosToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Converts a 3D World-space position to a 2D position within a StoreyMap image.</p>
 </div>
       </div>
     </td>
@@ -1302,7 +1386,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber699">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber780">source</a></span></span>
     </span>
   </h3>
 
@@ -1318,6 +1402,81 @@ if (pickResult &amp;&amp; pickResult.entity) {
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getStoreyContainingWorldPos">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getStoreyContainingWorldPos</span><span class="code" data-ice="signature">(worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber702">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the ID of the storey that contains the given 3D World-space position.
+.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">worldPos</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>3D World-space position.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>ID of the storey containing the position, or null if the position falls outside all the storeys.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1663,6 +1822,166 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-worldDirToStoreyMap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">worldDirToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, worldDir: <span>*</span>, imageDir: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber773">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">storeyMap</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">worldDir</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">imageDir</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-worldPosToStoreyMap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">worldPosToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber721">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Converts a 3D World-space position to a 2D position within a StoreyMap image.</p>
+<p>Use <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap">StoreyViewsPlugin#pickStoreyMap</a></span> to convert 2D image positions to 3D world-space.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">storeyMap</td>
+      <td data-ice="type" class="code"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The StoreyMap.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">worldPos</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>3D World-space position within the storey.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">imagePos</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>2D pixel position within the bounds of <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-imageData">StoreyMap#imageData</a></span>.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

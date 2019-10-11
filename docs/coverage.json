@@ -1,7 +1,7 @@
 {
-  "coverage": "49.68%",
-  "expectCount": 3508,
-  "actualCount": 1743,
+  "coverage": "49.62%",
+  "expectCount": 3476,
+  "actualCount": 1725,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -577,36 +577,6 @@
       "actualCount": 5,
       "undocumentLines": []
     },
-    "src/plugins/PlanViewsPlugin/IFCPlanViewObjectStates.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/PlanViewsPlugin/PlanView.js": {
-      "expectCount": 6,
-      "actualCount": 6,
-      "undocumentLines": []
-    },
-    "src/plugins/PlanViewsPlugin/PlanViewsPlugin.js": {
-      "expectCount": 28,
-      "actualCount": 14,
-      "undocumentLines": [
-        7,
-        126,
-        133,
-        139,
-        155,
-        156,
-        176,
-        197,
-        218,
-        240,
-        253,
-        262,
-        416,
-        434
-      ]
-    },
     "src/plugins/STLLoaderPlugin/STLLoader.js": {
       "expectCount": 4,
       "actualCount": 1,
@@ -720,8 +690,8 @@
       "undocumentLines": []
     },
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js": {
-      "expectCount": 22,
-      "actualCount": 12,
+      "expectCount": 25,
+      "actualCount": 15,
       "undocumentLines": [
         10,
         11,

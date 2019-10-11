@@ -45,9 +45,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-planviewsplugin">plugins/PlanViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanView.js~PlanView.html">PlanView</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/PlanViewsPlugin/PlanViewsPlugin.js~PlanViewsPlugin.html">PlanViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCPlanViewObjectStates">IFCPlanViewObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
@@ -367,9 +364,9 @@ const EMPTY_IMAGE = &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB
  *
  * We can use {@link StoreyViewsPlugin#pickStoreyMap} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyMap}&apos;s 2D plan image.
  *
- * &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/StoreyViewsPlugin/pickStoreyMap.gif&quot;&gt;&lt;/a&gt;
+ * &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif&quot;&gt;&lt;/a&gt;
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_pickStoreyMap)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *
  * Let&apos;s programmatically pick the Entity at the given 2D pixel coordinates within our image:
  *
@@ -822,6 +819,87 @@ class StoreyViewsPlugin extends Plugin {
         }
 
         return pickResult;
+    }
+
+    /**
+     * Gets the ID of the storey that contains the given 3D World-space position.
+     *.
+     * @param {Number[]} worldPos 3D World-space position.
+     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
+     */
+    getStoreyContainingWorldPos(worldPos) {
+        for (var storeyId in this.storeys) {
+            const storey = this.storeys[storeyId];
+            if (math.point3AABB3Intersect(storey.aabb, worldPos)) {
+                return storeyId;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Converts a 3D World-space position to a 2D position within a StoreyMap image.
+     *
+     * Use {@link StoreyViewsPlugin#pickStoreyMap} to convert 2D image positions to 3D world-space.
+     *
+     * @param {StoreyMap} storeyMap The StoreyMap.
+     * @param {Number[]} worldPos 3D World-space position within the storey.
+     * @param {Number[]} imagePos 2D pixel position within the bounds of {@link StoreyMap#imageData}.
+     */
+    worldPosToStoreyMap(storeyMap, worldPos, imagePos) {
+
+        const storeyId = storeyMap.storeyId;
+        const storey = this.storeys[storeyId];
+
+        if (!storey) {
+            this.error(&quot;IfcBuildingStorey not found with this ID: &quot; + storeyId);
+            return null
+        }
+
+        const aabb = storey.aabb;
+
+        const xmin = aabb[0];
+        const ymin = aabb[1];
+        const zmin = aabb[2];
+        const xmax = aabb[3];
+        const ymax = aabb[4];
+        const zmax = aabb[5];
+
+        const xwidth = xmax - xmin;
+        const ywidth = ymax - ymin;
+        const zwidth = zmax - zmin;
+
+        const ratioX = (imagePos[0] / storeyMap.width);
+        const ratioY = (imagePos[1] / storeyMap.height);
+
+
+        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
+        const direction = math.vec3([0, -1, 0]);
+        const look = math.addVec3(origin, direction, tempVec3a);
+        const worldForward = this.viewer.camera.worldForward;
+        const matrix = math.lookAtMat4v(origin, look, worldForward, tempMat4);
+    }
+
+    // /**
+    //  * Converts 2D position within a StoreyMap image to a 3D World-space position.
+    //  *
+    //  * @param {StoreyMap} storeyMap The StoreyMap.
+    //  * @param {Number[]} imagePos 2D pixel position within the bounds of {@link StoreyMap#imageData}.
+    //  * @param {Number[]} worldPos 3D World-space position within the storey.
+    //  */
+    // storeyMapToWorldPos(storeyMap, imagePos, worldPos) {
+    //
+    // }
+
+    /**
+     * Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.
+     *
+     * @param storeyMap
+     * @param worldDir
+     * @param imageDir
+     */
+    worldDirToStoreyMap(storeyMap, worldDir, imageDir) {
+
     }
 
     /**
