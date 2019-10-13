@@ -450,6 +450,7 @@ class NavCubePlugin extends Plugin {
                     var diag = math.getAABB3Diag(aabb);
                     math.getAABB3Center(aabb, center);
                     var dist = Math.abs(diag / Math.tan(55.0 / 2));
+                    viewer.cameraControl.pivotPos = center;
                     if (self._cameraFly) {
                         viewer.cameraFlight.flyTo({
                             look: center,
