@@ -126,6 +126,10 @@ class CameraControl extends Component {
                 return pivoting;
             };
 
+            this.setPivotPos = function (worldPos) {
+                pivotPoint.set(worldPos);
+            };
+
             this.getPivotPos = function () {
                 return pivotPoint;
             };
@@ -224,7 +228,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether clicking on an {@link Entity} and dragging will pivot the {@link Camera} about the picked point on the Entity's surface.
+     * Sets whether dragging will pivot the {@link Camera} about the current 3D pivot point.
+     *
+     * The pivot point is indicated by {@link CameraControl#pivotPos}.
+     *
+     * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
      *
      * Default value is ````false````.
      *
@@ -235,7 +243,11 @@ class CameraControl extends Component {
     }
 
     /**
-     * Gets whether clicking on an {@link Entity} and dragging will pivot the {@link Camera} about the picked point on the Entity's surface.
+     * Sets whether dragging will pivot the {@link Camera} about the current 3D pivot point.
+     *
+     * The pivot point is indicated by {@link CameraControl#pivotPos}.
+     *
+     * When in pivoting mode, clicking on an {@link Entity} will set {@link CameraControl#pivotPos} to the clicked position on the surface of the Entity.
      *
      * Default value is ````false````.
      *
@@ -243,6 +255,24 @@ class CameraControl extends Component {
      */
     get pivoting() {
         return this._pivoting;
+    }
+
+    /**
+     * Sets the current World-space 3D pivot position.
+     *
+     * @param {Number[]} worldPos The new World-space 3D pivot position.
+     */
+    set pivotPos(worldPos) {
+        this._pivoter.setPivotPos(worldPos);
+    }
+
+    /**
+     * Gets the current World-space 3D pivot position.
+     *
+     * @return {Number[]} worldPos The current World-space 3D pivot position.
+     */
+    get pivotPos() {
+        return this._pivoter.getPivotPos();
     }
 
     /**
