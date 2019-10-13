@@ -53,7 +53,9 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *
  *     cameraFly: true,       // Fly camera to each selected axis/diagonal
  *     cameraFitFOV: 45,      // How much field-of-view the scene takes once camera has fitted it to view
- *     cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+ *     cameraFlyDuration: 0.5,// How long (in seconds) camera takes to fly to each new axis/diagonal
+ *
+ *     fitVisible: false      // Fit whole scene, including invisible objects (default)
  * });
  *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -87,6 +89,8 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.topColor="#5555FF"] Custom color for the top face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.bottomColor="#5555FF"] Custom color for the bottom face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.hoverColor="rgba(0,0,0,0.4)"] Custom color for highlighting regions on the NavCube as we hover the pointer over them.
+     * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
+     * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
      */
     constructor(viewer, cfg = {}) {
 
@@ -442,7 +446,7 @@ class NavCubePlugin extends Plugin {
             var flyTo = (function () {
                 var center = math.vec3();
                 return function (dir, up, ok) {
-                    var aabb = viewer.scene.aabb;
+                    var aabb = self._fitVisible ? viewer.scene.getAABB(viewer.scene.visibleObjectIds) : viewer.scene.aabb;
                     var diag = math.getAABB3Diag(aabb);
                     math.getAABB3Center(aabb, center);
                     var dist = Math.abs(diag / Math.tan(55.0 / 2));
@@ -513,6 +517,31 @@ class NavCubePlugin extends Plugin {
             return false;
         }
         return this._cubeMesh.visible;
+    }
+
+
+    /**
+     * Sets whether the axis, corner and edge-aligned views will fit the
+     * view to the entire {@link Scene} or just to visible object-{@link Entity}s.
+     *
+     * Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
+     *
+     * @param {Boolean} fitVisible Set ````true```` to fit only visible object-Entitys.
+     */
+    setFitVisible(fitVisible =false) {
+        this._fitVisible = fitVisible;
+    }
+
+    /**
+     * Gets whether the axis, corner and edge-aligned views will fit the
+     * view to the entire {@link Scene} or just to visible object-{@link Entity}s.
+     *
+     * Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
+     *
+     * @return {Boolean} True when fitting only visible object-Entitys.
+     */
+    getFitVisible() {
+        return this._fitVisible;
     }
 
     /**
