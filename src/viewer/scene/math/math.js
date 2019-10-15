@@ -3794,6 +3794,10 @@ const math = {
         return aabb;
     },
 
+    point3AABB3Intersect(aabb, p) {
+        return aabb[0] > p[0] || aabb[3] < p[0] || aabb[1] > p[1] || aabb[4] < p[1] || aabb[2] > p[2] || aabb[5] < p[2];
+    },
+
     /**
      * Finds the minimum 2D projected axis-aligned boundary enclosing the given 3D points.
      *

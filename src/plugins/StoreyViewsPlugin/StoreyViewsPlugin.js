@@ -668,9 +668,9 @@ class StoreyViewsPlugin extends Plugin {
 
         const xwidth = xmax - xmin;
         const ywidth = ymax - ymin;
-        const zwidth = zmax - zmin;
+        const zWorldSize = zmax - zmin;
 
-        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
+        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zWorldSize * normZ)]);
         const direction = math.vec3([0, -1, 0]);
         const look = math.addVec3(origin, direction, tempVec3a);
         const worldForward = this.viewer.camera.worldForward;
@@ -716,7 +716,8 @@ class StoreyViewsPlugin extends Plugin {
      *
      * @param {StoreyMap} storeyMap The StoreyMap.
      * @param {Number[]} worldPos 3D World-space position within the storey.
-     * @param {Number[]} imagePos 2D pixel position within the bounds of {@link StoreyMap#imageData}.
+     * @param {Number[]} imagePos 2D pixel position within the {@link StoreyMap#imageData}.
+     * @returns {Boolean} True if ````imagePos```` is within the bounds of the {@link StoreyMap#imageData}, else ````false```` if it falls outside.
      */
     worldPosToStoreyMap(storeyMap, worldPos, imagePos) {
 
@@ -725,7 +726,7 @@ class StoreyViewsPlugin extends Plugin {
 
         if (!storey) {
             this.error("IfcBuildingStorey not found with this ID: " + storeyId);
-            return null
+            return false
         }
 
         const aabb = storey.aabb;
@@ -733,23 +734,29 @@ class StoreyViewsPlugin extends Plugin {
         const xmin = aabb[0];
         const ymin = aabb[1];
         const zmin = aabb[2];
+
         const xmax = aabb[3];
         const ymax = aabb[4];
         const zmax = aabb[5];
 
-        const xwidth = xmax - xmin;
-        const ywidth = ymax - ymin;
-        const zwidth = zmax - zmin;
+        const xWorldSize = xmax - xmin;
+        const yWorldSize = ymax - ymin;
+        const zWorldSize = zmax - zmin;
 
-        const ratioX = (imagePos[0] / storeyMap.width);
-        const ratioY = (imagePos[1] / storeyMap.height);
+        const camera = this.viewer.camera;
+        const worldUp = camera.worldUp;
 
+        const xUp = worldUp[0] > worldUp[1] && worldUp[0] > worldUp[2];
+        const yUp = !xUp && worldUp[1] > worldUp[0] && worldUp[1] > worldUp[2];
+        const zUp = !xUp && !yUp && worldUp[2] > worldUp[0] && worldUp[2] > worldUp[1];
 
-        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
-        const direction = math.vec3([0, -1, 0]);
-        const look = math.addVec3(origin, direction, tempVec3a);
-        const worldForward = this.viewer.camera.worldForward;
-        const matrix = math.lookAtMat4v(origin, look, worldForward, tempMat4);
+        const ratioX = (storeyMap.width / xWorldSize);
+        const ratioY = yUp ? (storeyMap.height / zWorldSize) : (storeyMap.height / yWorldSize); // Assuming either Y or Z is "up", but never X
+
+        imagePos[0] = Math.floor(storeyMap.width - ((worldPos[0] - xmin) * ratioX));
+        imagePos[1] = Math.floor(storeyMap.height - ((worldPos[2] - zmin) * ratioY));
+
+        return (imagePos[0] >= 0 && imagePos[0] < storeyMap.width && imagePos[1] >= 0 && imagePos[1] <= storeyMap.height);
     }
 
     // /**

@@ -33,6 +33,20 @@
             z-index: 200000;
         }
 
+        #planPointer {
+            color: #000000;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-image: url(images/standingPersonIcon.png);
+            background-repeat: no-repeat;
+            background-size: 25px 25px;
+        }
+
     </style>
 
 </head>
@@ -197,12 +211,18 @@
         };
 
         img.onmousemove = (e) => {
+
             img.style.cursor = "default";
+
             const imagePos = [e.offsetX, e.offsetY];
+
             const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {});
+
             if (pickResult) {
+
                 const entity = pickResult.entity;
                 const metaObject = viewer.metaScene.metaObjects[entity.id];
+
                 if (metaObject) {
                     if (canStandOnTypes[metaObject.type]) {
                         img.style.cursor = "pointer";
@@ -212,7 +232,6 @@
         };
 
         img.onmouseleave = (e) => {
-            pointer.style.visibility = "hidden";
             img.style.cursor = "default";
         };
 
@@ -226,7 +245,6 @@
             if (pickResult) {
                 worldPos.set(pickResult.worldPos);
                 worldPos[1] += 1.5;
-
                 viewer.cameraFlight.flyTo({
                     eye: worldPos,
                     up: viewer.camera.worldUp,
@@ -248,6 +266,60 @@
                 });
             }
         };
+
+        const imagePos = math.vec2();
+        const worldDir = math.vec3();
+        const imageDir = math.vec2();
+
+        const updatePointer = () => {
+            const eye = viewer.camera.eye;
+            const storeyId = storeyViewsPlugin.getStoreyContainingWorldPos(eye);
+            if (!storeyId) {
+                hidePointer();
+                return;
+            }
+            const inBounds = storeyViewsPlugin.worldPosToStoreyMap(storeyMap, eye, imagePos);
+            if (!inBounds) {
+                hidePointer();
+                return;
+            }
+            var offset = getPosition(img);
+            imagePos[0] += offset.x;
+            imagePos[1] += offset.y;
+            showPointer(imagePos, imageDir);
+        };
+
+        viewer.camera.on("viewMatrix", updatePointer);
+        viewer.scene.canvas.on("boundary", updatePointer);
+
+        function getPosition(el) {
+            var xPos = 0;
+            var yPos = 0;
+            while (el) {
+                if (el.tagName === "BODY") {      // deal with browser quirks with body/window/document and page scroll
+                    var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                    var yScroll = el.scrollTop || document.documentElement.scrollTop;
+                    xPos += (el.offsetLeft - xScroll + el.clientLeft);
+                    yPos += (el.offsetTop - yScroll + el.clientTop);
+                } else {
+                    // for all other non-BODY elements
+                    xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                    yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+                }
+                el = el.offsetParent;
+            }
+            return {x: xPos, y: yPos};
+        }
+
+        function hidePointer() {
+            pointer.style.visibility = "hidden";
+        }
+
+        function showPointer(imagePos, imageDir) {
+            pointer.style.left = imagePos[0] + "px";
+            pointer.style.top = imagePos[1] + "px";
+            pointer.style.visibility = "visible";
+        }
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -255,7 +327,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     var lastEntity = null;
-
     viewer.scene.input.on("mousemove", function (coords) {
         var hit = viewer.scene.pick({
             canvasPos: coords
