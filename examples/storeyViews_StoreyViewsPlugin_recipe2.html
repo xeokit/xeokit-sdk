@@ -40,11 +40,11 @@
             font-family: "monospace";
             font-weight: bold;
             position: absolute;
-            width: 25px;
-            height: 25px;
-            background-image: url(images/standingPersonIcon.png);
+            width: 60px;
+            height: 60px;
+            background-image: url(images/storeyMapCamera.png);
             background-repeat: no-repeat;
-            background-size: 25px 25px;
+            background-size: 60px 60px;
         }
 
     </style>
@@ -114,6 +114,7 @@
     viewer.camera.orbitPitch(20);
 
     viewer.cameraControl.panToPointer = true;
+    viewer.cameraControl.inertia = 0.75;
 
     viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
@@ -175,7 +176,7 @@
 
         const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
             format: "png",
-            width: 400,
+            width: 500,
             useObjectStates: true
         });
 
@@ -183,20 +184,23 @@
         img.src = storeyMap.imageData;
         img.style.width = storeyMap.width + "px";
         img.style.height = storeyMap.height + "px";
+        img.style.padding = "0";
+        img.style.margin = "0";
 
         const storeyMapDiv = document.getElementById("storeyMap");
         storeyMapDiv.appendChild(img);
 
         const pointer = document.createElement("div");
         pointer.id = "planPointer";
-        pointer.style.width = "25px";
-        pointer.style.height = "25px";
+        pointer.style.width = "60px";
+        pointer.style.height = "60px";
         pointer.style.position = "absolute";
         pointer.style["z-index"] = 100000;
         pointer.style.left = "0px";
         pointer.style.top = "0px";
         pointer.style.cursor = "none";
         pointer.style["pointer-events"] = "none";
+        pointer.style.transform = "rotate(0deg)";
         document.body.appendChild(pointer);
 
         const canStandOnTypes = {
@@ -286,6 +290,9 @@
             var offset = getPosition(img);
             imagePos[0] += offset.x;
             imagePos[1] += offset.y;
+
+            storeyViewsPlugin.worldDirToStoreyMap(storeyMap, worldDir, imageDir);
+
             showPointer(imagePos, imageDir);
         };
 
@@ -316,8 +323,14 @@
         }
 
         function showPointer(imagePos, imageDir) {
-            pointer.style.left = imagePos[0] + "px";
-            pointer.style.top = imagePos[1] + "px";
+
+
+            const angleRad = Math.atan2(imageDir[0], imageDir[1]);
+            const angleDeg = Math.floor(180 * angleRad / Math.PI);
+
+            pointer.style.left = (imagePos[0] - 30) + "px";
+            pointer.style.top = (imagePos[1] - 30) + "px";
+            pointer.style.transform = "rotate(" + -(angleDeg - 45) + "deg)";
             pointer.style.visibility = "visible";
         }
     });
@@ -326,26 +339,26 @@
     // Mouse over entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
-    var lastEntity = null;
-    viewer.scene.input.on("mousemove", function (coords) {
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-        if (hit) {
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
+    // var lastEntity = null;
+    // viewer.scene.input.on("mousemove", function (coords) {
+    //     var hit = viewer.scene.pick({
+    //         canvasPos: coords
+    //     });
+    //     if (hit) {
+    //         if (!lastEntity || hit.entity.id !== lastEntity.id) {
+    //             if (lastEntity) {
+    //                 lastEntity.highlighted = false;
+    //             }
+    //             lastEntity = hit.entity;
+    //             hit.entity.highlighted = true;
+    //         }
+    //     } else {
+    //         if (lastEntity) {
+    //             lastEntity.highlighted = false;
+    //             lastEntity = null;
+    //         }
+    //     }
+    // });
 
     window.viewer = viewer;
 
