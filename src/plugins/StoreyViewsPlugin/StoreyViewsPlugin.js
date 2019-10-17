@@ -595,7 +595,7 @@ class StoreyViewsPlugin extends Plugin {
 
         this._arrangeStoreyMapCamera();
 
-        scene.render(true); // Force-render a frame
+        //scene.render(true); // Force-render a frame
 
         const src = viewer.getSnapshot({
             width: width,
@@ -622,15 +622,15 @@ class StoreyViewsPlugin extends Plugin {
         eye[2] = look[2] + (camera.worldUp[2] * sca);
         const up = camera.worldForward;
         viewer.cameraFlight.jumpTo({eye: eye, look: look, up: up});
-        const xsize = aabb[3] - aabb[0];
-        const ysize = aabb[4] - aabb[1];
-        const zsize = aabb[5] - aabb[2];
-        const xmin = (xsize * -0.5);
-        const xmax = (xsize * +0.5);
-        const ymin = (ysize * -0.5);
-        const ymax = (ysize * +0.5);
-        const zmin = (zsize * -0.5);
-        const zmax = (zsize * +0.5);
+        const xHalfSize = (aabb[3] - aabb[0]) / 2;
+        const yHalfSize = (aabb[4] - aabb[1]) / 2;
+        const zHalfSize = (aabb[5] - aabb[2]) / 2;
+        const xmin = -xHalfSize;
+        const xmax = +xHalfSize;
+        const ymin = -yHalfSize;
+        const ymax = +yHalfSize;
+        const zmin = -zHalfSize;
+        const zmax = +zHalfSize;
         viewer.camera.customProjection.matrix = math.orthoMat4c(xmin, xmax, zmin, zmax, ymin, ymax, tempMat4);
         viewer.camera.projection = "customProjection";
     }
@@ -666,11 +666,11 @@ class StoreyViewsPlugin extends Plugin {
         const ymax = aabb[4];
         const zmax = aabb[5];
 
-        const xwidth = xmax - xmin;
-        const ywidth = ymax - ymin;
+        const xWorldSize = xmax - xmin;
+        const yWorldSize = ymax - ymin;
         const zWorldSize = zmax - zmin;
 
-        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zWorldSize * normZ)]);
+        const origin = math.vec3([xmin + (xWorldSize * normX), ymin + (yWorldSize * 0.5), zmin + (zWorldSize * normZ)]);
         const direction = math.vec3([0, -1, 0]);
         const look = math.addVec3(origin, direction, tempVec3a);
         const worldForward = this.viewer.camera.worldForward;
@@ -773,12 +773,30 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.
      *
-     * @param storeyMap
-     * @param worldDir
-     * @param imageDir
+     * @param {StoreyMap} storeyMap The StoreyMap.
+     * @param {Number[]} worldDir 3D World-space direction vector.
+     * @param {Number[]} imageDir Normalized 2D direction vector.
      */
     worldDirToStoreyMap(storeyMap, worldDir, imageDir) {
-
+        const camera = this.viewer.camera;
+        const eye = camera.eye;
+        const look = camera.look;
+        const eyeLookDir = math.subVec3(look, eye, tempVec3a);
+        const worldUp = camera.worldUp;
+        const xUp = worldUp[0] > worldUp[1] && worldUp[0] > worldUp[2];
+        const yUp = !xUp && worldUp[1] > worldUp[0] && worldUp[1] > worldUp[2];
+        const zUp = !xUp && !yUp && worldUp[2] > worldUp[0] && worldUp[2] > worldUp[1];
+        if (xUp) {
+            imageDir[0] = eyeLookDir[1];
+            imageDir[1] = eyeLookDir[2];
+        } else if (yUp) {
+            imageDir[0] = eyeLookDir[0];
+            imageDir[1] = eyeLookDir[2];
+        } else {
+            imageDir[0] = eyeLookDir[0];
+            imageDir[1] = eyeLookDir[1];
+        }
+        math.normalizeVec2(imageDir);
     }
 
     /**
