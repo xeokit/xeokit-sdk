@@ -66,7 +66,7 @@ import {math} from '../math/math.js';
  *  | {@link LambertMaterial#lineWidth} | Number | [0..100] | 1 |  | Line width in pixels. |
  *  | {@link LambertMaterial#pointSize} | Number | [0..100] | 1 |  | Point size in pixels. |
  *  | {@link LambertMaterial#backfaces} | Boolean |  | false |  | Whether to render {@link Geometry} backfaces. |
- *  | {@link LambertMaterial#backfaces} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
+ *  | {@link LambertMaterial#frontface} | String | "ccw", "cw" | "ccw" |  | The winding order for {@link Geometry} frontfaces - "cw" for clockwise, or "ccw" for counter-clockwise. |
  *
  */
 class LambertMaterial extends Material {
