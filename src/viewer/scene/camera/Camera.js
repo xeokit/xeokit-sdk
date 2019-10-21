@@ -589,6 +589,30 @@ class Camera extends Component {
     }
 
     /**
+     * Gets if the World-space X-axis is "up".
+     * @returns {boolean}
+     */
+    get xUp() {
+        return this._worldUp[0] > this._worldUp[1] && this._worldUp[0] > this._worldUp[2];
+    }
+
+    /**
+     * Gets if the World-space Y-axis is "up".
+     * @returns {boolean}
+     */
+    get yUp() {
+        return this._worldUp[1] > this._worldUp[0] && this._worldUp[1] > this._worldUp[2];
+    }
+
+    /**
+     * Gets if the World-space Z-axis is "up".
+     * @returns {boolean}
+     */
+    get zUp() {
+        return this._worldUp[2] > this._worldUp[0] && this._worldUp[2] > this._worldUp[1];
+    }
+
+    /**
      * Gets the direction of World-space "right".
      *
      * This is set by {@link Camera#worldAxis}.
