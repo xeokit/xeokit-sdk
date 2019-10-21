@@ -101,15 +101,13 @@ class CameraPathAnimation extends Component {
         super(owner, cfg);
 
         this._cameraFlightAnimation = new CameraFlightAnimation(this);
-
         this._t = 0;
-
         this.state = CameraPathAnimation.SCRUBBING;
-
         this._playingFromT = 0;
         this._playingToT = 0;
         this._playingRate = cfg.playingRate || 1.0;
         this._playingDir = 1.0;
+        this._lastTime = null;
 
         this.cameraPath = cfg.cameraPath;
 
@@ -117,52 +115,40 @@ class CameraPathAnimation extends Component {
     }
 
     _updateT() {
-
         const cameraPath = this._cameraPath;
-
         if (!cameraPath) {
             return;
         }
-
         const f = 0.002;
         let numFrames;
         let t;
-
+        const time = performance.now();
+        const elapsedSecs = (this._lastTime) ? (time - this._lastTime) * 0.001 : 0;
+        this._lastTime = time;
+        if (elapsedSecs === 0) {
+            return;
+        }
         switch (this.state) {
-
             case CameraPathAnimation.SCRUBBING:
                 return;
-
             case CameraPathAnimation.PLAYING:
-
-                this._t += this._playingRate;
-
+                this._t += this._playingRate * elapsedSecs;
                 numFrames = this._cameraPath.frames.length;
                 if (numFrames === 0 || (this._playingDir < 0 && this._t <= 0) || (this._playingDir > 0 && this._t >= this._cameraPath.frames[numFrames - 1].t)) {
                     this.state = CameraPathAnimation.SCRUBBING;
                     this._t = this._cameraPath.frames[numFrames - 1].t;
                     return;
                 }
-
                 cameraPath.loadFrame(this._t);
-
                 break;
-
             case CameraPathAnimation.PLAYING_TO:
-
-                t = this._t + (this._playingRate * this._playingDir);
-
-                //t = this._ease(t, this._playingFromT, this._playingToT, this._playingToT - this._playingFromT);
-
+                t = this._t + (this._playingRate * elapsedSecs * this._playingDir);
                 if ((this._playingDir < 0 && t <= this._playingToT) || (this._playingDir > 0 && t >= this._playingToT)) {
                     t = this._playingToT;
                     this.state = CameraPathAnimation.SCRUBBING;
                 }
-
                 this._t = t;
-
                 cameraPath.loadFrame(this._t);
-
                 break;
         }
     }
@@ -218,6 +204,7 @@ class CameraPathAnimation extends Component {
         if (!this._cameraPath) {
             return;
         }
+        this._lastTime = null;
         this.state = CameraPathAnimation.PLAYING;
     }
 
@@ -234,6 +221,7 @@ class CameraPathAnimation extends Component {
         this._playingFromT = this._t;
         this._playingToT = t;
         this._playingDir = (this._playingToT - this._playingFromT) < 0 ? -1 : 1;
+        this._lastTime = null;
         this.state = CameraPathAnimation.PLAYING_TO;
     }
 
