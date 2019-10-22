@@ -41,6 +41,7 @@ class CameraPath extends Component {
 
         if (cfg.frames) {
             this.addFrames(cfg.frames);
+            this.smoothFrameTimes(1);
         }
     }
 
@@ -174,7 +175,8 @@ class CameraPath extends Component {
             totalLen += lenVec;
         }
         for (let i = 1, len = this._frames.length; i < len; i++) {
-            this._frames[i].t = this._frames[i-1]. t + (lens[i] / totalLen) * duration;
+            const interFrameRate = (lens[i] / totalLen) * duration;
+            this._frames[i].t = this._frames[i-1].t + interFrameRate;
         }
     }
 
