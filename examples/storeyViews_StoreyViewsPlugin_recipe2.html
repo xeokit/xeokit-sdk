@@ -26,8 +26,8 @@
 
         #myNavCubeCanvas {
             position: absolute;
-            width: 250px;
-            height: 250px;
+            width: 300px;
+            height: 300px;
             bottom: 50px;
             right: 10px;
             z-index: 200000;
@@ -62,7 +62,6 @@
     <br>
     <p>Click anywhere in the 2D plan to go there in <b>first-person mode</b> in the 3D view.</p>
     <p>Click empty space in the 2D plan to return to ortho view.</p>
-
 
     <div id="storeyMap"></div>
 
@@ -176,7 +175,7 @@
 
         const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
             format: "png",
-            width: 500,
+            width: 380,
             useObjectStates: true
         });
 
@@ -201,6 +200,7 @@
         pointer.style.cursor = "none";
         pointer.style["pointer-events"] = "none";
         pointer.style.transform = "rotate(0deg)";
+        pointer.style.visibility = "hidden";
         document.body.appendChild(pointer);
 
         const canStandOnTypes = {
@@ -324,7 +324,6 @@
 
         function showPointer(imagePos, imageDir) {
 
-
             const angleRad = Math.atan2(imageDir[0], imageDir[1]);
             const angleDeg = Math.floor(180 * angleRad / Math.PI);
 
@@ -334,33 +333,6 @@
             pointer.style.visibility = "visible";
         }
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Mouse over entities to highlight them
-    //------------------------------------------------------------------------------------------------------------------
-
-    // var lastEntity = null;
-    // viewer.scene.input.on("mousemove", function (coords) {
-    //     var hit = viewer.scene.pick({
-    //         canvasPos: coords
-    //     });
-    //     if (hit) {
-    //         if (!lastEntity || hit.entity.id !== lastEntity.id) {
-    //             if (lastEntity) {
-    //                 lastEntity.highlighted = false;
-    //             }
-    //             lastEntity = hit.entity;
-    //             hit.entity.highlighted = true;
-    //         }
-    //     } else {
-    //         if (lastEntity) {
-    //             lastEntity.highlighted = false;
-    //             lastEntity = null;
-    //         }
-    //     }
-    // });
-
-    window.viewer = viewer;
 
 </script>
 </html>
