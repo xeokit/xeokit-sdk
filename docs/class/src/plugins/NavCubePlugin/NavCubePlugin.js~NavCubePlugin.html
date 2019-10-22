@@ -38,6 +38,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-lib">plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2">plugins/BIMServerLoaderPluginV2</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -126,13 +132,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber69">xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber71">xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber69">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber71">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -187,7 +193,9 @@ const navCube = new NavCubePlugin(viewer, {
 
     cameraFly: true,       // Fly camera to each selected axis/diagonal
     cameraFitFOV: 45,      // How much field-of-view the scene takes once camera has fitted it to view
-    cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+    cameraFlyDuration: 0.5,// How long (in seconds) camera takes to fly to each new axis/diagonal
+
+    fitVisible: false      // Fit whole scene, including invisible objects (default)
 });
 
 const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -384,6 +392,36 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-getFitVisible">getFitVisible</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether the axis, corner and edge-aligned views will fit the
+view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> or just to visible object-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-getVisible">getVisible</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
@@ -507,6 +545,36 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
         
         
         <div data-ice="description"><p>When flying the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to each new axis or diagonal, sets how long, in seconds, that the Camera takes to get there.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-setFitVisible">setFitVisible</a></span></span><span class="code" data-ice="signature">(fitVisible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether the axis, corner and edge-aligned views will fit the
+view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> or just to visible object-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
 </div>
       </div>
     </td>
@@ -804,7 +872,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -956,6 +1024,15 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
       <td data-ice="description"><p>Custom color for highlighting regions on the NavCube as we hover the pointer over them.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.fitVisible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Sets whether the axis, corner and edge-aligned views will fit the
+view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> or just to visible object-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s. Entitys are visible objects when <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> are both <code>true</code>.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -994,7 +1071,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber591">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber621">source</a></span></span>
     </span>
   </h3>
 
@@ -1039,7 +1116,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber560">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber590">source</a></span></span>
     </span>
   </h3>
 
@@ -1098,7 +1175,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber536">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
@@ -1156,7 +1233,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber582">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber612">source</a></span></span>
     </span>
   </h3>
 
@@ -1203,6 +1280,65 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getFitVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getFitVisible</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber544">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether the axis, corner and edge-aligned views will fit the
+view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> or just to visible object-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+<p>Entitys are visible objects when <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> are both <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>True when fitting only visible object-Entitys.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-getVisible">
     <span class="access" data-ice="access">public</span>
     
@@ -1214,7 +1350,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber511">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber516">source</a></span></span>
     </span>
   </h3>
 
@@ -1271,7 +1407,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber482">source</a></span></span>
     </span>
   </h3>
 
@@ -1336,7 +1472,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber548">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber578">source</a></span></span>
     </span>
   </h3>
 
@@ -1399,7 +1535,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber525">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber555">source</a></span></span>
     </span>
   </h3>
 
@@ -1461,7 +1597,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber571">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber601">source</a></span></span>
     </span>
   </h3>
 
@@ -1512,6 +1648,69 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setFitVisible">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setFitVisible</span><span class="code" data-ice="signature">(fitVisible: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber532">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether the axis, corner and edge-aligned views will fit the
+view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> or just to visible object-<span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+<p>Entitys are visible objects when <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> are both <code>true</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">fitVisible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Set <code>true</code> to fit only visible object-Entitys.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setVisible">
     <span class="access" data-ice="access">public</span>
     
@@ -1523,7 +1722,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber497">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber502">source</a></span></span>
     </span>
   </h3>
 

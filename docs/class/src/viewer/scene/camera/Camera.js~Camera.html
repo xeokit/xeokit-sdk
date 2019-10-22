@@ -38,6 +38,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-lib">plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2">plugins/BIMServerLoaderPluginV2</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -878,35 +884,6 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">up</a></span></span><span class="code" data-ice="signature">(up: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the direction of this Camera&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -924,6 +901,35 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
         
         
         <div data-ice="description"><p>Gets the direction of this Camera&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">up</a></span></span><span class="code" data-ice="signature">(up: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the direction of this Camera&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
 </div>
       </div>
     </td>
@@ -996,35 +1002,6 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the up, right and forward axis of the World coordinate system.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
@@ -1042,6 +1019,35 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
         
         
         <div data-ice="description"><p>Sets the up, right and forward axis of the World coordinate system.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-worldAxis">worldAxis</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the up, right and forward axis of the World coordinate system.</p>
 </div>
       </div>
     </td>
@@ -1129,6 +1135,93 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
         
         
         <div data-ice="description"><p>Gets the direction of World-space &quot;up&quot;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-xUp">xUp</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if the World-space X-axis is &quot;up&quot;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-yUp">yUp</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if the World-space Y-axis is &quot;up&quot;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-zUp">zUp</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets if the World-space Z-axis is &quot;up&quot;.</p>
 </div>
       </div>
     </td>
@@ -1869,7 +1962,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber680">source</a></span></span>
     </span>
   </h3>
 
@@ -1916,7 +2009,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber796">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber820">source</a></span></span>
     </span>
   </h3>
 
@@ -2178,7 +2271,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber685">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber709">source</a></span></span>
     </span>
   </h3>
 
@@ -2237,7 +2330,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber785">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber809">source</a></span></span>
     </span>
   </h3>
 
@@ -2295,7 +2388,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber641">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber665">source</a></span></span>
     </span>
   </h3>
 
@@ -2352,7 +2445,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber624">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber648">source</a></span></span>
     </span>
   </h3>
 
@@ -2512,7 +2605,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber696">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber720">source</a></span></span>
     </span>
   </h3>
 
@@ -2570,7 +2663,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber724">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber748">source</a></span></span>
     </span>
   </h3>
 
@@ -2628,7 +2721,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber774">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber798">source</a></span></span>
     </span>
   </h3>
 
@@ -2686,7 +2779,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber763">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber787">source</a></span></span>
     </span>
   </h3>
 
@@ -2744,7 +2837,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber752">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber776">source</a></span></span>
     </span>
   </h3>
 
@@ -2802,7 +2895,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber861">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber885">source</a></span></span>
     </span>
   </h3>
 
@@ -2860,7 +2953,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber850">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber874">source</a></span></span>
     </span>
   </h3>
 
@@ -2919,7 +3012,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber809">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber833">source</a></span></span>
     </span>
   </h3>
 
@@ -2937,6 +3030,63 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-up">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber496">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the direction of this Camera&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>Direction of &quot;up&quot;.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -3010,63 +3160,6 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-up">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">up</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber496">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the direction of this Camera&apos;s <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-up">Camera#up</a></span> vector.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>Direction of &quot;up&quot;.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-viewMatrix">
     <span class="access" data-ice="access">public</span>
     
@@ -3078,7 +3171,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber710">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber734">source</a></span></span>
     </span>
   </h3>
 
@@ -3136,7 +3229,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber738">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber762">source</a></span></span>
     </span>
   </h3>
 
@@ -3166,6 +3259,52 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <div data-ice="returnProperties">
 </div>
   </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-worldAxis">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">(axis: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber539">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the up, right and forward axis of the World coordinate system.</p>
+<p>Has format: <code>[rightX, rightY, rightZ, upX, upY, upZ, forwardX, forwardY, forwardZ]</code></p>
+<p>Default axis is <code>[1, 0, 0, 0, 1, 0, 0, 0, 1]</code></p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
 
   
 
@@ -3242,52 +3381,6 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-worldAxis">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">worldAxis</span><span class="code" data-ice="signature">(axis: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber539">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the up, right and forward axis of the World coordinate system.</p>
-<p>Has format: <code>[rightX, rightY, rightZ, upX, upY, upZ, forwardX, forwardY, forwardZ]</code></p>
-<p>Default axis is <code>[1, 0, 0, 0, 1, 0, 0, 0, 1]</code></p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-worldForward">
     <span class="access" data-ice="access">public</span>
     
@@ -3299,7 +3392,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber613">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber637">source</a></span></span>
     </span>
   </h3>
 
@@ -3358,7 +3451,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber600">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber624">source</a></span></span>
     </span>
   </h3>
 
@@ -3464,6 +3557,174 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-xUp">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">xUp</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber595">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the World-space X-axis is &quot;up&quot;.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-yUp">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">yUp</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber603">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the World-space Y-axis is &quot;up&quot;.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-zUp">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">zUp</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber611">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets if the World-space Z-axis is &quot;up&quot;.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -3479,7 +3740,7 @@ camera.gimbalLock = true; // Yaw rotation now happens about World&apos;s &quot;u
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber868">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/camera/Camera.js.html#lineNumber892">source</a></span></span>
     </span>
   </h3>
 

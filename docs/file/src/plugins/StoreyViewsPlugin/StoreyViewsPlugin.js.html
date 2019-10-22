@@ -38,6 +38,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-lib">plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2">plugins/BIMServerLoaderPluginV2</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -145,7 +151,7 @@ const EMPTY_IMAGE = &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB
 /**
  * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
- *  &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif&quot;&gt;&lt;/a&gt;
+ *  &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif&quot;&gt;&lt;/a&gt;
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *
@@ -723,7 +729,7 @@ class StoreyViewsPlugin extends Plugin {
 
         this._arrangeStoreyMapCamera();
 
-        scene.render(true); // Force-render a frame
+        //scene.render(true); // Force-render a frame
 
         const src = viewer.getSnapshot({
             width: width,
@@ -750,15 +756,15 @@ class StoreyViewsPlugin extends Plugin {
         eye[2] = look[2] + (camera.worldUp[2] * sca);
         const up = camera.worldForward;
         viewer.cameraFlight.jumpTo({eye: eye, look: look, up: up});
-        const xsize = aabb[3] - aabb[0];
-        const ysize = aabb[4] - aabb[1];
-        const zsize = aabb[5] - aabb[2];
-        const xmin = (xsize * -0.5);
-        const xmax = (xsize * +0.5);
-        const ymin = (ysize * -0.5);
-        const ymax = (ysize * +0.5);
-        const zmin = (zsize * -0.5);
-        const zmax = (zsize * +0.5);
+        const xHalfSize = (aabb[3] - aabb[0]) / 2;
+        const yHalfSize = (aabb[4] - aabb[1]) / 2;
+        const zHalfSize = (aabb[5] - aabb[2]) / 2;
+        const xmin = -xHalfSize;
+        const xmax = +xHalfSize;
+        const ymin = -yHalfSize;
+        const ymax = +yHalfSize;
+        const zmin = -zHalfSize;
+        const zmax = +zHalfSize;
         viewer.camera.customProjection.matrix = math.orthoMat4c(xmin, xmax, zmin, zmax, ymin, ymax, tempMat4);
         viewer.camera.projection = &quot;customProjection&quot;;
     }
@@ -794,11 +800,11 @@ class StoreyViewsPlugin extends Plugin {
         const ymax = aabb[4];
         const zmax = aabb[5];
 
-        const xwidth = xmax - xmin;
-        const ywidth = ymax - ymin;
-        const zwidth = zmax - zmin;
+        const xWorldSize = xmax - xmin;
+        const yWorldSize = ymax - ymin;
+        const zWorldSize = zmax - zmin;
 
-        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
+        const origin = math.vec3([xmin + (xWorldSize * normX), ymin + (yWorldSize * 0.5), zmin + (zWorldSize * normZ)]);
         const direction = math.vec3([0, -1, 0]);
         const look = math.addVec3(origin, direction, tempVec3a);
         const worldForward = this.viewer.camera.worldForward;
@@ -844,7 +850,8 @@ class StoreyViewsPlugin extends Plugin {
      *
      * @param {StoreyMap} storeyMap The StoreyMap.
      * @param {Number[]} worldPos 3D World-space position within the storey.
-     * @param {Number[]} imagePos 2D pixel position within the bounds of {@link StoreyMap#imageData}.
+     * @param {Number[]} imagePos 2D pixel position within the {@link StoreyMap#imageData}.
+     * @returns {Boolean} True if ````imagePos```` is within the bounds of the {@link StoreyMap#imageData}, else ````false```` if it falls outside.
      */
     worldPosToStoreyMap(storeyMap, worldPos, imagePos) {
 
@@ -853,7 +860,7 @@ class StoreyViewsPlugin extends Plugin {
 
         if (!storey) {
             this.error(&quot;IfcBuildingStorey not found with this ID: &quot; + storeyId);
-            return null
+            return false
         }
 
         const aabb = storey.aabb;
@@ -861,23 +868,29 @@ class StoreyViewsPlugin extends Plugin {
         const xmin = aabb[0];
         const ymin = aabb[1];
         const zmin = aabb[2];
+
         const xmax = aabb[3];
         const ymax = aabb[4];
         const zmax = aabb[5];
 
-        const xwidth = xmax - xmin;
-        const ywidth = ymax - ymin;
-        const zwidth = zmax - zmin;
+        const xWorldSize = xmax - xmin;
+        const yWorldSize = ymax - ymin;
+        const zWorldSize = zmax - zmin;
 
-        const ratioX = (imagePos[0] / storeyMap.width);
-        const ratioY = (imagePos[1] / storeyMap.height);
+        const camera = this.viewer.camera;
+        const worldUp = camera.worldUp;
 
+        const xUp = worldUp[0] &gt; worldUp[1] &amp;&amp; worldUp[0] &gt; worldUp[2];
+        const yUp = !xUp &amp;&amp; worldUp[1] &gt; worldUp[0] &amp;&amp; worldUp[1] &gt; worldUp[2];
+        const zUp = !xUp &amp;&amp; !yUp &amp;&amp; worldUp[2] &gt; worldUp[0] &amp;&amp; worldUp[2] &gt; worldUp[1];
 
-        const origin = math.vec3([xmin + (xwidth * normX), ymin + (ywidth * 0.5), zmin + (zwidth * normZ)]);
-        const direction = math.vec3([0, -1, 0]);
-        const look = math.addVec3(origin, direction, tempVec3a);
-        const worldForward = this.viewer.camera.worldForward;
-        const matrix = math.lookAtMat4v(origin, look, worldForward, tempMat4);
+        const ratioX = (storeyMap.width / xWorldSize);
+        const ratioY = yUp ? (storeyMap.height / zWorldSize) : (storeyMap.height / yWorldSize); // Assuming either Y or Z is &quot;up&quot;, but never X
+
+        imagePos[0] = Math.floor(storeyMap.width - ((worldPos[0] - xmin) * ratioX));
+        imagePos[1] = Math.floor(storeyMap.height - ((worldPos[2] - zmin) * ratioY));
+
+        return (imagePos[0] &gt;= 0 &amp;&amp; imagePos[0] &lt; storeyMap.width &amp;&amp; imagePos[1] &gt;= 0 &amp;&amp; imagePos[1] &lt;= storeyMap.height);
     }
 
     // /**
@@ -894,12 +907,30 @@ class StoreyViewsPlugin extends Plugin {
     /**
      * Converts a 3D World-space direction vector to a 2D vector within a StoreyMap image.
      *
-     * @param storeyMap
-     * @param worldDir
-     * @param imageDir
+     * @param {StoreyMap} storeyMap The StoreyMap.
+     * @param {Number[]} worldDir 3D World-space direction vector.
+     * @param {Number[]} imageDir Normalized 2D direction vector.
      */
     worldDirToStoreyMap(storeyMap, worldDir, imageDir) {
-
+        const camera = this.viewer.camera;
+        const eye = camera.eye;
+        const look = camera.look;
+        const eyeLookDir = math.subVec3(look, eye, tempVec3a);
+        const worldUp = camera.worldUp;
+        const xUp = worldUp[0] &gt; worldUp[1] &amp;&amp; worldUp[0] &gt; worldUp[2];
+        const yUp = !xUp &amp;&amp; worldUp[1] &gt; worldUp[0] &amp;&amp; worldUp[1] &gt; worldUp[2];
+        const zUp = !xUp &amp;&amp; !yUp &amp;&amp; worldUp[2] &gt; worldUp[0] &amp;&amp; worldUp[2] &gt; worldUp[1];
+        if (xUp) {
+            imageDir[0] = eyeLookDir[1];
+            imageDir[1] = eyeLookDir[2];
+        } else if (yUp) {
+            imageDir[0] = eyeLookDir[0];
+            imageDir[1] = eyeLookDir[2];
+        } else {
+            imageDir[0] = eyeLookDir[0];
+            imageDir[1] = eyeLookDir[1];
+        }
+        math.normalizeVec2(imageDir);
     }
 
     /**

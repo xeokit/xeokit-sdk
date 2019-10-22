@@ -38,6 +38,12 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-lib">plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2">plugins/BIMServerLoaderPluginV2</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
@@ -153,7 +159,7 @@
   
   
   <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides methods for visualizing IfcBuildingStoreys.</p>
-<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a></p>
+<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif"></a></p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><p>StoreyViewsPlugin provides a flexible set of methods for visualizing building storeys in 3D and 2D.</p>
 <p>Use the first two methods to set up 3D views of storeys:</p>
@@ -715,7 +721,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldDirToStoreyMap">worldDirToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, worldDir: <span>*</span>, imageDir: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldDirToStoreyMap">worldDirToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldDir: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imageDir: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
         </p>
       </div>
       <div>
@@ -744,7 +750,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldPosToStoreyMap">worldPosToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-worldPosToStoreyMap">worldPosToStoreyMap</a></span></span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -1386,7 +1392,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber780">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber805">source</a></span></span>
     </span>
   </h3>
 
@@ -1846,11 +1852,11 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     
     
     
-    <span class="code" data-ice="name">worldDirToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, worldDir: <span>*</span>, imageDir: <span>*</span>)</span>
+    <span class="code" data-ice="name">worldDirToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldDir: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imageDir: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber773">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber780">source</a></span></span>
     </span>
   </h3>
 
@@ -1872,21 +1878,24 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">storeyMap</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="type" class="code"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The StoreyMap.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">worldDir</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>3D World-space direction vector.</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">imageDir</td>
-      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Normalized 2D direction vector.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1918,11 +1927,11 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     
     
     
-    <span class="code" data-ice="name">worldPosToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span>*</span></span>
+    <span class="code" data-ice="name">worldPosToStoreyMap</span><span class="code" data-ice="signature">(storeyMap: <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, worldPos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>, imagePos: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber721">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber722">source</a></span></span>
     </span>
   </h3>
 
@@ -1961,7 +1970,7 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
       <td data-ice="name" class="code" data-depth="0">imagePos</td>
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>2D pixel position within the bounds of <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-imageData">StoreyMap#imageData</a></span>.</p>
+      <td data-ice="description"><p>2D pixel position within the <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-imageData">StoreyMap#imageData</a></span>.</p>
 </td>
     </tr>
 </tbody>
@@ -1974,8 +1983,9 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>True if <code>imagePos</code> is within the bounds of the <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html#instance-member-imageData">StoreyMap#imageData</a></span>, else <code>false</code> if it falls outside.</p>
+</td>
         </tr>
       </tbody>
     </table>
