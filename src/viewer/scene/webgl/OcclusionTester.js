@@ -179,7 +179,6 @@ class OcclusionTester {
         src.push("// Mesh occlusion fragment shader");
         src.push("precision lowp float;");
         if (clipping) {
-            src.push("uniform bool clippable;");
             src.push("varying vec4 vWorldPosition;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -189,7 +188,6 @@ class OcclusionTester {
         }
         src.push("void main(void) {");
         if (clipping) {
-            src.push("if (clippable) {");
             src.push("  float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("if (sectionPlaneActive" + i + ") {");
@@ -197,7 +195,6 @@ class OcclusionTester {
                 src.push("}");
             }
             src.push("  if (dist > 0.0) { discard; }");
-            src.push("}");
         }
         src.push("   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); ");
         src.push("}");
