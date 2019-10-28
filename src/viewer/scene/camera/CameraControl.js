@@ -528,9 +528,10 @@ class CameraControl extends Component {
         const camera = scene.camera;
         const canvas = this.scene.canvas.canvas;
         let over = false;
-        const mouseOrbitRate = 0.4;
-        const mousePanRate = 0.4;
-        const mouseZoomRate = 0.8;
+        let mouseOrbitRateX = 15;
+        let mouseOrbitRateY = 15;
+        const mousePanRate = 0.2;
+        const mouseZoomRate = 0.3;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -674,6 +675,7 @@ class CameraControl extends Component {
             let panVz = 0;
             let vZoom = 0;
             const mousePos = math.vec2();
+            const normalizedMousePos = math.vec2();
             let panToMouse = false;
 
             let ctrlDown = false;
@@ -972,6 +974,8 @@ class CameraControl extends Component {
 
             (function () {
 
+                let downX = 0;
+                let downY = 0;
                 let lastX;
                 let lastY;
                 let xDelta = 0;
@@ -981,6 +985,12 @@ class CameraControl extends Component {
                 let mouseDownLeft;
                 let mouseDownMiddle;
                 let mouseDownRight;
+
+                function normalizeMousePos(mousePos, normalizedMousePos) {
+                    const boundary = self.scene.canvas.boundary;
+                    normalizedMousePos[0] = mousePos[0] / boundary[2];
+                    normalizedMousePos[1] = mousePos[1] / boundary[3];
+                }
 
                 canvas.addEventListener("mousedown", function (e) {
                     if (!(self._active && self._pointerEnabled)) {
@@ -995,8 +1005,9 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            lastX = mousePos[0];
-                            lastY = mousePos[1];
+                            normalizeMousePos(mousePos, normalizedMousePos);
+                            lastX = normalizedMousePos[0];
+                            lastY = normalizedMousePos[1];
                             break;
                         case 2: // Middle/both buttons
                             self.scene.canvas.canvas.style.cursor = "move";
@@ -1009,8 +1020,9 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            lastX = mousePos[0];
-                            lastY = mousePos[1];
+                            normalizeMousePos(mousePos, normalizedMousePos);
+                            lastX = normalizedMousePos[0];
+                            lastY = normalizedMousePos[1];
                             break;
                         default:
                             break;
@@ -1088,14 +1100,15 @@ class CameraControl extends Component {
                         return;
                     }
                     getCanvasPosFromEvent(e, mousePos);
+                    normalizeMousePos(mousePos, normalizedMousePos);
                     panToMouse = true;
                     if (!down) {
                         return;
                     }
-                    const x = mousePos[0];
-                    const y = mousePos[1];
-                    xDelta += (x - lastX) * mouseOrbitRate;
-                    yDelta += (y - lastY) * mouseOrbitRate;
+                    const x = normalizedMousePos[0];
+                    const y = normalizedMousePos[1];
+                    xDelta += (x - lastX) * mouseOrbitRateX;
+                    yDelta += (y - lastY) * mouseOrbitRateY;
                     lastX = x;
                     lastY = y;
                 });
@@ -1124,8 +1137,8 @@ class CameraControl extends Component {
 
                             // Orbiting
 
-                            rotateVy = -xDelta * mouseOrbitRate;
-                            rotateVx = yDelta * mouseOrbitRate;
+                            rotateVy = -xDelta * mouseOrbitRateX;
+                            rotateVx = yDelta * mouseOrbitRateY;
                         }
                     }
 
