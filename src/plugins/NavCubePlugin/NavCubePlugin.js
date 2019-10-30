@@ -126,7 +126,7 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera.ortho.near = 0.1;
         this._navCubeCamera.ortho.far = 2000;
 
-        this._zUp = false;
+        this._zUp = Boolean(viewer.camera.zUp);
 
         var self = this;
 
@@ -153,32 +153,6 @@ class NavCubePlugin extends Plugin {
                 }
             };
         }());
-
-        this._onCameraMatrix = viewer.camera.on("matrix", this._synchCamera);
-        this._onCameraWorldAxis = viewer.camera.on("worldAxis", this._synchCamera);
-        this._onCameraFOV = viewer.camera.perspective.on("fov", (fov) => {
-            this._navCubeCamera.perspective.fov = fov;
-        });
-        this._onCameraProjection = viewer.camera.on("projection", (projection) => {
-            this._navCubeCamera.projection = projection;
-        });
-
-        viewer.camera.on("worldAxis", (worldAxis) => {
-            /*
-        case "zUp":
-            this._zUp = true;
-            this._cubeTextureCanvas.setZUp();
-            this._repaint();
-            this._synchCamera();
-            break;
-        case "yUp":
-            this._zUp = false;
-            this._cubeTextureCanvas.setYUp();
-            this._repaint();
-            this._synchCamera();
-            break;
-            */
-        });
 
         this._cubeTextureCanvas = new CubeTextureCanvas(viewer, cfg);
 
@@ -240,6 +214,27 @@ class NavCubePlugin extends Plugin {
             visible: !!visible,
             pickable: false,
             backfaces: false
+        });
+
+        this._onCameraMatrix = viewer.camera.on("matrix", this._synchCamera);
+        this._onCameraWorldAxis = viewer.camera.on("worldAxis", () => {
+            if (viewer.camera.zUp) {
+                this._zUp = true;
+                this._cubeTextureCanvas.setZUp();
+                this._repaint();
+                this._synchCamera();
+            } else if (viewer.camera.yUp) {
+                this._zUp = false;
+                this._cubeTextureCanvas.setYUp();
+                this._repaint();
+                this._synchCamera();
+            }
+        });
+        this._onCameraFOV = viewer.camera.perspective.on("fov", (fov) => {
+            this._navCubeCamera.perspective.fov = fov;
+        });
+        this._onCameraProjection = viewer.camera.on("projection", (projection) => {
+            this._navCubeCamera.projection = projection;
         });
 
         var lastAreaId = -1;
