@@ -531,7 +531,7 @@ class CameraControl extends Component {
         let mouseOrbitRateX = 15;
         let mouseOrbitRateY = 15;
         const mousePanRate = 0.2;
-        const mouseZoomRate = 0.3;
+        const mouseZoomRate = 1.0;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -930,15 +930,27 @@ class CameraControl extends Component {
                 }
             });
 
-            function getZoomRate() {
-                const aabb = scene.aabb;
-                const xsize = aabb[3] - aabb[0];
-                const ysize = aabb[4] - aabb[1];
-                const zsize = aabb[5] - aabb[2];
-                let max = (xsize > ysize ? xsize : ysize);
-                max = (zsize > max ? zsize : max);
-                return max / 30;
-            }
+            const getZoomRate = (function () {
+                const tempVec3 = math.vec3();
+                return function () {
+                    const aabb = scene.aabb;
+                    const xsize = aabb[3] - aabb[0];
+                    const ysize = aabb[4] - aabb[1];
+                    const zsize = aabb[5] - aabb[2];
+                    let max = (xsize > ysize ? xsize : ysize);
+                    max = (zsize > max ? zsize : max);
+                    const eyeLookDist = Math.abs(math.lenVec3(math.subVec3(scene.camera.look, scene.camera.eye, tempVec3)));
+                    let zoomRate = (eyeLookDist / max);
+                    if (zoomRate < 0.1) {
+                        zoomRate = 0.1;
+                    } else if (zoomRate > max) {
+                        zoomRate = max;
+                    }
+                //    zoomRate = (zoomRate * zoomRate * zoomRate);
+                    console.log("zoomRate = " + zoomRate);
+                    return zoomRate;
+                };
+            })();
 
             document.addEventListener("keydown", function (e) {
                 if (!self._active) {
@@ -1160,7 +1172,8 @@ class CameraControl extends Component {
                         return;
                     }
                     const d = delta / Math.abs(delta);
-                    vZoom = -d * getZoomRate() * mouseZoomRate;
+                    vZoom = -d * getZoomRate();
+                   // vZoom = -d * getZoomRate() * mouseZoomRate;
                     e.preventDefault();
                 });
 

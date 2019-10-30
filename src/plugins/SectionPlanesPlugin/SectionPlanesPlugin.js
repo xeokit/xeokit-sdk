@@ -10,7 +10,7 @@ const tempVec3 = math.vec3();
 /**
  * SectionPlanesPlugin is a {@link Viewer} plugin that manages {@link SectionPlane}s.
  *
- * <img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">
+ * [<img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
  *
