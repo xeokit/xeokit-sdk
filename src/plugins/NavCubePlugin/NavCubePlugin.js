@@ -12,7 +12,7 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
  *
- *  <img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">
+ *  [<img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
  *
