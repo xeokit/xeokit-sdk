@@ -146,7 +146,7 @@ import {CubeTextureCanvas} from &quot;./CubeTextureCanvas.js&quot;;
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
  *
- *  &lt;img src=&quot;https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif&quot;&gt;
+ *  [&lt;img src=&quot;https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
  *
@@ -260,7 +260,7 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera.ortho.near = 0.1;
         this._navCubeCamera.ortho.far = 2000;
 
-        this._zUp = false;
+        this._zUp = Boolean(viewer.camera.zUp);
 
         var self = this;
 
@@ -287,32 +287,6 @@ class NavCubePlugin extends Plugin {
                 }
             };
         }());
-
-        this._onCameraMatrix = viewer.camera.on(&quot;matrix&quot;, this._synchCamera);
-        this._onCameraWorldAxis = viewer.camera.on(&quot;worldAxis&quot;, this._synchCamera);
-        this._onCameraFOV = viewer.camera.perspective.on(&quot;fov&quot;, (fov) =&gt; {
-            this._navCubeCamera.perspective.fov = fov;
-        });
-        this._onCameraProjection = viewer.camera.on(&quot;projection&quot;, (projection) =&gt; {
-            this._navCubeCamera.projection = projection;
-        });
-
-        viewer.camera.on(&quot;worldAxis&quot;, (worldAxis) =&gt; {
-            /*
-        case &quot;zUp&quot;:
-            this._zUp = true;
-            this._cubeTextureCanvas.setZUp();
-            this._repaint();
-            this._synchCamera();
-            break;
-        case &quot;yUp&quot;:
-            this._zUp = false;
-            this._cubeTextureCanvas.setYUp();
-            this._repaint();
-            this._synchCamera();
-            break;
-            */
-        });
 
         this._cubeTextureCanvas = new CubeTextureCanvas(viewer, cfg);
 
@@ -374,6 +348,27 @@ class NavCubePlugin extends Plugin {
             visible: !!visible,
             pickable: false,
             backfaces: false
+        });
+
+        this._onCameraMatrix = viewer.camera.on(&quot;matrix&quot;, this._synchCamera);
+        this._onCameraWorldAxis = viewer.camera.on(&quot;worldAxis&quot;, () =&gt; {
+            if (viewer.camera.zUp) {
+                this._zUp = true;
+                this._cubeTextureCanvas.setZUp();
+                this._repaint();
+                this._synchCamera();
+            } else if (viewer.camera.yUp) {
+                this._zUp = false;
+                this._cubeTextureCanvas.setYUp();
+                this._repaint();
+                this._synchCamera();
+            }
+        });
+        this._onCameraFOV = viewer.camera.perspective.on(&quot;fov&quot;, (fov) =&gt; {
+            this._navCubeCamera.perspective.fov = fov;
+        });
+        this._onCameraProjection = viewer.camera.on(&quot;projection&quot;, (projection) =&gt; {
+            this._navCubeCamera.projection = projection;
         });
 
         var lastAreaId = -1;

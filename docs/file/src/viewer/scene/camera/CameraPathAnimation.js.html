@@ -271,6 +271,7 @@ class CameraPathAnimation extends Component {
                 if (numFrames === 0 || (this._playingDir &lt; 0 &amp;&amp; this._t &lt;= 0) || (this._playingDir &gt; 0 &amp;&amp; this._t &gt;= this._cameraPath.frames[numFrames - 1].t)) {
                     this.state = CameraPathAnimation.SCRUBBING;
                     this._t = this._cameraPath.frames[numFrames - 1].t;
+                    this.fire(&quot;stopped&quot;);
                     return;
                 }
                 cameraPath.loadFrame(this._t);
@@ -280,6 +281,7 @@ class CameraPathAnimation extends Component {
                 if ((this._playingDir &lt; 0 &amp;&amp; t &lt;= this._playingToT) || (this._playingDir &gt; 0 &amp;&amp; t &gt;= this._playingToT)) {
                     t = this._playingToT;
                     this.state = CameraPathAnimation.SCRUBBING;
+                    this.fire(&quot;stopped&quot;);
                 }
                 this._t = t;
                 cameraPath.loadFrame(this._t);
@@ -444,6 +446,7 @@ class CameraPathAnimation extends Component {
      */
     stop() {
         this.state = CameraPathAnimation.SCRUBBING;
+        this.fire(&quot;stopped&quot;);
     }
 
     destroy() {

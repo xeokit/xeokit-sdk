@@ -132,13 +132,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ObjectsMemento} from &apos;<span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber53">xeokit-sdk/src/viewer/scene/mementos/ObjectsMemento.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ObjectsMemento} from &apos;<span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber72">xeokit-sdk/src/viewer/scene/mementos/ObjectsMemento.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber53">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber72">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -200,6 +200,18 @@ model.on(&quot;loaded&quot;, () =&gt; {
      objectsMemento.restoreObjects(viewer.scene);
 });
 `</code>
+</code></pre>
+<h2 id="masking-saved-state">Masking Saved State</h2><p>We can optionally supply a mask to focus what state we save and restore.</p>
+<p>For example, to save and restore only the <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> and <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-clippable">Entity#clippable</a></span> states:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">objectsMemento.saveObjects(viewer.scene, {
+    visible: true,
+    clippable: true
+});
+
+//...
+
+// Restore the objects states again
+objectsMemento.restoreObjects(viewer.scene);</code>
 </code></pre>
 </div>
   
@@ -299,7 +311,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html#instance-method-saveObjects">saveObjects</a></span></span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html#instance-method-saveObjects">saveObjects</a></span></span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>, mask: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -336,7 +348,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -401,7 +413,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -458,11 +470,11 @@ model.on(&quot;loaded&quot;, () =&gt; {
     
     
     
-    <span class="code" data-ice="name">saveObjects</span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>)</span>
+    <span class="code" data-ice="name">saveObjects</span><span class="code" data-ice="signature">(scene: <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>, mask: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/mementos/ObjectsMemento.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -487,6 +499,83 @@ model.on(&quot;loaded&quot;, () =&gt; {
       <td data-ice="type" class="code"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The scene.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">mask</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Masks what state gets saved. Saves all state when not supplied.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.visible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.visible</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-visible">Entity#visible</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.edges</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-edges">Entity#edges</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.xrayed</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-xrayed">Entity#xrayed</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.highlighted</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-highlighted">Entity#highlighted</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.selected</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-selected">Entity#selected</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.clippable</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-clippable">Entity#clippable</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.pickable</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-pickable">Entity#pickable</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.colorize</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-colorize">Entity#colorize</a></span> values when <code>true</code>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">mask.opacity</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Saves <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-set-opacity">Entity#opacity</a></span> values when <code>true</code>.</p>
 </td>
     </tr>
 </tbody>

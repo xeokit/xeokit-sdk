@@ -313,7 +313,6 @@ class OcclusionTester {
         src.push(&quot;// Mesh occlusion fragment shader&quot;);
         src.push(&quot;precision lowp float;&quot;);
         if (clipping) {
-            src.push(&quot;uniform bool clippable;&quot;);
             src.push(&quot;varying vec4 vWorldPosition;&quot;);
             for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
                 src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
@@ -323,7 +322,6 @@ class OcclusionTester {
         }
         src.push(&quot;void main(void) {&quot;);
         if (clipping) {
-            src.push(&quot;if (clippable) {&quot;);
             src.push(&quot;  float dist = 0.0;&quot;);
             for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
                 src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
@@ -331,7 +329,6 @@ class OcclusionTester {
                 src.push(&quot;}&quot;);
             }
             src.push(&quot;  if (dist &gt; 0.0) { discard; }&quot;);
-            src.push(&quot;}&quot;);
         }
         src.push(&quot;   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); &quot;);
         src.push(&quot;}&quot;);

@@ -1,6 +1,6 @@
 {
-  "coverage": "46.51%",
-  "expectCount": 3792,
+  "coverage": "46.5%",
+  "expectCount": 3793,
   "actualCount": 1764,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -944,24 +944,24 @@
         129,
         133,
         157,
-        158,
         159,
-        162,
-        183,
-        185,
-        192,
-        226,
-        482,
-        491,
-        533,
-        556,
-        579,
-        602,
-        641,
-        642,
-        643,
-        644,
-        645
+        166,
+        200,
+        219,
+        220,
+        233,
+        236,
+        477,
+        486,
+        528,
+        551,
+        574,
+        597,
+        636,
+        637,
+        638,
+        639,
+        640
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoader.js": {
@@ -1965,8 +1965,8 @@
         495,
         513,
         523,
-        1853,
-        1889
+        1879,
+        1915
       ]
     },
     "src/viewer/scene/camera/CameraFlightAnimation.js": {
@@ -2035,9 +2035,9 @@
         110,
         114,
         117,
-        159,
-        170,
-        315
+        161,
+        172,
+        318
       ]
     },
     "src/viewer/scene/camera/CustomProjection.js": {
@@ -2565,10 +2565,11 @@
       "undocumentLines": []
     },
     "src/viewer/scene/mementos/ObjectsMemento.js": {
-      "expectCount": 15,
+      "expectCount": 16,
       "actualCount": 14,
       "undocumentLines": [
-        3
+        4,
+        136
       ]
     },
     "src/viewer/scene/mesh/Mesh.js": {
@@ -3121,16 +3122,16 @@
         143,
         150,
         174,
-        207,
-        216,
-        220,
-        221,
-        222,
+        204,
+        213,
+        217,
+        218,
+        219,
+        228,
         231,
-        234,
-        246,
-        262,
-        281
+        243,
+        259,
+        278
       ]
     },
     "src/viewer/scene/webgl/PickResult.js": {
