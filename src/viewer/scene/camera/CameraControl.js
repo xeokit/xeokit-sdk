@@ -528,10 +528,9 @@ class CameraControl extends Component {
         const camera = scene.camera;
         const canvas = this.scene.canvas.canvas;
         let over = false;
-        let mouseOrbitRateX = 15;
-        let mouseOrbitRateY = 15;
-        const mousePanRate = 0.2;
-        const mouseZoomRate = 1.0;
+        const mouseOrbitRate = 0.4;
+        const mousePanRate = 0.4;
+        const mouseZoomRate = 0.8;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -675,7 +674,6 @@ class CameraControl extends Component {
             let panVz = 0;
             let vZoom = 0;
             const mousePos = math.vec2();
-            const normalizedMousePos = math.vec2();
             let panToMouse = false;
 
             let ctrlDown = false;
@@ -930,27 +928,15 @@ class CameraControl extends Component {
                 }
             });
 
-            const getZoomRate = (function () {
-                const tempVec3 = math.vec3();
-                return function () {
-                    const aabb = scene.aabb;
-                    const xsize = aabb[3] - aabb[0];
-                    const ysize = aabb[4] - aabb[1];
-                    const zsize = aabb[5] - aabb[2];
-                    let max = (xsize > ysize ? xsize : ysize);
-                    max = (zsize > max ? zsize : max);
-                    const eyeLookDist = Math.abs(math.lenVec3(math.subVec3(scene.camera.look, scene.camera.eye, tempVec3)));
-                    let zoomRate = (eyeLookDist / max);
-                    if (zoomRate < 0.1) {
-                        zoomRate = 0.1;
-                    } else if (zoomRate > max) {
-                        zoomRate = max;
-                    }
-                //    zoomRate = (zoomRate * zoomRate * zoomRate);
-                    console.log("zoomRate = " + zoomRate);
-                    return zoomRate;
-                };
-            })();
+            function getZoomRate() {
+                const aabb = scene.aabb;
+                const xsize = aabb[3] - aabb[0];
+                const ysize = aabb[4] - aabb[1];
+                const zsize = aabb[5] - aabb[2];
+                let max = (xsize > ysize ? xsize : ysize);
+                max = (zsize > max ? zsize : max);
+                return max / 30;
+            }
 
             document.addEventListener("keydown", function (e) {
                 if (!self._active) {
@@ -986,8 +972,6 @@ class CameraControl extends Component {
 
             (function () {
 
-                let downX = 0;
-                let downY = 0;
                 let lastX;
                 let lastY;
                 let xDelta = 0;
@@ -997,12 +981,6 @@ class CameraControl extends Component {
                 let mouseDownLeft;
                 let mouseDownMiddle;
                 let mouseDownRight;
-
-                function normalizeMousePos(mousePos, normalizedMousePos) {
-                    const boundary = self.scene.canvas.boundary;
-                    normalizedMousePos[0] = mousePos[0] / boundary[2];
-                    normalizedMousePos[1] = mousePos[1] / boundary[3];
-                }
 
                 canvas.addEventListener("mousedown", function (e) {
                     if (!(self._active && self._pointerEnabled)) {
@@ -1017,9 +995,8 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            normalizeMousePos(mousePos, normalizedMousePos);
-                            lastX = normalizedMousePos[0];
-                            lastY = normalizedMousePos[1];
+                            lastX = mousePos[0];
+                            lastY = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
                             self.scene.canvas.canvas.style.cursor = "move";
@@ -1032,9 +1009,8 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            normalizeMousePos(mousePos, normalizedMousePos);
-                            lastX = normalizedMousePos[0];
-                            lastY = normalizedMousePos[1];
+                            lastX = mousePos[0];
+                            lastY = mousePos[1];
                             break;
                         default:
                             break;
@@ -1112,15 +1088,14 @@ class CameraControl extends Component {
                         return;
                     }
                     getCanvasPosFromEvent(e, mousePos);
-                    normalizeMousePos(mousePos, normalizedMousePos);
                     panToMouse = true;
                     if (!down) {
                         return;
                     }
-                    const x = normalizedMousePos[0];
-                    const y = normalizedMousePos[1];
-                    xDelta += (x - lastX) * mouseOrbitRateX;
-                    yDelta += (y - lastY) * mouseOrbitRateY;
+                    const x = mousePos[0];
+                    const y = mousePos[1];
+                    xDelta += (x - lastX) * mouseOrbitRate;
+                    yDelta += (y - lastY) * mouseOrbitRate;
                     lastX = x;
                     lastY = y;
                 });
@@ -1149,8 +1124,8 @@ class CameraControl extends Component {
 
                             // Orbiting
 
-                            rotateVy = -xDelta * mouseOrbitRateX;
-                            rotateVx = yDelta * mouseOrbitRateY;
+                            rotateVy = -xDelta * mouseOrbitRate;
+                            rotateVx = yDelta * mouseOrbitRate;
                         }
                     }
 
@@ -1172,8 +1147,7 @@ class CameraControl extends Component {
                         return;
                     }
                     const d = delta / Math.abs(delta);
-                    vZoom = -d * getZoomRate();
-                   // vZoom = -d * getZoomRate() * mouseZoomRate;
+                    vZoom = -d * getZoomRate() * mouseZoomRate;
                     e.preventDefault();
                 });
 
