@@ -88,6 +88,15 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * const aabb     = storey.aabb;     // Axis-aligned 3D World-space boundary of the IfcBuildingStorey
  * ````
  *
+ * We can also get a "storeys" event every time the set of storeys changes, ie. every time a storey is created or destroyed:
+ *
+ * ````javascript
+ * storeyViewsPlugin.on("storeys", ()=> {
+ *      const storey = storeyViewsPlugin.storeys["2SWZMQPyD9pfT9q87pgXa1"];
+ *      //...
+ * });
+ * ````
+ *
  * ## Showing Entitys within Storeys
  *
  * Showing the {@link Entity}s within a storey:
@@ -293,6 +302,7 @@ class StoreyViewsPlugin extends Plugin {
 
         this._onModelLoaded = this.viewer.scene.on("modelLoaded", (modelId) => {
             this._registerModelStoreys(modelId);
+            this.fire("storeys", this.storeys);
         });
     }
 
@@ -314,6 +324,7 @@ class StoreyViewsPlugin extends Plugin {
             const storey = new Storey(this, aabb, modelId, storeyId);
             storey._onModelDestroyed = model.once("destroyed", () => {
                 this._deregisterModelStoreys(modelId);
+                this.fire("storeys", this.storeys);
             });
             this.storeys[storeyId] = storey;
             if (!this.modelStoreys[modelId]) {
@@ -322,23 +333,6 @@ class StoreyViewsPlugin extends Plugin {
             this.modelStoreys[modelId][storeyId] = storey;
         }
     }
-
-    // _hasVisibleObjects(objectIds) {
-    //     const viewer = this.viewer;
-    //     const scene = viewer.scene;
-    //     const metaScene = viewer.metaScene;
-    //     for (var i = 0, len = objectIds.length; i < len; i++) {
-    //         const objectId = objectIds[i];
-    //         const metaObject = metaScene.metaObjects[objectId];
-    //         if (metaObject) {
-    //             const objectState = this.objectStates[metaObject.type];
-    //             if (objectState && objectState.visible) {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
 
     _deregisterModelStoreys(modelId) {
         const storeys = this.modelStoreys[modelId];
@@ -524,11 +518,11 @@ class StoreyViewsPlugin extends Plugin {
      * Executes a callback on each of the objects within the given storey.
      *
      * ## Usage
-     * 
+     *
      * In the example below, we'll show all the {@link Entity}s, within the given ````IfcBuildingStorey````,
      * that have {@link MetaObject}s with type ````IfcSpace````. Note that the callback will only be given
      * an {@link Entity} when one exists for the given {@link MetaObject}.
-     * 
+     *
      * ````JavaScript
      * myStoreyViewsPlugin.withStoreyObjects(storeyId, (entity, metaObject) => {
      *      if (entity && metaObject && metaObject.type === "IfcSpace") {
@@ -536,7 +530,7 @@ class StoreyViewsPlugin extends Plugin {
      *      }
      * });
      * ````
-     * 
+     *
      * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {Function} callback The callback.
      */
