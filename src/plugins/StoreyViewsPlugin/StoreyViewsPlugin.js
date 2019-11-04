@@ -400,7 +400,7 @@ class StoreyViewsPlugin extends Plugin {
         const scene = viewer.scene;
         const camera = scene.camera;
 
-        const aabb = this.viewer.scene.aabb;
+        const aabb = storey.aabb;
         if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
             if (options.done) {
                 options.done();
