@@ -532,13 +532,13 @@ class PerformanceNode {
                 scene._objectVisibilityUpdated(this, false);
             }
             if (this.xrayed) {
-                scene._objectXRayedUpdated(this, false);
+                scene._objectXRayedUpdated(this);
             }
             if (this.selected) {
-                scene._objectSelectedUpdated(this, false);
+                scene._objectSelectedUpdated(this);
             }
             if (this.highlighted) {
-                scene._objectHighlightedUpdated(this, false);
+                scene._objectHighlightedUpdated(this);
             }
         }
         for (var i = 0, len = this.meshes.length; i < len; i++) {
