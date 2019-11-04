@@ -472,6 +472,7 @@ class NavCubePlugin extends Plugin {
         this.setCameraFitFOV(cfg.cameraFitFOV);
         this.setCameraFly(cfg.cameraFly);
         this.setCameraFlyDuration(cfg.cameraFlyDuration);
+        this.setFitVisible(cfg.fitVisible);
     }
 
     send(name, value) {
