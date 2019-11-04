@@ -399,8 +399,8 @@ class StoreyViewsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
+        const aabb = storey.aabb;
 
-        const aabb = scene.aabb;
         if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
             if (options.done) {
                 options.done();
@@ -587,7 +587,7 @@ class StoreyViewsPlugin extends Plugin {
             hideOthers: true
         }));
 
-        this._arrangeStoreyMapCamera();
+        this._arrangeStoreyMapCamera(storey);
 
         //scene.render(true); // Force-render a frame
 
@@ -603,11 +603,11 @@ class StoreyViewsPlugin extends Plugin {
         return new StoreyMap(storeyId, src, format, width, height, padding);
     }
 
-    _arrangeStoreyMapCamera() {
+    _arrangeStoreyMapCamera(storey) {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-        const aabb = this.viewer.scene.aabb;
+        const aabb = storey.aabb;
         const look = math.getAABB3Center(aabb);
         const sca = 0.5;
         const eye = tempVec3a;
