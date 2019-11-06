@@ -345,6 +345,8 @@ class Scene extends Component {
 
         const transparent = !!cfg.transparent;
 
+        this._aabbDirty = true;
+
         /**
          The number of models currently loading.
 
@@ -1508,12 +1510,14 @@ class Scene extends Component {
      *
      * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
+     * When the Scene has no content, will be ````[-100,-100,-100,100,100,100]````.
+     *
      * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
             if (!this._aabb) {
-                this._aabb = math.AABB3(); // FIXME: return useful AABB when there are no collidables
+                this._aabb = math.AABB3();
             }
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;
@@ -1554,12 +1558,12 @@ class Scene extends Component {
                 }
             }
             if (!valid) {
-                xmin = -1;
-                ymin = -1;
-                zmin = -1;
-                xmax = 1;
-                ymax = 1;
-                zmax = 1;
+                xmin = -100;
+                ymin = -100;
+                zmin = -100;
+                xmax = 100;
+                ymax = 100;
+                zmax = 100;
             }
             this._aabb[0] = xmin;
             this._aabb[1] = ymin;
