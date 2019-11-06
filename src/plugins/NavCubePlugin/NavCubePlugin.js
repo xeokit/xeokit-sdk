@@ -29,12 +29,12 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  * ## Usage
  *
  * In the example below, we'll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the canvas
- * with the given ID. Then we'll use the {@link GLTFLoaderPlugin} to load a model into the Viewer's Scene. We can then
+ * with the given ID. Then we'll use the {@link XKTLoaderPlugin} to load a model into the Viewer's Scene. We can then
  * use the NavCube to look at the model along each axis or diagonal.
  *
  * ````JavaScript
  * import {Viewer} from "../src/viewer/Viewer.js";
- * import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
+ * import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
  * import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
  *
  * const viewer = new Viewer({
@@ -55,14 +55,16 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *     cameraFitFOV: 45,      // How much field-of-view the scene takes once camera has fitted it to view
  *     cameraFlyDuration: 0.5,// How long (in seconds) camera takes to fly to each new axis/diagonal
  *
- *     fitVisible: false      // Fit whole scene, including invisible objects (default)
+ *     fitVisible: false,     // Fit whole scene, including invisible objects (default)
+ *
+ *     synchProjection: false // Keep NavCube in perspective projection, even when camera switches to ortho (default)
  * });
  *
- * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * const model = gltfLoader.load({
+ * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/gltf/duplex/scene.gltf",
+ *     src: "./models/xkt/duplex/duplex.xkt",
  *     metaModelSrc: "./metaModels/duplex/metaModel.json", // Sets visual states of object in model
  *     edges: true
  * });
@@ -91,6 +93,7 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.hoverColor="rgba(0,0,0,0.4)"] Custom color for highlighting regions on the NavCube as we hover the pointer over them.
      * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
+     * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
      */
     constructor(viewer, cfg = {}) {
 
@@ -231,10 +234,14 @@ class NavCubePlugin extends Plugin {
             }
         });
         this._onCameraFOV = viewer.camera.perspective.on("fov", (fov) => {
-            this._navCubeCamera.perspective.fov = fov;
+            if (this._synchProjection) {
+                this._navCubeCamera.perspective.fov = fov;
+            }
         });
         this._onCameraProjection = viewer.camera.on("projection", (projection) => {
-            this._navCubeCamera.projection = projection;
+            if (this._synchProjection) {
+                this._navCubeCamera.projection = projection;
+            }
         });
 
         var lastAreaId = -1;
@@ -473,6 +480,7 @@ class NavCubePlugin extends Plugin {
         this.setCameraFly(cfg.cameraFly);
         this.setCameraFlyDuration(cfg.cameraFlyDuration);
         this.setFitVisible(cfg.fitVisible);
+        this.setSynchProjection(cfg.synchProjection);
     }
 
     send(name, value) {
@@ -607,6 +615,26 @@ class NavCubePlugin extends Plugin {
      */
     getCameraFlyDuration() {
         return this._cameraFlyDuration;
+    }
+
+    /**
+     * Sets whether the NavCube switches between perspective and orthographic projections in synchrony with
+     * the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
+     *
+     * @param {Boolean} synchProjection Set ````true```` to keep NavCube projection synchronized with {@link Camera#projection}.
+     */
+    setSynchProjection(synchProjection = false) {
+        this._synchProjection = synchProjection;
+    }
+
+    /**
+     * Gets whether the NavCube switches between perspective and orthographic projections in synchrony with
+     * the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
+     *
+     * @return {Boolean} True when NavCube projection is synchronized with {@link Camera#projection}.
+     */
+    getSynchProjection() {
+        return this._synchProjection;
     }
 
     /**
