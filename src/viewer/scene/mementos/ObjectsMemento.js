@@ -72,9 +72,9 @@ const color = math.vec3();
 class ObjectsMemento {
 
     /**
-     * Creates an ObjectsState.
+     * Creates an ObjectsMemento.
      *
-     * @param {Scene} [scene] When given, immediately saves the given {@link Scene}'s {@link Entity} states to this ObjectsState.
+     * @param {Scene} [scene] When given, immediately saves the given {@link Scene}'s {@link Entity} states to this ObjectsMemento.
      */
     constructor(scene) {
 
