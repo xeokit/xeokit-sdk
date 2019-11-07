@@ -1,7 +1,7 @@
 {
   "name": "xeokit-sdk",
-  "version": "0.2.0",
-  "description": "SDK for building high-performance AEC visualizations on xeogl",
+  "version": "0.5.0",
+  "description": "JavaScript SDK for viewing high-detail 3D BIM and CAD models in the Web browser",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,16 +12,21 @@
   },
   "keywords": [
     "webgl",
-    "xeogl",
+    "xeokit",
+    "ifc",
     "bim",
-    "cad"
+    "cad",
+    "bimserver",
+    "buildingsmart",
+    "openbim",
+    "3d-viewer"
   ],
   "author": "Lindsay Kay",
   "license": "SEE LICENSE IN LICENSE.txt",
   "bugs": {
     "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
-  "homepage": "https://github.com/xeokit/xeokit-sdk#readme",
+  "homepage": "https://xeokit.io",
   "dependencies": {},
   "devDependencies": {
     "esdoc": "^1.1.0",
