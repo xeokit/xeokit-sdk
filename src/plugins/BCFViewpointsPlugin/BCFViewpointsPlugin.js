@@ -335,7 +335,7 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {*} [options] Options for setting the viewpoint.
      * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
-     * @param {Boolean} [options.immediate] When ````true```` (default), immediatly set camera position.
+     * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
      * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
      */
     setViewpoint(bcfViewpoint, options = {}) {
