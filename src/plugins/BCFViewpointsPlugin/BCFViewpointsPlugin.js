@@ -244,19 +244,21 @@ class BCFViewpointsPlugin extends Plugin {
 
         const lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
 
-        bcfViewpoint.perspective_camera = {
-            camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(lookDirection),
-            camera_up_vector: xyzArrayToObject(camera.up),
-            field_of_view: camera.perspective.fov,
-        };
-
-        bcfViewpoint.orthogonal_camera = {
-            camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(lookDirection),
-            camera_up_vector: xyzArrayToObject(camera.up),
-            view_to_world_scale: camera.ortho.scale,
-        };
+        if (camera.projection === "ortho") {
+            bcfViewpoint.orthogonal_camera = {
+                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_direction: xyzArrayToObject(lookDirection),
+                camera_up_vector: xyzArrayToObject(camera.up),
+                view_to_world_scale: camera.ortho.scale,
+            };
+        } else {
+            bcfViewpoint.perspective_camera = {
+                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_direction: xyzArrayToObject(lookDirection),
+                camera_up_vector: xyzArrayToObject(camera.up),
+                field_of_view: camera.perspective.fov,
+            };
+        }
 
         bcfViewpoint.lines = [];
         bcfViewpoint.bitmaps = [];
@@ -361,6 +363,8 @@ class BCFViewpointsPlugin extends Plugin {
             });
         }
 
+        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+
         if (bcfViewpoint.components) {
 
             if (!bcfViewpoint.components.visibility.default_visibility) {
@@ -397,6 +401,7 @@ class BCFViewpointsPlugin extends Plugin {
             let eye;
             let look;
             let up;
+            let projection;
 
             if (bcfViewpoint.perspective_camera) {
 
@@ -405,6 +410,8 @@ class BCFViewpointsPlugin extends Plugin {
                 up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
 
                 camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
+
+                projection = "perspective";
             }
 
             if (bcfViewpoint.orthogonal_camera) {
@@ -414,6 +421,8 @@ class BCFViewpointsPlugin extends Plugin {
                 up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
                 camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
+
+                projection = "ortho";
             }
 
             if (rayCast) {
@@ -426,13 +435,14 @@ class BCFViewpointsPlugin extends Plugin {
             } else {
                 look = math.addVec3(eye, look, tempVec3);
             }
-            
+
             if (immediate) {
                 camera.eye = eye;
                 camera.look = look;
                 camera.up = up;
+                camera.projection = projection;
             } else {
-                viewer.cameraFlight.flyTo({ eye, look, up, duration: options.duration });
+                viewer.cameraFlight.flyTo({ eye, look, up, duration: options.duration, projection });
             }
         }
     }
