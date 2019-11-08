@@ -335,6 +335,8 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {*} [options] Options for setting the viewpoint.
      * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
+     * @param {Boolean} [options.immediate] When ````true```` (default), immediatly set camera position.
+     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
      */
     setViewpoint(bcfViewpoint, options = {}) {
 
@@ -346,6 +348,7 @@ class BCFViewpointsPlugin extends Plugin {
         const scene = viewer.scene;
         const camera = scene.camera;
         const rayCast = (options.rayCast !== false);
+        const immediate = (options.immediate !== false);
 
         scene.clearSectionPlanes();
 
@@ -414,22 +417,22 @@ class BCFViewpointsPlugin extends Plugin {
             }
 
             if (rayCast) {
-
                 const hit = scene.pick({
                     pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                     origin: eye,
                     direction: look
                 });
-
-                camera.eye = eye;
-                camera.look = (hit ? hit.worldPos : math.addVec3(eye, look, tempVec3));
-                camera.up = up;
-
+                look = (hit ? hit.worldPos : math.addVec3(eye, look, tempVec3));
             } else {
-
+                look = math.addVec3(eye, look, tempVec3);
+            }
+            
+            if (immediate) {
                 camera.eye = eye;
-                camera.look = math.addVec3(eye, look, tempVec3);
+                camera.look = look;
                 camera.up = up;
+            } else {
+                viewer.cameraFlight.flyTo({ eye, look, up, duration: options.duration });
             }
         }
     }
