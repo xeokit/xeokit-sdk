@@ -244,19 +244,21 @@ class BCFViewpointsPlugin extends Plugin {
 
         const lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
 
-        bcfViewpoint.perspective_camera = {
-            camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(lookDirection),
-            camera_up_vector: xyzArrayToObject(camera.up),
-            field_of_view: camera.perspective.fov,
-        };
-
-        bcfViewpoint.orthogonal_camera = {
-            camera_view_point: xyzArrayToObject(camera.eye),
-            camera_direction: xyzArrayToObject(lookDirection),
-            camera_up_vector: xyzArrayToObject(camera.up),
-            view_to_world_scale: camera.ortho.scale,
-        };
+        if (camera.projection === "ortho") {
+            bcfViewpoint.orthogonal_camera = {
+                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_direction: xyzArrayToObject(lookDirection),
+                camera_up_vector: xyzArrayToObject(camera.up),
+                view_to_world_scale: camera.ortho.scale,
+            };
+        } else {
+            bcfViewpoint.perspective_camera = {
+                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_direction: xyzArrayToObject(lookDirection),
+                camera_up_vector: xyzArrayToObject(camera.up),
+                field_of_view: camera.perspective.fov,
+            };
+        }
 
         bcfViewpoint.lines = [];
         bcfViewpoint.bitmaps = [];
@@ -335,6 +337,8 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {*} [options] Options for setting the viewpoint.
      * @param {Boolean} [options.rayCast=true] When ````true```` (default), will attempt to set {@link Camera#look} to the closest
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
+     * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
+     * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
      */
     setViewpoint(bcfViewpoint, options = {}) {
 
@@ -346,6 +350,7 @@ class BCFViewpointsPlugin extends Plugin {
         const scene = viewer.scene;
         const camera = scene.camera;
         const rayCast = (options.rayCast !== false);
+        const immediate = (options.immediate !== false);
 
         scene.clearSectionPlanes();
 
@@ -357,6 +362,8 @@ class BCFViewpointsPlugin extends Plugin {
                 });
             });
         }
+
+        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
 
         if (bcfViewpoint.components) {
 
@@ -394,6 +401,7 @@ class BCFViewpointsPlugin extends Plugin {
             let eye;
             let look;
             let up;
+            let projection;
 
             if (bcfViewpoint.perspective_camera) {
 
@@ -402,6 +410,8 @@ class BCFViewpointsPlugin extends Plugin {
                 up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
 
                 camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
+
+                projection = "perspective";
             }
 
             if (bcfViewpoint.orthogonal_camera) {
@@ -411,25 +421,28 @@ class BCFViewpointsPlugin extends Plugin {
                 up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
                 camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
+
+                projection = "ortho";
             }
 
             if (rayCast) {
-
                 const hit = scene.pick({
                     pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
                     origin: eye,
                     direction: look
                 });
-
-                camera.eye = eye;
-                camera.look = (hit ? hit.worldPos : math.addVec3(eye, look, tempVec3));
-                camera.up = up;
-
+                look = (hit ? hit.worldPos : math.addVec3(eye, look, tempVec3));
             } else {
+                look = math.addVec3(eye, look, tempVec3);
+            }
 
+            if (immediate) {
                 camera.eye = eye;
-                camera.look = math.addVec3(eye, look, tempVec3);
+                camera.look = look;
                 camera.up = up;
+                camera.projection = projection;
+            } else {
+                viewer.cameraFlight.flyTo({ eye, look, up, duration: options.duration, projection });
             }
         }
     }
