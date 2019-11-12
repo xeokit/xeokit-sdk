@@ -13,6 +13,7 @@
   "keywords": [
     "webgl",
     "xeokit",
+    "xeolabs",
     "ifc",
     "bim",
     "cad",
@@ -22,7 +23,7 @@
     "3d-viewer"
   ],
   "author": "Lindsay Kay",
-  "license": "SEE LICENSE IN LICENSE.txt",
+  "license": "https://xeokit.github.io/xeokit-licensing/",
   "bugs": {
     "url": "https://github.com/xeokit/xeokit-sdk/issues"
   },
