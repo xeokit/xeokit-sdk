@@ -1243,6 +1243,7 @@ class PerformanceModel extends Component {
 
     /** @private */
     drawNormalFillOpaque(frameCtx) {
+        this.scene.canvas.gl.disable(this.scene.canvas.gl.CULL_FACE);
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalFillOpaque(frameCtx);
         }
