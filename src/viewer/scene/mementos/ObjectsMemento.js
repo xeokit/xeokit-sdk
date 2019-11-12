@@ -73,10 +73,8 @@ class ObjectsMemento {
 
     /**
      * Creates an ObjectsMemento.
-     *
-     * @param {Scene} [scene] When given, immediately saves the given {@link Scene}'s {@link Entity} states to this ObjectsMemento.
      */
-    constructor(scene) {
+    constructor() {
 
         /** @private */
         this.objectsVisible = [];
@@ -107,10 +105,6 @@ class ObjectsMemento {
 
         /** @private */
         this.numObjects = 0;
-
-        if (scene) {
-            this.saveObjects(scene);
-        }
     }
 
     /**
