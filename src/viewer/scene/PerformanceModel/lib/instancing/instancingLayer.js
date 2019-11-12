@@ -551,7 +551,7 @@ class InstancingLayer {
         var visible = !!(flags & RENDER_FLAGS.VISIBLE) ? 255 : 0;
         var xrayed = !!(flags & RENDER_FLAGS.XRAYED) ? 255 : 0;
         var highlighted = !!(flags & RENDER_FLAGS.HIGHLIGHTED) ? 255 : 0;
-        var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0; // TODO
+        var selected = !!(flags & RENDER_FLAGS.SELECTED) ? 255 : 0;
         tempUint8Vec4[0] = visible;
         tempUint8Vec4[1] = xrayed;
         tempUint8Vec4[2] = highlighted;
