@@ -1,6 +1,6 @@
 {
   "name": "@xeokit/xeokit-sdk",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "JavaScript SDK for viewing high-detail 3D BIM and CAD models in the Web browser",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   },
   "keywords": [
     "webgl",
+    "javascript",
     "xeokit",
     "xeolabs",
     "ifc",
@@ -20,6 +21,11 @@
     "bimserver",
     "buildingsmart",
     "openbim",
+    "solidworks",
+    "gltf",
+    "3dxml",
+    "obj",
+    "stl",
     "3d-viewer"
   ],
   "author": "Lindsay Kay",
