@@ -144,14 +144,14 @@ class BCFViewpointsPlugin extends Plugin {
          * @property originatingSystem
          * @type {string}
          */
-        this.originatingSystem = cfg.originatingSystem || "xeokit";
+        this.originatingSystem = cfg.originatingSystem || "xeokit.io";
 
         /**
          * Identifies the authoring tool to include in BCF viewpoints saved by this plugin.
          * @property authoringTool
          * @type {string}
          */
-        this.authoringTool = cfg.authoringTool || "xeokit";
+        this.authoringTool = cfg.authoringTool || "xeokit.io";
     }
 
     /**
@@ -234,26 +234,27 @@ class BCFViewpointsPlugin extends Plugin {
      * }
      */
     getViewpoint(options={}) {
-
         const scene = this.viewer.scene;
         const camera = scene.camera;
+        const realWorldOffset = scene.realWorldOffset;
 
         let bcfViewpoint = {};
 
         // Camera
 
         const lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
+        const camera_view_point = xyzArrayToObject(sum(camera.eye, realWorldOffset));
 
         if (camera.projection === "ortho") {
             bcfViewpoint.orthogonal_camera = {
-                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_view_point: camera_view_point,
                 camera_direction: xyzArrayToObject(lookDirection),
                 camera_up_vector: xyzArrayToObject(camera.up),
                 view_to_world_scale: camera.ortho.scale,
             };
         } else {
             bcfViewpoint.perspective_camera = {
-                camera_view_point: xyzArrayToObject(camera.eye),
+                camera_view_point: camera_view_point,
                 camera_direction: xyzArrayToObject(lookDirection),
                 camera_up_vector: xyzArrayToObject(camera.up),
                 field_of_view: camera.perspective.fov,
@@ -316,8 +317,8 @@ class BCFViewpointsPlugin extends Plugin {
     _objectIdToComponent(objectId) {
         return {
             ifc_guid: objectId,
-            originating_system: this.originatingSystem || "xeokit.io",
-            authoring_tool_id: this.authoringTool || "xeokit.io"
+            originating_system: this.originatingSystem,
+            authoring_tool_id: this.authoringTool
         };
     }
 
@@ -351,6 +352,7 @@ class BCFViewpointsPlugin extends Plugin {
         const camera = scene.camera;
         const rayCast = (options.rayCast !== false);
         const immediate = (options.immediate !== false);
+        const realWorldOffset = scene.realWorldOffset;
 
         scene.clearSectionPlanes();
 
@@ -404,8 +406,7 @@ class BCFViewpointsPlugin extends Plugin {
             let projection;
 
             if (bcfViewpoint.perspective_camera) {
-
-                eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);
+                eye = substract(xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3), realWorldOffset);
                 look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);
                 up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
 
@@ -416,7 +417,7 @@ class BCFViewpointsPlugin extends Plugin {
 
             if (bcfViewpoint.orthogonal_camera) {
 
-                eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);
+                eye = substract(xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3), realWorldOffset);
                 look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
                 up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
@@ -465,6 +466,14 @@ function xyzObjectToArray(xyz, arry) {
     arry[1] = xyz.y;
     arry[2] = xyz.z;
     return arry;
+}
+
+function sum(pos, offset) {
+    return pos.map((a, i) => a + offset[i]);
+}
+
+function substract(pos, offset) {
+    return pos.map((a, i) => a - offset[i]);
 }
 
 export {BCFViewpointsPlugin}
