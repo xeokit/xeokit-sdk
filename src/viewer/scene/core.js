@@ -2,7 +2,6 @@ import {Queue} from './utils/Queue.js';
 import {Map} from './utils/Map.js';
 import {stats} from './stats.js';
 import {utils} from './utils.js';
-import {Scene} from "./scene/Scene.js";
 
 const scenesRenderInfo = {}; // Used for throttling FPS for each Scene
 const sceneIDMap = new Map(); // Ensures unique scene IDs
@@ -40,41 +39,6 @@ function Core() {
     this.scenes = {};
 
     this._superTypes = {}; // For each component type, a list of its supertypes, ordered upwards in the hierarchy.
-
-    /**
-     Returns the current default {@link Scene}.
-
-     If no Scenes exist yet, or no Scene has been made default yet with a previous call to
-     {@link xeokit/setDefaultScene:function}, then this method will create the default
-     Scene on-the-fly.
-
-     Components created without specifying their Scene will be created within this Scene.
-
-     @method getDefaultScene
-     @returns {Scene} The current default scene
-     */
-    this.getDefaultScene = function () {
-        if (!defaultScene) {
-            defaultScene = new Scene({id: "default.scene"});
-        }
-        return defaultScene;
-    };
-
-    /**
-     Sets the current default {@link Scene}.
-
-     A subsequent call to {@link xeokit/getDefaultScene:function} will return this Scene.
-
-     Components created without specifying their Scene will be created within this Scene.
-
-     @method setDefaultScene
-     @param {Scene} scene The new current default scene
-     @returns {Scene} The new current default scene
-     */
-    this.setDefaultScene = function (scene) {
-        defaultScene = scene;
-        return defaultScene;
-    };
 
     /**
      * Registers a scene on xeokit.
