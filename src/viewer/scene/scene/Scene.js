@@ -497,11 +497,11 @@ class Scene extends Component {
         this.reflectionMaps = {};
 
         /**
-         * The real world offset in this Scene
+         * The real world offset for this Scene
          *
          * @type {Number[]}
          */
-        this.realWorldOffset = cfg.realWorldOffset || [0, 0, 0];
+        this.realWorldOffset = cfg.realWorldOffset || new Float64Array([0, 0, 0]);
 
         /**
          * Manages the HTML5 canvas for this Scene.

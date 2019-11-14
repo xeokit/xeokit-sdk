@@ -242,21 +242,31 @@ class BCFViewpointsPlugin extends Plugin {
 
         // Camera
 
-        const lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
-        const camera_view_point = xyzArrayToObject(sum(camera.eye, realWorldOffset));
+        let lookDirection = math.normalizeVec3(math.subVec3(camera.look, camera.eye, math.vec3()));
+        let eye = camera.eye;
+        let up = camera.up;
+
+        if (camera.yUp) {
+            // BCF is Z up
+            lookDirection = YToZ(lookDirection);
+            eye = YToZ(eye);
+            up = YToZ(up);
+        }
+
+        const camera_view_point = xyzArrayToObject(math.addVec3(eye, realWorldOffset));
 
         if (camera.projection === "ortho") {
             bcfViewpoint.orthogonal_camera = {
                 camera_view_point: camera_view_point,
                 camera_direction: xyzArrayToObject(lookDirection),
-                camera_up_vector: xyzArrayToObject(camera.up),
+                camera_up_vector: xyzArrayToObject(up),
                 view_to_world_scale: camera.ortho.scale,
             };
         } else {
             bcfViewpoint.perspective_camera = {
                 camera_view_point: camera_view_point,
                 camera_direction: xyzArrayToObject(lookDirection),
-                camera_up_vector: xyzArrayToObject(camera.up),
+                camera_up_vector: xyzArrayToObject(up),
                 field_of_view: camera.perspective.fov,
             };
         }
@@ -399,31 +409,35 @@ class BCFViewpointsPlugin extends Plugin {
         }
 
         if (bcfViewpoint.perspective_camera || bcfViewpoint.orthogonal_camera) {
-
             let eye;
             let look;
             let up;
             let projection;
 
             if (bcfViewpoint.perspective_camera) {
-                eye = substract(xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3), realWorldOffset);
+                eye = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_view_point, tempVec3);
                 look = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_direction, tempVec3);
                 up = xyzObjectToArray(bcfViewpoint.perspective_camera.camera_up_vector, tempVec3);
 
                 camera.perspective.fov = bcfViewpoint.perspective_camera.field_of_view;
 
                 projection = "perspective";
-            }
-
-            if (bcfViewpoint.orthogonal_camera) {
-
-                eye = substract(xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3), realWorldOffset);
+            } else {
+                eye = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_view_point, tempVec3);
                 look = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_direction, tempVec3);
                 up = xyzObjectToArray(bcfViewpoint.orthogonal_camera.camera_up_vector, tempVec3);
 
                 camera.ortho.scale = bcfViewpoint.orthogonal_camera.field_of_view;
 
                 projection = "ortho";
+            }
+
+            math.subVec4(eye, realWorldOffset);
+
+            if (camera.yUp) {
+                eye = ZToY(eye);
+                look = ZToY(look);
+                up = ZToY(up);
             }
 
             if (rayCast) {
@@ -461,19 +475,19 @@ function xyzArrayToObject(arr) {
 }
 
 function xyzObjectToArray(xyz, arry) {
-    arry = new Float32Array(3);
+    arry = new Float64Array(3);
     arry[0] = xyz.x;
     arry[1] = xyz.y;
     arry[2] = xyz.z;
     return arry;
 }
 
-function sum(pos, offset) {
-    return pos.map((a, i) => a + offset[i]);
+function YToZ(vec) {
+    return new Float64Array([vec[0], -vec[2], vec[1]]);
 }
 
-function substract(pos, offset) {
-    return pos.map((a, i) => a - offset[i]);
+function ZToY(vec) {
+    return new Float64Array([vec[0], vec[2], -vec[1]]);
 }
 
 export {BCFViewpointsPlugin}
