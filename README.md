@@ -1,5 +1,7 @@
 # xeokit-sdk
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c5dd541424f44999ff63c74cae04fcd)](https://www.codacy.com/manual/lindsay-kay/xeokit-sdk?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xeokit/xeokit-sdk&amp;utm_campaign=Badge_Grade)
+
 [xeokit](http://xeokit.io) is a software development kit from [xeolabs](http://xeolabs.com) for viewing high-detail 3D models in the browser. 
 
 The SDK is provided under an [Affero GPL V3](https://github.com/xeokit/xeokit-sdk/blob/master/LICENSE.txt) dual-license, which allows free use for non-commercial purposes, with the option to buy a licence for commercial use. Please [see here](https://xeokit.github.io/xeokit-licensing/) for commercial licensing options.
