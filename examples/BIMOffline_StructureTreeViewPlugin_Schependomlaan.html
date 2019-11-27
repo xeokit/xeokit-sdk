@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StructureTreeViewPlugin - HTML tree view of the IFC structure</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #treePanel {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 650px;
+        }
+
+        #treePanel ul {
+            list-style: none;
+            padding-left: 1.75em;
+        }
+
+        #treePanel ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #treePanel ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            /*line-height: 1.5em;*/
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #treePanel ul li a.plus {
+            background-color: #ded;
+        }
+
+        #treePanel ul li a.minus {
+            background-color: #eee;
+        }
+
+        #treePanel ul li a:active {
+            top: 1px;
+        }
+
+        #treePanel ul li span {
+            display: inline-block;
+        }
+
+        #treePanel .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="treePanel" class="treePanel"></div>
+
+<div id="info">
+    <h1>StructureTreeViewPlugin - HTML tree view of IFC structure</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of the IFC structure
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
+                Guide</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a StructureTreeView
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treePanel")
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model 1 of 5";
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+    model.on("loaded", () => {
+
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+
+        structureTreeView.addModel(model.id);
+    });
+
+</script>
+</html>
