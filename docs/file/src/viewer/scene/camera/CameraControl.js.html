@@ -58,6 +58,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structuretreeviewplugin">plugins/StructureTreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
@@ -72,6 +73,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl2.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
@@ -112,6 +114,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
@@ -662,10 +665,9 @@ class CameraControl extends Component {
         const camera = scene.camera;
         const canvas = this.scene.canvas.canvas;
         let over = false;
-        let mouseOrbitRateX = 15;
-        let mouseOrbitRateY = 15;
-        const mousePanRate = 0.2;
-        const mouseZoomRate = 1.0;
+        const mouseOrbitRate = 0.4;
+        const mousePanRate = 0.4;
+        const mouseZoomRate = 0.8;
         const keyboardOrbitRate = .02;
         const keyboardPanRate = .02;
         const keyboardZoomRate = .02;
@@ -809,7 +811,6 @@ class CameraControl extends Component {
             let panVz = 0;
             let vZoom = 0;
             const mousePos = math.vec2();
-            const normalizedMousePos = math.vec2();
             let panToMouse = false;
 
             let ctrlDown = false;
@@ -1064,27 +1065,15 @@ class CameraControl extends Component {
                 }
             });
 
-            const getZoomRate = (function () {
-                const tempVec3 = math.vec3();
-                return function () {
-                    const aabb = scene.aabb;
-                    const xsize = aabb[3] - aabb[0];
-                    const ysize = aabb[4] - aabb[1];
-                    const zsize = aabb[5] - aabb[2];
-                    let max = (xsize &gt; ysize ? xsize : ysize);
-                    max = (zsize &gt; max ? zsize : max);
-                    const eyeLookDist = Math.abs(math.lenVec3(math.subVec3(scene.camera.look, scene.camera.eye, tempVec3)));
-                    let zoomRate = (eyeLookDist / max);
-                    if (zoomRate &lt; 0.1) {
-                        zoomRate = 0.1;
-                    } else if (zoomRate &gt; max) {
-                        zoomRate = max;
-                    }
-                //    zoomRate = (zoomRate * zoomRate * zoomRate);
-                    console.log(&quot;zoomRate = &quot; + zoomRate);
-                    return zoomRate;
-                };
-            })();
+            function getZoomRate() {
+                const aabb = scene.aabb;
+                const xsize = aabb[3] - aabb[0];
+                const ysize = aabb[4] - aabb[1];
+                const zsize = aabb[5] - aabb[2];
+                let max = (xsize &gt; ysize ? xsize : ysize);
+                max = (zsize &gt; max ? zsize : max);
+                return max / 30;
+            }
 
             document.addEventListener(&quot;keydown&quot;, function (e) {
                 if (!self._active) {
@@ -1120,8 +1109,6 @@ class CameraControl extends Component {
 
             (function () {
 
-                let downX = 0;
-                let downY = 0;
                 let lastX;
                 let lastY;
                 let xDelta = 0;
@@ -1131,12 +1118,6 @@ class CameraControl extends Component {
                 let mouseDownLeft;
                 let mouseDownMiddle;
                 let mouseDownRight;
-
-                function normalizeMousePos(mousePos, normalizedMousePos) {
-                    const boundary = self.scene.canvas.boundary;
-                    normalizedMousePos[0] = mousePos[0] / boundary[2];
-                    normalizedMousePos[1] = mousePos[1] / boundary[3];
-                }
 
                 canvas.addEventListener(&quot;mousedown&quot;, function (e) {
                     if (!(self._active &amp;&amp; self._pointerEnabled)) {
@@ -1151,9 +1132,8 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            normalizeMousePos(mousePos, normalizedMousePos);
-                            lastX = normalizedMousePos[0];
-                            lastY = normalizedMousePos[1];
+                            lastX = mousePos[0];
+                            lastY = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
                             self.scene.canvas.canvas.style.cursor = &quot;move&quot;;
@@ -1166,9 +1146,8 @@ class CameraControl extends Component {
                             xDelta = 0;
                             yDelta = 0;
                             getCanvasPosFromEvent(e, mousePos);
-                            normalizeMousePos(mousePos, normalizedMousePos);
-                            lastX = normalizedMousePos[0];
-                            lastY = normalizedMousePos[1];
+                            lastX = mousePos[0];
+                            lastY = mousePos[1];
                             break;
                         default:
                             break;
@@ -1246,15 +1225,14 @@ class CameraControl extends Component {
                         return;
                     }
                     getCanvasPosFromEvent(e, mousePos);
-                    normalizeMousePos(mousePos, normalizedMousePos);
                     panToMouse = true;
                     if (!down) {
                         return;
                     }
-                    const x = normalizedMousePos[0];
-                    const y = normalizedMousePos[1];
-                    xDelta += (x - lastX) * mouseOrbitRateX;
-                    yDelta += (y - lastY) * mouseOrbitRateY;
+                    const x = mousePos[0];
+                    const y = mousePos[1];
+                    xDelta += (x - lastX) * mouseOrbitRate;
+                    yDelta += (y - lastY) * mouseOrbitRate;
                     lastX = x;
                     lastY = y;
                 });
@@ -1283,8 +1261,8 @@ class CameraControl extends Component {
 
                             // Orbiting
 
-                            rotateVy = -xDelta * mouseOrbitRateX;
-                            rotateVx = yDelta * mouseOrbitRateY;
+                            rotateVy = -xDelta * mouseOrbitRate;
+                            rotateVx = yDelta * mouseOrbitRate;
                         }
                     }
 
@@ -1306,8 +1284,7 @@ class CameraControl extends Component {
                         return;
                     }
                     const d = delta / Math.abs(delta);
-                    vZoom = -d * getZoomRate();
-                   // vZoom = -d * getZoomRate() * mouseZoomRate;
+                    vZoom = -d * getZoomRate() * mouseZoomRate;
                     e.preventDefault();
                 });
 

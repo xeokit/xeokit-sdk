@@ -58,6 +58,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-structuretreeviewplugin">plugins/StructureTreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
@@ -72,6 +73,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl2.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
@@ -112,6 +114,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
@@ -479,6 +482,8 @@ class Scene extends Component {
 
         const transparent = !!cfg.transparent;
 
+        this._aabbDirty = true;
+
         /**
          The number of models currently loading.
 
@@ -627,6 +632,13 @@ class Scene extends Component {
          * @type {{String:ReflectionMap}}
          */
         this.reflectionMaps = {};
+
+        /**
+         * The real world offset for this Scene
+         *
+         * @type {Number[]}
+         */
+        this.realWorldOffset = cfg.realWorldOffset || new Float64Array([0, 0, 0]);
 
         /**
          * Manages the HTML5 canvas for this Scene.
@@ -1039,18 +1051,20 @@ class Scene extends Component {
         this._objectIds = null; // Lazy regenerate
     }
 
-    _objectVisibilityUpdated(entity, visible = entity.visible) {
-        if (visible) {
+    _objectVisibilityUpdated(entity, notify = true) {
+        if (entity.visible) {
             this.visibleObjects[entity.id] = entity;
         } else {
             delete this.visibleObjects[entity.id];
         }
         this._visibleObjectIds = null; // Lazy regenerate
-        this.fire(&quot;objectVisibility&quot;, entity, true);
+        if (notify) {
+            this.fire(&quot;objectVisibility&quot;, entity, true);
+        }
     }
 
-    _objectXRayedUpdated(entity, xrayed = entity.xrayed) {
-        if (xrayed) {
+    _objectXRayedUpdated(entity) {
+        if (entity.xrayed) {
             this.xrayedObjects[entity.id] = entity;
         } else {
             delete this.xrayedObjects[entity.id];
@@ -1058,8 +1072,8 @@ class Scene extends Component {
         this._xrayedObjectIds = null; // Lazy regenerate
     }
 
-    _objectHighlightedUpdated(entity, highlighted = entity.highlighted) {
-        if (highlighted) {
+    _objectHighlightedUpdated(entity) {
+        if (entity.highlighted) {
             this.highlightedObjects[entity.id] = entity;
         } else {
             delete this.highlightedObjects[entity.id];
@@ -1067,8 +1081,8 @@ class Scene extends Component {
         this._highlightedObjectIds = null; // Lazy regenerate
     }
 
-    _objectSelectedUpdated(entity, selected = entity.selected) {
-        if (selected) {
+    _objectSelectedUpdated(entity) {
+        if (entity.selected) {
             this.selectedObjects[entity.id] = entity;
         } else {
             delete this.selectedObjects[entity.id];
@@ -1640,12 +1654,14 @@ class Scene extends Component {
      *
      * The AABB is represented by a six-element Float32Array containing the min/max extents of the axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
      *
+     * When the Scene has no content, will be ````[-100,-100,-100,100,100,100]````.
+     *
      * @type {Number[]}
      */
     get aabb() {
         if (this._aabbDirty) {
             if (!this._aabb) {
-                this._aabb = math.AABB3(); // FIXME: return useful AABB when there are no collidables
+                this._aabb = math.AABB3();
             }
             let xmin = math.MAX_DOUBLE;
             let ymin = math.MAX_DOUBLE;
@@ -1686,12 +1702,12 @@ class Scene extends Component {
                 }
             }
             if (!valid) {
-                xmin = -1;
-                ymin = -1;
-                zmin = -1;
-                xmax = 1;
-                ymax = 1;
-                zmax = 1;
+                xmin = -100;
+                ymin = -100;
+                zmin = -100;
+                xmax = 100;
+                ymax = 100;
+                zmax = 100;
             }
             this._aabb[0] = xmin;
             this._aabb[1] = ymin;
@@ -1801,33 +1817,15 @@ class Scene extends Component {
      *         var worldPos = pickResult.worldPos; // Float32Array containing the picked World-space position on the Entity surface
      *         var worldNormal = pickResult.worldNormal; // Float32Array containing the picked World-space normal vector on the Entity Surface
      *     }
-     * }
-     * ````
-     *
-     * Picking the {@link Entity} that intersects an arbitrarily-aligned World-space ray, implicitly given as a 4x4 matrix:
-     *
-     * ````javascript
-     * const matrix = math.lookAtMat4v([0,10,0], [0,-1,0], [0,0,-1]); // Eye, look and up vectors
-     *
-     * const pickResult = scene.pick({
-     *       pickSurface: true,   // Picking with arbitrarily-positioned ray
-     *       matrix: matrix
-     * });
-     *
-     * if (pickResult) { // Picked an Entity with the ray
-     *      ....
-     * }
-     * ````
+     *  ````
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the ````origin````, ````direction```` and ````matrix```` parameters. Effectively fires a ray through the canvas at this position, directly along the negative View-space Z-axis.
-     * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when ````canvasPos```` given.
-     * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Ignored when ````canvasPos```` given.
-     * @param {Number[]} [params.matrix] Alternative way to indicate ray origin and direction when ray-picking. Overrides ````origin```` and ````direction````. Ignored when ````canvasPos```` given.
+     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
+     * @param {Number[]} [params.direction] World-space ray direction when ray-picking. Also indicates the length of the ray. Ignored when canvasPos given.
      * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
      * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
-     * @param {Boolean} [params.pickInvisible=false] When ````true````, will pick all Entities, including those that are currently invisible.
      * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene&apos;s singleton PickResult if you don&apos;t supply your own.
      * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Entity} is picked, else null. See method comments for description.
      */
@@ -1842,8 +1840,8 @@ class Scene extends Component {
 
         params.pickSurface = params.pickSurface || params.rayPick; // Backwards compatibility
 
-        if (!params.canvasPos &amp;&amp; !params.matrix &amp;&amp; (!params.origin || !params.direction)) {
-            this.warn(&quot;picking without canvasPos, matrix or ray origin and direction&quot;);
+        if (!params.canvasPos &amp;&amp; (!params.origin || !params.direction)) {
+            this.warn(&quot;picking without canvasPos or ray origin and direction&quot;);
         }
 
         const includeEntities = params.includeEntities || params.include; // Backwards compat

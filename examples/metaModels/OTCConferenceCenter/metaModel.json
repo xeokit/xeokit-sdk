@@ -39785,7 +39785,7 @@
     },
     {
       "id": "3lMSBJ1J9AUQZulZKiGshr",
-      "name": "Default",
+      "name": "Site",
       "type": "IfcSite",
       "parent": "3lMSBJ1J9AUQZulZKiGsht",
       "children": []
