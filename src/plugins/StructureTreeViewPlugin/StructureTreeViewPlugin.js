@@ -2,7 +2,7 @@ import {ModelStructureTreeView} from "./ModelStructureTreeView.js";
 import {Plugin} from "../../viewer/Plugin.js";
 
 /**
- * @desc A {@link Viewer} plugin that provides an HTML tree view that represents the structural hierarchy of models.
+ * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC structural hierarchy of models.
  *
  * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Hospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/StructureTreeViewPlugin/StructureTreeViewPlugin.png"></a>
  *
@@ -10,10 +10,11 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * ## Usage
  *
- * In the example below we'll create a structural tree view using StructureTreeViewPlugin. Then we'll use an [XKTLoaderPlugin]() to
- * load the Schependomlaan model from an [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
- * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan). When the
- * model has loaded, we'll add it to the StructureTreeViewPlugin.
+ * In the example below we'll use an [XKTLoaderPlugin]() to load the Schependomlaan model from an [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
+ * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
+ *
+ * Then we'll use a StructureTreeViewPlugin to create a structure tree view. When the
+ * model has loaded, we'll add it to the structure tree view.
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Schependomlaan)]
  *
@@ -41,13 +42,34 @@ import {Plugin} from "../../viewer/Plugin.js";
  * });
  *
  * const treeView = new StructureTreeViewPlugin(viewer, {
- *      containerElement: document.getElementById("myTreeViewContainer");
+ *      containerElement: document.getElementById("myTreeViewContainer")
  * });
  *
  * model.on("loaded", () => {
  *      treeView.addModel(model.id);
  * });
  * ````
+ *
+ * ## Automatically Adding Models
+ *
+ * We can also configure the StructureTreeViewPlugin to automatically add models whenever they are loaded. This will also
+ * add any models that are already loaded.
+ *
+ * ````javascript
+ * const treeView = new StructureTreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("myTreeViewContainer"),
+ *      autoAddModels: true
+ * });
+ * ````
+ *
+ * Models are automatically removed when they are destroyed.
+ *
+ * ## Customizing Appearance
+ *
+ * We can customize the appearance of our StructureTreeViewPlugin by defining custom CSS for its HTML
+ * elements. See our example's [source code](https://github.com/xeokit/xeokit-sdk/blob/master/examples/BIMOffline_StructureTreeViewPlugin_Schependomlaan.html)
+ * for an example of custom CSS rules.
+ *
  * @class StructureTreeViewPlugin
  */
 class StructureTreeViewPlugin extends Plugin {
@@ -61,20 +83,24 @@ class StructureTreeViewPlugin extends Plugin {
      * @param {Boolean} [cfg.autoAddModels=false] Set ````true```` to automatically add each model as it's created.
      */
     constructor(viewer, cfg = {}) {
+
         super("StructureTreeViewPlugin", viewer);
+
         if (!cfg.containerElement) {
             this.error("Config expected: containerElement");
             return;
         }
+
         this._containerElement = cfg.containerElement;
         this._modelTreeViews = {};
         this._autoAddModels = !!cfg.autoAddModels;
 
         if (this._autoAddModels) {
-
-            // TODO: Add existing models
-            // TODO: Option to order models alphabetically?
-
+            const modelIds = Object.keys(this.viewer.scene.models);
+            for (let i = 0, len = modelIds.length; i < len; i++) {
+                const modelId = modelIds[i];
+                this.addModel(modelId);
+            }
             this.viewer.scene.on("modelLoaded", (modelId) =>{
                 this.addModel(modelId);
             });
@@ -82,7 +108,7 @@ class StructureTreeViewPlugin extends Plugin {
     }
 
     /**
-     * Adds a model to this StructureTreeViewPlugin.
+     * Adds a model.
      *
      * The model will be automatically removed when destroyed.
      *
@@ -117,7 +143,7 @@ class StructureTreeViewPlugin extends Plugin {
     }
 
     /**
-     * Removes a model from this StructureTreeViewPlugin.
+     * Removes a model.
      *
      * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
      */
@@ -132,6 +158,31 @@ class StructureTreeViewPlugin extends Plugin {
         }
         modelTreeView.destroy();
         delete this._modelTreeViews[modelId];
+    }
+
+    /**
+     * Expands the tree node corresponding to the given object.
+     *
+     * @param {String} objectId ID of the object.
+     */
+    expandNode(objectId) {
+
+    }
+
+    /**
+     * Collapses the tree node corresponding to the given object.
+     *
+     * @param {String} objectId ID of the object.
+     */
+    collapseNode(objectId) {
+
+    }
+
+    /**
+     * Collapses all model trees.
+     */
+    collapseTree() {
+
     }
 
     /**
