@@ -191,6 +191,7 @@ class Component {
         this._subIdMap = null; // Subscription subId pool
         this._subIdEvents = null; // Subscription subIds mapped to event names
         this._eventSubs = null; // Event names mapped to subscribers
+        this._eventSubsNum = null;
         this._events = null; // Maps names to events
         this._eventCallDepth = 0; // Helps us catch stack overflows from recursive events
         this._ownedComponents = null; // // Components created with #create - lazy-instantiated
@@ -293,6 +294,7 @@ class Component {
         }
         if (!this._eventSubs) {
             this._eventSubs = {};
+            this._eventSubsNum = {};
         }
         if (forget !== true) {
             this._events[event] = value || true; // Save notification
@@ -337,11 +339,15 @@ class Component {
         }
         if (!this._eventSubs) {
             this._eventSubs = {};
+            this._eventSubsNum = {};
         }
         let subs = this._eventSubs[event];
         if (!subs) {
             subs = {};
             this._eventSubs[event] = subs;
+            this._eventSubsNum[event] = 1;
+        } else {
+            this._eventSubsNum[event]++;
         }
         const subId = this._subIdMap.addItem(); // Create unique subId
         subs[subId] = {
@@ -374,6 +380,7 @@ class Component {
             const subs = this._eventSubs[event];
             if (subs) {
                 delete subs[subId];
+                this._eventSubsNum[event]--;
             }
             this._subIdMap.removeItem(subId); // Release subId
         }
@@ -405,7 +412,7 @@ class Component {
      * @return {Boolean} True if there are any subscribers to the given event on this component.
      */
     hasSubs(event) {
-        return (this._eventSubs && !!this._eventSubs[event]);
+        return (this._eventSubsNum && (this._eventSubsNum[event] > 0));
     }
 
     /**
