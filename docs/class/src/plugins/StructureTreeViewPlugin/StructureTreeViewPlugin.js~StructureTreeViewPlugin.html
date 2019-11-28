@@ -135,13 +135,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StructureTreeViewPlugin} from &apos;<span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber53">@xeokit/xeokit-sdk/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StructureTreeViewPlugin} from &apos;<span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber75">@xeokit/xeokit-sdk/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber53">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber75">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -161,13 +161,13 @@
 
   
   
-  <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides an HTML tree view that represents the structural hierarchy of models.</p>
+  <div class="description" data-ice="description"><p>A <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that provides an HTML tree view to navigate the IFC structural hierarchy of models.</p>
 <p><a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Hospital"><img src="http://xeokit.io/img/docs/StructureTreeViewPlugin/StructureTreeViewPlugin.png"></a></p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Hospital">Run this example</a>]</p>
-<h2 id="usage">Usage</h2><p>In the example below we&apos;ll create a structural tree view using StructureTreeViewPlugin. Then we&apos;ll use an <a href>XKTLoaderPlugin</a> to
-load the Schependomlaan model from an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>, along
-with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>. When the
-model has loaded, we&apos;ll add it to the StructureTreeViewPlugin.</p>
+<h2 id="usage">Usage</h2><p>In the example below we&apos;ll use an <a href>XKTLoaderPlugin</a> to load the Schependomlaan model from an <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan">.xkt file</a>, along
+with an accompanying JSON <a href="https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan">IFC metadata file</a>.</p>
+<p>Then we&apos;ll use a StructureTreeViewPlugin to create a structure tree view. When the
+model has loaded, we&apos;ll add it to the structure tree view.</p>
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Schependomlaan">Run this example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
 import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
@@ -192,13 +192,24 @@ const model = xktLoader.load({
 });
 
 const treeView = new StructureTreeViewPlugin(viewer, {
-     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;);
+     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;)
 });
 
 model.on(&quot;loaded&quot;, () =&gt; {
      treeView.addModel(model.id);
 });</code>
 </code></pre>
+<h2 id="automatically-adding-models">Automatically Adding Models</h2><p>We can also configure the StructureTreeViewPlugin to automatically add models whenever they are loaded. This will also
+add any models that are already loaded.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const treeView = new StructureTreeViewPlugin(viewer, {
+     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+     autoAddModels: true
+});</code>
+</code></pre>
+<p>Models are automatically removed when they are destroyed.</p>
+<h2 id="customizing-appearance">Customizing Appearance</h2><p>We can customize the appearance of our StructureTreeViewPlugin by defining custom CSS for its HTML
+elements. See our example&apos;s <a href="https://github.com/xeokit/xeokit-sdk/blob/master/examples/BIMOffline_StructureTreeViewPlugin_Schependomlaan.html">source code</a>
+for an example of custom CSS rules.</p>
 </div>
   
 
@@ -273,7 +284,65 @@ model.on(&quot;loaded&quot;, () =&gt; {
       <div>
         
         
-        <div data-ice="description"><p>Adds a model to this StructureTreeViewPlugin.</p>
+        <div data-ice="description"><p>Adds a model.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html#instance-method-collapseNode">collapseNode</a></span></span><span class="code" data-ice="signature">(objectId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Collapses the tree node corresponding to the given object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html#instance-method-collapseTree">collapseTree</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Collapses all model trees.</p>
 </div>
       </div>
     </td>
@@ -325,13 +394,42 @@ model.on(&quot;loaded&quot;, () =&gt; {
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html#instance-method-expandNode">expandNode</a></span></span><span class="code" data-ice="signature">(objectId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Expands the tree node corresponding to the given object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html#instance-method-removeModel">removeModel</a></span></span><span class="code" data-ice="signature">(modelId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Removes a model from this StructureTreeViewPlugin.</p>
+        <div data-ice="description"><p>Removes a model.</p>
 </div>
       </div>
     </td>
@@ -600,7 +698,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber85">source</a></span></span>
     </span>
   </h3>
 
@@ -687,14 +785,14 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Adds a model to this StructureTreeViewPlugin.</p>
+  <div data-ice="description"><p>Adds a model.</p>
 <p>The model will be automatically removed when destroyed.</p>
 <p>To automatically add each model as it&apos;s created, instead of manually calling this method each time,
 provide a <code>autoAddModels: true</code> to the StructureTreeViewPlugin constructor.</p>
@@ -740,6 +838,111 @@ provide a <code>autoAddModels: true</code> to the StructureTreeViewPlugin constr
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-collapseNode">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">collapseNode</span><span class="code" data-ice="signature">(objectId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber177">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Collapses the tree node corresponding to the given object.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">objectId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>ID of the object.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-collapseTree">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">collapseTree</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber184">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Collapses all model trees.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-destroy">
     <span class="access" data-ice="access">public</span>
     
@@ -751,7 +954,7 @@ provide a <code>autoAddModels: true</code> to the StructureTreeViewPlugin constr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber191">source</a></span></span>
     </span>
   </h3>
 
@@ -784,6 +987,67 @@ provide a <code>autoAddModels: true</code> to the StructureTreeViewPlugin constr
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-expandNode">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">expandNode</span><span class="code" data-ice="signature">(objectId: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber168">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Expands the tree node corresponding to the given object.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">objectId</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>ID of the object.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-removeModel">
     <span class="access" data-ice="access">public</span>
     
@@ -795,14 +1059,14 @@ provide a <code>autoAddModels: true</code> to the StructureTreeViewPlugin constr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Removes a model from this StructureTreeViewPlugin.</p>
+  <div data-ice="description"><p>Removes a model.</p>
 </div>
 
   
