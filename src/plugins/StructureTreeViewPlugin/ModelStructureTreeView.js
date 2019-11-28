@@ -26,28 +26,45 @@ class ModelStructureTreeView {
                 return;
             }
             const objectId = entity.id;
+            const item = this._dataMap[objectId];
+            if (!item) {
+                return; // Not in this tree
+            }
+            const visible = entity.visible;
+            const updated = (visible !== item.checked);
+            if (!updated) {
+                return;
+            }
+            this._muteTreeEvents = true;
+            item.checked = visible;
+            if (visible) {
+                item.numVisibleEntities++;
+            } else {
+                item.numVisibleEntities--;
+            }
             const checkbox = document.getElementById(objectId);
-            if (checkbox) {  // Assuming here that only leaf MetaObjects have Entities in the Scene
-                this._muteTreeEvents = true;
-                const metaObject = this._viewer.metaScene.metaObjects[objectId];
-                if (metaObject) {
-                    const visible = entity.visible;
-                    checkbox.checked = visible;
-                    var parentMetaObject = metaObject.parent;
-                    while (parentMetaObject) {
-                        const checkbox = document.getElementById(parentMetaObject.id);
-                        if (checkbox) {
-                            if (visible) {
-                                checkbox.checked = true;
-                            } else {
-                                // TODO: Uncheck parents when zero children are visible
-                            }
-                        }
-                        parentMetaObject = parentMetaObject.parent;
+            if (checkbox) {
+                checkbox.checked = visible;
+            }
+            let parentId = item.parent;
+            while (parentId) {
+                const parentItem = this._dataMap[parentId];
+                parentItem.checked = visible;
+                if (visible) {
+                    parentItem.numVisibleEntities++;
+                } else {
+                    parentItem.numVisibleEntities--;
+                }
+                const parentCheckbox = document.getElementById(parentId);
+                if (parentCheckbox) {
+                    const newChecked = (parentItem.numVisibleEntities > 0);
+                    if (newChecked !== parentCheckbox.checked) {
+                        parentCheckbox.checked = newChecked;
                     }
                 }
-                this._muteTreeEvents = false;
+                parentId = parentItem.parent;
             }
+            this._muteTreeEvents = false;
         });
 
         this._onModelDestroyed = this._model.on("destroyed", () => {
@@ -196,61 +213,49 @@ class ModelStructureTreeView {
     }
 
     _treeNodeChecked(event) {
-
         if (this._muteTreeEvents) {
             return;
         }
-
         this._muteSceneEvents = true;
-
         const node = event.target;
+        const visible = node.checked;
         const checkedObjectId = node.id;
         const checkedMetaObject = this._viewer.metaScene.metaObjects[checkedObjectId];
-        if (checkedMetaObject) {
-            const visible = node.checked;
-            this._withMetaObjectsInSubtree(checkedMetaObject, (metaObject) => {
-                const objectId = metaObject.id;
-                const item = this._dataMap[objectId];
-                item.numVisibleEntities = visible ? item.numEntities : 0;
-                item.checked = visible;
-                const checkbox = document.getElementById(objectId);
-                if (checkbox) {
-                    const lastChecked = checkbox.checked;
-                    checkbox.checked = visible;
-                    if (lastChecked !== visible) {
-                        let nextObjectId = item.id;
-                        while (nextObjectId) {
-                            const parent = this._dataMap[nextObjectId];
-                            if (visible) {
-                                parent.numVisibleEntities++;
-                                if (!parent.checked) {
-                                    document.getElementById(nextObjectId).checked = true;
-                                    parent.checked = true;
-                                }
-                            } else {
-                                parent.numVisibleEntities--;
-                                const needCheck = (parent.numVisibleEntities > 0);
-                                if (needCheck) {
-                                    if (!parent.checked) {
-                                        document.getElementById(nextObjectId).checked = true;
-                                        parent.checked = true;
-                                    }
-                                } else {
-                                    if (parent.checked) {
-                                        document.getElementById(nextObjectId).checked = false;
-                                        parent.checked = false;
-                                    }
-                                }
-                            }
-                            nextObjectId = parent.parent;
-                        }
-                    }
-                }
-                const entity = this._viewer.scene.objects[objectId];
-                if (entity) {
-                    entity.visible = visible;
-                }
-            });
+        let numUpdated = 0;
+        this._withMetaObjectsInSubtree(checkedMetaObject, (metaObject) => {
+            const objectId = metaObject.id;
+            const item = this._dataMap[objectId];
+            item.numVisibleEntities = visible ? item.numEntities : 0;
+            if (visible !== item.checked) {
+                numUpdated++;
+            }
+            item.checked = visible;
+            const checkbox = document.getElementById(objectId);
+            if (checkbox) {
+                // Checkbox element is currently in DOM
+                checkbox.checked = visible;
+            }
+            const entity = this._viewer.scene.objects[objectId];
+            if (entity) {
+                entity.visible = visible;
+            }
+        });
+        const item = this._dataMap[checkedObjectId];
+        let parentId = item.parent;
+        while (parentId) {
+            const parentItem = this._dataMap[parentId];
+            parentItem.checked = visible;
+            const checkbox = document.getElementById(parentId); // Parent checkboxes are always in DOM
+            if (visible) {
+                parentItem.numVisibleEntities += numUpdated;
+            } else {
+                parentItem.numVisibleEntities -= numUpdated;
+            }
+            const newChecked = (parentItem.numVisibleEntities > 0);
+            if (newChecked !== checkbox.checked) {
+                checkbox.checked = newChecked;
+            }
+            parentId = parentItem.parent;
         }
         this._muteSceneEvents = false;
     }
