@@ -7,7 +7,21 @@
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
-        #treePanel {
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        #myStructureTreeViewContainer {
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
@@ -26,65 +40,51 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 650px;
+            width: 550px;
         }
 
-        #myCanvas {
-            background: #ffffff;
-        }
-
-        #myNavCubeCanvas {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            bottom: 50px;
-            right: 10px;
-            z-index: 200000;
-        }
-
-        #treePanel ul {
+        #myStructureTreeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
         }
 
-        #treePanel ul li {
+        #myStructureTreeViewContainer ul li {
             border-bottom-left-radius: 0.75em;
             border-top-left-radius: 0.75em;
             margin: 2px 0;
             position: relative;
         }
 
-        #treePanel ul li a {
+        #myStructureTreeViewContainer ul li a {
             background-color: #eee;
             border-radius: 50%;
             color: #000;
             display: inline-block;
             height: 1.5em;
             left: -1.5em;
-            /*line-height: 1.5em;*/
             position: absolute;
             text-align: center;
             text-decoration: none;
             width: 1.5em;
         }
 
-        #treePanel ul li a.plus {
+        #myStructureTreeViewContainer ul li a.plus {
             background-color: #ded;
         }
 
-        #treePanel ul li a.minus {
+        #myStructureTreeViewContainer ul li a.minus {
             background-color: #eee;
         }
 
-        #treePanel ul li a:active {
+        #myStructureTreeViewContainer ul li a:active {
             top: 1px;
         }
 
-        #treePanel ul li span {
+        #myStructureTreeViewContainer ul li span {
             display: inline-block;
         }
 
-        #treePanel .top-right {
+        #myStructureTreeViewContainer .top-right {
             font-size: small;
             position: fixed;
             right: 1em;
@@ -100,7 +100,7 @@
 
 <canvas id="myNavCubeCanvas"></canvas>
 
-<div id="treePanel" class="treePanel"></div>
+<div id="myStructureTreeViewContainer"></div>
 
 <div id="info">
     <h1>StructureTreeViewPlugin - HTML tree view of IFC structure</h1><br>
@@ -169,7 +169,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const structureTreeView = new StructureTreeViewPlugin(viewer, {
-        containerElement: document.getElementById("treePanel"),
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
         autoAddModels: true
     });
 
