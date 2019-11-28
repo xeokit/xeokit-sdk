@@ -339,6 +339,8 @@ class Component {
         }
         if (!this._eventSubs) {
             this._eventSubs = {};
+        }
+        if (!this._eventSubsNum) {
             this._eventSubsNum = {};
         }
         let subs = this._eventSubs[event];
