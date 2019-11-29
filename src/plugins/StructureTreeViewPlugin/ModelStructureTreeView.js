@@ -70,7 +70,7 @@ class ModelStructureTreeView {
         this._onModelDestroyed = this._model.on("destroyed", () => {
             this.destroy();
         });
-        
+
         this._expandHandler = (e) => {
             this._expand(e);
         };
@@ -84,7 +84,7 @@ class ModelStructureTreeView {
         };
 
         this._addModelTreeData();
-        
+
         this._initWithoutError = true;
     }
 
@@ -112,7 +112,8 @@ class ModelStructureTreeView {
         const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
-                this._addMetaObjectTreeData(children[i]);
+                const childMetaObject = children[i];
+                this._addMetaObjectTreeData(childMetaObject);
             }
         }
     }
@@ -162,8 +163,8 @@ class ModelStructureTreeView {
             return item.parent === null;
         });
         if (orphansArray.length > 0) {
-            const items = orphansArray.map((item) => {
-                return this._generateListItem(item);
+            const items = orphansArray.map((item2) => {
+                return this._generateListItem(item2);
             });
             const ul = document.createElement('ul');
             items.forEach(function (li) {
@@ -226,7 +227,7 @@ class ModelStructureTreeView {
             const objectId = metaObject.id;
             const item = this._dataMap[objectId];
             item.numVisibleEntities = visible ? item.numEntities : 0;
-            if (visible !== item.checked) {
+            if (((!metaObject.children) || (metaObject.children.length === 0)) && (visible !== item.checked)) {
                 numUpdated++;
             }
             item.checked = visible;
