@@ -29,7 +29,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
  * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Schependomlaan)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer} from "../src/viewer/Viewer.js";
@@ -102,7 +102,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * ## Customizing Appearance
  *
  * We can customize the appearance of our StructureTreeViewPlugin by defining custom CSS for its HTML
- * elements. See our example's [source code](https://github.com/xeokit/xeokit-sdk/blob/master/examples/BIMOffline_StructureTreeViewPlugin_Schependomlaan.html)
+ * elements. See our example's [source code](https://github.com/xeokit/xeokit-sdk/blob/master/examples/BIMOffline_XKT_Schependomlaan.html)
  * for an example of custom CSS rules.
  *
  * @class StructureTreeViewPlugin
