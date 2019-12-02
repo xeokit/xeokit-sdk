@@ -4,7 +4,9 @@
   "description": "JavaScript SDK for viewing high-detail 3D BIM and CAD models in the Web browser",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "./node_modules/.bin/esdoc",
+    "publish": "npm publish --access public"
   },
   "repository": {
     "type": "git",
