@@ -2,19 +2,32 @@ import {ModelStructureTreeView} from "./ModelStructureTreeView.js";
 import {Plugin} from "../../viewer/Plugin.js";
 
 /**
- * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC structural hierarchy of models.
+ * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the structural hierarchy of IFC elements in models.
+ * <br>
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Hospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/StructureTreeViewPlugin/StructureTreeViewPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/StructureTreeViewPlugin/StructureTreeViewPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Hospital)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WestRiverSideHospital)]
+ *
+ * ## Overview
+ *
+ * * A fast HTML tree widget, with zero external dependencies, that works with huge numbers of objects.
+ * * Each node has a checkbox to control the visibility of its object.
+ * * Automatically includes all models (that have metadata) that are currently in the {@link Scene}.
+ * * Allows custom CSS styling.
+ *
+ * ## Credits
+ *
+ * StructureTreeViewPlugin is based on techniques described in [*Super Fast Tree View in JavaScript*](https://chrissmith.xyz/super-fast-tree-view-in-javascript/) by [Chris Smith](https://twitter.com/chris22smith).
  *
  * ## Usage
  *
- * In the example below we'll use an [XKTLoaderPlugin]() to load the Schependomlaan model from an [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
- * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
+ * In the example below we'll add a StructureTreeViewPlugin which, by default, will automatically show the structural
+ * hierarchy of the IFC elements in each model we load.
  *
- * Then we'll use a StructureTreeViewPlugin to create a structure tree view. When the
- * model has loaded, we'll add it to the structure tree view.
+ * Then we'll use an [XKTLoaderPlugin]() to load the Schependomlaan model from an
+ * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
+ * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_StructureTreeViewPlugin_Schependomlaan)]
  *
@@ -32,6 +45,33 @@ import {Plugin} from "../../viewer/Plugin.js";
  * viewer.camera.look = [13.44, 3.31, -14.83];
  * viewer.camera.up = [0.10, 0.98, -0.14];
  *
+ * const treeView = new StructureTreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById("myTreeViewContainer")
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+ *     metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+ *     edges: true
+ * });
+ * ````
+ *
+ * ## Manually Adding Models
+ *
+ * We can control which models appear in our StructureTreeViewPlugin by adding them manually.
+ *
+ * In the next example, we'll configure the StructureTreeViewPlugin to not automatically add models. Once the model
+ * has loaded, we'll add it manually using {@link StructureTreeViewPlugin#addModel}.
+ *
+ * ````javascript
+ * const treeView = new StructureTreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("myTreeViewContainer"),
+ *      autoAddModels: false  // <<---------------- Don't auto-add models
+ * });
+ *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * const model = xktLoader.load({
@@ -41,28 +81,23 @@ import {Plugin} from "../../viewer/Plugin.js";
  *     edges: true
  * });
  *
- * const treeView = new StructureTreeViewPlugin(viewer, {
- *      containerElement: document.getElementById("myTreeViewContainer")
- * });
- *
  * model.on("loaded", () => {
  *      treeView.addModel(model.id);
  * });
  * ````
  *
- * ## Automatically Adding Models
+ * ## Initially Expanding Nodes
  *
- * We can also configure the StructureTreeViewPlugin to automatically add models whenever they are loaded. This will also
- * add any models that are already loaded.
+ * We can configure StructureTreeViewPlugin to initially expand each model's nodes to a given depth.
+ *
+ * Let's automatically expand the first three nodes from the root, for every model added:
  *
  * ````javascript
  * const treeView = new StructureTreeViewPlugin(viewer, {
  *      containerElement: document.getElementById("myTreeViewContainer"),
- *      autoAddModels: true
+ *      autoExpandDepth: 3
  * });
  * ````
- *
- * Models are automatically removed when they are destroyed.
  *
  * ## Customizing Appearance
  *
@@ -80,7 +115,8 @@ class StructureTreeViewPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {*} cfg Plugin configuration.
      * @param {HTMLElement} cfg.containerElement DOM element to contain the StructureTreeViewPlugin.
-     * @param {Boolean} [cfg.autoAddModels=false] Set ````true```` to automatically add each model as it's created.
+     * @param {Boolean} [cfg.autoAddModels=true] When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link StructureTreeViewPlugin#addModel} instead.
+     * @param {Number} [cfg.autoExpandDepth] Optional depth to which to initially expand the tree.
      */
     constructor(viewer, cfg = {}) {
 
@@ -93,7 +129,8 @@ class StructureTreeViewPlugin extends Plugin {
 
         this._containerElement = cfg.containerElement;
         this._modelTreeViews = {};
-        this._autoAddModels = !!cfg.autoAddModels;
+        this._autoAddModels = (cfg.autoAddModels !== false);
+        this._autoExpandDepth = (cfg.autoExpandDepth || 0);
 
         if (this._autoAddModels) {
             const modelIds = Object.keys(this.viewer.scene.models);
@@ -101,7 +138,7 @@ class StructureTreeViewPlugin extends Plugin {
                 const modelId = modelIds[i];
                 this.addModel(modelId);
             }
-            this.viewer.scene.on("modelLoaded", (modelId) =>{
+            this.viewer.metaScene.on("metaModelCreated", (modelId) =>{
                 this.addModel(modelId);
             });
         }
@@ -135,7 +172,8 @@ class StructureTreeViewPlugin extends Plugin {
             return;
         }
         this._modelTreeViews[modelId] = new ModelStructureTreeView(this.viewer, model, metaModel, {
-            containerElement: this._containerElement
+            containerElement: this._containerElement,
+            autoExpandDepth: this._autoExpandDepth
         });
         model.on("destroyed", () => {
             this.removeModel(model.id);
@@ -160,6 +198,10 @@ class StructureTreeViewPlugin extends Plugin {
         delete this._modelTreeViews[modelId];
     }
 
+    expandToDepth(depth) {
+
+    }
+
     /**
      * Expands the tree node corresponding to the given object.
      *
@@ -181,7 +223,7 @@ class StructureTreeViewPlugin extends Plugin {
     /**
      * Collapses all model trees.
      */
-    collapseTree() {
+    collapseAll() {
 
     }
 
