@@ -74,10 +74,6 @@ class ModelStructureTreeView {
             this._muteTreeEvents = false;
         });
 
-        this._onModelDestroyed = this._model.on("destroyed", () => {
-            this.destroy();
-        });
-
         this.groupExpandHandler = (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -375,10 +371,11 @@ class ModelStructureTreeView {
      * Destroys this ModelTreeView.
      */
     destroy() {
-        if (this._initWithoutError) {
+        if (this._initWithoutError && !this._destroyed) {
             this._rootElement.parentNode.removeChild(this._rootElement);
             this._viewer.scene.off(this._onObjectVisibility);
             this._model.off(this._onModelDestroyed);
+            this._destroyed = true;
         }
     }
 }
