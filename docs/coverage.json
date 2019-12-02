@@ -1,7 +1,7 @@
 {
-  "coverage": "46.62%",
-  "expectCount": 3906,
-  "actualCount": 1821,
+  "coverage": "46.59%",
+  "expectCount": 3902,
+  "actualCount": 1818,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -1148,14 +1148,13 @@
       ]
     },
     "src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js": {
-      "expectCount": 13,
-      "actualCount": 8,
+      "expectCount": 9,
+      "actualCount": 5,
       "undocumentLines": [
         130,
         131,
         132,
-        133,
-        201
+        133
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
