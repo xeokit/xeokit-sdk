@@ -1,6 +1,6 @@
 {
-  "coverage": "46.68%",
-  "expectCount": 3901,
+  "coverage": "46.62%",
+  "expectCount": 3906,
   "actualCount": 1821,
   "files": {
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -1114,44 +1114,48 @@
       ]
     },
     "src/plugins/StructureTreeViewPlugin/ModelStructureTreeView.js": {
-      "expectCount": 29,
+      "expectCount": 31,
       "actualCount": 3,
       "undocumentLines": [
-        14,
-        15,
-        16,
-        17,
-        18,
         19,
         20,
         21,
         22,
+        23,
         24,
-        70,
-        74,
-        78,
-        82,
+        25,
+        26,
+        27,
+        28,
+        30,
+        77,
+        81,
         88,
-        91,
-        97,
-        120,
-        160,
-        177,
-        183,
-        209,
-        215,
-        263,
-        285,
-        299
+        95,
+        150,
+        153,
+        159,
+        181,
+        225,
+        244,
+        273,
+        279,
+        300,
+        322,
+        343,
+        347,
+        358
       ]
     },
     "src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js": {
-      "expectCount": 11,
+      "expectCount": 13,
       "actualCount": 8,
       "undocumentLines": [
-        94,
-        95,
-        96
+        130,
+        131,
+        132,
+        133,
+        201
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
@@ -1309,7 +1313,7 @@
       "undocumentLines": []
     },
     "src/viewer/scene/Component.js": {
-      "expectCount": 43,
+      "expectCount": 44,
       "actualCount": 26,
       "undocumentLines": [
         128,
@@ -1324,11 +1328,12 @@
         194,
         195,
         196,
-        202,
-        426,
-        701,
-        726,
-        753
+        197,
+        203,
+        435,
+        710,
+        735,
+        762
       ]
     },
     "src/viewer/scene/Entity.js": {
