@@ -198,34 +198,35 @@ class StructureTreeViewPlugin extends Plugin {
         delete this._modelTreeViews[modelId];
     }
 
-    expandToDepth(depth) {
-
-    }
+    // expandToDepth(depth) {
+    //
+    // }
 
     /**
      * Expands the tree node corresponding to the given object.
      *
      * @param {String} objectId ID of the object.
+     *
      */
-    expandNode(objectId) {
-
-    }
+    // expandNode(objectId) {
+    //
+    // }
 
     /**
      * Collapses the tree node corresponding to the given object.
      *
      * @param {String} objectId ID of the object.
      */
-    collapseNode(objectId) {
-
-    }
+    // collapseNode(objectId) {
+    //
+    // }
 
     /**
      * Collapses all model trees.
      */
-    collapseAll() {
-
-    }
+    // collapseAll() {
+    //
+    // }
 
     /**
      * Destroys this StructureTreeViewPlugin.
