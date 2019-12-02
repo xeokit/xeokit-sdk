@@ -5,19 +5,18 @@
     <title>Basic Scene Graph with Metadata</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
-    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
-
-    <script src="./libs/lodash.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
-
     <style>
-        #treePanel {
-            /*padding: 5px;*/
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #myStructureTreeViewContainer {
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
+            overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.86);
             color: black;
@@ -31,15 +30,55 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 350px;
+            width: 250px;
         }
 
-        #myCanvas {
-            background: #ffffff;
+        #myStructureTreeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
         }
 
-        .inspire-tree .selected > .title-wrap:hover + .wholerow, .inspire-tree .selected > .wholerow {
-            background: rgba(47, 221, 22, 0.5);
+        #myStructureTreeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #myStructureTreeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #myStructureTreeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #myStructureTreeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #myStructureTreeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #myStructureTreeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #myStructureTreeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
         }
 
     </style>
@@ -50,7 +89,7 @@
 
 <canvas id="myCanvas"></canvas>
 
-<div id="treePanel" class="treePanel"></div>
+<div id="myStructureTreeViewContainer"></div>
 
 <div id="info">
     <h1>Basic Scene Graph with Metadata</h1>
@@ -95,9 +134,13 @@
             - Phong materials for meshes
         </li>
         <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of model structure
+        </li>
+        <li>
             <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs">User Guide</a>
         </li>
-
     </ul>
 </div>
 </body>
@@ -114,6 +157,7 @@
     import {PhongMaterial} from "../src/viewer/scene/materials/PhongMaterial.js";
     import {buildBoxGeometry} from "../src/viewer/scene/geometry/builders/buildBoxGeometry.js";
     import {ReadableGeometry} from "../src/viewer/scene/geometry/ReadableGeometry.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -131,6 +175,15 @@
     viewer.cameraFlight.fitFOV = 35;
 
     viewer.scene.highlightMaterial.edgeColor = [0, 0, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a metadata structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
+        autoExpandDepth: 1 // Initially expand root node
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Build a simple scene graph representing a table with four legs
@@ -305,82 +358,6 @@
     var redLegObject = viewer.scene.objects["redLeg"];
     var greenLegObject = viewer.scene.objects["greenLeg"];
     var blueLegObject = viewer.scene.objects["blueLeg"];
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a tree view that toggles object visibilities
-    //------------------------------------------------------------------------------------------------------------------
-
-
-    // Builds tree view data from MetaModel
-    var createData = function (metaModel) {
-        const data = [];
-
-        function visit(expand, data, metaObject) {
-            if (!metaObject) {
-                return;
-            }
-            var child = {
-                id: metaObject.id,
-                text: metaObject.name
-            };
-            data.push(child);
-            const children = metaObject.children;
-            if (children) {
-                child.children = [];
-                for (var i = 0, len = children.length; i < len; i++) {
-                    visit(true, child.children, children[i]);
-                }
-            }
-        }
-
-        visit(true, data, metaModel.rootMetaObject);
-        return data;
-    };
-
-    // Get MetaModel we loaded for our model
-    const modelId = tableModel.id;
-    const metaModel = viewer.metaScene.metaModels[modelId];
-
-    // Create the tree view
-    var treeView = new InspireTree({
-        selection: {
-            autoSelectChildren: true,
-            autoDeselect: true,
-            mode: 'default'
-        },
-        checkbox: {
-            autoCheckChildren: true
-        },
-        showCheckboxes: true,
-        data: createData(metaModel)
-    });
-
-    new InspireTreeDOM(treeView, {
-        target: document.getElementById("treePanel")
-    });
-
-    // Initialize the tree view once loaded
-    treeView.on('model.loaded', function () {
-
-        treeView.select();
-
-        treeView.model.expand();
-        treeView.model[0].children[0].expand();
-
-
-        treeView.on('node.selected', function (event, node) {
-            const objectId = event.id;
-            viewer.scene.setObjectsVisible(objectId, true);
-        });
-
-        treeView.on('node.deselected', function (event, node) {
-            const objectId = event.id;
-            viewer.scene.setObjectsVisible(objectId, false);
-        });
-
-    });
-
-
 
 </script>
 </html>

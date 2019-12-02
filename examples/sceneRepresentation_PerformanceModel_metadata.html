@@ -5,19 +5,18 @@
     <title>PerformanceModel with Metadata</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
-    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
-
-    <script src="./libs/lodash.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
-
     <style>
-        #treePanel {
-            /*padding: 5px;*/
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #myStructureTreeViewContainer {
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
+            overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.86);
             color: black;
@@ -31,15 +30,55 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 350px;
+            width: 250px;
         }
 
-        #myCanvas {
-            background: #ffffff;
+        #myStructureTreeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
         }
 
-        .inspire-tree .selected > .title-wrap:hover + .wholerow, .inspire-tree .selected > .wholerow {
-            background: rgba(47, 221, 22, 0.5);
+        #myStructureTreeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #myStructureTreeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #myStructureTreeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #myStructureTreeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #myStructureTreeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #myStructureTreeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #myStructureTreeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
         }
 
     </style>
@@ -50,7 +89,7 @@
 
 <canvas id="myCanvas"></canvas>
 
-<div id="treePanel" class="treePanel"></div>
+<div id="myStructureTreeViewContainer"></div>
 
 <div id="info">
     <h1>PerformanceModel with Metadata</h1>
@@ -74,6 +113,11 @@
             - high-performance model representation
         </li>
         <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of IFC structure
+        </li>
+        <li>
             <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/High-Performance-Model-Representation">User Guide</a>
         </li>
 
@@ -89,6 +133,7 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {PerformanceModel} from "../src/viewer/scene/PerformanceModel/PerformanceModel.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -356,88 +401,13 @@
     const blueLegObject = viewer.scene.objects["blueLeg"];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a tree view that toggles object visibilities
+    // Create a metadata structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-
-    // Builds tree view data from MetaModel
-    const createData = function (metaModel) {
-        const data = [];
-
-        function visit(expand, data, metaObject) {
-            if (!metaObject) {
-                return;
-            }
-            const child = {
-                id: metaObject.id,
-                text: metaObject.name
-            };
-            data.push(child);
-            const children = metaObject.children;
-            if (children) {
-                child.children = [];
-                for (var i = 0, len = children.length; i < len; i++) {
-                    visit(true, child.children, children[i]);
-                }
-            }
-        }
-
-        visit(true, data, metaModel.rootMetaObject);
-        return data;
-    };
-
-    // Get MetaModel we loaded for our model
-    const modelId = tableModel.id;
-    const metaScene = viewer.metaScene;
-    const metaModel = metaScene.metaModels[modelId];
-
-    // Create the tree view
-    const treeView = new InspireTree({
-        selection: {
-            autoSelectChildren: true,
-            autoDeselect: true,
-            mode: 'default'
-        },
-        checkbox: {
-            autoCheckChildren: true
-        },
-        showCheckboxes: true,
-        data: createData(metaModel)
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
+        autoExpandDepth: 1 // Initially expand root node
     });
-
-    new InspireTreeDOM(treeView, {
-        target: document.getElementById("treePanel")
-    });
-
-    // Initialize the tree view once loaded
-    treeView.on('model.loaded', function () {
-
-        treeView.select();
-
-        treeView.model.expand();
-        treeView.model[0].children[0].expand();
-
-
-        treeView.on('node.selected', function (event, node) {
-
-            const objectId = event.id;
-            const metaObject = metaScene.metaObjects[objectId];
-            const objectIds = metaObject.getObjectIDsInSubtree();
-
-            viewer.scene.setObjectsVisible(objectIds, true);
-        });
-
-        treeView.on('node.deselected', function (event, node) {
-
-            const objectId = event.id;
-            const metaObject = metaScene.metaObjects[objectId];
-            const objectIds = metaObject.getObjectIDsInSubtree();
-
-            viewer.scene.setObjectsVisible(objectIds, false);
-        });
-
-    });
-
 
 </script>
 </html>

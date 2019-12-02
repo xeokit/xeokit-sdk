@@ -7,27 +7,6 @@
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
-        #treePanel {
-            /*padding: 5px;*/
-            padding-top: 25px;
-            pointer-events: all;
-            height: 100%;
-            overflow-y: scroll;
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.86);
-            color: black;
-            top: 0;
-            z-index: 200000;
-            float: left;
-            left: 0;
-            font-family: 'Roboto', sans-serif;
-            font-size: 15px;
-            user-select: none;
-            -ms-user-select: none;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            width: 350px;
-        }
 
         #myCanvas {
             background: lightblue;
@@ -41,13 +20,78 @@
             right: 10px;
             z-index: 200000;
         }
+
+        #myStructureTreeViewContainer {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 550px;
+        }
+
+        #myStructureTreeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+        }
+
+        #myStructureTreeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #myStructureTreeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #myStructureTreeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #myStructureTreeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #myStructureTreeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #myStructureTreeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #myStructureTreeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
+        }
+
     </style>
-
-    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
-    <script src="./libs/lodash.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
-
 
 </head>
 <body>
@@ -56,7 +100,7 @@
 
 <canvas id="myNavCubeCanvas"></canvas>
 
-<div id="treePanel" class="treePanel"></div>
+<div id="myStructureTreeViewContainer"></div>
 
 <div id="info">
     <h1>GLTFLoaderPlugin - Loading an IFC Model from the File System</h1><br>
@@ -68,6 +112,11 @@
             <a target="_other"
                href="./../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a>
             - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of IFC structure
         </li>
         <li>
             <a target="_other"
@@ -91,6 +140,7 @@
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak xraying and highlight materials
@@ -124,7 +174,7 @@
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a NavCube gizmo
+    // Create a NavCube
     //------------------------------------------------------------------------------------------------------------------
 
     new NavCubePlugin(viewer, {
@@ -134,6 +184,15 @@
         alignment: "bottomRight",
         bottomMargin: 100,
         rightMargin: 10
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
+        autoExpandDepth: 3 // Initially expand tree three nodes deep
     });
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -149,8 +208,15 @@
         edges: true
     });
 
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) + " milliseconds<br>Objects: " + model.numEntities;
+    });
+
     //------------------------------------------------------------------------------------------------------------------
-    // Mouse over entityes to highlight them
+    // Mouse over entities to highlight them
     //------------------------------------------------------------------------------------------------------------------
 
     var lastEntity = null;
@@ -182,88 +248,8 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // When model loaded, create a tree view that toggles object xraying
+    // Click an object to log IFC data to console
     //------------------------------------------------------------------------------------------------------------------
-
-    const t0 = performance.now();
-
-    document.getElementById("time").innerHTML = "Loading model...";
-
-    model.on("loaded", function () {
-
-        const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) + " milliseconds<br>Objects: " + model.numEntities + "<br>Triangles: " + model.numTriangles;
-
-        // Builds tree view data from MetaModel
-        var createData = function (metaModel) {
-            const data = [];
-
-            function visit(expand, data, metaObject) {
-                if (!metaObject) {
-                    return;
-                }
-                var child = {
-                    id: metaObject.id,
-                    text: metaObject.name
-                };
-                data.push(child);
-                const children = metaObject.children;
-                if (children) {
-                    child.children = [];
-                    for (var i = 0, len = children.length; i < len; i++) {
-                        visit(true, child.children, children[i]);
-                    }
-                }
-            }
-
-            visit(true, data, metaModel.rootMetaObject);
-            return data;
-        };
-
-        // Get MetaModel we loaded for our model
-        const modelId = model.id;
-        const metaModel = viewer.metaScene.metaModels[modelId];
-
-        // Create the tree view
-        var treeView = new InspireTree({
-            selection: {
-                autoSelectChildren: true,
-                autoDeselect: true,
-                mode: 'checkbox'
-            },
-            checkbox: {
-                autoCheckChildren: true
-            },
-            data: createData(metaModel)
-        });
-
-        new InspireTreeDOM(treeView, {
-            target: document.getElementById("treePanel")
-        });
-
-        // Initialize the tree view once loaded
-        treeView.on('model.loaded', function () {
-
-            treeView.select();
-
-            treeView.model.expand();
-            treeView.model[0].children[0].expand();
-            treeView.model[0].children[0].children[0].expand();
-
-            treeView.on('node.selected', function (event, node) {
-                const objectId = event.id;
-                viewer.scene.setObjectsVisible(objectId, true);
-                // viewer.scene.setObjectsPickable(objectId, true);
-            });
-
-            treeView.on('node.deselected', function (event, node) {
-                const objectId = event.id;
-                viewer.scene.setObjectsVisible(objectId, false);
-                // viewer.scene.setObjectsPickable(objectId, false);
-            });
-        });
-    });
-
 
     scene.input.on("mouseclicked", function (coords) {
 

@@ -8,12 +8,17 @@
     <script src="libs/perfect-scrollbar.min.js"></script>
 
     <style>
-        #treePanel {
-            /*padding: 5px;*/
+
+        #myCanvas {
+            background: #ffffff;
+        }
+
+        #myStructureTreeViewContainer {
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
             overflow-y: scroll;
+            overflow-x: hidden;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.86);
             color: black;
@@ -27,25 +32,66 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 350px;
+            width: 550px;
         }
 
-        #myCanvas {
-            background: #ffffff;
+        #myStructureTreeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
         }
+
+        #myStructureTreeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #myStructureTreeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #myStructureTreeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #myStructureTreeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #myStructureTreeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #myStructureTreeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #myStructureTreeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
+        }
+
     </style>
-
-    <link href="./libs/inspire-tree/site-min.css" type="text/css" rel="stylesheet"/>
-    <script src="./libs/lodash.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree.min.js"></script>
-    <script src="./libs/inspire-tree/inspire-tree-dom-min.js"></script>
 
 </head>
 <body>
 
 <canvas id="myCanvas"></canvas>
 
-<div id="treePanel" class="treePanel"></div>
+<div id="myStructureTreeViewContainer"></div>
+
 <div id="info">
     <h1>BIMServerPlugin - Setting Initial Object Appearances by IFC Type</h1>
     <p>Using our own map of initial default states for IFC elements</p>
@@ -54,6 +100,11 @@
             <a target="_other"
                href="./../docs/class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a>
             - Loads model and IFC data from BIMServer
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of model structure
         </li>
         <li>
             <a target="_other"
@@ -76,6 +127,7 @@
     import {Viewer} from "./../src/viewer/Viewer.js";
     import BimServerClient from "../src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js";
     import {BIMServerLoaderPlugin} from "../src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // BIMServer parameters for this example
@@ -113,6 +165,14 @@
 
     viewer.scene.edgeMaterial.edgeColor = [0.3, 0.3, 0.3];
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
+        autoExpandDepth: 1 // Initially expand the root tree node
+    });
     //------------------------------------------------------------------------------------------------------------------
     // Mouse over objects to highlight them
     //------------------------------------------------------------------------------------------------------------------
@@ -355,90 +415,11 @@
                 });
 
                 //------------------------------------------------------------------------------------------------------
-                // When model loaded, create a tree view to navigate the objects in our model.
-                //
-                // The BIMServerLoaderPlugin created a MetaModel, with MetaObjects, from the IFC data it loaded
-                // from BIMServer.
-                //
-                // We'll use the Inspire Tree UI tree component (https://github.com/helion3/inspire-tree) to create a
-                // tree view from the MetaModel, with which we'll navigate the model's objects.
+                // When model loaded, fit to view
                 //------------------------------------------------------------------------------------------------------
 
                 model.on("loaded", function () {
-
-                    // Fit model to view
                     viewer.cameraFlight.jumpTo(model);
-
-                    // Builds tree view data from MetaModel
-                    var createData = function (metaModel) {
-                        const data = [];
-
-                        function visit(expand, data, metaObject) {
-                            if (!metaObject) {
-                                return;
-                            }
-                            var child = {
-                                id: metaObject.id,
-                                text: metaObject.name
-                            };
-                            data.push(child);
-                            const children = metaObject.children;
-                            if (children) {
-                                child.children = [];
-                                for (var i = 0, len = children.length; i < len; i++) {
-                                    visit(true, child.children, children[i]);
-                                }
-                            }
-                        }
-
-                        visit(true, data, metaModel.rootMetaObject);
-                        return data;
-                    };
-
-                    // Get the MetaModel thet BIMServerLoaderPlugin loaded for our model
-                    const modelId = model.id;
-                    const metaModel = viewer.metaScene.metaModels[modelId];
-
-                    // Create the tree view
-                    var treeView = new InspireTree({
-                        selection: {
-                            autoSelectChildren: true,
-                            autoDeselect: true,
-                            mode: 'checkbox'
-                        },
-                        checkbox: {
-                            autoCheckChildren: true
-                        },
-                        data: createData(metaModel)
-                    });
-
-                    new InspireTreeDOM(treeView, {
-                        target: document.getElementById("treePanel")
-                    });
-
-                    // Initialize the tree view once loaded
-                    treeView.on('model.loaded', function () {
-
-                        treeView.select();
-
-                        treeView.model.expand();
-                        treeView.model[0].children[0].expand();
-                        treeView.model[0].children[0].children[0].expand();
-
-                        treeView.on('node.selected', function (event, node) {
-                            const objectId = event.id;
-                            viewer.scene.setObjectsXRayed(objectId, false);
-                            viewer.scene.setObjectsCollidable(objectId, true);
-                            viewer.scene.setObjectsPickable(objectId, true);
-                        });
-
-                        treeView.on('node.deselected', function (event, node) {
-                            const objectId = event.id;
-                            viewer.scene.setObjectsXRayed(objectId, true);
-                            viewer.scene.setObjectsCollidable(objectId, false);
-                            viewer.scene.setObjectsPickable(objectId, false);
-                        });
-                    });
                 });
 
             }, function (response) {
