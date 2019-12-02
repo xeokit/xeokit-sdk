@@ -25,7 +25,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * In the example below we'll add a StructureTreeViewPlugin which, by default, will automatically show the structural
  * hierarchy of the IFC elements in each model we load.
  *
- * Then we'll use an [XKTLoaderPlugin]() to load the Schependomlaan model from an
+ * Then we'll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
  * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan), along
  * with an accompanying JSON [IFC metadata file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/metaModels/schependomlaan).
  *
