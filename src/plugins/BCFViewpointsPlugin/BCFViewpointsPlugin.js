@@ -350,6 +350,7 @@ class BCFViewpointsPlugin extends Plugin {
      * point of surface intersection with a ray fired from the BCF ````camera_view_point```` in the direction of ````camera_direction````.
      * @param {Boolean} [options.immediate] When ````true```` (default), immediately set camera position.
      * @param {Boolean} [options.duration] Flight duration in seconds.  Overrides {@link CameraFlightAnimation#duration}.
+     * @param {Boolean} [options.reset] When ````true```` (default), set scene objects xrayed property to false, highlighted to false, pickable to true and opacity to 1.
      */
     setViewpoint(bcfViewpoint, options = {}) {
 
@@ -362,6 +363,7 @@ class BCFViewpointsPlugin extends Plugin {
         const camera = scene.camera;
         const rayCast = (options.rayCast !== false);
         const immediate = (options.immediate !== false);
+        const reset = (options.reset !== false);
         const realWorldOffset = scene.realWorldOffset;
 
         scene.clearSectionPlanes();
@@ -375,7 +377,12 @@ class BCFViewpointsPlugin extends Plugin {
             });
         }
 
-        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+        if (reset) {
+            scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+            scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+            scene.setObjectsPickable(scene.objectIds, true);
+            scene.setObjectsOpacity(scene.objectIds, 1);
+        }
 
         if (bcfViewpoint.components) {
 
