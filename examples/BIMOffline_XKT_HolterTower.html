@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XKTLoaderPlugin - Loading an IFC Model from the File System</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightBlue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        #myStructureTreeViewContainer {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 550px;
+        }
+
+        #myStructureTreeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+        }
+
+        #myStructureTreeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #myStructureTreeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #myStructureTreeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #myStructureTreeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #myStructureTreeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #myStructureTreeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #myStructureTreeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="myStructureTreeViewContainer"></div>
+
+<div id="info">
+    <h1>XKTLoaderPlugin - Loading an IFC4 Model from the File System</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+            - HTML tree view of IFC structure
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
+            - Camera navigation cube gizmo
+        </li>
+        <li>
+            <a target="_other"
+               href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/316">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
+                Guide</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {AmbientLight} from '../src/viewer/scene/lights/AmbientLight.js';
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
+    viewer.scene.camera.look = [42.45, 49.62, -43.59];
+    viewer.scene.camera.up = [0.05, 0.95, 0.15];
+
+
+    viewer.cameraFlight.fitFOV = 25;
+
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    new AmbientLight(viewer.scene, {
+        color: [0.35, 0.35, 0.2],
+        intensity: 1.0
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+        containerElement: document.getElementById("myStructureTreeViewContainer"),
+        autoExpandDepth: 3 // Initially expand tree three nodes deep
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/HolterTower/HolterTower.xkt",
+        metaModelSrc: "./metaModels/HolterTower/HolterTower.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
+    });
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse over entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (hit) {
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+
+                lastEntity = hit.entity;
+                hit.entity.highlighted = true;
+            }
+        } else {
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
+        }
+    });
+
+    viewer.cameraControl.on("picked", function (e) {
+        console.log("entity id = " + e.entity.id);
+        var parent = e.entity.parent;
+        if (parent) {
+            console.log("node ID = " + parent.id);
+        }
+    })
+
+    window.viewer = viewer;
+
+</script>
+</html>
