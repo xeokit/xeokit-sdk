@@ -833,6 +833,8 @@ class Component {
             return;
         }
 
+        this.scene._removeComponent(this);
+
         /**
          * Fired when this Component is destroyed.
          * @event destroyed
@@ -873,8 +875,6 @@ class Component {
                 }
             }
         }
-
-        this.scene._removeComponent(this);
 
         // Memory leak avoidance
         this._attached = {};
