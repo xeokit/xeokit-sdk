@@ -833,6 +833,12 @@ class Component {
             return;
         }
 
+        /**
+         * Fired when this Component is destroyed.
+         * @event destroyed
+         */
+        this.fire("destroyed", this.destroyed = true); // Must fire before we blow away subscription maps, below
+
         // Unsubscribe from child components and destroy then
 
         let id;
@@ -880,13 +886,6 @@ class Component {
         this._eventCallDepth = 0;
         this._ownedComponents = null;
         this._updateScheduled = false;
-
-
-        /**
-         * Fired when this Component is destroyed.
-         * @event destroyed
-         */
-        this.fire("destroyed", this.destroyed = true); // Must fire before we blow away subscription maps, below
     }
 }
 
