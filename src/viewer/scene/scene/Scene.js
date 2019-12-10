@@ -15,6 +15,7 @@ import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
+import {PostProcesses} from "../posteffects/PostProcesses.js";
 
 // Cached vars to avoid garbage collection
 
@@ -526,6 +527,12 @@ class Scene extends Component {
         this.canvas.on("webglContextFailed", () => {
             alert("xeokit failed to find WebGL!");
         });
+
+        /**
+         * Manages post processes for this Scene.
+         * @type {PostProcesses}
+         */
+        this.postProcesses = new PostProcesses(this);
 
         this._renderer = new Renderer(this, {
             transparent: transparent

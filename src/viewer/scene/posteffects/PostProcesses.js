@@ -31,9 +31,9 @@ class PostProcesses {
     }
 
     /**
-     * Initialize the post-processing effects pipeline.
+     * @private
      */
-    init() {
+    _init() {
 
         if (this.postProcessInitialized) {
             return;
@@ -96,6 +96,9 @@ class PostProcesses {
         return postProcess;
     }
 
+    /**
+     * Enable post-processing.
+     */
     enable () {
         if (!this.enabled) {
             this.enabled = true;
@@ -103,6 +106,9 @@ class PostProcesses {
         }
     }
 
+    /**
+     * Disable post-processing.
+     */
     disable () {
         if (this.enabled) {
             this.destroyPipeline();
@@ -110,7 +116,11 @@ class PostProcesses {
         }
     }
 
-    parse (cfg) {
+    /**
+     * Creates the post-processing pipeline.
+     * @param cfg
+     */
+    create (cfg) {
        
         this.destroyPipeline();
 
@@ -133,7 +143,7 @@ class PostProcesses {
             }
         }
         
-        this.createPipeline(pipeline);
+        this._createPipeline(pipeline);
     };
 
     destroyPipeline() {
@@ -157,7 +167,7 @@ class PostProcesses {
         }
     };
     
-    createPipeline(effects) {
+    _createPipeline(effects) {
 
         var ctx = {
 
@@ -282,7 +292,7 @@ class PostProcesses {
     finalize(cfg = []) {
 
         if (cfg.length > 0) {
-            this.init();
+            this._init();
         }
 
         for (let i = 0, len = this.postProcessPipelineFinal.length; i < len; ++i) {
