@@ -1432,7 +1432,6 @@ class PerformanceModel extends Component {
             }
         }
         this.scene.camera.off(this._onCameraViewMatrix);
-        super.destroy();
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].destroy();
         }
@@ -1443,6 +1442,7 @@ class PerformanceModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
+        super.destroy();
     }
 }
 
