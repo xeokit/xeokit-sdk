@@ -1,8 +1,8 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
 import {BatchingDrawShaderSource} from "./batchingDrawShaderSource.js";
-import {RENDER_PASSES} from '../renderPasses.js';
+import {RENDER_PASSES} from '../../renderPasses.js';
 
 const ids = new Map({});
 

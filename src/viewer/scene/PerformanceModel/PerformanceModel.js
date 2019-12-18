@@ -1250,6 +1250,13 @@ class PerformanceModel extends Component {
     }
 
     /** @private */
+    drawDepth(frameCtx) {
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].drawDepth(frameCtx);
+        }
+    }
+
+    /** @private */
     drawNormalEdgesOpaque(frameCtx) {
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawNormalEdgesOpaque(frameCtx);

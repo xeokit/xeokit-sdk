@@ -1,7 +1,7 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
-import {BatchingPickMeshShaderSource} from "./batchingPickMeshShaderSource.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
+import {BatchingDepthShaderSource} from "./batchingDepthShaderSource.js";
 
 const ids = new Map({});
 
@@ -9,23 +9,23 @@ const ids = new Map({});
  * @private
  * @constructor
  */
-const BatchingPickMeshRenderer = function (hash, layer) {
+const BatchingDepthRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new BatchingPickMeshShaderSource(layer);
+    this._shaderSource = new BatchingDepthShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
 
-BatchingPickMeshRenderer.get = function (layer) {
+BatchingDepthRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new BatchingPickMeshRenderer(hash, layer);
+        renderer = new BatchingDepthRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -38,14 +38,14 @@ BatchingPickMeshRenderer.get = function (layer) {
 };
 
 function getHash(scene) {
-    return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
+    return [scene.canvas.canvas.id, "", "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-BatchingPickMeshRenderer.prototype.getValid = function () {
+BatchingDepthRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-BatchingPickMeshRenderer.prototype.put = function () {
+BatchingDepthRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -56,11 +56,11 @@ BatchingPickMeshRenderer.prototype.put = function () {
     }
 };
 
-BatchingPickMeshRenderer.prototype.webglContextRestored = function () {
+BatchingDepthRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-BatchingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
+BatchingDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
     const model = layer.model;
     const scene = model.scene;
     const gl = scene.canvas.gl;
@@ -73,9 +73,8 @@ BatchingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
-    frameCtx.bindArray++;
     if (this._aFlags) {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
@@ -84,8 +83,8 @@ BatchingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
         frameCtx.bindArray++;
     }
-    if (this._aPickColor) {
-        this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
+    if (this._aColor) {
+        this._aColor.bindArrayBuffer(state.colorsBuf);
         frameCtx.bindArray++;
     }
     state.indicesBuf.bind();
@@ -94,7 +93,7 @@ BatchingPickMeshRenderer.prototype.drawLayer = function (frameCtx, layer) {
     frameCtx.drawElements++;
 };
 
-BatchingPickMeshRenderer.prototype._allocate = function (layer) {
+BatchingDepthRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
@@ -104,13 +103,13 @@ BatchingPickMeshRenderer.prototype._allocate = function (layer) {
         return;
     }
     const program = this._program;
-    this._uPickInvisible = program.getLocation("pickInvisible");
+    this._uRenderPass = program.getLocation("renderPass");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
     this._uSectionPlanes = [];
     const sectionPlanes = sectionPlanesState.sectionPlanes;
-    for (var i = 0, len = sectionPlanes.length; i < len; i++) {
+    for (let i = 0, len = sectionPlanes.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
@@ -118,21 +117,19 @@ BatchingPickMeshRenderer.prototype._allocate = function (layer) {
         });
     }
     this._aPosition = program.getAttribute("position");
-    this._aPickColor = program.getAttribute("pickColor");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
 };
 
-BatchingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
+BatchingDepthRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
     const sectionPlanesState = scene._sectionPlanesState;
-    const camera = scene.camera;
     program.bind();
     frameCtx.useProgram++;
-    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix || camera.project._state.matrix);
+    const camera = scene.camera;
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -159,4 +156,4 @@ BatchingPickMeshRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
 };
 
-export {BatchingPickMeshRenderer};
+export {BatchingDepthRenderer};

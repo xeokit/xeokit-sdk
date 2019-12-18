@@ -172,7 +172,7 @@ const Renderer = function (scene, options) {
         params = params || {};
         updateDrawlist();
         if (imageDirty || params.force) {
-            draw(params);
+            drawColor(params);
             stats.frame.frameCount++;
             imageDirty = false;
         }
@@ -283,10 +283,94 @@ const Renderer = function (scene, options) {
         renderBuf.unbind();
     }
 
-    var draw = (function () { // Draws the drawables in drawableListSorted
+    const draw = function (params) {
 
-        // On the first pass, we'll immediately draw the opaque normal-appearance drawables, while deferring
-        // the rest to these bins, then do subsequent passes to render these bins.
+        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
+            gl.getExtension("OES_element_index_uint");
+        }
+
+        // if (SAO enabled) {
+        //      bind depth frame buffer
+
+        //      drawDepth({..});
+
+        //      bind default frame buffer
+        //      feed depth frame buffer into frameCtx as an SAO texture
+        // }
+
+        // drawColor({..});
+    };
+
+    const drawDepth = (function () {
+
+        const renderFlags = new RenderFlags();
+
+        return function (params) {
+
+            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
+                gl.getExtension("OES_element_index_uint");
+            }
+
+            frameCtx.reset();
+            frameCtx.pass = params.pass;
+
+            const boundary = scene.viewport.boundary;
+            gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
+
+            if (canvasTransparent) { // Canvas is transparent
+                gl.clearColor(0, 0, 0, 0);
+            } else {
+                const clearColor = scene.canvas.backgroundColor || ambientColor;
+                gl.clearColor(clearColor[0], clearColor[1], clearColor[2], 1.0);
+            }
+
+            gl.enable(gl.DEPTH_TEST);
+            gl.frontFace(gl.CCW);
+            gl.enable(gl.CULL_FACE);
+            gl.depthMask(true);
+            gl.lineWidth(1);
+            frameCtx.lineWidth = 1;
+
+            if (bindOutputFrameBuffer) {
+                bindOutputFrameBuffer(params.pass);
+            }
+
+            if (params.clear !== false) {
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+            }
+
+            for (var type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                    const drawableInfo = drawableTypeInfo[type];
+                    const drawableList = drawableInfo.drawableList;
+
+                    for (var i = 0, len = drawableList.length; i < len; i++) {
+
+                        const drawable = drawableList[i];
+
+                        if (drawable.culled === true || drawable.visible === false) {
+                            continue;
+                        }
+
+                        drawable.getRenderFlags(renderFlags);
+
+                        if (renderFlags.normalFillOpaque) {
+                            drawable.drawDepth(frameCtx);
+                        }
+                    }
+                }
+            }
+            //
+            // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+            // for (let ii = 0; ii < numVertexAttribs; ii++) {
+            //     gl.disableVertexAttribArray(ii);
+            // }
+
+        };
+    })();
+
+    const drawColor = (function () { // Draws the drawables in drawableListSorted
 
         const normalEdgesOpaqueBin = [];
         const normalFillTransparentBin = [];
@@ -310,8 +394,6 @@ const Renderer = function (scene, options) {
         const renderFlags = new RenderFlags();
 
         return function (params) {
-
-            const opaqueOnly = !!params.opaqueOnly;
 
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
                 gl.getExtension("OES_element_index_uint");

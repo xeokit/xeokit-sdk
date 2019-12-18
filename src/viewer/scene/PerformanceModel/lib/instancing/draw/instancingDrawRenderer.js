@@ -1,8 +1,8 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
 import {InstancingDrawShaderSource} from "./instancingDrawShaderSource.js";
-import {RENDER_PASSES} from '../renderPasses.js';
+import {RENDER_PASSES} from '../../renderPasses.js';
 
 const ids = new Map({});
 
@@ -255,7 +255,6 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
-    const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     for (var i = 0, len = lights.length; i < len; i++) {
         light = lights[i];

@@ -1,60 +1,52 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
-
-import {RENDER_PASSES} from '../renderPasses.js';
+import {RENDER_PASSES} from '../../renderPasses.js';
 
 /**
  * @private
  */
-const InstancingFillShaderSource = function (layer) {
+const BatchingFillShaderSource = function (layer) {
     this.vertex = buildVertex(layer);
     this.fragment = buildFragment(layer);
 };
 
 function buildVertex(layer) {
-    var scene = layer.model.scene;
+    const scene = layer.model.scene;
     const sectionPlanesState = scene._sectionPlanesState;
+    const lightsState = scene._lightsState;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
+    let i;
+    let len;
+    let light;
     const src = [];
 
-    src.push("// Instancing fill vertex shader");
-
+    src.push("// Batched fill vertex shader");
     src.push("precision mediump float;");
     src.push("precision mediump int;");
-
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
-
-    src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
-    src.push("attribute vec4 modelMatrixCol1;");
-    src.push("attribute vec4 modelMatrixCol2;");
-
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
-
     src.push("uniform vec4 color;");
 
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
-
     src.push("void main(void) {");
 
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
     src.push("bool selected     = (float(flags.w) > 0.0);");
+    src.push("bool clippable    = (float(flags2.x) > 0.0);");
 
     src.push("bool transparent  = (color.a < 1.0);"); // Color comes from EmphasisMaterial.fillColor, so is not quantized
 
-    src.push(`if
-    (!visible ||
+    src.push(`if (
+    !visible || 
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
@@ -65,9 +57,7 @@ function buildVertex(layer) {
     src.push("} else {");
 
     src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-    src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-
     if (clipping) {
         src.push("vWorldPosition = worldPosition;");
         src.push("vFlags2 = flags2;");
@@ -85,7 +75,7 @@ function buildFragment(layer) {
     let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Instancing fill fragment shader");
+    src.push("// Batched fill fragment shader");
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     if (clipping) {
@@ -108,7 +98,7 @@ function buildFragment(layer) {
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
-        src.push("if (dist > 0.0) { discard; }");
+        src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
     src.push("gl_FragColor = color;");
@@ -116,4 +106,4 @@ function buildFragment(layer) {
     return src;
 }
 
-export {InstancingFillShaderSource};
+export {BatchingFillShaderSource};

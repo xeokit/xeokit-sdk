@@ -1,30 +1,30 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
-import {InstancingPickDepthShaderSource} from "./instancingPickDepthShaderSource.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
+import {InstancingDepthShaderSource} from "./instancingDepthShaderSource.js";
 
 const ids = new Map({});
 
 /**
  * @private
  */
-const InstancingPickDepthRenderer = function (hash, layer) {
+const InstancingDepthRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new InstancingPickDepthShaderSource(layer);
+    this._shaderSource = new InstancingDepthShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
 
-InstancingPickDepthRenderer.get = function (layer) {
+InstancingDepthRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new InstancingPickDepthRenderer(hash, layer);
+        renderer = new InstancingDepthRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -37,14 +37,14 @@ InstancingPickDepthRenderer.get = function (layer) {
 };
 
 function getHash(scene) {
-    return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
+    return [scene.canvas.canvas.id, "", "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-InstancingPickDepthRenderer.prototype.getValid = function () {
+InstancingDepthRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-InstancingPickDepthRenderer.prototype.put = function () {
+InstancingDepthRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -55,11 +55,11 @@ InstancingPickDepthRenderer.prototype.put = function () {
     }
 };
 
-InstancingPickDepthRenderer.prototype.webglContextRestored = function () {
+InstancingDepthRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
+InstancingDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     const model = layer.model;
     const scene = model.scene;
@@ -79,17 +79,8 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._bindProgram(frameCtx, layer);
     }
 
-    const camera = scene.camera;
-    const projectState = camera.project._state;
-    // In practice, these binds will only happen once per frame
-    // because we pick normals on a single previously-picked mesh
-    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
-    gl.uniform1f(this._uZNear, projectState.near);
-    gl.uniform1f(this._uZFar, projectState.far);
-
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
 
     this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
     this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -101,6 +92,10 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
     frameCtx.bindArray += 3;
 
     this._aPosition.bindArrayBuffer(state.positionsBuf);
+    frameCtx.bindArray++;
+
+    this._aColor.bindArrayBuffer(state.colorsBuf);
+    instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 1);
     frameCtx.bindArray++;
 
     this._aFlags.bindArrayBuffer(state.flagsBuf);
@@ -118,11 +113,10 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
 
     instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
-    // Cleanup
-
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol1.location, 0);
-    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);;
+    instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol2.location, 0);
+    instanceExt.vertexAttribDivisorANGLE(this._aColor.location, 0);
     instanceExt.vertexAttribDivisorANGLE(this._aFlags.location, 0);
     if (this._aFlags2) { // Won't be in shader when not clipping
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 0);
@@ -131,7 +125,7 @@ InstancingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
     frameCtx.drawElements++;
 };
 
-InstancingPickDepthRenderer.prototype._allocate = function (layer) {
+InstancingDepthRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
@@ -146,7 +140,7 @@ InstancingPickDepthRenderer.prototype._allocate = function (layer) {
     this._instanceExt = gl.getExtension("ANGLE_instanced_arrays");
 
     const program = this._program;
-    this._uPickInvisible = program.getLocation("pickInvisible");
+
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
@@ -162,24 +156,24 @@ InstancingPickDepthRenderer.prototype._allocate = function (layer) {
     }
 
     this._aPosition = program.getAttribute("position");
+    this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
 
     this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
     this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
     this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
-    this._uZNear = program.getLocation("zNear");
-    this._uZFar = program.getLocation("zFar");
 };
 
-InstancingPickDepthRenderer.prototype._bindProgram = function (frameCtx, layer) {
+InstancingDepthRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
     const sectionPlanesState = scene._sectionPlanesState;
     program.bind();
     frameCtx.useProgram++;
+    const camera = scene.camera;
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const clips = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -206,4 +200,4 @@ InstancingPickDepthRenderer.prototype._bindProgram = function (frameCtx, layer) 
     }
 };
 
-export {InstancingPickDepthRenderer};
+export {InstancingDepthRenderer};

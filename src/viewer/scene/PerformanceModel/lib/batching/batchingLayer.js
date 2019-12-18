@@ -3,13 +3,13 @@ import {WEBGL_INFO} from "../../../webglInfo.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 
-import {BatchingDrawRenderer} from "./batchingDrawRenderer.js";
-import {BatchingFillRenderer} from "./batchingFillRenderer.js";
-import {BatchingEdgesRenderer} from "./batchingEdgesRenderer.js";
-import {BatchingPickMeshRenderer} from "./batchingPickMeshRenderer.js";
-import {BatchingPickDepthRenderer} from "./batchingPickDepthRenderer.js";
-import {BatchingPickNormalsRenderer} from "./batchingPickNormalsRenderer.js";
-import {BatchingOcclusionRenderer} from "./batchingOcclusionRenderer.js";
+import {BatchingDrawRenderer} from "./draw/batchingDrawRenderer.js";
+import {BatchingFillRenderer} from "./emphasis/batchingFillRenderer.js";
+import {BatchingEdgesRenderer} from "./emphasis/batchingEdgesRenderer.js";
+import {BatchingPickMeshRenderer} from "./pick/batchingPickMeshRenderer.js";
+import {BatchingPickDepthRenderer} from "./pick/batchingPickDepthRenderer.js";
+import {BatchingPickNormalsRenderer} from "./pick/batchingPickNormalsRenderer.js";
+import {BatchingOcclusionRenderer} from "./occlusion/batchingOcclusionRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -649,6 +649,17 @@ class BatchingLayer {
         }
     }
 
+    //-- SAO---------------------------------------------------------------------------------------------------
+
+    drawDepth(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (this._depthRenderer) {
+            this._depthRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     //-- XRAYED--------------------------------------------------------------------------------------------------------
 
     drawXRayedFillOpaque(frameCtx) {
@@ -811,6 +822,10 @@ class BatchingLayer {
             this._drawRenderer.put();
             this._drawRenderer = null;
         }
+        if (this._depthRenderer && this._depthRenderer.getValid() === false) {
+            this._depthRenderer.put();
+            this._depthRenderer = null;
+        }
         if (this._fillRenderer && this._fillRenderer.getValid() === false) {
             this._fillRenderer.put();
             this._fillRenderer = null;
@@ -838,6 +853,9 @@ class BatchingLayer {
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
+        if (!this._depthRenderer) {
+            this._depthRenderer = BatchingDepthRenderer.get(this);
+        }
         if (!this._fillRenderer) {
             this._fillRenderer = BatchingFillRenderer.get(this);
         }
@@ -862,6 +880,10 @@ class BatchingLayer {
         if (this._drawRenderer) {
             this._drawRenderer.put();
             this._drawRenderer = null;
+        }
+        if (this._depthRenderer) {
+            this._depthRenderer.put();
+            this._depthRenderer = null;
         }
         if (this._fillRenderer) {
             this._fillRenderer.put();

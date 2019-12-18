@@ -1,13 +1,10 @@
-/**
- * @author xeolabs / https://github.com/xeolabs
- */
-
-import {RENDER_PASSES} from '../renderPasses.js';
+import {RENDER_PASSES} from '../../renderPasses.js';
 
 /**
  * @private
+ * @constructor
  */
-const InstancingDrawShaderSource = function (layer) {
+const BatchingDrawShaderSource = function (layer) {
     this.vertex = buildVertex(layer);
     this.fragment = buildFragment(layer);
 };
@@ -22,23 +19,15 @@ function buildVertex(layer) {
     let light;
     const src = [];
 
-    src.push("// Instancing geometry drawing vertex shader");
+    src.push("// Batched geometry drawing vertex shader");
 
     src.push("uniform int renderPass;");
 
     src.push("attribute vec3 position;");
-    src.push("attribute vec2 normal;");
+    src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
     src.push("attribute vec4 flags2;");
-
-    src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
-    src.push("attribute vec4 modelMatrixCol1;");
-    src.push("attribute vec4 modelMatrixCol2;");
-
-    src.push("attribute vec4 modelNormalMatrixCol0;");
-    src.push("attribute vec4 modelNormalMatrixCol1;");
-    src.push("attribute vec4 modelNormalMatrixCol2;");
 
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
@@ -83,6 +72,7 @@ function buildVertex(layer) {
 
     src.push("void main(void) {");
 
+
     src.push("bool visible      = (float(flags.x) > 0.0);");
     src.push("bool xrayed       = (float(flags.y) > 0.0);");
     src.push("bool highlighted  = (float(flags.z) > 0.0);");
@@ -90,8 +80,8 @@ function buildVertex(layer) {
 
     src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
 
-    src.push(`if 
-    (!visible || 
+    src.push(`if (
+    !visible ||  
     (renderPass == ${RENDER_PASSES.NORMAL_OPAQUE} && (transparent || xrayed)) || 
     (renderPass == ${RENDER_PASSES.NORMAL_TRANSPARENT} && (!transparent || xrayed || highlighted || selected)) || 
     (renderPass == ${RENDER_PASSES.XRAYED} && (!xrayed || highlighted || selected)) || 
@@ -99,20 +89,19 @@ function buildVertex(layer) {
     (renderPass == ${RENDER_PASSES.SELECTED} && !selected)) {`);
 
     src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+
     src.push("} else {");
 
-    src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-
-    src.push("worldPosition = vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-
+    src.push("vec4 worldPosition = (positionsDecodeMatrix * vec4(position, 1.0)); ");
     src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
-    src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-    src.push("vec4 worldNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-    src.push("vec3 viewNormal = normalize(vec4(worldNormal * viewNormalMatrix).xyz);");
+    src.push("vec4 worldNormal =  vec4(octDecode(normal.xy), 0.0); ");
+
+    src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 
     src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
     src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
+
 
     src.push("float lambertian = 1.0;");
     for (i = 0, len = lightsState.lights.length; i < len; i++) {
@@ -164,7 +153,7 @@ function buildFragment(layer) {
     let len;
     const clipping = sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-    src.push("// Instancing geometry drawing fragment shader");
+    src.push("// Batched geometry drawing fragment shader");
     src.push("precision mediump float;");
     src.push("precision mediump int;");
     if (clipping) {
@@ -187,7 +176,7 @@ function buildFragment(layer) {
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
         }
-        src.push("if (dist > 0.0) { discard; }");
+        src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
     src.push("gl_FragColor = vColor;");
@@ -195,4 +184,4 @@ function buildFragment(layer) {
     return src;
 }
 
-export {InstancingDrawShaderSource};
+export {BatchingDrawShaderSource};

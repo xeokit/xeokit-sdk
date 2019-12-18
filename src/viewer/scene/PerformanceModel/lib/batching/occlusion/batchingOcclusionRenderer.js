@@ -1,6 +1,6 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
 import {BatchingOcclusionShaderSource} from "./batchingOcclusionShaderSource.js";
 
 const ids = new Map({});

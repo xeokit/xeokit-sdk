@@ -1,7 +1,7 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
-import {BatchingPickNormalsShaderSource} from "./batchingPickNormalsShaderSource.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
+import {BatchingPickDepthShaderSource} from "./batchingPickDepthShaderSource.js";
 
 const ids = new Map({});
 
@@ -9,23 +9,23 @@ const ids = new Map({});
  * @private
  * @constructor
  */
-const BatchingPickNormalsRenderer = function (hash, layer) {
+const BatchingPickDepthRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new BatchingPickNormalsShaderSource(layer);
+    this._shaderSource = new BatchingPickDepthShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
 
-BatchingPickNormalsRenderer.get = function (layer) {
+BatchingPickDepthRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new BatchingPickNormalsRenderer(hash, layer);
+        renderer = new BatchingPickDepthRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -41,11 +41,11 @@ function getHash(scene) {
     return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-BatchingPickNormalsRenderer.prototype.getValid = function () {
+BatchingPickDepthRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-BatchingPickNormalsRenderer.prototype.put = function () {
+BatchingPickDepthRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -56,15 +56,16 @@ BatchingPickNormalsRenderer.prototype.put = function () {
     }
 };
 
-BatchingPickNormalsRenderer.prototype.webglContextRestored = function () {
+BatchingPickDepthRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-BatchingPickNormalsRenderer.prototype.drawLayer = function (frameCtx, layer) {
+BatchingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
     const model = layer.model;
     const scene = model.scene;
     const gl = scene.canvas.gl;
     const state = layer._state;
+    const projectState = scene.camera.project._state;
     if (!this._program) {
         this._allocate(layer);
     }
@@ -72,18 +73,14 @@ BatchingPickNormalsRenderer.prototype.drawLayer = function (frameCtx, layer) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    // In practice, these binds will only happen once per frame
-    // because we pick normals on a single previously-picked mesh
     gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
     gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
+    gl.uniform1f(this._uZNear, projectState.near);
+    gl.uniform1f(this._uZFar, projectState.far);
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
-    if (this._aNormal) {
-        this._aNormal.bindArrayBuffer(state.normalsBuf);
-        frameCtx.bindArray++;
-    }
     if (this._aFlags) {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
@@ -103,7 +100,7 @@ BatchingPickNormalsRenderer.prototype.drawLayer = function (frameCtx, layer) {
     frameCtx.drawElements++;
 };
 
-BatchingPickNormalsRenderer.prototype._allocate = function (layer) {
+BatchingPickDepthRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
@@ -127,12 +124,13 @@ BatchingPickNormalsRenderer.prototype._allocate = function (layer) {
         });
     }
     this._aPosition = program.getAttribute("position");
-    this._aNormal = program.getAttribute("normal");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
+    this._uZNear = program.getLocation("zNear");
+    this._uZFar = program.getLocation("zFar");
 };
 
-BatchingPickNormalsRenderer.prototype._bindProgram = function (frameCtx, layer) {
+BatchingPickDepthRenderer.prototype._bindProgram = function (frameCtx) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
@@ -166,4 +164,4 @@ BatchingPickNormalsRenderer.prototype._bindProgram = function (frameCtx, layer) 
     }
 };
 
-export {BatchingPickNormalsRenderer};
+export {BatchingPickDepthRenderer};

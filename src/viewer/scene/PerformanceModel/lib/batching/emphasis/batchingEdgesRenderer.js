@@ -1,7 +1,8 @@
-import {Map} from "../../../utils/Map.js";
-import {stats} from "../../../stats.js"
-import {Program} from "../../../webgl/Program.js";
-import {BatchingPickDepthShaderSource} from "./batchingPickDepthShaderSource.js";
+import {Map} from "../../../../utils/Map.js";
+import {stats} from "../../../../stats.js"
+import {Program} from "../../../../webgl/Program.js";
+import {BatchingEdgesShaderSource} from "./batchingEdgesShaderSource.js";
+import {RENDER_PASSES} from '../../renderPasses.js';
 
 const ids = new Map({});
 
@@ -9,23 +10,24 @@ const ids = new Map({});
  * @private
  * @constructor
  */
-const BatchingPickDepthRenderer = function (hash, layer) {
+const BatchingEdgesRenderer = function (hash, layer) {
     this.id = ids.addItem({});
     this._hash = hash;
     this._scene = layer.model.scene;
     this._useCount = 0;
-    this._shaderSource = new BatchingPickDepthShaderSource(layer);
+    this._shaderSource = new BatchingEdgesShaderSource(layer);
     this._allocate(layer);
 };
 
 const renderers = {};
+const defaultColorize = new Float32Array([1.0, 1.0, 1.0, 1.0]);
 
-BatchingPickDepthRenderer.get = function (layer) {
+BatchingEdgesRenderer.get = function (layer) {
     const scene = layer.model.scene;
     const hash = getHash(scene);
     let renderer = renderers[hash];
     if (!renderer) {
-        renderer = new BatchingPickDepthRenderer(hash, layer);
+        renderer = new BatchingEdgesRenderer(hash, layer);
         if (renderer.errors) {
             console.log(renderer.errors.join("\n"));
             return null;
@@ -41,11 +43,11 @@ function getHash(scene) {
     return [scene.canvas.canvas.id, "", scene._sectionPlanesState.getHash()].join(";")
 }
 
-BatchingPickDepthRenderer.prototype.getValid = function () {
+BatchingEdgesRenderer.prototype.getValid = function () {
     return this._hash === getHash(this._scene);
 };
 
-BatchingPickDepthRenderer.prototype.put = function () {
+BatchingEdgesRenderer.prototype.put = function () {
     if (--this._useCount === 0) {
         ids.removeItem(this.id);
         if (this._program) {
@@ -56,29 +58,51 @@ BatchingPickDepthRenderer.prototype.put = function () {
     }
 };
 
-BatchingPickDepthRenderer.prototype.webglContextRestored = function () {
+BatchingEdgesRenderer.prototype.webglContextRestored = function () {
     this._program = null;
 };
 
-BatchingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
+BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass) {
     const model = layer.model;
     const scene = model.scene;
     const gl = scene.canvas.gl;
     const state = layer._state;
-    const projectState = scene.camera.project._state;
     if (!this._program) {
         this._allocate(layer);
+        if (this.errors) {
+            return;
+        }
     }
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
-    gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-    gl.uniformMatrix4fv(this._uViewMatrix, false, frameCtx.pickViewMatrix ? model.getPickViewMatrix(frameCtx.pickViewMatrix) : model.viewMatrix);
-    gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
-    gl.uniform1f(this._uZNear, projectState.near);
-    gl.uniform1f(this._uZFar, projectState.far);
+    if (renderPass === RENDER_PASSES.XRAYED) {
+        const material = scene.xrayMaterial._state;
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+    } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
+        const material = scene.highlightMaterial._state;
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+    } else if (renderPass === RENDER_PASSES.SELECTED) {
+        const material = scene.selectedMaterial._state;
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+    } else {
+        const material = scene.edgeMaterial._state;
+        const edgeColor = material.edgeColor;
+        const edgeAlpha = material.edgeAlpha;
+        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+    }
+
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
+    gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
+    gl.uniformMatrix4fv(this._uViewNormalMatrix, false, model.viewNormalMatrix);
+    gl.uniform1i(this._uRenderPass, renderPass);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
     frameCtx.bindArray++;
     if (this._aFlags) {
@@ -89,18 +113,13 @@ BatchingPickDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
         frameCtx.bindArray++;
     }
-    state.indicesBuf.bind();
+    state.edgeIndicesBuf.bind();
     frameCtx.bindArray++;
-
-    //=============================================================
-    // TODO: Use drawElements count and offset to draw only one entity
-    //=============================================================
-
-    gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+    gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
     frameCtx.drawElements++;
 };
 
-BatchingPickDepthRenderer.prototype._allocate = function (layer) {
+BatchingEdgesRenderer.prototype._allocate = function (layer) {
     var scene = layer.model.scene;
     const gl = scene.canvas.gl;
     const sectionPlanesState = scene._sectionPlanesState;
@@ -110,7 +129,8 @@ BatchingPickDepthRenderer.prototype._allocate = function (layer) {
         return;
     }
     const program = this._program;
-    this._uPickInvisible = program.getLocation("pickInvisible");
+    this._uColor = program.getLocation("color");
+    this._uRenderPass = program.getLocation("renderPass");
     this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
@@ -126,18 +146,17 @@ BatchingPickDepthRenderer.prototype._allocate = function (layer) {
     this._aPosition = program.getAttribute("position");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
-    this._uZNear = program.getLocation("zNear");
-    this._uZFar = program.getLocation("zFar");
 };
 
-BatchingPickDepthRenderer.prototype._bindProgram = function (frameCtx) {
+BatchingEdgesRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const scene = this._scene;
     const gl = scene.canvas.gl;
     const program = this._program;
     const sectionPlanesState = scene._sectionPlanesState;
-    const camera = scene.camera;
     program.bind();
     frameCtx.useProgram++;
+    const camera = scene.camera;
+    gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     if (sectionPlanesState.sectionPlanes.length > 0) {
         const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
         let sectionPlaneUniforms;
@@ -164,4 +183,4 @@ BatchingPickDepthRenderer.prototype._bindProgram = function (frameCtx) {
     }
 };
 
-export {BatchingPickDepthRenderer};
+export {BatchingEdgesRenderer};
