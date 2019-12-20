@@ -59,7 +59,7 @@ class ModelTreeView {
                 } else {
                     parent.numVisibleEntities--;
                 }
-                const parentCheckbox = document.getElementById(parentId);
+                const parentCheckbox = document.getElementById(parent.id);
                 if (parentCheckbox) {
                     const newChecked = (parent.numVisibleEntities > 0);
                     if (newChecked !== parentCheckbox.checked) {
@@ -95,7 +95,6 @@ class ModelTreeView {
             const checkedObjectId = checkbox.id;
             const checkedNode = this._nodeMap[checkedObjectId];
             const objects = this._viewer.scene.objects;
-
             let numUpdated = 0;
             this._withNodeTree(checkedNode, (node) => {
                 const objectId = node.id;
@@ -404,8 +403,7 @@ class ModelTreeView {
         return nodeElement;
     }
 
-    _expandToDepth(depth) {
-        const expand = (metaObject, countDepth) => {
+    _expandToDepth(depth) {        const expand = (metaObject, countDepth) => {
             if (countDepth === depth) {
                 return;
             }

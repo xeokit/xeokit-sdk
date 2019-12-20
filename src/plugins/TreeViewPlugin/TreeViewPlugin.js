@@ -176,6 +176,7 @@ class TreeViewPlugin extends Plugin {
      * @type {String}
      */
     set mode(mode) {
+        mode = mode || "structure";
         if (mode !== "structure" && mode !== "storeys" && mode !== "types") {
             this.error("Unsupported value for `mode' - defaulting to 'structure'");
             mode = "structure";
