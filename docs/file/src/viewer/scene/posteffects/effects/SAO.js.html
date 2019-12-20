@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../../../">
+  <title data-ice="title">src/viewer/scene/posteffects/effects/SAO.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="SDK for developing custom 3D viewers on xeogl"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin">plugins/BIMServerLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-bimserverclient">plugins/BIMServerLoaderPlugin/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderplugin-lib">plugins/BIMServerLoaderPlugin/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPlugin/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2">plugins/BIMServerLoaderPluginV2</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js~BIMServerLoaderPlugin.html">BIMServerLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-bimserverclient">plugins/BIMServerLoaderPluginV2/BIMServerClient</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js~BimServerClient.html">BimServerClient</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bimserverloaderpluginv2-lib">plugins/BIMServerLoaderPluginV2/lib</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js~Datainputstream.html">Datainputstream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BIMServerLoaderPluginV2/lib/Executor.js~Executor.html">Executor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.new.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl2.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/PostEffect.js~PostEffect.html">PostEffect</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx-sao">viewer/scene/postfx/SAO</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/viewer/scene/posteffects/effects/SAO.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {WEBGL_INFO} from &apos;../../webglInfo.js&apos;;
+
+const DEFAULT_RADIUS = 0.9;
+const DEFAULT_INTENSITY = 50;
+const DEFAULT_BIAS = 0.1;
+const DEFAULT_SCALE = 0.9;
+const DEFAULT_CUTOFF = 0.3;
+
+const SAO_SOURCE = `
+    #extension GL_OES_standard_derivatives : require
+    precision highp float;
+    #define PI2 6.283185
+    #define TAU (PI2 * 2.0)
+    #define NUM_SAMPLES 16.0
+    #define SAMPLE_WEIGHT (1.0 / NUM_SAMPLES)
+    #define EPSILON 0.0001
+    varying vec2 vUV;
+    uniform float uSampleRadius;
+    uniform float uIntensity;
+    uniform float uContrast;
+    uniform float uBias;
+    uniform vec2 uTexelOffset;
+    uniform vec3 uDepthParams;
+    uniform vec3 uXYParams;
+    uniform sampler2D uDepthBuffer;
+    vec3 getPosition(float fragDepth, vec2 uv) {
+        vec2 clipCoord = uv * 2.0 - 1.0;
+        float zView = uDepthParams.x / (fragDepth * uDepthParams.y + uDepthParams.z);
+        return vec3(clipCoord.x * zView * uXYParams.x * uXYParams.y,clipCoord.y * zView * uXYParams.y,zView);
+    }
+    vec2 packDepth(float viewZ) {
+        float d = viewZ / -uDepthParams.z;
+        float temp = floor(d * 256.0);
+        return vec2(temp / 256.0,d * 256.0 - temp);
+    }
+    void main() {
+        float fragDepth = texture2D(uDepthBuffer, vUV).x;
+        if (fragDepth == 1.0) { discard; }
+        vec3 position = getPosition(fragDepth, vUV);
+        vec3 normal = normalize(cross(dFdx(position), dFdy(position)));
+        float ssRadius = min((uXYParams.z * uSampleRadius) / (position.z + EPSILON), 32.0);
+        if (ssRadius &lt; 4.0) { discard; }
+        float occlusion = 0.0;
+        for (int i = 0; i &lt; int(NUM_SAMPLES); ++i) {
+            float a = (float(i) + 0.5) * SAMPLE_WEIGHT;
+            float h = ssRadius * a;
+            float theta = a * TAU;
+            vec2 u = vec2(cos(theta), sin(theta));
+            vec2 uv = vUV + h * u * uTexelOffset;
+            fragDepth = texture2D(uDepthBuffer, uv).x;
+            vec3 samplePosition = getPosition(fragDepth, uv);
+            vec3 dir = samplePosition - position;
+            float len2 = dot(dir, dir);
+            float f = max(0.0, uSampleRadius * uSampleRadius - len2);
+            occlusion += f * f * f * max(0.0, dot(dir, normal) - uBias) / (len2 + EPSILON);
+        }
+        occlusion = max(0.0, occlusion * 2.0 * uIntensity * SAMPLE_WEIGHT);
+        vec2 odd = mod(gl_FragCoord.xy, 2.0);
+        if (abs(dFdx(position.z)) &lt; 0.02) {
+            occlusion -= dFdx(occlusion) * (odd.x - 0.5);
+        }
+        if (abs(dFdy(position.z)) &lt; 0.02) {
+            occlusion -= dFdy(occlusion) * (odd.y - 0.5);
+        }
+        gl_FragColor.r = occlusion;
+        gl_FragColor.gb = packDepth(position.z);
+    }`;
+
+const SAO_BLUR_SOURCE = `
+    precision highp float;
+    varying vec2 vUV;
+    uniform sampler2D uColorBuffer;
+    uniform vec2 uTexelOffset;
+    float unpackDepth(vec2 p) {
+        return p.x + p.y / 256.0;
+    }
+    void main() {
+        float gaussian[5];
+        gaussian[0] = 0.153170;
+        gaussian[1] = 0.144893;
+        gaussian[2] = 0.122649;
+        gaussian[3] = 0.092902;
+        gaussian[4] = 0.062970;
+        vec3 centerValue = texture2D(uColorBuffer, vUV).rgb;
+        float totalWeight = gaussian[0];
+        float sum = centerValue.r * totalWeight;
+        float centerDepth = unpackDepth(centerValue.gb);
+        for (int r = 1; r &lt;= 4; ++r) {
+            vec2 uv = vUV + uTexelOffset * float(r) * 2.0;
+            vec3 sampleValue = texture2D(uColorBuffer, uv).rgb;
+            float sampleDepth = unpackDepth(sampleValue.gb);
+            float weight = gaussian[r];
+            weight *= max(0.0, 1.0 - 10.0 * abs(sampleDepth - centerDepth));
+            sum += sampleValue.r * weight;
+            totalWeight += weight;
+        }
+        for (int r = 1; r &lt;= 4; ++r) {
+            vec2 uv = vUV + uTexelOffset * -float(r) * 2.0;
+            vec3 sampleValue = texture2D(uColorBuffer, uv).rgb;
+            float sampleDepth = unpackDepth(sampleValue.gb);
+            float weight = gaussian[r];
+            weight *= max(0.0, 1.0 - 10.0 * abs(sampleDepth - centerDepth));
+            sum += sampleValue.r * weight;
+            totalWeight += weight;
+        }
+        gl_FragColor.r = sum / (totalWeight + 0.0001);
+    }`;
+
+const SAO_BLEND_SOURCE = `
+    precision highp float;
+    varying vec2 vUV;
+    uniform sampler2D uColorBuffer;
+    uniform sampler2D uOcclusionBuffer;
+    uniform float uOcclusionScale;
+    uniform float uOcclusionCutoff;
+    void main() {,
+        vec4 color = texture2D(uColorBuffer, vUV);
+        float ambient = 1.0 - smoothstep(uOcclusionCutoff, 1.0, texture2D(uOcclusionBuffer, vUV).r) * uOcclusionScale;
+        gl_FragColor = vec4(color.rgb * ambient, color.a);
+    }`;
+
+class SAO {
+
+    constructor(postEffects) {
+
+        this.postEffects = postEffects;
+        this.scene = postEffects.scene;
+        this.supported = WEBGL_INFO.depthTexturesSupported;
+        this.fbInitialized = false;
+        this.sampleRadius = DEFAULT_RADIUS;
+        this.intensity = DEFAULT_INTENSITY;
+        this.bias = DEFAULT_BIAS;
+        this.scale = DEFAULT_SCALE;
+
+        this.saoConfig = {
+            type: &quot;sao&quot;,
+            id: &quot;sao&quot;,
+            uniforms: {
+                uSampleRadius: 0.4,
+                uIntensity: 8,
+                uBias: 0.001,
+                uTexelOffset: new Float32Array([1 / window.innerWidth, 1 / window.innerHeight]),
+                uXYParams: new Float32Array(3),
+                uDepthParams: new Float32Array(3)
+            },
+            textures: {
+                uDepthBuffer: {
+                    framebuffer: &quot;__MAIN&quot;,
+                    target: &quot;depth&quot;
+                }
+            },
+            framebuffer: &quot;__BDS_SAO&quot;
+        };
+
+        this.blurHConfig = {
+            type: &quot;saoblur&quot;,
+            id: &quot;saohblur&quot;,
+            uniforms: {
+                uTexelOffset: new Float32Array([1 / window.innerWidth, 0]),
+            },
+            textures: {
+                uColorBuffer: {
+                    framebuffer: &quot;__BDS_SAO&quot;,
+                    target: &quot;color&quot;,
+                }
+            },
+            framebuffer: &quot;---SET_ME---&quot;
+        };
+
+        this.blurVConfig = {
+            type: &quot;saoblur&quot;,
+            id: &quot;saovblur&quot;,
+            uniforms: {
+                uTexelOffset: new Float32Array([0, 1 / window.innerHeight]),
+            },
+            textures: {
+                uColorBuffer: {
+                    framebuffer: &quot;---SET_ME---&quot;,
+                    target: &quot;color&quot;,
+                }
+            },
+            framebuffer: &quot;__BDS_SAO&quot;
+        };
+
+        this.blendConfig = {
+            type: &quot;saoblend&quot;,
+            id: &quot;saoblend&quot;,
+            uniforms: {
+                uOcclusionScale: DEFAULT_SCALE,
+                uOcclusionCutoff: DEFAULT_CUTOFF
+            },
+            textures: {
+                uColorBuffer: {
+                    framebuffer: &quot;---SET_ME---&quot;,
+                    target: &quot;color&quot;,
+                },
+                uOcclusionBuffer: {
+                    framebuffer: &quot;__BDS_SAO&quot;,
+                    target: &quot;color&quot;
+                }
+            },
+            framebuffer: &quot;--SET_ME---&quot;
+        };
+
+        this.postEffects.createPostProcess(&quot;sao&quot;, SAO_SOURCE);
+        this.postEffects.createPostProcess(&quot;saoblur&quot;, SAO_BLUR_SOURCE);
+        this.postEffects.createPostProcess(&quot;saoblend&quot;, SAO_BLEND_SOURCE);
+    }
+
+    init(scene) {
+
+    }
+
+    addStage(cfg) {
+
+        if (!this.supported) {
+            return;
+        }
+
+        if (!this.fbInitialized) {
+            this.initializeFramebuffer();
+        }
+
+        const canvas = this.scene.canvas;
+        const canvasElement = canvas.canvas;
+        var projection = this.scene.getProjection();
+        var aspect = projection.aspect;
+        var fov = projection.fov * Math.PI / 180;
+        var near = projection.near;
+        var far = projection.far;
+        var multiplier = -Math.tan(fov * 0.5);
+        var scaleFactor = -canvasElement.height / (2.0 * Math.tan(fov * 0.5));
+
+        var width = canvasElement.width;
+        var height = canvasElement.height;
+
+        var ioFramebuffers = ctx.getIOFramebuffers(&quot;opaque&quot;);
+
+        var colorIn = ioFramebuffers.read;
+        var colorOut = ioFramebuffers.write;
+
+        // In __MAIN depth, out: __XEOKIT_SAO
+        this.saoConfig.uniforms.uSampleRadius = this.sampleRadius;
+        this.saoConfig.uniforms.uIntensity = this.intensity;
+        this.saoConfig.uniforms.uBias = this.bias;
+        this.saoConfig.uniforms.uTexelOffset[0] = 1 / width;
+        this.saoConfig.uniforms.uTexelOffset[1] = 1 / height;
+        this.saoConfig.uniforms.uXYParams[0] = aspect;
+        this.saoConfig.uniforms.uXYParams[1] = multiplier;
+        this.saoConfig.uniforms.uXYParams[2] = scaleFactor;
+        this.saoConfig.uniforms.uDepthParams[0] = -near * far;
+        this.saoConfig.uniforms.uDepthParams[1] = near - far;
+        this.saoConfig.uniforms.uDepthParams[2] = far;
+
+        // In __XEOKIT_SAO, out: colorOut
+        this.blurHConfig.uniforms.uTexelOffset[0] = 1 / width;
+        this.blurHConfig.uniforms.uTexelOffset[1] = 0;
+        this.blurHConfig.framebuffer = colorOut;
+
+        // In colorOut, out: __XEOKIT_SAO
+        this.blurVConfig.uniforms.uTexelOffset[0] = 0;
+        this.blurVConfig.uniforms.uTexelOffset[1] = 1 / height;
+        this.blurVConfig.textures.uColorBuffer.framebuffer = colorOut;
+
+        // In colorIn, __XEOKIT_SAO, out: colorOut
+        this.blendConfig.uniforms.uOcclusionScale = this.scale;
+        this.blendConfig.textures.uColorBuffer.framebuffer = colorIn;
+        this.blendConfig.framebuffer = colorOut;
+
+        ctx.opaquePipeline.push(this.saoConfig);
+        ctx.opaquePipeline.push(this.blurHConfig);
+        ctx.opaquePipeline.push(this.blurVConfig);
+        ctx.opaquePipeline.push(this.blendConfig);
+    }
+
+    initializeFramebuffer(scene) {
+        this.scene.createFramebuffer(&quot;__XEOKIT_SAO&quot;, {
+            depthAttachment: false
+        });
+    }
+
+    setSampleRadius(r) {
+        this.sampleRadius = this.saoConfig.uniforms.uSampleRadius = r;
+        var saoStage = this.postEffects.getPostProcessStage(&quot;sao&quot;);
+        if (saoStage) {
+            saoStage.setUniform(&quot;uSampleRadius&quot;, this.sampleRadius);
+        }
+    }
+
+    setIntensity(i) {
+        this.intensity = this.saoConfig.uniforms.uIntensity = i;
+        var saoStage = this.postEffects.getPostProcessStage(&quot;sao&quot;);
+        if (saoStage) {
+            saoStage.setUniform(&quot;uIntensity&quot;, this.intensity);
+        }
+    }
+
+    setBias(b) {
+        this.bias = this.saoConfig.uniforms.uBias = b;
+        var saoStage = this.postEffects.getPostProcessStage(&quot;sao&quot;);
+        if (saoStage) {
+            saoStage.setUniform(&quot;uBias&quot;, this.bias);
+        }
+    }
+
+    setOcclusionScale(s) {
+        this.scale = this.blendConfig.uniforms.uOcclusionScale = s;
+        var blendStage = this.postEffects.getPostProcessStage(&quot;saoblend&quot;);
+        if (blendStage) {
+            blendStage.setUniform(&quot;uOcclusionScale&quot;, this.scale);
+        }
+    }
+
+    setOcclusionCutoff(c) {
+        this.cutoff = this.blendConfig.uniforms.uOcclusionCutoff = c;
+        var blendStage = this.postEffects.getPostProcessStage(&quot;saoblend&quot;);
+        if (blendStage) {
+            blendStage.setUniform(&quot;uOcclusionCutoff&quot;, this.cutoff);
+        }
+    };
+
+    configure(cfg) {
+        cfg = cfg || {};
+        cfg.sampleRadius = cfg.sampleRadius === undefined ? DEFAULT_RADIUS : cfg.sampleRadius;
+        cfg.intensity = cfg.intensity === undefined ? DEFAULT_INTENSITY : cfg.intensity;
+        cfg.bias = cfg.bias === undefined ? DEFAULT_BIAS : cfg.bias;
+        cfg.scale = cfg.scale === undefined ? DEFAULT_SCALE : cfg.scale;
+        cfg.cutoff = cfg.cutoff === undefined ? DEFAULT_CUTOFF : cfg.cutoff;
+
+        this.setSampleRadius(cfg.sampleRadius);
+        this.setIntensity(cfg.intensity);
+        this.setBias(cfg.bias);
+        this.setOcclusionScale(cfg.scale);
+        this.setOcclusionCutoff(cfg.cutoff);
+    }
+
+    updateProjection() {
+        var projection = this.scene.getProjection();
+        var aspect = projection.aspect;
+        var fov = projection.fov * Math.PI / 180;
+        var near = projection.near;
+        var far = projection.far;
+        var multiplier = -Math.tan(fov * 0.5);
+        var scaleFactor = -Human.renderer.canvas.height / (2.0 * Math.tan(fov * 0.5));
+
+        this.saoConfig.uniforms.uXYParams[0] = aspect;
+        this.saoConfig.uniforms.uXYParams[1] = multiplier;
+        this.saoConfig.uniforms.uXYParams[2] = scaleFactor;
+        this.saoConfig.uniforms.uDepthParams[0] = -near * far;
+        this.saoConfig.uniforms.uDepthParams[1] = near - far;
+        this.saoConfig.uniforms.uDepthParams[2] = far;
+
+
+        var saoStage = this.postEffects.getPostProcessStage(&quot;sao&quot;);
+
+        if (saoStage) {
+            saoStage.setUniform(&quot;uXYParams&quot;, this.saoConfig.uniforms.uXYParams);
+            saoStage.setUniform(&quot;uDepthParams&quot;, this.saoConfig.uniforms.uDepthParams);
+        }
+    }
+
+    updateCanvas() {
+        const canvasBoundary = this.scene.canvas.boundary;
+        var width = canvasBoundary[2];
+        var height = canvasBoundary[3];
+
+        var projection = this.scene.getProjection();
+        var aspect = projection.aspect;
+        var fov = projection.fov * Math.PI / 180;
+        var multiplier = -Math.tan(fov * 0.5);
+        var scaleFactor = -Human.renderer.canvas.height / (2.0 * Math.tan(fov * 0.5));
+
+        this.saoConfig.uniforms.uTexelOffset[0] = 1 / width;
+        this.saoConfig.uniforms.uTexelOffset[1] = 1 / height;
+        this.saoConfig.uniforms.uXYParams[0] = aspect;
+        this.saoConfig.uniforms.uXYParams[1] = multiplier;
+        this.saoConfig.uniforms.uXYParams[2] = scaleFactor;
+
+        this.blurHConfig.uniforms.uTexelOffset[0] = 1 / width;
+
+        this.blurVConfig.uniforms.uTexelOffset[1] = 1 / height;
+
+        var saoStage = this.postEffects.getPostProcessStage(&quot;sao&quot;);
+        var blurHStage = this.postEffects.getPostProcessStage(&quot;saohblur&quot;);
+        var blurVStage = this.postEffects.getPostProcessStage(&quot;saovblur&quot;);
+        if (saoStage &amp;&amp; blurHStage &amp;&amp; blurVStage) {
+            saoStage.setUniform(&quot;uXYParams&quot;, this.saoConfig.uniforms.uXYParams);
+            saoStage.setUniform(&quot;uTexelOffset&quot;, this.saoConfig.uniforms.uTexelOffset);
+            blurHStage.setUniform(&quot;uTexelOffset&quot;, this.blurHConfig.uniforms.uTexelOffset);
+            blurVStage.setUniform(&quot;uTexelOffset&quot;,  this.blurVConfig.uniforms.uTexelOffset);
+        }
+    }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

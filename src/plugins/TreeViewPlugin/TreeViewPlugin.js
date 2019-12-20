@@ -110,15 +110,27 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * TreeViewPlugin has three modes for organizing its nodes:
  *
- * * **"structure"** - organizes
+ * * "structure" - organizes the tree nodes to indicate the structural hierarchy of the {@link MetaObject}s.
+ * * "storeys" - groups nodes within their ````IfcBuildingStoreys````, and sub-groups them by their IFC types.
+ * * "types" - groups nodes by their IFC types.
  *
- * * "storeys" - organizes
- *
- * * "types" - organizes
+ * <br>
+ * The table below shows what the modes look like:
+ * <br>
  *
  * | 1. Structure Mode | 2. Types Mode | 3. Storeys Mode |
  * |---|---|---|
  * | <img src="http://xeokit.io/img/docs/TreeViewPlugin/structureMode.png"> | <img src="http://xeokit.io/img/docs/TreeViewPlugin/typesMode.png"> | <img src="http://xeokit.io/img/docs/TreeViewPlugin/storeysMode.png"> |
+ * <br>
+ *
+ * Let's create a TreeViewPlugin that groups nodes by their building stories and IFC types:
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("myTreeViewContainer"),
+ *      mode: "stories"
+ * });
+ * ````
  *
  * @class TreeViewPlugin
  */
