@@ -195,7 +195,6 @@ class Viewer {
             this.error(`Plugin with this ID already installed: ${plugin.id}`);
         }
         this.plugins[plugin.id] = plugin;
-        this.log(`Installed plugin: ${plugin.id}`);
     }
 
     /**
@@ -217,7 +216,6 @@ class Viewer {
             installedPlugin.clear();
         }
         delete this.plugins[plugin.id];
-        this.log(`Removed plugin: ${plugin.id}`);
     }
 
     /**
