@@ -112,7 +112,7 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
+               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
             - HTML tree view of model structure
         </li>
         <li>
@@ -137,7 +137,7 @@
     import BimServerClient from "../src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverclient.js"
     import {BIMServerLoaderPlugin} from "../src/plugins/BIMServerLoaderPlugin/BIMServerLoaderPlugin.js";
     import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
-    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // BIMServer parameters for this example
@@ -178,7 +178,7 @@
     // Create an IFC structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-    const structureTreeView = new StructureTreeViewPlugin(viewer, {
+    const structureTreeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer")
     });
     //------------------------------------------------------------------------------------------------------------------
