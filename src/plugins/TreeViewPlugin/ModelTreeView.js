@@ -17,18 +17,16 @@ class ModelTreeView {
         }
 
         this._viewer = viewer;
-        this._metaModel = metaModel;
         this._rootMetaObject = rootMetaObject;
         this._model = model;
         this._containerElement = cfg.containerElement;
         this._rootElement = null;
-        this._muteSceneEvents = false; // When true, ModelStructureTreeView ignores "objectVisibility" events from xeokit Scene
-        this._muteTreeEvents = false; // When true, ModelStructureTreeView does not update xeokit Entity visibilities
-        this._nodeList = [];
+        this._muteSceneEvents = false;
+        this._muteTreeEvents = false;
+        this._rootNodes = [];
         this._nodeMap = {};
 
         this._onObjectVisibility = this._viewer.scene.on("objectVisibility", (entity) => {
-            // When an object's visibility changes, update checkbox state on corresponding node and parents
             if (this._muteSceneEvents) {
                 return;
             }
@@ -53,23 +51,22 @@ class ModelTreeView {
             if (checkbox) {
                 checkbox.checked = visible;
             }
-            let parentId = node.parentId;
-            while (parentId) {
-                const parentNode = this._nodeMap[parentId];
-                parentNode.checked = visible;
+            let parent = node.parent;
+            while (parent) {
+                parent.checked = visible;
                 if (visible) {
-                    parentNode.numVisibleEntities++;
+                    parent.numVisibleEntities++;
                 } else {
-                    parentNode.numVisibleEntities--;
+                    parent.numVisibleEntities--;
                 }
                 const parentCheckbox = document.getElementById(parentId);
                 if (parentCheckbox) {
-                    const newChecked = (parentNode.numVisibleEntities > 0);
+                    const newChecked = (parent.numVisibleEntities > 0);
                     if (newChecked !== parentCheckbox.checked) {
                         parentCheckbox.checked = newChecked;
                     }
                 }
-                parentId = parentNode.parentId;
+                parent = parent.parent;
             }
             this._muteTreeEvents = false;
         });
@@ -100,11 +97,10 @@ class ModelTreeView {
             const objects = this._viewer.scene.objects;
 
             let numUpdated = 0;
-
             this._withNodeTree(checkedNode, (node) => {
                 const objectId = node.id;
                 const entity = objects[objectId];
-                const isLeaf = (!!entity); // Only the leaf nodes have Entities
+                const isLeaf = (node.children.length === 0);
                 node.numVisibleEntities = visible ? node.numEntities : 0;
                 if (isLeaf && (visible !== node.checked)) {
                     numUpdated++;
@@ -118,21 +114,20 @@ class ModelTreeView {
                     entity.visible = visible;
                 }
             });
-            let parentId = checkedNode.parentId;
-            while (parentId) {
-                const parentNode = this._nodeMap[parentId];
-                parentNode.checked = visible;
-                const checkbox = document.getElementById(parentId); // Parent checkboxes are always in DOM
+            let parent = checkedNode.parent;
+            while (parent) {
+                parent.checked = visible;
+                const checkbox = document.getElementById(parent.id); // Parent checkboxes are always in DOM
                 if (visible) {
-                    parentNode.numVisibleEntities += numUpdated;
+                    parent.numVisibleEntities += numUpdated;
                 } else {
-                    parentNode.numVisibleEntities -= numUpdated;
+                    parent.numVisibleEntities -= numUpdated;
                 }
-                const newChecked = (parentNode.numVisibleEntities > 0);
+                const newChecked = (parent.numVisibleEntities > 0);
                 if (newChecked !== checkbox.checked) {
                     checkbox.checked = newChecked;
                 }
-                parentId = parentNode.parentId;
+                parent = parent.parent;
             }
             this._muteSceneEvents = false;
         };
@@ -157,8 +152,11 @@ class ModelTreeView {
     }
 
     _createNodes() {
-        this._containerElement.innerHTML = "";
-        this._nodeList = [];
+        if (this._rootElement) {
+            this._rootElement.parentNode.removeChild(this._rootElement);
+            this._rootElement = null;
+        }
+        this._rootNodes = [];
         this._nodeMap = {};
         switch (this._mode) {
             case "storeys":
@@ -171,58 +169,70 @@ class ModelTreeView {
             default:
                 this._createStructureNodes();
         }
-        this._createSubNodeCounts();
         this._synchNodesToEntities();
         this._createTrees();
     }
 
-    _createStoreysNodes(metaObject = this._rootMetaObject, storeyNode, typeNodes) {
+    _createStoreysNodes(
+        metaObject = this._rootMetaObject,
+        projectNode,
+        storeyNode,
+        typeNodes) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
-        if (metaObjectType === "IfcBuildingStorey") {
-            storeyNode = {
+        if (metaObjectType === "IfcProject") {
+            projectNode = {
                 id: metaObject.id,
                 name: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                parentId: null,
+                parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
-                index: this._nodeList.length,
-                numSubNodes: 0
+                children: []
             };
-            this._nodeList.push(storeyNode);
+            this._rootNodes.push(projectNode);
+            this._nodeMap[projectNode.id] = projectNode;
+        } else if (metaObjectType === "IfcBuildingStorey") {
+            storeyNode = {
+                id: metaObject.id,
+                name: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                parent: projectNode,
+                numEntities: 0,
+                numVisibleEntities: 0,
+                checked: false,
+                children: []
+            };
+            projectNode.children.push(storeyNode);
             this._nodeMap[storeyNode.id] = storeyNode;
             typeNodes = {};
         } else {
             if (storeyNode) {
                 typeNodes = typeNodes || {};
-                var classNode = typeNodes[metaObjectType];
-                if (!classNode) {
-                    classNode = {
+                var typeNode = typeNodes[metaObjectType];
+                if (!typeNode) {
+                    typeNode = {
                         id: storeyNode.id + "." + metaObjectType,
                         name: metaObjectType,
-                        parentId: storeyNode.id,
+                        parent: storeyNode,
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
-                        index: this._nodeList.length,
-                        numSubNodes: 0
+                        children: []
                     };
-                    this._nodeList.push(classNode);
-                    this._nodeMap[classNode.id] = classNode;
-                    typeNodes[metaObjectType] = classNode;
+                    storeyNode.children.push(typeNode);
+                    this._nodeMap[typeNode.id] = typeNode;
+                    typeNodes[metaObjectType] = typeNode;
                 }
                 const node = {
                     id: metaObject.id,
                     name: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                    parentId: classNode.id,
+                    parent: typeNode,
                     numEntities: 0,
                     numVisibleEntities: 0,
                     checked: false,
-                    index: this._nodeList.length,
-                    numSubNodes: 0
+                    children: []
                 };
-                this._nodeList.push(node);
+                typeNode.children.push(node);
                 this._nodeMap[node.id] = node;
             }
         }
@@ -230,7 +240,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStoreysNodes(childMetaObject, storeyNode, typeNodes);
+                this._createStoreysNodes(childMetaObject, projectNode, storeyNode, typeNodes);
             }
         }
     }
@@ -241,33 +251,31 @@ class ModelTreeView {
         if (object) {
             const metaObjectType = metaObject.type;
             const metaObjectName = metaObject.name;
-            var classNode = typeNodes[metaObjectType];
-            if (!classNode) {
-                classNode = {
+            var typeNode = typeNodes[metaObjectType];
+            if (!typeNode) {
+                typeNode = {
                     id: metaObjectType,
                     name: metaObjectType,
-                    parentId: null,
+                    parent: null,
                     numEntities: 0,
                     numVisibleEntities: 0,
                     checked: false,
-                    index: this._nodeList.length,
-                    numSubNodes: 0
+                    children: []
                 };
-                this._nodeList.push(classNode);
-                this._nodeMap[classNode.id] = classNode;
-                typeNodes[metaObjectType] = classNode;
+                this._rootNodes.push(typeNode);
+                this._nodeMap[typeNode.id] = typeNode;
+                typeNodes[metaObjectType] = typeNode;
             }
             const node = {
                 id: metaObject.id,
                 name: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                parentId: classNode.id,
+                parent: typeNode,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
-                index: this._nodeList.length,
-                numSubNodes: 0
+                children: []
             };
-            this._nodeList.push(node);
+            typeNode.children.push(node);
             this._nodeMap[node.id] = node;
         }
         const children = metaObject.children;
@@ -279,59 +287,35 @@ class ModelTreeView {
         }
     }
 
-    _createStructureNodes(metaObject = this._rootMetaObject) {
+    _createStructureNodes(metaObject = this._rootMetaObject, parent) {
         const metaObjectName = metaObject.name;
         const node = {
             id: metaObject.id,
             name: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
-            parentId: metaObject.parent ? metaObject.parent.id : null,
+            parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
             checked: false,
-            index: this._nodeList.length,
-            numSubNodes: 0
+            children: []
         };
-        this._nodeList.push(node);
+        if (parent) {
+            parent.children.push(node);
+        } else {
+            this._rootNodes.push(node);
+        }
         this._nodeMap[node.id] = node;
         const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStructureNodes(childMetaObject);
+                this._createStructureNodes(childMetaObject, node);
             }
-        }
-    }
-
-    _createSubNodeCounts() {
-        const objects = this._viewer.scene.objects;
-        for (var i = 0, len = this._nodeList.length; i < len; i++) {
-            let node = this._nodeList[i];
-            const objectId = node.id;
-            const isLeaf = (!!objects[objectId]); // Only the leaf nodes have Objects
-            //   if (isLeaf) {
-            node.numSubNodes = 1;
-            while (node.parentId) {
-                node = this._nodeMap[node.parentId];
-                if (node) {
-                    node.numSubNodes++;
-                }
-            }
-            // }
         }
     }
 
     _synchNodesToEntities() {
         const rootMetaObject = this._rootMetaObject;
         const objectIds = rootMetaObject.getObjectIDsInSubtree();
-        for (let i = 0, len = objectIds.length; i < len; i++) {
-            const objectId = objectIds[i];
-            const node = this._nodeMap[objectId];
-            if (node) {
-                node.numEntities = 0;
-                node.numVisibleEntities = 0;
-                node.checked = false;
-            }
-        }
         const metaObjects = this._viewer.metaScene.metaObjects;
         const objects = this._viewer.scene.objects;
         for (let i = 0, len = objectIds.length; i < len; i++) {
@@ -351,15 +335,14 @@ class ModelTreeView {
                             node.numVisibleEntities = 0;
                             node.checked = false;
                         }
-                        let parentId = node.parentId; // Synch parents
-                        while (parentId) {
-                            let parent = this._nodeMap[parentId];
+                        let parent = node.parent; // Synch parents
+                        while (parent) {
                             parent.numEntities++;
                             if (visible) {
                                 parent.numVisibleEntities++;
                                 parent.checked = true;
                             }
-                            parentId = parent.parentId;
+                            parent = parent.parent;
                         }
                     }
                 }
@@ -368,36 +351,35 @@ class ModelTreeView {
     }
 
     _withNodeTree(node, callback) {
-        for (let i = node.index, end = node.index + node.numSubNodes; i < end; i++) {
-            const node = this._nodeList[i];
-            callback(node);
+        callback(node);
+        const children = node.children;
+        if (!children) {
+            return;
+        }
+        for (let i = 0, len = children.length; i < len; i++) {
+            this._withNodeTree(children[i], callback);
         }
     }
 
     _createTrees() {
-        // Create DOM element for the unexpanded root of each tree
-        const rootNodes = this._nodeList.filter((node) => {
-            return node.parentId === null;
-        });
-        if (rootNodes.length === 0) {
+        if (this._rootNodes.length === 0) {
             return;
         }
-        const rootNodeElements = rootNodes.map((rootNode) => {
+        const rootNodeElements = this._rootNodes.map((rootNode) => {
             return this._createNodeElement(rootNode);
         });
         const ul = document.createElement('ul');
-        rootNodeElements.forEach(function (nodeElement) {
+        rootNodeElements.forEach((nodeElement) => {
             ul.appendChild(nodeElement);
-            });
+        });
         this._containerElement.appendChild(ul);
         this._rootElement = ul;
     }
 
     _createNodeElement(node) {
-        // Create a DOM element for a node, which represents an object
         const nodeElement = document.createElement('li');
         nodeElement.id = 'node-' + node.id;
-        if (this._hasChildren(node.id)) {
+        if (node.children.length > 0) {
             const groupElementId = "a-" + node.id;
             const groupElement = document.createElement('a');
             groupElement.href = '#';
@@ -422,12 +404,6 @@ class ModelTreeView {
         return nodeElement;
     }
 
-    _hasChildren(parentId) {
-        return this._nodeList.some((node) => {
-            return node.parentId === parentId;
-        });
-    }
-
     _expandToDepth(depth) {
         const expand = (metaObject, countDepth) => {
             if (countDepth === depth) {
@@ -450,7 +426,6 @@ class ModelTreeView {
     }
 
     _expandNode(objectId) {
-        //
         const groupElementId = "a-" + objectId;
         const groupElement = document.getElementById(groupElementId);
         if (groupElement) {
@@ -460,11 +435,10 @@ class ModelTreeView {
         const path = [];
         path.unshift(objectId);
         const node = this._nodeMap[objectId];
-        let parentId = node.parentId;
-        while (parentId) {
-            let parent = this._nodeMap[parentId];
-            path.unshift(parentId);
-            parentId = parent.parentId;
+        let parent = node.parent;
+        while (parent) {
+            path.unshift(parent.id);
+            parent = parent.parent;
         }
         for (var i = 0, len = path.length; i < len; i++) {
             //const element =
@@ -474,9 +448,8 @@ class ModelTreeView {
     _expandGroupElement(groupElement) {
         const parentElement = groupElement.parentElement;
         const id = parentElement.id.replace('node-', '');
-        const childNodes = this._nodeList.filter((node) => {
-            return node.parentId === id;
-        });
+        const groupNode = this._nodeMap[id];
+        const childNodes = groupNode.children;
         const nodeElements = childNodes.map((node) => {
             return this._createNodeElement(node);
         });
@@ -514,7 +487,6 @@ class ModelTreeView {
         if (this._createNodesWithoutError && !this._destroyed) {
             this._rootElement.parentNode.removeChild(this._rootElement);
             this._viewer.scene.off(this._onObjectVisibility);
-            this._model.off(this._onModelDestroyed);
             this._destroyed = true;
         }
     }
