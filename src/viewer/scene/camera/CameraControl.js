@@ -1057,6 +1057,7 @@ class CameraControl extends Component {
                         default:
                             break;
                     }
+                    self.scene.canvas.canvas.style.removeProperty("cursor");
                     down = false;
                     xDelta = 0;
                     yDelta = 0;
