@@ -30,9 +30,6 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultEntityContextMenuItems">DefaultEntityContextMenuItems</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultNavCubeContextMenuItems">DefaultNavCubeContextMenuItems</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultTreeViewContextMenuItems">DefaultTreeViewContextMenuItems</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
@@ -192,7 +189,7 @@ class GLTFQualityLoader {
         options = options || {};
         var spinner = modelNode.scene.canvas.spinner;
         spinner.processes++;
-        parseGLTF(plugin, gltf, &quot;&quot;, options, plugin, modelNode, function () {
+        parseGLTF(plugin, gltf, &quot;&quot;, options, modelNode, function () {
                 spinner.processes--;
                 modelNode.scene.fire(&quot;modelLoaded&quot;, modelNode.id); // FIXME: Assumes listeners know order of these two events
                 modelNode.fire(&quot;loaded&quot;, true, true);

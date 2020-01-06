@@ -30,9 +30,6 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultEntityContextMenuItems">DefaultEntityContextMenuItems</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultNavCubeContextMenuItems">DefaultNavCubeContextMenuItems</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultTreeViewContextMenuItems">DefaultTreeViewContextMenuItems</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
@@ -143,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber103">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ContextMenu} from &apos;<span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber100">@xeokit/xeokit-sdk/src/extras/ContextMenu/ContextMenu.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber103">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber100">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -170,12 +167,9 @@
   
   
   <div class="description" data-ice="description"><p>A customizable HTML context menu.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom"><img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif"></a></p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom"><img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif"></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Default">Example 1: Canvas context menu with default items</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom">Example 2: Canvas context menu with custom items</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_TreeViewPlugin_Default">Example 3: Tree view context menu with default items</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_TreeViewPlugin_Custom">Example 4: Tree view context menu with custom items</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run this example</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
 <li>Use with anything that fires a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event">contextmenu</a> event</li>
@@ -595,7 +589,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -626,7 +620,7 @@ ContextMenu instances depending on what we clicked.</p>
       <td data-ice="name" class="code" data-depth="1">cfg.items</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The context menu items. These can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>. See <span><a href="variable/index.html#static-variable-DefaultEntityContextMenuItems">DefaultEntityContextMenuItems</a></span> for an example.</p>
+      <td data-ice="description"><p>The context menu items. These can also be dynamically set on <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html#instance-set-items">ContextMenu#items</a></span>. See <span>DefaultEntityContextMenuItems</span> for an example.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -681,7 +675,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber241">source</a></span></span>
     </span>
   </h3>
 
@@ -726,7 +720,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber250">source</a></span></span>
     </span>
   </h3>
 
@@ -770,7 +764,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
@@ -815,7 +809,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber233">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -860,7 +854,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -869,7 +863,7 @@ ContextMenu instances depending on what we clicked.</p>
   
   <div data-ice="description"><p>Sets the context menu items.</p>
 <p>These can be dynamically updated.</p>
-<p>See <span><a href="variable/index.html#static-variable-DefaultEntityContextMenuItems">DefaultEntityContextMenuItems</a></span> for an example.</p>
+<p>See <span>DefaultEntityContextMenuItems</span> for an example.</p>
 </div>
 
   
@@ -906,7 +900,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber169">source</a></span></span>
     </span>
   </h3>
 
@@ -953,7 +947,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -997,7 +991,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber277">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber274">source</a></span></span>
     </span>
   </h3>
 
@@ -1041,7 +1035,7 @@ ContextMenu instances depending on what we clicked.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/ContextMenu/ContextMenu.js.html#lineNumber262">source</a></span></span>
     </span>
   </h3>
 

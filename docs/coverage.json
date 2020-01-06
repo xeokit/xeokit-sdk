@@ -1,36 +1,21 @@
 {
-  "coverage": "46.03%",
-  "expectCount": 4073,
-  "actualCount": 1875,
+  "coverage": "45.99%",
+  "expectCount": 4070,
+  "actualCount": 1872,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 19,
       "actualCount": 11,
       "undocumentLines": [
         4,
+        111,
+        112,
+        113,
         114,
         115,
-        116,
-        117,
-        118,
-        176,
-        189
+        173,
+        186
       ]
-    },
-    "src/extras/ContextMenu/DefaultEntityContextMenuItems.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/extras/ContextMenu/DefaultNavCubeContextMenuItems.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/extras/ContextMenu/DefaultTreeViewContextMenuItems.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 56,
@@ -2083,8 +2068,8 @@
         495,
         513,
         523,
-        1853,
-        1889
+        1854,
+        1890
       ]
     },
     "src/viewer/scene/camera/CameraControl2.js": {
