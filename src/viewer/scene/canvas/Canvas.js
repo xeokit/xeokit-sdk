@@ -238,10 +238,6 @@ class Canvas extends Component {
             }
         });
 
-        this.canvas.oncontextmenu = function (e) {
-            e.preventDefault();
-        };
-
         this._spinner = new Spinner(this.scene, {
             canvas: this.canvas,
             elementId: cfg.spinnerElementId
