@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TreeViewPlugin - Structural Hierarchy</title>
+    <title>TreeViewPlugin - Containment Hierarchy</title>
     <link href="css/styles.css" type="text/css" rel="stylesheet"/>
 
     <style>
@@ -103,7 +103,7 @@
 <div id="treeViewContainer"></div>
 
 <div id="info">
-    <h1>TreeViewPlugin - Structural Hierarchy</h1><br>
+    <h1>TreeViewPlugin - Containment Hierarchy</h1><br>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -111,7 +111,7 @@
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view
+            - HTML tree view of IFC containment hierarchy
         </li>
         <li>
             <a target="_other"
@@ -148,7 +148,7 @@
     import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -197,8 +197,8 @@
 
     const structureTreeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
-        autoExpandDepth: 3, // Initially expand tree three nodes deep
-        mode: "structure"
+        autoExpandDepth: 3, // Initially expand tree three storeys deep
+        hierarchy: "containment"
     });
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -255,31 +255,7 @@
         }
     });
 
-
-    scene.input.on("mouseclicked", function (coords) {
-
-        var hit = scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-            var entity = hit.entity;
-            var metaObject = viewer.metaScene.metaObjects[entity.id];
-            if (metaObject) {
-                console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-            } else {
-                const parent = entity.parent;
-                if (parent) {
-                    metaObject = viewer.metaScene.metaObjects[parent.id];
-                    if (metaObject) {
-                        console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-                    }
-                }
-            }
-        }
-    });
-
-    window.viewer = viewer;
+    window.structureTreeView = structureTreeView;
 
 </script>
 </html>

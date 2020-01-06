@@ -236,8 +236,8 @@ function loadArraybuffer(url, ok, err) {
  Tests if the given object is an array
  @private
  */
-function isArray(testMesh) {
-    return testMesh && !(testMesh.propertyIsEnumerable('length')) && typeof testMesh === 'object' && typeof testMesh.length === 'number';
+function isArray(value) {
+    return value && !(value.propertyIsEnumerable('length')) && typeof value === 'object' && typeof value.length === 'number';
 }
 
 /**

@@ -116,7 +116,7 @@
         <li>
             <a target="_other"
                href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
-            - HTML tree view of IFC structure
+            - HTML tree view of IFC containment hierarchy
         </li>
         <li>
             <a target="_other"
@@ -148,7 +148,7 @@
     import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -252,32 +252,6 @@
             }
         }
     });
-
-
-    scene.input.on("mouseclicked", function (coords) {
-
-        var hit = scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-            var entity = hit.entity;
-            var metaObject = viewer.metaScene.metaObjects[entity.id];
-            if (metaObject) {
-                console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-            } else {
-                const parent = entity.parent;
-                if (parent) {
-                    metaObject = viewer.metaScene.metaObjects[parent.id];
-                    if (metaObject) {
-                        console.log(JSON.stringify(metaObject.getJSON(), null, "\t"));
-                    }
-                }
-            }
-        }
-    });
-
-    window.viewer = viewer;
 
 </script>
 </html>
