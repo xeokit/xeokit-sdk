@@ -130,6 +130,29 @@ class MetaObject {
         return objectIds;
     }
 
+
+    /**
+     * Iterates over the {@link MetaObject}s within the subtree.
+     *
+     * @param {Function} callback Callback fired at each {@link MetaObject}.
+     */
+    withMetaObjectsInSubtree(callback) {
+
+        function visit(metaObject) {
+            if (!metaObject) {
+                return;
+            }
+            callback(metaObject);
+            const children = metaObject.children;
+            if (children) {
+                for (var i = 0, len = children.length; i < len; i++) {
+                    visit(children[i]);
+                }
+            }
+        }
+
+        visit(this);
+    }
     /**
      * Gets the {@link MetaObject#id}s of the {@link MetaObject}s within the subtree that have the given {@link MetaObject#type}s.
      *
