@@ -6,15 +6,15 @@ const idMap = new Map();
 /**
  * @desc A customizable HTML context menu.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)
+ * [<img src="http://xeokit.io/img/docs/ContextMenu/ContextMenu.gif">](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ## Overview
  *
- * * Use with anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
- * * Configure with custom items, or with bundled default items for various xeokit components
- * * Configure style with custom CSS (see examples above)
+ * * Attach to anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
+ * * Configure custom items
+ * * Configure custom style with custom CSS (see examples above)
  *
  * ## Usage
  *
