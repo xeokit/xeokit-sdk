@@ -416,7 +416,6 @@ function flattenParentChildHierarchy(root) {
     }
 
     visit(root);
-    console.log(JSON.stringify(list, null, "\t"));
     return list;
 }
 
