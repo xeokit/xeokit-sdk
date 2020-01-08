@@ -268,9 +268,17 @@ class ContextMenu {
         if (!this._enabled || !this._menuElement) {
             return;
         }
+        this._menuElement.style.display = 'block';
+        const menuHeight = this._menuElement.offsetHeight;
+        const menuWidth = this._menuElement.offsetWidth;
+        if ((pageY + menuHeight) > window.innerHeight) {
+            pageY = window.innerHeight - menuHeight;
+        }
+        if ((pageX + menuWidth) > window.innerWidth) {
+            pageX = window.innerWidth - menuWidth;
+        }
         this._menuElement.style.left = pageX + 'px';
         this._menuElement.style.top = pageY + 'px';
-        this._menuElement.style.display = 'block';
     }
 
     /**
