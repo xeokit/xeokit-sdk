@@ -113,9 +113,9 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
-        document.onclick = () => {
+        document.addEventListener("click", (e) => {
             this.hide();
-        };
+        });
         if (cfg.items) {
             this.items = cfg.items;
         }
@@ -172,14 +172,19 @@ class ContextMenu {
 
     _buildActionLinks(items, html, ctx = {id: 0}) {
         for (let i = 0, len = items.length; i < len; i++) {
-            const action = items[i];
-            if (utils.isArray(action)) {
-                this._buildActionLinks(action, html, ctx);
-            } else {
-                const actionId = "xeokit-context-menu-" + this._id + "-" + ctx.id++;
-                const actionTitle = action.title;
-                html.push('<li class="' + actionId + '" style="' + ((i < len - 1) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') + '">' + actionTitle + '</li>');
-            }
+            const itemsGroup = items[i];
+            ctx.groupIdx = i;
+            ctx.groupLen = len;
+            this._buildActionLinks2(itemsGroup, html, ctx);
+        }
+    }
+
+    _buildActionLinks2(itemsGroup, html, ctx) {
+        for (let i = 0, len = itemsGroup.length; i < len; i++) {
+            const action = itemsGroup[i];
+            const actionId = "xeokit-context-menu-" + this._id + "-" + ctx.id++;
+            const actionTitle = action.title;
+            html.push('<li class="' + actionId + '" style="' + ((ctx.groupIdx === ctx.groupLen - 1) || ((i < len - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') + '">' + actionTitle + '</li>');
         }
     }
 
