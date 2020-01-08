@@ -324,6 +324,8 @@ class CameraFlightAnimation extends Component {
                 this._projMatrix2 = camera.perspective.matrix.slice();
                 camera.projection = "customProjection";
             }
+        } else {
+            this._projection2 = null;
         }
 
         this.fire("started", params, true);
