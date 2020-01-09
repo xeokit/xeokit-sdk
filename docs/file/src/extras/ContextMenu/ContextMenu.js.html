@@ -148,15 +148,15 @@ const idMap = new Map();
 /**
  * @desc A customizable HTML context menu.
  *
- * [&lt;img src=&quot;https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)
+ * [&lt;img src=&quot;http://xeokit.io/img/docs/ContextMenu/ContextMenu.gif&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)
  *
  * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ## Overview
  *
- * * Use with anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
- * * Configure with custom items, or with bundled default items for various xeokit components
- * * Configure style with custom CSS (see examples above)
+ * * Attach to anything that fires a [contextmenu](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event) event
+ * * Configure custom items
+ * * Configure custom style with custom CSS (see examples above)
  *
  * ## Usage
  *
@@ -255,9 +255,9 @@ class ContextMenu {
         this._menuElement = null;
         this._enabled = false;
         this._items = [];
-        document.onclick = () =&gt; {
+        document.addEventListener(&quot;click&quot;, (e) =&gt; {
             this.hide();
-        };
+        });
         if (cfg.items) {
             this.items = cfg.items;
         }
@@ -314,14 +314,19 @@ class ContextMenu {
 
     _buildActionLinks(items, html, ctx = {id: 0}) {
         for (let i = 0, len = items.length; i &lt; len; i++) {
-            const action = items[i];
-            if (utils.isArray(action)) {
-                this._buildActionLinks(action, html, ctx);
-            } else {
-                const actionId = &quot;xeokit-context-menu-&quot; + this._id + &quot;-&quot; + ctx.id++;
-                const actionTitle = action.title;
-                html.push(&apos;&lt;li class=&quot;&apos; + actionId + &apos;&quot; style=&quot;&apos; + ((i &lt; len - 1) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
-            }
+            const itemsGroup = items[i];
+            ctx.groupIdx = i;
+            ctx.groupLen = len;
+            this._buildActionLinks2(itemsGroup, html, ctx);
+        }
+    }
+
+    _buildActionLinks2(itemsGroup, html, ctx) {
+        for (let i = 0, len = itemsGroup.length; i &lt; len; i++) {
+            const action = itemsGroup[i];
+            const actionId = &quot;xeokit-context-menu-&quot; + this._id + &quot;-&quot; + ctx.id++;
+            const actionTitle = action.title;
+            html.push(&apos;&lt;li class=&quot;&apos; + actionId + &apos;&quot; style=&quot;&apos; + ((ctx.groupIdx === ctx.groupLen - 1) || ((i &lt; len - 1)) ? &apos;border-bottom: 0&apos; : &apos;border-bottom: 1px solid black&apos;) + &apos;&quot;&gt;&apos; + actionTitle + &apos;&lt;/li&gt;&apos;);
         }
     }
 
@@ -405,9 +410,17 @@ class ContextMenu {
         if (!this._enabled || !this._menuElement) {
             return;
         }
+        this._menuElement.style.display = &apos;block&apos;;
+        const menuHeight = this._menuElement.offsetHeight;
+        const menuWidth = this._menuElement.offsetWidth;
+        if ((pageY + menuHeight) &gt; window.innerHeight) {
+            pageY = window.innerHeight - menuHeight;
+        }
+        if ((pageX + menuWidth) &gt; window.innerWidth) {
+            pageX = window.innerWidth - menuWidth;
+        }
         this._menuElement.style.left = pageX + &apos;px&apos;;
         this._menuElement.style.top = pageY + &apos;px&apos;;
-        this._menuElement.style.display = &apos;block&apos;;
     }
 
     /**

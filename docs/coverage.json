@@ -1,10 +1,10 @@
 {
-  "coverage": "45.99%",
-  "expectCount": 4070,
+  "coverage": "45.98%",
+  "expectCount": 4071,
   "actualCount": 1872,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
-      "expectCount": 19,
+      "expectCount": 20,
       "actualCount": 11,
       "undocumentLines": [
         4,
@@ -14,7 +14,8 @@
         114,
         115,
         173,
-        186
+        182,
+        191
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -131,11 +132,11 @@
       "actualCount": 7,
       "undocumentLines": [
         5,
-        480,
-        484,
-        492,
-        496,
-        327
+        483,
+        487,
+        495,
+        499,
+        330
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/BIMServerClient/bimserverapipromise.js": {
@@ -1028,14 +1029,14 @@
         44,
         56,
         859,
-        897,
-        900,
-        903,
-        1066,
-        1137,
-        1245,
-        1250,
-        1274
+        893,
+        896,
+        899,
+        1062,
+        1133,
+        1241,
+        1246,
+        1270
       ]
     },
     "src/plugins/SectionPlanesPlugin/Overview.js": {
@@ -2125,15 +2126,15 @@
         314,
         315,
         317,
-        360,
-        454,
-        503,
-        508,
-        513,
-        568,
-        594,
-        620,
-        644
+        362,
+        456,
+        505,
+        510,
+        515,
+        570,
+        596,
+        622,
+        646
       ]
     },
     "src/viewer/scene/camera/CameraPath.js": {
