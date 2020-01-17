@@ -142,7 +142,6 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
     } else {
         gl.uniform4fv(this._uColorize, defaultColorize);
     }
-
     instanceExt.drawElementsInstancedANGLE(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
     instanceExt.vertexAttribDivisorANGLE(this._aModelMatrixCol0.location, 0);
@@ -256,7 +255,7 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     frameCtx.useProgram++;
     const camera = scene.camera;
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
-    for (var i = 0, len = lights.length; i < len; i++) {
+    for (let i = 0, len = lights.length; i < len; i++) {
         light = lights[i];
         if (this._uLightAmbient[i]) {
             gl.uniform4f(this._uLightAmbient[i], light.color[0], light.color[1], light.color[2], light.intensity);

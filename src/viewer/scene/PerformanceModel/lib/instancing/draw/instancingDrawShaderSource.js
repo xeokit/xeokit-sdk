@@ -30,7 +30,11 @@ function buildVertex(layer) {
     src.push("attribute vec2 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-    src.push("attribute vec4 flags2;");
+
+    if (clipping) {
+        src.push("attribute vec4 flags2;");
+    }
+
 
     src.push("attribute vec4 modelMatrixCol0;"); // Modeling matrix
     src.push("attribute vec4 modelMatrixCol1;");

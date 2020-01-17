@@ -16,7 +16,9 @@ function buildVertex(layer) {
     src.push("attribute vec3 position;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
-    src.push("attribute vec4 flags2;");
+    if (clipping) {
+        src.push("attribute vec4 flags2;");
+    }
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
