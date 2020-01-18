@@ -9,7 +9,7 @@ class ModelTreeView {
     /**
      * @private
      */
-    constructor(viewer, treeViewPlugin, contextMenu, model, metaModel, cfg) {
+    constructor(viewer, treeViewPlugin, model, metaModel, cfg) {
 
         if (!cfg.containerElement) {
             throw "Config expected: containerElement";
@@ -31,6 +31,7 @@ class ModelTreeView {
         this._muteTreeEvents = false;
         this._rootNodes = [];
         this._objectNodes = {};
+        this._rootName = cfg.rootName;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -203,7 +204,7 @@ class ModelTreeView {
             projectNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
-                title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
@@ -319,7 +320,7 @@ class ModelTreeView {
         const node = {
             nodeId: this._objectToNodeID(metaObject.id),
             objectId: metaObject.id,
-            title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
+            title: (!parent) ? this._rootName : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
             parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
