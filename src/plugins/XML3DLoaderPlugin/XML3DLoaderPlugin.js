@@ -79,7 +79,6 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *
  * | Material Type | Components Created  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | "LambertMaterial" | {@link LambertMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Lambert) |
  * | "PhongMaterial" | {@link PhongMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
  * | "MetallicMaterial" | {@link MetallicMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
  * | "SpecularMaterial" | {@link SpecularMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
