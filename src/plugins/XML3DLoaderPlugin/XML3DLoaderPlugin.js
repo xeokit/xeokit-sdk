@@ -8,7 +8,9 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *
  * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ *
+ * ## Overview
  *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
