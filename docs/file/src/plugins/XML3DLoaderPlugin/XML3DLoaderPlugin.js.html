@@ -203,17 +203,31 @@ import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
  * // Destroy the model
  * model.destroy();
  * ````
+ *
  * ## Material Type
  *
  * Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.
  *
  * The plugin supports three material types:
  *
- * | Material Type | Materials Loaded  | Description | Example |
+ * | Material Type | Material Components Loaded  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | &quot;PhongMaterial&quot; | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | &quot;PhongMaterial&quot; (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
  * | &quot;MetallicMaterial&quot; | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
  * | &quot;SpecularMaterial&quot; | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ *
+ * &lt;br&gt;
+ * Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong materials to {@link SpecularMaterial}s:
+ *
+ * ````javascript
+ * var model = plugin.load({ // Model is an Entity
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+ *     materialtype: &quot;SpecularMaterial&quot;: true&quot;
+ * });
+ * ````
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)]
  *
  * @class XML3DLoaderPlugin
  */

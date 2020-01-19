@@ -130,13 +130,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber89">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber103">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber89">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber103">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -220,14 +220,14 @@ model.destroy();</code>
 <thead>
 <tr>
 <th style="text-align:center">Material Type</th>
-<th style="text-align:center">Materials Loaded</th>
+<th style="text-align:center">Material Components Loaded</th>
 <th style="text-align:center">Description</th>
 <th style="text-align:center">Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">&quot;PhongMaterial&quot;</td>
+<td style="text-align:center">&quot;PhongMaterial&quot; (default)</td>
 <td style="text-align:center"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></td>
 <td style="text-align:center">Non-physically-correct Blinn-Phong shading model</td>
 <td style="text-align:center"><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong">Run example</a></td>
@@ -246,6 +246,17 @@ model.destroy();</code>
 </tr>
 </tbody>
 </table>
+<p><br>
+Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong materials to <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var model = plugin.load({ // Model is an Entity
+    id: &quot;myModel&quot;,
+    src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+    materialtype: &quot;SpecularMaterial&quot;: true&quot;
+});</code>
+</code></pre>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular">Run this example</a>]</li>
+</ul>
 </div>
   
 
@@ -625,7 +636,7 @@ model.destroy();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber115">source</a></span></span>
     </span>
   </h3>
 
@@ -721,7 +732,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -784,7 +795,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber144">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">source</a></span></span>
     </span>
   </h3>
 
