@@ -6,7 +6,7 @@ import {XML3DLoader} from "./XML3DLoader.js";
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)
+ * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
  *
