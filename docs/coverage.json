@@ -814,36 +814,36 @@
       "expectCount": 27,
       "actualCount": 4,
       "undocumentLines": [
-        14,
-        17,
-        101,
-        110,
-        856,
-        887,
-        895,
-        907,
-        919,
-        991,
-        1004,
-        1109,
-        1230,
-        1241,
-        1249,
-        24,
+        13,
+        16,
+        119,
+        128,
+        874,
+        905,
+        913,
+        925,
+        937,
+        1009,
+        1022,
+        1127,
+        1248,
+        1259,
+        1267,
+        23,
+        32,
         33,
         34,
-        35,
+        50,
         51,
         52,
-        53,
-        56
+        55
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js": {
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        93
+        109
       ]
     },
     "src/plugins/lib/html/Dot.js": {

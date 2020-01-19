@@ -130,13 +130,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber72">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber88">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber72">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber88">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -157,8 +157,12 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from <a href="https://en.wikipedia.org/wiki/3DXML">3DXML</a> files.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget"><img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif"></a></p>
 <ul>
-<li>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> representing each model it loads, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>.</li>
+<li><p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget">Run this example</a>]</p>
+</li>
+<li><p>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> representing each model it loads, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>.</p>
+</li>
 <li>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the model, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</li>
 <li>When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
 </ul>
@@ -212,6 +216,44 @@ model = viewer.scene.models[&quot;myModel&quot;];
 // Destroy the model
 model.destroy();</code>
 </code></pre>
+<h2 id="material-type">Material Type</h2><p>Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.</p>
+<p>The plugin supports three material types:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Material Type</th>
+<th style="text-align:center">Components Created</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">&quot;LambertMaterial&quot;</td>
+<td style="text-align:center"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Lambert">Run example</a></td>
+</tr>
+<tr>
+<td style="text-align:center">&quot;PhongMaterial&quot;</td>
+<td style="text-align:center"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong">Run example</a></td>
+</tr>
+<tr>
+<td style="text-align:center">&quot;MetallicMaterial&quot;</td>
+<td style="text-align:center"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic">Run example</a></td>
+</tr>
+<tr>
+<td style="text-align:center">&quot;SpecularMaterial&quot;</td>
+<td style="text-align:center"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular">Run example</a></td>
+</tr>
+</tbody>
+</table>
 </div>
   
 
@@ -591,7 +633,7 @@ model.destroy();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -643,11 +685,11 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.materialWorkflow</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.materialType</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: &quot;PhongMaterial&quot;</li></ul></td>
-      <td data-ice="description"><p>What type of materials to create while loading - &quot;MetallicMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span>s, &quot;SpecularMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s or &quot;PhongMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>s.</p>
+      <td data-ice="description"><p>What type of materials to create while loading: &quot;MetallicMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span>s, &quot;SpecularMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s or &quot;PhongMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.</p>
 </td>
     </tr>
 </tbody>
@@ -687,7 +729,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber121">source</a></span></span>
     </span>
   </h3>
 
@@ -750,7 +792,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber126">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
@@ -849,12 +891,19 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.materialWorkflow</td>
+      <td data-ice="name" class="code" data-depth="1">params.materialType</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: &quot;PhongMaterial&quot;</li></ul></td>
-      <td data-ice="description"><p>What type of materials to create while loading - &quot;MetallicMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span>s, &quot;SpecularMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s or &quot;PhongMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>s.</p>
+      <td data-ice="description"><p>What type of materials to create while loading: &quot;MetallicMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span>s, &quot;SpecularMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s or &quot;PhongMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.</p>
 </td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.geometryType</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: &quot;ReadableGeometry&quot;</li></ul></td>
+      <td data-ice="description"></td>
     </tr>
 </tbody>
   </table>

@@ -137,7 +137,6 @@ import {PhongMaterial} from &quot;../../viewer/scene/materials/PhongMaterial.js&
 import {MetallicMaterial} from &quot;../../viewer/scene/materials/MetallicMaterial.js&quot;;
 import {SpecularMaterial} from &quot;../../viewer/scene/materials/SpecularMaterial.js&quot;;
 import {LambertMaterial} from &quot;../../viewer/scene/materials/LambertMaterial.js&quot;;
-import {utils} from &quot;../../viewer/scene/utils.js&quot;;
 import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
 import {zipLib} from &quot;./zipjs/zip.js&quot;;
@@ -153,7 +152,7 @@ const supportedSchemas = [&quot;4.2&quot;];
  */
 class XML3DLoader {
 
-    constructor(plugin, cfg={}) {
+    constructor(plugin, cfg = {}) {
 
         /**
          * Supported 3DXML schema versions
@@ -187,11 +186,30 @@ class XML3DLoader {
 
     load(plugin, modelNode, src, options, ok, error) {
 
-        modelNode._defaultMaterial = new MetallicMaterial(modelNode, {
-            baseColor: [1, 1, 1],
-            metallic: 0.6,
-            roughness: 0.6
-        });
+        switch (options.materialType) {
+            case &quot;MetallicMaterial&quot;:
+                modelNode._defaultMaterial = new MetallicMaterial(modelNode, {
+                    baseColor: [1, 1, 1],
+                    metallic: 0.6,
+                    roughness: 0.6
+                });
+                break;
+
+            case &quot;SpecularMaterial&quot;:
+                modelNode._defaultMaterial = new SpecularMaterial(modelNode, {
+                    diffuse: [1, 1, 1],
+                    specular: math.vec3([1.0, 1.0, 1.0]),
+                    glossiness: 0.5
+                });
+                break;
+
+            default:
+                modelNode._defaultMaterial = new PhongMaterial(modelNode, {
+                    reflectivity: 0.75,
+                    shiness: 100,
+                    diffuse: [1, 1, 1]
+                });
+        }
 
         // Material shared by all Meshes that have &quot;lines&quot; Geometry
         // Overrides whatever material 3DXML would apply.
@@ -245,7 +263,7 @@ var parse3DXML = (function () {
             plugin: plugin,
             zip: zip,
             edgeThreshold: 30, // Guess at degrees of normal deviation between adjacent tris below which we remove edge between them
-            materialWorkflow: options.materialWorkflow,
+            materialType: options.materialType,
             scene: modelNode.scene,
             modelNode: modelNode,
             info: {
@@ -1196,7 +1214,7 @@ function parseMaterialDefDocumentOsm(ctx, node) {
 
                     var material;
 
-                    switch (ctx.materialWorkflow) {
+                    switch (ctx.materialType) {
                         case &quot;MetallicMaterial&quot;:
                             material = new MetallicMaterial(ctx.modelNode, {
                                 baseColor: materialCfg.diffuse,
