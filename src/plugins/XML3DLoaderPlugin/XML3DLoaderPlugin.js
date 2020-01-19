@@ -77,11 +77,11 @@ import {XML3DLoader} from "./XML3DLoader.js";
  *
  * The plugin supports three material types:
  *
- * | Material Type | Components Created  | Description | Example |
+ * | Material Type | Materials Loaded  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | "PhongMaterial" | {@link PhongMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
- * | "MetallicMaterial" | {@link MetallicMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
- * | "SpecularMaterial" | {@link SpecularMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ * | "PhongMaterial" | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
+ * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
  *
  * @class XML3DLoaderPlugin
  */
