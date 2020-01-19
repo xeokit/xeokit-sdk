@@ -6,6 +6,10 @@ import {XML3DLoader} from "./XML3DLoader.js";
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
+ * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
@@ -65,6 +69,18 @@ import {XML3DLoader} from "./XML3DLoader.js";
  * // Destroy the model
  * model.destroy();
  * ````
+ * ## Material Type
+ *
+ * Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.
+ *
+ * The plugin supports three material types:
+ *
+ * | Material Type | Components Created  | Description | Example |
+ * |:--------:|:----:|:-----:|:-----:|
+ * | "LambertMaterial" | {@link LambertMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Lambert) |
+ * | "PhongMaterial" | {@link PhongMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | "MetallicMaterial" | {@link MetallicMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
+ * | "SpecularMaterial" | {@link SpecularMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
  *
  * @class XML3DLoaderPlugin
  */
@@ -79,6 +95,7 @@ class XML3DLoaderPlugin extends Plugin {
      * @param {String} cfg.workerScriptsPath Path to the directory that contains the
      * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
      * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.
+     * @param {String} [cfg.materialType="PhongMaterial"] What type of materials to create while loading: "MetallicMaterial" to create {@link MetallicMaterial}s, "SpecularMaterial" to create {@link SpecularMaterial}s or "PhongMaterial" to create {@link PhongMaterial}s. As it loads XML3D's Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
      */
     constructor(viewer, cfg = {}) {
 
@@ -119,6 +136,8 @@ class XML3DLoaderPlugin extends Plugin {
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {String} [params.materialType="PhongMaterial"] What type of materials to create while loading: "MetallicMaterial" to create {@link MetallicMaterial}s, "SpecularMaterial" to create {@link SpecularMaterial}s or "PhongMaterial" to create {@link PhongMaterial}s. As it loads XML3D's Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {String} [params.geometryType="ReadableGeometry"]
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {

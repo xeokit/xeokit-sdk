@@ -5,7 +5,6 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {MetallicMaterial} from "../../viewer/scene/materials/MetallicMaterial.js";
 import {SpecularMaterial} from "../../viewer/scene/materials/SpecularMaterial.js";
 import {LambertMaterial} from "../../viewer/scene/materials/LambertMaterial.js";
-import {utils} from "../../viewer/scene/utils.js";
 import {math} from "../../viewer/scene/math/math.js";
 
 import {zipLib} from "./zipjs/zip.js";
@@ -21,7 +20,7 @@ const supportedSchemas = ["4.2"];
  */
 class XML3DLoader {
 
-    constructor(owner, cfg={}) {
+    constructor(plugin, cfg = {}) {
 
         /**
          * Supported 3DXML schema versions
@@ -43,7 +42,7 @@ class XML3DLoader {
         this.viewpoint = null;
 
         if (!cfg.workerScriptsPath) {
-            this.error("Config expected: workerScriptsPath");
+            plugin.error("Config expected: workerScriptsPath");
             return
         }
         zip.workerScriptsPath = cfg.workerScriptsPath;
@@ -55,11 +54,30 @@ class XML3DLoader {
 
     load(plugin, modelNode, src, options, ok, error) {
 
-        modelNode._defaultMaterial = new MetallicMaterial(modelNode, {
-            baseColor: [1, 1, 1],
-            metallic: 0.6,
-            roughness: 0.6
-        });
+        switch (options.materialType) {
+            case "MetallicMaterial":
+                modelNode._defaultMaterial = new MetallicMaterial(modelNode, {
+                    baseColor: [1, 1, 1],
+                    metallic: 0.6,
+                    roughness: 0.6
+                });
+                break;
+
+            case "SpecularMaterial":
+                modelNode._defaultMaterial = new SpecularMaterial(modelNode, {
+                    diffuse: [1, 1, 1],
+                    specular: math.vec3([1.0, 1.0, 1.0]),
+                    glossiness: 0.5
+                });
+                break;
+
+            default:
+                modelNode._defaultMaterial = new PhongMaterial(modelNode, {
+                    reflectivity: 0.75,
+                    shiness: 100,
+                    diffuse: [1, 1, 1]
+                });
+        }
 
         // Material shared by all Meshes that have "lines" Geometry
         // Overrides whatever material 3DXML would apply.
@@ -113,7 +131,7 @@ var parse3DXML = (function () {
             plugin: plugin,
             zip: zip,
             edgeThreshold: 30, // Guess at degrees of normal deviation between adjacent tris below which we remove edge between them
-            materialWorkflow: options.materialWorkflow,
+            materialType: options.materialType,
             scene: modelNode.scene,
             modelNode: modelNode,
             info: {
@@ -1064,7 +1082,7 @@ function parseMaterialDefDocumentOsm(ctx, node) {
 
                     var material;
 
-                    switch (ctx.materialWorkflow) {
+                    switch (ctx.materialType) {
                         case "MetallicMaterial":
                             material = new MetallicMaterial(ctx.modelNode, {
                                 baseColor: materialCfg.diffuse,
