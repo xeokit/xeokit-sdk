@@ -140,7 +140,9 @@ import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
  *
  * [&lt;img src=&quot;https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ *
+ * ## Overview
  *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
@@ -207,12 +209,11 @@ import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
  *
  * The plugin supports three material types:
  *
- * | Material Type | Components Created  | Description | Example |
+ * | Material Type | Materials Loaded  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | &quot;LambertMaterial&quot; | {@link LambertMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Lambert) |
- * | &quot;PhongMaterial&quot; | {@link PhongMaterial}  |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
- * | &quot;MetallicMaterial&quot; | {@link MetallicMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
- * | &quot;SpecularMaterial&quot; | {@link SpecularMaterial} |  | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ * | &quot;PhongMaterial&quot; | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | &quot;MetallicMaterial&quot; | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
+ * | &quot;SpecularMaterial&quot; | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
  *
  * @class XML3DLoaderPlugin
  */
