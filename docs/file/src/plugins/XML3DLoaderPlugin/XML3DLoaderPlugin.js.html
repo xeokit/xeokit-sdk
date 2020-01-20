@@ -138,16 +138,17 @@ import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * [&lt;img src=&quot;https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)
+ * [&lt;img src=&quot;https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
  *
  * ## Overview
  *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model&apos;s {@link Entity}s.
- *
+ * * Can optionally load a {@link MetaModel} to classify the objects within the model, from which you can create a tree view using the {@link TreeViewPlugin}.
+ * &lt;br&gt;
  * Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript class name cannot begin with a numeral.
  *
  * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DLoaderPlugin uses the
@@ -203,6 +204,60 @@ import {XML3DLoader} from &quot;./XML3DLoader.js&quot;;
  * // Destroy the model
  * model.destroy();
  * ````
+ * ## Loading MetaModels
+ *
+ * We have the option to load a {@link MetaModel} that contains a hierarchy of {@link MetaObject}s that classifes the objects within
+ * our 3DXML model.
+ *
+ * This is useful for building a tree view to navigate the objects, using {@link TreeViewPlugin}.
+ *
+ * Let&apos;s load the model again, this time creating a MetaModel:
+ *
+ * ````javascript
+ * var model = plugin.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+ *     scale: [0.1, 0.1, 0.1],
+ *     rotate: [90, 0, 0],
+ *     translate: [100,0,0],
+ *     edges: true,
+ *
+ *     createMetaModel: true // &lt;&lt;-------- Create a MetaModel
+ * });
+ * ````
+ *
+ * The MetaModel can then be found on the {@link Viewer}&apos;s {@link MetaScene}, using the model&apos;s ID:
+ *
+ * ````javascript
+ * const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];
+ * ````
+ *
+ * Now we can use {@link TreeViewPlugin} to create a tree view to navigate our model&apos;s objects:
+ *
+ * ````javascript
+ * import {TreeViewPlugin} from &quot;../src/plugins/TreeViewPlugin/TreeViewPlugin.js&quot;;
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;)
+ * });
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+ *      autoExpandDepth: 3, // Initially expand tree three storeys deep
+ *      hierarchy: &quot;containment&quot;,
+ *      autoAddModels: false
+ * });
+ *
+ * model.on(&quot;loaded&quot;, () =&gt; {
+ *      treeView.addModel(model.id);
+ * });
+ * ````
+ *
+ * Note that only the TreeViewPlugin &quot;containment&quot; hierarchy makes sense for an XML3D model. A &quot;types&quot; hierarchy
+ * does not make sense because XML3DLoaderPlugin will set each {@link MetaObject#type} to &quot;Default&quot;, and &quot;storeys&quot;
+ * does not make sense because that requires some of the MetaObject#type values to be &quot;IfcBuildingStorey&quot;.
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
  *
  * ## Material Type
  *
@@ -243,6 +298,7 @@ class XML3DLoaderPlugin extends Plugin {
      * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
      * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.
      * @param {String} [cfg.materialType=&quot;PhongMaterial&quot;] What type of materials to create while loading: &quot;MetallicMaterial&quot; to create {@link MetallicMaterial}s, &quot;SpecularMaterial&quot; to create {@link SpecularMaterial}s or &quot;PhongMaterial&quot; to create {@link PhongMaterial}s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {Boolean} [cfg.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
      */
     constructor(viewer, cfg = {}) {
 
@@ -284,14 +340,12 @@ class XML3DLoaderPlugin extends Plugin {
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {String} [params.materialType=&quot;PhongMaterial&quot;] What type of materials to create while loading: &quot;MetallicMaterial&quot; to create {@link MetallicMaterial}s, &quot;SpecularMaterial&quot; to create {@link SpecularMaterial}s or &quot;PhongMaterial&quot; to create {@link PhongMaterial}s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
-     * @param {String} [params.geometryType=&quot;ReadableGeometry&quot;]
+     * @param {Boolean} [params.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
         params.workerScriptsPath = this._workerScriptsPath;
-
-        const self = this;
 
         if (params.id &amp;&amp; this.viewer.scene.components[params.id]) {
             this.error(&quot;Component with this ID already exists in viewer: &quot; + params.id + &quot; - will autogenerate this ID&quot;);

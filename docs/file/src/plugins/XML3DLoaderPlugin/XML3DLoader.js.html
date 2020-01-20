@@ -182,6 +182,7 @@ class XML3DLoader {
         this.src = cfg.src;
         this.xrayOpacity = 0.7;
         this.displayEffect = cfg.displayEffect;
+        this.createMetaModel = cfg.createMetaModel;
     }
 
     load(plugin, modelNode, src, options, ok, error) {
@@ -211,8 +212,6 @@ class XML3DLoader {
                 });
         }
 
-        // Material shared by all Meshes that have &quot;lines&quot; Geometry
-        // Overrides whatever material 3DXML would apply.
         modelNode._wireframeMaterial = new LambertMaterial(modelNode, {
             color: [0, 0, 0],
             lineWidth: 2
@@ -271,14 +270,24 @@ var parse3DXML = (function () {
             },
             materials: {}
         };
+
+        if (options.createMetaModel) {
+            ctx.metaModelData = {
+                modelId: &quot;myModel&quot;,
+                metaObjects: [{
+                    name: &quot;myModel&quot;,
+                    type: &quot;Default&quot;,
+                    id: &quot;myModel&quot;
+                }]
+            };
+        }
         modelNode.scene.loading++; // Disables (re)compilation
 
-
-        // Now parse 3DXML
-
         parseDocument(ctx, function () {
+            if (ctx.metaModelData) {
+                plugin.viewer.metaScene.createMetaModel(modelNode.id, ctx.metaModelData);
+            }
             modelNode.scene.loading--; // Re-enables (re)compilation
-            //console.log(&quot;3DXML parsed.&quot;);
             ok();
         });
     };
@@ -384,10 +393,8 @@ var parse3DXML = (function () {
 
         parseReferenceReps(ctx, productStructureNode, function (referenceReps) {
 
-            //----------------------------------------------------------------------------------
             // Parse out an intermediate scene DAG representation, that we can then
             // recursive descend through to build a xeokit Object hierarchy.
-            //----------------------------------------------------------------------------------
 
             var children = productStructureNode.children;
 
@@ -432,6 +439,7 @@ var parse3DXML = (function () {
                         instanceReps[child.id] = {
                             type: &quot;InstanceRep&quot;,
                             id: child.id,
+                            name: child.name,
                             isAggregatedBy: isAggregatedBy,
                             isInstanceOf: isInstanceOf,
                             referenceReps: {}
@@ -459,6 +467,7 @@ var parse3DXML = (function () {
                         instance3Ds[child.id] = {
                             type: &quot;Instance3D&quot;,
                             id: child.id,
+                            name: child.name,
                             isAggregatedBy: isAggregatedBy,
                             isInstanceOf: isInstanceOf,
                             relativeMatrix: relativeMatrix,
@@ -530,6 +539,14 @@ var parse3DXML = (function () {
                     var childGroup = new Node(ctx.modelNode, {
                         position: translate
                     });
+                    if (ctx.metaModelData) {
+                        ctx.metaModelData.metaObjects.push({
+                            id: childGroup.id,
+                            type: &quot;Default&quot;,
+                            name: instance3D.name,
+                            parent: group ? group.id : ctx.modelNode.id
+                        });
+                    }
                     if (group) {
                         group.addChild(childGroup, true);
                     } else {
@@ -539,10 +556,26 @@ var parse3DXML = (function () {
                     childGroup = new Node(ctx.modelNode, {
                         matrix: mat4
                     });
+                    if (ctx.metaModelData) {
+                        ctx.metaModelData.metaObjects.push({
+                            id: childGroup.id,
+                            type: &quot;Default&quot;,
+                            name: instance3D.name,
+                            parent: group ? group.id : ctx.modelNode.id
+                        });
+                    }
                     group.addChild(childGroup, true);
                     group = childGroup;
                 } else {
                     var childGroup = new Node(ctx.modelNode, {});
+                    if (ctx.metaModelData) {
+                        ctx.metaModelData.metaObjects.push({
+                            id: childGroup.id,
+                            type: &quot;Default&quot;,
+                            name: instance3D.name,
+                            parent: group ? group.id : ctx.modelNode.id
+                        });
+                    }
                     if (group) {
                         group.addChild(childGroup, true);
                     } else {
@@ -569,11 +602,20 @@ var parse3DXML = (function () {
                             var material = lines ? ctx.modelNode._wireframeMaterial : (meshCfg.materialId ? ctx.materials[meshCfg.materialId] : null);
                             var colorize = meshCfg.color;
                             var mesh = new Mesh(ctx.modelNode, {
+                                isObject: true,
                                 geometry: meshCfg.geometry,
                                 material: material || ctx.modelNode._defaultMaterial,
                                 colorize: colorize,
                                 backfaces: false
                             });
+                            if (ctx.metaModelData) {
+                                ctx.metaModelData.metaObjects.push({
+                                    id: mesh.id,
+                                    type: &quot;Default&quot;,
+                                    name: instanceRep.name,
+                                    parent: group ? group.id : ctx.modelNode.id
+                                });
+                            }
                             if (group) {
                                 group.addChild(mesh, true);
                             } else {
@@ -688,7 +730,6 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepDocument(ctx, node, result) {
-        // ctx.plugin.log(&quot;parse3DRepDocument&quot;);
         var children = node.children;
         for (var i = 0, len = children.length; i &lt; len; i++) {
             var child = children[i];
@@ -701,7 +742,6 @@ var parse3DXML = (function () {
     }
 
     function parseXMLRepresentation(ctx, node, result) {
-        // ctx.plugin.log(&quot;parseXMLRepresentation&quot;);
         var children = node.children;
         for (var i = 0, len = children.length; i &lt; len; i++) {
             var child = children[i];
@@ -714,7 +754,6 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepRoot(ctx, node, result) {
-        // ctx.plugin.log(&quot;parse3DRepRoot&quot;);
         switch (node[&quot;xsi:type&quot;]) {
             case &quot;BagRepType&quot;:
                 break;
@@ -733,7 +772,6 @@ var parse3DXML = (function () {
     }
 
     function parse3DRepRep(ctx, node, result) {
-        // ctx.plugin.log(&quot;parse3DRep&quot;);
         switch (node[&quot;xsi:type&quot;]) {
             case &quot;BagRepType&quot;:
                 break;
@@ -752,13 +790,7 @@ var parse3DXML = (function () {
                     parse3DRepRep(ctx, child, result);
                     break;
                 case &quot;Edges&quot;:
-
-                    //----------------------------------------------------------------------
-                    // NOTE: Ignoring edges because we auto-generate our own using xeokit
-                    //----------------------------------------------------------------------
-
-                    // meshesResult.primitive = &quot;lines&quot;;
-                    // parseEdges(ctx, child, meshesResult);
+                    // Ignoring edges because we auto-generate our own using xeokit
                     break;
                 case &quot;Faces&quot;:
                     meshesResult.primitive = &quot;triangles&quot;;
@@ -783,7 +815,6 @@ var parse3DXML = (function () {
     }
 
     function parseEdges(ctx, node, result) {
-        // ctx.plugin.log(&quot;parseEdges&quot;);
         result.positions = [];
         result.indices = [];
         var children = node.children;
@@ -798,7 +829,6 @@ var parse3DXML = (function () {
     }
 
     function parsePolyline(ctx, node, result) {
-        //ctx.plugin.log(&quot;parsePolyline&quot;);
         var vertices = node.vertices;
         if (vertices) {
             var positions = parseFloatArray(vertices, 3);
@@ -816,7 +846,6 @@ var parse3DXML = (function () {
     }
 
     function parseFaces(ctx, node, result) {
-        // ctx.plugin.log(&quot;parseFaces&quot;);
         var children = node.children;
         for (var i = 0, len = children.length; i &lt; len; i++) {
             var child = children[i];
@@ -829,13 +858,9 @@ var parse3DXML = (function () {
     }
 
     function parseFace(ctx, node, result) {
-        // ctx.plugin.log(&quot;parseFace&quot;);
-
         var strips = node.strips;
         if (strips) {
-
             // Triangle strips
-
             var arrays = parseIntArrays(strips);
             if (arrays.length &gt; 0) {
                 result.primitive = &quot;triangles&quot;;
@@ -849,18 +874,14 @@ var parse3DXML = (function () {
                 result.indices = indices; // TODO
             }
         } else {
-
             // Triangle meshes
-
             var triangles = node.triangles;
             if (triangles) {
                 result.primitive = &quot;triangles&quot;;
                 result.indices = parseIntArray(triangles);
             }
         }
-
         // Material
-
         var children = node.children;
         for (var i = 0, len = children.length; i &lt; len; i++) {
             var child = children[i];
@@ -999,10 +1020,6 @@ var parse3DXML = (function () {
     }
 })();
 
-//----------------------------------------------------------------------------------------------------
-// Materials
-//----------------------------------------------------------------------------------------------------
-
 function loadCATMaterialRefDocuments(ctx, materialIds, ok) {
     var loaded = {};
 
@@ -1034,9 +1051,7 @@ function loadCATMaterialRefDocuments(ctx, materialIds, ok) {
     load(0, ok);
 }
 
-function
-
-loadCATMaterialRefDocument(ctx, src, ok) { // Loads CATMaterialRef.3dxml
+function loadCATMaterialRefDocument(ctx, src, ok) { // Loads CATMaterialRef.3dxml
     ctx.zip.getFile(src, function (xmlDoc, json) {
         parseCATMaterialRefDocument(ctx, json, ok);
     });
@@ -1067,17 +1082,12 @@ function parseModel_3dxml(ctx, node, ok) { // Parse CATMaterialRef.3dxml
 }
 
 function parseCATMaterialRef(ctx, node, ok) {
-
-    // ctx.plugin.log(&quot;parseCATMaterialRef&quot;);
-
     var domainToReferenceMap = {};
     var materials = {};
-
     var result = {};
     var children = node.children;
     var child;
     var numToLoad = 0;
-
     for (var j = 0, lenj = children.length; j &lt; lenj; j++) {
         var child2 = children[j];
         switch (child2.type) {
@@ -1099,7 +1109,6 @@ function parseCATMaterialRef(ctx, node, ok) {
                 break;
         }
     }
-
     for (var j = 0, lenj = children.length; j &lt; lenj; j++) {
         var child2 = children[j];
         switch (child2.type) {
@@ -1108,9 +1117,7 @@ function parseCATMaterialRef(ctx, node, ok) {
                 break;
         }
     }
-
     // Now load them
-
     for (var j = 0, lenj = children.length; j &lt; lenj; j++) {
         var child2 = children[j];
         switch (child2.type) {
@@ -1139,7 +1146,6 @@ function parseCATMaterialRef(ctx, node, ok) {
 }
 
 function parseMaterialDefDocument(ctx, node) {
-    // ctx.plugin.log(&quot;parseMaterialDefDocumentOsm&quot;);
     var children = node.children;
     for (var i = 0, len = children.length; i &lt; len; i++) {
         var child = children[i];
@@ -1163,7 +1169,6 @@ function parseMaterialDefDocumentOsm(ctx, node) {
 
                 if (child.Alias === &quot;RenderingFeature&quot;) {
                     // Parse the coefficients, then parse the colors, scaling those by their coefficients.
-
                     var coeffs = {};
                     var materialCfg = {};
                     var children2 = child.children;
@@ -1400,7 +1405,7 @@ function
 
 getIDFromURI(str) {
     var hashIdx = str.lastIndexOf(&quot;#&quot;);
-    return hashIdx != -1 ? str.substring(hashIdx + 1) : str;
+    return hashIdx !== -1 ? str.substring(hashIdx + 1) : str;
 }
 
 export {XML3DLoader};

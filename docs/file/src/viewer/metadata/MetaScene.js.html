@@ -323,6 +323,49 @@ class MetaScene {
     }
 
     /**
+     * Creates a {@link MetaModel} in this MetaScene from the given {@link Node} tree.
+     *
+     * TODO: factor out createMetaModelData()
+     *
+     * Each {@link MetaObject} in the MetaModel will get an TODO
+     *
+     * @param {Node} node The root of the Node tree from which to create the MetaModel.
+     * @returns {MetaModel} The new MetaModel.
+     */
+    createMetaModelFromNode(node, options = {}) {
+
+        const metaModelData = {
+            &quot;name&quot;: node.id,
+            &quot;id&quot;: node.id,
+            &quot;projectId&quot;: &quot;myProject&quot;,
+            &quot;revisionId&quot;: &quot;myRevision&quot;,
+            &quot;metaObjects&quot;: []
+        };
+
+        function createMetaObject(node) {
+            const metaObject = {
+                &quot;name&quot;: node.id,
+                &quot;type&quot;: &quot;Default&quot;,
+                &quot;id&quot;: node.id
+            };
+            if (node.parent) {
+                metaObject.parent = node.parent.id;
+            }
+            metaModelData.metaObjects.push(metaObject);
+            const children = node.children;
+            if (children) {
+                for (let i = 0, len = children.length; i &lt; len; i++) {
+                    const childNode = children[i];
+                    createMetaObject(childNode);
+                }
+            }
+        }
+
+        createMetaObject(node);
+        return this.createMetaModel(node.id, metaModelData);
+    }
+
+    /**
      * Removes a {@link MetaModel} from this MetaScene.
      *
      * Fires a &quot;metaModelDestroyed&quot; event with the value of the {@link MetaModel#id}.

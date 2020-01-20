@@ -79,6 +79,63 @@
     ]
   },
   {
+    "name": "MetaScene#createMetaModelFromNode",
+    "filePath": "src/viewer/metadata/MetaScene.js",
+    "lines": [
+      {
+        "lineNumber": 192,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 193,
+        "line": "     * Creates a {@link MetaModel} in this MetaScene from the given {@link Node} tree."
+      },
+      {
+        "lineNumber": 194,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 195,
+        "line": "     * TODO: factor out createMetaModelData()"
+      },
+      {
+        "lineNumber": 196,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 197,
+        "line": "     * Each {@link MetaObject} in the MetaModel will get an TODO"
+      },
+      {
+        "lineNumber": 198,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 199,
+        "line": "     * @param {Node} node The root of the Node tree from which to create the MetaModel."
+      },
+      {
+        "lineNumber": 200,
+        "line": "     * @returns {MetaModel} The new MetaModel."
+      },
+      {
+        "lineNumber": 201,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 202,
+        "line": "    createMetaModelFromNode(node, options = {}) {"
+      }
+    ],
+    "codeParams": [
+      "node",
+      "options"
+    ],
+    "docParams": [
+      "node"
+    ]
+  },
+  {
     "name": "PickResult#reset",
     "filePath": "src/viewer/scene/webgl/PickResult.js",
     "lines": [

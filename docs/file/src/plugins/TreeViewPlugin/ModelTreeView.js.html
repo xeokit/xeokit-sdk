@@ -276,7 +276,7 @@ class ModelTreeView {
             this._muteSceneEvents = false;
         };
 
-        this._hierarchy = cfg.hierarchy || &quot;structure&quot;;
+        this._hierarchy = cfg.hierarchy || &quot;containment&quot;;
         this._autoExpandDepth = cfg.autoExpandDepth || 0;
 
         this._createNodes();
@@ -316,9 +316,9 @@ class ModelTreeView {
             case &quot;types&quot;:
                 this._createTypesNodes();
                 break;
-            case &quot;structure&quot;:
+            case &quot;containment&quot;:
             default:
-                this._createStructureNodes();
+                this._createContainmentNodes();
         }
         this._synchNodesToEntities();
         this._createTrees();
@@ -447,12 +447,12 @@ class ModelTreeView {
         }
     }
 
-    _createStructureNodes(metaObject = this._rootMetaObject, parent) {
-        const metaObjectName = metaObject.name;
+    _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
+        const metaObjectName = metaObject.name || metaObject.type;
         const node = {
             nodeId: this._objectToNodeID(metaObject.id),
             objectId: metaObject.id,
-            title: (!parent) ? this._rootName : (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObject.type,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObject.type,
             parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
@@ -469,7 +469,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i &lt; len; i++) {
                 const childMetaObject = children[i];
-                this._createStructureNodes(childMetaObject, node);
+                this._createContainmentNodes(childMetaObject, node);
             }
         }
     }

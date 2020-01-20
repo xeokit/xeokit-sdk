@@ -130,13 +130,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber103">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XML3DLoaderPlugin} from &apos;<span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">@xeokit/xeokit-sdk/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber103">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -157,14 +157,16 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that loads models from <a href="https://en.wikipedia.org/wiki/3DXML">3DXML</a> files.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular"><img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/gear-animated.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget">Run this example</a>]</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView"><img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><ul>
 <li>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> representing each model it loads, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isModel">Entity#isModel</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-models">Scene#models</a></span>.</li>
 <li>Creates an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> for each object within the model, which will have <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-isObject">Entity#isObject</a></span> set <code>true</code> and will be registered by <span><a href="class/src/viewer/scene/Entity.js~Entity.html#instance-get-id">Entity#id</a></span> in <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-objects">Scene#objects</a></span>.</li>
 <li>When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
+<li>Can optionally load a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> to classify the objects within the model, from which you can create a tree view using the <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.
+<br>
+Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript class name cannot begin with a numeral.</li>
 </ul>
-<p>Note that the name of this plugin is intentionally munged to &quot;XML3D&quot; because a JavaScript class name cannot begin with a numeral.</p>
 <p>An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DLoaderPlugin uses the
 <a href="https://gildas-lormeau.github.io/zip.js/">zip.js</a> library to unzip them before loading. The zip.js library uses
 <a href="https://www.w3.org/TR/workers/">Web workers</a> for fast unzipping, so XML3DLoaderPlugin requires that we configure it
@@ -214,6 +216,48 @@ model = viewer.scene.models[&quot;myModel&quot;];
 // Destroy the model
 model.destroy();</code>
 </code></pre>
+<h2 id="loading-metamodels">Loading MetaModels</h2><p>We have the option to load a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> that contains a hierarchy of <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s that classifes the objects within
+our 3DXML model.</p>
+<p>This is useful for building a tree view to navigate the objects, using <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span>.</p>
+<p>Let&apos;s load the model again, this time creating a MetaModel:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var model = plugin.load({
+    id: &quot;myModel&quot;,
+    src: &quot;./models/xml3d/3dpreview.3dxml&quot;,
+    scale: [0.1, 0.1, 0.1],
+    rotate: [90, 0, 0],
+    translate: [100,0,0],
+    edges: true,
+
+    createMetaModel: true // &lt;&lt;-------- Create a MetaModel
+});</code>
+</code></pre>
+<p>The MetaModel can then be found on the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span>, using the model&apos;s ID:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];</code>
+</code></pre>
+<p>Now we can use <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span> to create a tree view to navigate our model&apos;s objects:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {TreeViewPlugin} from &quot;../src/plugins/TreeViewPlugin/TreeViewPlugin.js&quot;;
+
+const treeView = new TreeViewPlugin(viewer, {
+    containerElement: document.getElementById(&quot;myTreeViewContainer&quot;)
+});
+
+const treeView = new TreeViewPlugin(viewer, {
+     containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+     autoExpandDepth: 3, // Initially expand tree three storeys deep
+     hierarchy: &quot;containment&quot;,
+     autoAddModels: false
+});
+
+model.on(&quot;loaded&quot;, () =&gt; {
+     treeView.addModel(model.id);
+});</code>
+</code></pre>
+<p>Note that only the TreeViewPlugin &quot;containment&quot; hierarchy makes sense for an XML3D model. A &quot;types&quot; hierarchy
+does not make sense because XML3DLoaderPlugin will set each <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-type">MetaObject#type</a></span> to &quot;Default&quot;, and &quot;storeys&quot;
+does not make sense because that requires some of the MetaObject#type values to be &quot;IfcBuildingStorey&quot;.</p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView">Run this example</a>]</li>
+</ul>
 <h2 id="material-type">Material Type</h2><p>Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.</p>
 <p>The plugin supports three material types:</p>
 <table>
@@ -636,7 +680,7 @@ Let&apos;s load our model again, this time converting the 3DXML Blinn-Phong mate
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber171">source</a></span></span>
     </span>
   </h3>
 
@@ -695,6 +739,14 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
       <td data-ice="description"><p>What type of materials to create while loading: &quot;MetallicMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span>s, &quot;SpecularMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span>s or &quot;PhongMaterial&quot; to create <span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span>s. As it loads XML3D&apos;s Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.createMetaModel</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When true, will create a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> for the model in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaModels">MetaScene#metaModels</a></span>.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -732,7 +784,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -795,7 +847,7 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js.html#lineNumber214">source</a></span></span>
     </span>
   </h3>
 
@@ -902,11 +954,12 @@ contains the script that is used by zip.js to instantiate Web workers, which ass
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">params.geometryType</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">params.createMetaModel</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;ReadableGeometry&quot;</li></ul></td>
-      <td data-ice="description"></td>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>When true, will create a <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> for the model in <span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-metaModels">MetaScene#metaModels</a></span>.</p>
+</td>
     </tr>
 </tbody>
   </table>

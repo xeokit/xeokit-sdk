@@ -1,7 +1,7 @@
 {
   "coverage": "49.65%",
-  "expectCount": 3601,
-  "actualCount": 1788,
+  "expectCount": 3603,
+  "actualCount": 1789,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 20,
@@ -811,24 +811,24 @@
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
-      "expectCount": 27,
+      "expectCount": 28,
       "actualCount": 4,
       "undocumentLines": [
         13,
         16,
-        119,
-        128,
-        874,
-        905,
-        913,
-        925,
-        937,
-        1009,
-        1022,
-        1127,
-        1248,
-        1259,
-        1267,
+        118,
+        127,
+        891,
+        922,
+        928,
+        940,
+        952,
+        1016,
+        1028,
+        1132,
+        1253,
+        1264,
+        1272,
         23,
         32,
         33,
@@ -836,14 +836,15 @@
         50,
         51,
         52,
-        55
+        53,
+        56
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js": {
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        124
+        180
       ]
     },
     "src/plugins/lib/html/Dot.js": {
@@ -935,8 +936,8 @@
       ]
     },
     "src/viewer/metadata/MetaScene.js": {
-      "expectCount": 16,
-      "actualCount": 16,
+      "expectCount": 17,
+      "actualCount": 17,
       "undocumentLines": []
     },
     "src/viewer/scene/Component.js": {
