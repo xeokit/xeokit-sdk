@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TreeViewPlugin - Containment Hierarchy</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        #treeViewContainer {
+            padding-top: 25px;
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.86);
+            color: black;
+            top: 0;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 450px;
+        }
+
+        #treeViewContainer ul {
+            list-style: none;
+            padding-left: 1.75em;
+            width: 100%;
+        }
+
+        #treeViewContainer ul li {
+            border-bottom-left-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        #treeViewContainer ul li a {
+            background-color: #eee;
+            border-radius: 50%;
+            color: #000;
+            display: inline-block;
+            height: 1.5em;
+            left: -1.5em;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            width: 1.5em;
+        }
+
+        #treeViewContainer ul li a.plus {
+            background-color: #ded;
+        }
+
+        #treeViewContainer ul li a.minus {
+            background-color: #eee;
+        }
+
+        #treeViewContainer ul li a:active {
+            top: 1px;
+        }
+
+        #treeViewContainer ul li span {
+            display: inline-block;
+        }
+
+        #treeViewContainer .top-right {
+            font-size: small;
+            position: fixed;
+            right: 1em;
+            top: 1em;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<canvas id="myNavCubeCanvas"></canvas>
+
+<div id="treeViewContainer"></div>
+
+<div id="info">
+    <h1>TreeViewPlugin - Containment Hierarchy</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
+            - HTML tree view of IFC containment hierarchy
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a>
+            - Camera navigation cube gizmo
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
+                Guide</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {NavCubePlugin} from "../src/plugins/NavCubePlugin/NavCubePlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+    import {ReflectionMap} from "../src/viewer/scene/lights/ReflectionMap.js";
+    import {XML3DLoaderPlugin} from "../src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+
+    cameraControl.panToPointer = true;
+    cameraControl.doublePickFlyTo = true;
+    cameraFlight.duration = 1.0;
+    cameraFlight.fitFOV = 25;
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
+
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.fillAlpha = 0.3;
+    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube
+    //------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        autoExpandDepth: 3, // Initially expand tree three storeys deep
+        hierarchy: "containment",
+        autoAddModels: false
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a ReflectionMap
+    //------------------------------------------------------------------------------------------------------------------
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "textures/reflect/desertRoad/px.png",
+            "textures/reflect/desertRoad/nx.png",
+            "textures/reflect/desertRoad/py.png",
+            "textures/reflect/desertRoad/ny.png",
+            "textures/reflect/desertRoad/pz.png",
+            "textures/reflect/desertRoad/nz.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load 3DXML model and fit it to view, then start orbiting the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xml3dLoader = new XML3DLoaderPlugin(viewer, {
+        workerScriptsPath: "../src/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
+    });
+
+    const model = xml3dLoader.load({
+        id: "myModel",
+        src: "./models/xml3d/3dpreview.3dxml",
+        materialType: "MetallicMaterial", // <<----------- Create MetallicMaterials
+        edges: true,
+        createMetaModel: true
+    });
+
+    model.on("loaded", () => {
+
+        viewer.cameraFlight.jumpTo(model);
+
+        treeView.addModel(model.id);
+
+    });
+
+</script>
+</html>
