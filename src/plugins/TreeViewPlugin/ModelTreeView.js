@@ -144,7 +144,7 @@ class ModelTreeView {
             this._muteSceneEvents = false;
         };
 
-        this._hierarchy = cfg.hierarchy || "structure";
+        this._hierarchy = cfg.hierarchy || "containment";
         this._autoExpandDepth = cfg.autoExpandDepth || 0;
 
         this._createNodes();
@@ -184,9 +184,9 @@ class ModelTreeView {
             case "types":
                 this._createTypesNodes();
                 break;
-            case "structure":
+            case "containment":
             default:
-                this._createStructureNodes();
+                this._createContainmentNodes();
         }
         this._synchNodesToEntities();
         this._createTrees();
@@ -315,12 +315,12 @@ class ModelTreeView {
         }
     }
 
-    _createStructureNodes(metaObject = this._rootMetaObject, parent) {
-        const metaObjectName = metaObject.name;
+    _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
+        const metaObjectName = metaObject.name || metaObject.type;
         const node = {
             nodeId: this._objectToNodeID(metaObject.id),
             objectId: metaObject.id,
-            title: (!parent) ? this._rootName : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
             parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
@@ -337,7 +337,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStructureNodes(childMetaObject, node);
+                this._createContainmentNodes(childMetaObject, node);
             }
         }
     }
