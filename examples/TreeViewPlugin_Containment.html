@@ -195,7 +195,7 @@
     // Create an IFC structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-    const structureTreeView = new TreeViewPlugin(viewer, {
+    const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
         autoExpandDepth: 3, // Initially expand tree three storeys deep
         hierarchy: "containment"
@@ -208,7 +208,7 @@
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     const model = xktLoader.load({
-        id: "myModel",
+        id: "Widget",
         src: "./models/xkt/schependomlaan/schependomlaan.xkt",
         metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
         edges: true,
@@ -255,7 +255,7 @@
         }
     });
 
-    window.structureTreeView = structureTreeView;
+    window.treeView = treeView;
 
 </script>
 </html>
