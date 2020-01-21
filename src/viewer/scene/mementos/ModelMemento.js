@@ -107,7 +107,9 @@ class ModelMemento {
         this.numObjects = 0;
 
         if (metaModel) {
-            this.saveObjects(metaModel);
+            const metaScene = metaModel.metaScene;
+            const scene = metaScene.scene;
+            this.saveObjects(scene, metaModel);
         }
     }
 
