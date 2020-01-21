@@ -23,6 +23,8 @@ class ModelTreeView {
         this._id = idMap.addItem();
         this._baseId = "" + this._id;
         this._viewer = viewer;
+        this._model = model;
+        this._metaModel = model;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
         this._containerElement = cfg.containerElement;
@@ -180,6 +182,9 @@ class ModelTreeView {
         switch (this._hierarchy) {
             case "storeys":
                 this._createStoreysNodes();
+                if (this._rootNodes.length === 0) {
+                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._model.id + "' - perhaps this model is not an IFC model?");
+                }
                 break;
             case "types":
                 this._createTypesNodes();
@@ -195,13 +200,13 @@ class ModelTreeView {
 
     _createStoreysNodes(
         metaObject = this._rootMetaObject,
-        projectNode,
+        buildingNode,
         storeyNode,
         typeNodes) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
-        if (metaObjectType === "IfcProject") {
-            projectNode = {
+        if (metaObjectType === "IfcBuilding") {
+            buildingNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
@@ -211,20 +216,24 @@ class ModelTreeView {
                 checked: false,
                 children: []
             };
-            this._rootNodes.push(projectNode);
-            this._objectNodes[projectNode.objectId] = projectNode;
+            this._rootNodes.push(buildingNode);
+            this._objectNodes[buildingNode.objectId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
+            if (!buildingNode) {
+                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._model.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                return;
+            }
             storeyNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                parent: projectNode,
+                parent: buildingNode,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
                 children: []
             };
-            projectNode.children.push(storeyNode);
+            buildingNode.children.push(storeyNode);
             this._objectNodes[storeyNode.objectId] = storeyNode;
             typeNodes = {};
         } else {
@@ -266,7 +275,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStoreysNodes(childMetaObject, projectNode, storeyNode, typeNodes);
+                this._createStoreysNodes(childMetaObject, buildingNode, storeyNode, typeNodes);
             }
         }
     }
