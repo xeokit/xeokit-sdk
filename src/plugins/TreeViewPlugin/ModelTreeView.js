@@ -23,7 +23,6 @@ class ModelTreeView {
         this._id = idMap.addItem();
         this._baseId = "" + this._id;
         this._viewer = viewer;
-        this._model = model;
         this._metaModel = model;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
@@ -183,7 +182,7 @@ class ModelTreeView {
             case "storeys":
                 this._createStoreysNodes();
                 if (this._rootNodes.length === 0) {
-                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._model.id + "' - perhaps this model is not an IFC model?");
+                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - perhaps this model is not an IFC model?");
                 }
                 break;
             case "types":
@@ -220,7 +219,7 @@ class ModelTreeView {
             this._objectNodes[buildingNode.objectId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
             if (!buildingNode) {
-                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._model.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
                 return;
             }
             storeyNode = {
