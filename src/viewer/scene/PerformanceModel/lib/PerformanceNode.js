@@ -1,6 +1,7 @@
 import {RENDER_FLAGS} from './renderFlags.js';
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
+const tempIntRGB = new Uint16Array([0, 0, 0]);
 
 /**
  * @private
@@ -53,8 +54,6 @@ class PerformanceNode {
         this.id = id;
 
         this._flags = flags;
-        this._colorize = new Uint8Array([255, 255, 255, 255]);
-
         this._aabb = aabb;
 
         if (this._isObject) {
@@ -415,12 +414,17 @@ class PerformanceNode {
      * @type {Number[]}
      */
     set colorize(color) { // [0..1, 0..1, 0..1]
-        this._colorize[0] = Math.floor(color[0] * 255.0); // Quantize
-        this._colorize[1] = Math.floor(color[1] * 255.0);
-        this._colorize[2] = Math.floor(color[2] * 255.0);
-        const setOpacity = false;
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setColor(this._colorize, setOpacity);
+        if (color) {
+            tempIntRGB[0] = Math.floor(color[0] * 255.0); // Quantize
+            tempIntRGB[1] = Math.floor(color[1] * 255.0);
+            tempIntRGB[2] = Math.floor(color[2] * 255.0);
+            for (let i = 0, len = this.meshes.length; i < len; i++) {
+                this.meshes[i]._setColorize(tempIntRGB);
+            }
+        } else {
+            for (let i = 0, len = this.meshes.length; i < len; i++) {
+                this.meshes[i]._setColorize(null);
+            }
         }
         this.model.glRedraw();
     }
@@ -433,9 +437,13 @@ class PerformanceNode {
      * @type {Number[]}
      */
     get colorize() { // [0..1, 0..1, 0..1]
-        tempFloatRGB[0] = this._colorize[0] / 255.0; // Unquantize
-        tempFloatRGB[1] = this._colorize[1] / 255.0;
-        tempFloatRGB[2] = this._colorize[2] / 255.0;
+        if (this.meshes.length === 0) {
+            return null;
+        }
+        const colorize = this.meshes[0]._colorize;
+        tempFloatRGB[0] = colorize[0] / 255.0; // Unquantize
+        tempFloatRGB[1] = colorize[1] / 255.0;
+        tempFloatRGB[2] = colorize[2] / 255.0;
         return tempFloatRGB;
     }
 
@@ -447,20 +455,21 @@ class PerformanceNode {
      * @type {Number}
      */
     set opacity(opacity) {
+        if (this.meshes.length === 0) {
+            return;
+        }
         if (opacity < 0) {
             opacity = 0;
         } else if (opacity > 1) {
             opacity = 1;
         }
         opacity = Math.floor(opacity * 255.0); // Quantize
-        var lastOpacity = this._colorize[3];
+        var lastOpacity = (this.meshes[0]._colorize[3] / 255.0);
         if (lastOpacity === opacity) {
             return;
         }
-        this._colorize[3] = opacity; // Only set alpha
-        const setOpacity = true;
         for (var i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setColor(this._colorize, setOpacity);
+            this.meshes[i]._setOpacity(opacity);
         }
         this.model.glRedraw();
     }
@@ -473,7 +482,11 @@ class PerformanceNode {
      * @type {Number}
      */
     get opacity() {
-        return this._colorize[3] / 255.0;
+        if (this.meshes.length > 0) {
+            return (this.meshes[0]._colorize[3] / 255.0);
+        } else {
+            return 1.0;
+        }
     }
 
     /**

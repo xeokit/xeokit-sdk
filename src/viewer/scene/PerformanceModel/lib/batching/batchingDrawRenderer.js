@@ -2,7 +2,6 @@ import {Map} from "../../../utils/Map.js";
 import {stats} from "../../../stats.js"
 import {Program} from "../../../webgl/Program.js";
 import {BatchingDrawShaderSource} from "./batchingDrawShaderSource.js";
-import {RENDER_PASSES} from '../renderPasses.js';
 
 const ids = new Map({});
 
@@ -20,7 +19,6 @@ const BatchingDrawRenderer = function (hash, layer) {
 };
 
 const renderers = {};
-const defaultColorize = new Float32Array([1.0, 1.0, 1.0, 1.0]);
 
 BatchingDrawRenderer.get = function (layer) {
     const scene = layer.model.scene;
@@ -98,19 +96,6 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
     }
     state.indicesBuf.bind();
     frameCtx.bindArray++;
-    if (renderPass === RENDER_PASSES.XRAYED) {
-        const material = scene.xrayMaterial._state;
-        const fillColor = material.fillColor;
-        const fillAlpha = material.fillAlpha;
-        gl.uniform4f(this._uColorize, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-    } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
-        const material = scene.highlightMaterial._state;
-        const fillColor = material.fillColor;
-        const fillAlpha = material.fillAlpha;
-        gl.uniform4f(this._uColorize, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-    } else {
-        gl.uniform4fv(this._uColorize, defaultColorize);
-    }
     gl.drawElements(state.primitive, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
     frameCtx.drawElements++;
 };
@@ -131,7 +116,6 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._uViewMatrix = program.getLocation("viewMatrix");
     this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
     this._uProjMatrix = program.getLocation("projMatrix");
-    this._uColorize = program.getLocation("colorize");
     this._uLightAmbient = [];
     this._uLightColor = [];
     this._uLightDir = [];
