@@ -46,6 +46,8 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+    import {AmbientLight} from "../src/viewer/scene/lights/AmbientLight.js";
+    import {DirLight} from "../src/viewer/scene/lights/DirLight.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -67,9 +69,16 @@
     const xktLoader = new XKTLoaderPlugin(viewer, {
 
         objectDefaults: { // <<----- Only override color of IfcSpace elements, keep other original IFC colors
+
             IfcSpace: {
+                visible: false,
                 pickable: false,
                 opacity: 0.2
+            },
+
+            IfcWindow: {
+                pickable: false,
+                opacity: 0.5
             }
         }
     });
@@ -89,6 +98,21 @@
         var t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) /1000.0 + " seconds<br>Objects: " + model.numEntities;
     });
+
+
+    // viewer.scene.input.on("mousedown", function (coords) {
+    //
+    //     var hit = viewer.scene.pick({
+    //         canvasPos: coords
+    //     });
+    //
+    //     if (hit) {
+    //
+    //         const entity = hit.entity;
+    //         const metaObject = viewer.metaScene.metaObjects[entity.id];
+    //         alert(metaObject.id + ", " + metaObject.type)
+    //     }
+    // });
 
 </script>
 </html>

@@ -199,9 +199,16 @@
     const xktLoader = new XKTLoaderPlugin(viewer, {
 
         objectDefaults: { // <<----- Only override color of IfcSpace elements, keep other original IFC colors
+
             IfcSpace: {
+                visible: false,
                 pickable: false,
                 opacity: 0.2
+            },
+
+            IfcWindow: {
+                pickable: false,
+                opacity: 0.5
             }
         }
     });
