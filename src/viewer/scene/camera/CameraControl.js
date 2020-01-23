@@ -435,7 +435,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether right-clicking pans the {@link Camera}.
+     * Sets whether either right-clicking (true) or middle-clicking (false) pans the {@link Camera}.
      *
      * Default value is ````true````.
      *
@@ -999,18 +999,28 @@ class CameraControl extends Component {
                             lastY = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
-                            self.scene.canvas.canvas.style.cursor = "move";
                             mouseDownMiddle = true;
+                            if (!self._panRightClick) {
+                                self.scene.canvas.canvas.style.cursor = "move";
+                                down = true;
+                                xDelta = 0;
+                                yDelta = 0;
+                                getCanvasPosFromEvent(e, mousePos);
+                                lastX = mousePos[0];
+                                lastY = mousePos[1];
+                            }
                             break;
                         case 3: // Right button
-                            self.scene.canvas.canvas.style.cursor = "move";
-                            mouseDownRight = true;
-                            down = true;
-                            xDelta = 0;
-                            yDelta = 0;
-                            getCanvasPosFromEvent(e, mousePos);
-                            lastX = mousePos[0];
-                            lastY = mousePos[1];
+                             mouseDownRight = true;
+                            if (self._panRightClick) {
+                                self.scene.canvas.canvas.style.cursor = "move";
+                                down = true;
+                                xDelta = 0;
+                                yDelta = 0;
+                                getCanvasPosFromEvent(e, mousePos);
+                                lastX = mousePos[0];
+                                lastY = mousePos[1];
+                            }
                             break;
                         default:
                             break;
@@ -1109,12 +1119,12 @@ class CameraControl extends Component {
                         return;
                     }
 
-                    const panning = shiftDown || mouseDownRight;
+                    const panning = shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight);
 
                     if (panning) {
 
                         // Panning
-                        if (shiftDown || (self.panRightClick && mouseDownRight)) {
+                        if (shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight) ) {
                             panVx = xDelta * mousePanRate;
                             panVy = yDelta * mousePanRate;
                         }
