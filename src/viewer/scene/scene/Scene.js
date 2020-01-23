@@ -1777,8 +1777,6 @@ class Scene extends Component {
      *
      * Each {@link Entity} is only included in the AABB when {@link Entity#collidable} is ````true````.
      *
-     * Returns the AABB of all {@link Entity}s in {@link Scene#objects} by default, or TODO
-     *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
      */
