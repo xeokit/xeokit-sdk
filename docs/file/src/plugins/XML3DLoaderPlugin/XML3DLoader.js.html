@@ -273,11 +273,11 @@ var parse3DXML = (function () {
 
         if (options.createMetaModel) {
             ctx.metaModelData = {
-                modelId: &quot;myModel&quot;,
+                modelId: modelNode.id,
                 metaObjects: [{
-                    name: &quot;myModel&quot;,
+                    name: modelNode.id,
                     type: &quot;Default&quot;,
-                    id: &quot;myModel&quot;
+                    id: modelNode.id
                 }]
             };
         }

@@ -1,7 +1,7 @@
 {
-  "coverage": "49.65%",
+  "coverage": "49.62%",
   "expectCount": 3603,
-  "actualCount": 1789,
+  "actualCount": 1788,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 20,
@@ -725,7 +725,7 @@
       ]
     },
     "src/plugins/TreeViewPlugin/ModelTreeView.js": {
-      "expectCount": 41,
+      "expectCount": 42,
       "actualCount": 3,
       "undocumentLines": [
         3,
@@ -741,31 +741,32 @@
         32,
         33,
         34,
-        40,
-        85,
-        92,
-        99,
-        147,
+        35,
+        41,
+        86,
+        93,
+        100,
         148,
-        153,
-        157,
-        161,
-        165,
-        173,
-        196,
-        274,
-        318,
-        345,
-        382,
-        393,
-        408,
-        446,
-        469,
-        476,
-        513,
-        538,
-        545,
-        572
+        149,
+        154,
+        158,
+        162,
+        166,
+        174,
+        200,
+        282,
+        326,
+        353,
+        390,
+        401,
+        416,
+        454,
+        477,
+        484,
+        521,
+        546,
+        553,
+        580
       ]
     },
     "src/plugins/TreeViewPlugin/TreeViewNode.js": {
@@ -798,16 +799,16 @@
         8,
         14,
         16,
-        344,
-        366,
-        391,
+        372,
+        394,
         419,
-        448,
-        589,
-        603,
-        612,
-        665,
-        703
+        447,
+        476,
+        617,
+        631,
+        640,
+        693,
+        731
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
@@ -936,8 +937,8 @@
       ]
     },
     "src/viewer/metadata/MetaScene.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 16,
+      "actualCount": 16,
       "undocumentLines": []
     },
     "src/viewer/scene/Component.js": {
@@ -2246,7 +2247,7 @@
       "actualCount": 14,
       "undocumentLines": [
         4,
-        142
+        144
       ]
     },
     "src/viewer/scene/mementos/ObjectsMemento.js": {
