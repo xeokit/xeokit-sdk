@@ -208,7 +208,7 @@ const decompressColor = (function () {
  *
  * ## Configuring initial IFC object appearances
  *
- * We can specify the initial appearance of loaded objects according to their IFC types.
+ * We can specify the custom initial appearance of loaded objects according to their IFC types.
  *
  * This is useful for things like:
  *
@@ -244,6 +244,36 @@ const decompressColor = (function () {
  *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
  * });
  * ````
+ *
+ * When we don't customize the appearance of IFC types, as just above, then IfcSpace elements tend to obscure other
+ * elements, which can be confusing.
+ *
+ * It's often helpful to make IfcSpaces transparent and unpickable, like this:
+ *
+ * ````javascript
+ * const xktLoader = new XKTLoaderPlugin(viewer, {
+ *    objectDefaults: {
+ *        IfcSpace: {
+ *            pickable: false,
+ *            opacity: 0.2
+ *        }
+ *    }
+ * });
+ * ````
+ *
+ * Alternatively, we could just make IfcSpaces invisible, which also makes them unpickable:
+ *
+ * ````javascript
+ * const xktLoader = new XKTLoaderPlugin(viewer, {
+ *    objectDefaults: {
+ *        IfcSpace: {
+ *            visible: false
+ *        }
+ *    }
+ * });
+ * ````
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_originalIFCColors)]
  *
  * ## Configuring a custom data source
  *
