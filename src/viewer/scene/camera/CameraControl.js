@@ -175,6 +175,13 @@ class CameraControl extends Component {
                 spot.style.visibility = "visible";
             };
 
+            this.showPivot = function () {
+                spot.style.visibility = "visible";
+                window.setTimeout(() => {
+                    spot.style.visibility = "hidden";
+                }, 1000)
+            };
+
             this.hidePivot = function () {
                 spot.style.visibility = "hidden";
             };
@@ -880,6 +887,9 @@ class CameraControl extends Component {
                         eye[1] = y;
                         camera.eye = eye;
                     } else {
+                        if (self._pivoter.getPivoting()) {
+                            self._pivoter.showPivot();
+                        }
                         camera.pan([panVx * f, panVy * f, panVz * f]);
                     }
                 }
