@@ -128,6 +128,7 @@ class CameraControl extends Component {
 
             this.setPivotPos = function (worldPos) {
                 pivotPoint.set(worldPos);
+                pivoting = true;
             };
 
             this.getPivotPos = function () {
@@ -1021,7 +1022,7 @@ class CameraControl extends Component {
                             }
                             break;
                         case 3: // Right button
-                             mouseDownRight = true;
+                            mouseDownRight = true;
                             if (self._panRightClick) {
                                 self.scene.canvas.canvas.style.cursor = "move";
                                 down = true;
@@ -1186,6 +1187,9 @@ class CameraControl extends Component {
                         const wkey = input.keyDown[input.KEY_ADD];
                         const skey = input.keyDown[input.KEY_SUBTRACT];
                         if (wkey || skey) {
+                            if (self._pivoting) {
+                                self._pivoter.startPivot();
+                            }
                             if (skey) {
                                 vZoom = elapsed * getZoomRate() * keyboardZoomRate;
                             } else if (wkey) {
@@ -1227,6 +1231,9 @@ class CameraControl extends Component {
                             down = input.keyDown[input.KEY_X];
                         }
                         if (front || back || left || right || up || down) {
+                            if (self._pivoting) {
+                                self._pivoter.startPivot();
+                            }
                             if (down) {
                                 panVy += elapsed * keyboardPanRate;
                             } else if (up) {
@@ -1388,6 +1395,9 @@ class CameraControl extends Component {
                     const up = input.keyDown[input.KEY_UP_ARROW];
                     const down = input.keyDown[input.KEY_DOWN_ARROW];
                     if (left || right || up || down) {
+                        if (self._pivoting) {
+                            self._pivoter.startPivot();
+                        }
                         if (right) {
                             rotateVy += -elapsed * keyboardOrbitRate;
 
