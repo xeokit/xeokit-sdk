@@ -177,8 +177,6 @@ function buildVertex(layer) {
     src.push(&quot;uniform mat4 viewNormalMatrix;&quot;);
     src.push(&quot;uniform mat4 positionsDecodeMatrix;&quot;);
 
-    src.push(&quot;uniform vec4 colorize;&quot;);
-
     src.push(&quot;uniform vec4 lightAmbient;&quot;);
 
     for (i = 0, len = lightsState.lights.length; i &lt; len; i++) {
@@ -277,7 +275,7 @@ function buildVertex(layer) {
         src.push(&quot;reflectedColor += lambertian * (lightColor&quot; + i + &quot;.rgb * lightColor&quot; + i + &quot;.a);&quot;);
     }
 
-    src.push(&quot;vColor = colorize *  vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);&quot;);
+    src.push(&quot;vColor =  vec4(reflectedColor * ((lightAmbient.rgb * lightAmbient.a) + vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0)), float(color.a) / 255.0);&quot;);
 
     if (clipping) {
         src.push(&quot;vWorldPosition = worldPosition;&quot;);

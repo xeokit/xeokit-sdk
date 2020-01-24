@@ -411,46 +411,69 @@ class ModelTreeView {
         }
     }
 
-    _createTypesNodes(metaObject = this._rootMetaObject, typeNodes = {}) {
-        const objects = this._viewer.scene.objects;
-        const object = objects[metaObject.id];
-        if (object) {
-            const metaObjectType = metaObject.type;
-            const metaObjectName = metaObject.name;
-            var typeNode = typeNodes[metaObjectType];
-            if (!typeNode) {
-                typeNode = {
-                    nodeId: this._objectToNodeID(metaObjectType),
-                    objectId: metaObjectType,
-                    title: metaObjectType,
-                    parent: null,
-                    numEntities: 0,
-                    numVisibleEntities: 0,
-                    checked: false,
-                    children: []
-                };
-                this._rootNodes.push(typeNode);
-                this._objectNodes[typeNode.objectId] = typeNode;
-                typeNodes[metaObjectType] = typeNode;
-            }
-            const node = {
+    _createTypesNodes(
+        metaObject = this._rootMetaObject,
+        buildingNode,
+        typeNodes) {
+        const metaObjectType = metaObject.type;
+        const metaObjectName = metaObject.name;
+        if (metaObjectType === &quot;IfcBuilding&quot;) {
+            buildingNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
-                title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
-                parent: typeNode,
+                title: this._rootName || ((metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType),
+                parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
                 children: []
             };
-            typeNode.children.push(node);
-            this._objectNodes[node.objectId] = node;
+            this._rootNodes.push(buildingNode);
+            this._objectNodes[buildingNode.objectId] = buildingNode;
+            typeNodes = {};
+        } else {
+            if (buildingNode) {
+                const objects = this._viewer.scene.objects;
+                const object = objects[metaObject.id];
+                if (object) {
+                    const metaObjectType = metaObject.type;
+                    const metaObjectName = metaObject.name;
+                    var typeNode = typeNodes[metaObjectType];
+                    if (!typeNode) {
+                        typeNode = {
+                            nodeId: this._objectToNodeID(metaObjectType),
+                            objectId: metaObjectType,
+                            title: metaObjectType,
+                            parent: buildingNode,
+                            numEntities: 0,
+                            numVisibleEntities: 0,
+                            checked: false,
+                            children: []
+                        };
+                        buildingNode.children.push(typeNode);
+                        this._objectNodes[typeNode.objectId] = typeNode;
+                        typeNodes[metaObjectType] = typeNode;
+                    }
+                    const node = {
+                        nodeId: this._objectToNodeID(metaObject.id),
+                        objectId: metaObject.id,
+                        title: (metaObjectName &amp;&amp; metaObjectName !== &quot;&quot; &amp;&amp; metaObjectName !== &quot;Default&quot;) ? metaObjectName : metaObjectType,
+                        parent: typeNode,
+                        numEntities: 0,
+                        numVisibleEntities: 0,
+                        checked: false,
+                        children: []
+                    };
+                    typeNode.children.push(node);
+                    this._objectNodes[node.objectId] = node;
+                }
+            }
         }
         const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i &lt; len; i++) {
                 const childMetaObject = children[i];
-                this._createTypesNodes(childMetaObject, typeNodes);
+                this._createTypesNodes(childMetaObject, buildingNode, typeNodes);
             }
         }
     }
