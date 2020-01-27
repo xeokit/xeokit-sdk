@@ -621,15 +621,15 @@
         enabled: true
     });
 
-    viewer.scene.canvas.canvas.oncontextmenu = function (e) {
+    viewer.cameraControl.on("rightClick", function (e) {
 
         var hit = viewer.scene.pick({
-            canvasPos: [e.pageX, e.pageY]
+            canvasPos: e.canvasPos
         });
 
         if (hit && hit.entity.isObject) {
 
-            objectContextMenu.show(e.pageX, e.pageY);
+            objectContextMenu.show(e.event.pageX, e.event.pageY);
 
             objectContextMenu.context = {
                 viewer: viewer,
@@ -639,16 +639,15 @@
 
         } else {
 
-            canvasContextMenu.show(e.pageX, e.pageY);
+            canvasContextMenu.show(e.event.pageX, e.event.pageY);
 
             canvasContextMenu.context = {
                 viewer: viewer
             };
-
         }
 
-        e.preventDefault();
-    };
+        e.event.preventDefault();
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load a model
