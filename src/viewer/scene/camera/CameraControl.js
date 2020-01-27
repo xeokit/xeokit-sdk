@@ -19,6 +19,7 @@ import {CameraFlightAnimation} from './CameraFlightAnimation.js';
  * @emits "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
  * @emits "pickedNothing" - Clicked or tapped, but not on any objects
  * @emits "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
+ * @emits "rightClick" - Right-click
  */
 class CameraControl extends Component {
 
@@ -980,6 +981,8 @@ class CameraControl extends Component {
 
                 let lastX;
                 let lastY;
+                let lastXDown = 0;
+                let lastYDown = 0;
                 let xDelta = 0;
                 let yDelta = 0;
                 let down = false;
@@ -1003,6 +1006,8 @@ class CameraControl extends Component {
                             getCanvasPosFromEvent(e, mousePos);
                             lastX = mousePos[0];
                             lastY = mousePos[1];
+                            lastXDown = mousePos[0];
+                            lastYDown = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
                             mouseDownMiddle = true;
@@ -1014,6 +1019,8 @@ class CameraControl extends Component {
                                 getCanvasPosFromEvent(e, mousePos);
                                 lastX = mousePos[0];
                                 lastY = mousePos[1];
+                                lastXDown = mousePos[0];
+                                lastYDown = mousePos[1];
                             }
                             break;
                         case 3: // Right button
@@ -1026,6 +1033,8 @@ class CameraControl extends Component {
                                 getCanvasPosFromEvent(e, mousePos);
                                 lastX = mousePos[0];
                                 lastY = mousePos[1];
+                                lastXDown = mousePos[0];
+                                lastYDown = mousePos[1];
                             }
                             break;
                         default:
@@ -1046,6 +1055,15 @@ class CameraControl extends Component {
                             break;
                         case 3: // Right button
                             mouseDownRight = false;
+                            getCanvasPosFromEvent(e, mousePos);
+                            const x = mousePos[0];
+                            const y = mousePos[1];
+                            if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
+                                self.fire("rightClick", {
+                                    canvasPos: pickCursorPos,
+                                    event: e
+                                }, true);
+                            }
                             break;
                         default:
                             break;
