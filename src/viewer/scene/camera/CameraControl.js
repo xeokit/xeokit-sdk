@@ -922,12 +922,7 @@ class CameraControl extends Component {
                     } else {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
-                            updatePick();
-                            if (pickedSurface && pickResult.worldPos) {
-                                panToWorldPos(pickResult.worldPos, -vZoom);
-                            } else {
-                                camera.zoom(vZoom);
-                            }
+                            panToMousePos(mousePos, -vZoom * 2);
                         } else if (self._panToPivot) {
                             panToWorldPos(self._pivoter.getPivotPos(), -vZoom); // FIXME: What about when pivotPos undefined?
                         } else {
@@ -1160,9 +1155,6 @@ class CameraControl extends Component {
                 canvas.addEventListener("wheel", function (e) {
                     if (!(self._active && self._pointerEnabled)) {
                         return;
-                    }
-                    if (self._panToPointer) {
-                        needPickSurface = true;
                     }
                     const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
                     if (delta === 0) {
