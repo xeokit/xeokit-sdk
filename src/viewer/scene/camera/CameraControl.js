@@ -127,11 +127,6 @@ class CameraControl extends Component {
                 return pivoting;
             };
 
-            this.setPivotPos = function (worldPos) {
-                pivotPoint.set(worldPos);
-                pivoting = true;
-            };
-
             this.getPivotPos = function () {
                 return pivotPoint;
             };
@@ -272,7 +267,7 @@ class CameraControl extends Component {
      * @param {Number[]} worldPos The new World-space 3D pivot position.
      */
     set pivotPos(worldPos) {
-        this._pivoter.setPivotPos(worldPos);
+        this._pivoter.startPivot(worldPos);
     }
 
     /**
