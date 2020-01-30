@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scalable Ambient Obscurance</title>
+    <link href="css/styles.css" type="text/css" rel="stylesheet"/>
+
+    <style>
+
+        #myCanvas {
+            background: lightblue;
+        }
+
+        #my-gui-container {
+            position: absolute;
+            top: 280px;
+            right: 20px;
+            z-index: 10;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="libs/dat.gui.min.js"></script>
+
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<div id="info">
+    <h1>Scalable Ambient Obscurance</h1><br>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a>
+            - Manages Scalable Ambient Obscurance
+        </li>
+        <li>
+            <a target="_other"
+               href="./../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a>
+            - Loads model and IFC data from file system
+        </li>
+        <li>
+            <a target="_other"
+               href="https://github.com/openBIMstandards/DataSetSchependomlaan">Model source</a>
+        </li>
+        <li>
+            <a target="_other" href="https://github.com/xeokit/xeokit-sdk/wiki/Viewing-BIM-Models-Offline">User
+                Guide</a>
+        </li>
+    </ul>
+</div>
+
+<div id="my-gui-container"></div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer} from "../src/viewer/Viewer.js";
+    import {XKTLoaderPlugin} from "../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        saoEnabled: true // <<------------------- Enable SAO
+    });
+
+    if (!viewer.scene.sao.supported) {
+        viewer.scene.sao.warn("SAO is not supported by this browser or GPU - ignoring SAO configs")
+    }
+
+    const cameraControl = viewer.cameraControl;
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+    const sao = scene.sao;
+    const camera = scene.camera;
+
+    sao.enabled = true; // Only works if supported (see above)
+    sao.kernelRadius = 100;
+    sao.intensity = 0.5;
+    sao.bias = 1.5;
+    sao.scale = 1000.0;
+    sao.minResolution = 0.0;
+
+    cameraControl.panToPointer = true;
+    cameraControl.pivoting = true;
+
+    camera.eye = [-2.56, 8.38, 8.27];
+    camera.look = [13.44, 3.31, -14.83];
+    camera.up = [0.10, 0.98, -0.14];
+
+    camera.perspective.near = 0.1;
+    camera.perspective.far = 5000.0;
+
+    scene.highlightMaterial.fill = true;
+    scene.highlightMaterial.fillAlpha = 0.3;
+    scene.highlightMaterial.edgeColor = [1, 1, 0];
+
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const model = xktLoader.load({
+        id: "myModel",
+        src: "./models/xkt/schependomlaan/schependomlaan.xkt",
+        metaModelSrc: "./metaModels/schependomlaan/metaModel.json",
+        edges: true
+    });
+
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    model.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+
+        cameraFlight.jumpTo(model);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with SAO parameters
+    //------------------------------------------------------------------------------------------------------------------
+
+    var saoParams = new function () {
+        this.enabled = sao.enabled;
+        this.kernelRadius = sao.kernelRadius;
+        this.intensity = sao.intensity;
+        this.bias = sao.bias;
+        this.scale = sao.scale;
+        this.minResolution = sao.minResolution;
+        this.blur = sao.blur;
+        this.perspective = (camera.projection === "perspective");
+        this.far = camera.perspective.far;
+    }();
+
+    var update = function () {
+        sao.enabled = saoParams.enabled;
+        sao.kernelRadius = saoParams.kernelRadius;
+        sao.intensity = saoParams.intensity;
+        sao.bias = saoParams.bias;
+        sao.scale = saoParams.scale;
+        sao.minResolution = saoParams.minResolution;
+        sao.blur = saoParams.blur;
+        camera.projection = saoParams.perspective ? "perspective" : "ortho";
+        camera.perspective.far = saoParams.far;
+        camera.ortho.far = saoParams.far;
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false});
+
+    const saoFolder = gui.addFolder('SAO');
+    saoFolder.add(saoParams, 'enabled');
+    saoFolder.add(saoParams, 'bias', -2, 2);
+    saoFolder.add(saoParams, 'intensity', 0, 1.0);
+    saoFolder.add(saoParams, 'scale', 0, 2000);
+    saoFolder.add(saoParams, 'kernelRadius', 1, 200);
+    saoFolder.add(saoParams, 'minResolution', 0, 1);
+    saoFolder.add(saoParams, 'blur');
+    saoFolder.open();
+
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(saoParams, 'perspective');
+    cameraFolder.add(saoParams, 'far', 100, 5000);
+    cameraFolder.open();
+
+    var customContainer = document.getElementById('my-gui-container');
+    customContainer.appendChild(gui.domElement);
+
+</script>
+</html>

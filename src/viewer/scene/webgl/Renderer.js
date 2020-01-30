@@ -7,8 +7,9 @@ import {WEBGL_INFO} from '../webglInfo.js';
 import {Map} from "../utils/Map.js";
 import {PickResult} from "./PickResult.js";
 import {OcclusionTester} from "./OcclusionTester.js";
-
-const TEST_TICKS = 20; // Do Occlusion test per this number of ticks.
+import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
+import {SAOBlendRenderer} from "./sao/SAOBlendRenderer.js";
+import {SAOBlurRenderer} from "./sao/SAOBlurRenderer.js";
 
 /**
  * @private
@@ -38,11 +39,20 @@ const Renderer = function (scene, options) {
 
     let blendOneMinusSrcAlpha = true;
 
-    let pickBuf = null;
-    let readPixelBuf = null;
+    const saoDepthBuffer = new RenderBuffer(canvas, gl);
+    const occlusionBuffer1 = new RenderBuffer(canvas, gl);
+    const occlusionBuffer2 = new RenderBuffer(canvas, gl);
+    const colorBuffer = new RenderBuffer(canvas, gl);
+
+    const pickBuffer = new RenderBuffer(canvas, gl);
+    const readPixelBuffer = new RenderBuffer(canvas, gl);
 
     const bindOutputFrameBuffer = null;
     const unbindOutputFrameBuffer = null;
+
+    const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
+    const saoBlurRenderer = new SAOBlurRenderer(scene);
+    const saoBlendRenderer = new SAOBlendRenderer(scene);
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
 
@@ -66,12 +76,18 @@ const Renderer = function (scene, options) {
     };
 
     this.webglContextRestored = function (gl) {
-        if (pickBuf) {
-            pickBuf.webglContextRestored(gl);
-        }
-        if (readPixelBuf) {
-            readPixelBuf.webglContextRestored(gl);
-        }
+
+        pickBuffer.webglContextRestored(gl);
+        readPixelBuffer.webglContextRestored(gl);
+        saoDepthBuffer.webglContextRestored(gl);
+        occlusionBuffer1.webglContextRestored(gl);
+        occlusionBuffer2.webglContextRestored(gl);
+        colorBuffer.webglContextRestored(gl);
+
+        saoOcclusionRenderer.init();
+        saoBlurRenderer.init();
+        saoBlendRenderer.init();
+
         imageDirty = true;
     };
 
@@ -172,7 +188,7 @@ const Renderer = function (scene, options) {
         params = params || {};
         updateDrawlist();
         if (imageDirty || params.force) {
-            drawColor(params);
+            draw(params);
             stats.frame.frameCount++;
             imageDirty = false;
         }
@@ -285,20 +301,56 @@ const Renderer = function (scene, options) {
 
     const draw = function (params) {
 
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) {  // In case context lost/recovered
-            gl.getExtension("OES_element_index_uint");
+        const sao = scene.sao;
+
+        if (sao.enabled && sao.supported) {
+
+            // Render depth buffer
+
+            saoDepthBuffer.bind();
+            saoDepthBuffer.clear();
+            drawDepth(params);
+            saoDepthBuffer.unbind();
+
+            // Render occlusion buffer
+
+            occlusionBuffer1.bind();
+            occlusionBuffer1.clear();
+            saoOcclusionRenderer.render(saoDepthBuffer.getTexture(), null);
+            occlusionBuffer1.unbind();
+
+            if (sao.blur) {
+
+                // Horizontally blur occlusion buffer 1 into occlusion buffer 2
+
+                occlusionBuffer2.bind();
+                occlusionBuffer2.clear();
+                saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer1.getTexture(), 0);
+                occlusionBuffer2.unbind();
+
+                // Vertically blur occlusion buffer 2 back into occlusion buffer 1
+
+                occlusionBuffer1.bind();
+                occlusionBuffer1.clear();
+                saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
+                occlusionBuffer1.unbind();
+            }
+
+            // Render color buffer
+
+            colorBuffer.bind();
+            colorBuffer.clear();
+            drawColor(params);
+            colorBuffer.unbind();
+
+            // Blend color buffer with occlusion buffer 1
+
+            saoBlendRenderer.render(colorBuffer.getTexture(), occlusionBuffer1.getTexture());
+
+        } else {
+
+            drawColor(params);
         }
-
-        // if (SAO enabled) {
-        //      bind depth frame buffer
-
-        //      drawDepth({..});
-
-        //      bind default frame buffer
-        //      feed depth frame buffer into frameCtx as an SAO texture
-        // }
-
-        // drawColor({..});
     };
 
     const drawDepth = (function () {
@@ -317,23 +369,11 @@ const Renderer = function (scene, options) {
             const boundary = scene.viewport.boundary;
             gl.viewport(boundary[0], boundary[1], boundary[2], boundary[3]);
 
-            if (canvasTransparent) { // Canvas is transparent
-                gl.clearColor(0, 0, 0, 0);
-            } else {
-                const clearColor = scene.canvas.backgroundColor || ambientColor;
-                gl.clearColor(clearColor[0], clearColor[1], clearColor[2], 1.0);
-            }
-
+            gl.clearColor(0, 0, 0, 0);
             gl.enable(gl.DEPTH_TEST);
             gl.frontFace(gl.CCW);
             gl.enable(gl.CULL_FACE);
             gl.depthMask(true);
-            gl.lineWidth(1);
-            frameCtx.lineWidth = 1;
-
-            if (bindOutputFrameBuffer) {
-                bindOutputFrameBuffer(params.pass);
-            }
 
             if (params.clear !== false) {
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
@@ -345,11 +385,11 @@ const Renderer = function (scene, options) {
                     const drawableInfo = drawableTypeInfo[type];
                     const drawableList = drawableInfo.drawableList;
 
-                    for (var i = 0, len = drawableList.length; i < len; i++) {
+                    for (let i = 0, len = drawableList.length; i < len; i++) {
 
                         const drawable = drawableList[i];
 
-                        if (drawable.culled === true || drawable.visible === false) {
+                        if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
                             continue;
                         }
 
@@ -361,7 +401,7 @@ const Renderer = function (scene, options) {
                     }
                 }
             }
-            //
+
             // const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
             // for (let ii = 0; ii < numVertexAttribs; ii++) {
             //     gl.disableVertexAttribArray(ii);
@@ -773,13 +813,12 @@ const Renderer = function (scene, options) {
                 canvasY = canvas.clientHeight * 0.5;
             }
 
-            pickBuf = pickBuf || new RenderBuffer(canvas, gl);
-            pickBuf.bind();
+            pickBuffer.bind();
 
             const pickable = pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params);
 
             if (!pickable) {
-                pickBuf.unbind();
+                pickBuffer.unbind();
                 return null;
             }
 
@@ -798,7 +837,7 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            pickBuf.unbind();
+            pickBuffer.unbind();
 
             pickResult.entity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
@@ -854,7 +893,7 @@ const Renderer = function (scene, options) {
             }
         }
 
-        const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -890,7 +929,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const pix = pickBuf.read(canvasX, canvasY);
+        const pix = pickBuffer.read(canvasX, canvasY);
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -928,7 +967,7 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+            const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
@@ -986,7 +1025,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const pix = pickBuf.read(Math.round(canvasX), Math.round(canvasY));
+        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
 
         const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
 
@@ -1076,9 +1115,8 @@ const Renderer = function (scene, options) {
      * @private
      */
     this.readPixels = function (pixels, colors, len, opaqueOnly) {
-        readPixelBuf = readPixelBuf || (readPixelBuf = new RenderBuffer(canvas, gl));
-        readPixelBuf.bind();
-        readPixelBuf.clear();
+        readPixelBuffer.bind();
+        readPixelBuffer.clear();
         this.render({force: true, opaqueOnly: opaqueOnly});
         let color;
         let i;
@@ -1087,13 +1125,13 @@ const Renderer = function (scene, options) {
         for (i = 0; i < len; i++) {
             j = i * 2;
             k = i * 4;
-            color = readPixelBuf.read(pixels[j], pixels[j + 1]);
+            color = readPixelBuffer.read(pixels[j], pixels[j + 1]);
             colors[k] = color[0];
             colors[k + 1] = color[1];
             colors[k + 2] = color[2];
             colors[k + 3] = color[3];
         }
-        readPixelBuf.unbind();
+        readPixelBuffer.unbind();
         imageDirty = true;
     };
 
@@ -1102,14 +1140,21 @@ const Renderer = function (scene, options) {
      * @private
      */
     this.destroy = function () {
+
         drawableTypeInfo = {};
         drawables = {};
-        if (pickBuf) {
-            pickBuf.destroy();
-        }
-        if (readPixelBuf) {
-            readPixelBuf.destroy();
-        }
+
+        pickBuffer.destroy();
+        readPixelBuffer.destroy();
+        saoDepthBuffer.destroy();
+        occlusionBuffer1.destroy();
+        occlusionBuffer2.destroy();
+        colorBuffer.destroy();
+
+        saoOcclusionRenderer.destroy();
+        saoBlurRenderer.destroy();
+        saoBlendRenderer.destroy();
+
         if (this._occlusionTester) {
             this._occlusionTester.destroy();
         }
