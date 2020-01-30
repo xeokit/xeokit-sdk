@@ -164,6 +164,7 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.openingsVisible=false] Indicates whether ````IfcOpening```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.spaceBoundariesVisible=false] Indicates whether the boundaries of ````IfcSpace```` types should be visible in the viewpoint.
+     * @param {Boolean} [options.snapshot=true] Indicates whether the snapshot should be included in the viewpoint.
      * @returns {*} BCF JSON viewpoint object
      * @example
      *
@@ -316,10 +317,12 @@ class BCFViewpointsPlugin extends Plugin {
 
         bcfViewpoint.components.selection = selectedObjectIds.map(el => this._objectIdToComponent(el));
 
-        bcfViewpoint.snapshot = {
-            snapshot_type: "png",
-            snapshot_data: this.viewer.getSnapshot({format: "png"})
-        };
+        if (options.snapshot !== false) {
+            bcfViewpoint.snapshot = {
+                snapshot_type: "png",
+                snapshot_data: this.viewer.getSnapshot({format: "png"})
+            };
+        }
 
         return bcfViewpoint;
     }

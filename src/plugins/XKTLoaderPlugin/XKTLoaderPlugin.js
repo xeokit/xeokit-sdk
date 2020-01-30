@@ -311,6 +311,7 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Object} [cfg.dataSource] A custom data source through which the XKTLoaderPlugin can load model and metadata files. Defaults to an instance of {@link XKTDefaultDataSource}, which loads uover HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
+     * @param {Boolean} [cfg.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
      */
     constructor(viewer, cfg = {}) {
 
@@ -320,6 +321,7 @@ class XKTLoaderPlugin extends Plugin {
         this.objectDefaults = cfg.objectDefaults;
         this.includeTypes = cfg.includeTypes;
         this.excludeTypes = cfg.excludeTypes;
+        this.excludeUnclassifiedObjects = cfg.excludeUnclassifiedObjects;
     }
 
     /**
@@ -431,6 +433,35 @@ class XKTLoaderPlugin extends Plugin {
         return this._excludeTypes;
     }
 
+
+    /**
+     * Sets whether we load objects that don't have IFC types.
+     *
+     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
+     * that don't have IFC types.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set excludeUnclassifiedObjects(value) {
+        this._excludeUnclassifiedObjects = !!value;
+    }
+
+    /**
+     * Gets whether we load objects that don't have IFC types.
+     *
+     * When loading models with metadata and this is ````true````, XKTLoaderPlugin will not load objects
+     * that don't have IFC types.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get excludeUnclassifiedObjects() {
+        return this._excludeUnclassifiedObjects;
+    }
+
     /**
      * Loads a .xkt model into this XKTLoaderPlugin's {@link Viewer}.
      *
@@ -450,6 +481,7 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
+     * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link StructureTreeViewPlugin}.
      */
     load(params = {}) {
 
@@ -495,6 +527,8 @@ class XKTLoaderPlugin extends Plugin {
             if (objectDefaults) {
                 options.objectDefaults = objectDefaults;
             }
+
+            options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
 
             const processMetaModelData = (metaModelData) => {
 
@@ -725,7 +759,9 @@ class XKTLoaderPlugin extends Plugin {
                         }
                     }
                 } else {
-                    //this.warn("metaobject not found for entity: " + entityId);
+                    if (options.excludeUnclassifiedObjects) {
+                        continue;
+                    }
                 }
 
                 const lastEntity = (i === numEntities - 1);
@@ -849,7 +885,9 @@ class XKTLoaderPlugin extends Plugin {
                         }
                     }
                 } else {
-                    //    this.warn("metaobject not found for entity: " + entityId);
+                    if (options.excludeUnclassifiedObjects) {
+                        continue;
+                    }
                 }
 
                 const lastEntity = (i === numEntities - 1);

@@ -218,7 +218,6 @@ class Viewer {
             installedPlugin.clear();
         }
         delete this.plugins[plugin.id];
-        this.log(`Removed plugin: ${plugin.id}`);
     }
 
     /**

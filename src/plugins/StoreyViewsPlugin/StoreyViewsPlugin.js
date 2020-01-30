@@ -321,7 +321,8 @@ class StoreyViewsPlugin extends Plugin {
             const metaObject = metaScene.metaObjects[storeyId];
             const childObjectIds = metaObject.getObjectIDsInSubtree();
             const aabb = scene.getAABB(childObjectIds);
-            const storey = new Storey(this, aabb, modelId, storeyId);
+            const numObjects = (Math.random() > 0.5) ? childObjectIds.length : 0;
+            const storey = new Storey(this, aabb, modelId, storeyId, numObjects);
             storey._onModelDestroyed = model.once("destroyed", () => {
                 this._deregisterModelStoreys(modelId);
                 this.fire("storeys", this.storeys);
@@ -426,7 +427,7 @@ class StoreyViewsPlugin extends Plugin {
         eye2[1] = look2[1] + (camera.worldUp[1] * sca);
         eye2[2] = look2[2] + (camera.worldUp[2] * sca);
 
-        const up2 = camera.worldForward;
+        const up2 = math.mulVec3Scalar(camera.worldForward, -1, []);
 
         if (options.done) {
 

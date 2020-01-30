@@ -8,7 +8,7 @@ class Storey {
     /**
      * @private
      */
-    constructor(plugin, aabb, modelId, storeyId) {
+    constructor(plugin, aabb, modelId, storeyId, numObjects) {
 
         /**
          * The {@link StoreyViewsPlugin} this Storey belongs to.
@@ -48,6 +48,13 @@ class Storey {
          * @type {Number[]}
          */
         this.aabb = aabb.slice();
+
+        /** Number of {@link Entity}s within the IfcBuildingStorey.
+         *
+         * @property numObjects
+         * @type {Number}
+         */
+        this.numObjects = numObjects;
     }
 }
 

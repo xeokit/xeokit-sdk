@@ -12,7 +12,7 @@
             background: #ffffff;
         }
 
-        #myStructureTreeViewContainer {
+        #treeViewContainer {
             padding-top: 25px;
             pointer-events: all;
             height: 100%;
@@ -34,19 +34,19 @@
             width: 550px;
         }
 
-        #myStructureTreeViewContainer ul {
+        #treeViewContainer ul {
             list-style: none;
             padding-left: 1.75em;
         }
 
-        #myStructureTreeViewContainer ul li {
+        #treeViewContainer ul li {
             border-bottom-left-radius: 0.75em;
             border-top-left-radius: 0.75em;
             margin: 2px 0;
             position: relative;
         }
 
-        #myStructureTreeViewContainer ul li a {
+        #treeViewContainer ul li a {
             background-color: #eee;
             border-radius: 50%;
             color: #000;
@@ -59,23 +59,23 @@
             width: 1.5em;
         }
 
-        #myStructureTreeViewContainer ul li a.plus {
+        #treeViewContainer ul li a.plus {
             background-color: #ded;
         }
 
-        #myStructureTreeViewContainer ul li a.minus {
+        #treeViewContainer ul li a.minus {
             background-color: #eee;
         }
 
-        #myStructureTreeViewContainer ul li a:active {
+        #treeViewContainer ul li a:active {
             top: 1px;
         }
 
-        #myStructureTreeViewContainer ul li span {
+        #treeViewContainer ul li span {
             display: inline-block;
         }
 
-        #myStructureTreeViewContainer .top-right {
+        #treeViewContainer .top-right {
             font-size: small;
             position: fixed;
             right: 1em;
@@ -89,7 +89,7 @@
 
 <canvas id="myCanvas"></canvas>
 
-<div id="myStructureTreeViewContainer"></div>
+<div id="treeViewContainer"></div>
 
 <div id="info">
     <h1>XKTLoaderPlugin - Setting Initial Object Appearances</h1>
@@ -106,8 +106,8 @@
         </li>
         <li>
             <a target="_other"
-               href="./../docs/class/src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js~StructureTreeViewPlugin.html">StructureTreeViewPlugin</a>
-            - HTML tree view of IFC structure
+               href="./../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a>
+            - HTML tree view of IFC containment hierarchy
         </li>
         <li>
             <a target="_other"
@@ -129,10 +129,10 @@
 
     import {Viewer} from "../src/viewer/Viewer.js";
     import {GLTFLoaderPlugin} from "../src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-    import {StructureTreeViewPlugin} from "../src/plugins/StructureTreeViewPlugin/StructureTreeViewPlugin.js";
+    import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer, arrange the camera, tweak xraying and highlight materials
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
@@ -158,8 +158,8 @@
     // Create an IFC structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-    const structureTreeView = new StructureTreeViewPlugin(viewer, {
-        containerElement: document.getElementById("myStructureTreeViewContainer"),
+    const structureTreeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
         autoExpandDepth: 1 // Initially expand root tree node
     });
 
