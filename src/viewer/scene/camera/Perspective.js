@@ -148,7 +148,11 @@ class Perspective extends Component {
      * @param {Number} value New Perspective near plane position.
      */
     set near(value) {
-        this._state.near = (value !== undefined && value !== null) ? value : 0.1;
+        const near = (value !== undefined && value !== null) ? value : 0.1;
+        if (this._state.near === near) {
+            return;
+        }
+        this._state.near = near;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
          Fired whenever this Perspective's   {@link Perspective/near} property changes.
@@ -181,7 +185,11 @@ class Perspective extends Component {
      * @type {Number}
      */
     set far(value) {
-        this._state.far = (value !== undefined && value !== null) ? value : 10000;
+        const far = (value !== undefined && value !== null) ? value : 10000.0;
+        if (this._state.far === far) {
+            return;
+        }
+        this._state.far = far;
         this._needUpdate(0); // Ensure matrix built on next "tick"
         /**
          Fired whenever this Perspective's  {@link Perspective/far} property changes.
