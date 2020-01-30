@@ -75,16 +75,16 @@ BatchingDepthRenderer.prototype.drawLayer = function (frameCtx, layer) {
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
     gl.uniformMatrix4fv(this._uViewMatrix, false, model.viewMatrix);
     this._aPosition.bindArrayBuffer(state.positionsBuf);
+    if (this._aColor) { // Needed for masking out transparent entities using alpha channel
+        this._aColor.bindArrayBuffer(state.colorsBuf);
+        frameCtx.bindArray++;
+    }
     if (this._aFlags) {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         frameCtx.bindArray++;
     }
     if (this._aFlags2) {
         this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        frameCtx.bindArray++;
-    }
-    if (this._aColor) {
-        this._aColor.bindArrayBuffer(state.colorsBuf);
         frameCtx.bindArray++;
     }
     state.indicesBuf.bind();
@@ -117,6 +117,7 @@ BatchingDepthRenderer.prototype._allocate = function (layer) {
         });
     }
     this._aPosition = program.getAttribute("position");
+    this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
 };
@@ -126,6 +127,7 @@ BatchingDepthRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const gl = scene.canvas.gl;
     const program = this._program;
     const sectionPlanesState = scene._sectionPlanesState;
+    const projectState = scene.camera.project._state;
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
@@ -137,7 +139,7 @@ BatchingDepthRenderer.prototype._bindProgram = function (frameCtx, layer) {
         let sectionPlane;
         let uSectionPlanePos;
         let uSectionPlaneDir;
-        for (var i = 0, len = this._uSectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = this._uSectionPlanes.length; i < len; i++) {
             sectionPlaneUniforms = this._uSectionPlanes[i];
             uSectionPlaneActive = sectionPlaneUniforms.active;
             sectionPlane = sectionPlanes[i];

@@ -1250,9 +1250,16 @@ class PerformanceModel extends Component {
     }
 
     /** @private */
-    drawDepth(frameCtx) {
+    drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
         for (var i = 0, len = this._layers.length; i < len; i++) {
             this._layers[i].drawDepth(frameCtx);
+        }
+    }
+
+    /** @private */
+    drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
+        for (var i = 0, len = this._layers.length; i < len; i++) {
+            this._layers[i].drawNormals(frameCtx);
         }
     }
 

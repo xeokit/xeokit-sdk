@@ -10,6 +10,8 @@ import {BatchingPickMeshRenderer} from "./pick/batchingPickMeshRenderer.js";
 import {BatchingPickDepthRenderer} from "./pick/batchingPickDepthRenderer.js";
 import {BatchingPickNormalsRenderer} from "./pick/batchingPickNormalsRenderer.js";
 import {BatchingOcclusionRenderer} from "./occlusion/batchingOcclusionRenderer.js";
+import {BatchingDepthRenderer} from "./depth/batchingDepthRenderer.js";
+import {BatchingNormalsRenderer} from "./normals/batchingNormalsRenderer.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
 import {RENDER_PASSES} from '../renderPasses.js';
@@ -64,7 +66,7 @@ class BatchingLayer {
                 primitive = gl.TRIANGLE_FAN;
                 break;
             default:
-                throw `Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`;
+                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
                 primitive = gl.TRIANGLES;
                 primitiveName = "triangles";
         }
@@ -649,14 +651,29 @@ class BatchingLayer {
         }
     }
 
-    //-- SAO---------------------------------------------------------------------------------------------------
+    //-- SPost effects supprt------------------------------------------------------------------------------------------------
 
     drawDepth(frameCtx) {
         if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
+        if (!this._depthRenderer) {
+            this._depthRenderer = BatchingDepthRenderer.get(this);
+        }
         if (this._depthRenderer) {
             this._depthRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawNormals(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (!this._normalsRenderer) {
+            this._normalsRenderer = BatchingNormalsRenderer.get(this);
+        }
+        if (this._normalsRenderer) {
+            this._normalsRenderer.drawLayer(frameCtx, this);
         }
     }
 
@@ -826,6 +843,10 @@ class BatchingLayer {
             this._depthRenderer.put();
             this._depthRenderer = null;
         }
+        if (this._normalsRenderer && this._normalsRenderer.getValid() === false) {
+            this._normalsRenderer.put();
+            this._normalsRenderer = null;
+        }
         if (this._fillRenderer && this._fillRenderer.getValid() === false) {
             this._fillRenderer.put();
             this._fillRenderer = null;
@@ -853,9 +874,9 @@ class BatchingLayer {
         if (!this._drawRenderer) {
             this._drawRenderer = BatchingDrawRenderer.get(this);
         }
-        if (!this._depthRenderer) {
-            this._depthRenderer = BatchingDepthRenderer.get(this);
-        }
+
+        // Lazy-get normals and depth renderers when needed
+
         if (!this._fillRenderer) {
             this._fillRenderer = BatchingFillRenderer.get(this);
         }
@@ -884,6 +905,10 @@ class BatchingLayer {
         if (this._depthRenderer) {
             this._depthRenderer.put();
             this._depthRenderer = null;
+        }
+        if (this._normalsRenderer) {
+            this._normalsRenderer.put();
+            this._normalsRenderer = null;
         }
         if (this._fillRenderer) {
             this._fillRenderer.put();

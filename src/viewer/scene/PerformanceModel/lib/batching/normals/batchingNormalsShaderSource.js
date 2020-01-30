@@ -1,7 +1,7 @@
 /**
  * @private
  */
-class BatchingDepthShaderSource {
+class BatchingNormalsShaderSource {
     constructor(layer) {
         this.vertex = buildVertex(layer);
         this.fragment = buildFragment(layer);
@@ -12,10 +12,9 @@ function buildVertex(layer) {
     const scene = layer.model.scene;
     const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const src = [];
-
-    src.push("// Batched geometry depth vertex shader");
-
+    src.push("// Batched geometry normals vertex shader");
     src.push("attribute vec3 position;");
+    src.push("attribute vec3 normal;");
     src.push("attribute vec4 color;");
     src.push("attribute vec4 flags;");
     if (clipping) {
@@ -23,13 +22,20 @@ function buildVertex(layer) {
     }
     src.push("uniform mat4 viewMatrix;");
     src.push("uniform mat4 projMatrix;");
+    src.push("uniform mat4 viewNormalMatrix;");
     src.push("uniform mat4 positionsDecodeMatrix;");
-
+    src.push("vec3 octDecode(vec2 oct) {");
+    src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+    src.push("    if (v.z < 0.0) {");
+    src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+    src.push("    }");
+    src.push("    return normalize(v);");
+    src.push("}");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
         src.push("varying vec4 vFlags2;");
     }
-    src.push("varying vec4 vViewPosition;");
+    src.push("varying vec3 vViewNormal;");
     src.push("void main(void) {");
     src.push("  bool visible        = (float(flags.x) > 0.0);");
     src.push("  bool xrayed         = (float(flags.y) > 0.0);");
@@ -37,13 +43,15 @@ function buildVertex(layer) {
     src.push(`  if (!visible || transparent || xrayed) {`);
     src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
     src.push("  } else {");
-    src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-    src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
+    src.push("      vec4 worldPosition  = positionsDecodeMatrix * vec4(position, 1.0); ");
+    src.push("      vec4 viewPosition   = viewMatrix * worldPosition; ");
+    src.push("      vec4 worldNormal    = vec4(octDecode(normal.xy), 0.0); ");
+    src.push("      vec3 viewNormal     = normalize((viewNormalMatrix * worldNormal).xyz);");
     if (clipping) {
-        src.push("      vWorldPosition = worldPosition;");
-        src.push("      vFlags2 = flags2;");
+        src.push("      vWorldPosition  = worldPosition;");
+        src.push("      vFlags2         = flags2;");
     }
-    src.push("      vViewPosition = viewPosition;");
+    src.push("      vViewNormal = viewNormal;");
     src.push("      gl_Position = projMatrix * viewPosition;");
     src.push("  }");
     src.push("}");
@@ -55,7 +63,7 @@ function buildFragment(layer) {
     const sectionPlanesState = scene._sectionPlanesState;
     const clipping = (sectionPlanesState.sectionPlanes.length > 0);
     const src = [];
-    src.push("// Batched geometry depth fragment shader");
+    src.push("// Batched geometry normals fragment shader");
     src.push("precision highp float;");
     if (clipping) {
         src.push("varying vec4 vWorldPosition;");
@@ -66,20 +74,10 @@ function buildFragment(layer) {
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
         }
     }
-    src.push("varying vec4 vViewPosition;");
-
-    src.push("const float   packUpScale = 256. / 255.;");
-    src.push("const float   unpackDownscale = 255. / 256.;");
-    src.push("const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-    src.push("const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );");
-    src.push("const float   shiftRight8 = 1. / 256.;");
-
-    src.push("vec4 packDepthToRGBA( const in float v ) {");
-    src.push("    vec4 r = vec4( fract( v * packFactors ), v );");
-    src.push("    r.yzw -= r.xyz * shiftRight8;");
-    src.push("    return r * packUpScale;");
+    src.push("varying vec3 vViewNormal;");
+    src.push("vec3 packNormalToRGB( const in vec3 normal ) {");
+    src.push("    return normalize( normal ) * 0.5 + 0.5;");
     src.push("}");
-
     src.push("void main(void) {");
     if (clipping) {
         src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
@@ -93,9 +91,9 @@ function buildFragment(layer) {
         src.push("      if (dist > 0.0) { discard; }");
         src.push("  }");
     }
-    src.push("    gl_FragColor = packDepthToRGBA( gl_FragCoord.z); ");
+    src.push("    gl_FragColor = vec4(packNormalToRGB(vViewNormal), 1.0); ");
     src.push("}");
     return src;
 }
 
-export {BatchingDepthShaderSource};
+export {BatchingNormalsShaderSource};
