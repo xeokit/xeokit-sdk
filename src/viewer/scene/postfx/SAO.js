@@ -236,13 +236,13 @@ class SAO extends Component {
     /**
      * Sets the SAO occlusion scale.
      *
-     * Default value is ````1.0````.
+     * Default value is ````1000.0````.
      *
      * @type {Number}
      */
     set scale(value) {
         if (value === undefined || value === null) {
-            value = 1.0;
+            value = 1000.0;
         }
         if (this._scale === value) {
             return;
@@ -254,7 +254,7 @@ class SAO extends Component {
     /**
      * Gets the SAO occlusion scale.
      *
-     * Default value is ````1.0````.
+     * Default value is ````1000.0````.
      *
      * @type {Number}
      */
