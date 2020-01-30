@@ -85,11 +85,11 @@
     const camera = scene.camera;
 
     sao.enabled = true; // Only works if supported (see above)
-    sao.kernelRadius = 100;
-    sao.intensity = 0.5;
-    sao.bias = 1.5;
+    sao.intensity = 0.25;
+    sao.bias = 0.5;
     sao.scale = 1000.0;
     sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
 
     cameraControl.panToPointer = true;
     cameraControl.pivoting = true;
@@ -129,8 +129,6 @@
     model.on("loaded", function () {
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
-
-        cameraFlight.jumpTo(model);
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -184,6 +182,9 @@
 
     var customContainer = document.getElementById('my-gui-container');
     customContainer.appendChild(gui.domElement);
+
+
+    window.viewer = viewer;
 
 </script>
 </html>

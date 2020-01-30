@@ -89,11 +89,11 @@
     const camera = scene.camera;
 
     sao.enabled = true; // Only works if supported (see above)
-    sao.kernelRadius = 100;
-    sao.intensity = 0.5;
-    sao.bias = 1.5;
+    sao.intensity = 0.25;
+    sao.bias = 0.5;
     sao.scale = 1000.0;
     sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
 
     cameraControl.panToPointer = true;
     cameraControl.pivoting = true;
