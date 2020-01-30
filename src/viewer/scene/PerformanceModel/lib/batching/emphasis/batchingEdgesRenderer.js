@@ -77,26 +77,25 @@ BatchingEdgesRenderer.prototype.drawLayer = function (frameCtx, layer, renderPas
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx, layer);
     }
+
+    var material;
     if (renderPass === RENDER_PASSES.XRAYED) {
-        const material = scene.xrayMaterial._state;
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+        material = scene.xrayMaterial._state;
     } else if (renderPass === RENDER_PASSES.HIGHLIGHTED) {
-        const material = scene.highlightMaterial._state;
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+        material = scene.highlightMaterial._state;
     } else if (renderPass === RENDER_PASSES.SELECTED) {
-        const material = scene.selectedMaterial._state;
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+        material = scene.selectedMaterial._state;
     } else {
-        const material = scene.edgeMaterial._state;
-        const edgeColor = material.edgeColor;
-        const edgeAlpha = material.edgeAlpha;
-        gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+        material = scene.edgeMaterial._state;
+    }
+
+    const edgeColor = material.edgeColor;
+    const edgeAlpha = material.edgeAlpha;
+    gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+
+    if (frameCtx.lineWidth !== material.edgeWidth) {
+        gl.lineWidth(material.edgeWidth);
+        frameCtx.lineWidth = material.edgeWidth;
     }
 
     gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, layer._state.positionsDecodeMatrix);
