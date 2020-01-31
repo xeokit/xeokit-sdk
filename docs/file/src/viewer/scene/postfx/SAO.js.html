@@ -146,16 +146,30 @@ import {WEBGL_INFO} from &quot;../webglInfo.js&quot;;
 /**
  * @desc Configures Scalable Ambient Obscurance (SAO) for a {@link Scene}.
  *
- * [&lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png&quot;&gt;](https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter)
+ * ## Overview
+ *
+ * * This component is found on {@link Scene#sao}.
+ * * This effect approximates Ambient Occlusion in realtime. It darkens creases, cavities and surfaces
+ * that are close to each other, which tend to occlude ambient light and appear darker.
+ * * For deeper technical information on SAO, see the paper [Scalable Ambient Obscurance](https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf).
+ *
+ * &lt;br&gt;
+ *
+ * Scene without SAO:
+ *
+ *  &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png&quot;&gt;
+ *
+ * Scene with SAO:
+ *
+ *  &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png&quot;&gt;
+ *
+ * Scene with SAO and blur:
+ *
+ * &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png&quot;&gt;
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter)]
  *
- * This component is found on {@link Scene#sao}.
- *
- * This effect approximates Ambient Occlusion in realtime. It darkens creases, cavities and surfaces
- * that are close to each other, which tend to occlude ambient light and appear darker.
- *
- * For deeper technical information on SAO, see the paper [Scalable Ambient Obscurance](https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf).
+
  */
 class SAO extends Component {
 
@@ -462,93 +476,6 @@ class SAO extends Component {
      */
     get blur() {
         return this._blur;
-    }
-
-    /**
-     * Sets the Guassian blur radius.
-     *
-     * Default value is ````12.0````.
-     *
-     * @type {Number}
-     */
-    set blurRadius(value) {
-        if (value === undefined || value === null) {
-            value = 12.0;
-        }
-        if (this._blurRadius === value) {
-            return;
-        }
-        this._blurRadius = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Guassian blur radius.
-     *
-     * Default value is ````12.0````.
-     *
-     * @type {Number}
-     */
-    get blurRadius() {
-        return this._blurRadius;
-    }
-
-    /**
-     * Sets the Guassian blur standard deviation.
-     *
-     * Default value is ````6.0````.
-     *
-     * @type {Number}
-     */
-    set blurStdDev(value) {
-        if (value === undefined || value === null) {
-            value = 6.0;
-        }
-        if (this._blurStdDev === value) {
-            return;
-        }
-        this._blurStdDev = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Guassian blur standard deviation.
-     *
-     * Default value is ````6.0````.
-     *
-     * @type {Number}
-     */
-    get blurStdDev() {
-        return this._blurStdDev;
-    }
-
-    /**
-     * Sets the Guassian blur depth cutoff.
-     *
-     * Default value is ````0.01````.
-     *
-     * @type {Number}
-     */
-    set blurDepthCutoff(value) {
-        if (value === undefined || value === null) {
-            value = 0.01;
-        }
-        if (this._blurDepthCutoff === value) {
-            return;
-        }
-        this._blurDepthCutoff = value;
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the Guassian blur depth cutoff.
-     *
-     * Default value is ````0.1````.
-     *
-     * @type {Number}
-     */
-    get blurDepthCutoff() {
-        return this._blurDepthCutoff;
     }
 }
 

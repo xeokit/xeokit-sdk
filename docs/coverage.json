@@ -1,7 +1,7 @@
 {
-  "coverage": "45.08%",
-  "expectCount": 4236,
-  "actualCount": 1910,
+  "coverage": "45.01%",
+  "expectCount": 4230,
+  "actualCount": 1904,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 20,
@@ -3200,22 +3200,22 @@
       ]
     },
     "src/viewer/scene/postfx/SAO.js": {
-      "expectCount": 40,
-      "actualCount": 27,
+      "expectCount": 34,
+      "actualCount": 21,
       "undocumentLines": [
-        25,
-        66,
-        98,
-        131,
-        167,
-        196,
-        225,
-        254,
-        283,
-        310,
-        339,
-        368,
-        397
+        39,
+        50,
+        51,
+        52,
+        80,
+        112,
+        145,
+        181,
+        210,
+        239,
+        268,
+        297,
+        324
       ]
     },
     "src/viewer/scene/scene/Scene.js": {
