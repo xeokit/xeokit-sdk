@@ -5,13 +5,15 @@ import {WEBGL_INFO} from "../../../webglInfo.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 
-import {InstancingDrawRenderer} from "./instancingDrawRenderer.js";
-import {InstancingFillRenderer} from "./instancingFillRenderer.js";
-import {InstancingEdgesRenderer} from "./instancingEdgesRenderer.js";
-import {InstancingPickMeshRenderer} from "./instancingPickMeshRenderer.js";
-import {InstancingPickDepthRenderer} from "./instancingPickDepthRenderer.js";
-import {InstancingPickNormalsRenderer} from "./instancingPickNormalsRenderer.js";
-import {InstancingOcclusionRenderer} from "./instancingOcclusionRenderer.js";
+import {InstancingDrawRenderer} from "./draw/instancingDrawRenderer.js";
+import {InstancingFillRenderer} from "./emphasis/instancingFillRenderer.js";
+import {InstancingEdgesRenderer} from "./emphasis/instancingEdgesRenderer.js";
+import {InstancingPickMeshRenderer} from "./pick/instancingPickMeshRenderer.js";
+import {InstancingPickDepthRenderer} from "./pick/instancingPickDepthRenderer.js";
+import {InstancingPickNormalsRenderer} from "./pick/instancingPickNormalsRenderer.js";
+import {InstancingOcclusionRenderer} from "./occlusion/instancingOcclusionRenderer.js";
+import {InstancingDepthRenderer} from "./depth/instancingDepthRenderer.js";
+import {InstancingNormalsRenderer} from "./normals/instancingNormalsRenderer.js";
 import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 
 import {RENDER_FLAGS} from '../renderFlags.js';
@@ -69,7 +71,7 @@ class InstancingLayer {
                 primitive = gl.TRIANGLE_FAN;
                 break;
             default:
-                throw `Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`;
+                model.error(`Unsupported value for 'primitive': '${primitiveName}' - supported values are 'points', 'lines', 'line-loop', 'line-strip', 'triangles', 'triangle-strip' and 'triangle-fan'. Defaulting to 'triangles'.`);
                 primitive = gl.TRIANGLES;
                 primitiveName = "triangles";
         }
@@ -610,6 +612,32 @@ class InstancingLayer {
         }
     }
 
+    //--  Post effects support -----------------------------------------------------------------------------------------
+
+    drawDepth(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (!this._depthRenderer) {
+            this._depthRenderer = InstancingDepthRenderer.get(this);
+        }
+        if (this._depthRenderer) {
+            this._depthRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
+    drawNormals(frameCtx) {
+        if (this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
+            return;
+        }
+        if (!this._normalsRenderer) {
+            this._normalsRenderer = InstancingNormalsRenderer.get(this);
+        }
+        if (this._normalsRenderer) {
+            this._normalsRenderer.drawLayer(frameCtx, this);
+        }
+    }
+
     //-- XRAYED--------------------------------------------------------------------------------------------------------
 
     drawXRayedFillOpaque(frameCtx) {
@@ -772,6 +800,14 @@ class InstancingLayer {
             this._drawRenderer.put();
             this._drawRenderer = null;
         }
+        if (this._depthRenderer && this._depthRenderer.getValid() === false) {
+            this._depthRenderer.put();
+            this._depthRenderer = null;
+        }
+        if (this._normalsRenderer && this._normalsRenderer.getValid() === false) {
+            this._normalsRenderer.put();
+            this._normalsRenderer = null;
+        }
         if (this._fillRenderer && this._fillRenderer.getValid() === false) {
             this._fillRenderer.put();
             this._fillRenderer = null;
@@ -799,6 +835,9 @@ class InstancingLayer {
         if (!this._drawRenderer) {
             this._drawRenderer = InstancingDrawRenderer.get(this);
         }
+
+        // Lazy-get depth and normals renderers, only when needed
+
         if (!this._fillRenderer) {
             this._fillRenderer = InstancingFillRenderer.get(this);
         }
@@ -823,6 +862,14 @@ class InstancingLayer {
         if (this._drawRenderer) {
             this._drawRenderer.put();
             this._drawRenderer = null;
+        }
+        if (this._depthRenderer) {
+            this._depthRenderer.put();
+            this._depthRenderer = null;
+        }
+        if (this._normalsRenderer) {
+            this._normalsRenderer.put();
+            this._normalsRenderer = null;
         }
         if (this._fillRenderer) {
             this._fillRenderer.put();

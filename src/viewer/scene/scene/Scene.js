@@ -15,6 +15,7 @@ import {PhongMaterial} from '../materials/PhongMaterial.js';
 import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
+import {SAO} from "../postfx/SAO.js";
 
 // Cached vars to avoid garbage collection
 
@@ -72,7 +73,7 @@ function getEntityIDMap(scene, entityIds) {
  * ## Creating and accessing Scene components
  *
  * As a brief introduction to creating Scene components, we'll create a {@link Mesh} that has a
- * {@link uildTorusGeometry} and a {@link PhongMaterial}:
+ * {@link buildTorusGeometry} and a {@link PhongMaterial}:
  *
  * ````javascript
  * var teapotMesh = new Mesh(scene, {
@@ -708,6 +709,14 @@ class Scene extends Component {
             units: cfg.units,
             scale: cfg.scale,
             origin: cfg.origin
+        });
+
+        /** Configures Scalable Ambient Obscurance (SAO) for this Scene.
+         * @type {SAO}
+         * @final
+         */
+        this.sao = new SAO(this, {
+            enabled: cfg.saoEnabled
         });
 
         this.ticksPerRender = cfg.ticksPerRender;

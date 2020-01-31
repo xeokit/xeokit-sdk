@@ -132,7 +132,11 @@ class Ortho extends Component {
      * @param {Number} value New Ortho near plane position.
      */
     set near(value) {
-        this._state.near = (value !== undefined && value !== null) ? value : 0.1;
+       const near = (value !== undefined && value !== null) ? value : 0.1;
+        if (this._state.near === near) {
+            return;
+        }
+        this._state.near = near;
         this._needUpdate(0);
         /**
          Fired whenever this Ortho's  {@link Ortho#near} property changes.
@@ -164,7 +168,11 @@ class Ortho extends Component {
      * @param {Number} value New far ortho plane position.
      */
     set far(value) {
-        this._state.far = (value !== undefined && value !== null) ? value : 10000.0;
+        const far = (value !== undefined && value !== null) ? value : 10000.0;
+        if (this._state.far === far) {
+            return;
+        }
+        this._state.far = far;
         this._needUpdate(0);
         /**
          Fired whenever this Ortho's {@link Ortho#far} property changes.

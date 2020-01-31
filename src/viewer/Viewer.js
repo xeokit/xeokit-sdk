@@ -35,6 +35,7 @@ class Viewer {
      * @param {String} [cfg.units="meters"] The measurement unit type. Accepted values are ````"meters"````, ````"metres"````, , ````"centimeters"````, ````"centimetres"````, ````"millimeters"````,  ````"millimetres"````, ````"yards"````, ````"feet"```` and ````"inches"````.
      * @param {Number} [cfg.scale=1] The number of Real-space units in each World-space coordinate system unit.
      * @param {Number[]} [cfg.origin=[0,0,0]] The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits.
+     * @param {Boolean} [cfg.saoEnabled=false] Whether to enable Scalable Ambient Obscurance (SAO) effect. See {@link SAO} for more info.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(cfg) {
@@ -68,7 +69,8 @@ class Viewer {
             ticksPerOcclusionTest: 20,
             units: cfg.units,
             scale: cfg.scale,
-            origin: cfg.origin
+            origin: cfg.origin,
+            saoEnabled: cfg.saoEnabled
         });
 
         /**
