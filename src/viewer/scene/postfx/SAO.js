@@ -15,15 +15,15 @@ import {WEBGL_INFO} from "../webglInfo.js";
  *
  * Scene without SAO:
  *
- *  <img src="http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png">
+ *  <img src="http://xeokit.io/img/docs/SAO/saoDisabled.png">
  *
  * Scene with SAO:
  *
- *  <img src="http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png">
+ *  <img src="http://xeokit.io/img/docs/SAO/saoEnabledNoBlur.png">
  *
  * Scene with SAO and blur:
  *
- * <img src="http://xeokit.io/img/docs/SAO/saoEnabledDefaultsDocs.png">
+ * <img src="http://xeokit.io/img/docs/SAO/saoEnabledDefaults.png">
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter)]
  *
