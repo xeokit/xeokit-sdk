@@ -220,7 +220,7 @@ class SAOBlendRenderer {
                     }
                     
                     void main() {
-                        vec4 color      = texture2D(uColorTexture, vUV);
+                        vec4 color      = texture2D(uColorTexture, gl_FragCoord.xy - (gl_FragCoord.xy / 2.0));
                         float ambient   = smoothstep(uOcclusionCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, vUV))) * uOcclusionScale;
                         gl_FragColor    = vec4(color.rgb * (ambient), color.a);
                     }`]
