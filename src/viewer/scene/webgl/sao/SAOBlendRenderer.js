@@ -2,6 +2,7 @@ import {Program} from "./../Program.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 
 /**
+ * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 class SAOBlendRenderer {

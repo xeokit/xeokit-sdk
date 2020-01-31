@@ -25,6 +25,7 @@ function createSampleOffsets(kernelRadius, uvIncrement) {
 }
 
 /**
+ * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 class SAODepthLimitedBlurRenderer {

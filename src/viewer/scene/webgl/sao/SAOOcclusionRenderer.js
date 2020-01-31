@@ -3,6 +3,7 @@ import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
 
 /**
+ * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 class SAOOcclusionRenderer {
