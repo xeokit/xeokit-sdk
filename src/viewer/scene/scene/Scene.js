@@ -750,27 +750,27 @@ class Scene extends Component {
 
         new AmbientLight(this, {
             color: [0.3, 0.3, 0.3],
-            intensity: 1.0
+            intensity: 0.6
         });
 
         new DirLight(this, {
             dir: [0.8, -0.6, -0.8],
             color: [1.0, 1.0, 1.0],
-            intensity: 1.0,
+            intensity: 0.9,
             space: "view"
         });
 
         new DirLight(this, {
             dir: [-0.8, -0.4, -0.4],
             color: [1.0, 1.0, 1.0],
-            intensity: 1.0,
+            intensity: 0.9,
             space: "view"
         });
 
         new DirLight(this, {
             dir: [0.2, -0.8, 0.8],
-            color: [0.6, 0.6, 0.6],
-            intensity: 1.0,
+            color: [0.7, 0.7, 0.7],
+            intensity: 0.9,
             space: "view"
         });
 
@@ -1785,8 +1785,6 @@ class Scene extends Component {
      * Each {@link Entity} on which {@link Entity#isObject} is registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * Each {@link Entity} is only included in the AABB when {@link Entity#collidable} is ````true````.
-     *
-     * Returns the AABB of all {@link Entity}s in {@link Scene#objects} by default, or TODO
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @returns {[Number, Number, Number, Number, Number, Number]} An axis-aligned World-space bounding box, given as elements ````[xmin, ymin, zmin, xmax, ymax, zmax]````.

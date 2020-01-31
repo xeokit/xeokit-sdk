@@ -148,7 +148,7 @@
     // Create an IFC structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-    const structureTreeView = new TreeViewPlugin(viewer, {
+    const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer")
     });
 
@@ -174,7 +174,7 @@
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
 
-        structureTreeView.addModel(model.id);
+        treeView.addModel(model.id);
     });
 
 </script>

@@ -568,9 +568,6 @@ class BatchingLayer {
         this._state.colorsBuf.setData(tempUint8Vec4.slice(0, lenColor), firstColor, lenColor);
     }
 
-    // setMatrix(portionId, matrix) { // TODO
-    // }
-
     _setFlags(portionId, flags) {
         if (!this._finalized) {
             throw "Not finalized";

@@ -6,10 +6,17 @@ import {XML3DLoader} from "./XML3DLoader.js";
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
+ * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ *
+ * ## Overview
+ *
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
- *
+ * * Can optionally load a {@link MetaModel} to classify the objects within the model, from which you can create a tree view using the {@link TreeViewPlugin}.
+ * <br>
  * Note that the name of this plugin is intentionally munged to "XML3D" because a JavaScript class name cannot begin with a numeral.
  *
  * An 3DXML model is a zip archive that bundles multiple XML files and assets. Internally, the XML3DLoaderPlugin uses the
@@ -65,6 +72,85 @@ import {XML3DLoader} from "./XML3DLoader.js";
  * // Destroy the model
  * model.destroy();
  * ````
+ * ## Loading MetaModels
+ *
+ * We have the option to load a {@link MetaModel} that contains a hierarchy of {@link MetaObject}s that classifes the objects within
+ * our 3DXML model.
+ *
+ * This is useful for building a tree view to navigate the objects, using {@link TreeViewPlugin}.
+ *
+ * Let's load the model again, this time creating a MetaModel:
+ *
+ * ````javascript
+ * var model = plugin.load({
+ *     id: "myModel",
+ *     src: "./models/xml3d/3dpreview.3dxml",
+ *     scale: [0.1, 0.1, 0.1],
+ *     rotate: [90, 0, 0],
+ *     translate: [100,0,0],
+ *     edges: true,
+ *
+ *     createMetaModel: true // <<-------- Create a MetaModel
+ * });
+ * ````
+ *
+ * The MetaModel can then be found on the {@link Viewer}'s {@link MetaScene}, using the model's ID:
+ *
+ * ````javascript
+ * const metaModel = viewer.metaScene.metaModels["myModel"];
+ * ````
+ *
+ * Now we can use {@link TreeViewPlugin} to create a tree view to navigate our model's objects:
+ *
+ * ````javascript
+ * import {TreeViewPlugin} from "../src/plugins/TreeViewPlugin/TreeViewPlugin.js";
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById("myTreeViewContainer")
+ * });
+ *
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("treeViewContainer"),
+ *      autoExpandDepth: 3, // Initially expand tree three storeys deep
+ *      hierarchy: "containment",
+ *      autoAddModels: false
+ * });
+ *
+ * model.on("loaded", () => {
+ *      treeView.addModel(model.id);
+ * });
+ * ````
+ *
+ * Note that only the TreeViewPlugin "containment" hierarchy makes sense for an XML3D model. A "types" hierarchy
+ * does not make sense because XML3DLoaderPlugin will set each {@link MetaObject#type} to "Default", and "storeys"
+ * does not make sense because that requires some of the MetaObject#type values to be "IfcBuildingStorey".
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ *
+ * ## Material Type
+ *
+ * Although 3DXML only supports Phong materials, XML3DLoaderPlugin is able to convert them to physically-based materials.
+ *
+ * The plugin supports three material types:
+ *
+ * | Material Type | Material Components Loaded  | Description | Example |
+ * |:--------:|:----:|:-----:|:-----:|
+ * | "PhongMaterial" (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
+ * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
+ * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ *
+ * <br>
+ * Let's load our model again, this time converting the 3DXML Blinn-Phong materials to {@link SpecularMaterial}s:
+ *
+ * ````javascript
+ * var model = plugin.load({ // Model is an Entity
+ *     id: "myModel",
+ *     src: "./models/xml3d/3dpreview.3dxml",
+ *     materialtype: "SpecularMaterial": true"
+ * });
+ * ````
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)]
  *
  * @class XML3DLoaderPlugin
  */
@@ -79,6 +165,8 @@ class XML3DLoaderPlugin extends Plugin {
      * @param {String} cfg.workerScriptsPath Path to the directory that contains the
      * bundled [zip.js](https://gildas-lormeau.github.io/zip.js/) archive, which is a dependency of this plugin. This directory
      * contains the script that is used by zip.js to instantiate Web workers, which assist with unzipping the 3DXML, which is a ZIP archive.
+     * @param {String} [cfg.materialType="PhongMaterial"] What type of materials to create while loading: "MetallicMaterial" to create {@link MetallicMaterial}s, "SpecularMaterial" to create {@link SpecularMaterial}s or "PhongMaterial" to create {@link PhongMaterial}s. As it loads XML3D's Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {Boolean} [cfg.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
      */
     constructor(viewer, cfg = {}) {
 
@@ -119,13 +207,13 @@ class XML3DLoaderPlugin extends Plugin {
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the 3DXML. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=20] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {String} [params.materialType="PhongMaterial"] What type of materials to create while loading: "MetallicMaterial" to create {@link MetallicMaterial}s, "SpecularMaterial" to create {@link SpecularMaterial}s or "PhongMaterial" to create {@link PhongMaterial}s. As it loads XML3D's Phong materials, the XMLLoaderPlugin will do its best approximate conversion of those to the specified workflow.
+     * @param {Boolean} [params.createMetaModel=false] When true, will create a {@link MetaModel} for the model in {@link MetaScene#metaModels}.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
         params.workerScriptsPath = this._workerScriptsPath;
-
-        const self = this;
 
         if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");

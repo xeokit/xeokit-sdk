@@ -1,7 +1,7 @@
 {
-  "coverage": "45.98%",
-  "expectCount": 4071,
-  "actualCount": 1872,
+  "coverage": "49.66%",
+  "expectCount": 3604,
+  "actualCount": 1790,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 20,
@@ -364,39 +364,6 @@
         107
       ]
     },
-    "src/plugins/BIMServerLoaderPlugin/lib/Datainputstream.js": {
-      "expectCount": 28,
-      "actualCount": 1,
-      "undocumentLines": [
-        2,
-        5,
-        6,
-        18,
-        19,
-        20,
-        21,
-        24,
-        28,
-        37,
-        45,
-        53,
-        59,
-        65,
-        71,
-        77,
-        83,
-        97,
-        111,
-        121,
-        131,
-        141,
-        151,
-        157,
-        163,
-        173,
-        179
-      ]
-    },
     "src/plugins/BIMServerLoaderPlugin/lib/EventHandler.js": {
       "expectCount": 4,
       "actualCount": 1,
@@ -404,30 +371,6 @@
         8,
         12,
         27
-      ]
-    },
-    "src/plugins/BIMServerLoaderPlugin/lib/Executor.js": {
-      "expectCount": 19,
-      "actualCount": 1,
-      "undocumentLines": [
-        6,
-        7,
-        9,
-        10,
-        11,
-        12,
-        14,
-        15,
-        18,
-        28,
-        43,
-        49,
-        65,
-        74,
-        76,
-        77,
-        83,
-        84
       ]
     },
     "src/plugins/BIMServerLoaderPlugin/lib/MetaDataReader.js": {
@@ -480,353 +423,6 @@
       "undocumentLines": []
     },
     "src/plugins/BIMServerLoaderPlugin/lib/request.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverapipromise.js": {
-      "expectCount": 11,
-      "actualCount": 1,
-      "undocumentLines": [
-        5,
-        6,
-        7,
-        8,
-        9,
-        12,
-        29,
-        36,
-        47,
-        64
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverapiwebsocket.js": {
-      "expectCount": 22,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        20,
-        43,
-        57,
-        62,
-        72,
-        80,
-        89,
-        95,
-        140,
-        146
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/bimserverclient.js": {
-      "expectCount": 73,
-      "actualCount": 1,
-      "undocumentLines": [
-        19,
-        23,
-        24,
-        25,
-        39,
-        42,
-        45,
-        51,
-        54,
-        69,
-        72,
-        76,
-        79,
-        81,
-        86,
-        89,
-        92,
-        95,
-        98,
-        101,
-        104,
-        125,
-        141,
-        151,
-        157,
-        174,
-        191,
-        197,
-        201,
-        205,
-        243,
-        252,
-        259,
-        263,
-        267,
-        273,
-        279,
-        297,
-        310,
-        326,
-        339,
-        352,
-        364,
-        375,
-        384,
-        399,
-        409,
-        423,
-        432,
-        448,
-        460,
-        475,
-        489,
-        501,
-        520,
-        528,
-        542,
-        557,
-        596,
-        646,
-        734,
-        743,
-        749,
-        753,
-        757,
-        761,
-        765,
-        793,
-        806,
-        847,
-        895,
-        907
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/geometry.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/ifc2x3tc1.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/ifc4.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/model.js": {
-      "expectCount": 43,
-      "actualCount": 1,
-      "undocumentLines": [
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        14,
-        15,
-        16,
-        18,
-        19,
-        20,
-        23,
-        24,
-        25,
-        26,
-        27,
-        29,
-        30,
-        33,
-        37,
-        82,
-        86,
-        92,
-        99,
-        117,
-        121,
-        133,
-        144,
-        148,
-        155,
-        421,
-        454,
-        498,
-        521,
-        529,
-        539,
-        632,
-        641,
-        665,
-        674,
-        764
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerClient/translations_en.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/BIMServerLoaderPlugin.js": {
-      "expectCount": 10,
-      "actualCount": 9,
-      "undocumentLines": [
-        167
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/BIMServerPerformanceGeometryLoader.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/DataInputStreamReader.js": {
-      "expectCount": 19,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        11,
-        14,
-        23,
-        27,
-        36,
-        45,
-        51,
-        57,
-        63,
-        69,
-        75,
-        85,
-        91,
-        101,
-        107
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/Datainputstream.js": {
-      "expectCount": 28,
-      "actualCount": 1,
-      "undocumentLines": [
-        2,
-        5,
-        6,
-        18,
-        19,
-        20,
-        21,
-        24,
-        28,
-        37,
-        45,
-        53,
-        59,
-        65,
-        71,
-        77,
-        83,
-        97,
-        111,
-        121,
-        131,
-        141,
-        151,
-        157,
-        163,
-        173,
-        179
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/EventHandler.js": {
-      "expectCount": 4,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        12,
-        27
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/Executor.js": {
-      "expectCount": 19,
-      "actualCount": 1,
-      "undocumentLines": [
-        6,
-        7,
-        9,
-        10,
-        11,
-        12,
-        14,
-        15,
-        18,
-        28,
-        43,
-        49,
-        65,
-        74,
-        76,
-        77,
-        83,
-        84
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/MetaDataReader.js": {
-      "expectCount": 4,
-      "actualCount": 2,
-      "undocumentLines": [
-        28,
-        64
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/Notifier.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/StringView.js": {
-      "expectCount": 16,
-      "actualCount": 1,
-      "undocumentLines": [
-        330,
-        350,
-        393,
-        397,
-        408,
-        425,
-        431,
-        448,
-        467,
-        488,
-        510,
-        523,
-        574,
-        592,
-        629
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/defaultMaterials.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/loadBIMServerMetaModel.js": {
-      "expectCount": 2,
-      "actualCount": 1,
-      "undocumentLines": [
-        120
-      ]
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/preloadQuery.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/plugins/BIMServerLoaderPluginV2/lib/request.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
@@ -1129,7 +725,7 @@
       ]
     },
     "src/plugins/TreeViewPlugin/ModelTreeView.js": {
-      "expectCount": 40,
+      "expectCount": 42,
       "actualCount": 3,
       "undocumentLines": [
         3,
@@ -1144,31 +740,33 @@
         31,
         32,
         33,
-        39,
-        84,
-        91,
-        98,
-        146,
-        147,
-        152,
-        156,
-        160,
-        164,
-        172,
-        195,
-        273,
-        317,
-        344,
-        381,
-        392,
-        407,
-        445,
-        468,
-        475,
-        512,
-        537,
+        34,
+        35,
+        41,
+        86,
+        93,
+        100,
+        148,
+        149,
+        154,
+        158,
+        162,
+        166,
+        174,
+        200,
+        282,
+        349,
+        376,
+        413,
+        424,
+        439,
+        477,
+        500,
+        507,
         544,
-        571
+        569,
+        576,
+        603
       ]
     },
     "src/plugins/TreeViewPlugin/TreeViewNode.js": {
@@ -1180,18 +778,11 @@
       "expectCount": 16,
       "actualCount": 11,
       "undocumentLines": [
-        264,
-        265,
-        267,
-        268,
-        308
-      ]
-    },
-    "src/plugins/TreeViewPlugin/temp.js": {
-      "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        1
+        275,
+        276,
+        278,
+        279,
+        319
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
@@ -1208,59 +799,42 @@
         8,
         14,
         16,
-        344,
-        366,
-        391,
-        419,
-        448,
-        589,
-        603,
-        612,
-        665,
-        703
-      ]
-    },
-    "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.new.js": {
-      "expectCount": 24,
-      "actualCount": 12,
-      "undocumentLines": [
-        8,
-        14,
-        16,
-        342,
-        364,
-        389,
-        417,
-        566,
-        580,
-        589,
+        374,
+        396,
+        421,
+        449,
+        478,
+        619,
+        633,
         642,
-        680
+        695,
+        733
       ]
     },
     "src/plugins/XML3DLoaderPlugin/XML3DLoader.js": {
-      "expectCount": 27,
+      "expectCount": 28,
       "actualCount": 4,
       "undocumentLines": [
-        14,
-        17,
-        101,
-        110,
-        856,
-        887,
-        895,
-        907,
-        919,
-        991,
-        1004,
-        1109,
-        1230,
-        1241,
-        1249,
-        24,
+        13,
+        16,
+        118,
+        127,
+        891,
+        922,
+        928,
+        940,
+        952,
+        1016,
+        1028,
+        1132,
+        1253,
+        1264,
+        1272,
+        23,
+        32,
         33,
         34,
-        35,
+        50,
         51,
         52,
         53,
@@ -1271,7 +845,7 @@
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        92
+        180
       ]
     },
     "src/plugins/lib/html/Dot.js": {
@@ -1438,13 +1012,14 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/PerformanceMesh.js": {
-      "expectCount": 30,
-      "actualCount": 25,
+      "expectCount": 33,
+      "actualCount": 27,
       "undocumentLines": [
-        3,
-        11,
-        74,
+        9,
+        72,
+        73,
         75,
+        76,
         77
       ]
     },
@@ -1453,13 +1028,13 @@
       "actualCount": 36,
       "undocumentLines": [
         3,
-        15,
-        55,
+        4,
+        16,
         56,
-        58,
-        152,
-        515,
-        536
+        57,
+        151,
+        528,
+        549
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingBuffer.js": {
@@ -1492,20 +1067,19 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingDrawRenderer.js": {
-      "expectCount": 12,
+      "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
-        7,
-        22,
+        6,
+        21,
         23,
-        25,
-        42,
-        46,
-        50,
-        61,
-        65,
-        118,
-        184
+        40,
+        44,
+        48,
+        59,
+        63,
+        103,
+        168
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingDrawShaderSource.js": {
@@ -1513,7 +1087,7 @@
       "actualCount": 1,
       "undocumentLines": [
         12,
-        149
+        147
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingEdgesRenderer.js": {
@@ -1578,11 +1152,11 @@
         23,
         24,
         25,
-        928,
-        957,
-        1004,
-        1021,
-        1039,
+        925,
+        954,
+        1001,
+        1018,
+        1036,
         39,
         40,
         72,
@@ -1609,37 +1183,37 @@
         517,
         523,
         537,
-        572,
-        594,
-        616,
-        625,
-        634,
-        643,
-        654,
-        663,
-        672,
-        681,
-        692,
-        701,
-        710,
-        719,
-        730,
-        739,
-        748,
-        757,
-        768,
-        777,
-        786,
-        797,
-        802,
+        569,
+        591,
+        613,
+        622,
+        631,
+        640,
+        651,
+        660,
+        669,
+        678,
+        689,
+        698,
+        707,
+        716,
+        727,
+        736,
+        745,
+        754,
+        765,
+        774,
+        783,
+        794,
+        799,
+        806,
         809,
-        812,
-        816,
-        820,
-        824,
-        828,
-        832,
-        860
+        813,
+        817,
+        821,
+        825,
+        829,
+        857
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/batching/batchingOcclusionRenderer.js": {
@@ -1751,20 +1325,19 @@
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingDrawRenderer.js": {
-      "expectCount": 12,
+      "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
-        7,
-        21,
+        6,
+        20,
         22,
-        24,
-        41,
-        45,
-        49,
-        60,
-        64,
-        163,
-        247
+        39,
+        43,
+        47,
+        58,
+        62,
+        147,
+        230
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingDrawShaderSource.js": {
@@ -1772,7 +1345,7 @@
       "actualCount": 1,
       "undocumentLines": [
         15,
-        160
+        158
       ]
     },
     "src/viewer/scene/PerformanceModel/lib/instancing/instancingEdgesRenderer.js": {
@@ -2055,45 +1628,22 @@
       "actualCount": 29,
       "undocumentLines": [
         42,
-        188,
-        216,
-        242,
-        286,
-        288,
-        338,
-        364,
-        397,
-        424,
-        445,
-        473,
-        495,
-        513,
-        523,
-        1854,
-        1890
-      ]
-    },
-    "src/viewer/scene/camera/CameraControl2.js": {
-      "expectCount": 46,
-      "actualCount": 29,
-      "undocumentLines": [
-        42,
-        188,
-        216,
-        242,
-        286,
-        288,
-        338,
-        364,
-        397,
-        424,
-        445,
-        473,
-        495,
-        513,
-        523,
-        1879,
-        1915
+        196,
+        224,
+        250,
+        294,
+        296,
+        346,
+        372,
+        405,
+        432,
+        453,
+        481,
+        503,
+        521,
+        531,
+        1884,
+        1920
       ]
     },
     "src/viewer/scene/camera/CameraFlightAnimation.js": {
@@ -2696,7 +2246,7 @@
       "actualCount": 14,
       "undocumentLines": [
         4,
-        142
+        144
       ]
     },
     "src/viewer/scene/mementos/ObjectsMemento.js": {
@@ -3058,118 +2608,6 @@
         125
       ]
     },
-    "src/viewer/scene/posteffects/effects/DOF.js": {
-      "expectCount": 10,
-      "actualCount": 0,
-      "undocumentLines": [
-        1,
-        37,
-        39,
-        43,
-        47,
-        51,
-        55,
-        59,
-        63,
-        67
-      ]
-    },
-    "src/viewer/scene/posteffects/effects/SAO.js": {
-      "expectCount": 34,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        9,
-        69,
-        109,
-        122,
-        124,
-        126,
-        127,
-        128,
-        129,
-        130,
-        131,
-        132,
-        133,
-        135,
-        155,
-        170,
-        185,
-        210,
-        214,
-        276,
-        282,
-        290,
-        298,
-        306,
-        314,
-        315,
-        322,
-        337,
-        362
-      ]
-    },
-    "src/viewer/scene/posteffects/effects/blur.js": {
-      "expectCount": 35,
-      "actualCount": 0,
-      "undocumentLines": [
-        1,
-        3,
-        26,
-        42,
-        57,
-        62,
-        67,
-        85,
-        93,
-        100,
-        112,
-        114,
-        116,
-        117,
-        118,
-        119,
-        120,
-        121,
-        122,
-        124,
-        144,
-        159,
-        174,
-        199,
-        203,
-        263,
-        269,
-        277,
-        285,
-        293,
-        301,
-        302,
-        309,
-        324,
-        349
-      ]
-    },
-    "src/viewer/scene/postfx/PostEffect.js": {
-      "expectCount": 4,
-      "actualCount": 3,
-      "undocumentLines": [
-        24
-      ]
-    },
-    "src/viewer/scene/postfx/SAO/SAO.js": {
-      "expectCount": 10,
-      "actualCount": 8,
-      "undocumentLines": [
-        4,
-        247
-      ]
-    },
     "src/viewer/scene/scene/Scene.js": {
       "expectCount": 117,
       "actualCount": 70,
@@ -3220,7 +2658,7 @@
         1505,
         1527,
         1586,
-        2025
+        2023
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {

@@ -195,9 +195,9 @@
     // Create an IFC structure tree view
     //------------------------------------------------------------------------------------------------------------------
 
-    const structureTreeView = new TreeViewPlugin(viewer, {
+    const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
-        autoExpandDepth: 0, // Initially expanding "types" makes for a lot of nodes to scroll though - let's not expand
+        autoExpandDepth: 1, // Initially expanding "types" makes for a lot of nodes to scroll though - let's not expand
         hierarchy: "types"
     });
 

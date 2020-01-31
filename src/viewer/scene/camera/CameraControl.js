@@ -19,6 +19,7 @@ import {CameraFlightAnimation} from './CameraFlightAnimation.js';
  * @emits "doublePickedSurface" - Double-clicked or double-tapped object, with event containing surface intersection details
  * @emits "pickedNothing" - Clicked or tapped, but not on any objects
  * @emits "doublePickedNothing" - Double-clicked or double-tapped, but not on any objects
+ * @emits "rightClick" - Right-click
  */
 class CameraControl extends Component {
 
@@ -126,10 +127,6 @@ class CameraControl extends Component {
                 return pivoting;
             };
 
-            this.setPivotPos = function (worldPos) {
-                pivotPoint.set(worldPos);
-            };
-
             this.getPivotPos = function () {
                 return pivotPoint;
             };
@@ -173,6 +170,13 @@ class CameraControl extends Component {
                 math.subVec3(camera.eye, math.mulVec3Scalar(zAxis, eyeLookLen), camera.look);
                 camera.up = [lookat[4], lookat[5], lookat[6]];
                 spot.style.visibility = "visible";
+            };
+
+            this.showPivot = function () {
+                spot.style.visibility = "visible";
+                window.setTimeout(() => {
+                    spot.style.visibility = "hidden";
+                }, 1000)
             };
 
             this.hidePivot = function () {
@@ -263,7 +267,7 @@ class CameraControl extends Component {
      * @param {Number[]} worldPos The new World-space 3D pivot position.
      */
     set pivotPos(worldPos) {
-        this._pivoter.setPivotPos(worldPos);
+        this._pivoter.startPivot(worldPos);
     }
 
     /**
@@ -435,7 +439,7 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets whether right-clicking pans the {@link Camera}.
+     * Sets whether either right-clicking (true) or middle-clicking (false) pans the {@link Camera}.
      *
      * Default value is ````true````.
      *
@@ -880,6 +884,9 @@ class CameraControl extends Component {
                         eye[1] = y;
                         camera.eye = eye;
                     } else {
+                        if (self._pivoter.getPivoting()) {
+                            self._pivoter.showPivot();
+                        }
                         camera.pan([panVx * f, panVy * f, panVz * f]);
                     }
                 }
@@ -911,12 +918,7 @@ class CameraControl extends Component {
                     } else {
                         // Do both zoom and ortho scale so that we can switch projections without weird scale jumps
                         if (self._panToPointer) {
-                            updatePick();
-                            if (pickedSurface && pickResult.worldPos) {
-                                panToWorldPos(pickResult.worldPos, -vZoom);
-                            } else {
-                                camera.zoom(vZoom);
-                            }
+                            panToMousePos(mousePos, -vZoom * 2);
                         } else if (self._panToPivot) {
                             panToWorldPos(self._pivoter.getPivotPos(), -vZoom); // FIXME: What about when pivotPos undefined?
                         } else {
@@ -974,6 +976,8 @@ class CameraControl extends Component {
 
                 let lastX;
                 let lastY;
+                let lastXDown = 0;
+                let lastYDown = 0;
                 let xDelta = 0;
                 let yDelta = 0;
                 let down = false;
@@ -997,20 +1001,36 @@ class CameraControl extends Component {
                             getCanvasPosFromEvent(e, mousePos);
                             lastX = mousePos[0];
                             lastY = mousePos[1];
+                            lastXDown = mousePos[0];
+                            lastYDown = mousePos[1];
                             break;
                         case 2: // Middle/both buttons
-                            self.scene.canvas.canvas.style.cursor = "move";
                             mouseDownMiddle = true;
+                            if (!self._panRightClick) {
+                                self.scene.canvas.canvas.style.cursor = "move";
+                                down = true;
+                                xDelta = 0;
+                                yDelta = 0;
+                                getCanvasPosFromEvent(e, mousePos);
+                                lastX = mousePos[0];
+                                lastY = mousePos[1];
+                                lastXDown = mousePos[0];
+                                lastYDown = mousePos[1];
+                            }
                             break;
                         case 3: // Right button
-                            self.scene.canvas.canvas.style.cursor = "move";
                             mouseDownRight = true;
-                            down = true;
-                            xDelta = 0;
-                            yDelta = 0;
-                            getCanvasPosFromEvent(e, mousePos);
-                            lastX = mousePos[0];
-                            lastY = mousePos[1];
+                            if (self._panRightClick) {
+                                self.scene.canvas.canvas.style.cursor = "move";
+                                down = true;
+                                xDelta = 0;
+                                yDelta = 0;
+                                getCanvasPosFromEvent(e, mousePos);
+                                lastX = mousePos[0];
+                                lastY = mousePos[1];
+                                lastXDown = mousePos[0];
+                                lastYDown = mousePos[1];
+                            }
                             break;
                         default:
                             break;
@@ -1030,6 +1050,15 @@ class CameraControl extends Component {
                             break;
                         case 3: // Right button
                             mouseDownRight = false;
+                            getCanvasPosFromEvent(e, mousePos);
+                            const x = mousePos[0];
+                            const y = mousePos[1];
+                            if (Math.abs(x - lastXDown) < 3 && Math.abs(y - lastYDown) < 3) {
+                                self.fire("rightClick", {
+                                    canvasPos: pickCursorPos,
+                                    event: e
+                                }, true);
+                            }
                             break;
                         default:
                             break;
@@ -1109,12 +1138,12 @@ class CameraControl extends Component {
                         return;
                     }
 
-                    const panning = shiftDown || mouseDownRight;
+                    const panning = shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight);
 
                     if (panning) {
 
                         // Panning
-                        if (shiftDown || (self.panRightClick && mouseDownRight)) {
+                        if (shiftDown || (!self._panRightClick && mouseDownMiddle) || (self._panRightClick && mouseDownRight) ) {
                             panVx = xDelta * mousePanRate;
                             panVy = yDelta * mousePanRate;
                         }
@@ -1140,9 +1169,6 @@ class CameraControl extends Component {
                     if (!(self._active && self._pointerEnabled)) {
                         return;
                     }
-                    if (self._panToPointer) {
-                        needPickSurface = true;
-                    }
                     const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
                     if (delta === 0) {
                         return;
@@ -1166,6 +1192,9 @@ class CameraControl extends Component {
                         const wkey = input.keyDown[input.KEY_ADD];
                         const skey = input.keyDown[input.KEY_SUBTRACT];
                         if (wkey || skey) {
+                            if (self._pivoting) {
+                                self._pivoter.startPivot();
+                            }
                             if (skey) {
                                 vZoom = elapsed * getZoomRate() * keyboardZoomRate;
                             } else if (wkey) {
@@ -1207,6 +1236,9 @@ class CameraControl extends Component {
                             down = input.keyDown[input.KEY_X];
                         }
                         if (front || back || left || right || up || down) {
+                            if (self._pivoting) {
+                                self._pivoter.startPivot();
+                            }
                             if (down) {
                                 panVy += elapsed * keyboardPanRate;
                             } else if (up) {
@@ -1368,6 +1400,9 @@ class CameraControl extends Component {
                     const up = input.keyDown[input.KEY_UP_ARROW];
                     const down = input.keyDown[input.KEY_DOWN_ARROW];
                     if (left || right || up || down) {
+                        if (self._pivoting) {
+                            self._pivoter.startPivot();
+                        }
                         if (right) {
                             rotateVy += -elapsed * keyboardOrbitRate;
 

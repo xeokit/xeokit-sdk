@@ -1,7 +1,5 @@
 import {math} from "../../math/math.js";
 
-const tempIntRGBA = new Uint16Array([0, 0, 0, 0]);
-
 /**
  * @private
  * @implements Pickable
@@ -75,6 +73,8 @@ class PerformanceMesh {
         this._portionId = portionId;
 
         this._color = [color[0], color[1], color[2], opacity]; // [0..255]
+        this._colorize = [color[0], color[1], color[2], opacity]; // [0..255]
+        this._colorizing = false;
     }
 
     /**
@@ -94,12 +94,40 @@ class PerformanceMesh {
     /**
      * @private
      */
-    _setColor(color, setOpacity) {
-        tempIntRGBA[0] = Math.floor((((this._color[0] / 255) * (color[0] / 255))) * 255);
-        tempIntRGBA[1] = Math.floor((((this._color[1] / 255) * (color[1] / 255))) * 255);
-        tempIntRGBA[2] = Math.floor((((this._color[2] / 255) * (color[2] / 255))) * 255);
-        tempIntRGBA[3] = Math.floor((((this._color[3] / 255) * (color[3] / 255))) * 255);
-        this._layer.setColor(this._portionId, tempIntRGBA, setOpacity);
+    _setColor(color) {
+        this._color[0] = color[0];
+        this._color[1] = color[1];
+        this._color[2] = color[2];
+        if (!this._colorizing) {
+            this._layer.setColor(this._portionId, this._color, false);
+        }
+    }
+
+    /** @private */
+    _setColorize(colorize) {
+        const setOpacity = false;
+        if (colorize) {
+            this._colorize[0] = colorize[0];
+            this._colorize[1] = colorize[1];
+            this._colorize[2] = colorize[2];
+            this._layer.setColor(this._portionId, this._colorize, setOpacity);
+            this._colorizing = true;
+        } else {
+            this._layer.setColor(this._portionId, this._color, setOpacity);
+            this._colorizing = false;
+        }
+    }
+
+    /** @private */
+    _setOpacity(opacity) {
+        this._color[3] = opacity;
+        this._colorize[3] = opacity;
+        const setOpacity = true;
+        if (this._colorizing) {
+            this._layer.setColor(this._portionId, this._colorize, setOpacity);
+        } else {
+            this._layer.setColor(this._portionId, this._color, setOpacity);
+        }
     }
 
     /**

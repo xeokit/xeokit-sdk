@@ -9,7 +9,7 @@ class ModelTreeView {
     /**
      * @private
      */
-    constructor(viewer, treeViewPlugin, contextMenu, model, metaModel, cfg) {
+    constructor(viewer, treeViewPlugin, model, metaModel, cfg) {
 
         if (!cfg.containerElement) {
             throw "Config expected: containerElement";
@@ -23,6 +23,7 @@ class ModelTreeView {
         this._id = idMap.addItem();
         this._baseId = "" + this._id;
         this._viewer = viewer;
+        this._metaModel = model;
         this._treeViewPlugin = treeViewPlugin;
         this._rootMetaObject = rootMetaObject;
         this._containerElement = cfg.containerElement;
@@ -31,6 +32,7 @@ class ModelTreeView {
         this._muteTreeEvents = false;
         this._rootNodes = [];
         this._objectNodes = {};
+        this._rootName = cfg.rootName;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -143,7 +145,7 @@ class ModelTreeView {
             this._muteSceneEvents = false;
         };
 
-        this._hierarchy = cfg.hierarchy || "structure";
+        this._hierarchy = cfg.hierarchy || "containment";
         this._autoExpandDepth = cfg.autoExpandDepth || 0;
 
         this._createNodes();
@@ -179,51 +181,58 @@ class ModelTreeView {
         switch (this._hierarchy) {
             case "storeys":
                 this._createStoreysNodes();
+                if (this._rootNodes.length === 0) {
+                    this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - perhaps this model is not an IFC model?");
+                }
                 break;
             case "types":
                 this._createTypesNodes();
                 break;
-            case "structure":
+            case "containment":
             default:
-                this._createStructureNodes();
+                this._createContainmentNodes();
         }
         this._synchNodesToEntities();
         this._createTrees();
         this.expandToDepth(this._autoExpandDepth);
     }
 
-    _createStoreysNodes(
+    _createIFCStoreysNodes(
         metaObject = this._rootMetaObject,
-        projectNode,
+        buildingNode,
         storeyNode,
         typeNodes) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
-        if (metaObjectType === "IfcProject") {
-            projectNode = {
+        if (metaObjectType === "IfcBuilding") {
+            buildingNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
-                title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
                 children: []
             };
-            this._rootNodes.push(projectNode);
-            this._objectNodes[projectNode.objectId] = projectNode;
+            this._rootNodes.push(buildingNode);
+            this._objectNodes[buildingNode.objectId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
+            if (!buildingNode) {
+                this._treeViewPlugin.error("Failed to build storeys hierarchy for model '" + this._metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                return;
+            }
             storeyNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                parent: projectNode,
+                parent: buildingNode,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
                 children: []
             };
-            projectNode.children.push(storeyNode);
+            buildingNode.children.push(storeyNode);
             this._objectNodes[storeyNode.objectId] = storeyNode;
             typeNodes = {};
         } else {
@@ -265,61 +274,84 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStoreysNodes(childMetaObject, projectNode, storeyNode, typeNodes);
+                this._createIFCStoreysNodes(childMetaObject, buildingNode, storeyNode, typeNodes);
             }
         }
     }
 
-    _createTypesNodes(metaObject = this._rootMetaObject, typeNodes = {}) {
-        const objects = this._viewer.scene.objects;
-        const object = objects[metaObject.id];
-        if (object) {
-            const metaObjectType = metaObject.type;
-            const metaObjectName = metaObject.name;
-            var typeNode = typeNodes[metaObjectType];
-            if (!typeNode) {
-                typeNode = {
-                    nodeId: this._objectToNodeID(metaObjectType),
-                    objectId: metaObjectType,
-                    title: metaObjectType,
-                    parent: null,
-                    numEntities: 0,
-                    numVisibleEntities: 0,
-                    checked: false,
-                    children: []
-                };
-                this._rootNodes.push(typeNode);
-                this._objectNodes[typeNode.objectId] = typeNode;
-                typeNodes[metaObjectType] = typeNode;
-            }
-            const node = {
+    _createIFCTypesNodes(
+        metaObject = this._rootMetaObject,
+        buildingNode,
+        typeNodes) {
+        const metaObjectType = metaObject.type;
+        const metaObjectName = metaObject.name;
+        if (metaObjectType === "IfcBuilding") {
+            buildingNode = {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
-                title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
-                parent: typeNode,
+                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
                 children: []
             };
-            typeNode.children.push(node);
-            this._objectNodes[node.objectId] = node;
+            this._rootNodes.push(buildingNode);
+            this._objectNodes[buildingNode.objectId] = buildingNode;
+            typeNodes = {};
+        } else {
+            if (buildingNode) {
+                const objects = this._viewer.scene.objects;
+                const object = objects[metaObject.id];
+                if (object) {
+                    const metaObjectType = metaObject.type;
+                    const metaObjectName = metaObject.name;
+                    var typeNode = typeNodes[metaObjectType];
+                    if (!typeNode) {
+                        typeNode = {
+                            nodeId: this._objectToNodeID(metaObjectType),
+                            objectId: metaObjectType,
+                            title: metaObjectType,
+                            parent: buildingNode,
+                            numEntities: 0,
+                            numVisibleEntities: 0,
+                            checked: false,
+                            children: []
+                        };
+                        buildingNode.children.push(typeNode);
+                        this._objectNodes[typeNode.objectId] = typeNode;
+                        typeNodes[metaObjectType] = typeNode;
+                    }
+                    const node = {
+                        nodeId: this._objectToNodeID(metaObject.id),
+                        objectId: metaObject.id,
+                        title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                        parent: typeNode,
+                        numEntities: 0,
+                        numVisibleEntities: 0,
+                        checked: false,
+                        children: []
+                    };
+                    typeNode.children.push(node);
+                    this._objectNodes[node.objectId] = node;
+                }
+            }
         }
         const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createTypesNodes(childMetaObject, typeNodes);
+                this._createIFCTypesNodes(childMetaObject, buildingNode, typeNodes);
             }
         }
     }
 
-    _createStructureNodes(metaObject = this._rootMetaObject, parent) {
-        const metaObjectName = metaObject.name;
+    _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
+        const metaObjectName = metaObject.name || metaObject.type;
         const node = {
             nodeId: this._objectToNodeID(metaObject.id),
             objectId: metaObject.id,
-            title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
             parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
@@ -336,7 +368,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createStructureNodes(childMetaObject, node);
+                this._createContainmentNodes(childMetaObject, node);
             }
         }
     }

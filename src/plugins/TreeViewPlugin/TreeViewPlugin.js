@@ -88,6 +88,17 @@ import {Plugin} from "../../viewer/Plugin.js";
  * });
  * ````
  *
+ * Adding models manually also allows us to set some options for the model. For example, the ````rootName```` option allows us to provide a custom name for
+ * the root node, which is sometimes desirable when the model's "IfcProject" element's name is not suitable:
+ *
+ * ````javascript
+ * model.on("loaded", () => {
+ *      treeView.addModel(model.id, {
+ *          rootName: "Schependomlaan Model"
+ *      });
+ * });
+ * ````
+ *
  * ## Initially Expanding the Hierarchy
  *
  * We can also configure TreeViewPlugin to initially expand each model's nodes to a given depth.
@@ -331,8 +342,10 @@ class TreeViewPlugin extends Plugin {
      * provide a ````autoAddModels: true```` to the TreeViewPlugin constructor.
      *
      * @param {String} modelId ID of a model {@link Entity} in {@link Scene#models}.
+     * @param {Object} [options] Options for model in the tree view.
+     * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for "containment" and "storeys" hierarchy types, the tree would derive the root node name from the model's "IfcProject" element name. This option allows to override that name when it is not suitable as a display name.
      */
-    addModel(modelId) {
+    addModel(modelId, options={}) {
         if (!this._containerElement) {
             return;
         }
@@ -349,10 +362,11 @@ class TreeViewPlugin extends Plugin {
             this.warn("Model already added: " + modelId);
             return;
         }
-        this._modelTreeViews[modelId] = new ModelTreeView(this.viewer, this, this._contextMenu, model, metaModel, {
+        this._modelTreeViews[modelId] = new ModelTreeView(this.viewer, this, model, metaModel, {
             containerElement: this._containerElement,
             autoExpandDepth: this._autoExpandDepth,
-            hierarchy: this._hierarchy
+            hierarchy: this._hierarchy,
+            rootName: options.rootName
         });
         model.on("destroyed", () => {
             this.removeModel(model.id);
@@ -458,7 +472,6 @@ class TreeViewPlugin extends Plugin {
             }
         }
         this._modelTreeViews = {};
-        //this._contextMenu.destroy();
         super.destroy();
     }
 }

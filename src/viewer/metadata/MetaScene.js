@@ -266,6 +266,20 @@ class MetaScene {
         visit(metaObject);
         return list;
     }
+
+    /**
+     * Iterates over the {@link MetaObject}s within the subtree.
+     *
+     * @param {String} id ID of root {@link MetaObject}.
+     * @param {Function} callback Callback fired at each {@link MetaObject}.
+     */
+    withMetaObjectsInSubtree(id, callback) {
+        const metaObject = this.metaObjects[id];
+        if (!metaObject) {
+            return;
+        }
+        metaObject.withMetaObjectsInSubtree(callback);
+    }
 }
 
 export {MetaScene};
