@@ -197,7 +197,7 @@ class ModelTreeView {
         this.expandToDepth(this._autoExpandDepth);
     }
 
-    _createIFCStoreysNodes(
+    _createStoreysNodes(
         metaObject = this._rootMetaObject,
         buildingNode,
         storeyNode,
@@ -274,12 +274,12 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createIFCStoreysNodes(childMetaObject, buildingNode, storeyNode, typeNodes);
+                this._createStoreysNodes(childMetaObject, buildingNode, storeyNode, typeNodes);
             }
         }
     }
 
-    _createIFCTypesNodes(
+    _createTypesNodes(
         metaObject = this._rootMetaObject,
         buildingNode,
         typeNodes) {
@@ -341,7 +341,7 @@ class ModelTreeView {
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
-                this._createIFCTypesNodes(childMetaObject, buildingNode, typeNodes);
+                this._createTypesNodes(childMetaObject, buildingNode, typeNodes);
             }
         }
     }
