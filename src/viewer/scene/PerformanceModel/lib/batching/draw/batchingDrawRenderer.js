@@ -2,8 +2,10 @@ import {Map} from "../../../../utils/Map.js";
 import {stats} from "../../../../stats.js"
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingDrawShaderSource} from "./batchingDrawShaderSource.js";
+import {math} from "../../../../../../../src2/viewer/scene/math/math.js";
 
 const ids = new Map({});
+const tempVec4 = math.vec4();
 
 /**
  * @private
@@ -65,6 +67,7 @@ BatchingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPass
     const scene = model.scene;
     const gl = scene.canvas.gl;
     const state = layer._state;
+
     if (!this._program) {
         this._allocate(layer);
     }
@@ -163,6 +166,9 @@ BatchingDrawRenderer.prototype._allocate = function (layer) {
     this._aColor = program.getAttribute("color");
     this._aFlags = program.getAttribute("flags");
     this._aFlags2 = program.getAttribute("flags2");
+    this._uSAOEnabled = program.getLocation("uSAOEnabled");
+    this._uOcclusionTexture = "uOcclusionTexture";
+    this._uOcclusionParams = program.getLocation("uSAOParams");
 };
 
 BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -219,6 +225,20 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
                 gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
             }
         }
+    }
+    const sao = scene.sao;
+    const saoEnabled = sao.enabled && sao.supported;
+    gl.uniform1i(this._uSAOEnabled, saoEnabled ? 1 : 0);
+    if (saoEnabled) {
+        const canvasBoundary = scene.canvas.boundary;
+        const canvasWidth = canvasBoundary[2];
+        const canvasHeight = canvasBoundary[3];
+        tempVec4[0] = canvasWidth;
+        tempVec4[1] = canvasHeight;
+        tempVec4[2] = 0.3;
+        tempVec4[3] = 1.0;
+        this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+        gl.uniform4fv(this._uOcclusionParams, tempVec4);
     }
 };
 

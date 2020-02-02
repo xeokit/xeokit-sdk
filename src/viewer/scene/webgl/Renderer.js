@@ -42,7 +42,6 @@ const Renderer = function (scene, options) {
     const saoDepthBuffer = new RenderBuffer(canvas, gl);
     const occlusionBuffer1 = new RenderBuffer(canvas, gl);
     const occlusionBuffer2 = new RenderBuffer(canvas, gl);
-    const colorBuffer = new RenderBuffer(canvas, gl);
 
     const pickBuffer = new RenderBuffer(canvas, gl);
     const readPixelBuffer = new RenderBuffer(canvas, gl);
@@ -82,7 +81,6 @@ const Renderer = function (scene, options) {
         saoDepthBuffer.webglContextRestored(gl);
         occlusionBuffer1.webglContextRestored(gl);
         occlusionBuffer2.webglContextRestored(gl);
-        colorBuffer.webglContextRestored(gl);
 
         saoOcclusionRenderer.init();
         saoBlurRenderer.init();
@@ -335,22 +333,9 @@ const Renderer = function (scene, options) {
                 saoBlurRenderer.render(saoDepthBuffer.getTexture(), occlusionBuffer2.getTexture(), 1);
                 occlusionBuffer1.unbind();
             }
-
-            // Render color buffer
-
-            colorBuffer.bind();
-            colorBuffer.clear();
-            drawColor(params);
-            colorBuffer.unbind();
-
-            // Blend color buffer with occlusion buffer 1
-
-            saoBlendRenderer.render(colorBuffer.getTexture(), occlusionBuffer1.getTexture());
-
-        } else {
-
-            drawColor(params);
         }
+
+        drawColor(params);
     };
 
     const drawDepth = (function () {
@@ -460,6 +445,9 @@ const Renderer = function (scene, options) {
             gl.depthMask(true);
             gl.lineWidth(1);
             frameCtx.lineWidth = 1;
+
+            const sao = scene.sao;
+            frameCtx.occlusionTexture = (sao.enabled && sao.supported) ? occlusionBuffer1.getTexture() : null;
 
             let i;
             let len;
@@ -1149,7 +1137,6 @@ const Renderer = function (scene, options) {
         saoDepthBuffer.destroy();
         occlusionBuffer1.destroy();
         occlusionBuffer2.destroy();
-        colorBuffer.destroy();
 
         saoOcclusionRenderer.destroy();
         saoBlurRenderer.destroy();
