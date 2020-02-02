@@ -2,7 +2,7 @@ import {Map} from "../../../../utils/Map.js";
 import {stats} from "../../../../stats.js"
 import {Program} from "../../../../webgl/Program.js";
 import {BatchingDrawShaderSource} from "./batchingDrawShaderSource.js";
-import {math} from "../../../../../../../src2/viewer/scene/math/math.js";
+import {math} from "../../../../math/math.js";
 
 const ids = new Map({});
 const tempVec4 = math.vec4();
