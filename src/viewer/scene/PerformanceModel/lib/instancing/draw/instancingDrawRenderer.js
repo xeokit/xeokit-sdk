@@ -2,8 +2,10 @@ import {Map} from "../../../../utils/Map.js";
 import {stats} from "../../../../stats.js"
 import {Program} from "../../../../webgl/Program.js";
 import {InstancingDrawShaderSource} from "./instancingDrawShaderSource.js";
+import {math} from "../../../../../../../src2/viewer/scene/math/math.js";
 
 const ids = new Map({});
+const tempVec4 = math.vec4();
 
 /**
  * @private
@@ -123,7 +125,6 @@ InstancingDrawRenderer.prototype.drawLayer = function (frameCtx, layer, renderPa
         instanceExt.vertexAttribDivisorANGLE(this._aFlags2.location, 1);
         frameCtx.bindArray++;
     }
-
     state.indicesBuf.bind();
     frameCtx.bindArray++;
 
@@ -204,7 +205,7 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
 
     this._uSectionPlanes = [];
     const clips = sectionPlanesState.sectionPlanes;
-    for (var i = 0, len = clips.length; i < len; i++) {
+    for (let i = 0, len = clips.length; i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),
@@ -225,6 +226,10 @@ InstancingDrawRenderer.prototype._allocate = function (layer) {
     this._aModelNormalMatrixCol0 = program.getAttribute("modelNormalMatrixCol0");
     this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
     this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
+
+    this._uSAOEnabled = program.getLocation("uSAOEnabled");
+    this._uOcclusionTexture = "uOcclusionTexture";
+    this._uOcclusionParams = program.getLocation("uSAOParams");
 };
 
 InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
@@ -234,11 +239,11 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     const lightsState = scene._lightsState;
     const sectionPlanesState = scene._sectionPlanesState;
     const lights = lightsState.lights;
+
     let light;
     program.bind();
     frameCtx.useProgram++;
     const camera = scene.camera;
-    const cameraState = camera._state;
     gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
     for (let i = 0, len = lights.length; i < len; i++) {
         light = lights[i];
@@ -282,6 +287,20 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
                 gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
             }
         }
+    }
+    const sao = scene.sao;
+    const saoEnabled = sao.enabled && sao.supported;
+    gl.uniform1i(this._uSAOEnabled, saoEnabled ? 1 : 0);
+    if (saoEnabled) {
+        const canvasBoundary = scene.canvas.boundary;
+        const canvasWidth = canvasBoundary[2];
+        const canvasHeight = canvasBoundary[3];
+        tempVec4[0] = canvasWidth;
+        tempVec4[1] = canvasHeight;
+        tempVec4[2] = 0.3;
+        tempVec4[3] = 1.0;
+        this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+        gl.uniform4fv(this._uOcclusionParams, tempVec4);
     }
 };
 

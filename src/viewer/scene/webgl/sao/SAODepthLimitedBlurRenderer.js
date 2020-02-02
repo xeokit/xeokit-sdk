@@ -67,26 +67,6 @@ class SAODepthLimitedBlurRenderer {
         this._positionsBuf = null;
         this._indicesBuf = null;
 
-        // this._getInverseProjectMat = (function () {
-        //     let projMatDirty = true;
-        //     scene.camera.on("projMatrix", function () {
-        //         projMatDirty = true;
-        //     });
-        //     const inverseProjectMat = math.mat4();
-        //     return function () {
-        //         if (projMatDirty) {
-        //             math.inverseMat4(scene.camera.projMatrix, inverseProjectMat);
-        //         }
-        //         return inverseProjectMat;
-        //     }
-        // })();
-
-        this._getInverseProjectMat = function () {
-            const inverseProjectMat = math.mat4();
-            math.inverseMat4(scene.camera.projMatrix, inverseProjectMat);
-            return inverseProjectMat;
-        };
-
         this.init();
     }
 
@@ -100,12 +80,12 @@ class SAODepthLimitedBlurRenderer {
 
             vertex: [`attribute vec3 aPosition;
                     attribute vec2 aUV;
-                    uniform vec2 uSize;
+                    uniform vec2 uViewport;
                     varying vec2 vUV;
                     varying vec2 vInvSize;
                     void main () {
                         vUV = aUV;
-                        vInvSize = 1.0 / uSize;
+                        vInvSize = 1.0 / uViewport;
                         gl_Position = vec4(aPosition, 1.0);
                     }`],
 
@@ -244,6 +224,22 @@ class SAODepthLimitedBlurRenderer {
 
         if (this._programError) {
             return;
+        }
+
+        if (!this._getInverseProjectMat) { // HACK: scene.camera not defined until render time
+            this._getInverseProjectMat = (() => {
+                let projMatDirty = true;
+                this._scene.camera.on("projMatrix", function () {
+                    projMatDirty = true;
+                });
+                const inverseProjectMat = math.mat4();
+                return () => {
+                    if (projMatDirty) {
+                        math.inverseMat4(scene.camera.projMatrix, inverseProjectMat);
+                    }
+                    return inverseProjectMat;
+                }
+            })();
         }
 
         const gl = this._scene.canvas.gl;

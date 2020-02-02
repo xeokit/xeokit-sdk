@@ -2,6 +2,8 @@ import {Program} from "./../Program.js";
 import {ArrayBuf} from "./../ArrayBuf.js";
 import {math} from "../../math/math.js";
 
+const tempVec2 = math.vec2();
+
 /**
  * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
@@ -93,7 +95,7 @@ class SAOOcclusionRenderer {
                 uniform float       uBias;
                 uniform float       uKernelRadius;
                 uniform float       uMinResolution;
-                uniform vec2        uSize;
+                uniform vec2        uViewport;
                 uniform float       uRandomSeed;
 
                 float pow2( const in float x ) { return x*x; }
@@ -181,7 +183,7 @@ class SAOOcclusionRenderer {
                 	vec3 centerViewNormal = getViewNormal( centerViewPosition, vUV );
 
                 	float angle = rand( vUV + uRandomSeed ) * PI2;
-                	vec2 radius = vec2( uKernelRadius * INV_NUM_SAMPLES ) / uSize;
+                	vec2 radius = vec2( uKernelRadius * INV_NUM_SAMPLES ) / uViewport;
                 	vec2 radiusStep = radius;
 
                 	float occlusionSum = 0.0;
@@ -254,7 +256,7 @@ class SAOOcclusionRenderer {
         this._uBias = this._program.getLocation("uBias");
         this._uKernelRadius = this._program.getLocation("uKernelRadius");
         this._uMinResolution = this._program.getLocation("uMinResolution");
-        this._uSize = this._program.getLocation("uSize");
+        this._uViewport = this._program.getLocation("uViewport");
         this._uRandomSeed = this._program.getLocation("uRandomSeed");
 
         this._aPosition = this._program.getAttribute("aPosition");
@@ -296,8 +298,10 @@ class SAOOcclusionRenderer {
         const projectionMatrix = projectState.matrix;
         const inverseProjectionMatrix = this._getInverseProjectMat();
         const randomSeed = Math.random();
-        const size = new Float32Array([canvasWidth, canvasHeight]);
         const perspective = (scene.camera.projection === "perspective");
+
+        tempVec2[0] = canvasWidth;
+        tempVec2[1] = canvasHeight;
 
         gl.getExtension("OES_standard_derivatives");
 
@@ -323,7 +327,7 @@ class SAOOcclusionRenderer {
         gl.uniform1f(this._uBias, sao.bias);
         gl.uniform1f(this._uKernelRadius, sao.kernelRadius);
         gl.uniform1f(this._uMinResolution, sao.minResolution);
-        gl.uniform2fv(this._uSize, size);
+        gl.uniform2fv(this._uViewport, tempVec2);
         gl.uniform1f(this._uRandomSeed, randomSeed);
 
         program.bindTexture(this._uDepthTexture, depthTexture, 0);
