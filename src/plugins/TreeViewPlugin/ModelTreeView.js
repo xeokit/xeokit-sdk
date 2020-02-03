@@ -33,6 +33,7 @@ class ModelTreeView {
         this._rootNodes = [];
         this._objectNodes = {};
         this._rootName = cfg.rootName;
+        this._sortNodes = cfg.sortNodes;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -192,6 +193,9 @@ class ModelTreeView {
             default:
                 this._createContainmentNodes();
         }
+        if (this._sortNodes) {
+            this._doSortNodes();
+        }
         this._synchNodesToEntities();
         this._createTrees();
         this.expandToDepth(this._autoExpandDepth);
@@ -209,6 +213,7 @@ class ModelTreeView {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                type: metaObjectType,
                 parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
@@ -226,6 +231,7 @@ class ModelTreeView {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                type: metaObjectType,
                 parent: buildingNode,
                 numEntities: 0,
                 numVisibleEntities: 0,
@@ -246,6 +252,7 @@ class ModelTreeView {
                         nodeId: typeNodeNodeId,
                         objectId: typeNodeObjectId,
                         title: metaObjectType,
+                        type: metaObjectType,
                         parent: storeyNode,
                         numEntities: 0,
                         numVisibleEntities: 0,
@@ -260,6 +267,7 @@ class ModelTreeView {
                     nodeId: this._objectToNodeID(metaObject.id),
                     objectId: metaObject.id,
                     title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                    type: metaObjectType,
                     parent: typeNode,
                     numEntities: 0,
                     numVisibleEntities: 0,
@@ -290,6 +298,7 @@ class ModelTreeView {
                 nodeId: this._objectToNodeID(metaObject.id),
                 objectId: metaObject.id,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                type: metaObjectType,
                 parent: null,
                 numEntities: 0,
                 numVisibleEntities: 0,
@@ -312,6 +321,7 @@ class ModelTreeView {
                             nodeId: this._objectToNodeID(metaObjectType),
                             objectId: metaObjectType,
                             title: metaObjectType,
+                            type: metaObjectType,
                             parent: buildingNode,
                             numEntities: 0,
                             numVisibleEntities: 0,
@@ -326,6 +336,7 @@ class ModelTreeView {
                         nodeId: this._objectToNodeID(metaObject.id),
                         objectId: metaObject.id,
                         title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+                        type: metaObjectType,
                         parent: typeNode,
                         numEntities: 0,
                         numVisibleEntities: 0,
@@ -347,11 +358,13 @@ class ModelTreeView {
     }
 
     _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
-        const metaObjectName = metaObject.name || metaObject.type;
+        const metaObjectType = metaObject.type;
+        const metaObjectName = metaObject.name || metaObjectType;
         const node = {
             nodeId: this._objectToNodeID(metaObject.id),
             objectId: metaObject.id,
             title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
+            type: metaObjectType,
             parent: parent,
             numEntities: 0,
             numVisibleEntities: 0,
@@ -371,6 +384,74 @@ class ModelTreeView {
                 this._createContainmentNodes(childMetaObject, node);
             }
         }
+    }
+
+    _doSortNodes() {
+        for (let i = 0, len = this._rootNodes.length; i < len; i++) {
+            const rootNode = this._rootNodes[i];
+            this._sortChildren(rootNode);
+        }
+    }
+
+    _sortChildren(node) {
+        const children = node.children;
+        if (!children || children.length === 0) {
+            return;
+        }
+        if (this._hierarchy === "storeys" && node.type === "IfcBuilding") {
+            // Assumes that children of an IfcBuilding will always be IfcBuildingStoreys
+            children.sort(this._getSpatialSortFunc());
+        } else {
+            children.sort(this._alphaSortFunc);
+        }
+        for (let i = 0, len = children.length; i < len; i++) {
+            const node = children[i];
+            this._sortChildren(node);
+        }
+    }
+
+    _getSpatialSortFunc() { // Creates cached sort func with Viewer in scope
+        const viewer = this._treeViewPlugin.viewer;
+        const scene = viewer.scene;
+        const camera = scene.camera;
+        const metaScene = viewer.metaScene;
+        return this._spatialSortFunc || (this._spatialSortFunc = (node1, node2) => {
+            if (!node1.aabb || !node2.aabb) {
+                if (!node1.aabb) {
+                    node1.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId));
+                }
+                if (!node2.aabb) {
+                    node2.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId));
+                }
+            }
+            let idx = 0;
+            if (camera.xUp) {
+                idx = 0;
+            } else if (camera.yUp) {
+                idx = 1;
+            } else {
+                idx = 2;
+            }
+            if (node1.aabb[idx] > node2.aabb[idx]) {
+                return -1;
+            }
+            if (node1.aabb[idx] < node2.aabb[idx]) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    _alphaSortFunc(node1, node2) {
+        const title1 = node1.title.toUpperCase();
+        const title2 = node2.title.toUpperCase();
+        if (title1 < title2) {
+            return -1;
+        }
+        if (title1 > title2) {
+            return 1;
+        }
+        return 0;
     }
 
     _synchNodesToEntities() {

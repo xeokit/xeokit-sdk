@@ -15,6 +15,8 @@ import {Plugin} from "../../viewer/Plugin.js";
  * * Each tree node has a checkbox to control the visibility of its object.
  * * Has three hierarchy modes: "containment", "types" and "storeys".
  * * Automatically contains all models (that have metadata) that are currently in the {@link Scene}.
+ * * Sorts tree nodes by default. For a "storeys" hierarchy,
+ * ````IfcBuildingStorey```` nodes are ordered spatially, from the highest storey to the lowest. For all hierarchy types, other nodes are ordered in ascending alphanumeric order.
  * * Allows custom CSS styling.
  * * Use {@link ContextMenu} to create a context menu for the tree nodes.
  *
@@ -262,6 +264,9 @@ class TreeViewPlugin extends Plugin {
      * @param {Boolean} [cfg.autoAddModels=true] When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin#addModel} instead.
      * @param {Number} [cfg.autoExpandDepth] Optional depth to which to initially expand the tree.
      * @param {String} [cfg.hierarchy="containment"] How to organize the tree nodes: "containment", "storeys" or "types". See the class documentation for details.
+     * @param {Boolean} [cfg.sortNodes=true] When true, will sort the children of each node. For a "storeys" hierarchy, the
+     * ````IfcBuildingStorey```` nodes will be ordered spatially, from the highest storey down to the lowest, on the
+     * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
      */
     constructor(viewer, cfg = {}) {
 
@@ -277,6 +282,7 @@ class TreeViewPlugin extends Plugin {
         this._modelTreeViews = {};
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
+        this._sortNodes = (cfg.sortNodes !== false);
 
         if (this._autoAddModels) {
             const modelIds = Object.keys(this.viewer.scene.models);
@@ -366,6 +372,7 @@ class TreeViewPlugin extends Plugin {
             containerElement: this._containerElement,
             autoExpandDepth: this._autoExpandDepth,
             hierarchy: this._hierarchy,
+            sortNodes: this._sortNodes,
             rootName: options.rootName
         });
         model.on("destroyed", () => {
