@@ -1,4 +1,5 @@
 import {Map} from "./../../viewer/scene/utils/Map.js";
+import {math} from "../../viewer/scene/math/math.js";
 
 const idMap = new Map();
 
@@ -416,12 +417,13 @@ class ModelTreeView {
         const camera = scene.camera;
         const metaScene = viewer.metaScene;
         return this._spatialSortFunc || (this._spatialSortFunc = (node1, node2) => {
-            if (!node1.aabb || !node2.aabb) {
-                if (!node1.aabb) {
-                    node1.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId));
+            if (!node1.center || !node2.center) {
+                // Sorting on center more robust when objects could overlap storeys
+                if (!node1.center) {
+                    node1.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId)));
                 }
-                if (!node2.aabb) {
-                    node2.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId));
+                if (!node2.center) {
+                    node2.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId)));
                 }
             }
             let idx = 0;
@@ -432,10 +434,10 @@ class ModelTreeView {
             } else {
                 idx = 2;
             }
-            if (node1.aabb[idx] > node2.aabb[idx]) {
+            if (node1.center[idx] > node2.center[idx]) {
                 return -1;
             }
-            if (node1.aabb[idx] < node2.aabb[idx]) {
+            if (node1.center[idx] < node2.center[idx]) {
                 return 1;
             }
             return 0;
