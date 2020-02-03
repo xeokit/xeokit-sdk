@@ -165,32 +165,6 @@ class SAO extends Component {
             return;
         }
         this._interactive = value;
-        if (this._interactive) {
-            this._interactiveCountDown = this._interactiveDelay;
-            this._onCameraMatrix = this.scene.camera.on("matrix", () => {
-                this._interactiveCountDown = this._interactiveDelay;
-                this._active = false;
-               // console.log("SAO inactive");
-            });
-
-            this._onSceneTick = this.scene.on("tick", (e) => {
-                this._interactiveCountDown -= e.deltaTime;
-                if (this._interactiveCountDown <= 0) {
-                    this._interactiveCountDown = this._interactiveDelay;
-                    this._active = true;
-                  //  console.log("SAO active");
-                }
-            });
-        } else {
-            if (this._onCameraMatrix !== undefined) {
-                this.scene.camera.off(this._onCameraMatrix);
-                this.scene.off(this._onSceneTick);
-                this._onCameraMatrix = undefined;
-                this._onSceneTick = undefined;
-            }
-            this._active = true;
-        }
-        //this.glRedraw();
     }
 
     /**
