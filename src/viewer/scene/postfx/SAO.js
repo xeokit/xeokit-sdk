@@ -91,6 +91,8 @@ class SAO extends Component {
         super(owner, cfg);
 
         this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
+        this._interactiveActive = true;
+        this._interactiveCountDown = 0;
 
         this.enabled = cfg.enabled;
         this.interactive = cfg.interactive;
@@ -103,23 +105,6 @@ class SAO extends Component {
         this.blur = cfg.blur;
         this.blendCutoff = cfg.blendCutoff;
         this.blendFactor = cfg.blendFactor;
-
-        this._countDown = this._interactiveDelay;
-
-        this._onCameraMatrix = this.scene.camera.on("matrix", () => {
-            this._countDown = this._interactiveDelay;
-
-            // TODO: Deactivate
-        });
-
-        this._onSceneTick = this.scene.on("tick", (e) => {
-            this._countDown -= e.deltaTime;
-            if (this._countDown <= 0) {
-                this._countDown = this._interactiveDelay;
-
-                // TODO: Activate
-            }
-        });
     }
 
     /**
@@ -180,10 +165,33 @@ class SAO extends Component {
             return;
         }
         this._interactive = value;
+        if (this._interactive) {
+            this._interactiveCountDown = this._interactiveDelay;
+            this._onCameraMatrix = this.scene.camera.on("matrix", () => {
+                this._interactiveCountDown = this._interactiveDelay;
+                this._active = false;
+               // console.log("SAO inactive");
+            });
+
+            this._onSceneTick = this.scene.on("tick", (e) => {
+                this._interactiveCountDown -= e.deltaTime;
+                if (this._interactiveCountDown <= 0) {
+                    this._interactiveCountDown = this._interactiveDelay;
+                    this._active = true;
+                  //  console.log("SAO active");
+                }
+            });
+        } else {
+            if (this._onCameraMatrix !== undefined) {
+                this.scene.camera.off(this._onCameraMatrix);
+                this.scene.off(this._onSceneTick);
+                this._onCameraMatrix = undefined;
+                this._onSceneTick = undefined;
+            }
+            this._active = true;
+        }
         //this.glRedraw();
-
     }
-
 
     /**
      * Gets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
@@ -215,10 +223,7 @@ class SAO extends Component {
             return;
         }
         this._interactiveDelay = value;
-
-        /////////////////////////////////
-        // TODO: implement time delay
-        /////////////////////////////////
+        this._interactiveCountDown = this._interactiveDelay;
 
         //this.glRedraw();
     }
@@ -235,7 +240,15 @@ class SAO extends Component {
     get interactiveDelay() {
         return this._interactiveDelay;
     }
-    
+
+    /**
+     * @private
+     * @returns {boolean|*}
+     */
+    get active() {
+        return this._active;
+    }
+
     /**
      * Sets the maximum area that SAO takes into account when checking for possible occlusion.
      *
@@ -455,7 +468,7 @@ class SAO extends Component {
      */
     set blendFactor(value) {
         if (value === undefined || value === null) {
-            value = 0.2;
+            value = 1.0;
         }
         if (this._blendFactor === value) {
             return;
@@ -476,6 +489,14 @@ class SAO extends Component {
      */
     get blendFactor() {
         return this._blendFactor;
+    }
+
+    /**
+     * Destroys this component.
+     */
+    destroy() {
+        this.interactive = false; // Unbinds Scene and Camera events
+        super.destroy();
     }
 }
 
