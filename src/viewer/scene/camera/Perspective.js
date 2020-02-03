@@ -29,7 +29,7 @@ class Perspective extends Component {
         this._state = new RenderState({
             matrix: math.mat4(),
             near : 0.1,
-            far: 10000.0
+            far: 2000.0
         });
 
         this._dirty = false;
@@ -181,11 +181,11 @@ class Perspective extends Component {
      * Fires a "far" event on change.
      *
      * @property far
-     * @default 10000.0
+     * @default 2000.0
      * @type {Number}
      */
     set far(value) {
-        const far = (value !== undefined && value !== null) ? value : 10000.0;
+        const far = (value !== undefined && value !== null) ? value : 2000.0;
         if (this._state.far === far) {
             return;
         }
