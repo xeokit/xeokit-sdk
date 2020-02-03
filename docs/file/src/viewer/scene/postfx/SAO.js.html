@@ -233,6 +233,8 @@ class SAO extends Component {
         super(owner, cfg);
 
         this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS[&quot;OES_standard_derivatives&quot;]; // For computing normals in SAO fragment shader
+        this._interactiveActive = true;
+        this._interactiveCountDown = 0;
 
         this.enabled = cfg.enabled;
         this.interactive = cfg.interactive;
@@ -245,23 +247,6 @@ class SAO extends Component {
         this.blur = cfg.blur;
         this.blendCutoff = cfg.blendCutoff;
         this.blendFactor = cfg.blendFactor;
-
-        this._countDown = this._interactiveDelay;
-
-        this._onCameraMatrix = this.scene.camera.on(&quot;matrix&quot;, () =&gt; {
-            this._countDown = this._interactiveDelay;
-
-            // TODO: Deactivate
-        });
-
-        this._onSceneTick = this.scene.on(&quot;tick&quot;, (e) =&gt; {
-            this._countDown -= e.deltaTime;
-            if (this._countDown &lt;= 0) {
-                this._countDown = this._interactiveDelay;
-
-                // TODO: Activate
-            }
-        });
     }
 
     /**
@@ -322,10 +307,7 @@ class SAO extends Component {
             return;
         }
         this._interactive = value;
-        //this.glRedraw();
-
     }
-
 
     /**
      * Gets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
@@ -357,10 +339,7 @@ class SAO extends Component {
             return;
         }
         this._interactiveDelay = value;
-
-        /////////////////////////////////
-        // TODO: implement time delay
-        /////////////////////////////////
+        this._interactiveCountDown = this._interactiveDelay;
 
         //this.glRedraw();
     }
@@ -377,7 +356,15 @@ class SAO extends Component {
     get interactiveDelay() {
         return this._interactiveDelay;
     }
-    
+
+    /**
+     * @private
+     * @returns {boolean|*}
+     */
+    get active() {
+        return this._active;
+    }
+
     /**
      * Sets the maximum area that SAO takes into account when checking for possible occlusion.
      *
@@ -597,7 +584,7 @@ class SAO extends Component {
      */
     set blendFactor(value) {
         if (value === undefined || value === null) {
-            value = 0.2;
+            value = 1.0;
         }
         if (this._blendFactor === value) {
             return;
@@ -618,6 +605,14 @@ class SAO extends Component {
      */
     get blendFactor() {
         return this._blendFactor;
+    }
+
+    /**
+     * Destroys this component.
+     */
+    destroy() {
+        this.interactive = false; // Unbinds Scene and Camera events
+        super.destroy();
     }
 }
 

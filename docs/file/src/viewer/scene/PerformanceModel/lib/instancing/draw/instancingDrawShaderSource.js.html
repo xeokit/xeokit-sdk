@@ -356,8 +356,8 @@ function buildFragment(layer) {
     src.push(&quot;  if (uSAOEnabled) {&quot;);
     src.push(&quot;      float viewportWidth     = uSAOParams[0];&quot;);
     src.push(&quot;      float viewportHeight    = uSAOParams[1];&quot;);
-    src.push(&quot;      float blendCutoff   = uSAOParams[2];&quot;);
-    src.push(&quot;      float blendFactor    = uSAOParams[3];&quot;);
+    src.push(&quot;      float blendCutoff       = uSAOParams[2];&quot;);
+    src.push(&quot;      float blendFactor       = uSAOParams[3];&quot;);
     src.push(&quot;      vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);&quot;);
     src.push(&quot;      float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;&quot;);
     src.push(&quot;      gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);&quot;);

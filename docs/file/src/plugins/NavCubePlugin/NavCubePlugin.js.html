@@ -166,7 +166,9 @@ import {CubeTextureCanvas} from &quot;./CubeTextureCanvas.js&quot;;
  * the Camera to look at the entire Scene along the corresponding axis. Clicking on an edge or a corner looks at
  * the entire Scene along a diagonal.
  * * The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
- * NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.
+ * NavCube fits the Scene to view, and when flying, we can configure how fast it flies. We can also configure whether the
+ * NavCube fits all objects to view, or just the currently visible objects. See below for a usage example.
+ * * Clicking the NavCube also sets {@link CameraControl#pivotPos} to the center of the fitted objects.
  *
  * ## Usage
  *

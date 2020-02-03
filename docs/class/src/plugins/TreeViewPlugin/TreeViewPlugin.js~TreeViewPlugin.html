@@ -140,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber254">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber279">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber254">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber279">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -175,6 +175,7 @@
 <li>Each tree node has a checkbox to control the visibility of its object.</li>
 <li>Has three hierarchy modes: &quot;containment&quot;, &quot;types&quot; and &quot;storeys&quot;.</li>
 <li>Automatically contains all models (that have metadata) that are currently in the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</li>
+<li>Sorts tree nodes by default - spatially, from top-to-bottom for <code>IfcBuildingStorey</code> nodes, and alphanumerically for other nodes.</li>
 <li>Allows custom CSS styling.</li>
 <li>Use <span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span> to create a context menu for the tree nodes.</li>
 </ul>
@@ -290,6 +291,22 @@ The table below shows what the hierarchies look like:
      hierarchy: &quot;stories&quot;
 });</code>
 </code></pre>
+<h2 id="sorting-nodes">Sorting nodes</h2><p>TreeViewPlugin sorts its tree nodes by default. For a &quot;storeys&quot; hierarchy, it orders <code>IfcBuildingStorey</code> nodes
+spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
+3D World-space boundaries of the <code>IfcBuildingStory</code> elements are actually spatially sortable, which may not be the case
+in all IFC models. Some models may have <code>IfcBuildingStory</code> elements that contain objects that span multiple storeys,
+which would defeat this sorting.</p>
+<p>For all the hierarchy types (&quot;containment&quot;, &quot;classes&quot; and &quot;storeys&quot;), TreeViewPlugin sorts the other node types
+alphanumerically on their titles.</p>
+<p>If for some reason you need to prevent sorting, create your TreeViewPlugin with the option disabled, like so:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const treeView = new TreeViewPlugin(viewer, {
+     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+     hierarchy: &quot;stories&quot;,
+     sortNodes: false // &lt;&lt;------ Disable node sorting
+});</code>
+</code></pre>
+<p>Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
+update dynamically if we later transform the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s corresponding to the nodes.</p>
 <h2 id="context-menu">Context menu</h2><p>TreeViewPlugin fires a &quot;contextmenu&quot; event whenever we right-click on a tree node.</p>
 <p>The event contains:</p>
 <ul>
@@ -955,7 +972,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber294">source</a></span></span>
     </span>
   </h3>
 
@@ -1019,6 +1036,16 @@ node in depth-first pre-order.</p>
       <td data-ice="description"><p>How to organize the tree nodes: &quot;containment&quot;, &quot;storeys&quot; or &quot;types&quot;. See the class documentation for details.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.sortNodes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, will sort the children of each node. For a &quot;storeys&quot; hierarchy, the
+<code>IfcBuildingStorey</code> nodes will be ordered spatially, from the highest storey down to the lowest, on the
+vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1056,7 +1083,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber313">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber342">source</a></span></span>
     </span>
   </h3>
 
@@ -1109,7 +1136,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -1156,7 +1183,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber348">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
@@ -1234,7 +1261,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber427">source</a></span></span>
     </span>
   </h3>
 
@@ -1278,7 +1305,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber465">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber495">source</a></span></span>
     </span>
   </h3>
 
@@ -1322,7 +1349,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber434">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber464">source</a></span></span>
     </span>
   </h3>
 
@@ -1384,7 +1411,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber381">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber411">source</a></span></span>
     </span>
   </h3>
 
@@ -1445,7 +1472,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber441">source</a></span></span>
     </span>
   </h3>
 
@@ -1506,7 +1533,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber451">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 

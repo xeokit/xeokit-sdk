@@ -140,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber73">@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {NavCubePlugin} from &apos;<span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber75">@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber73">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber75">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -176,7 +176,9 @@ point-of-interest. Conversely, orbiting the Camera causes the NavCube to rotate 
 the Camera to look at the entire Scene along the corresponding axis. Clicking on an edge or a corner looks at
 the entire Scene along a diagonal.</li>
 <li>The NavCube can be configured to either jump or fly the Camera to each new position. We can configure how tightly the
-NavCube fits the Scene to view, and when flying, we can configure how fast it flies. See below for a usage example.</li>
+NavCube fits the Scene to view, and when flying, we can configure how fast it flies. We can also configure whether the
+NavCube fits all objects to view, or just the currently visible objects. See below for a usage example.</li>
+<li>Clicking the NavCube also sets <span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html#instance-set-pivotPos">CameraControl#pivotPos</a></span> to the center of the fitted objects.</li>
 </ul>
 <h2 id="usage">Usage</h2><p>In the example below, we&apos;ll create a Viewer and add a NavCubePlugin, which will create a NavCube gizmo in the canvas
 with the given ID. Then we&apos;ll use the <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a model into the Viewer&apos;s Scene. We can then
@@ -942,7 +944,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -1149,7 +1151,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber645">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber647">source</a></span></span>
     </span>
   </h3>
 
@@ -1194,7 +1196,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber594">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber596">source</a></span></span>
     </span>
   </h3>
 
@@ -1253,7 +1255,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber570">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber572">source</a></span></span>
     </span>
   </h3>
 
@@ -1311,7 +1313,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber616">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber618">source</a></span></span>
     </span>
   </h3>
 
@@ -1369,7 +1371,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber548">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber550">source</a></span></span>
     </span>
   </h3>
 
@@ -1428,7 +1430,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber636">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber638">source</a></span></span>
     </span>
   </h3>
 
@@ -1486,7 +1488,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber520">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber522">source</a></span></span>
     </span>
   </h3>
 
@@ -1543,7 +1545,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber486">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -1608,7 +1610,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber582">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber584">source</a></span></span>
     </span>
   </h3>
 
@@ -1671,7 +1673,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber559">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber561">source</a></span></span>
     </span>
   </h3>
 
@@ -1733,7 +1735,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber605">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber607">source</a></span></span>
     </span>
   </h3>
 
@@ -1795,7 +1797,7 @@ fill the canvas when flying or jumping the <span><a href="class/src/viewer/scene
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber536">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber538">source</a></span></span>
     </span>
   </h3>
 
@@ -1858,7 +1860,7 @@ view to the entire <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber626">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber628">source</a></span></span>
     </span>
   </h3>
 
@@ -1920,7 +1922,7 @@ the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber506">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/NavCubePlugin/NavCubePlugin.js.html#lineNumber508">source</a></span></span>
     </span>
   </h3>
 
