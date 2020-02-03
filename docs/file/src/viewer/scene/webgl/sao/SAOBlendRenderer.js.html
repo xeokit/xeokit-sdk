@@ -144,6 +144,7 @@
 import {ArrayBuf} from &quot;./../ArrayBuf.js&quot;;
 
 /**
+ * SAO implementation inspired from previous SAO work in THREE.js by ludobaka / ludobaka.github.io and bhouston
  * @private
  */
 class SAOBlendRenderer {
@@ -220,7 +221,7 @@ class SAOBlendRenderer {
                     }
                     
                     void main() {
-                        vec4 color      = texture2D(uColorTexture, gl_FragCoord.xy - (gl_FragCoord.xy / 2.0));
+                        vec4 color      = texture2D(uColorTexture, vUV);
                         float ambient   = smoothstep(uOcclusionCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, vUV))) * uOcclusionScale;
                         gl_FragColor    = vec4(color.rgb * (ambient), color.a);
                     }`]

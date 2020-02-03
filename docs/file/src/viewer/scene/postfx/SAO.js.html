@@ -146,30 +146,84 @@ import {WEBGL_INFO} from &quot;../webglInfo.js&quot;;
 /**
  * @desc Configures Scalable Ambient Obscurance (SAO) for a {@link Scene}.
  *
+ *  &lt;a href=&quot;https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter&quot;&gt;&lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif&quot;&gt;&lt;/a&gt;
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter)]
+ *
  * ## Overview
  *
- * * This component is found on {@link Scene#sao}.
- * * This effect approximates Ambient Occlusion in realtime. It darkens creases, cavities and surfaces
- * that are close to each other, which tend to occlude ambient light and appear darker.
- * * For deeper technical information on SAO, see the paper [Scalable Ambient Obscurance](https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf).
+ * SAO approximates [Ambient Occlusion](https://en.wikipedia.org/wiki/Ambient_occlusion) in realtime. It darkens creases, cavities and surfaces
+ * that are close to each other, which tend to be occluded from ambient light and appear darker.
  *
- * &lt;br&gt;
+ * The animated GIF above shows the effect as we repeatedly enable and disable SAO. When SAO is enabled, we can see darkening
+ * in regions such as the corners, and the crevices between stairs. This increases the amount of detail we can see when ambient
+ * light is high, or when objects have uniform colors across their surfaces. Run the example to experiment with the various
+ * SAO configurations.
  *
- * Scene without SAO:
+ * xeokit&apos;s implementation of SAO is based on the paper [Scalable Ambient Obscurance](https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf).
  *
- *  &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoDisabled.png&quot;&gt;
+ * ## Usage
  *
- * Scene with SAO:
+ * In the example below, we&apos;ll start by logging a warning message to the console if SAO is not supported by the
+ * system. Then we&apos;ll configure SAO, position the camera, and configure the near and far perspective and orthographic
+ * clipping planes. Finally, we&apos;ll use {@link XKTLoaderPlugin} to load the OTC Conference Center model.
  *
- *  &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledNoBlur.png&quot;&gt;
+ * ````javascript
+ * import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+ * import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
  *
- * Scene with SAO and blur:
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ *     transparent: true
+ * });
  *
- * &lt;img src=&quot;http://xeokit.io/img/docs/SAO/saoEnabledDefaults.png&quot;&gt;
+ * const sao = viewer.scene.sao;
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter)]
+ * if (!sao.supported) {
+ *     sao.warn(&quot;SAO is not supported on this system - ignoring SAO configs&quot;)
+ * }
  *
-
+ * sao.enabled = true; // Enable SAO - only works if supported (see above)
+ * sao.intensity = 0.25;
+ * sao.bias = 0.5;
+ * sao.scale = 1000.0;
+ * sao.minResolution = 0.0;
+ * sao.kernelRadius = 100;
+ * sao.blendCutoff = 0.2;
+ *
+ * const camera = viewer.scene.camera;
+ *
+ * camera.eye = [3.69, 5.83, -23.98];
+ * camera.look = [84.31, -29.88, -116.21];
+ * camera.up = [0.18, 0.96, -0.21];
+ *
+ * camera.perspective.near = 0.1;
+ * camera.perspective.far = 5000.0;
+ *
+ * camera.ortho.near = 0.1;
+ * camera.ortho.far = 5000.0;
+ * camera.projection = &quot;perspective&quot;;
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
+ *     metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+ *     edges: true
+ * });
+ * ````
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter)]
+ *
+ * ## Efficiency
+ *
+ * SAO can incur some rendering overhead, especially on objects that are viewed close to the camera. For this reason,
+ * it&apos;s recommended to use a low value for {@link SAO#kernelRadius}.  A low radius will sample pixels that are close
+ * to the source pixel, which will allow the GPU to efficiently cache those pixels. When {@link Camera#projection} is &quot;perspective&quot;,
+ * objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
+ * is more expensive than for objects far away, that occupy fewer pixels on the canvas.
+ *
  */
 class SAO extends Component {
 
@@ -189,9 +243,25 @@ class SAO extends Component {
         this.scale = cfg.scale;
         this.minResolution = cfg.minResolution;
         this.blur = cfg.blur;
-        this.blurRadius = cfg.blurRadius;
-        this.blurStdDev = cfg.blurStdDev;
-        this.blurDepthCutoff = cfg.blurDepthCutoff;
+        this.blendCutoff = cfg.blendCutoff;
+        this.blendFactor = cfg.blendFactor;
+
+        this._countDown = this._interactiveDelay;
+
+        this._onCameraMatrix = this.scene.camera.on(&quot;matrix&quot;, () =&gt; {
+            this._countDown = this._interactiveDelay;
+
+            // TODO: Deactivate
+        });
+
+        this._onSceneTick = this.scene.on(&quot;tick&quot;, (e) =&gt; {
+            this._countDown -= e.deltaTime;
+            if (this._countDown &lt;= 0) {
+                this._countDown = this._interactiveDelay;
+
+                // TODO: Activate
+            }
+        });
     }
 
     /**
@@ -240,7 +310,7 @@ class SAO extends Component {
     /**
      * Sets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
      *
-     * When this is ````false````, SAO will only be applied when the Camera is at rest.
+     * When this is ````false````, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.
      *
      * Default value is ````true````.
      *
@@ -253,12 +323,14 @@ class SAO extends Component {
         }
         this._interactive = value;
         //this.glRedraw();
+
     }
+
 
     /**
      * Gets whether SAO is applied interactively, ie. while the {@link Camera} is moving.
      *
-     * When this is ````false````, SAO will only be applied when the Camera is at rest.
+     * When this is ````false````, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.
      *
      * Default value is ````true````.
      *
@@ -476,6 +548,76 @@ class SAO extends Component {
      */
     get blur() {
         return this._blur;
+    }
+
+    /**
+     * Sets the SAO blend cutoff.
+     *
+     * Default value is ````0.2````.
+     *
+     * Normally you don&apos;t need to alter this.
+     *
+     * @type {Number}
+     * @private
+     */
+    set blendCutoff(value) {
+        if (value === undefined || value === null) {
+            value = 0.2;
+        }
+        if (this._blendCutoff === value) {
+            return;
+        }
+        this._blendCutoff = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the SAO blend cutoff.
+     *
+     * Default value is ````0.2````.
+     *
+     * Normally you don&apos;t need to alter this.
+     *
+     * @type {Number}
+     * @private
+     */
+    get blendCutoff() {
+        return this._blendCutoff;
+    }
+
+    /**
+     * Sets the SAO blend factor.
+     *
+     * Default value is ````1.0````.
+     *
+     * Normally you don&apos;t need to alter this.
+     *
+     * @type {Number}
+     * @private
+     */
+    set blendFactor(value) {
+        if (value === undefined || value === null) {
+            value = 0.2;
+        }
+        if (this._blendFactor === value) {
+            return;
+        }
+        this._blendFactor = value;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the SAO blend scale.
+     *
+     * Default value is ````1.0````.
+     *
+     * Normally you don&apos;t need to alter this.
+     *
+     * @type {Number}
+     * @private
+     */
+    get blendFactor() {
+        return this._blendFactor;
     }
 }
 

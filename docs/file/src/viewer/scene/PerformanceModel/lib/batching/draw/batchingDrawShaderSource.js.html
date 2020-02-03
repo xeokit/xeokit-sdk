@@ -299,6 +299,21 @@ function buildFragment(layer) {
     src.push(&quot;// Batched geometry drawing fragment shader&quot;);
     src.push(&quot;precision mediump float;&quot;);
     src.push(&quot;precision mediump int;&quot;);
+
+    src.push(&quot;uniform bool      uSAOEnabled;&quot;);
+    src.push(&quot;uniform sampler2D uOcclusionTexture;&quot;);
+    src.push(&quot;uniform vec4      uSAOParams;&quot;);
+
+    src.push(&quot;const float       packUpscale = 256. / 255.;&quot;);
+    src.push(&quot;const float       unpackDownScale = 255. / 256.;&quot;);
+
+    src.push(&quot;const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );&quot;);
+    src.push(&quot;const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );&quot;);
+
+    src.push(&quot;float unpackRGBAToDepth( const in vec4 v ) {&quot;);
+    src.push(&quot;    return dot( v, unPackFactors );&quot;);
+    src.push(&quot;}&quot;);
+
     if (clipping) {
         src.push(&quot;varying vec4 vWorldPosition;&quot;);
         src.push(&quot;varying vec4 vFlags2;&quot;);
@@ -322,7 +337,21 @@ function buildFragment(layer) {
         src.push(&quot;  if (dist &gt; 0.0) { discard; }&quot;);
         src.push(&quot;}&quot;);
     }
-    src.push(&quot;gl_FragColor = vColor;&quot;);
+
+    // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+    // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+
+    src.push(&quot;  if (uSAOEnabled) {&quot;);
+    src.push(&quot;      float viewportWidth     = uSAOParams[0];&quot;);
+    src.push(&quot;      float viewportHeight    = uSAOParams[1];&quot;);
+    src.push(&quot;      float blendCutoff   = uSAOParams[2];&quot;);
+    src.push(&quot;      float blendFactor    = uSAOParams[3];&quot;);
+    src.push(&quot;      vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);&quot;);
+    src.push(&quot;      float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;&quot;);
+    src.push(&quot;      gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);&quot;);
+    src.push(&quot;  } else {&quot;);
+    src.push(&quot;      gl_FragColor = vColor;&quot;);
+    src.push(&quot;  }&quot;);
     src.push(&quot;}&quot;);
     return src;
 }

@@ -140,13 +140,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber32">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SAO} from &apos;<span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber86">@xeokit/xeokit-sdk/src/viewer/scene/postfx/SAO.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber32">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber86">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -167,20 +167,68 @@
   
   
   <div class="description" data-ice="description"><p>Configures Scalable Ambient Obscurance (SAO) for a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
-<h2 id="overview">Overview</h2><ul>
-<li>This component is found on <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-sao">Scene#sao</a></span>.</li>
-<li>This effect approximates Ambient Occlusion in realtime. It darkens creases, cavities and surfaces
-that are close to each other, which tend to occlude ambient light and appear darker.</li>
-<li>For deeper technical information on SAO, see the paper <a href="https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf">Scalable Ambient Obscurance</a>.</li>
-</ul>
-<p><br></p>
-<p>Scene without SAO:</p>
-<p> <img src="http://xeokit.io/img/docs/SAO/saoDisabled.png"></p>
-<p>Scene with SAO:</p>
-<p> <img src="http://xeokit.io/img/docs/SAO/saoEnabledNoBlur.png"></p>
-<p>Scene with SAO and blur:</p>
-<p><img src="http://xeokit.io/img/docs/SAO/saoEnabledDefaults.png"></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
+<p> <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a></p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
+<h2 id="overview">Overview</h2><p>SAO approximates <a href="https://en.wikipedia.org/wiki/Ambient_occlusion">Ambient Occlusion</a> in realtime. It darkens creases, cavities and surfaces
+that are close to each other, which tend to be occluded from ambient light and appear darker.</p>
+<p>The animated GIF above shows the effect as we repeatedly enable and disable SAO. When SAO is enabled, we can see darkening
+in regions such as the corners, and the crevices between stairs. This increases the amount of detail we can see when ambient
+light is high, or when objects have uniform colors across their surfaces. Run the example to experiment with the various
+SAO configurations.</p>
+<p>xeokit&apos;s implementation of SAO is based on the paper <a href="https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf">Scalable Ambient Obscurance</a>.</p>
+<h2 id="usage">Usage</h2><p>In the example below, we&apos;ll start by logging a warning message to the console if SAO is not supported by the
+system. Then we&apos;ll configure SAO, position the camera, and configure the near and far perspective and orthographic
+clipping planes. Finally, we&apos;ll use <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load the OTC Conference Center model.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer} from &quot;../src/viewer/Viewer.js&quot;;
+import {XKTLoaderPlugin} from &quot;../src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;,
+    transparent: true
+});
+
+const sao = viewer.scene.sao;
+
+if (!sao.supported) {
+    sao.warn(&quot;SAO is not supported on this system - ignoring SAO configs&quot;)
+}
+
+sao.enabled = true; // Enable SAO - only works if supported (see above)
+sao.intensity = 0.25;
+sao.bias = 0.5;
+sao.scale = 1000.0;
+sao.minResolution = 0.0;
+sao.kernelRadius = 100;
+sao.blendCutoff = 0.2;
+
+const camera = viewer.scene.camera;
+
+camera.eye = [3.69, 5.83, -23.98];
+camera.look = [84.31, -29.88, -116.21];
+camera.up = [0.18, 0.96, -0.21];
+
+camera.perspective.near = 0.1;
+camera.perspective.far = 5000.0;
+
+camera.ortho.near = 0.1;
+camera.ortho.far = 5000.0;
+camera.projection = &quot;perspective&quot;;
+
+const xktLoader = new XKTLoaderPlugin(viewer);
+
+const model = xktLoader.load({
+    id: &quot;myModel&quot;,
+    src: &quot;./models/xkt/OTCConferenceCenter/OTCConferenceCenter.xkt&quot;,
+    metaModelSrc: &quot;./metaModels/OTCConferenceCenter/metaModel.json&quot;,
+    edges: true
+});</code>
+</code></pre>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter">Run this example</a>]</p>
+<h2 id="efficiency">Efficiency</h2><p>SAO can incur some rendering overhead, especially on objects that are viewed close to the camera. For this reason,
+it&apos;s recommended to use a low value for <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-kernelRadius">SAO#kernelRadius</a></span>.  A low radius will sample pixels that are close
+to the source pixel, which will allow the GPU to efficiently cache those pixels. When <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html#instance-set-projection">Camera#projection</a></span> is &quot;perspective&quot;,
+objects near to the viewpoint will use larger radii than farther pixels. Therefore, computing  SAO for close objects
+is more expensive than for objects far away, that occupy fewer pixels on the canvas.</p>
 </div>
   
 
@@ -309,90 +357,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
         
         <div data-ice="description"><p>Sets whether Guassian blur is enabled.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-member-blurDepthCutoff">blurDepthCutoff</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-member-blurRadius">blurRadius</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-member-blurStdDev">blurStdDev</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -636,35 +600,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-kernelRadius">kernelRadius</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -682,6 +617,35 @@ that are close to each other, which tend to occlude ambient light and appear dar
         
         
         <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-kernelRadius">kernelRadius</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
 </div>
       </div>
     </td>
@@ -752,35 +716,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <td>
       <span class="access" data-ice="access">public</span>
       
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the SAO occlusion scale.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -798,6 +733,35 @@ that are close to each other, which tend to occlude ambient light and appear dar
         
         
         <div data-ice="description"><p>Gets the SAO occlusion scale.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the SAO occlusion scale.</p>
 </div>
       </div>
     </td>
@@ -1358,7 +1322,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber322">source</a></span></span>
     </span>
   </h3>
 
@@ -1403,7 +1367,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -1448,7 +1412,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber407">source</a></span></span>
     </span>
   </h3>
 
@@ -1493,7 +1457,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber391">source</a></span></span>
     </span>
   </h3>
 
@@ -1503,135 +1467,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
   <div data-ice="description"><p>Sets whether Guassian blur is enabled.</p>
 <p>Default value is <code>true</code>.</p>
 </div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-blurDepthCutoff">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">blurDepthCutoff</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber52">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-blurRadius">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">blurRadius</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber50">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-blurStdDev">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">blurStdDev</span><span class="code" data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber51">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
 
   
 
@@ -1667,7 +1502,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber94">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1713,7 +1548,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber75">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber145">source</a></span></span>
     </span>
   </h3>
 
@@ -1759,7 +1594,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
@@ -1804,7 +1639,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber275">source</a></span></span>
     </span>
   </h3>
 
@@ -1849,7 +1684,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
@@ -1857,7 +1692,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
   
   
   <div data-ice="description"><p>Gets whether SAO is applied interactively, ie. while the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving.</p>
-<p>When this is <code>false</code>, SAO will only be applied when the Camera is at rest.</p>
+<p>When this is <code>false</code>, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.</p>
 <p>Default value is <code>true</code>.</p>
 </div>
 
@@ -1895,7 +1730,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber177">source</a></span></span>
     </span>
   </h3>
 
@@ -1903,7 +1738,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
   
   
   <div data-ice="description"><p>Sets whether SAO is applied interactively, ie. while the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> is moving.</p>
-<p>When this is <code>false</code>, SAO will only be applied when the Camera is at rest.</p>
+<p>When this is <code>false</code>, SAO will only be applied after the Camera has rested for longer than the duration specified by {@link  SAO#interactiveDelay}.</p>
 <p>Default value is <code>true</code>.</p>
 </div>
 
@@ -1941,7 +1776,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber163">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
@@ -1987,7 +1822,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber210">source</a></span></span>
     </span>
   </h3>
 
@@ -1997,51 +1832,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
   <div data-ice="description"><p>Sets the interaction time delay after the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> stops moving before SAO is applied.</p>
 <p>Only applies when <span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html#instance-set-interactive">SAO#interactive</a></span> is <code>true</code>.</p>
 <p>Default value is <code>2.0</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-kernelRadius">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">kernelRadius</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber174">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
-<p>Default value is <code>100.0</code>.</p>
 </div>
 
   
@@ -2078,7 +1868,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber264">source</a></span></span>
     </span>
   </h3>
 
@@ -2086,6 +1876,51 @@ that are close to each other, which tend to occlude ambient light and appear dar
   
   
   <div data-ice="description"><p>Gets the maximum area that SAO takes into account when checking for possible occlusion.</p>
+<p>Default value is <code>100.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-kernelRadius">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">kernelRadius</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber246">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the maximum area that SAO takes into account when checking for possible occlusion.</p>
 <p>Default value is <code>100.0</code>.</p>
 </div>
 
@@ -2123,7 +1958,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber362">source</a></span></span>
     </span>
   </h3>
 
@@ -2168,7 +2003,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber380">source</a></span></span>
     </span>
   </h3>
 
@@ -2177,51 +2012,6 @@ that are close to each other, which tend to occlude ambient light and appear dar
   
   <div data-ice="description"><p>Gets the SAO minimum resolution.</p>
 <p>Default value is <code>0.0</code>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-scale">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber261">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the SAO occlusion scale.</p>
-<p>Default value is <code>1000.0</code>.</p>
 </div>
 
   
@@ -2258,7 +2048,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -2266,6 +2056,51 @@ that are close to each other, which tend to occlude ambient light and appear dar
   
   
   <div data-ice="description"><p>Gets the SAO occlusion scale.</p>
+<p>Default value is <code>1000.0</code>.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-scale">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber333">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the SAO occlusion scale.</p>
 <p>Default value is <code>1000.0</code>.</p>
 </div>
 
@@ -2303,7 +2138,7 @@ that are close to each other, which tend to occlude ambient light and appear dar
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/postfx/SAO.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
