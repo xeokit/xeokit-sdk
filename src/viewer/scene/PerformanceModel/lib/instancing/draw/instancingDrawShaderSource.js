@@ -214,10 +214,10 @@ function buildFragment(layer) {
     src.push("  if (uSAOEnabled) {");
     src.push("      float viewportWidth     = uSAOParams[0];");
     src.push("      float viewportHeight    = uSAOParams[1];");
-    src.push("      float occlusionCutoff   = uSAOParams[2];");
-    src.push("      float occlusionScale    = uSAOParams[3];");
+    src.push("      float blendCutoff       = uSAOParams[2];");
+    src.push("      float blendFactor       = uSAOParams[3];");
     src.push("      vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-    src.push("      float ambient           = smoothstep(occlusionCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * occlusionScale;");
+    src.push("      float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture2D(uOcclusionTexture, uv))) * blendFactor;");
     src.push("      gl_FragColor            = vec4(vColor.rgb * ambient, vColor.a);");
     src.push("  } else {");
     src.push("      gl_FragColor = vColor;");

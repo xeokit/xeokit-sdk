@@ -297,8 +297,8 @@ InstancingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
         const canvasHeight = canvasBoundary[3];
         tempVec4[0] = canvasWidth;
         tempVec4[1] = canvasHeight;
-        tempVec4[2] = 0.3;
-        tempVec4[3] = 1.0;
+        tempVec4[2] = sao.blendCutoff;
+        tempVec4[3] = sao.blendFactor;
         this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
         gl.uniform4fv(this._uOcclusionParams, tempVec4);
     }
