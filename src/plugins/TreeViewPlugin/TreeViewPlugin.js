@@ -15,8 +15,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * * Each tree node has a checkbox to control the visibility of its object.
  * * Has three hierarchy modes: "containment", "types" and "storeys".
  * * Automatically contains all models (that have metadata) that are currently in the {@link Scene}.
- * * Sorts tree nodes by default. For a "storeys" hierarchy,
- * ````IfcBuildingStorey```` nodes are ordered spatially, from the highest storey to the lowest. For all hierarchy types, other nodes are ordered in ascending alphanumeric order.
+ * * Sorts tree nodes by default - spatially, from top-to-bottom for ````IfcBuildingStorey```` nodes, and alphanumerically for other nodes.
  * * Allows custom CSS styling.
  * * Use {@link ContextMenu} to create a context menu for the tree nodes.
  *
@@ -160,6 +159,30 @@ import {Plugin} from "../../viewer/Plugin.js";
  *      hierarchy: "stories"
  * });
  * ````
+ *
+ * ## Sorting nodes
+ *
+ * TreeViewPlugin sorts its tree nodes by default. For a "storeys" hierarchy, it orders ````IfcBuildingStorey```` nodes
+ * spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
+ * 3D World-space boundaries of the ````IfcBuildingStory```` elements are actually spatially sortable, which may not be the case
+ * in all IFC models. Some models may have ````IfcBuildingStory```` elements that contain objects that span multiple storeys,
+ * which would defeat this sorting.
+ *
+ * For all the hierarchy types ("containment", "classes" and "storeys"), TreeViewPlugin sorts the other node types
+ * alphanumerically on their titles.
+ *
+ * If for some reason you need to prevent sorting, create your TreeViewPlugin with the option disabled, like so:
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("myTreeViewContainer"),
+ *      hierarchy: "stories",
+ *      sortNodes: false // <<------ Disable node sorting
+ * });
+ * ````
+ *
+ * Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
+ * update dynamically if we later transform the {@link Entity}s corresponding to the nodes.
  *
  * ## Context menu
  *
