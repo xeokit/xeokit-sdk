@@ -228,7 +228,7 @@ BatchingDrawRenderer.prototype._bindProgram = function (frameCtx, layer) {
     }
     const sao = scene.sao;
     const saoEnabled = sao.enabled && sao.supported;
-    gl.uniform1i(this._uSAOEnabled, saoEnabled ? 1 : 0);
+    gl.uniform1i(this._uSAOEnabled, saoEnabled);
     if (saoEnabled) {
         const canvasBoundary = scene.canvas.boundary;
         const canvasWidth = canvasBoundary[2];
