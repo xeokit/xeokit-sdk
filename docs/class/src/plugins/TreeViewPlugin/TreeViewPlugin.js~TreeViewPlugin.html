@@ -138,13 +138,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber283">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber334">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber283">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber334">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -247,7 +247,7 @@ the root node, which is sometimes desirable when the model&apos;s &quot;IfcProje
 });</code>
 </code></pre>
 <h2 id="showing-a-node-by-id">Showing a Node by ID</h2><p>We can show a given node using its ID. This causes the TreeViewPlugin to collapse, then expand and scroll the node into view, then highlight the node.</p>
-<p>See the documentation for the <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-showNode">TreeViewPlugin#showNode</a></span> method for more information, including how to define a custom highlighted appearance for the node.</p>
+<p>See the documentation for the <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-showNode">TreeViewPlugin#showNode</a></span> method for more information, including how to define a custom highlighted appearance for the node using CSS.</p>
 <p>Let&apos;s make the TreeViewPlugin show the node corresponding to whatever object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that we pick:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">viewer.cameraControl.on(&quot;picked&quot;, function (e) {
     var objectId = e.entity.id;
@@ -291,7 +291,7 @@ The table below shows what the hierarchies look like:
      hierarchy: &quot;stories&quot;
 });</code>
 </code></pre>
-<h2 id="sorting-nodes">Sorting nodes</h2><p>TreeViewPlugin sorts its tree nodes by default. For a &quot;storeys&quot; hierarchy, it orders <code>IfcBuildingStorey</code> nodes
+<h2 id="sorting-nodes">Sorting Nodes</h2><p>TreeViewPlugin sorts its tree nodes by default. For a &quot;storeys&quot; hierarchy, it orders <code>IfcBuildingStorey</code> nodes
 spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
 3D World-space boundaries of the <code>IfcBuildingStory</code> elements are actually spatially sortable, which may not be the case
 in all IFC models. Some models may have <code>IfcBuildingStory</code> elements that contain objects that span multiple storeys,
@@ -307,7 +307,7 @@ alphanumerically on their titles.</p>
 </code></pre>
 <p>Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
 update dynamically if we later transform the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s corresponding to the nodes.</p>
-<h2 id="context-menu">Context menu</h2><p>TreeViewPlugin fires a &quot;contextmenu&quot; event whenever we right-click on a tree node.</p>
+<h2 id="context-menu">Context Menu</h2><p>TreeViewPlugin fires a &quot;contextmenu&quot; event whenever we right-click on a tree node.</p>
 <p>The event contains:</p>
 <ul>
 <li><code>event</code> - the original <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event">contextmenu</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent">MouseEvent</a></li>
@@ -389,6 +389,47 @@ treeView.on(&quot;contextmenu&quot;, (e) =&gt; {
         treeViewNode: e.treeViewNode
     };
 });</code>
+</code></pre>
+<h2 id="clicking-node-titles">Clicking Node Titles</h2><p>TreeViewPlugin fires a &quot;nodeTitleClicked&quot; event whenever we left-click on a tree node.</p>
+<p>Like the &quot;contextmenu&quot; event, this event contains:</p>
+<ul>
+<li><code>event</code> - the original <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event">click</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent">MouseEvent</a></li>
+<li><code>viewer</code> - the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></li>
+<li><code>treeViewPlugin</code> - the TreeViewPlugin</li>
+<li><code>treeViewNode</code> - the <span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span> representing the tree node
+<br><br></li>
+</ul>
+<p>Let&apos;s register a callback to isolate and fit-to-view the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>(s) represented by the node. This callback is
+going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom">Run an example</a>]</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">treeView.on(&quot;nodeTitleClicked&quot;, (e) =&gt; {
+    const scene = viewer.scene;
+    const objectIds = [];
+    e.treeViewPlugin.withNodeTree(e.treeViewNode, (treeViewNode) =&gt; {
+        if (treeViewNode.objectId) {
+            objectIds.push(treeViewNode.objectId);
+        }
+    });
+    scene.setObjectsXRayed(scene.objectIds, true);
+    scene.setObjectsVisible(scene.objectIds, true);
+    scene.setObjectsXRayed(objectIds, false);
+    viewer.cameraFlight.flyTo({
+        aabb: scene.getAABB(objectIds),
+        duration: 0.5
+    }, () =&gt; {
+        setTimeout(function () {
+            scene.setObjectsVisible(scene.xrayedObjectIds, false);
+            scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+        }, 500);
+    });
+});</code>
+</code></pre>
+<p>To make the cursor change to a pointer when we hover over the node titles, and also to make the titles change to blue, we&apos;ll also define this CSS for the <code>&lt;span&gt;</code> elements
+that represent the titles of our TreeViewPlugin nodes:</p>
+<pre><code class="lang-css"><code class="source-code prettyprint">#treeViewContainer ul li span:hover {
+     color: blue;
+     cursor: pointer;
+}</code>
 </code></pre>
 </div>
   
@@ -1001,7 +1042,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber298">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -1112,7 +1153,7 @@ vertical World axis. For all hierarchy types, other node types will be ordered i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber346">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber397">source</a></span></span>
     </span>
   </h3>
 
@@ -1165,7 +1206,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber365">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
@@ -1212,7 +1253,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber381">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber432">source</a></span></span>
     </span>
   </h3>
 
@@ -1290,7 +1331,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber431">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber482">source</a></span></span>
     </span>
   </h3>
 
@@ -1334,7 +1375,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber524">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber575">source</a></span></span>
     </span>
   </h3>
 
@@ -1378,7 +1419,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber493">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber544">source</a></span></span>
     </span>
   </h3>
 
@@ -1440,7 +1481,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber415">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -1501,7 +1542,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber504">source</a></span></span>
     </span>
   </h3>
 
@@ -1567,7 +1608,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber528">source</a></span></span>
     </span>
   </h3>
 
@@ -1613,7 +1654,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber561">source</a></span></span>
     </span>
   </h3>
 
