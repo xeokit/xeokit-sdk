@@ -37,7 +37,6 @@ class ModelTreeView {
         this._sortNodes = cfg.sortNodes;
 
         this._shownNodeSpan = null;
-        this._shownNodeLastBackgroundStyle = null;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -619,26 +618,24 @@ class ModelTreeView {
                 this._expandGroupElement(groupElement);
             }
         }
-        const nodeElement = document.getElementById(nodeId);
-        const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
-        spanElement.scrollIntoView({block: "center"});
-        this._shownNodeLastBackgroundStyle = spanElement.style.background;
-        spanElement.style.background = "yellow";
-        this._shownNodeId = nodeId;
+        const listItemElementId = 'node-' + nodeId;
+        const listItemElement = document.getElementById(listItemElementId);
+        listItemElement.scrollIntoView({block: "center"});
+        listItemElement.classList.add("highlighted-node");
+        this._showListItemElementId = listItemElementId;
     }
 
     unShowNode() {
-        if (!this._shownNodeId) {
+        if (!this._showListItemElementId) {
             return;
         }
-        const nodeElement = document.getElementById(this._shownNodeId);
-        if (!nodeElement) {
-            this._shownNodeId = null;
+        const listItemElement = document.getElementById(this._showListItemElementId);
+        if (!listItemElement) {
+            this._showListItemElementId = null;
             return;
         }
-        const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
-        spanElement.style.background = this._shownNodeLastBackgroundStyle;
-        this._shownNodeId = null;
+        listItemElement.classList.remove("highlighted-node");
+        this._showListItemElementId = null;
     }
 
     _expandGroupElement(groupElement) {

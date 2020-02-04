@@ -40,8 +40,6 @@
         }
 
         #treeViewContainer ul li {
-            border-bottom-left-radius: 0.75em;
-            border-top-left-radius: 0.75em;
             margin: 2px 0;
             position: relative;
         }
@@ -80,6 +78,14 @@
             position: fixed;
             right: 1em;
             top: 1em;
+        }
+
+        #treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+            border: black solid 1px;
+            background: yellow;
+            color: black;
+            padding-left: 1px;
+            padding-right: 5px;
         }
 
         .xeokit-context-menu {

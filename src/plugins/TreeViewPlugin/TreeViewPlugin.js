@@ -115,7 +115,9 @@ import {Plugin} from "../../viewer/Plugin.js";
  *
  * ## Showing a Node by ID
  *
- * We can show a given node using its ID. This causes the TreeViewPlugin to expand and scroll the node into view.
+ * We can show a given node using its ID. This causes the TreeViewPlugin to collapse, then expand and scroll the node into view, then highlight the node.
+ *
+ * See the documentation for the {@link TreeViewPlugin#showNode} method for more information, including how to define a custom highlighted appearance for the node using CSS.
  *
  * Let's make the TreeViewPlugin show the node corresponding to whatever object {@link Entity} that we pick:
  *
@@ -126,7 +128,9 @@ import {Plugin} from "../../viewer/Plugin.js";
  * });
  * ````
  *
- * Note that only works if the picked {@link Entity} is an object that belongs to a model that's represented in the TreeViewPlugin.
+ * This will de-highlight any node that was previously shown by this method.
+ *
+ * Note that this method only works if the picked {@link Entity} is an object that belongs to a model that's represented in the TreeViewPlugin.
  *
  * ## Customizing Appearance
  *
@@ -439,6 +443,10 @@ class TreeViewPlugin extends Plugin {
      * This causes the tree view to collapse, then expand to reveal the node, then highlight the node.
      *
      * If a node is previously highlighted, de-highlights that node and collapses the tree first.
+     *
+     * Within the DOM, the node is represented by an ````<li>```` element. This method will add a ````.highlighted-node```` class to
+     * the element to make it appear highlighted, removing that class when de-highlighting it again. See the CSS rules
+     * in the TreeViewPlugin examples for an example of that class.
      *
      * @param {String} objectId ID of the {@link Entity}.
      */
