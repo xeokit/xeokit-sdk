@@ -544,9 +544,6 @@ class ModelTreeView {
         const span = document.createElement('span');
         span.textContent = node.title;
         nodeElement.appendChild(span);
-        span.addEventListener('click', () =>{
-            //alert("clicked");
-        });
         span.oncontextmenu = (e) => {
             this._treeViewPlugin.fire("contextmenu", {
                 event: e,
