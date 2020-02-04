@@ -63,7 +63,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.new.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -76,7 +75,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-performancemodel">viewer/scene/PerformanceModel</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraControl2.js~CameraControl.html">CameraControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
@@ -141,6 +139,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/TreeViewPlugin/ModelTreeView.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Map} from &quot;./../../viewer/scene/utils/Map.js&quot;;
+import {math} from &quot;../../viewer/scene/math/math.js&quot;;
 
 const idMap = new Map();
 
@@ -176,6 +175,8 @@ class ModelTreeView {
         this._objectNodes = {};
         this._rootName = cfg.rootName;
         this._sortNodes = cfg.sortNodes;
+
+        this._shownNodeSpan = null;
 
         this._containerElement.oncontextmenu = (e) =&gt; {
             e.preventDefault();
@@ -558,12 +559,13 @@ class ModelTreeView {
         const camera = scene.camera;
         const metaScene = viewer.metaScene;
         return this._spatialSortFunc || (this._spatialSortFunc = (node1, node2) =&gt; {
-            if (!node1.aabb || !node2.aabb) {
-                if (!node1.aabb) {
-                    node1.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId));
+            if (!node1.center || !node2.center) {
+                // Sorting on center more robust when objects could overlap storeys
+                if (!node1.center) {
+                    node1.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId)));
                 }
-                if (!node2.aabb) {
-                    node2.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId));
+                if (!node2.center) {
+                    node2.center = math.getAABB3Center(scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId)));
                 }
             }
             let idx = 0;
@@ -574,10 +576,10 @@ class ModelTreeView {
             } else {
                 idx = 2;
             }
-            if (node1.aabb[idx] &gt; node2.aabb[idx]) {
+            if (node1.center[idx] &gt; node2.center[idx]) {
                 return -1;
             }
-            if (node1.aabb[idx] &lt; node2.aabb[idx]) {
+            if (node1.center[idx] &lt; node2.center[idx]) {
                 return 1;
             }
             return 0;
@@ -728,6 +730,9 @@ class ModelTreeView {
     }
 
     showNode(objectId) {
+        if (this._shownNodeSpan) {
+            this.unShowNode();
+        }
         const nodeId = this._objectToNodeID(objectId);
         const groupElementId = &quot;a-&quot; + nodeId;
         const groupElement = document.getElementById(groupElementId);
@@ -753,15 +758,24 @@ class ModelTreeView {
                 this._expandGroupElement(groupElement);
             }
         }
-        const nodeElement = document.getElementById(nodeId);
-        const spanElement = nodeElement.parentElement.getElementsByTagName(&apos;span&apos;)[0];
-        //spanElement.scrollIntoView();
-        spanElement.scrollIntoView({block: &quot;center&quot;});
-        const background = spanElement.style.background;
-        spanElement.style.background = &quot;yellow&quot;;
-        setTimeout(function () {
-            spanElement.style.background = background;
-        }, 1500);
+        const listItemElementId = &apos;node-&apos; + nodeId;
+        const listItemElement = document.getElementById(listItemElementId);
+        listItemElement.scrollIntoView({block: &quot;center&quot;});
+        listItemElement.classList.add(&quot;highlighted-node&quot;);
+        this._showListItemElementId = listItemElementId;
+    }
+
+    unShowNode() {
+        if (!this._showListItemElementId) {
+            return;
+        }
+        const listItemElement = document.getElementById(this._showListItemElementId);
+        if (!listItemElement) {
+            this._showListItemElementId = null;
+            return;
+        }
+        listItemElement.classList.remove(&quot;highlighted-node&quot;);
+        this._showListItemElementId = null;
     }
 
     _expandGroupElement(groupElement) {
