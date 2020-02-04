@@ -35,7 +35,9 @@ class ModelTreeView {
         this._objectNodes = {};
         this._rootName = cfg.rootName;
         this._sortNodes = cfg.sortNodes;
-        this._shownNodeId = null;
+
+        this._shownNodeSpan = null;
+        this._shownNodeLastBackgroundStyle = null;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -589,7 +591,7 @@ class ModelTreeView {
     }
 
     showNode(objectId) {
-        if (this._shownNodeId) {
+        if (this._shownNodeSpan) {
             this.unShowNode();
         }
         const nodeId = this._objectToNodeID(objectId);
@@ -620,12 +622,15 @@ class ModelTreeView {
         const nodeElement = document.getElementById(nodeId);
         const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
         spanElement.scrollIntoView({block: "center"});
-        const background = spanElement.style.background;
+        this._shownNodeLastBackgroundStyle = spanElement.style.background;
         spanElement.style.background = "yellow";
         this._shownNodeId = nodeId;
     }
 
     unShowNode() {
+
+        // TODO: Broken - should get span, within node
+
         if (!this._shownNodeId) {
             return;
         }
@@ -634,9 +639,9 @@ class ModelTreeView {
             this._shownNodeId = null;
             return;
         }
+        alert("unshow");
         const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
-        const background = spanElement.style.background;
-        spanElement.style.background = background;
+        spanElement.style.background = this._shownNodeLastBackgroundStyle;
         this._shownNodeId = null;
     }
 
