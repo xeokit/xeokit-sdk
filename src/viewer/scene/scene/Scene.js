@@ -517,7 +517,8 @@ class Scene extends Component {
             backgroundColor: cfg.backgroundColor,
             webgl2: cfg.webgl2 !== false,
             contextAttr: cfg.contextAttr || {},
-            clearColorAmbient: cfg.clearColorAmbient
+            clearColorAmbient: cfg.clearColorAmbient,
+            premultipliedAlpha: cfg.premultipliedAlpha
         });
 
         this.canvas.on("boundary", () => {

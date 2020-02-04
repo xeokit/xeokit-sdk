@@ -88,8 +88,8 @@ class Canvas extends Component {
 
         this.contextAttr.stencil = false;
         this.contextAttr.antialias = true;
-        this.contextAttr.premultipliedAlpha = this.contextAttr.premultipliedAlpha !== false;
-        this.contextAttr.antialias = this.contextAttr.antialias !== false;
+        this.contextAttr.premultipliedAlpha = (!!this.contextAttr.premultipliedAlpha);  // False by default: https://github.com/xeokit/xeokit-sdk/issues/251
+        this.contextAttr.antialias = (this.contextAttr.antialias !== false);
 
         // If the canvas uses css styles to specify the sizes make sure the basic
         // width and height attributes match or the WebGL context will use 300 x 150
