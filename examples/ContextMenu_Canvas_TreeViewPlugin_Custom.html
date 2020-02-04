@@ -73,6 +73,11 @@
             display: inline-block;
         }
 
+        #treeViewContainer ul li span:hover {
+            color: blue;
+            cursor: pointer;
+        }
+
         #treeViewContainer .top-right {
             font-size: small;
             position: fixed;
@@ -436,6 +441,28 @@
         };
     });
 
+    treeView.on("nodeTitleClicked", (e) => {
+        const scene = viewer.scene;
+        const objectIds = [];
+        e.treeViewPlugin.withNodeTree(e.treeViewNode, (treeViewNode) => {
+            if (treeViewNode.objectId) {
+                objectIds.push(treeViewNode.objectId);
+            }
+        });
+        scene.setObjectsXRayed(scene.objectIds, true);
+        scene.setObjectsVisible(scene.objectIds, true);
+        //scene.setObjectsVisible(objectIds, true);
+        scene.setObjectsXRayed(objectIds, false);
+        viewer.cameraFlight.flyTo({
+            aabb: scene.getAABB(objectIds),
+            duration: 0.5
+        }, () => {
+            setTimeout(function () {
+                scene.setObjectsVisible(scene.xrayedObjectIds, false);
+                scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+            }, 500);
+        });
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create two ContextMenus - one for right-click on empty space, the other for right-click on an Entity

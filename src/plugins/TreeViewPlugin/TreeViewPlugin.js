@@ -164,7 +164,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * });
  * ````
  *
- * ## Sorting nodes
+ * ## Sorting Nodes
  *
  * TreeViewPlugin sorts its tree nodes by default. For a "storeys" hierarchy, it orders ````IfcBuildingStorey```` nodes
  * spatially, with the node for the highest story at the top, down to the lowest at the bottom. This assumes that the
@@ -188,7 +188,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
  * update dynamically if we later transform the {@link Entity}s corresponding to the nodes.
  *
- * ## Context menu
+ * ## Context Menu
  *
  * TreeViewPlugin fires a "contextmenu" event whenever we right-click on a tree node.
  *
@@ -276,6 +276,57 @@ import {Plugin} from "../../viewer/Plugin.js";
  *         treeViewNode: e.treeViewNode
  *     };
  * });
+ * ````
+ *
+ * ## Clicking Node Titles
+ *
+ * TreeViewPlugin fires a "nodeTitleClicked" event whenever we left-click on a tree node.
+ *
+ * Like the "contextmenu" event, this event contains:
+ *
+ * * ````event```` - the original [click](https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event) [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+ * * ````viewer```` - the {@link Viewer}
+ * * ````treeViewPlugin```` - the TreeViewPlugin
+ * * ````treeViewNode```` - the {@link TreeViewNode} representing the tree node
+ *<br><br>
+ *
+ * Let's register a callback to isolate and fit-to-view the {@link Entity}(s) represented by the node. This callback is
+ * going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.
+ *
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ *
+ * ````javascript
+ * treeView.on("nodeTitleClicked", (e) => {
+ *     const scene = viewer.scene;
+ *     const objectIds = [];
+ *     e.treeViewPlugin.withNodeTree(e.treeViewNode, (treeViewNode) => {
+ *         if (treeViewNode.objectId) {
+ *             objectIds.push(treeViewNode.objectId);
+ *         }
+ *     });
+ *     scene.setObjectsXRayed(scene.objectIds, true);
+ *     scene.setObjectsVisible(scene.objectIds, true);
+ *     scene.setObjectsXRayed(objectIds, false);
+ *     viewer.cameraFlight.flyTo({
+ *         aabb: scene.getAABB(objectIds),
+ *         duration: 0.5
+ *     }, () => {
+ *         setTimeout(function () {
+ *             scene.setObjectsVisible(scene.xrayedObjectIds, false);
+ *             scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+ *         }, 500);
+ *     });
+ * });
+ * ````
+ *
+ * To make the cursor change to a pointer when we hover over the node titles, and also to make the titles change to blue, we'll also define this CSS for the ````<span>```` elements
+ * that represent the titles of our TreeViewPlugin nodes:
+ *
+ * ````css
+ * #treeViewContainer ul li span:hover {
+ *      color: blue;
+ *      cursor: pointer;
+ * }
  * ````
  *
  * @class TreeViewPlugin

@@ -447,7 +447,7 @@ class ModelTreeView {
     }
 
     _alphaSortFunc(node1, node2) {
-        const title1 = node1.title.toUpperCase();
+        const title1 = node1.title.toUpperCase(); // FIXME: Should be case sensitive?
         const title2 = node2.title.toUpperCase();
         if (title1 < title2) {
             return -1;
@@ -556,6 +556,15 @@ class ModelTreeView {
             });
             e.preventDefault();
         };
+        span.onclick = (e) => {
+            this._treeViewPlugin.fire("nodeTitleClicked", {
+                event: e,
+                viewer: this._viewer,
+                treeViewPlugin: this._treeViewPlugin,
+                treeViewNode: node
+            });
+            e.preventDefault();
+        };
         return nodeElement;
     }
 
@@ -590,7 +599,7 @@ class ModelTreeView {
     }
 
     showNode(objectId) {
-        if (this._shownNodeSpan) {
+        if (this._showListItemElementId) {
             this.unShowNode();
         }
         const nodeId = this._objectToNodeID(objectId);
