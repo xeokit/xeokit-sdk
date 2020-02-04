@@ -628,9 +628,6 @@ class ModelTreeView {
     }
 
     unShowNode() {
-
-        // TODO: Broken - should get span, within node
-
         if (!this._shownNodeId) {
             return;
         }
@@ -639,7 +636,6 @@ class ModelTreeView {
             this._shownNodeId = null;
             return;
         }
-        alert("unshow");
         const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
         spanElement.style.background = this._shownNodeLastBackgroundStyle;
         this._shownNodeId = null;
