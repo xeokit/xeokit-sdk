@@ -35,6 +35,7 @@ class ModelTreeView {
         this._objectNodes = {};
         this._rootName = cfg.rootName;
         this._sortNodes = cfg.sortNodes;
+        this._shownNodeId = null;
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -588,6 +589,9 @@ class ModelTreeView {
     }
 
     showNode(objectId) {
+        if (this._shownNodeId) {
+            this.unShowNode();
+        }
         const nodeId = this._objectToNodeID(objectId);
         const groupElementId = "a-" + nodeId;
         const groupElement = document.getElementById(groupElementId);
@@ -615,13 +619,25 @@ class ModelTreeView {
         }
         const nodeElement = document.getElementById(nodeId);
         const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
-        //spanElement.scrollIntoView();
         spanElement.scrollIntoView({block: "center"});
         const background = spanElement.style.background;
         spanElement.style.background = "yellow";
-        setTimeout(function () {
-            spanElement.style.background = background;
-        }, 1500);
+        this._shownNodeId = nodeId;
+    }
+
+    unShowNode() {
+        if (!this._shownNodeId) {
+            return;
+        }
+        const nodeElement = document.getElementById(this._shownNodeId);
+        if (!nodeElement) {
+            this._shownNodeId = null;
+            return;
+        }
+        const spanElement = nodeElement.parentElement.getElementsByTagName('span')[0];
+        const background = spanElement.style.background;
+        spanElement.style.background = background;
+        this._shownNodeId = null;
     }
 
     _expandGroupElement(groupElement) {
