@@ -35,8 +35,9 @@ class ModelTreeView {
         this._objectNodes = {};
         this._rootName = cfg.rootName;
         this._sortNodes = cfg.sortNodes;
+        this._pruneEmptyNodes = cfg.pruneEmptyNodes;
 
-        this._shownNodeSpan = null;
+        this._showListItemElementId
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -211,10 +212,20 @@ class ModelTreeView {
         typeNodes) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
+        const children = metaObject.children;
+        const objectId = metaObject.id;
+        if (this._pruneEmptyNodes && (!children || children.length === 0)) {
+            const viewer = this._treeViewPlugin.viewer;
+            const scene = viewer.scene;
+            const entity = scene.objects[objectId];
+            if (!entity) {
+                return;
+            }
+        }
         if (metaObjectType === "IfcBuilding") {
             buildingNode = {
-                nodeId: this._objectToNodeID(metaObject.id),
-                objectId: metaObject.id,
+                nodeId: this._objectToNodeID(objectId),
+                objectId: objectId,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
@@ -231,8 +242,8 @@ class ModelTreeView {
                 return;
             }
             storeyNode = {
-                nodeId: this._objectToNodeID(metaObject.id),
-                objectId: metaObject.id,
+                nodeId: this._objectToNodeID(objectId),
+                objectId: objectId,
                 title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                 type: metaObjectType,
                 parent: buildingNode,
@@ -267,8 +278,8 @@ class ModelTreeView {
                     typeNodes[metaObjectType] = typeNode;
                 }
                 const node = {
-                    nodeId: this._objectToNodeID(metaObject.id),
-                    objectId: metaObject.id,
+                    nodeId: this._objectToNodeID(objectId),
+                    objectId: objectId,
                     title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                     type: metaObjectType,
                     parent: typeNode,
@@ -281,7 +292,6 @@ class ModelTreeView {
                 this._objectNodes[node.objectId] = node;
             }
         }
-        const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
@@ -296,10 +306,20 @@ class ModelTreeView {
         typeNodes) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name;
+        const children = metaObject.children;
+        const objectId = metaObject.id;
+        if (this._pruneEmptyNodes && (!children || children.length === 0)) {
+            const viewer = this._treeViewPlugin.viewer;
+            const scene = viewer.scene;
+            const entity = scene.objects[objectId];
+            if (!entity) {
+                return;
+            }
+        }
         if (metaObjectType === "IfcBuilding") {
             buildingNode = {
-                nodeId: this._objectToNodeID(metaObject.id),
-                objectId: metaObject.id,
+                nodeId: this._objectToNodeID(objectId),
+                objectId: objectId,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
@@ -314,10 +334,8 @@ class ModelTreeView {
         } else {
             if (buildingNode) {
                 const objects = this._viewer.scene.objects;
-                const object = objects[metaObject.id];
+                const object = objects[objectId];
                 if (object) {
-                    const metaObjectType = metaObject.type;
-                    const metaObjectName = metaObject.name;
                     var typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
                         typeNode = {
@@ -336,8 +354,8 @@ class ModelTreeView {
                         typeNodes[metaObjectType] = typeNode;
                     }
                     const node = {
-                        nodeId: this._objectToNodeID(metaObject.id),
-                        objectId: metaObject.id,
+                        nodeId: this._objectToNodeID(objectId),
+                        objectId: objectId,
                         title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                         type: metaObjectType,
                         parent: typeNode,
@@ -351,7 +369,6 @@ class ModelTreeView {
                 }
             }
         }
-        const children = metaObject.children;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
@@ -363,10 +380,20 @@ class ModelTreeView {
     _createContainmentNodes(metaObject = this._rootMetaObject, parent) {
         const metaObjectType = metaObject.type;
         const metaObjectName = metaObject.name || metaObjectType;
+        const children = metaObject.children;
+        const objectId = metaObject.id;
+        if (this._pruneEmptyNodes && (!children || children.length === 0)) {
+            const viewer = this._treeViewPlugin.viewer;
+            const scene = viewer.scene;
+            const entity = scene.objects[objectId];
+            if (!entity) {
+                return;
+            }
+        }
         const node = {
-            nodeId: this._objectToNodeID(metaObject.id),
-            objectId: metaObject.id,
-            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObject.type,
+            nodeId: this._objectToNodeID(objectId),
+            objectId: objectId,
+            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
             type: metaObjectType,
             parent: parent,
             numEntities: 0,
@@ -380,7 +407,7 @@ class ModelTreeView {
             this._rootNodes.push(node);
         }
         this._objectNodes[node.objectId] = node;
-        const children = metaObject.children;
+
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
@@ -599,7 +626,11 @@ class ModelTreeView {
         if (this._showListItemElementId) {
             this.unShowNode();
         }
-        const nodeId = this._objectToNodeID(objectId);
+        const node = this._objectNodes[objectId];
+        if (!node) {
+            return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
+        }
+        const nodeId = node.nodeId;
         const groupElementId = "a-" + nodeId;
         const groupElement = document.getElementById(groupElementId);
         if (groupElement) {
@@ -608,7 +639,6 @@ class ModelTreeView {
             return;
         }
         const path = [];
-        const node = this._objectNodes[objectId];
         path.unshift(node);
         let parent = node.parent;
         while (parent) {

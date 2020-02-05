@@ -188,6 +188,25 @@ import {Plugin} from "../../viewer/Plugin.js";
  * Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
  * update dynamically if we later transform the {@link Entity}s corresponding to the nodes.
  *
+ * ## Pruning empty nodes
+ *
+ * Sometimes a model contains subtrees of objects that don't have any geometry. These are models whose
+ * {@link MetaModel} contains trees of {@link MetaObject}s that don't have any {@link Entity}s in the {@link Scene}.
+ *
+ * For these models, the tree view would contain nodes that don't do anything in the Scene when we interact with them,
+ * which is undesirable.
+ *
+ * By default, TreeViewPlugin will not create nodes for those objects. However, we can override that behaviour if we want
+ * to have nodes for those objects (perhaps for debugging the model):
+ *
+ * ````javascript
+ * const treeView = new TreeViewPlugin(viewer, {
+ *      containerElement: document.getElementById("myTreeViewContainer"),
+ *      hierarchy: "stories",
+ *      pruneEmptyNodes: false // <<------ Create nodes for object subtrees without geometry
+ * });
+ * ````
+ *
  * ## Context Menu
  *
  * TreeViewPlugin fires a "contextmenu" event whenever we right-click on a tree node.
@@ -345,6 +364,7 @@ class TreeViewPlugin extends Plugin {
      * @param {Boolean} [cfg.sortNodes=true] When true, will sort the children of each node. For a "storeys" hierarchy, the
      * ````IfcBuildingStorey```` nodes will be ordered spatially, from the highest storey down to the lowest, on the
      * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
+     * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don't have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don't have {@link Entity}s.
      */
     constructor(viewer, cfg = {}) {
 
@@ -361,6 +381,7 @@ class TreeViewPlugin extends Plugin {
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
         this._sortNodes = (cfg.sortNodes !== false);
+        this._pruneEmptyNodes = (cfg.pruneEmptyNodes !== false);
 
         if (this._autoAddModels) {
             const modelIds = Object.keys(this.viewer.scene.models);
@@ -451,6 +472,7 @@ class TreeViewPlugin extends Plugin {
             autoExpandDepth: this._autoExpandDepth,
             hierarchy: this._hierarchy,
             sortNodes: this._sortNodes,
+            pruneEmptyNodes: this._pruneEmptyNodes,
             rootName: options.rootName
         });
         model.on("destroyed", () => {
@@ -494,6 +516,9 @@ class TreeViewPlugin extends Plugin {
      * This causes the tree view to collapse, then expand to reveal the node, then highlight the node.
      *
      * If a node is previously highlighted, de-highlights that node and collapses the tree first.
+     *
+     * Note that if the TreeViewPlugin was configured with ````pruneEmptyNodes: true```` (default configuration), then the
+     * node won't exist in the tree if it has no Entitys in the {@link Scene}. in that case, nothing will happen.
      *
      * Within the DOM, the node is represented by an ````<li>```` element. This method will add a ````.highlighted-node```` class to
      * the element to make it appear highlighted, removing that class when de-highlighting it again. See the CSS rules
