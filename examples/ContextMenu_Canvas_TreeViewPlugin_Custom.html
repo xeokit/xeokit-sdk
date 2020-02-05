@@ -462,6 +462,7 @@
             duration: 0.5
         }, () => {
             setTimeout(function () {
+                scene.setObjectsVisible(scene.xrayedObjectIds, false);
                 scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             }, 500);
         });
