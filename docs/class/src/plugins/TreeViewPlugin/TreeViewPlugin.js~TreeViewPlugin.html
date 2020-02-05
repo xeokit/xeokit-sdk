@@ -138,13 +138,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber334">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {TreeViewPlugin} from &apos;<span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber353">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber334">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber353">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -307,6 +307,18 @@ alphanumerically on their titles.</p>
 </code></pre>
 <p>Note that node sorting is only done for each model at the time that it is added to the TreeViewPlugin, and will not
 update dynamically if we later transform the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s corresponding to the nodes.</p>
+<h2 id="pruning-empty-nodes">Pruning empty nodes</h2><p>Sometimes a model contains subtrees of objects that don&apos;t have any geometry. These are models whose
+<span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span> contains trees of <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s that don&apos;t have any <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
+<p>For these models, the tree view would contain nodes that don&apos;t do anything in the Scene when we interact with them,
+which is undesirable.</p>
+<p>By default, TreeViewPlugin will not create nodes for those objects. However, we can override that behaviour if we want
+to have nodes for those objects (perhaps for debugging the model):</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const treeView = new TreeViewPlugin(viewer, {
+     containerElement: document.getElementById(&quot;myTreeViewContainer&quot;),
+     hierarchy: &quot;stories&quot;,
+     pruneEmptyNodes: false // &lt;&lt;------ Create nodes for object subtrees without geometry
+});</code>
+</code></pre>
 <h2 id="context-menu">Context Menu</h2><p>TreeViewPlugin fires a &quot;contextmenu&quot; event whenever we right-click on a tree node.</p>
 <p>The event contains:</p>
 <ul>
@@ -1042,7 +1054,7 @@ node in depth-first pre-order.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber369">source</a></span></span>
     </span>
   </h3>
 
@@ -1116,6 +1128,14 @@ node in depth-first pre-order.</p>
 vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.pruneEmptyNodes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, will not contain nodes that don&apos;t have content in the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>. These are nodes whose <span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span>s don&apos;t have <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1153,7 +1173,7 @@ vertical World axis. For all hierarchy types, other node types will be ordered i
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber418">source</a></span></span>
     </span>
   </h3>
 
@@ -1206,7 +1226,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -1253,7 +1273,7 @@ This can be updated dynamically.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber432">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber453">source</a></span></span>
     </span>
   </h3>
 
@@ -1331,7 +1351,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber504">source</a></span></span>
     </span>
   </h3>
 
@@ -1375,7 +1395,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber575">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber600">source</a></span></span>
     </span>
   </h3>
 
@@ -1419,7 +1439,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber544">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber569">source</a></span></span>
     </span>
   </h3>
 
@@ -1481,7 +1501,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber488">source</a></span></span>
     </span>
   </h3>
 
@@ -1542,7 +1562,7 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber504">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber529">source</a></span></span>
     </span>
   </h3>
 
@@ -1552,6 +1572,8 @@ provide a <code>autoAddModels: true</code> to the TreeViewPlugin constructor.</p
   <div data-ice="description"><p>Highlights the tree view node that represents the given object <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>.</p>
 <p>This causes the tree view to collapse, then expand to reveal the node, then highlight the node.</p>
 <p>If a node is previously highlighted, de-highlights that node and collapses the tree first.</p>
+<p>Note that if the TreeViewPlugin was configured with <code>pruneEmptyNodes: true</code> (default configuration), then the
+node won&apos;t exist in the tree if it has no Entitys in the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>. in that case, nothing will happen.</p>
 <p>Within the DOM, the node is represented by an <code>&lt;li&gt;</code> element. This method will add a <code>.highlighted-node</code> class to
 the element to make it appear highlighted, removing that class when de-highlighting it again. See the CSS rules
 in the TreeViewPlugin examples for an example of that class.</p>
@@ -1608,7 +1630,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber528">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber553">source</a></span></span>
     </span>
   </h3>
 
@@ -1654,7 +1676,7 @@ in the TreeViewPlugin examples for an example of that class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber561">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html#lineNumber586">source</a></span></span>
     </span>
   </h3>
 
