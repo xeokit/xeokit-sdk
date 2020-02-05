@@ -454,6 +454,7 @@
                 objectIds.push(treeViewNode.objectId);
             }
         });
+        e.treeViewPlugin.unShowNode();
         scene.setObjectsXRayed(scene.objectIds, true);
         scene.setObjectsVisible(scene.objectIds, true);
         scene.setObjectsXRayed(objectIds, false);
@@ -581,15 +582,13 @@
                         context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
                     }
                 },
-                [
-                    {
-                        title: "Show all ",
-                        callback: function (context) {
-                            const scene = context.viewer.scene;
-                            scene.setObjectsVisible(scene.objectIds, true);
-                        }
+                {
+                    title: "Show all ",
+                    callback: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
                     }
-                ]
+                }
             ],
             [
                 {
