@@ -431,6 +431,8 @@
         ]
     });
 
+    // Right-clicking on a tree node shows the context menu for that node
+
     treeView.on("contextmenu", (e) => {
 
         treeViewContextMenu.show(e.event.pageX, e.event.pageY);
@@ -442,6 +444,8 @@
         };
     });
 
+    // Left-clicking on a tree node isolates that object in the 3D view
+
     treeView.on("nodeTitleClicked", (e) => {
         const scene = viewer.scene;
         const objectIds = [];
@@ -452,14 +456,12 @@
         });
         scene.setObjectsXRayed(scene.objectIds, true);
         scene.setObjectsVisible(scene.objectIds, true);
-        //scene.setObjectsVisible(objectIds, true);
         scene.setObjectsXRayed(objectIds, false);
         viewer.cameraFlight.flyTo({
             aabb: scene.getAABB(objectIds),
             duration: 0.5
         }, () => {
             setTimeout(function () {
-                scene.setObjectsVisible(scene.xrayedObjectIds, false);
                 scene.setObjectsXRayed(scene.xrayedObjectIds, false);
             }, 500);
         });
