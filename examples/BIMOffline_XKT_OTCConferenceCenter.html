@@ -53,6 +53,7 @@
             border-top-left-radius: 0.75em;
             margin: 2px 0;
             position: relative;
+            width: 500px;
         }
 
         #treeViewContainer ul li a {
@@ -205,7 +206,9 @@
 
     const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
-        autoExpandDepth: 3 // Initially expand tree three nodes deep
+        autoExpandDepth: 3, // Initially expand tree three nodes deep
+        sortNodes: true, // Default
+        pruneEmptyNodes: true // Default
     });
 
     //------------------------------------------------------------------------------------------------------------------
