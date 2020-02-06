@@ -128,7 +128,7 @@ class ContextMenu {
      * Creates a context menu.
      *
      * @param {Object} [cfg] Context menu configuration.
-     * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See {@link DefaultEntityContextMenuItems} for an example.
+     * @param {Object} [cfg.items] The context menu items. These can also be dynamically set on {@link ContextMenu#items}. See the class documentation for an example.
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this context menu is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      */
@@ -154,7 +154,7 @@ class ContextMenu {
      *
      * These can be dynamically updated.
      *
-     * See {@link DefaultEntityContextMenuItems} for an example.
+     * See class documentation for an example.
      *
      * @type {Object[]}
      */
